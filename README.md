@@ -63,7 +63,7 @@ User can manipulate **Roles**, **policy Rules**, **Resource**, **Service** data 
 [k2hash transaction plugin](https://github.com/yahoojapan/k2htp_dtor)  
 
 ### Packages
-[k2hr3-app(npm packages)]()  
+[k2hr3-app(npm packages)](https://www.npmjs.com/package/k2hr3-app)  
 
 ### License
 This software is released under the MIT License, see the license file.  
