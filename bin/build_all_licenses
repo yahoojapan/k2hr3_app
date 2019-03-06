@@ -1,0 +1,562 @@
+#!/usr/bin/env node
+/*
+ *
+ * K2HR3 Web Application
+ *
+ * Copyright 2017 Yahoo! Japan Corporation.
+ *
+ * K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers
+ * common management information for the cloud.
+ * K2HR3 can dynamically manage information as "who", "what", "operate".
+ * These are stored as roles, resources, policies in K2hdkc, and the
+ * client system can dynamically read and modify these information.
+ *
+ * For the full copyright and license information, please view
+ * the license file that was distributed with this source code.
+ *
+ * AUTHOR:	 Takeshi Nakatani
+ * CREATE:	 Tue Aug 15 2017
+ * REVISION:
+ *
+ */
+
+'use strict';
+
+var	fs		= require('fs');
+var	execSync= require('child_process').execSync;			// For before section to launching sub processes
+
+var	r3util	= require('../routes/lib/libr3util');
+
+//
+// Utility: parse arguments
+//
+function getArguments()
+{
+	var	args = {
+		process_name:		'build_all_licenses',
+		help:				false,
+		use_package_json:	false
+	};
+
+	for(var cnt = 0; cnt < process.argv.length; ++cnt){
+		if(0 == cnt){
+			// always 'node'
+			continue;
+		}else if(1 == cnt){
+			// always this program name
+			args.process_name		= process.argv[cnt].replace(/^.*\//g, '');
+		}else if(r3util.compareCaseString('--help', process.argv[cnt]) || r3util.compareCaseString('-h', process.argv[cnt])){
+			args.help				= true;
+		}else if(r3util.compareCaseString('--packagejson', process.argv[cnt]) || r3util.compareCaseString('-pj', process.argv[cnt])){
+			args.use_package_json	= true;
+		}else{
+			console.log('[INFO] Unknown argument specified : ' + process.argv[cnt]);
+		}
+	}
+	return args;
+}
+
+//
+// Utility: print help
+//
+function printHelp(process_name)
+{
+	console.log('Usage : ' + process_name + ' [--help(-h)] [--packagejson(-pj)]');
+	console.log('        --packagejson(-pj) : analyze using dependencies of package.json.');
+	console.log('        --help(-h)         : display help(this).');
+}
+
+//
+// Utility: load file contents
+//
+function loadFileContents(file)
+{
+	if(!r3util.isSafeString(file)){
+		console.error('[ERROR] loadFileContents : file argument is not safe.');
+		return null;
+	}
+	try{
+		fs.statSync(file);
+	}catch(err){
+		console.error('[ERROR] loadFileContents : file(' + file + ') does not exist. error : ' + err.message);
+		return null;
+	}
+
+	var	contents = null;
+	try{
+		contents = fs.readFileSync(file).toString();
+	}catch(err){
+		console.error('[ERROR] loadFileContents : could not read from file(' + file + '). error : ' + err.message);
+		return null;
+	}
+	return contents;
+}
+
+//
+// Utility: get object from json string
+//
+function cvtJsonStringToObject(json_contents)
+{
+	var json_obj = null;
+	try{
+		json_obj = JSON.parse(json_contents);
+	}catch(err){
+		console.error('[ERROR] cvtJsonStringToObject : could not convert json string(' + JSON.stringify(json_contents) + ') to object.' + err.message);
+		return null;
+	}
+	return json_obj;
+}
+
+//
+// Utility: get license-checker path
+//
+function getLicenseCheckerPath()
+{
+	var	bin_name= 'license-checker';
+	var	path	= null;
+	var	result;
+	try{
+		result	= execSync('which ' + bin_name);
+		path	= String(result).replace(/\r?\n/g, '');
+	}catch(error){
+		try{
+			result	= execSync('ls -1 ' + __dirname + '/../node_modules/.bin/' + bin_name);
+			path	= String(result).replace(/\r?\n/g, '');
+		}catch(error){
+			console.error('[ERROR] not found ' + bin_name + ' tool, please check path and packages.');
+		}
+	}
+	return path;
+}
+
+//
+// Utility: get all depending packages
+//
+function getDependPackages(package_name, packages)
+{
+	if(!r3util.isSafeEntity(packages)){
+		packages = {};
+	}
+	for(var exist_package in packages){
+		if(exist_package == package_name){
+			// already has package info
+			return true;
+		}
+	}
+
+	// get package version and set it
+	var	package_version;
+	try{
+		// [NOTE]
+		// we use 'npm list' command instead of 'npm view <package> version'.
+		// because 'npm view' sometimes returns different version from installed
+		// package version.
+		//
+		package_version	= execSync('npm list ' + package_name + ' 2>/dev/null | grep ' + package_name + ' | head -1');
+		package_version = String(package_version)
+							.replace(/\r?\n/g,	'')
+							.replace(/^.*@/g,	'')
+							.replace(/\s+.*/g,	'');
+		if(!r3util.isSafeString(package_version)){
+			console.error('  [WARNING] could not get ' + package_name + ' version, so retry another command(, but ultimately will not get license).');
+			package_version = null;				// version is set null.
+		}
+	}catch(error){
+		console.error('  [WARNING] caught exception(' + error.message + ') for ' + package_name + ' version, so retry another command(, but ultimately will not get license).');
+		package_version = null;					// version is set null.
+	}
+	if(null == package_version){
+		try{
+			// retry to get version by npm view command.
+			package_version	= execSync('npm view ' + package_name + ' version');
+			package_version = String(package_version).replace(/\r?\n/g, '');
+			if(!r3util.isSafeString(package_version)){
+				console.error('  [ERROR] could not get ' + package_name + ' version, probably it is not installed.');
+				package_version = null;			// version is set null.
+			}
+		}catch(error){
+			console.error('  [ERROR] caught exception(' + error.message + ') for getting ' + package_name + ' version, probably it is not installed.');
+			package_version = null;				// version is set null.
+		}
+	}
+	packages[package_name] = {
+		version:	package_version
+	};
+	console.log('  ' + package_name + '@' + (null == package_version ? '???' : package_version));
+
+    // get depending packages by npm view command
+	var deps_result = "";
+	try{
+		deps_result	= execSync('npm view ' + package_name + ' dependencies');
+		deps_result	= String(deps_result)
+						.replace(/\r?\n/g,	'')
+						.replace(/> /g,		'>')
+						.replace(/< /g,		'<')
+						.replace(/= /g,		'=')
+						.replace(/ >/g,		'>')
+						.replace(/ </g,		'<')
+						.replace(/ =/g,		'=')
+						.replace(/ \|\|/g,	'||')
+						.replace(/\|\| /g,	'||')
+						.replace(/ /g,		'\'')
+						.replace(/:/g,		'\':')
+						.replace(/'{/g,		'{')
+						.replace(/}'/g,		'}')
+						.replace(/\'+/g,	'\'')
+						.replace(/'/g,		'"');
+	}catch(error){
+		console.log('  [INFO] caught exception(' + error.message + ') for getting ' + package_name + ' dependencies, probably it does not have any dependencies.');
+	}
+	if(!r3util.isSafeString(deps_result)){
+		// probably empty string
+		return true;
+	}
+	var deps_obj	= cvtJsonStringToObject(deps_result);
+	if(!r3util.isSafeEntity(deps_obj)){
+		console.error('  [ERROR] got something wrong result from \'npm view ' + package_name + ' dependencies\' command.');
+		return false;
+	}
+
+	// check and set all sub depending packages
+	for(var dep_package in deps_obj){
+		// reentrant
+		if(!getDependPackages(dep_package, packages)){
+			console.error('  [ERROR] something wrong about ' + dep_package + ' depends on packages, but continue...');
+		}
+	}
+	return true;
+}
+
+//
+// Utility: Load package.json
+//
+function getPackageJsonObject()
+{
+	var	package_json			= __dirname + '/../package.json';
+	var	package_json_contents	= loadFileContents(package_json);
+	if(!r3util.isSafeString(package_json_contents)){
+		console.error('[ERROR] could not load contents from package.json.');
+		return null;
+	}
+	var package_json_obj		= cvtJsonStringToObject(package_json_contents);
+	if(!r3util.isSafeEntity(package_json_obj)){
+		console.error('[ERROR] package.json contents is not safe json contents.');
+		return null;
+	}
+
+	//
+	// With package package described in dependency of package.json
+	// as the top package, retrieve all dependent package names and
+	// versions.
+	//
+	if(!r3util.isSafeEntity(package_json_obj) || !r3util.isSafeEntity(package_json_obj.dependencies)){
+		console.error('[ERROR] package.json does not have dependencies member.');
+		return null;
+	}
+	return package_json_obj.dependencies;
+}
+
+//
+// Utility: get file names from import sentences
+//
+function getPackageNames(import_lines)
+{
+	var	files = {};
+	if(!r3util.isEmptyArray(import_lines)){
+		for(var cnt = 0; cnt < import_lines.length; ++cnt){
+			if(r3util.isSafeString(import_lines[cnt])){
+				// ex)	"import PropTypes              from 'prop-types';"				=> prop-types
+				//		"import Checkbox               from 'material-ui/Checkbox';"	=> material-ui
+				//		"import { policyEffects, ... } from '../util/r3define';"		=> ..
+				//		"import { errorType, ... }     from './r3types';"				=> .
+				//
+				var	file = import_lines[cnt].replace(/^\s*/g, '').replace(/\/\/.*/g, '').replace(/^import.*from/g, '').replace(/\'|;| |\s/g, '').replace(/\/.*/g, '');
+				if(r3util.isSafeString(file) && '..' != file && '.' != file){
+					files[file] = true;
+				}
+			}
+		}
+	}
+	return Object.keys(files);
+}
+
+//
+// Utility: get all top level package name from source files
+//
+function getTopLevelPackages()
+{
+	var	result;
+	var	all_source_files;
+	var	all_imports = {};
+	var	current_dir	= process.cwd();
+	try{
+		result			= execSync('git ls-files ' + __dirname + '/.. | grep \'src/\'');
+		result			= String(result);
+		all_source_files= result.split('\n');
+	}catch(error){
+		console.error('[ERROR] caught exception(' + error.message + ') for getting top level source files.');
+		return all_imports;
+	}
+
+	for(var cnt = 0; cnt < all_source_files.length; ++cnt){
+		if(!r3util.isSafeString(all_source_files[cnt])){
+			continue;
+		}
+		try{
+			// [NOTE]
+			// The result of "git ls-files" command is relative to the current directory.
+			//
+			result		= execSync('grep import ' + current_dir + '/' + all_source_files[cnt]);
+			result		= String(result);
+			var	imports	= result.split('\n');
+			var	files	= getPackageNames(imports);
+			for(var cnt2 = 0; cnt2 < files.length; ++cnt2){
+				all_imports[files[cnt2]] = 'dummy';
+			}
+		}catch(error){
+			// probably the file does not have import sentence.
+			//console.log('[INFO] caught exception(' + error.message + ') for search import files in ' + all_source_files[cnt]);
+		}
+	}
+	return all_imports;
+}
+
+//
+// Special add for Reset Stylesheet
+//
+function addSpecialLicenses(licenses_obj)
+{
+	if(!r3util.isSafeEntity(licenses_obj)){
+		return false;
+	}
+
+	licenses_obj['Reset Stylesheet(html5doctor.com)'] = {
+		licenseType:	'CC0 Public Domain Dedication or MIT License',
+		licenseText:	'\
+html5doctor.com Reset Stylesheet\n\
+v1.6.1\n\
+Last Updated: 2010-09-17\n\
+Author: Richard Clark - http://richclarkdesign.com \n\
+Twitter: @rich_clark\n\n\
+Permission is hereby granted, free of charge, to any person \n\
+obtaining a copy of any version of this file on Google Code \n\
+or this file on Github (the "Software"), to deal in the \n\
+Software under the terms of the CC0 Public Domain Dedication, \n\
+or,alternatively, to deal in the Software under the terms of \n\
+the MIT License.\n'
+};
+	return true;
+}
+
+//
+// Put licenses to file
+//
+function putLicensesFile(file, licenses_obj)
+{
+	if(!r3util.isSafeEntity(licenses_obj) || !r3util.isSafeString(file)){
+		return false;
+	}
+
+	// build contents which includes JSON from licenses object.
+	var	output_contents = '/* eslint-disable no-useless-escape */\n';
+	output_contents		+= 'export const r3LicensesJsonString = \'' + JSON.stringify(licenses_obj).replace(/\'/g, '\\\'').replace(/\\n/g, '\\\\n').replace(/\\\"/g, '\\\\\"') + '\';\n';
+	output_contents		+= '/* eslint-enable no-useless-escape */\n';
+
+	try{
+		fs.writeFileSync(file, output_contents);
+	}catch(err){
+		console.error('[ERROR] could not put license contents to file(' + file + ').');
+		return false;
+	}
+	return true;
+}
+
+//
+// Main
+//
+function main(use_package_json)
+{
+	var top_level_obj;
+	if(use_package_json){
+		//
+		// Get file names from package.json
+		//
+		top_level_obj = getPackageJsonObject();
+	}else{
+		//
+		// Get file names from source files
+		//
+		top_level_obj = getTopLevelPackages();
+	}
+	if(!r3util.isSafeEntity(top_level_obj)){
+		console.error('[ERROR] not found top level file list.');
+		return false;
+	}
+	// For debug
+	{
+		console.log('Top level packages = {');
+		var	tmp_keys = Object.keys(top_level_obj);
+		for(var cnt = 0; cnt < tmp_keys.length; ++cnt){
+			console.log('  ' + tmp_keys[cnt]);
+		}
+		console.log('}\n');
+	}
+
+	//
+	// With package package described in dependency of package.json
+	// as the top package, retrieve all dependent package names and
+	// versions.
+	//
+	console.log('Check packages = {');
+	var	all_packages = {};
+	for(var top_package_name in top_level_obj){
+		// get/set all depending packages
+		getDependPackages(top_package_name, all_packages);
+	}
+	console.log('}');
+
+	//
+	// Create an option to pass to license-checker.
+	// The option is a semicolon-separated string of 'package_name@version'.
+	// ex) 'name@version\;name@version...'
+	//
+	var package_name;
+	var	package_opt_arg = "";				// option formatted is "name@version\;name@version..."
+	for(package_name in all_packages){
+		if(!r3util.isSafeString(all_packages[package_name] && !r3util.isSafeString(all_packages[package_name].version))){
+			if(r3util.isSafeString(package_opt_arg)){
+				package_opt_arg += '\\;';
+			}
+			package_opt_arg += package_name;
+			package_opt_arg += '@';
+			package_opt_arg += all_packages[package_name].version;
+		}
+	}
+	if(!r3util.isSafeString(package_opt_arg)){
+		console.error('[ERROR] could not make option argument for license-checker.');
+		return false;
+	}
+
+	//
+	// Use license-checker to obtain license information of each package with JSON.
+	//
+	var	raw_licenses_obj;
+	var	license_checker_path = getLicenseCheckerPath();
+	if(!r3util.isSafeString(license_checker_path)){
+		return false;
+	}
+	try{
+		var	raw_licenses_result	= execSync(license_checker_path + ' --excludePrivatePackages --json --packages ' + package_opt_arg);
+		raw_licenses_obj		= cvtJsonStringToObject(String(raw_licenses_result).replace(/\r?\n/g, ''));
+		if(!r3util.isSafeEntity(raw_licenses_obj)){
+			console.error('[ERROR] could not get result of license-checker with packages argument(' + package_opt_arg + ').');
+			return false;
+		}
+	}catch(error){
+		console.error('[ERROR] caught exception(' + error.message + ') for license-checker by \'' + package_opt_arg + '\'.');
+		return false;
+	}
+
+	//
+	// Create a pair of package name and its license string.
+	//
+	var	all_licenses_obj = {}
+	for(package_name in raw_licenses_obj){
+		if(!r3util.isSafeEntity(raw_licenses_obj[package_name])){
+			console.error('[ERROR] not found ' + package_name + ' result from license-checker, then skip this.');
+			continue;
+		}
+
+		// pure package name
+		var	display_name;
+		var	name_match	= package_name.match(/(^.*)@/);
+		if(r3util.isSafeEntity(name_match) && r3util.isSafeString(name_match[1])){
+			display_name = name_match[1];
+		}else{
+			display_name = package_name;
+		}
+
+		// license context
+		var	license_text;
+		if(r3util.isSafeString(raw_licenses_obj[package_name].licenseFile)){
+			// [NOTE]
+			// Packages whose license file is README.md are not brute.
+			// Let's pass the license type.
+			//
+			var	filename = raw_licenses_obj[package_name].licenseFile.replace(/^.*\//g, '');
+			if(r3util.compareCaseString('README.md', filename)){
+				console.error('[WARNING] ' + package_name + ' license file is README.md, so we try to use license type string instead of it.');
+				license_text = null;
+			}else{
+				// load all of license file context
+				license_text = loadFileContents(raw_licenses_obj[package_name].licenseFile);
+				if(!r3util.isSafeString(license_text)){
+					console.error('[WARNING] could not load ' + package_name + ' license file(' + raw_licenses_obj[package_name].licenseFile + '), so we try to use license type string instead of it.');
+					license_text = null;
+				}
+			}
+		}else{
+			console.error('[WARNING] not found ' + package_name + ' license file, so we use license type string instead of it.');
+			license_text = null;
+		}
+		if(!r3util.isSafeString(license_text)){
+			// Substitute with licenses( +repository)
+			if(r3util.isSafeString(raw_licenses_obj[package_name].licenses)){
+				if(r3util.isSafeString(raw_licenses_obj[package_name].repository)){
+					license_text = 'Repository: ' + raw_licenses_obj[package_name].repository + '\n';
+				}else{
+					license_text = null;
+				}
+			}else{
+				console.error('[ERROR] could not get ' + package_name + ' license file/type, so skip this.');
+				continue;
+			}
+		}
+		all_licenses_obj[display_name] = {
+			licenseType:	raw_licenses_obj[package_name].licenses,
+			licenseText:	license_text
+		}
+	}
+
+	//
+	// Special add for Reset Stylesheet
+	//
+	if(!addSpecialLicenses(all_licenses_obj)){
+		return false
+	}
+//	console.log('\nAll package licenses = {');
+//	console.dir(all_licenses_obj);
+//	console.log('}');
+
+	//
+	// Put all licenses JSON string object to source file.
+	//
+	if(!putLicensesFile(__dirname + '/../src/util/r3licenses.js', all_licenses_obj)){
+		return false
+	}
+	console.log('\nSucceed output file(' + __dirname + '/../src/util/r3licenses.js).');
+
+	return true;
+}
+
+//
+// Run
+//
+var	result;
+var	args = getArguments();
+if(args.help){
+	printHelp(args.process_name);
+	result = true;
+}else{
+	console.log('\nStart to make all package licenses JSON object file.\n');
+	result = main(args.use_package_json);
+	console.log('\nFinish with ' + (result ? 'no error' : 'error') + '.\n');
+}
+process.exit(result ? 0 : 1);
+
+/*
+ * VIM modelines
+ *
+ * vim:set ts=4 fenc=utf-8:
+ *
+ */

@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`R3TextLabel test snapshot for R3TextLabel 1`] = `
+<span
+  style={
+    Object {
+      "MozBorderRadius": "20px",
+      "WebkitBorderRadius": "20px",
+      "backgroundColor": "#673ab7",
+      "border": 0,
+      "borderRadius": "20px",
+      "color": "#ede7f6",
+      "fontWeight": "bold",
+      "marginRight": "12px",
+      "padding": "6px 12px",
+    }
+  }
+>
+  JEST_TEST_TENANT
+</span>
+`;

@@ -1,0 +1,201 @@
+/*
+ *
+ * K2HR3 Web Application
+ *
+ * Copyright 2017 Yahoo! Japan Corporation.
+ *
+ * K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers
+ * common management information for the cloud.
+ * K2HR3 can dynamically manage information as "who", "what", "operate".
+ * These are stored as roles, resources, policies in K2hdkc, and the
+ * client system can dynamically read and modify these information.
+ *
+ * For the full copyright and license information, please view
+ * the license file that was distributed with this source code.
+ *
+ * AUTHOR:   Takeshi Nakatani
+ * CREATE:   Tue Aug 15 2017
+ * REVISION:
+ *
+ */
+
+/**************************************************************************************************
+ *
+ * [NOTE] - Important background
+ *
+ * This is CSS Style file for IconFont.
+ * We use Google Material(https://material.io/icons/) as IconFont and load it in head.ejs.
+ * 	ex) <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+ * 
+ * The loaded CSS has class name "material-icons".
+ * Google's IconFont is supposed to be called from the <i> tag, and this way is the usual
+ * usage method.
+ * However, it can not be passed directly to the "material-ui" component.
+ * Therefore, we extend the class name by this CSS Style file and give the unique class
+ * name for each IconFont.
+ * 
+ * In addition, this project uses webpack, CSS file is subject to build. Then by webpack,
+ * the class name is "public-css-styleiconfont-" prefixed.
+ * When using IconFont, we need to use this prefixed class name.
+ * 
+ * [Reference]
+ * 	https://github.com/callemall/material-ui/blob/master/docs/src/www/css/font-icons/style.css
+ * 	https://github.com/callemall/material-ui/issues/2526
+ *************************************************************************************************/
+
+/*
+ * [NOTE] - Common class setting
+ *
+ * Here we extend the "public-css-styleiconfont-" prefix for the each "material-icons"
+ * class name("material-icons-*").
+ * For the each extended class, following sets the same item as "material-icons" in Google
+ * Matrial.
+ * Its contents are exactly the same as the "material-icons" class obtained from
+ * "https://fonts.googleapis.com/icon?Family=Material+Icons".
+ * Then the styles of all "material-icons-*" classes extended by this CSS Style file are
+ * commonly set to.
+ */
+
+[class^="public-css-styleiconfont-material-icons-"], [class*=" public-css-styleiconfont-material-icons-"] {
+	font-family:					'Material Icons';
+	font-weight:					normal;
+	font-style:						normal;
+	font-size:						24px;
+	line-height:					1;
+	letter-spacing:					normal;
+	text-transform:					none;
+	display:						inline-block;
+	white-space:					nowrap;
+	word-wrap:						normal;
+	direction:						ltr;
+	-moz-font-feature-settings:		'liga';
+	-moz-osx-font-smoothing:		grayscale;
+}
+
+/*
+ * [NOTE] - How to add IconFont
+ *
+ * First, select the IconFont you want to use from "https://material.io/icons/", then
+ * check how to use that IconFont(example below).
+ * 
+ * 	<i class="material-icons">&#xE851;</i>
+ * 
+ * Determine the class name of IconFont to use.
+ * The class name is prefixed with "material-icons-", and give a unique name following
+ * that prefix.
+ * (example: for "Account Box" IconFont, it is "material-icons-account-box")
+ * 
+ * In this class we only define "content".
+ * The "content" value is specified the value of the <i> tag (example: "&#xE851")
+ * confirmed with the above URL.
+ * 
+ * Please call from material-ui's JSX(React.js) as follows.
+ * 
+ * 	import styleIconFont from '../../public/css/styleiconfont.css'
+ * 	<AppBar
+ * 		title={ this.props.title }
+ * 		iconClassNameRight={ styleIconFont['material-icons-account-box'] }
+ * 	/>
+ * 
+ * When adding IconFont, add it according to this example.
+ */
+
+.material-icons-dehaze:before {
+	content:	'\e3c7';
+}
+
+.material-icons-close:before {
+	content:	'\e5cd';
+}
+
+.material-icons-account-box:before {
+	content:	'\e851';
+}
+
+.material-icons-account-box-large:before {
+	content:	'\e851';
+	font-size:	48px;
+}
+
+.material-icons-account-login:before {
+	content:	'\e7fd';
+}
+
+.material-icons-add-btn:before {
+	content:	'\e146';
+}
+
+.material-icons-delete-forever-btn:before {
+	content:	'\e92b';
+}
+
+.material-icons-description:before {
+	content:	'\e873';
+}
+
+.material-icons-save:before {
+	content:	'\e161';
+}
+
+.material-icons-check:before {
+	content:	'\e86c';
+}
+
+.material-icons-cancel:before {
+	content:	'\e5c9';
+}
+
+.material-icons-error:before {
+	content:	'\e000';
+}
+
+.material-icons-warning:before {
+	content:	'\e002';
+}
+
+.material-icons-information:before {
+	content:	'\e001';
+}
+
+.material-icons-arrow-right:before {
+	content:	'\e315';
+}
+
+.material-icons-more-vert:before {
+	content:	'\e5d4';
+}
+
+.material-icons-move-up:before {
+	content:	'\e5d8';
+}
+
+.material-icons-move-down:before {
+	content:	'\e5db';
+}
+
+.material-icons-label-top:before {
+	content:	'\e892';
+}
+
+.material-icons-down-arrow:before {
+	content:	'\e313';
+}
+
+.material-icons-arrow-upward:before {
+	content:	'\e5d8';
+}
+
+.material-icons-clipcopy:before {
+	content:	'\e862';
+}
+
+.material-icons-edit:before {
+	content:	'\e3c9';
+}
+
+/*
+ * VIM modelines
+ *
+ * vim:set ts=4 fenc=utf-8:
+ *
+ */

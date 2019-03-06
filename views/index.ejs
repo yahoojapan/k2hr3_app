@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+	<%- include('./include/head', { title: title }) %>
+	<%- include('./include/globalval', { apischeme: apischeme, apihost: apihost, apiport: apiport, appmenu: appmenu, userdata: userdata, username: username, unscopedtoken: unscopedtoken, signintype: signintype, signinurl: signinurl, signouturl: signouturl, lang: lang, dbgheader: dbgheader, dbgvalue: dbgvalue, dbgresheader: dbgresheader }) %>
+	<body>
+		<%- include('./include/noscript') %>
+		<div id="r3app"></div>
+		<%- include('./include/footer') %>
+		<script src="/public/js/bundle.js"></script>
+	</body>
+</html>
