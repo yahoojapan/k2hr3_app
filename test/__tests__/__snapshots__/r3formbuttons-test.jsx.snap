@@ -2,262 +2,93 @@
 
 exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
 <div
-  className="clearof"
-  style={
-    Object {
-      "float": "right",
-    }
-  }
+  className="R3FormButtons-root-1"
 >
-  <div
-    style={
-      Object {
-        "WebkitTapHighlightColor": "rgba(0,0,0,0)",
-        "backgroundColor": "#ede7f6",
-        "borderRadius": 2,
-        "boxShadow": "0 1px 6px rgba(49, 27, 146, 0.12),
-         0 1px 4px rgba(49, 27, 146, 0.12)",
-        "boxSizing": "border-box",
-        "color": "#212121",
-        "display": "inline-block",
-        "fontFamily": "Roboto, sans-serif",
-        "margin": 4,
-        "minWidth": 88,
-        "muiPrepared": true,
-        "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-      }
-    }
+  <button
+    aria-label="cancel"
+    className="MuiButtonBase-root-31 MuiButton-root-5 MuiButton-contained-16 MuiButton-containedPrimary-17 MuiButton-raised-19 MuiButton-raisedPrimary-20 R3FormButtons-cancelButton-2"
+    disabled={false}
+    onBlur={[Function]}
+    onClick={[Function]}
+    onContextMenu={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onKeyUp={[Function]}
+    onMouseDown={[Function]}
+    onMouseLeave={[Function]}
+    onMouseUp={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
+    onTouchStart={[Function]}
+    tabIndex="0"
+    type="button"
   >
-    <button
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchStart={[Function]}
-      onTouchTap={[Function]}
-      style={
-        Object {
-          "WebkitTapHighlightColor": "rgba(0, 0, 0, 0)",
-          "backgroundColor": "#607d8b",
-          "border": 10,
-          "borderRadius": 2,
-          "boxSizing": "border-box",
-          "cursor": "pointer",
-          "display": "inline-block",
-          "fontFamily": "Roboto, sans-serif",
-          "fontSize": "inherit",
-          "fontWeight": "inherit",
-          "height": 36,
-          "lineHeight": "36px",
-          "margin": 0,
-          "muiPrepared": true,
-          "outline": "none",
-          "padding": 0,
-          "position": "relative",
-          "textAlign": "center",
-          "textDecoration": "none",
-          "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-          "verticalAlign": null,
-          "width": "100%",
-          "zIndex": 1,
-        }
-      }
-      tabIndex={0}
-      type="button"
+    <span
+      className="MuiButton-label-6"
     >
-      <div
-        onMouseDown={[Function]}
-        onMouseLeave={[Function]}
-        onMouseUp={[Function]}
-        onTouchEnd={[Function]}
-        onTouchStart={[Function]}
+      CANCEL
+      <svg
+        aria-hidden="true"
+        className="MuiSvgIcon-root-34 R3FormButtons-buttonIcon-4"
+        focusable="false"
+        role="presentation"
+        viewBox="0 0 24 24"
       >
-        <div
-          style={
-            Object {
-              "backgroundColor": false,
-              "borderRadius": 2,
-              "height": 36,
-              "muiPrepared": true,
-              "top": 0,
-              "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-            }
-          }
-        >
-          <span
-            color="#ffffff"
-            onMouseEnter={[Function]}
-            onMouseLeave={[Function]}
-            style={
-              Object {
-                "color": "#ffffff",
-                "display": "inline-block",
-                "fontSize": 24,
-                "marginLeft": 12,
-                "marginRight": 0,
-                "muiPrepared": true,
-                "position": "relative",
-                "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                "userSelect": "none",
-                "verticalAlign": "middle",
-              }
-            }
-          />
-          <span
-            style={
-              Object {
-                "color": "#ffffff",
-                "fontSize": 14,
-                "fontWeight": 500,
-                "letterSpacing": 0,
-                "margin": 0,
-                "muiPrepared": true,
-                "opacity": 1,
-                "paddingLeft": 8,
-                "paddingRight": 16,
-                "position": "relative",
-                "textTransform": "uppercase",
-                "userSelect": "none",
-              }
-            }
-          >
-            CANCEL
-          </span>
-        </div>
-      </div>
-    </button>
-  </div>
-  <div
-    style={
-      Object {
-        "WebkitTapHighlightColor": "rgba(0,0,0,0)",
-        "backgroundColor": "#ede7f6",
-        "borderRadius": 2,
-        "boxShadow": "0 1px 6px rgba(49, 27, 146, 0.12),
-         0 1px 4px rgba(49, 27, 146, 0.12)",
-        "boxSizing": "border-box",
-        "color": "#212121",
-        "display": "inline-block",
-        "fontFamily": "Roboto, sans-serif",
-        "margin": 4,
-        "minWidth": 88,
-        "muiPrepared": true,
-        "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-      }
-    }
+        <path
+          d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"
+        />
+        <path
+          d="M0 0h24v24H0z"
+          fill="none"
+        />
+      </svg>
+    </span>
+    <span
+      className="MuiTouchRipple-root-43"
+    />
+  </button>
+  <button
+    aria-label="save"
+    className="MuiButtonBase-root-31 MuiButton-root-5 MuiButton-contained-16 MuiButton-containedSecondary-18 MuiButton-raised-19 MuiButton-raisedSecondary-21 R3FormButtons-saveButton-3"
+    disabled={false}
+    onBlur={[Function]}
+    onClick={[Function]}
+    onContextMenu={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onKeyUp={[Function]}
+    onMouseDown={[Function]}
+    onMouseLeave={[Function]}
+    onMouseUp={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
+    onTouchStart={[Function]}
+    tabIndex="0"
+    type="button"
   >
-    <button
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchStart={[Function]}
-      onTouchTap={[Function]}
-      style={
-        Object {
-          "WebkitTapHighlightColor": "rgba(0, 0, 0, 0)",
-          "backgroundColor": "#ff5722",
-          "border": 10,
-          "borderRadius": 2,
-          "boxSizing": "border-box",
-          "cursor": "pointer",
-          "display": "inline-block",
-          "fontFamily": "Roboto, sans-serif",
-          "fontSize": "inherit",
-          "fontWeight": "inherit",
-          "height": 36,
-          "lineHeight": "36px",
-          "margin": 0,
-          "muiPrepared": true,
-          "outline": "none",
-          "padding": 0,
-          "position": "relative",
-          "textAlign": "center",
-          "textDecoration": "none",
-          "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-          "verticalAlign": null,
-          "width": "100%",
-          "zIndex": 1,
-        }
-      }
-      tabIndex={0}
-      type="button"
+    <span
+      className="MuiButton-label-6"
     >
-      <div
-        onMouseDown={[Function]}
-        onMouseLeave={[Function]}
-        onMouseUp={[Function]}
-        onTouchEnd={[Function]}
-        onTouchStart={[Function]}
+      SAVE
+      <svg
+        aria-hidden="true"
+        className="MuiSvgIcon-root-34 R3FormButtons-buttonIcon-4"
+        focusable="false"
+        role="presentation"
+        viewBox="0 0 24 24"
       >
-        <div
-          style={
-            Object {
-              "backgroundColor": false,
-              "borderRadius": 2,
-              "height": 36,
-              "muiPrepared": true,
-              "top": 0,
-              "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-            }
-          }
-        >
-          <span
-            color="#ffffff"
-            onMouseEnter={[Function]}
-            onMouseLeave={[Function]}
-            style={
-              Object {
-                "color": "#ffffff",
-                "display": "inline-block",
-                "fontSize": 24,
-                "marginLeft": 12,
-                "marginRight": 0,
-                "muiPrepared": true,
-                "position": "relative",
-                "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                "userSelect": "none",
-                "verticalAlign": "middle",
-              }
-            }
-          />
-          <span
-            style={
-              Object {
-                "color": "#ffffff",
-                "fontSize": 14,
-                "fontWeight": 500,
-                "letterSpacing": 0,
-                "margin": 0,
-                "muiPrepared": true,
-                "opacity": 1,
-                "paddingLeft": 8,
-                "paddingRight": 16,
-                "position": "relative",
-                "textTransform": "uppercase",
-                "userSelect": "none",
-              }
-            }
-          >
-            SAVE
-          </span>
-        </div>
-      </div>
-    </button>
-  </div>
+        <path
+          d="M0 0h24v24H0z"
+          fill="none"
+        />
+        <path
+          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+        />
+      </svg>
+    </span>
+    <span
+      className="MuiTouchRipple-root-43"
+    />
+  </button>
 </div>
 `;

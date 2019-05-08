@@ -19,35 +19,86 @@
  *
  */
 
-import React			from 'react';
-import ReactDOM			from 'react-dom';									// eslint-disable-line no-unused-vars
-import PropTypes		from 'prop-types';
+import React						from 'react';
+import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
+import PropTypes					from 'prop-types';
 
-import TextField		from 'material-ui/TextField';
-import FontIcon			from 'material-ui/FontIcon';
-import IconButton		from 'material-ui/IconButton';
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';	// Radio Button
+import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
+import TextField					from '@material-ui/core/TextField';
+import Typography					from '@material-ui/core/Typography';
+import IconButton					from '@material-ui/core/IconButton';
+import FormControl					from '@material-ui/core/FormControl';	// For Radio Button
+import FormControlLabel				from '@material-ui/core/FormControlLabel';
+import RadioGroup					from '@material-ui/core/RadioGroup';
+import Radio						from '@material-ui/core/Radio';
+import Tooltip						from '@material-ui/core/Tooltip';
+import DeleteIcon					from '@material-ui/icons/ClearRounded';
+import AddIcon						from '@material-ui/icons/AddRounded';
+import UpIcon						from '@material-ui/icons/ArrowUpwardRounded';
+import DownIcon						from '@material-ui/icons/ArrowDownwardRounded';
 
-import R3FormButtons	from './r3formbuttons';								// Buttons
-import R3Message		from '../util/r3message';
-import R3PopupMsgDialog	from './r3popupmsgdialog';
-import { regYrnAnyResourcePath } from '../util/r3define';
-import { r3ObjMerge, r3DeepClone, r3DeepCompare, r3RenameObjectKey, r3IsJSON, r3ConvertFromJSON, r3IsEmptyStringObject, r3IsEmptyString } from '../util/r3util';
+import { r3Resource }				from './r3styles';
+import R3FormButtons				from './r3formbuttons';					// Buttons
+import R3PopupMsgDialog				from './r3popupmsgdialog';
+import R3Message					from '../util/r3message';
+import { regYrnAnyResourcePath }	from '../util/r3define';
 import { errorType, resourceTypeString, resourceTypeObject, actionTypeName, actionTypeValue, actionTypeNewKey, actionTypeNewValue, actionTypeDelete, actionTypeAdd, actionTypeUp, actionTypeDown } from '../util/r3types';
+import { r3DeepClone, r3DeepCompare, r3RenameObjectKey, r3IsJSON, r3ConvertFromJSON, r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsEmptyString, r3IsSafeTypedEntity } from '../util/r3util';
+
+//
+// Local variables
+//
+const tooltipValues = {
+	deleteKeysTooltip:				'deleteKeysTooltip',
+	addKeysTooltip:					'addKeysTooltip',
+	downAliasTooltip:				'downAliasTooltip',
+	upAliasTooltip:					'upAliasTooltip',
+	deleteAliasTooltip:				'deleteAliasTooltip',
+	addAliasTooltip:				'addAliasTooltip'
+};
+
+const resourceComponentValues = {
+	valueTypeRadioName:				'resourceType',
+	valueTextFieldName:				'resourceValue',
+	keysKeyTextFieldNamePrefix:		'resourceKeysKey_',
+	keysValueTextFieldNamePrefix:	'resourceKeysValue_',
+	keysNewKeyTextFieldName:		'resourceKeysNewKey',
+	keysNewValueTextFieldName:		'resourceKeysNewValue',
+	aliasTextFieldNamePrefix:		'aliasValue_',
+	aliasNewTextFieldName:			'aliasNew'
+};
 
 //
 // Resource Contents Class
 //
+@withTheme()
+@withStyles(r3Resource)
 export default class R3Resource extends React.Component
 {
+	static contextTypes = {
+		r3Context:	PropTypes.object.isRequired
+	};
+
+	static propTypes = {
+		r3provider:	PropTypes.object.isRequired,
+		resource:	PropTypes.object.isRequired,
+		isReadMode:	PropTypes.bool,
+
+		onSave:		PropTypes.func.isRequired,
+		onUpdate:	PropTypes.func.isRequired
+	};
+
+	static defaultProps = {
+		isReadMode:	false
+	};
+
+	state = this.createState(this.props.resource);
+
 	constructor(props)
 	{
 		super(props);
 
-		// Initalize Sate
-		this.state = this.createState(this.props.resource);
-
-		// Binding
+		// Binding(do not define handlers as arrow functions for performance)
 		this.handleSave					= this.handleSave.bind(this);
 		this.handleCancel				= this.handleCancel.bind(this);
 		this.handleConfirmDialogClose	= this.handleConfirmDialogClose.bind(this);
@@ -71,11 +122,11 @@ export default class R3Resource extends React.Component
 	{
 		let	resourceType	= resourceTypeString;			// default
 		let	resourceValue	= '';
-		if(undefined !== resource && null !== resource){
-			if(undefined !== resource.string && null !== resource.string && 'string' === typeof resource.string){
+		if(!r3IsEmptyEntity(resource)){
+			if(r3IsSafeTypedEntity(resource.string, 'string')){
 				resourceType	= resourceTypeString;
 				resourceValue	= resource.string;
-			}else if(undefined !== resource.object && null !== resource.object && 'object' === typeof resource.object){
+			}else if(r3IsSafeTypedEntity(resource.object, 'object')){
 				resourceType	= resourceTypeObject;
 				resourceValue	= JSON.stringify(resource.object);
 			}
@@ -90,7 +141,16 @@ export default class R3Resource extends React.Component
 			addAliases:				'',
 			changed:				false,
 			confirmMessageObject:	null,
-			messageDialogObject:	null
+			messageDialogObject:	null,
+
+			tooltips: {
+				deleteKeysTooltip:	null,		// keyname
+				addKeysTooltip:		false,
+				downAliasTooltip:	-1,			// position
+				upAliasTooltip:		-1,			// position
+				deleteAliasTooltip:	-1,			// position
+				addAliasTooltip:	false
+			}
 		};
 	}
 
@@ -99,17 +159,17 @@ export default class R3Resource extends React.Component
 	//
 	isChangedKeysValueState(nowType, nowValue)
 	{
-		if(undefined === nowType || null === nowType || undefined ===  nowValue || null === nowValue){
+		if(r3IsEmptyEntity(nowType) || r3IsEmptyEntity(nowValue)){
 			nowType	= this.state.resourceType;
 			nowValue= this.state.resourceValue;
 		}
 		// check type
 		let	propsType	= resourceTypeString;
 		let	propsValue	= '';
-		if(undefined !== this.props.resource && null !== this.props.resource && undefined !== this.props.resource.string && null !== this.props.resource.string && 'string' === typeof this.props.resource.string){
+		if(!r3IsEmptyEntity(this.props.resource) && r3IsSafeTypedEntity(this.props.resource.string, 'string')){
 			propsType	= resourceTypeString;
 			propsValue	= this.props.resource.string;
-		}else if(undefined !== this.props.resource && null !== this.props.resource && undefined !== this.props.resource.object && null !== this.props.resource.object && 'object' === typeof this.props.resource.object){
+		}else if(!r3IsEmptyEntity(this.props.resource) && r3IsSafeTypedEntity(this.props.resource.object, 'object')){
 			propsType	= resourceTypeObject;
 			propsValue	= this.props.resource.object;
 		}
@@ -126,17 +186,16 @@ export default class R3Resource extends React.Component
 	//
 	isChangedKeysNameState(nowKeys)
 	{
-		if(undefined === nowKeys || null === nowKeys){
-			nowKeys	= undefined === this.state.resource || null === this.state.resource ? undefined : this.state.resource.keys;
+		if(r3IsEmptyEntity(nowKeys)){
+			nowKeys	= r3IsEmptyEntity(this.state.resource) ? undefined : this.state.resource.keys;
 		}
-		if(undefined === nowKeys || null === nowKeys){
+		if(r3IsEmptyEntity(nowKeys)){
 			nowKeys = {};									// empty object
 		}
-		let	propsKeys = undefined === this.props.resource || null === this.props.resource ? undefined : this.props.resource.keys;
-		if(undefined === propsKeys || null === propsKeys){
+		let	propsKeys = r3IsEmptyEntity(this.props.resource) ? undefined : this.props.resource.keys;
+		if(r3IsEmptyEntity(propsKeys)){
 			propsKeys = {};									// empty object
 		}
-
 		// check
 		return !r3DeepCompare(nowKeys, propsKeys);
 	}
@@ -146,14 +205,14 @@ export default class R3Resource extends React.Component
 	//
 	isChangedAliasesState(nowAliases)
 	{
-		if(undefined === nowAliases || null === nowAliases){
-			nowAliases	= undefined === this.state.resource || null === this.state.resource ? undefined : this.state.resource.aliases;
+		if(r3IsEmptyEntity(nowAliases)){
+			nowAliases	= r3IsEmptyEntity(this.state.resource) ? undefined : this.state.resource.aliases;
 		}
-		if(undefined === nowAliases || null === nowAliases){
+		if(!r3IsSafeTypedEntity(nowAliases, 'array')){
 			nowAliases = [];									// empty array
 		}
-		let	propsAliases = undefined === this.props.resource || null === this.props.resource ? undefined : this.props.resource.aliases;
-		if(undefined === propsAliases || null === propsAliases){
+		let	propsAliases = r3IsEmptyEntity(this.props.resource) ? undefined : this.props.resource.aliases;
+		if(!r3IsSafeTypedEntity(propsAliases, 'array')){
 			propsAliases = [];									// empty object
 		}
 		// check
@@ -227,7 +286,7 @@ export default class R3Resource extends React.Component
 			//
 			// keys
 			//
-			if(undefined === newResource.keys || null === newResource.keys || !(newResource.keys instanceof Object)){
+			if(!r3IsSafeTypedEntity(newResource.keys, 'object')){
 				newResource.keys = {};
 			}
 			let	keyNames = Object.keys(newResource.keys);
@@ -253,7 +312,7 @@ export default class R3Resource extends React.Component
 						return;
 					}
 				}
-				if(undefined !== nameLists[name]){
+				if(!r3IsEmptyEntity(nameLists[name])){
 					this.setState({
 						messageDialogObject:	new R3Message(this.props.r3provider.getR3TextRes().eSameKey, errorType)
 					});
@@ -282,7 +341,7 @@ export default class R3Resource extends React.Component
 			//
 			// aliases
 			//
-			if(undefined === newResource.aliases || null === newResource.aliases || !(newResource.aliases instanceof Array)){
+			if(!r3IsSafeTypedEntity(newResource.aliases, 'array')){
 				newResource.aliases = [];
 			}
 			// check empty and yrn path by regex
@@ -381,7 +440,7 @@ export default class R3Resource extends React.Component
 		if(resourceTypeString === nowResourceType){
 			defaultResourceValue = r3IsEmptyStringObject(this.props.resource, 'string') ? '' : this.props.resource.string;
 		}else{
-			defaultResourceValue = (undefined === this.props.resource || null === this.props.resource || undefined === this.props.resource.object || null === this.props.resource.object || 'object' !== typeof this.props.resource.object) ? '' : this.props.resource.object;
+			defaultResourceValue = (r3IsEmptyEntity(this.props.resource) || !r3IsSafeTypedEntity(this.props.resource.object, 'object')) ? '' : this.props.resource.object;
 		}
 
 		// new type and value
@@ -394,7 +453,7 @@ export default class R3Resource extends React.Component
 			if(resourceTypeString === newResourceType){
 				newResourceValue = r3IsEmptyStringObject(this.props.resource, 'string') ? '' : this.props.resource.string;
 			}else{
-				newResourceValue = (undefined === this.props.resource || null === this.props.resource || undefined === this.props.resource.object || null === this.props.resource.object || 'object' !== typeof this.props.resource.object) ? '' : JSON.stringify(this.props.resource.object);
+				newResourceValue = (r3IsEmptyEntity(this.props.resource) || !r3IsSafeTypedEntity(this.props.resource.object, 'object')) ? '' : JSON.stringify(this.props.resource.object);
 			}
 		}
 
@@ -413,40 +472,41 @@ export default class R3Resource extends React.Component
 	//
 	// Handle Resource Value : Change
 	//
-	handleValueChange(event, newValue)										// eslint-disable-line no-unused-vars
+	handleValueChange(event)
 	{
 		// set parent changed state
-		let	changed = this.isChangedState(this.state.resourceType, newValue);
+		let	changed = this.isChangedState(this.state.resourceType, event.target.value);
 		this.props.onUpdate(changed);
 
 		// update state
 		this.setState({
 			changed:		changed,
-			resourceValue:	newValue
+			resourceValue:	event.target.value
 		});
 	}
 
 	//
 	// Handle Resource Keys( key, value ) : Change
 	//
-	handleKeysChange(event, type, keyname, changedValue)							// eslint-disable-line no-unused-vars
+	handleKeysChange(event, type, keyname)
 	{
 		let	nowKeys = {};
-		if(undefined !== this.state.resource.keys && null !== this.state.resource.keys && this.state.resource.keys instanceof Object){
+		if(r3IsSafeTypedEntity(this.state.resource.keys, 'object')){
 			nowKeys = r3DeepClone(this.state.resource.keys);
 		}
 
+		let	changedValue	= r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
 		let	newKeys			= nowKeys;
 		let	isClearNewKey	= false;
 		if(actionTypeName === type){
 			//
 			// changed name
 			//
-			if(undefined !== nowKeys[changedValue]){
+			if(!r3IsEmptyEntity(nowKeys[changedValue])){
 				// found same name, we allow it as temporary. then pickups temporary additional name.
 				for(let counter = 0, found = false; !found; ++counter){
 					let tmpName		= changedValue + '\n' + String(counter);		// convert new name with ('\n' + number)
-					if(undefined === nowKeys[tmpName]){
+					if(r3IsEmptyEntity(nowKeys[tmpName])){
 						changedValue= tmpName;
 						found		= true;
 					}
@@ -462,7 +522,7 @@ export default class R3Resource extends React.Component
 			newKeys[keyname] = changedValue;
 
 		}else if(actionTypeDelete === type){
-			if(undefined !== newKeys[keyname]){
+			if(!r3IsEmptyEntity(newKeys[keyname])){
 				delete newKeys[keyname];
 			}
 
@@ -473,7 +533,7 @@ export default class R3Resource extends React.Component
 				});
 				return;
 			}
-			if(undefined === this.state.addKeyValue || null === this.state.addKeyValue || 'string' !== typeof this.state.addKeyValue){
+			if(!r3IsSafeTypedEntity(this.state.addKeyValue, 'string')){
 				this.setState({
 					messageDialogObject:	new R3Message(this.props.r3provider.getR3TextRes().eNewKeyValue, errorType)
 				});
@@ -484,11 +544,11 @@ export default class R3Resource extends React.Component
 			// check name
 			//
 			let	newName = this.state.addKeyName;
-			if(undefined !== nowKeys[newName]){
+			if(!r3IsEmptyEntity(nowKeys[newName])){
 				// found same name, we allow it as temporary. then pickups temporary additional name.
 				for(let counter = 0, found = false; !found; ++counter){
 					let tmpName	= newName + '\n' + String(counter);		// convert new name with ('\n' + number)
-					if(undefined === nowKeys[tmpName]){
+					if(r3IsEmptyEntity(nowKeys[tmpName])){
 						newName	= tmpName;
 						found	= true;
 					}
@@ -523,16 +583,16 @@ export default class R3Resource extends React.Component
 	//
 	// Handle Add Resource Keys( key, value ) : Change
 	//
-	handleAddKeysChange(event, type, changedValue)									// eslint-disable-line no-unused-vars
+	handleAddKeysChange(event, type)
 	{
 		// update state
 		if(actionTypeNewKey === type){
 			this.setState({
-				addKeyName:		changedValue
+				addKeyName:		event.target.value
 			});
 		}else if(actionTypeNewValue === type){
 			this.setState({
-				addKeyValue:	changedValue
+				addKeyValue:	event.target.value
 			});
 		}else{
 			console.warn('unknown action(' + JSON.stringify(type) + ') for keys.');
@@ -543,11 +603,12 @@ export default class R3Resource extends React.Component
 	//
 	// Handle Resource Aliases : Change
 	//
-	handleAliasesChange(event, type, pos, changedValue)							// eslint-disable-line no-unused-vars
+	handleAliasesChange(event, type, pos)
 	{
+		let	changedValue	= r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
 		let	isClearNewAlias	= false;
 		let	newAliases		= [];
-		if(undefined !== this.state.resource.aliases && null !== this.state.resource.aliases && this.state.resource.aliases instanceof Array){
+		if(r3IsSafeTypedEntity(this.state.resource.aliases, 'array')){
 			newAliases		= r3DeepClone(this.state.resource.aliases);
 		}
 
@@ -607,17 +668,60 @@ export default class R3Resource extends React.Component
 	//
 	// Handle Add Resource Aliases : Change
 	//
-	handleAddAliasesChange(event, changedValue)										// eslint-disable-line no-unused-vars
+	handleAddAliasesChange(event)
 	{
 		// update state
 		this.setState({
-			addAliases:		changedValue
+			addAliases:		event.target.value
 		});
+	}
+
+	handTooltipChange = (event, type, extData) =>									// eslint-disable-line no-unused-vars
+	{
+		if(tooltipValues.deleteKeysTooltip === type){
+			this.setState({
+				tooltips: {
+					deleteKeysTooltip:	extData
+				}
+			});
+		}else if(tooltipValues.addKeysTooltip === type){
+			this.setState({
+				tooltips: {
+					addKeysTooltip:		extData
+				}
+			});
+		}else if(tooltipValues.downAliasTooltip === type){
+			this.setState({
+				tooltips: {
+					downAliasTooltip:	extData
+				}
+			});
+		}else if(tooltipValues.upAliasTooltip === type){
+			this.setState({
+				tooltips: {
+					upAliasTooltip:		extData
+				}
+			});
+		}else if(tooltipValues.deleteAliasTooltip === type){
+			this.setState({
+				tooltips: {
+					deleteAliasTooltip:	extData
+				}
+			});
+		}else if(tooltipValues.addAliasTooltip === type){
+			this.setState({
+				tooltips: {
+					addAliasTooltip:	extData
+				}
+			});
+		}
 	}
 
 	getKeysContents(items)
 	{
-		if(undefined === items || !(items instanceof Object)){
+		const { theme, classes, r3provider } = this.props;
+
+		if(!r3IsSafeTypedEntity(items, 'object')){
 			return;
 		}
 
@@ -625,11 +729,11 @@ export default class R3Resource extends React.Component
 		let	elementCount = 0;
 		Object.keys(items).forEach( (keyname) => {
 			let	value = '';
-			if(undefined === items[keyname] || null === items[keyname]){
+			if(r3IsEmptyEntity(items[keyname])){
 				value = '';
-			}else if(items[keyname] instanceof Array){
+			}else if(r3IsSafeTypedEntity(items[keyname], 'array')){
 				value = JSON.stringify(items[keyname]);
-			}else if(items[keyname] instanceof Object){
+			}else if(r3IsSafeTypedEntity(items[keyname], 'object')){
 				value = JSON.stringify(items[keyname]);
 			}else{
 				// probabry string type
@@ -644,34 +748,68 @@ export default class R3Resource extends React.Component
 			}
 
 			let	deleteButton;
-			if(!this.props.isReadMode){
+			if(this.props.isReadMode){
 				deleteButton = (
 					<IconButton
-						iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-						tooltip={ 'Delete' }
-						style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-						onClick={ (event) => this.handleKeysChange(event, actionTypeDelete, keyname, null) }
+						disabled={ true }
+						{ ...theme.r3Resource.deleteKeysButton }
+						className={ classes.deleteInvisibleKeysButton }
 					>
-						<FontIcon className={ this.context.muiTheme.r3IconFonts.deleteIconFont } />
+						<DeleteIcon />
 					</IconButton>
+				);
+			}else{
+				deleteButton = (
+					<Tooltip
+						title={ r3provider.getR3TextRes().tResResourceKeysDelTT }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteKeysTooltip, 'string') || (this.state.tooltips.deleteKeysTooltip != keyname)) ? false : true) }
+					>
+						<IconButton
+							onClick={ (event) => this.handleKeysChange(event, actionTypeDelete, keyname) }
+							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deleteKeysTooltip, keyname) }
+							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deleteKeysTooltip, null) }
+							{ ...theme.r3Resource.deleteKeysButton }
+							className={ classes.deleteKeysButton }
+						>
+							<DeleteIcon />
+						</IconButton>
+					</Tooltip>
 				);
 			}
 
+			let	inputProps;
+			if(this.props.isReadMode){
+				inputProps = {};
+			}else{
+				inputProps = {
+					className: classes.inputTextField
+				};
+			}
+
 			elementArray.push(
-				<div className={ 'clearof' } key={ elementCount++ }>
+				<div
+					key={ elementCount++ }
+					className={ classes.enclosureElement }
+				>
 					<TextField
-						name={ 'key_' + String(elementCount) }
+						name={ resourceComponentValues.keysKeyTextFieldNamePrefix + String(elementCount) }
 						value={ dispName }
 						disabled={ this.props.isReadMode }
-						style={ this.context.muiTheme.r3Contents.firstInTwoTextFieldStyle }
-						onChange={ (event, value) => this.handleKeysChange(event, actionTypeName, keyname, value) }
+						placeholder={ r3provider.getR3TextRes().tResResourceKeysKeyHint }
+						onChange={ (event) => this.handleKeysChange(event, actionTypeName, keyname) }
+						InputProps={ inputProps }
+						{ ...theme.r3Resource.keysKeyTextField }
+						className={ classes.keysKeyTextField }
 					/>
 					<TextField
-						name={ 'value_' + String(elementCount) }
+						name={ resourceComponentValues.keysValueTextFieldNamePrefix + String(elementCount) }
 						value={ value }
 						disabled={ this.props.isReadMode }
-						style={ this.context.muiTheme.r3Contents.secondInTwoTextFieldStyle }
-						onChange={ (event, value) => this.handleKeysChange(event, actionTypeValue, keyname, value) }
+						placeholder={ r3provider.getR3TextRes().tResResourceKeysValueHint }
+						onChange={ (event) => this.handleKeysChange(event, actionTypeValue, keyname) }
+						InputProps={ inputProps }
+						{ ...theme.r3Resource.keysValueTextField }
+						className={ classes.keysValueTextField }
 					/>
 					{ deleteButton }
 				</div>
@@ -685,82 +823,180 @@ export default class R3Resource extends React.Component
 		);
 	}
 
-	getAliasContents(items)
+	getAddKeysContents()
 	{
-		if(undefined === items || !(items instanceof Array)){
+		const { theme, classes, r3provider } = this.props;
+
+		if(this.props.isReadMode){
 			return;
 		}
 
 		return (
-			items.map( (item, pos) =>
+			<div
+				className={ classes.enclosureElement }
+			>
+				<TextField
+					name={ resourceComponentValues.keysNewKeyTextFieldName }
+					value={ this.state.addKeyName }
+					placeholder={ r3provider.getR3TextRes().tResResourceKeysKeyHint }
+					onChange={ (event) => this.handleAddKeysChange(event, actionTypeNewKey) }
+					InputProps={{ className: classes.inputTextField }}
+					{ ...theme.r3Resource.keysKeyTextField }
+					className={ classes.keysKeyTextField }
+				/>
+				<TextField
+					name={ resourceComponentValues.keysNewValueTextFieldName }
+					value={ this.state.addKeyValue }
+					placeholder={ r3provider.getR3TextRes().tResResourceKeysValueHint }
+					onChange={ (event) => this.handleAddKeysChange(event, actionTypeNewValue) }
+					InputProps={{ className: classes.inputTextField }}
+					{ ...theme.r3Resource.keysValueTextField }
+					className={ classes.keysValueTextField }
+				/>
+				<Tooltip
+					title={ r3provider.getR3TextRes().tResResourceKeysAddTT }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.addKeysTooltip, 'boolean')) ? false : this.state.tooltips.addKeysTooltip) }
+				>
+					<IconButton
+						onClick={ (event) => this.handleKeysChange(event, actionTypeAdd, null) }
+						onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.addKeysTooltip, true) }
+						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addKeysTooltip, false) }
+						{ ...theme.r3Resource.addKeysButton }
+						className={ classes.addKeysButton }
+					>
+						<AddIcon />
+					</IconButton>
+				</Tooltip>
+			</div>
+		);
+	}
+
+	getAliasContents(items)
+	{
+		const { theme, classes, r3provider } = this.props;
+
+		if(!r3IsSafeTypedEntity(items, 'array')){
+			return;
+		}
+		let	_items = items;
+
+		return (
+			_items.map( (item, pos) =>
 			{
 				let	downButton;
-				let	upButton;
-				let	deleteButton;
-				if(this.props.isReadMode || items.length <= (pos + 1)){
+				if(this.props.isReadMode || (_items.length <= (pos + 1))){
 					downButton = (
-						<div style={ this.context.muiTheme.r3Contents.dummyButtonStyle } ></div>
+						<IconButton
+							disabled={ true }
+							{ ...theme.r3Resource.downAliasButton }
+							className={ classes.arrowInvisibleAliasButton }
+						>
+							<DownIcon />
+						</IconButton>
 					);
 				}else{
 					downButton = (
-						<IconButton
-							iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-							tooltip={ 'Down' }
-							disabled={ false }
-							style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-							onClick={ (event) => this.handleAliasesChange(event, actionTypeDown, pos, null) }
+						<Tooltip
+							title={ r3provider.getR3TextRes().tResAliasDownTT }
+							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.downAliasTooltip, 'number') || (this.state.tooltips.downAliasTooltip != pos)) ? false : true) }
 						>
-							<FontIcon className={ this.context.muiTheme.r3IconFonts.downIconFont } />
-						</IconButton>
-					);
-				}
-				if(this.props.isReadMode || 0 === pos){
-					upButton = (
-						<div style={ this.context.muiTheme.r3Contents.dummyButtonStyle } ></div>
-					);
-				}else{
-					upButton = (
-						<IconButton
-							iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-							tooltip={ 'Up' }
-							disabled={ false }
-							style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-							onClick={ (event) => this.handleAliasesChange(event, actionTypeUp, pos, null) }
-						>
-							<FontIcon className={ this.context.muiTheme.r3IconFonts.upIconFont } />
-						</IconButton>
+							<IconButton
+								onClick={ (event) => this.handleAliasesChange(event, actionTypeDown, pos) }
+								onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.downAliasTooltip, pos) }
+								onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.downAliasTooltip, -1) }
+								{ ...theme.r3Resource.downAliasButton }
+								className={ classes.arrowAliasButton }
+							>
+								<DownIcon />
+							</IconButton>
+						</Tooltip>
 					);
 				}
 
-				if(!this.props.isReadMode){
-					deleteButton = (
+				let	upButton;
+				if(this.props.isReadMode || (0 === pos)){
+					upButton = (
 						<IconButton
-							iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-							tooltip={ 'Delete' }
-							style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-							onClick={ (event) => this.handleAliasesChange(event, actionTypeDelete, pos, null) }
+							disabled={ true }
+							{ ...theme.r3Resource.upAliasButton }
+							className={ classes.arrowInvisibleAliasButton }
 						>
-							<FontIcon className={ this.context.muiTheme.r3IconFonts.deleteIconFont } />
+							<UpIcon />
 						</IconButton>
 					);
+				}else{
+					upButton = (
+						<Tooltip
+							title={ r3provider.getR3TextRes().tResAliasUpTT }
+							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.upAliasTooltip, 'number') || (this.state.tooltips.upAliasTooltip != pos)) ? false : true) }
+						>
+							<IconButton
+								onClick={ (event) => this.handleAliasesChange(event, actionTypeUp, pos) }
+								onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.upAliasTooltip, pos) }
+								onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.upAliasTooltip, -1) }
+								{ ...theme.r3Resource.upAliasButton }
+								className={ classes.arrowAliasButton }
+							>
+								<UpIcon />
+							</IconButton>
+						</Tooltip>
+					);
+				}
+
+				let	deleteButton;
+				if(this.props.isReadMode){
+					deleteButton = (
+						<IconButton
+							disabled={ true }
+							{ ...theme.r3Resource.deleteAliasButton }
+							className={ classes.deleteInvisibleAliasButton }
+						>
+							<DeleteIcon />
+						</IconButton>
+					);
+				}else{
+					deleteButton = (
+						<Tooltip
+							title={ r3provider.getR3TextRes().tResAliasDelTT }
+							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteAliasTooltip, 'number') || (this.state.tooltips.deleteAliasTooltip != pos)) ? false : true) }
+						>
+							<IconButton
+								onClick={ (event) => this.handleAliasesChange(event, actionTypeDelete, pos) }
+								onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deleteAliasTooltip, pos) }
+								onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deleteAliasTooltip, -1) }
+								{ ...theme.r3Resource.deleteAliasButton }
+								className={ classes.deleteAliasButton }
+							>
+								<DeleteIcon />
+							</IconButton>
+						</Tooltip>
+					);
+				}
+
+				let	inputProps;
+				if(this.props.isReadMode){
+					inputProps = {};
+				}else{
+					inputProps = {
+						className: classes.inputTextField
+					};
 				}
 
 				return (
-					<div className={ 'clearof' } key={ pos }>
+					<div
+						key={ pos }
+						className={ classes.enclosureElement }
+					>
 						<TextField
-							name={ 'alias_' + String(pos) }
+							name={ resourceComponentValues.aliasTextFieldNamePrefix + String(pos) }
+							disabled={ this.props.isReadMode }
 							value={ item }
-							style={ this.context.muiTheme.r3Contents.aliasesTextFieldStyle }
-							onChange={ (event, value) => this.handleAliasesChange(event, actionTypeValue, pos, value) }
+							placeholder={ r3provider.getR3TextRes().tResAliasHint }
+							onChange={ (event) => this.handleAliasesChange(event, actionTypeValue, pos) }
+							InputProps={ inputProps }
+							{ ...theme.r3Resource.aliasTextField }
+							className={ classes.aliasTextField }
 						/>
-						<IconButton
-							iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-							tooltip={ 'Delete' }
-							style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-							onClick={ (event) => this.handleAliasesChange(event, actionTypeDelete, pos, null) }
-						>
-							<FontIcon className={ this.context.muiTheme.r3IconFonts.deleteIconFont } />
-						</IconButton>
 						{ downButton }
 						{ upButton }
 						{ deleteButton }
@@ -770,140 +1006,173 @@ export default class R3Resource extends React.Component
 		);
 	}
 
+	getAddAliasContents()
+	{
+		const { theme, classes, r3provider } = this.props;
+
+		if(this.props.isReadMode){
+			return;
+		}
+
+		return (
+			<div
+				className={ classes.enclosureElement }
+			>
+				<TextField
+					name={ resourceComponentValues.aliasNewTextFieldName }
+					value={ this.state.addAliases }
+					placeholder={ r3provider.getR3TextRes().tResAliasHint }
+					onChange={ (event) => this.handleAddAliasesChange(event) }
+					InputProps={{ className: classes.inputTextField }}
+					{ ...theme.r3Resource.aliasTextField }
+					className={ classes.aliasTextField }
+				/>
+				<Tooltip
+					title={ r3provider.getR3TextRes().tResAliasAddTT }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.addAliasTooltip, 'boolean')) ? false : this.state.tooltips.addAliasTooltip) }
+				>
+					<IconButton
+						onClick={ (event) => this.handleAliasesChange(event, actionTypeAdd, 0) }
+						onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.addAliasTooltip, true) }
+						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addAliasTooltip, false) }
+						{ ...theme.r3Resource.addAliasButton }
+						className={ classes.addAliasButton }
+					>
+						<AddIcon />
+					</IconButton>
+				</Tooltip>
+			</div>
+		);
+	}
+
 	render()
 	{
 		console.info('CALL : resource:render()');
 
-		let	keysAddFields;
-		let	aliasAddFields;
-		if(!this.props.isReadMode){
-			keysAddFields = (
-				<div className={ 'clearof' }>
-					<TextField
-						name={ 'key_new' }
-						hintText={ 'Key' }
-						value={ this.state.addKeyName }
-						style={ this.context.muiTheme.r3Contents.firstInTwoTextFieldStyle }
-						onChange={ (event, value) => this.handleAddKeysChange(event, actionTypeNewKey, value) }
-					/>
-					<TextField
-						name={ 'value_new' }
-						hintText={ 'Value' }
-						value={ this.state.addKeyValue }
-						style={ this.context.muiTheme.r3Contents.secondInTwoTextFieldStyle }
-						onChange={ (event, value) => this.handleAddKeysChange(event, actionTypeNewValue, value) }
-					/>
-					<IconButton
-						iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-						tooltip={ 'Add' }
-						style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-						onClick={ (event) => this.handleKeysChange(event, actionTypeAdd, null, null) }
-					>
-						<FontIcon
-							className={ this.context.muiTheme.r3IconFonts.addIconFont }
-						/>
-					</IconButton>
-				</div>
-			);
+		const { theme, classes, r3provider } = this.props;
 
-			aliasAddFields = (
-				<div className={ 'clearof' }>
-					<TextField
-						name={ 'alias_new' }
-						hintText={ 'Path' }
-						value={ this.state.addAliases }
-						style={ this.context.muiTheme.r3Contents.aliasesTextFieldStyle }
-						onChange={ (event, value) => this.handleAddAliasesChange(event, value) }
-					/>
-					<IconButton
-						iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-						tooltip={ 'Add' }
-						style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-						onClick={ (event) => this.handleAliasesChange(event, actionTypeAdd, 0, null) }
-					>
-						<FontIcon
-							className={ this.context.muiTheme.r3IconFonts.addIconFont }
-						/>
-					</IconButton>
-				</div>
-			);
+		let valueTextFieldTheme		= (resourceTypeObject === this.state.resourceType ? theme.r3Resource.valueObjectTextField : theme.r3Resource.valueStringTextField);
+		let	leftValueSelectLabel	= (
+			<Typography
+				{ ...theme.r3Resource.valueFormControlLabel }
+			>
+				{ r3provider.getR3TextRes().tResResourceValueTypeText }
+			</Typography>
+		);
+		let	rightValueSelectLabel	= (
+			<Typography
+				{ ...theme.r3Resource.valueFormControlLabel }
+			>
+				{ r3provider.getR3TextRes().tResResourceValueTypeObj }
+			</Typography>
+		);
+
+		let	inputProps;
+		if(this.props.isReadMode){
+			inputProps = {};
+		}else{
+			inputProps = {
+				className: classes.inputTextField
+			};
 		}
 
 		return (
-			<div style={{ width: '100%' }} >
-				<div>
-					<div>
-						<span style={ this.context.muiTheme.r3Contents.labelStyle } >VALUE</span>
-					</div>
-					<div style={ this.context.muiTheme.r3Contents.subcomponent } >
-						<div className={ 'clearof' }>
-							<RadioButtonGroup
-								name={ 'resource_type' }
-								valueSelected={ this.state.resourceType }
-								onChange={ this.handleValueTypeChange }
-							>
-								<RadioButton
-									value={ resourceTypeString }
-									label={ 'Text String Type' }
-									disabled={ this.props.isReadMode }
-									style={ r3ObjMerge(this.context.muiTheme.r3Contents.selectButtonStyle, this.context.muiTheme.r3FontMiddle, { float: 'left' }) }
-								/>
-								<RadioButton
-									value={ resourceTypeObject }
-									label={ 'Object(JSON) Type' }
-									disabled={ this.props.isReadMode }
-									style={ r3ObjMerge(this.context.muiTheme.r3Contents.selectButtonStyle, this.context.muiTheme.r3FontMiddle) }
-								/>
-							</RadioButtonGroup>
-						</div>
-						<div>
-							<TextField
-								name={ 'resource_value' }
-								value={ this.state.resourceValue }
-								hintText={ (resourceTypeObject === this.state.resourceType ? 'Input Object formatted by JSON' : 'Input Text string') }
-								multiLine={ true }
-								rows={ 1 }
-								disabled={ this.props.isReadMode }
-								style={{ width: '100%' }}
-								onChange={ this.handleValueChange }
-							/>
-						</div>
-					</div>
+			<div
+				className={ classes.root }
+			>
+				<Typography
+					{ ...theme.r3Resource.subTitle }
+					className={ classes.subTitleTop }
+				>
+					{ r3provider.getR3TextRes().tResResourceValueSubTitle }
+				</Typography>
+				<FormControl
+					{ ...theme.r3Resource.valueFormControl }
+					className={ classes.valueFormControl }
+				>
+					<RadioGroup
+						name={ resourceComponentValues.valueTypeRadioName }
+						value={ this.state.resourceType }
+						onChange={ this.handleValueTypeChange }
+						{ ...theme.r3Resource.valueRadioGroup }
+						className={ classes.valueRadioGroup }
+					>
+						<FormControlLabel
+							value={ resourceTypeString }
+							label={ leftValueSelectLabel }
+							disabled={ this.props.isReadMode }
+							control={ <Radio /> }
+							{ ...theme.r3Resource.valueLeftFormControlLabel }
+							className={ classes.valueLeftFormControlLabel }
+						/>
+						<FormControlLabel
+							value={ resourceTypeObject }
+							label={ rightValueSelectLabel }
+							disabled={ this.props.isReadMode }
+							control={ <Radio /> }
+							{ ...theme.r3Resource.valueRightFormControlLabel }
+							className={ classes.valueRightFormControlLabel }
+						/>
+					</RadioGroup>
+				</FormControl>
 
-					<div style={ this.context.muiTheme.r3Contents.componentSpacer }>
-						<span style={ this.context.muiTheme.r3Contents.labelStyle } >KEYS</span>
-					</div>
-					<div style={ this.context.muiTheme.r3Contents.subcomponent } >
-						<div className={ 'clearof' }>
-							<span style={ this.context.muiTheme.r3Contents.firstInTwoLabelStyle } >KEY NAME</span>
-							<span style={ this.context.muiTheme.r3Contents.secondInTwoLabelStyle } >VALUE</span>
-						</div>
-						{ this.getKeysContents(this.state.resource.keys) }
-						{ keysAddFields }
-					</div>
+				<TextField
+					name={ resourceComponentValues.valueTextFieldName }
+					value={ this.state.resourceValue }
+					placeholder={ (resourceTypeObject === this.state.resourceType ? r3provider.getR3TextRes().tResResourceValueObjHint : r3provider.getR3TextRes().tResResourceValueTextHint) }
+					disabled={ this.props.isReadMode }
+					onChange={ (event) => this.handleValueChange(event) }
+					InputProps={ inputProps }
+					{ ...valueTextFieldTheme }
+					className={ classes.valueTextField }
+				/>
 
-					<div style={ this.context.muiTheme.r3Contents.componentSpacer }>
-						<span style={ this.context.muiTheme.r3Contents.labelStyle } >ALIAS</span>
-					</div>
-					<div style={ this.context.muiTheme.r3Contents.subcomponent } >
-						{ this.getAliasContents(this.state.resource.aliases) }
-						{ aliasAddFields }
-					</div>
-				</div>
-				<div style={ this.context.muiTheme.r3Contents.componentSpacer }>
-					<R3FormButtons
-						status={ this.state.changed }
-						onSave={ this.handleSave }
-						onCancel={ this.handleCancel }
-					/>
-				</div>
+				<Typography
+					{ ...theme.r3Resource.subTitle }
+					className={ classes.subTitle }
+				>
+					{ r3provider.getR3TextRes().tResResourceKeysSubTitle }
+				</Typography>
+				<Typography
+					{ ...theme.r3Resource.keysKeySubTitle }
+					className={ classes.keysKeySubTitle }
+				>
+					{ r3provider.getR3TextRes().tResResourceKeySubTitle }
+				</Typography>
+				<Typography
+					{ ...theme.r3Resource.keysValueSubTitle }
+					className={ classes.keysValueSubTitle }
+				>
+					{ r3provider.getR3TextRes().tResResourceKValueSubTitle }
+				</Typography>
+				{ this.getKeysContents(this.state.resource.keys) }
+				{ this.getAddKeysContents() }
+
+				<Typography
+					{ ...theme.r3Resource.subTitle }
+					className={ classes.subTitle }
+				>
+					{ r3provider.getR3TextRes().tResAliasSubTitle }
+				</Typography>
+				{ this.getAliasContents(this.state.resource.aliases) }
+				{ this.getAddAliasContents() }
+
+				<R3FormButtons
+					r3provider={ this.props.r3provider }
+					status={ this.state.changed }
+					onSave={ this.handleSave }
+					onCancel={ this.handleCancel }
+				/>
+
 				<R3PopupMsgDialog
+					r3provider={ this.props.r3provider }
 					title={ this.props.r3provider.getR3TextRes().cUpdatingTitle }
 					r3Message={ this.state.confirmMessageObject }
 					twoButton={ true }
 					onClose={ this.handleConfirmDialogClose }
 				/>
 				<R3PopupMsgDialog
+					r3provider={ this.props.r3provider }
 					r3Message={ this.state.messageDialogObject }
 					onClose={ this.handleMessageDialogClose }
 				/>
@@ -911,24 +1180,6 @@ export default class R3Resource extends React.Component
 		);
 	}
 }
-
-R3Resource.contextTypes = {
-	muiTheme:	PropTypes.object.isRequired,
-	r3Context:	PropTypes.object.isRequired
-};
-
-R3Resource.propTypes = {
-	r3provider:	PropTypes.object.isRequired,
-	resource:	PropTypes.object.isRequired,
-	isReadMode:	PropTypes.bool,
-
-	onSave:		PropTypes.func.isRequired,
-	onUpdate:	PropTypes.func.isRequired
-};
-
-R3Resource.defaultProps = {
-	isReadMode:	false
-};
 
 /*
  * VIM modelines

@@ -21,7 +21,6 @@
 
 const webpack	= require('webpack'); 
 const path		= require('path');
-const is_dev	= (undefined !== process.env.NODE_ENV && 'development' === process.env.NODE_ENV);
 
 module.exports = {
 	entry: {
@@ -32,43 +31,48 @@ module.exports = {
 		filename:	'bundle.js'
 	},
 	module: {
-		loaders: [
+		rules: [
 			{
 				loader:		'babel-loader',
 				exclude:	/node_modules/,
 				test:		/\.js[x]?$/,
 				query: {
+					babelrc:		false,
 					cacheDirectory:	true,
-					presets:		['@babel/preset-react', '@babel/preset-env']
+					presets: [
+						'@babel/preset-react',
+						'@babel/preset-env'
+					],
+					plugins: [
+						['@babel/plugin-proposal-decorators', { legacy: true }],
+						['@babel/plugin-proposal-class-properties', { loose: true }]
+					]
 				}
 			},
 			{
-				loaders:	['style-loader', 'css-loader?modules&localIdentName=[path][name]-[local]-[hash:base64:5]'],
-				test:		/\.css$/
+				loaders: [
+					'style-loader',
+					'css-loader?modules&localIdentName=[path][name]-[local]-[hash:base64:5]'
+				],
+				test:	/\.css$/
 			},
 			{
-				loader:		'url-loader?limit=8192',
-				test:		/\.(png|jpg)$/
+				loader:	'url-loader?limit=8192',
+				test:	/\.(png|jpg)$/
 			}
 		]
 	},
-	plugins: is_dev ? [
+	plugins: [
 		new webpack.DefinePlugin({
-			'process.env.NODE_ENV': JSON.stringify('development')
+			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
 		})
-	] : [
-		new webpack.DefinePlugin({
-			'process.env.NODE_ENV': JSON.stringify('production')
-		}),
-		new webpack.optimize.UglifyJsPlugin({
-			compress: {
-				warnings:	false
-			}
-		})
-	]
-	,
+	],
 	resolve: {  
 		extensions: ['*', '.js', '.jsx', '.css']
+	},
+	performance: {
+		maxEntrypointSize:	1572864,
+		maxAssetSize:		1572864
 	}
 };
 

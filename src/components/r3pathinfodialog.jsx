@@ -19,29 +19,78 @@
  *
  */
 
-import React			from 'react';
-import ReactDOM			from 'react-dom';									// eslint-disable-line no-unused-vars
-import PropTypes		from 'prop-types';
+import React						from 'react';
+import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
+import PropTypes					from 'prop-types';
 
-import FontIcon			from 'material-ui/FontIcon';
-import RaisedButton		from 'material-ui/RaisedButton';
-import Dialog			from 'material-ui/Dialog';
+import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
+import Button						from '@material-ui/core/Button';
+import IconButton					from '@material-ui/core/IconButton';
+import Dialog						from '@material-ui/core/Dialog';
+import DialogTitle					from '@material-ui/core/DialogTitle';
+import DialogContent				from '@material-ui/core/DialogContent';
+import DialogActions				from '@material-ui/core/DialogActions';
+import Typography					from '@material-ui/core/Typography';
+import TextField					from '@material-ui/core/TextField';
+import Tooltip						from '@material-ui/core/Tooltip';
+import CheckCircleIcon				from '@material-ui/icons/CheckCircle';
+import CopyClipBoardIcon			from '@material-ui/icons/AssignmentTurnedInRounded';
 
-import IconButton		from 'material-ui/IconButton';
-import TextField		from 'material-ui/TextField';
+import { r3PathInfoDialog }			from './r3styles';
+import { r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsEmptyString, r3IsSafeTypedEntity } from '../util/r3util';
 
-import { r3IsEmptyStringObject, r3IsEmptyString } from '../util/r3util';
+//
+// Local variables
+//
+const pathInfoDialogTextFields = {
+	name:	'userdatascript'
+};
 
 //
 // Path Information Class
 //
+@withTheme()
+@withStyles(r3PathInfoDialog)
 export default class R3PathInfoDialog extends React.Component
 {
+	static contextTypes = {
+		r3Context:		PropTypes.object.isRequired
+	};
+
+	static propTypes = {
+		r3provider:		PropTypes.object.isRequired,
+		open:			PropTypes.bool.isRequired,
+		tenant:			PropTypes.object,
+		service:		PropTypes.string,
+		type:			PropTypes.string,
+		fullpath:		PropTypes.string,
+		userDataScript:	PropTypes.string,
+		roleToken:		PropTypes.string,
+		onClose:		PropTypes.func.isRequired
+	};
+
+	static defaultProps = {
+		tenant:			null,
+		service:		null,
+		type:			null,
+		fullpath:		null,
+		userDataScript:	null,
+		roleToken:		null
+	};
+
+	inputElementUSD	= null;														// input textfield for user data script.
+
+	state = {
+		tooltips: {
+			copyUDSButtonTooltip:	false
+		}
+	};
+
 	constructor(props)
 	{
 		super(props);
 
-		// Binding
+		// Binding(do not define handlers as arrow functions for performance)
 		this.handleClose		= this.handleClose.bind(this);
 		this.handleClipboardCopy= this.handleClipboardCopy.bind(this);
 	}
@@ -53,134 +102,236 @@ export default class R3PathInfoDialog extends React.Component
 
 	handleClipboardCopy(event)												// eslint-disable-line no-unused-vars
 	{
-		this.refs.userscripttextarea.select();
+		if(r3IsEmptyEntityObject(this.inputElementUSD, 'select') || !r3IsSafeTypedEntity(this.inputElementUSD.select, 'function')){
+			return;
+		}
+		this.inputElementUSD.select();
 		document.execCommand('copy');
+
+		this.setState({
+			tooltips: {
+				copyUDSButtonTooltip:	false
+			}
+		});
+	}
+
+	handTooltipChange = (event, isOpen) =>									// eslint-disable-line no-unused-vars
+	{
+		this.setState({
+			tooltips: {
+				copyUDSButtonTooltip:	isOpen
+			}
+		});
 	}
 
 	getRoleTokenContents(roleToken, userDataScript)
 	{
+		const { theme, classes, r3provider } = this.props;
+
 		if(r3IsEmptyString(roleToken) || r3IsEmptyString(userDataScript)){
 			return;
 		}
+
 		return (
-			<div>
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >ROLE TOKEN</p>
-				<p style={ this.context.muiTheme.dialogSimple.valueStyle } >{ roleToken }</p>
-				<div className={ 'clearof' }>
-					<span style={ this.context.muiTheme.dialogSimple.keyLeftTitleStyle } >USER DATA SCRIPT</span>
+			<React.Fragment>
+				<Typography
+					{ ...theme.r3PathInfoDialog.keyTitle }
+					className={ classes.keyTitle }
+				>
+					{ r3provider.getR3TextRes().tResRoleTokenSubTitle }
+				</Typography>
+				<Typography
+					{ ...theme.r3PathInfoDialog.value }
+					className={ classes.value }
+				>
+					{ roleToken }
+				</Typography>
+
+				<Typography
+					{ ...theme.r3PathInfoDialog.keyTitle }
+					className={ classes.floatKeyTitle }
+				>
+					{ r3provider.getR3TextRes().tResUDSSubTitle }
+				</Typography>
+
+				<Tooltip
+					title={ r3provider.getR3TextRes().tResCopyUDSTT }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.copyUDSButtonTooltip, 'boolean')) ? false : this.state.tooltips.copyUDSButtonTooltip) }
+				>
 					<IconButton
-						tooltip="Copy user script to clipboard"
 						onClick={ this.handleClipboardCopy }
-						style={ this.context.muiTheme.dialogSimple.iconButtonStyle }
+						onMouseEnter={ event => this.handTooltipChange(event, true) }
+						onMouseLeave={ event => this.handTooltipChange(event, false) }
+						{ ...theme.r3AppBar.copyUDSButton }
+						className={ classes.copyUDSButton }
 					>
-						<FontIcon
-							className={ this.context.muiTheme.r3IconFonts.clipboardCopyIconFont }
-							color={ this.context.muiTheme.palette.accent1Color }
+						<CopyClipBoardIcon
+							className={ classes.copyUDSIcon }
 						/>
 					</IconButton>
+				</Tooltip>
+
+				<div
+					className={ classes.textFieldWrapper }
+				>
+					<TextField
+						name={ pathInfoDialogTextFields.name }
+						value={ userDataScript }
+						inputRef = { (element) => { this.inputElementUSD = element; } } 
+						InputProps={{ className: classes.inputTextField }}
+						{ ...theme.r3AppBar.textFieldUDS }
+						className={ classes.textFieldUDS }
+					/>
 				</div>
-				<TextField
-					name={ 'userscript' }
-					value={ userDataScript }
-					multiLine={ true }
-					rows={ 10 }
-					rowsMax={ 12 }
-					underlineShow={ false }
-					textareaStyle={ this.context.muiTheme.dialogSimple.HiddenTextareaStyle }
-					style={ this.context.muiTheme.dialogSimple.HiddenTextFieldStyle }
-					ref={ 'userscripttextarea' }
-				/>
-			</div>
+			</React.Fragment>
 		);
 	}
 
 	render()
 	{
-		const actions = [
-			<RaisedButton
-				label={ 'CLOSE' }
-				primary={ true }
-				onClick={ this.handleClose }
-				icon={
-					<FontIcon className={ this.context.muiTheme.r3IconFonts.closeIconFont } />
-				}
-			/>
-		];
+		const { theme, classes, r3provider } = this.props;
 
-		let	tenant	= r3IsEmptyStringObject(this.props.tenant, 'display') ? '(Unselected)' : this.props.tenant.display;
+		let	tenant;
+		let	tenantKey = (
+			<Typography
+				{ ...theme.r3PathInfoDialog.keyTitle }
+				className={ classes.keyTitle }
+			>
+				{ r3provider.getR3TextRes().tResTenantSubTitle }
+			</Typography>
+		);
+		if(r3IsEmptyStringObject(this.props.tenant, 'display')){
+			tenant = (
+				<React.Fragment>
+					{ tenantKey }
+					<Typography
+						{ ...theme.r3PathInfoDialog.value }
+						className={ classes.valueItalic }
+					>
+						{ r3provider.getR3TextRes().tResUnselected }
+					</Typography>
+				</React.Fragment>
+			);
+		}else{
+			tenant = (
+				<React.Fragment>
+					{ tenantKey }
+					<Typography
+						{ ...theme.r3PathInfoDialog.value }
+						className={ classes.value }
+					>
+						{ this.props.tenant.display }
+					</Typography>
+				</React.Fragment>
+			);
+		}
 
 		let	serviceContents;
 		if(!r3IsEmptyString(this.props.service)){
 			serviceContents = (
-				<div>
-					<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >SERVICE</p>
-					<p style={ this.context.muiTheme.dialogSimple.valueStyle } >{ this.props.service }</p>
-				</div>
+				<React.Fragment>
+					<Typography
+						{ ...theme.r3PathInfoDialog.keyTitle }
+						className={ classes.keyTitle }
+					>
+						{ r3provider.getR3TextRes().tResServiceSubTitle }
+					</Typography>
+					<Typography
+						{ ...theme.r3PathInfoDialog.value }
+						className={ classes.value }
+					>
+						{ this.props.service }
+					</Typography>
+				</React.Fragment>
 			);
 		}
+
 		let	typeContents;
 		if(!r3IsEmptyString(this.props.type)){
 			typeContents = (
-				<div>
-					<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >TYPE</p>
-					<p style={ this.context.muiTheme.dialogSimple.valueStyle } >{ this.props.type }</p>
-				</div>
+				<React.Fragment>
+					<Typography
+						{ ...theme.r3PathInfoDialog.keyTitle }
+						className={ classes.keyTitle }
+					>
+						{ r3provider.getR3TextRes().tResTypeSubTitle }
+					</Typography>
+					<Typography
+						{ ...theme.r3PathInfoDialog.value }
+						className={ classes.value }
+					>
+						{ this.props.type }
+					</Typography>
+				</React.Fragment>
 			);
 		}
+
 		let	fullpathContents;
 		if(!r3IsEmptyString(this.props.fullpath)){
 			fullpathContents = (
-				<div>
-					<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >PATH</p>
-					<p style={ this.context.muiTheme.dialogSimple.valueStyle } >{ this.props.fullpath }</p>
-				</div>
+				<React.Fragment>
+					<Typography
+						{ ...theme.r3PathInfoDialog.keyTitle }
+						className={ classes.keyTitle }
+					>
+						{ r3provider.getR3TextRes().tResPathSubTitle }
+					</Typography>
+					<Typography
+						{ ...theme.r3PathInfoDialog.value }
+						className={ classes.value }
+					>
+						{ this.props.fullpath }
+					</Typography>
+				</React.Fragment>
 			);
 		}
 
 		return (
+
 			<Dialog
-				title={ 'Selected Path Information' }
-				actions={ actions }
-				modal={ false }
-				autoScrollBodyContent={ false }
 				open={ this.props.open }
-				onRequestClose={ this.handleClose }
+				onClose={ this.handleClose }
+				{ ...theme.r3PathInfoDialog.root }
+				className={ classes.root }
 			>
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >TENANT</p>
-				<p style={ this.context.muiTheme.dialogSimple.valueStyle } >{ tenant }</p>
-				{ serviceContents }
-				{ typeContents }
-				{ fullpathContents }
-				{ this.getRoleTokenContents(this.props.roleToken, this.props.userDataScript) }
+				<DialogTitle
+					{ ...theme.r3PathInfoDialog.dialogTitle }
+					className={ classes.dialogTitle }
+				>
+					<Typography
+						{ ...theme.r3PathInfoDialog.title }
+						className={ classes.title }
+					>
+						{ r3provider.getR3TextRes().tResPathInfoDialogTitle }
+					</Typography>
+				</DialogTitle>
+
+				<DialogContent
+					className={ classes.dialogContent }
+				>
+					{ tenant }
+					{ serviceContents }
+					{ typeContents }
+					{ fullpathContents }
+					{ this.getRoleTokenContents(this.props.roleToken, this.props.userDataScript) }
+				</DialogContent>
+
+				<DialogActions>
+					<Button
+						onClick={ this.handleClose }
+						{ ...theme.r3PathInfoDialog.button }
+						className={ classes.button }
+					>
+						{ r3provider.getR3TextRes().tResButtonClose }
+						<CheckCircleIcon
+							className={ classes.buttonIcon }
+						/>
+					</Button>
+				</DialogActions>
 			</Dialog>
 		);
 	}
 }
-
-R3PathInfoDialog.contextTypes = {
-	muiTheme:		PropTypes.object.isRequired,
-	r3Context:		PropTypes.object.isRequired
-};
-
-R3PathInfoDialog.propTypes = {
-	open:			PropTypes.bool.isRequired,
-	tenant:			PropTypes.object,
-	service:		PropTypes.string,
-	type:			PropTypes.string,
-	fullpath:		PropTypes.string,
-	userDataScript:	PropTypes.string,
-	roleToken:		PropTypes.string,
-	onClose:		PropTypes.func.isRequired
-};
-
-R3PathInfoDialog.defaultProps = {
-	tenant:			null,
-	service:		null,
-	type:			null,
-	fullpath:		null,
-	userDataScript:	null,
-	roleToken:		null
-};
 
 /*
  * VIM modelines

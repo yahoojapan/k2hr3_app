@@ -19,23 +19,41 @@
  *
  */
 
-import React			from 'react';
-import ReactDOM			from 'react-dom';									// eslint-disable-line no-unused-vars
-import PropTypes		from 'prop-types';
+import React						from 'react';
+import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
+import PropTypes					from 'prop-types';
 
 // Components
-import Paper			from 'material-ui/Paper';							// For contents wrap
-import FontIcon			from 'material-ui/FontIcon';
-import R3Message		from '../util/r3message';
+import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
+import Paper						from '@material-ui/core/Paper';			// For contents wrap
+import Typography					from '@material-ui/core/Typography';
+import ErrorIcon					from '@material-ui/icons/ErrorRounded';
+import WarningIcon					from '@material-ui/icons/WarningRounded';
+import InformationIcon				from '@material-ui/icons/InfoOutlined';
 
-// Types
+import { r3MsgBox }					from './r3styles';
+import R3Message					from '../util/r3message';
 import { errorType, warningType, infoType } from '../util/r3types';			// eslint-disable-line no-unused-vars
 
 //
 // Message Box Class
 //
+@withTheme()
+@withStyles(r3MsgBox)
 export default class R3MsgBox extends React.Component
 {
+	static contextTypes = {
+		r3Context:	PropTypes.object.isRequired
+	};
+
+	static propTypes = {
+		message:	PropTypes.object
+	};
+
+	static defaultProps = {
+		message:	new R3Message()
+	};
+
 	constructor(props)
 	{
 		super(props);
@@ -43,72 +61,92 @@ export default class R3MsgBox extends React.Component
 
 	getMessageContents()
 	{
-		let	msgarr		= this.props.message.getMessageArray();
+		const { theme, classes } = this.props;
+
+		if(null === this.props.message){
+			return;
+		}
+
+		let	themeobj;
+		let	classobj;
+		if(this.props.message.isErrorType()){
+			themeobj	= theme.r3PopupMsgDialog.dialogErrorContentText;
+			classobj	= classes.dialogErrorContentText;
+		}else if(this.props.message.isWarningType()){
+			themeobj	= theme.r3PopupMsgDialog.dialogWarningContentText;
+			classobj	= classes.dialogWarningContentText;
+		}else{	// this.props.message.isInfoType()
+			themeobj	= theme.r3PopupMsgDialog.dialogInformationContentText;
+			classobj	= classes.dialogInformationContentText;
+		}
+		let	msgarr = this.props.message.getMessageArray();
 
 		return (
 			msgarr.map( (item, pos) =>
 			{
 				return (
-					<div key={ pos }>
-						<span>{ item }</span>
-					</div>
+					<Typography
+						key={ pos }
+						{ ...themeobj }
+						className={ classobj }
+					>
+						{ item }
+						<br />
+					</Typography>
 				);
 			})
 		);
 	}
 
+	getIcon()
+	{
+		const { theme, classes } = this.props;
+
+		let	icon;
+		if(null !== this.props.message && this.props.message.isErrorType()){
+			icon = (
+				<ErrorIcon
+					{ ...theme.r3PopupMsgDialog.errorIcon }
+					className={ classes.errorIcon }
+				/>
+			);
+		}else if(null !== this.props.message && this.props.message.isWarningType()){
+			icon = (
+				<WarningIcon
+					{ ...theme.r3PopupMsgDialog.warningIcon }
+					className={ classes.warningIcon }
+				/>
+			);
+		}else{	// this.props.message.isInfoType()
+			icon = (
+				<InformationIcon
+					{ ...theme.r3PopupMsgDialog.informationIcon }
+					className={ classes.informationIcon }
+				/>
+			);
+		}
+		return icon;
+	}
+
 	render()
 	{
+		const { theme, classes } = this.props;
+
 		if(this.props.message.empty()){
 			return null;
 		}
 
-		let	iconClassName;
-		let	iconStyle;
-		let	textStyle;
-		if(this.props.message.isErrorType()){
-			iconClassName	= this.context.muiTheme.r3IconFonts.errIconFont;
-			iconStyle		= this.context.muiTheme.r3MsgBox.errIconFontStyle;
-			textStyle		= this.context.muiTheme.r3MsgBox.errTextStyle;
-		}else if(this.props.message.isWarningType()){
-			iconClassName	= this.context.muiTheme.r3IconFonts.warnIconFont;
-			iconStyle		= this.context.muiTheme.r3MsgBox.warnIconFontStyle;
-			textStyle		= this.context.muiTheme.r3MsgBox.warnTextStyle;
-		}else{	// this.props.message.isInfoType()
-			iconClassName	= this.context.muiTheme.r3IconFonts.infoIconFont;
-			iconStyle		= this.context.muiTheme.r3MsgBox.infoIconFontStyle;
-			textStyle		= this.context.muiTheme.r3MsgBox.infoTextStyle;
-		}
-		let	messages		= this.getMessageContents();
-
 		return (
-			<Paper style={ this.context.muiTheme.r3Paper.paperStyle } zDepth={4} >
-				<div className={ 'clearof' } style={{width: '100%'}}>
-					<FontIcon
-						className={ iconClassName }
-						style={ iconStyle }
-					/>
-					<div style={ textStyle }>
-						{ messages }
-					</div>
-				</div>
+			<Paper
+				{ ...theme.r3MsgBox.root }
+				className={ classes.root }
+			>
+				{ this.getIcon() }
+				{ this.getMessageContents() }
 			</Paper>
 		);
 	}
 }
-
-R3MsgBox.contextTypes = {
-	muiTheme:	PropTypes.object.isRequired,
-	r3Context:	PropTypes.object.isRequired
-};
-
-R3MsgBox.propTypes = {
-	message:	PropTypes.object
-};
-
-R3MsgBox.defaultProps = {
-	message:	new R3Message()
-};
 
 /*
  * VIM modelines

@@ -19,30 +19,68 @@
  *
  */
 
-import React			from 'react';
-import ReactDOM			from 'react-dom';									// eslint-disable-line no-unused-vars
-import PropTypes		from 'prop-types';
+import React						from 'react';
+import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
+import PropTypes					from 'prop-types';
 
-import TextField		from 'material-ui/TextField';
-import FontIcon			from 'material-ui/FontIcon';
-import RaisedButton		from 'material-ui/RaisedButton';
-import Dialog			from 'material-ui/Dialog';
+import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
+import TextField					from '@material-ui/core/TextField';
+import Button						from '@material-ui/core/Button';
+import Dialog						from '@material-ui/core/Dialog';
+import DialogTitle					from '@material-ui/core/DialogTitle';
+import DialogContent				from '@material-ui/core/DialogContent';
+import DialogActions				from '@material-ui/core/DialogActions';
+import Typography					from '@material-ui/core/Typography';
+import CheckCircleIcon				from '@material-ui/icons/CheckCircle';
+import CancelIcon					from '@material-ui/icons/Cancel';
 
+import { r3CreatePathDialog }		from './r3styles';
 import { r3IsEmptyStringObject, r3IsEmptyString } from '../util/r3util';
+
+//
+// Local variables
+//
+const pathTextFieldId = 'new-path-textfield-id';
 
 //
 // Create New Path Dialog Class
 //
+@withTheme()
+@withStyles(r3CreatePathDialog)
 export default class R3CreatePathDialog extends React.Component
 {
+	static contextTypes = {
+		r3Context:		PropTypes.object.isRequired
+	};
+
+	static propTypes = {
+		r3provider:		PropTypes.object.isRequired,
+		open:			PropTypes.bool,
+		tenant:			PropTypes.object,
+		type:			PropTypes.string,
+		parentPath:		PropTypes.string,
+		newPath:		PropTypes.string,
+
+		onClose:		PropTypes.func.isRequired
+	};
+
+	static defaultProps = {
+		open:			false,
+		tenant:			null,
+		type:			null,
+		parentPath:		null,
+		newPath:		'',
+	};
+
+	state = {
+		newPath:	this.props.newPath
+	};
+
 	constructor(props)
 	{
 		super(props);
 
-		this.state = {
-			newPath:	this.props.newPath
-		};
-
+		// Binding(do not define handlers as arrow functions for performance)
 		this.handleNewPathChange	= this.handleNewPathChange.bind(this);
 	}
 
@@ -53,94 +91,152 @@ export default class R3CreatePathDialog extends React.Component
 		});
 	}
 
-	handleNewPathChange(event, changedValue)									// eslint-disable-line no-unused-vars
+	handleNewPathChange(event)
 	{
 		this.setState({
-			newPath:	changedValue
+			newPath:	event.target.value
 		});
 	}
 
 	render()
 	{
-		let	tenant		= r3IsEmptyStringObject(this.props.tenant, 'display') ?	'(Unselected)' : this.props.tenant.display;
-		let	type		= r3IsEmptyString(this.props.type) ?					'(Unselected)' : this.props.type;
-		let	parentPath	= r3IsEmptyString(this.props.parentPath) ?				'(Unselected)' : this.props.parentPath;
-		let	actions		= [
-			<RaisedButton
-				label={ 'CANCEL' }
-				labelPosition={ 'after' }
-				secondary={ true }
-				style={ this.context.muiTheme.r3FormButtons.raisedButtonStyle }
-				disabled={ false }
-				onClick={ (event) => this.props.onClose(event, false, null) }
-				icon={
-					<FontIcon className={ this.context.muiTheme.r3IconFonts.cancelIconFont } />
-				}
-			/>,
-			<RaisedButton
-				label={ 'OK' }
-				labelPosition={ 'after' }
-				primary={ true }
-				style={ this.context.muiTheme.r3FormButtons.raisedButtonStyle }
-				disabled={ ('' === this.state.newPath) }
-				onClick={ (event) => this.props.onClose(event, true, this.state.newPath) }
-				icon={
-					<FontIcon className={ this.context.muiTheme.r3IconFonts.checkIconFont } />
-				}
-			/>
-		];
+		const { theme, classes, r3provider } = this.props;
+
+		let	tenant;
+		let	tenantClass;
+		if(!r3IsEmptyStringObject(this.props.tenant, 'display')){
+			tenant		= this.props.tenant.display;
+			tenantClass	= classes.value;
+		}else{
+			tenant		= r3provider.getR3TextRes().tResUnselected;
+			tenantClass	= classes.valueItalic;
+		}
+
+		let	type;
+		let	typeClass;
+		if(!r3IsEmptyString(this.props.type)){
+			type		= this.props.type;
+			typeClass	= classes.value;
+		}else{
+			type		= r3provider.getR3TextRes().tResUnselected;
+			typeClass	= classes.valueItalic;
+		}
+
+		let	parentPath;
+		let	parentPathClass;
+		if(!r3IsEmptyString(this.props.parentPath)){
+			parentPath		= this.props.parentPath;
+			parentPathClass	= classes.value;
+		}else{
+			parentPath		= r3provider.getR3TextRes().tResUnselected;
+			parentPathClass	= classes.valueItalic;
+		}
 
 		return (
 			<Dialog
-				title={ this.props.r3provider.getR3TextRes().cCreateNewPathTitle }
-				actions={ actions }
-				modal={ true }
 				open={ this.props.open }
-				onRequestClose={ (event) => this.props.onClose(event, false, null) }
+				onClose={ (event) => this.props.onClose(event, false, null) }
+				{ ...theme.r3CreatePathDialog.root }
+				className={ classes.root }
 			>
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >TENANT</p>
-				<p style={ this.context.muiTheme.dialogSimple.valueStyle } >{ tenant }</p>
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >TYPE</p>
-				<p style={ this.context.muiTheme.dialogSimple.valueStyle } >{ type }</p>
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >PARENT PATH</p>
-				<p style={ this.context.muiTheme.dialogSimple.valueStyle } >{ parentPath }</p>
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >CREATE PATH</p>
-				<TextField
-					name={ 'new_path' }
-					value={ this.state.newPath }
-					hintText={ 'Input create path'  }
-					style={ this.context.muiTheme.dialogSimple.TextFieldStyle }
-					onChange={ (event, value) => this.handleNewPathChange(event, value) }
-				/>
+				<DialogTitle
+					{ ...theme.r3CreatePathDialog.dialogTitle }
+					className={ classes.dialogTitle }
+				>
+					<Typography
+						{ ...theme.r3CreatePathDialog.title }
+						className={ classes.title }
+					>
+						{ r3provider.getR3TextRes().cCreateNewPathTitle }
+					</Typography>
+				</DialogTitle>
+
+				<DialogContent
+					className={ classes.dialogContent }
+				>
+					<Typography
+						{ ...theme.r3CreatePathDialog.keyTitle }
+						className={ classes.keyTitle }
+					>
+						{ r3provider.getR3TextRes().tResTenantSubTitle }
+					</Typography>
+					<Typography
+						{ ...theme.r3CreatePathDialog.value }
+						className={ tenantClass }
+					>
+						{ tenant }
+					</Typography>
+
+					<Typography
+						{ ...theme.r3CreatePathDialog.keyTitle }
+						className={ classes.keyTitle }
+					>
+						{ r3provider.getR3TextRes().tResTypeSubTitle }
+					</Typography>
+					<Typography
+						{ ...theme.r3CreatePathDialog.value }
+						className={ typeClass }
+					>
+						{ type }
+					</Typography>
+
+					<Typography
+						{ ...theme.r3CreatePathDialog.keyTitle }
+						className={ classes.keyTitle }
+					>
+						{ r3provider.getR3TextRes().tResParentPathSubTitle }
+					</Typography>
+					<Typography
+						{ ...theme.r3CreatePathDialog.value }
+						className={ parentPathClass }
+					>
+						{ parentPath }
+					</Typography>
+
+					<Typography
+						{ ...theme.r3CreatePathDialog.keyTitle }
+						className={ classes.keyTitle }
+					>
+						{ r3provider.getR3TextRes().tResCreatePathSubTitle }
+					</Typography>
+					<TextField
+						id={ pathTextFieldId }
+						value={ this.state.newPath }
+						placeholder={ r3provider.getR3TextRes().tResCreatePathHint }
+						onChange={ (event) => this.handleNewPathChange(event) }
+						InputProps={{ className: classes.inputTextField }}
+						{ ...theme.r3CreatePathDialog.textField }
+						className={ classes.textField }
+					/>
+				</DialogContent>
+
+				<DialogActions>
+					<Button
+						onClick={ (event) => this.props.onClose(event, false, null) }
+						{ ...theme.r3CreatePathDialog.cancelButton }
+						className={ classes.cancelButton }
+					>
+						{ r3provider.getR3TextRes().tResButtonCancel }
+						<CancelIcon
+							className={ classes.buttonIcon }
+						/>
+					</Button>
+					<Button
+						disabled={ r3IsEmptyString(this.state.newPath, true) }
+						onClick={ (event) => this.props.onClose(event, true, this.state.newPath) }
+						{ ...theme.r3CreatePathDialog.okButton }
+						className={ classes.okButton }
+					>
+						{ r3provider.getR3TextRes().tResButtonOk }
+						<CheckCircleIcon
+							className={ classes.buttonIcon }
+						/>
+					</Button>
+				</DialogActions>
 			</Dialog>
 		);
-
 	}
 }
-
-R3CreatePathDialog.contextTypes = {
-	muiTheme:		PropTypes.object.isRequired,
-	r3Context:		PropTypes.object.isRequired
-};
-
-R3CreatePathDialog.propTypes = {
-	r3provider:		PropTypes.object.isRequired,
-	open:			PropTypes.bool,
-	tenant:			PropTypes.object,
-	type:			PropTypes.string,
-	parentPath:		PropTypes.string,
-	newPath:		PropTypes.string,
-
-	onClose:		PropTypes.func.isRequired
-};
-
-R3CreatePathDialog.defaultProps = {
-	open:			false,
-	tenant:			null,
-	type:			null,
-	parentPath:		null,
-	newPath:		'',
-};
 
 /*
  * VIM modelines

@@ -19,30 +19,66 @@
  *
  */
 
-import React			from 'react';
-import ReactDOM			from 'react-dom';									// eslint-disable-line no-unused-vars
-import PropTypes		from 'prop-types';
+import React						from 'react';
+import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
+import PropTypes					from 'prop-types';
 
-import TextField		from 'material-ui/TextField';
-import FontIcon			from 'material-ui/FontIcon';
-import RaisedButton		from 'material-ui/RaisedButton';
-import Dialog			from 'material-ui/Dialog';
+import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
+import TextField					from '@material-ui/core/TextField';
+import Button						from '@material-ui/core/Button';
+import Dialog						from '@material-ui/core/Dialog';
+import DialogTitle					from '@material-ui/core/DialogTitle';
+import DialogContent				from '@material-ui/core/DialogContent';
+import DialogActions				from '@material-ui/core/DialogActions';
+import Typography					from '@material-ui/core/Typography';
+import CheckCircleIcon				from '@material-ui/icons/CheckCircle';
+import CancelIcon					from '@material-ui/icons/Cancel';
 
+import { r3CreateServiceTenantDialog } from './r3styles';
 import { r3IsEmptyStringObject, r3IsEmptyString } from '../util/r3util';
+
+//
+// Local variables
+//
+const serviceTenantTextFieldId	= 'service-tenant-textfield-id';
 
 //
 // Create Service Tenant Dialog Class
 //
+@withTheme()
+@withStyles(r3CreateServiceTenantDialog)
 export default class R3CreateServiceTenantDialog extends React.Component
 {
+	static contextTypes = {
+		r3Context:		PropTypes.object.isRequired
+	};
+
+	static propTypes = {
+		r3provider:		PropTypes.object.isRequired,
+		open:			PropTypes.bool,
+		tenant:			PropTypes.object,
+		service:		PropTypes.string,
+		aliasRole:		PropTypes.string,
+
+		onClose:		PropTypes.func.isRequired
+	};
+
+	static defaultProps = {
+		open:			false,
+		tenant:			null,
+		service:		null,
+		aliasRole:		''
+	};
+
+	state = {
+		aliasRole:	this.props.aliasRole
+	};
+
 	constructor(props)
 	{
 		super(props);
 
-		this.state = {
-			aliasRole:	this.props.aliasRole
-		};
-
+		// Binding(do not define handlers as arrow functions for performance)
 		this.handleAliasRoleChange	= this.handleAliasRoleChange.bind(this);
 	}
 
@@ -53,92 +89,145 @@ export default class R3CreateServiceTenantDialog extends React.Component
 		});
 	}
 
-	handleAliasRoleChange(event, changedValue)									// eslint-disable-line no-unused-vars
+	handleAliasRoleChange(event)
 	{
 		this.setState({
-			aliasRole:	changedValue
+			aliasRole:	event.target.value
 		});
 	}
 
 	render()
 	{
-		let	tenant		= r3IsEmptyStringObject(this.props.tenant, 'display') ? '(Unselected)' : this.props.tenant.display;
-		let	service		= r3IsEmptyString(this.props.service, true) ? '(Unselected)' : this.props.service.trim();
+		const { theme, classes, r3provider } = this.props;
+
+		let	tenant;
+		let	tenantClass;
+		if(!r3IsEmptyStringObject(this.props.tenant, 'display')){
+			tenant		= this.props.tenant.display;
+			tenantClass	= classes.value;
+		}else{
+			tenant		= r3provider.getR3TextRes().tResUnselected;
+			tenantClass	= classes.valueItalic;
+		}
+
+		let	service;
+		let	serviceClass;
+		if(!r3IsEmptyString(this.props.service, true)){
+			service			= this.props.service.trim();
+			serviceClass	= classes.value;
+		}else{
+			service			= r3provider.getR3TextRes().tResUnselected;
+			serviceClass	= classes.valueItalic;
+		}
+
 		let	path		= 'yrn:yahoo:' + service + '::' + (r3IsEmptyStringObject(this.props.tenant, 'name') ? '' : this.props.tenant.name);
-		let	actions		= [
-			<RaisedButton
-				label={ 'CANCEL' }
-				labelPosition={ 'after' }
-				secondary={ true }
-				style={ this.context.muiTheme.r3FormButtons.raisedButtonStyle }
-				disabled={ false }
-				onClick={ (event) => this.props.onClose(event, false, null) }
-				icon={
-					<FontIcon className={ this.context.muiTheme.r3IconFonts.cancelIconFont } />
-				}
-			/>,
-			<RaisedButton
-				label={ 'OK' }
-				labelPosition={ 'after' }
-				primary={ true }
-				style={ this.context.muiTheme.r3FormButtons.raisedButtonStyle }
-				disabled={ false }
-				onClick={ (event) => this.props.onClose(event, true, this.state.aliasRole) }
-				icon={
-					<FontIcon className={ this.context.muiTheme.r3IconFonts.checkIconFont } />
-				}
-			/>
-		];
+		let	pathClass	= classes.value;
 
 		return (
 			<Dialog
-				title={ this.props.r3provider.getR3TextRes().cCreateServiceTenantTitle }
-				actions={ actions }
-				modal={ true }
 				open={ this.props.open }
-				onRequestClose={ (event) => this.props.onClose(event, false, null, null) }
+				onClose={ (event) => this.props.onClose(event, false, null, null) }
+				{ ...theme.r3CreateServiceDialog.root }
+				className={ classes.root }
 			>
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >TENANT</p>
-				<p style={ this.context.muiTheme.dialogSimple.valueStyle } >{ tenant }</p>
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >SERVICE</p>
-				<p style={ this.context.muiTheme.dialogSimple.valueStyle } >{ service }</p>
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >PATH</p>
-				<p style={ this.context.muiTheme.dialogSimple.valueStyle } >{ path }</p>
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >{ this.props.r3provider.getR3TextRes().cDefaultRoleAlias }</p>
-				<TextField
-					name={ 'alias_role' }
-					value={ this.state.aliasRole }
-					hintText={ 'Role path under tenant(yrn:yahoo:::<tenant>)' }
-					style={ this.context.muiTheme.dialogSimple.TextFieldStyle }
-					onChange={ (event, value) => this.handleAliasRoleChange(event, value) }
-				/>
+				<DialogTitle
+					{ ...theme.r3CreateServiceDialog.dialogTitle }
+					className={ classes.dialogTitle }
+				>
+					<Typography
+						{ ...theme.r3CreateServiceDialog.title }
+						className={ classes.title }
+					>
+						{ r3provider.getR3TextRes().cCreateServiceTenantTitle }
+					</Typography>
+				</DialogTitle>
+
+				<DialogContent
+					className={ classes.dialogContent }
+				>
+					<Typography
+						{ ...theme.r3CreateServiceDialog.keyTitle }
+						className={ classes.keyTitle }
+					>
+						{ r3provider.getR3TextRes().tResTenantSubTitle }
+					</Typography>
+					<Typography
+						{ ...theme.r3CreateServiceDialog.value }
+						className={ tenantClass }
+					>
+						{ tenant }
+					</Typography>
+
+					<Typography
+						{ ...theme.r3CreateServiceDialog.keyTitle }
+						className={ classes.keyTitle }
+					>
+						{ r3provider.getR3TextRes().tResServiceSubTitle }
+					</Typography>
+					<Typography
+						{ ...theme.r3CreateServiceDialog.value }
+						className={ serviceClass }
+					>
+						{ service }
+					</Typography>
+
+					<Typography
+						{ ...theme.r3CreateServiceDialog.keyTitle }
+						className={ classes.keyTitle }
+					>
+						{ r3provider.getR3TextRes().tResPathSubTitle }
+					</Typography>
+					<Typography
+						{ ...theme.r3CreateServiceDialog.value }
+						className={ pathClass }
+					>
+						{ path }
+					</Typography>
+
+					<Typography
+						{ ...theme.r3CreateServiceDialog.keyTitle }
+						className={ classes.keyTitle }
+					>
+						{ r3provider.getR3TextRes().cDefaultRoleAlias }
+					</Typography>
+					<TextField
+						id={ serviceTenantTextFieldId }
+						value={ this.state.aliasRole }
+						placeholder={ r3provider.getR3TextRes().tResAliasRoleHint }
+						onChange={ (event) => this.handleAliasRoleChange(event) }
+						InputProps={{ className: classes.inputTextField }}
+						{ ...theme.r3CreatePathDialog.textField }
+						className={ classes.textField }
+					/>
+				</DialogContent>
+
+				<DialogActions>
+					<Button
+						onClick={ (event) => this.props.onClose(event, false, null) }
+						{ ...theme.r3CreateServiceDialog.cancelButton }
+						className={ classes.cancelButton }
+					>
+						{ r3provider.getR3TextRes().tResButtonCancel }
+						<CancelIcon
+							className={ classes.buttonIcon }
+						/>
+					</Button>
+					<Button
+						onClick={ (event) => this.props.onClose(event, true, this.state.aliasRole) }
+						{ ...theme.r3CreateServiceDialog.okButton }
+						className={ classes.okButton }
+					>
+						{ r3provider.getR3TextRes().tResButtonOk }
+						<CheckCircleIcon
+							className={ classes.buttonIcon }
+						/>
+					</Button>
+				</DialogActions>
 			</Dialog>
 		);
 
 	}
 }
-
-R3CreateServiceTenantDialog.contextTypes = {
-	muiTheme:		PropTypes.object.isRequired,
-	r3Context:		PropTypes.object.isRequired
-};
-
-R3CreateServiceTenantDialog.propTypes = {
-	r3provider:		PropTypes.object.isRequired,
-	open:			PropTypes.bool,
-	tenant:			PropTypes.object,
-	service:		PropTypes.string,
-	aliasRole:		PropTypes.string,
-
-	onClose:		PropTypes.func.isRequired
-};
-
-R3CreateServiceTenantDialog.defaultProps = {
-	open:			false,
-	tenant:			null,
-	service:		null,
-	aliasRole:		''
-};
 
 /*
  * VIM modelines

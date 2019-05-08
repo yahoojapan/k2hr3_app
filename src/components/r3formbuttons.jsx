@@ -19,19 +19,39 @@
  *
  */
 
-import React			from 'react';
-import ReactDOM			from 'react-dom';									// eslint-disable-line no-unused-vars
-import PropTypes		from 'prop-types';
+import React						from 'react';
+import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
+import PropTypes					from 'prop-types';
 
-// For Icon/Button
-import RaisedButton		from 'material-ui/RaisedButton';
-import FontIcon			from 'material-ui/FontIcon';
+import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
+import Button						from '@material-ui/core/Button';
+import CheckCircleIcon				from '@material-ui/icons/CheckCircle';
+import CancelIcon					from '@material-ui/icons/Cancel';
+
+import { r3FormButtons }			from './r3styles';
 
 //
 // Form Button Class
 //
+@withTheme()
+@withStyles(r3FormButtons)
 export default class R3FormButtons extends React.Component
 {
+	static contextTypes = {
+		r3Context:	PropTypes.object.isRequired
+	};
+
+	static propTypes = {
+		r3provider:	PropTypes.object.isRequired,
+		status:		PropTypes.bool,
+		onSave:		PropTypes.func.isRequired,
+		onCancel:	PropTypes.func.isRequired
+	};
+
+	static defaultProps = {
+		status:		false
+	};
+
 	constructor(props)
 	{
 		super(props);
@@ -39,53 +59,38 @@ export default class R3FormButtons extends React.Component
 
 	render()
 	{
+		const { theme, classes, r3provider } = this.props;
+
 		return (
-			<div className={ 'clearof' } style={{float: 'right'}} >
-				<RaisedButton
-					label={ 'CANCEL' }
-					labelPosition={ 'after' }
-					secondary={ true }
-					style={ this.context.muiTheme.r3FormButtons.raisedButtonStyle }
+			<div
+				className={ classes.root }
+			>
+				<Button
 					disabled={ !this.props.status }
 					onClick={ (event) => this.props.onCancel(event) }
-					icon={
-						<FontIcon
-							className={ this.context.muiTheme.r3IconFonts.cancelIconFont }
-						/>
-					}
-				/>
-				<RaisedButton
-					label={ 'SAVE' }
-					labelPosition={ 'after' }
-					primary={ true }
-					style={ this.context.muiTheme.r3FormButtons.raisedButtonStyle }
+					{ ...theme.r3FormButtons.cancelButton }
+					className={ classes.cancelButton }
+				>
+					{ r3provider.getR3TextRes().tResButtonCancel }
+					<CancelIcon
+						className={ classes.buttonIcon }
+					/>
+				</Button>
+				<Button
 					disabled={ !this.props.status }
 					onClick={ (event) => this.props.onSave(event) }
-					icon={
-						<FontIcon
-							className={ this.context.muiTheme.r3IconFonts.saveIconFont }
-						/>
-					}
-				/>
+					{ ...theme.r3FormButtons.saveButton }
+					className={ classes.saveButton }
+				>
+					{ r3provider.getR3TextRes().tResButtonSave }
+					<CheckCircleIcon
+						className={ classes.buttonIcon }
+					/>
+				</Button>
 			</div>
 		);
 	}
 }
-
-R3FormButtons.contextTypes = {
-	muiTheme:	PropTypes.object.isRequired,
-	r3Context:	PropTypes.object.isRequired
-};
-
-R3FormButtons.propTypes = {
-	status:		PropTypes.bool,
-	onSave:		PropTypes.func.isRequired,
-	onCancel:	PropTypes.func.isRequired
-};
-
-R3FormButtons.defaultProps = {
-	status:		false
-};
 
 /*
  * VIM modelines

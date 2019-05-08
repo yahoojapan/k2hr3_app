@@ -46,10 +46,27 @@ export const r3CompareCaseString = (str1, str2) =>
 
 export const r3IsEmptyEntity = (obj) =>
 {
-	if(undefined === obj || null === obj || (!(obj instanceof Object) && 'boolean' !== typeof obj && 'string' !== typeof obj && isNaN(obj))){
+	if(undefined === obj || null === obj || ('object' !== typeof obj && 'boolean' !== typeof obj && 'string' !== typeof obj && 'function' !== typeof obj && isNaN(obj))){
 		return true;
 	}
 	return false;
+};
+
+export const r3IsSafeTypedEntity = (obj, type) =>
+{
+	if(r3IsEmptyEntity(obj) || r3IsEmptyString(type, true)){
+		return false;
+	}
+	if('array' === type.toLowerCase()){
+		if(!(obj instanceof Array)){
+			return false;
+		}
+	}else{
+		if(type.toLowerCase() !== typeof obj){
+			return false;
+		}
+	}
+	return true;
 };
 
 export const r3IsEmptyString = (str, istrimed) =>
@@ -403,7 +420,7 @@ export const parseCombineHostObject = (combineHostObject) =>
 		// 2) port
 		sepPos					= combineHostObject.indexOf(' ');				// separator is ' '
 		if(-1 === sepPos){
-			if(!r3IsEmptyEntity(combineHostObject, true)){
+			if(!r3IsEmptyEntity(combineHostObject)){
 				if('string' === typeof combineHostObject && !isNaN(combineHostObject.trim())){
 					port		= parseInt(combineHostObject.trim());
 				}else if('number' === typeof combineHostObject){
@@ -415,7 +432,7 @@ export const parseCombineHostObject = (combineHostObject) =>
 			combineHostObject	= combineHostObject.substr(sepPos + 1);
 		}else{
 			let	tmpstr			= combineHostObject.substr(0, sepPos);
-			if(!r3IsEmptyEntity(tmpstr, true)){
+			if(!r3IsEmptyEntity(tmpstr)){
 				if('string' === typeof tmpstr && !isNaN(tmpstr.trim())){
 					port		= parseInt(tmpstr.trim());
 				}else if('number' === typeof tmpstr){

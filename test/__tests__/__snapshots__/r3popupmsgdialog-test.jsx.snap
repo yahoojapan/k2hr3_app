@@ -1,3 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `null`;
+exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
+<div
+  aria-label="message dialog"
+  className="MuiModal-root-28 MuiDialog-root-14 R3PopupMsgDialog-root-1"
+  label="message-dialog"
+  onKeyDown={[Function]}
+  role="dialog"
+/>
+`;

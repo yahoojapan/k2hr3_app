@@ -19,18 +19,18 @@
  *
  */
 
-import React					from 'react';							// eslint-disable-line no-unused-vars
-import getMuiTheme				from 'material-ui/styles/getMuiTheme';
+import React					from 'react';										// eslint-disable-line no-unused-vars
 import renderer					from 'react-test-renderer';
-import getElementWithContext	from 'react-test-context-provider';		// for context provider
+import getElementWithContext	from 'react-test-context-provider';					// for context provider
+import MuiThemeProvider			from '@material-ui/core/styles/MuiThemeProvider';	// for custom theme
+import CssBaseline				from '@material-ui/core/CssBaseline';				// for reset.css
 
+import r3Theme					from '../../src/components/r3theme';				// custom theme
 import R3MainTree				from '../../src/components/r3maintree';
 import R3Provider				from '../../src/util/r3provider';
-import r3Theme					from '../../src/components/r3theme';
 
-import mock_fetch				from '../__mocks__/fetchMock';			// eslint-disable-line no-unused-vars
-import { createNodeMock }		from '../__mocks__/materialUiMock';		// for material-ui
-import mock_injecttap			from '../__mocks__/injectTapMock';		// eslint-disable-line no-unused-vars
+import mock_fetch				from '../__mocks__/fetchMock';						// eslint-disable-line no-unused-vars
+import { createNodeMock }		from '../__mocks__/materialUiMock';					// for material-ui
 
 //
 // Mock functions
@@ -52,6 +52,7 @@ const NameItemInServiceChange	= jest.fn();							// eslint-disable-line no-undef
 const TypeInServiceChange		= jest.fn();							// eslint-disable-line no-undef
 const ListItemInServiceChange	= jest.fn();							// eslint-disable-line no-undef
 const OpenChange				= jest.fn();							// eslint-disable-line no-undef
+const PopupClose				= jest.fn();							// eslint-disable-line no-undef
 const TreeDocking				= jest.fn();							// eslint-disable-line no-undef
 const CheckUpdating				= jest.fn();							// eslint-disable-line no-undef
 const About						= jest.fn();							// eslint-disable-line no-undef
@@ -179,32 +180,35 @@ describe('R3MainTree', () => {											// eslint-disable-line no-undef
 		/* eslint-disable indent */
 		const r3provider	= new R3Provider(null);
 		const element		= getElementWithContext({
-									muiTheme:	getMuiTheme(r3Theme),
 									r3Context:	r3provider.getR3Context()
 								},
-								<R3MainTree
-									r3provider={ r3provider }
-									title='K2HR3'
-									enDock={ false }
-									isDocking={ true }
-									open={ true }
-									tenants={ tenants }
-									treeList={ treelist }
-									selectedTenant={ tenants[0] }
-									selectedType={ selectedtype }
-									selectedService={ selectedservice }
-									selectedPath={ selectedpath }
-									onTenantChange={ TenantChange }
-									onTypeItemChange={ TypeItemChange }
-									onListItemChange={ ListItemChange }
-									onNameItemInServiceChange={ NameItemInServiceChange }
-									onTypeInServiceChange={ TypeInServiceChange }
-									onListItemInServiceChange={ ListItemInServiceChange }
-									onOpenChange={ OpenChange }
-									onTreeDocking={ TreeDocking }
-									onCheckUpdating={ CheckUpdating }
-									onAbout={ About }
-								/>
+								<MuiThemeProvider theme={ r3Theme } >
+									<CssBaseline />
+									<R3MainTree
+										r3provider={ r3provider }
+										title='K2HR3'
+										enDock={ false }
+										isDocking={ true }
+										open={ true }
+										tenants={ tenants }
+										treeList={ treelist }
+										selectedTenant={ tenants[0] }
+										selectedType={ selectedtype }
+										selectedService={ selectedservice }
+										selectedPath={ selectedpath }
+										onTenantChange={ TenantChange }
+										onTypeItemChange={ TypeItemChange }
+										onListItemChange={ ListItemChange }
+										onNameItemInServiceChange={ NameItemInServiceChange }
+										onTypeInServiceChange={ TypeInServiceChange }
+										onListItemInServiceChange={ ListItemInServiceChange }
+										onOpenChange={ OpenChange }
+										onPopupClose={ PopupClose }
+										onTreeDocking={ TreeDocking }
+										onCheckUpdating={ CheckUpdating }
+										onAbout={ About }
+									/>
+								</MuiThemeProvider>
 							);
 		/* eslint-enable indent */
 

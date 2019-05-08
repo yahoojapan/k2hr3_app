@@ -19,8 +19,8 @@
  *
  */
 
-import { kwApiHostForUD, kwIncludePathForUD, signinUnknownType, signinUnscopedToken, signinCredential }	from '../util/r3types';
-import { r3ConvertFromJSON, r3UnescapeHTML, r3CompareCaseString }										from '../util/r3util';
+import { kwApiHostForUD, kwIncludePathForUD, signinUnknownType, signinUnscopedToken, signinCredential }						from '../util/r3types';
+import { r3ConvertFromJSON, r3UnescapeHTML, r3CompareCaseString, r3IsEmptyString, r3IsEmptyEntity, r3IsSafeTypedEntity }	from '../util/r3util';
 
 //
 // Load Global object for K2HR3 Context
@@ -34,10 +34,10 @@ const r3GlobalObject = (function()
 
 	// global app menu
 	let	_appmenu = null;
-	if(undefined !== r3globaltmp.r3appmenu && null !== r3globaltmp.r3appmenu && 'string' === typeof r3globaltmp.r3appmenu && '' !== r3globaltmp.r3appmenu){
+	if(!r3IsEmptyEntity(r3globaltmp.r3appmenu)){
 		let	_decodemenu	= unescape(r3globaltmp.r3appmenu);				// decode
 		let	_objmenu	= r3ConvertFromJSON(_decodemenu);				// parse
-		if(undefined !== _objmenu && null !== _objmenu && _objmenu instanceof Array && 0 < _objmenu.length){
+		if(r3IsSafeTypedEntity(_objmenu, 'array') && 0 < _objmenu.length){
 			_appmenu = _objmenu;
 		}else{
 			console.info('There is no application global menu.');
@@ -48,10 +48,10 @@ const r3GlobalObject = (function()
 
 	// user script
 	let	_userdata = null;
-	if(undefined !== r3globaltmp.r3userdata && null !== r3globaltmp.r3userdata && 'string' === typeof r3globaltmp.r3userdata && '' !== r3globaltmp.r3userdata){
+	if(!r3IsEmptyEntity(r3globaltmp.r3userdata)){
 		let	_decodeuserdata	= unescape(r3globaltmp.r3userdata);			// decode
 		let	_templuserdata	= r3ConvertFromJSON(_decodeuserdata);		// parse
-		if(undefined !== _templuserdata && null !== _templuserdata && 'string' === typeof _templuserdata){
+		if(r3IsSafeTypedEntity(_templuserdata, 'string')){
 			_userdata = _templuserdata;
 		}else{
 			console.info('There is no user script template.');
@@ -62,27 +62,27 @@ const r3GlobalObject = (function()
 
 	// default object values
 	let	r3globalobj	= {
-		apischeme:		(undefined === r3globaltmp.r3apischeme ?	''	: r3globaltmp.r3apischeme),
-		apihost:		(undefined === r3globaltmp.r3apihost ?		''	: r3globaltmp.r3apihost),
-		apiport:		(undefined === r3globaltmp.r3apiport ?		0	: r3globaltmp.r3apiport),
+		apischeme:		(r3IsEmptyString(r3globaltmp.r3apischeme)	? '' : r3globaltmp.r3apischeme),
+		apihost:		(r3IsEmptyString(r3globaltmp.r3apihost)		? '' : r3globaltmp.r3apihost),
+		apiport:		((r3IsEmptyEntity(r3globaltmp.r3apiport) || isNaN(r3globaltmp.r3apiport)) ? 0 : r3globaltmp.r3apiport),
 		appmenu:		_appmenu,
 		userdata:		_userdata,
 		login:			false,
 		username:		'',
 		unscopedtoken:	'',
 		signintype:		(r3CompareCaseString(r3globaltmp.signintype, signinUnscopedToken) ? signinUnscopedToken : r3CompareCaseString(r3globaltmp.signintype, signinCredential) ? signinCredential : signinUnknownType),
-		signinurl:		((undefined !== r3globaltmp.signinurl && null !== r3globaltmp.signinurl && 'string' == typeof r3globaltmp.signinurl && '' !== r3globaltmp.signinurl) ? r3globaltmp.signinurl : null),
-		signouturl:		((undefined !== r3globaltmp.signouturl && null !== r3globaltmp.signouturl && 'string' == typeof r3globaltmp.signouturl && '' !== r3globaltmp.signouturl) ? r3globaltmp.signouturl : null),
-		lang:			((undefined !== r3globaltmp.lang && null !== r3globaltmp.lang && 'string' == typeof r3globaltmp.lang && '' !== r3globaltmp.lang) ? r3globaltmp.lang : 'en'),
-		dbgheader:		(undefined === r3globaltmp.dbgheader ?		''	: r3globaltmp.dbgheader),
-		dbgvalue:		(undefined === r3globaltmp.dbgvalue ?		''	: r3globaltmp.dbgvalue),
-		dbgresheader:	(undefined === r3globaltmp.dbgresheader ?	''	: r3globaltmp.dbgresheader),
-		errormsg:		((undefined !== r3globaltmp.errormsg && null !== r3globaltmp.errormsg && 'string' == typeof r3globaltmp.errormsg && '' !== r3globaltmp.errormsg) ? r3globaltmp.errormsg : null)
+		signinurl:		(r3IsEmptyString(r3globaltmp.signinurl)		? null	: r3globaltmp.signinurl),
+		signouturl:		(r3IsEmptyString(r3globaltmp.signouturl)	? null	: r3globaltmp.signouturl),
+		lang:			(r3IsEmptyString(r3globaltmp.lang)			? 'en'	: r3globaltmp.lang),
+		dbgheader:		(r3IsEmptyString(r3globaltmp.dbgheader)		? ''	: r3globaltmp.dbgheader),
+		dbgvalue:		(r3IsEmptyString(r3globaltmp.dbgvalue)		? ''	: r3globaltmp.dbgvalue),
+		dbgresheader:	(r3IsEmptyString(r3globaltmp.dbgresheader)	? ''	: r3globaltmp.dbgresheader),
+		errormsg:		(r3IsEmptyString(r3globaltmp.errormsg)		? null	: r3globaltmp.errormsg)
 	};
 
-	if(	undefined !== r3globaltmp				&& null !== r3globaltmp																											&&
-		undefined !== r3globaltmp.username		&& null !== r3globaltmp.username		&& 'string' === typeof r3globaltmp.username			&& '' !== r3globaltmp.username		&&
-		undefined !== r3globaltmp.unscopedtoken	&& null !== r3globaltmp.unscopedtoken	&& 'string' === typeof r3globaltmp.unscopedtoken	&& '' !== r3globaltmp.unscopedtoken	)
+	if(	!r3IsEmptyEntity(r3globaltmp)				&&
+		!r3IsEmptyString(r3globaltmp.username)		&&
+		!r3IsEmptyString(r3globaltmp.unscopedtoken)	)
 	{
 		r3globalobj.login			= true;
 		r3globalobj.username		= r3globaltmp.username;
@@ -117,15 +117,15 @@ export default class R3Context
 		this.errormsg					= r3GlobalObject.errormsg;		// Error message
 
 		// User name and Unscoped User Token
-		if(	undefined !== signin		&& null !== signin			&& 'boolean' === typeof signin			&& signin				&&
-			undefined !== username		&& null !== username		&& 'string' === typeof username			&& '' !== username		&&
-			undefined !== unscopedtoken	&& null !== unscopedtoken	&& 'string' === typeof unscopedtoken	&& '' !== unscopedtoken	)
+		if(	r3IsSafeTypedEntity(signin, 'boolean')	&&
+			!r3IsEmptyString(username)				&&
+			!r3IsEmptyString(unscopedtoken)			)
 		{
 			this.login					= true;							// Signed in
 			this.user					= username;						// Using parameter
 			this.unscopedUserToken		= unscopedtoken;				// 
 		}else{
-			if(undefined !== signin && null !== signin && 'boolean' === typeof signin){
+			if(r3IsSafeTypedEntity(signin, 'boolean')){
 				this.login				= false;						// Signed out
 				this.user				= '';							// 
 				this.unscopedUserToken	= '';							// 
@@ -144,7 +144,7 @@ export default class R3Context
 
 	getSafeApiScheme()
 	{
-		return ((undefined === this.apischeme || null === this.apischeme) ? 'http' : this.apischeme);
+		return (r3IsEmptyString(this.apischeme) ? 'http' : this.apischeme);
 	}
 
 	getApiHost()
@@ -154,7 +154,7 @@ export default class R3Context
 
 	getSafeApiHost()
 	{
-		return ((undefined === this.apihost || null === this.apihost) ? 'localhost' : this.apihost);
+		return (r3IsEmptyString(this.apihost) ? 'localhost' : this.apihost);
 	}
 
 	getApiPort()
@@ -164,7 +164,7 @@ export default class R3Context
 
 	getSafeApiPort()
 	{
-		return ((undefined === this.apiport || isNaN(this.apiport)) ? 80 : this.apiport);
+		return ((r3IsEmptyEntity(this.apiport) || isNaN(this.apiport)) ? 80 : this.apiport);
 	}
 
 	getAppMenu()
@@ -174,7 +174,7 @@ export default class R3Context
 
 	getSafeAppMenu()
 	{
-		return ((undefined === this.appmenu || null === this.appmenu) ? null : this.appmenu);
+		return (r3IsEmptyEntity(this.appmenu) ? null : this.appmenu);
 	}
 
 	getUserData()
@@ -184,11 +184,11 @@ export default class R3Context
 
 	getExpandUserData(registerpath)
 	{
-		if(undefined === this.userdata || null === this.userdata || 'string' !== typeof this.userdata || '' === this.userdata){
+		if(r3IsEmptyString(this.userdata)){
 			console.info('There is no user script template.');
 			return '';
 		}
-		if(undefined === registerpath || null === registerpath || 'string' !== typeof registerpath || '' === registerpath){
+		if(r3IsEmptyString(registerpath)){
 			console.error('Register path is empty.');
 			return '';
 		}
@@ -217,7 +217,7 @@ export default class R3Context
 
 	getSafeUserName()
 	{
-		return ((undefined === this.user || null === this.user) ? '' : this.user);
+		return (r3IsEmptyString(this.user) ? '' : this.user);
 	}
 
 	getUnscopedToken()
@@ -227,7 +227,7 @@ export default class R3Context
 
 	getSafeUnscopedToken()
 	{
-		return ((undefined === this.unscopedUserToken || null === this.unscopedUserToken) ? '' : this.unscopedUserToken);
+		return (r3IsEmptyString(this.unscopedUserToken) ? '' : this.unscopedUserToken);
 	}
 
 	getSignInType()
@@ -237,22 +237,22 @@ export default class R3Context
 
 	getSafeSignInUrl()
 	{
-		return ((undefined === this.signinurl || null === this.signinurl) ? '' : r3UnescapeHTML(this.signinurl));
+		return (r3IsEmptyString(this.signinurl) ? '' : r3UnescapeHTML(this.signinurl));
 	}
 
 	getSafeSignOutUrl()
 	{
-		return ((undefined === this.signouturl || null === this.signouturl) ? '' : r3UnescapeHTML(this.signouturl));
+		return (r3IsEmptyString(this.signouturl) ? '' : r3UnescapeHTML(this.signouturl));
 	}
 
 	getSafeLang()
 	{
-		return ((undefined === this.lang || null === this.lang) ? '' : r3UnescapeHTML(this.lang));
+		return (r3IsEmptyString(this.lang) ? '' : r3UnescapeHTML(this.lang));
 	}
 
 	isDbgHeader()
 	{
-		if(undefined === this.dbgHeaderName || null === this.dbgHeaderName || '' === this.dbgHeaderName || undefined === this.dbgHeaderValue || null === this.dbgHeaderValue || '' === this.dbgHeaderValue){
+		if(r3IsEmptyString(this.dbgHeaderName) || r3IsEmptyString(this.dbgHeaderValue)){
 			return false;
 		}
 		return true;
@@ -260,7 +260,7 @@ export default class R3Context
 
 	getDbgHeader(headers)
 	{
-		if(undefined === headers || null === headers){
+		if(r3IsEmptyEntity(headers)){
 			return false;
 		}
 		if(!this.isDbgHeader()){

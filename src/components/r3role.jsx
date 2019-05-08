@@ -19,34 +19,90 @@
  *
  */
 
-import React			from 'react';
-import ReactDOM			from 'react-dom';									// eslint-disable-line no-unused-vars
-import PropTypes		from 'prop-types';
+import React						from 'react';
+import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
+import PropTypes					from 'prop-types';
 
-import TextField		from 'material-ui/TextField';
-import FontIcon			from 'material-ui/FontIcon';
-import IconButton		from 'material-ui/IconButton';
+import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
+import TextField					from '@material-ui/core/TextField';
+import Typography					from '@material-ui/core/Typography';
+import IconButton					from '@material-ui/core/IconButton';
+import Tooltip						from '@material-ui/core/Tooltip';
+import DeleteIcon					from '@material-ui/icons/ClearRounded';
+import AddIcon						from '@material-ui/icons/AddRounded';
+import UpIcon						from '@material-ui/icons/ArrowUpwardRounded';
+import DownIcon						from '@material-ui/icons/ArrowDownwardRounded';
 
-import R3FormButtons	from './r3formbuttons';								// Buttons
-import R3Message		from '../util/r3message';
-import R3PopupMsgDialog	from './r3popupmsgdialog';
+import { r3Role }					from './r3styles';
+import R3FormButtons				from './r3formbuttons';					// Buttons
+import R3Message					from '../util/r3message';
+import R3PopupMsgDialog				from './r3popupmsgdialog';
 import { regYrnAnyPolicyPath, regYrnAnyRolePath }	from '../util/r3define';
-import { r3DeepClone, r3DeepCompare, parseCombineHostObject, getCombineHostObject, r3IsEmptyString, r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, parseKVString } from '../util/r3util';
 import { errorType, actionTypeValue, actionTypeDelete, actionTypeAdd, actionTypeUp, actionTypeDown, actionTypeHostName, actionTypeHostAuxiliary } from '../util/r3types';
+import { r3DeepClone, r3DeepCompare, parseCombineHostObject, getCombineHostObject, r3IsEmptyString, r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity, parseKVString } from '../util/r3util';
+
+//
+// Local variables
+//
+const tooltipValues = {
+	deleteHostnameTooltip:			'deleteHostnameTooltip',
+	addHostnameTooltip:				'addHostnameTooltip',
+	deleteIpTooltip:				'deleteIpTooltip',
+	addIpTooltip:					'addIpTooltip',
+	deletePolicyTooltip:			'deletePolicyTooltip',
+	addPolicyTooltip:				'addPolicyTooltip',
+	downAliasTooltip:				'downAliasTooltip',
+	upAliasTooltip:					'upAliasTooltip',
+	deleteAliasTooltip:				'deleteAliasTooltip',
+	addAliasTooltip:				'addAliasTooltip'
+};
+
+const roleComponentValues = {
+	hostnameTextFieldNamePrefix:	'roleHostname',
+	hostnameAUXTextFieldNamePrefix:	'roleHostnameAUX_',
+	hostnameNewTextFieldName:		'roleNewHostname',
+	hostnameAUXNewTextFieldName:	'roleNewHostnameAUX',
+	ipTextFieldNamePrefix:			'roleIp',
+	ipAUXTextFieldNamePrefix:		'roleIpAUX_',
+	ipNewTextFieldName:				'roleNewIp',
+	ipAUXNewTextFieldName:			'roleNewIpAUX',
+	policyTextFieldNamePrefix:		'rolePolicy_',
+	policyNewTextFieldName:			'roleNewPolicy',
+	aliasTextFieldNamePrefix:		'aliasValue_',
+	aliasNewTextFieldName:			'aliasNew'
+};
 
 //
 // Role Contents Class
 //
+@withTheme()
+@withStyles(r3Role)
 export default class R3Role extends React.Component
 {
+	static contextTypes = {
+		r3Context:	PropTypes.object.isRequired
+	};
+
+	static propTypes = {
+		r3provider:	PropTypes.object.isRequired,
+		role:		PropTypes.object.isRequired,
+		isReadMode:	PropTypes.bool,
+
+		onSave:		PropTypes.func.isRequired,
+		onUpdate:	PropTypes.func.isRequired
+	};
+
+	static defaultProps = {
+		isReadMode:	false
+	};
+
+	state = this.createState(this.props.role);
+
 	constructor(props)
 	{
 		super(props);
 
-		// Initalize Sate
-		this.state						= this.createState(this.props.role);
-
-		// Binding
+		// Binding(do not define handlers as arrow functions for performance)
 		this.handleSave					= this.handleSave.bind(this);
 		this.handleCancel				= this.handleCancel.bind(this);
 		this.handleConfirmDialogClose	= this.handleConfirmDialogClose.bind(this);
@@ -91,16 +147,29 @@ export default class R3Role extends React.Component
 			localIps		= this.convertStandardToLocal(standars);
 		}
 		return {
-			role:					r3DeepClone(role),
-			localHostnames:			localHostnames,
-			localIps:				localIps,
-			addHostName:			'',
-			addAuxiliary:			'',
-			addPolicies:			'',
-			addAliases:				'',
-			changed:				false,
-			confirmMessageObject:	null,
-			messageDialogObject:	null
+			role:						r3DeepClone(role),
+			localHostnames:				localHostnames,
+			localIps:					localIps,
+			addHostName:				'',
+			addAuxiliary:				'',
+			addPolicies:				'',
+			addAliases:					'',
+			changed:					false,
+			confirmMessageObject:		null,
+			messageDialogObject:		null,
+
+			tooltips: {
+				deleteHostnameTooltip:	-1,				// position
+				addHostnameTooltip:		false,
+				deleteIpTooltip:		-1,				// position
+				addIpTooltip:			false,
+				deletePolicyTooltip:	-1,				// position
+				addPolicyTooltip:		false,
+				downAliasTooltip:		-1,				// position
+				upAliasTooltip:			-1,				// position
+				deleteAliasTooltip:		-1,				// position
+				addAliasTooltip:		false
+			}
 		};
 	}
 
@@ -135,8 +204,8 @@ export default class R3Role extends React.Component
 		local.auxiliary	= '';
 
 		// port in auxiliary
-		if(!r3IsEmptyEntityObject(standard, 'port') && ('string' === typeof standard.port || 'number' === typeof standard.port)){
-			if('string' === typeof standard.port){
+		if(!r3IsEmptyEntityObject(standard, 'port') && (r3IsSafeTypedEntity(standard.port, 'string') || r3IsSafeTypedEntity(standard.port, 'number'))){
+			if(r3IsSafeTypedEntity(standard.port, 'string')){
 				if(!isNaN(standard.port.trim()) || '*' === standard.port.trim()){
 					local.auxiliary += 'PORT=' + standard.port.trim();
 				}else{
@@ -207,7 +276,7 @@ export default class R3Role extends React.Component
 			// PORT
 			let	parsed	= parseKVString(tmpstr, 'PORT');
 			if(!r3IsEmptyEntity(parsed.value)){
-				if('string' === typeof parsed.value && '' !== parsed.value){
+				if(!r3IsEmptyString(parsed.value)){
 					if(!isNaN(parsed.value.trim())){
 						result.port	= parseInt(parsed.value.trim());
 					}else if('*' === parsed.value.trim()){
@@ -215,7 +284,7 @@ export default class R3Role extends React.Component
 					}else{
 						result.port	= -1;				// wrong string...
 					}
-				}else if('number' === typeof parsed.value){
+				}else if(r3IsSafeTypedEntity(parsed.value.port, 'number')){
 					result.port	= parsed.value;
 				}else{
 					result.port	= -1;					// wrong type...
@@ -251,7 +320,13 @@ export default class R3Role extends React.Component
 		if(r3IsEmptyStringObject(standard, 'hostname') || r3IsEmptyString(standard.hostname, true)){
 			return false;
 		}
-		if(r3IsEmptyEntityObject(standard, 'port') || isNaN(standard.port) || 'number' !== typeof standard.port || standard.port < 0 || 65535 < standard.port){
+		if(r3IsEmptyEntityObject(standard, 'port') || isNaN(standard.port)){
+			return false;
+		}
+		if(!r3IsSafeTypedEntity(standard.port, 'number')){
+			standard.port = Number(standard.port);
+		}
+		if(standard.port < 0 || 65535 < standard.port){
 			return false;
 		}
 		if(!r3IsEmptyStringObject(standard, 'cuk') && -1 !== standard.cuk.indexOf(' ')){
@@ -631,8 +706,9 @@ export default class R3Role extends React.Component
 	//
 	// Handle Hostname and port : Change
 	//
-	handleHostsChange(event, type, pos, combineHostObject, changedValue)							// eslint-disable-line no-unused-vars
+	handleHostsChange(event, type, pos)
 	{
+		let	changedValue	= r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
 		let	newHosts		= [];
 		let	isClearNewKey	= false;
 
@@ -648,7 +724,7 @@ export default class R3Role extends React.Component
 				console.warn('unknown pos(' + JSON.stringify(pos) + ') for hostnames array.');
 				return;
 			}
-			newHosts[pos].host		= changedValue;													// set hostname
+			newHosts[pos].host		= changedValue;						// set hostname
 
 		}else if(actionTypeHostAuxiliary === type){
 			//
@@ -658,7 +734,7 @@ export default class R3Role extends React.Component
 				console.warn('unknown pos(' + JSON.stringify(pos) + ') for hostnames array.');
 				return;
 			}
-			newHosts[pos].auxiliary	= changedValue;													// set auxiliary
+			newHosts[pos].auxiliary	= changedValue;						// set auxiliary
 
 		}else if(actionTypeDelete === type){
 			//
@@ -733,8 +809,10 @@ export default class R3Role extends React.Component
 	//
 	// Handle Add Hostname and port etc : Change
 	//
-	handleAddHostsChange(event, type, changedValue)									// eslint-disable-line no-unused-vars
+	handleAddHostsChange(event, type)
 	{
+		let	changedValue = r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
+
 		// update state
 		if(actionTypeHostName === type){
 			this.setState({
@@ -782,23 +860,24 @@ export default class R3Role extends React.Component
 	//
 	// Handle Policies Value : Change
 	//
-	handlePoliciesChange(event, type, pos, changedValue)							// eslint-disable-line no-unused-vars
+	handlePoliciesChange(event, type, pos)
 	{
-		let	newPolicies = [];
-		if(undefined !== this.state.role.policies && null !== this.state.role.policies && this.state.role.policies instanceof Array){
+		let	changedValue= r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
+		let	newPolicies	= [];
+		if(r3IsSafeTypedEntity(this.state.role.policies, 'array')){
 			newPolicies = r3DeepClone(this.state.role.policies);
 		}
 
 		let	isClearNewValue	= false;
 		if(actionTypeValue === type){
-			if(undefined === pos || null === pos || isNaN(pos) || pos < 0 || newPolicies.length <= pos){
+			if(r3IsEmptyEntity(pos) || isNaN(pos) || pos < 0 || newPolicies.length <= pos){
 				console.warn('unknown position(' + JSON.stringify(pos) + ') for policies.');
 				return;
 			}
 			newPolicies[pos] = changedValue.trim();
 
 		}else if(actionTypeDelete === type){
-			if(undefined === pos || null === pos || isNaN(pos) || pos < 0 || newPolicies.length <= pos){
+			if(r3IsEmptyEntity(pos) || isNaN(pos) || pos < 0 || newPolicies.length <= pos){
 				console.warn('unknown position(' + JSON.stringify(pos) + ') for policies.');
 				return;
 			}
@@ -838,22 +917,23 @@ export default class R3Role extends React.Component
 	//
 	// Handle Add New Policies : Change
 	//
-	handleAddPoliciesChange(event, changedValue)								// eslint-disable-line no-unused-vars
+	handleAddPoliciesChange(event)
 	{
 		// update state
 		this.setState({
-			addPolicies:		changedValue
+			addPolicies:		event.target.value
 		});
 	}
 
 	//
 	// Handle Policy Aliases : Change
 	//
-	handleAliasesChange(event, type, pos, changedValue)							// eslint-disable-line no-unused-vars
+	handleAliasesChange(event, type, pos)
 	{
+		let	changedValue	= r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
 		let	isClearNewAlias	= false;
 		let	newAliases		= [];
-		if(undefined !== this.state.role.aliases && null !== this.state.role.aliases && this.state.role.aliases instanceof Array){
+		if(r3IsSafeTypedEntity(this.state.role.aliases, 'array')){
 			newAliases		= r3DeepClone(this.state.role.aliases);
 		}
 
@@ -913,16 +993,83 @@ export default class R3Role extends React.Component
 	//
 	// Handle Add Policy Aliases : Change
 	//
-	handleAddAliasesChange(event, changedValue)									// eslint-disable-line no-unused-vars
+	handleAddAliasesChange(event)
 	{
 		// update state
 		this.setState({
-			addAliases:		changedValue
+			addAliases:		event.target.value
 		});
+	}
+
+	handTooltipChange = (event, type, extData) =>									// eslint-disable-line no-unused-vars
+	{
+		if(tooltipValues.deleteHostnameTooltip === type){
+			this.setState({
+				tooltips: {
+					deleteHostnameTooltip:	extData
+				}
+			});
+		}else if(tooltipValues.addHostnameTooltip === type){
+			this.setState({
+				tooltips: {
+					addHostnameTooltip:		extData
+				}
+			});
+		}else if(tooltipValues.deleteIpTooltip === type){
+			this.setState({
+				tooltips: {
+					deleteIpTooltip:		extData
+				}
+			});
+		}else if(tooltipValues.addIpTooltip === type){
+			this.setState({
+				tooltips: {
+					addIpTooltip:			extData
+				}
+			});
+		}else if(tooltipValues.deletePolicyTooltip === type){
+			this.setState({
+				tooltips: {
+					deletePolicyTooltip:	extData
+				}
+			});
+		}else if(tooltipValues.addPolicyTooltip === type){
+			this.setState({
+				tooltips: {
+					addPolicyTooltip:		extData
+				}
+			});
+		}else if(tooltipValues.downAliasTooltip === type){
+			this.setState({
+				tooltips: {
+					downAliasTooltip:		extData
+				}
+			});
+		}else if(tooltipValues.upAliasTooltip === type){
+			this.setState({
+				tooltips: {
+					upAliasTooltip:			extData
+				}
+			});
+		}else if(tooltipValues.deleteAliasTooltip === type){
+			this.setState({
+				tooltips: {
+					deleteAliasTooltip:		extData
+				}
+			});
+		}else if(tooltipValues.addAliasTooltip === type){
+			this.setState({
+				tooltips: {
+					addAliasTooltip:		extData
+				}
+			});
+		}
 	}
 
 	getHostnameContents()
 	{
+		const { theme, classes, r3provider } = this.props;
+
 		if(r3IsEmptyEntity(this.state.localHostnames) || !(this.state.localHostnames instanceof Array)){
 			return;
 		}
@@ -935,34 +1082,68 @@ export default class R3Role extends React.Component
 			let	axiliary = r3IsEmptyStringObject(oneHostObj, 'auxiliary') ?	'' : oneHostObj.auxiliary;
 
 			let	deleteButton;
-			if(!this.props.isReadMode){
+			if(this.props.isReadMode){
 				deleteButton = (
 					<IconButton
-						iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-						tooltip={ 'Delete' }
-						style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-						onClick={ (event) => this.handleHostsChange(event, actionTypeDelete, pos, null, null) }
+						disabled={ true }
+						{ ...theme.r3Role.deleteHostnameButton }
+						className={ classes.deleteInvisibleHostnameButton }
 					>
-						<FontIcon className={ this.context.muiTheme.r3IconFonts.deleteIconFont } />
+						<DeleteIcon />
 					</IconButton>
+				);
+			}else{
+				deleteButton = (
+					<Tooltip
+						title={ r3provider.getR3TextRes().tResRoleHostnameDelTT }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteHostnameTooltip, 'number') || (this.state.tooltips.deleteHostnameTooltip != pos)) ? false : true) }
+					>
+						<IconButton
+							onClick={ (event) => this.handleHostsChange(event, actionTypeDelete, pos) }
+							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deleteHostnameTooltip, pos) }
+							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deleteHostnameTooltip, -1) }
+							{ ...theme.r3Role.deleteHostnameButton }
+							className={ classes.deleteHostnameButton }
+						>
+							<DeleteIcon />
+						</IconButton>
+					</Tooltip>
 				);
 			}
 
+			let	inputProps;
+			if(this.props.isReadMode){
+				inputProps = {};
+			}else{
+				inputProps = {
+					className: classes.inputTextField
+				};
+			}
+
 			elementArray.push(
-				<div className={ 'clearof' } key={ pos }>
+				<div
+					key={ pos }
+					className={ classes.enclosureElement }
+				>
 					<TextField
-						name={ 'name_' + String(pos) }
+						name={ roleComponentValues.hostnameTextFieldNamePrefix + String(pos) }
 						value={ dispName }
 						disabled={ this.props.isReadMode }
-						style={ this.context.muiTheme.r3Contents.firstInTwoTextFieldStyle }
-						onChange={ (event, value) => this.handleHostsChange(event, actionTypeHostName, pos, oneHostObj.host, value) }
+						placeholder={ r3provider.getR3TextRes().tResRoleHostnameHint }
+						onChange={ (event) => this.handleHostsChange(event, actionTypeHostName, pos) }
+						InputProps={ inputProps }
+						{ ...theme.r3Role.hostnameTextField }
+						className={ classes.hostnameTextField }
 					/>
 					<TextField
-						name={ 'auxiliary_' + String(pos) }
+						name={ roleComponentValues.hostnameAUXTextFieldNamePrefix + String(pos) }
 						value={ axiliary }
 						disabled={ this.props.isReadMode }
-						style={ this.context.muiTheme.r3Contents.secondInTwoTextFieldStyle }
-						onChange={ (event, value) => this.handleHostsChange(event, actionTypeHostAuxiliary, pos, oneHostObj.auxiliary, value) }
+						placeholder={ r3provider.getR3TextRes().tResRoleHostnameAUXHint }
+						onChange={ (event) => this.handleHostsChange(event, actionTypeHostAuxiliary, pos) }
+						InputProps={ inputProps }
+						{ ...theme.r3Role.hostnameAUXTextField }
+						className={ classes.hostnameAUXTextField }
 					/>
 					{ deleteButton }
 				</div>
@@ -976,8 +1157,58 @@ export default class R3Role extends React.Component
 		);
 	}
 
+	getAddHostnameContents()
+	{
+		const { theme, classes, r3provider } = this.props;
+
+		if(this.props.isReadMode){
+			return;
+		}
+
+		return (
+			<div
+				className={ classes.enclosureElement }
+			>
+				<TextField
+					name={ roleComponentValues.hostnameNewTextFieldName }
+					value={ this.state.addHostName }
+					placeholder={ r3provider.getR3TextRes().tResRoleHostnameHint }
+					onChange={ (event) => this.handleAddHostsChange(event, actionTypeHostName) }
+					InputProps={{ className: classes.inputTextField }}
+					{ ...theme.r3Role.hostnameTextField }
+					className={ classes.hostnameTextField }
+				/>
+				<TextField
+					name={ roleComponentValues.hostnameAUXNewTextFieldName }
+					value={ this.state.addAuxiliary }
+					placeholder={ r3provider.getR3TextRes().tResRoleHostnameAUXHint }
+					onChange={ (event) => this.handleAddHostsChange(event, actionTypeHostAuxiliary) }
+					InputProps={{ className: classes.inputTextField }}
+					{ ...theme.r3Role.hostnameAUXTextField }
+					className={ classes.hostnameAUXTextField }
+				/>
+				<Tooltip
+					title={ r3provider.getR3TextRes().tResRoleHostnameAddTT }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.addHostnameTooltip, 'boolean')) ? false : this.state.tooltips.addHostnameTooltip) }
+				>
+					<IconButton
+						onClick={ (event) => this.handleHostsChange(event, actionTypeAdd, 0) }
+						onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.addHostnameTooltip, true) }
+						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addHostnameTooltip, false) }
+						{ ...theme.r3Role.addHostnameButton }
+						className={ classes.addHostnameButton }
+					>
+						<AddIcon />
+					</IconButton>
+				</Tooltip>
+			</div>
+		);
+	}
+
 	getIpAddressContents()
 	{
+		const { theme, classes, r3provider } = this.props;
+
 		if(r3IsEmptyEntity(this.state.localIps) || !(this.state.localIps instanceof Array)){
 			return;
 		}
@@ -990,30 +1221,57 @@ export default class R3Role extends React.Component
 			let	axiliary= r3IsEmptyStringObject(oneHostObj, 'auxiliary') ?	'' : oneHostObj.auxiliary;
 
 			let	deleteButton;
-			if(!this.props.isReadMode){
+			if(this.props.isReadMode){
 				deleteButton = (
 					<IconButton
-						iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-						tooltip={ 'Delete' }
-						style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-						onClick={ (event) => this.handleIpsChange(event, pos) }
+						disabled={ true }
+						{ ...theme.r3Role.deleteIpButton }
+						className={ classes.deleteInvisibleIpButton }
 					>
-						<FontIcon className={ this.context.muiTheme.r3IconFonts.deleteIconFont } />
+						<DeleteIcon />
 					</IconButton>
+				);
+			}else{
+				deleteButton = (
+					<Tooltip
+						title={ r3provider.getR3TextRes().tResRoleIpDelTT }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteIpTooltip, 'number') || (this.state.tooltips.deleteIpTooltip != pos)) ? false : true) }
+					>
+						<IconButton
+							onClick={ (event) => this.handleIpsChange(event, pos) }
+							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deleteIpTooltip, pos) }
+							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deleteIpTooltip, -1) }
+							{ ...theme.r3Role.deleteIpButton }
+							className={ classes.deleteIpButton }
+						>
+							<DeleteIcon />
+						</IconButton>
+					</Tooltip>
 				);
 			}
 
-			// [TODO]
-			// may use Divider instead of div tag
+			// [NOTE]
+			// IP address is always disable
 			//
 			elementArray.push(
-				<div className={ 'clearof' } key={ pos } style={ this.context.muiTheme.r3Contents.wrapperDivStyle }>
-					<div style={ this.context.muiTheme.r3Contents.firstInTwoTextStyle } >
-						<span>{ ip }</span>
-					</div>
-					<div style={ this.context.muiTheme.r3Contents.secondInTwoTextStyle } >
-						<span>{ axiliary }</span>
-					</div>
+				<div
+					key={ pos }
+					className={ classes.enclosureElement }
+				>
+					<TextField
+						name={ roleComponentValues.ipTextFieldNamePrefix + String(pos) }
+						value={ ip }
+						disabled={ true }
+						{ ...theme.r3Role.ipTextField }
+						className={ classes.ipTextField }
+					/>
+					<TextField
+						name={ roleComponentValues.ipAUXTextFieldNamePrefix + String(pos) }
+						value={ axiliary }
+						disabled={ true }
+						{ ...theme.r3Role.ipAUXTextField }
+						className={ classes.ipAUXTextField }
+					/>
 					{ deleteButton }
 				</div>
 			);
@@ -1028,35 +1286,69 @@ export default class R3Role extends React.Component
 
 	getPolicyContents(items)
 	{
-		if(undefined === items || !(items instanceof Array)){
+		const { theme, classes, r3provider } = this.props;
+
+		if(!r3IsSafeTypedEntity(items, 'array')){
 			return;
 		}
+		let	_items = items;
 
 		return (
-			items.map( (item, pos) =>
+			_items.map( (item, pos) =>
 			{
 				let	deleteButton;
-				if(!this.props.isReadMode){
+				if(this.props.isReadMode){
 					deleteButton = (
 						<IconButton
-							iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-							tooltip={ 'Delete' }
-							style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-							onClick={ (event) => this.handlePoliciesChange(event, actionTypeDelete, pos, null) }
+							disabled={ true }
+							{ ...theme.r3Role.deletePolicyButton }
+							className={ classes.deleteInvisiblePolicyButton }
 						>
-							<FontIcon className={ this.context.muiTheme.r3IconFonts.deleteIconFont } />
+							<DeleteIcon />
 						</IconButton>
+					);
+				}else{
+					deleteButton = (
+						<Tooltip
+							title={ r3provider.getR3TextRes().tResRolePolicyDelTT }
+							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deletePolicyTooltip, 'number') || (this.state.tooltips.deletePolicyTooltip != pos)) ? false : true) }
+						>
+							<IconButton
+								onClick={ (event) => this.handlePoliciesChange(event, actionTypeDelete, pos) }
+								onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deletePolicyTooltip, pos) }
+								onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deletePolicyTooltip, -1) }
+								{ ...theme.r3Role.deletePolicyButton }
+								className={ classes.deletePolicyButton }
+							>
+								<DeleteIcon />
+							</IconButton>
+						</Tooltip>
 					);
 				}
 
+				let	inputProps;
+				if(this.props.isReadMode){
+					inputProps = {};
+				}else{
+					inputProps = {
+						className: classes.inputTextField
+					};
+				}
+
 				return (
-					<div className={ 'clearof' } key={ pos }>
+					<div
+						key={ pos }
+						className={ classes.enclosureElement }
+					>
 						<TextField
-							name={ 'policy_' + String(pos) }
-							value={ item }
+							name={ roleComponentValues.policyTextFieldNamePrefix + String(pos) }
 							disabled={ this.props.isReadMode }
-							style={ this.context.muiTheme.r3Contents.policyTextFieldStyle }
-							onChange={ (event, value) => this.handlePoliciesChange(event, actionTypeValue, pos, value) }
+							value={ item }
+							placeholder={ r3provider.getR3TextRes().tResRolePolicyHint }
+							onChange={ (event) => this.handlePoliciesChange(event, actionTypeValue, pos) }
+							InputProps={ inputProps }
+							{ ...theme.r3Role.policyTextField }
+							className={ classes.policyTextField }
 						/>
 						{ deleteButton }
 					</div>
@@ -1065,76 +1357,170 @@ export default class R3Role extends React.Component
 		);
 	}
 
-	getAliasContents(items)
+	getAddPolicyContents()
 	{
-		if(undefined === items || !(items instanceof Array)){
+		const { theme, classes, r3provider } = this.props;
+
+		if(this.props.isReadMode){
 			return;
 		}
 
 		return (
-			items.map( (item, pos) =>
+			<div
+				className={ classes.enclosureElement }
+			>
+				<TextField
+					name={ roleComponentValues.policyNewTextFieldName }
+					value={ this.state.addPolicies }
+					placeholder={ r3provider.getR3TextRes().tResRolePolicyHint }
+					onChange={ (event) => this.handleAddPoliciesChange(event) }
+					InputProps={{ className: classes.inputTextField }}
+					{ ...theme.r3Role.policyTextField }
+					className={ classes.policyTextField }
+				/>
+				<Tooltip
+					title={ r3provider.getR3TextRes().tResRolePolicyAddTT }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.addPolicyTooltip, 'boolean')) ? false : this.state.tooltips.addPolicyTooltip) }
+				>
+					<IconButton
+						onClick={ (event) => this.handlePoliciesChange(event, actionTypeAdd, 0) }
+						onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.addPolicyTooltip, true) }
+						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addPolicyTooltip, false) }
+						{ ...theme.r3Role.addPolicyButton }
+						className={ classes.addPolicyButton }
+					>
+						<AddIcon />
+					</IconButton>
+				</Tooltip>
+			</div>
+		);
+	}
+
+	getAliasContents(items)
+	{
+		const { theme, classes, r3provider } = this.props;
+
+		if(!r3IsSafeTypedEntity(items, 'array')){
+			return;
+		}
+		let	_items = items;
+
+		return (
+			_items.map( (item, pos) =>
 			{
 				let	downButton;
-				let	upButton;
-				let	deleteButton;
-				if(this.props.isReadMode || items.length <= (pos + 1)){
+				if(this.props.isReadMode || (_items.length <= (pos + 1))){
 					downButton = (
-						<div style={ this.context.muiTheme.r3Contents.dummyButtonStyle } ></div>
+						<IconButton
+							disabled={ true }
+							{ ...theme.r3Role.downAliasButton }
+							className={ classes.arrowInvisibleAliasButton }
+						>
+							<DownIcon />
+						</IconButton>
 					);
 				}else{
 					downButton = (
-						<IconButton
-							iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-							tooltip={ 'Down' }
-							disabled={ false }
-							style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-							onClick={ (event) => this.handleAliasesChange(event, actionTypeDown, pos, null) }
+						<Tooltip
+							title={ r3provider.getR3TextRes().tResAliasDownTT }
+							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.downAliasTooltip, 'number') || (this.state.tooltips.downAliasTooltip != pos)) ? false : true) }
 						>
-							<FontIcon className={ this.context.muiTheme.r3IconFonts.downIconFont } />
-						</IconButton>
-					);
-				}
-				if(this.props.isReadMode || 0 === pos){
-					upButton = (
-						<div style={ this.context.muiTheme.r3Contents.dummyButtonStyle } ></div>
-					);
-				}else{
-					upButton = (
-						<IconButton
-							iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-							tooltip={ 'Up' }
-							disabled={ false }
-							style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-							onClick={ (event) => this.handleAliasesChange(event, actionTypeUp, pos, null) }
-						>
-							<FontIcon className={ this.context.muiTheme.r3IconFonts.upIconFont } />
-						</IconButton>
-					);
-				}
-				if(!this.props.isReadMode){
-					deleteButton = (
-						<IconButton
-							iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-							tooltip={ 'Delete' }
-							style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-							onClick={ (event) => this.handleAliasesChange(event, actionTypeDelete, pos, null) }
-						>
-							<FontIcon
-								className={ this.context.muiTheme.r3IconFonts.deleteIconFont }
-								style={ this.context.muiTheme.r3IconFonts.fontIconMiddle }
-							/>
-						</IconButton>
+							<IconButton
+								onClick={ (event) => this.handleAliasesChange(event, actionTypeDown, pos) }
+								onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.downAliasTooltip, pos) }
+								onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.downAliasTooltip, -1) }
+								{ ...theme.r3Role.downAliasButton }
+								className={ classes.arrowAliasButton }
+							>
+								<DownIcon />
+							</IconButton>
+						</Tooltip>
 					);
 				}
 
+				let	upButton;
+				if(this.props.isReadMode || (0 === pos)){
+					upButton = (
+						<IconButton
+							disabled={ true }
+							{ ...theme.r3Role.upAliasButton }
+							className={ classes.arrowInvisibleAliasButton }
+						>
+							<UpIcon />
+						</IconButton>
+					);
+				}else{
+					upButton = (
+						<Tooltip
+							title={ r3provider.getR3TextRes().tResAliasUpTT }
+							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.upAliasTooltip, 'number') || (this.state.tooltips.upAliasTooltip != pos)) ? false : true) }
+						>
+							<IconButton
+								onClick={ (event) => this.handleAliasesChange(event, actionTypeUp, pos) }
+								onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.upAliasTooltip, pos) }
+								onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.upAliasTooltip, -1) }
+								{ ...theme.r3Role.upAliasButton }
+								className={ classes.arrowAliasButton }
+							>
+								<UpIcon />
+							</IconButton>
+						</Tooltip>
+					);
+				}
+
+				let	deleteButton;
+				if(this.props.isReadMode){
+					deleteButton = (
+						<IconButton
+							disabled={ true }
+							{ ...theme.r3Role.deleteAliasButton }
+							className={ classes.deleteInvisibleAliasButton }
+						>
+							<DeleteIcon />
+						</IconButton>
+					);
+				}else{
+					deleteButton = (
+						<Tooltip
+							title={ r3provider.getR3TextRes().tResAliasDelTT }
+							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteAliasTooltip, 'number') || (this.state.tooltips.deleteAliasTooltip != pos)) ? false : true) }
+						>
+							<IconButton
+								onClick={ (event) => this.handleAliasesChange(event, actionTypeDelete, pos) }
+								onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deleteAliasTooltip, pos) }
+								onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deleteAliasTooltip, -1) }
+								{ ...theme.r3Role.deleteAliasButton }
+								className={ classes.deleteAliasButton }
+							>
+								<DeleteIcon />
+							</IconButton>
+						</Tooltip>
+					);
+				}
+
+				let	inputProps;
+				if(this.props.isReadMode){
+					inputProps = {};
+				}else{
+					inputProps = {
+						className: classes.inputTextField
+					};
+				}
+
 				return (
-					<div className={ 'clearof' } key={ pos }>
+					<div
+						key={ pos }
+						className={ classes.enclosureElement }
+					>
 						<TextField
-							name={ 'alias_' + String(pos) }
-							value={ item }
+							name={ roleComponentValues.aliasTextFieldNamePrefix + String(pos) }
 							disabled={ this.props.isReadMode }
-							style={ this.context.muiTheme.r3Contents.aliasesTextFieldStyle }
-							onChange={ (event, value) => this.handleAliasesChange(event, actionTypeValue, pos, value) }
+							value={ item }
+							placeholder={ r3provider.getR3TextRes().tResAliasHint }
+							onChange={ (event) => this.handleAliasesChange(event, actionTypeValue, pos) }
+							InputProps={ inputProps }
+							{ ...theme.r3Role.aliasTextField }
+							className={ classes.aliasTextField }
 						/>
 						{ downButton }
 						{ upButton }
@@ -1145,151 +1531,130 @@ export default class R3Role extends React.Component
 		);
 	}
 
-	render()
+	getAddAliasContents()
 	{
-		let	hostnameAddFields;
-		let	policiesAddFields;
-		let	aliasesAddFields;
-		if(!this.props.isReadMode){
-			hostnameAddFields = (
-				<div className={ 'clearof' }>
-					<TextField
-						name={ 'name_new' }
-						hintText={ 'Hostname' }
-						value={ this.state.addHostName }
-						style={ this.context.muiTheme.r3Contents.firstInTwoTextFieldStyle }
-						onChange={ (event, value) => this.handleAddHostsChange(event, actionTypeHostName, value) }
-					/>
-					<TextField
-						name={ 'aux_new' }
-						hintText={ 'Additional auxiliary' }
-						value={ this.state.addAuxiliary }
-						style={ this.context.muiTheme.r3Contents.secondInTwoTextFieldStyle }
-						onChange={ (event, value) => this.handleAddHostsChange(event, actionTypeHostAuxiliary, value) }
-					/>
-					<IconButton
-						iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-						tooltip={ 'Add' }
-						style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-						onClick={ (event) => this.handleHostsChange(event, actionTypeAdd, 0, null, null) }
-					>
-						<FontIcon
-							className={ this.context.muiTheme.r3IconFonts.addIconFont }
-						/>
-					</IconButton>
-				</div>
-			);
+		const { theme, classes, r3provider } = this.props;
 
-			policiesAddFields = (
-				<div className={ 'clearof' }>
-					<TextField
-						name={ 'policy_new' }
-						hintText={ 'Path' }
-						value={ this.state.addPolicies }
-						style={ this.context.muiTheme.r3Contents.policyTextFieldStyle }
-						onChange={ (event, value) => this.handleAddPoliciesChange(event, value) }
-					/>
-					<IconButton
-						iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-						tooltip={ 'Add' }
-						style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-						onClick={ (event) => this.handlePoliciesChange(event, actionTypeAdd, 0, null) }
-					>
-						<FontIcon
-							className={ this.context.muiTheme.r3IconFonts.addIconFont }
-						/>
-					</IconButton>
-				</div>
-			);
-
-			aliasesAddFields = (
-				<div className={ 'clearof' }>
-					<TextField
-						name={ 'alias_new' }
-						hintText={ 'Path' }
-						value={ this.state.addAliases }
-						style={ this.context.muiTheme.r3Contents.aliasesTextFieldStyle }
-						onChange={ (event, value) => this.handleAddAliasesChange(event, value) }
-					/>
-					<IconButton
-						iconStyle={ this.context.muiTheme.r3Contents.iconButtonColor }
-						tooltip={ 'Add' }
-						style={ this.context.muiTheme.r3Contents.iconButtonStyle }
-						onClick={ (event) => this.handleAliasesChange(event, actionTypeAdd, 0, null) }
-					>
-						<FontIcon
-							className={ this.context.muiTheme.r3IconFonts.addIconFont }
-							style={ this.context.muiTheme.r3FontMiddle }
-						/>
-					</IconButton>
-				</div>
-			);
+		if(this.props.isReadMode){
+			return;
 		}
 
 		return (
-			<div style={{ width: '100%' }} >
-				<div>
-					<div style={ this.context.muiTheme.r3Contents.componentSpacer }>
-						<span style={ this.context.muiTheme.r3Contents.labelStyle } >HOST NAMES</span>
-					</div>
-					<div style={ this.context.muiTheme.r3Contents.subcomponent } >
-						<div style={{ overflow:	'auto' }}>
-							<div style={ this.context.muiTheme.r3Contents.firstInTwoLabelStyle } >
-								<span>HOST NAME</span>
-							</div>
-							<div style={ this.context.muiTheme.r3Contents.secondInTwoLabelStyle } >
-								<span>AUX</span>
-							</div>
-						</div>
-						{ this.getHostnameContents() }
-						{ hostnameAddFields }
-					</div>
+			<div
+				className={ classes.enclosureElement }
+			>
+				<TextField
+					name={ roleComponentValues.aliasNewTextFieldName }
+					value={ this.state.addAliases }
+					placeholder={ r3provider.getR3TextRes().tResAliasHint }
+					onChange={ (event) => this.handleAddAliasesChange(event) }
+					InputProps={{ className: classes.inputTextField }}
+					{ ...theme.r3Role.aliasTextField }
+					className={ classes.aliasTextField }
+				/>
+				<Tooltip
+					title={ r3provider.getR3TextRes().tResAliasAddTT }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.addAliasTooltip, 'boolean')) ? false : this.state.tooltips.addAliasTooltip) }
+				>
+					<IconButton
+						onClick={ (event) => this.handleAliasesChange(event, actionTypeAdd, 0) }
+						onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.addAliasTooltip, true) }
+						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addAliasTooltip, false) }
+						{ ...theme.r3Role.addAliasButton }
+						className={ classes.addAliasButton }
+					>
+						<AddIcon />
+					</IconButton>
+				</Tooltip>
+			</div>
+		);
+	}
 
-					<div style={ this.context.muiTheme.r3Contents.componentSpacer }>
-						<span style={ this.context.muiTheme.r3Contents.labelStyle } >IP ADDRESSES</span>
-					</div>
-					<div style={ this.context.muiTheme.r3Contents.subcomponent } >
-						<div style={{ overflow:	'auto' }}>
-							<div style={ this.context.muiTheme.r3Contents.firstInTwoLabelStyle } >
-								<span>IP ADDRESS</span>
-							</div>
-							<div style={ this.context.muiTheme.r3Contents.secondInTwoLabelStyle } >
-								<span>AUX</span>
-							</div>
-						</div>
-						{ this.getIpAddressContents() }
-					</div>
+	render()
+	{
+		console.info('CALL : role:render()');
 
-					<div style={ this.context.muiTheme.r3Contents.componentSpacer }>
-						<span style={ this.context.muiTheme.r3Contents.labelStyle } >POLICIES</span>
-					</div>
-					<div style={ this.context.muiTheme.r3Contents.subcomponent } >
-						{ this.getPolicyContents(this.state.role.policies) }
-						{ policiesAddFields }
-					</div>
+		const { theme, classes, r3provider } = this.props;
 
-					<div style={ this.context.muiTheme.r3Contents.componentSpacer }>
-						<span style={ this.context.muiTheme.r3Contents.labelStyle } >ALIAS</span>
-					</div>
-					<div style={ this.context.muiTheme.r3Contents.subcomponent } >
-						{ this.getAliasContents(this.state.role.aliases) }
-						{ aliasesAddFields }
-					</div>
-				</div>
-				<div style={ this.context.muiTheme.r3Contents.componentSpacer }>
-					<R3FormButtons
-						status={ this.state.changed }
-						onSave={ this.handleSave }
-						onCancel={ this.handleCancel }
-					/>
-				</div>
+		return (
+			<div
+				className={ classes.root }
+			>
+				<Typography
+					{ ...theme.r3Role.subTitle }
+					className={ classes.subTitleTop }
+				>
+					{ r3provider.getR3TextRes().tResRoleHostnamesSubTitle }
+				</Typography>
+				<Typography
+					{ ...theme.r3Role.hostnameSubTitle }
+					className={ classes.hostnameSubTitle }
+				>
+					{ r3provider.getR3TextRes().tResRoleHostnameLabel }
+				</Typography>
+				<Typography
+					{ ...theme.r3Role.hostnameAUXSubTitle }
+					className={ classes.hostnameAUXSubTitle }
+				>
+					{ r3provider.getR3TextRes().tResRoleAUXLabel }
+				</Typography>
+				{ this.getHostnameContents() }
+				{ this.getAddHostnameContents() }
+
+				<Typography
+					{ ...theme.r3Role.subTitle }
+					className={ classes.subTitle }
+				>
+					{ r3provider.getR3TextRes().tResRoleIpsSubTitle }
+				</Typography>
+				<Typography
+					{ ...theme.r3Role.ipSubTitle }
+					className={ classes.ipSubTitle }
+				>
+					{ r3provider.getR3TextRes().tResRoleIpLabel }
+				</Typography>
+				<Typography
+					{ ...theme.r3Role.ipAUXSubTitle }
+					className={ classes.ipAUXSubTitle }
+				>
+					{ r3provider.getR3TextRes().tResRoleAUXLabel }
+				</Typography>
+				{ this.getIpAddressContents() }
+
+				<Typography
+					{ ...theme.r3Role.subTitle }
+					className={ classes.subTitle }
+				>
+					{ r3provider.getR3TextRes().tResRolePoliciesSubTitle }
+				</Typography>
+				{ this.getPolicyContents(this.state.role.policies) }
+				{ this.getAddPolicyContents() }
+
+				<Typography
+					{ ...theme.r3Role.subTitle }
+					className={ classes.subTitle }
+				>
+					{ r3provider.getR3TextRes().tResAliasSubTitle }
+				</Typography>
+				{ this.getAliasContents(this.state.role.aliases) }
+				{ this.getAddAliasContents() }
+
+				<R3FormButtons
+					r3provider={ this.props.r3provider }
+					status={ this.state.changed }
+					onSave={ this.handleSave }
+					onCancel={ this.handleCancel }
+				/>
+
 				<R3PopupMsgDialog
+					r3provider={ this.props.r3provider }
 					title={ this.props.r3provider.getR3TextRes().cUpdatingTitle }
 					r3Message={ this.state.confirmMessageObject }
 					twoButton={ true }
 					onClose={ this.handleConfirmDialogClose }
 				/>
 				<R3PopupMsgDialog
+					r3provider={ this.props.r3provider }
 					r3Message={ this.state.messageDialogObject }
 					onClose={ this.handleMessageDialogClose }
 				/>
@@ -1297,24 +1662,6 @@ export default class R3Role extends React.Component
 		);
 	}
 }
-
-R3Role.contextTypes = {
-	muiTheme:	PropTypes.object.isRequired,
-	r3Context:	PropTypes.object.isRequired
-};
-
-R3Role.propTypes = {
-	r3provider:	PropTypes.object.isRequired,
-	role:		PropTypes.object.isRequired,
-	isReadMode:	PropTypes.bool,
-
-	onSave:		PropTypes.func.isRequired,
-	onUpdate:	PropTypes.func.isRequired
-};
-
-R3Role.defaultProps = {
-	isReadMode:	false
-};
 
 /*
  * VIM modelines

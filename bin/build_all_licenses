@@ -193,9 +193,11 @@ function getDependPackages(package_name, packages)
 						.replace(/> /g,		'>')
 						.replace(/< /g,		'<')
 						.replace(/= /g,		'=')
+						.replace(/- /g,		'-')
 						.replace(/ >/g,		'>')
 						.replace(/ </g,		'<')
 						.replace(/ =/g,		'=')
+						.replace(/ -/g,		'-')
 						.replace(/ \|\|/g,	'||')
 						.replace(/\|\| /g,	'||')
 						.replace(/ /g,		'\'')
@@ -265,14 +267,32 @@ function getPackageNames(import_lines)
 	if(!r3util.isEmptyArray(import_lines)){
 		for(var cnt = 0; cnt < import_lines.length; ++cnt){
 			if(r3util.isSafeString(import_lines[cnt])){
-				// ex)	"import PropTypes              from 'prop-types';"				=> prop-types
-				//		"import Checkbox               from 'material-ui/Checkbox';"	=> material-ui
-				//		"import { policyEffects, ... } from '../util/r3define';"		=> ..
-				//		"import { errorType, ... }     from './r3types';"				=> .
+				// ex)	"import PropTypes              from 'prop-types';"					=> prop-types
+				//		"import Checkbox               from '@material-ui/core/Checkbox';	=> material-ui
+				//		"import { policyEffects, ... } from '../util/r3define';"			=> ..
+				//		"import { errorType, ... }     from './r3types';"					=> .
 				//
-				var	file = import_lines[cnt].replace(/^\s*/g, '').replace(/\/\/.*/g, '').replace(/^import.*from/g, '').replace(/\'|;| |\s/g, '').replace(/\/.*/g, '');
-				if(r3util.isSafeString(file) && '..' != file && '.' != file){
-					files[file] = true;
+				var	strImport = import_lines[cnt].replace(/^\s*/g, '').replace(/\/\/.*/g, '').replace(/^import.*from/g, '').replace(/\'|;| |\s/g, '');
+				if(!r3util.isSafeString(strImport)){
+					continue;
+				}
+				if('@' === strImport[0]){
+					// Case: import XXXX from '@xxxx/yyy'
+					var	reg		= new RegExp('^@([^/]*)($|([\/]([^\/]*)+))');
+					var	matches	= strImport.match(reg);
+					if(null != matches && r3util.isSafeString(matches[1])){
+						var	file = '@' + matches[1];
+						if(r3util.isSafeString(matches[2])){
+							file += matches[2];
+						}
+						files[file] = true;
+					}
+				}else{
+					// Case: import XXXX from 'zzzz'
+					var	file = strImport.replace(/\/.*/g, '');
+					if(r3util.isSafeString(file) && '..' != file && '.' != file){
+						files[file] = true;
+					}
 				}
 			}
 		}
@@ -322,33 +342,6 @@ function getTopLevelPackages()
 }
 
 //
-// Special add for Reset Stylesheet
-//
-function addSpecialLicenses(licenses_obj)
-{
-	if(!r3util.isSafeEntity(licenses_obj)){
-		return false;
-	}
-
-	licenses_obj['Reset Stylesheet(html5doctor.com)'] = {
-		licenseType:	'CC0 Public Domain Dedication or MIT License',
-		licenseText:	'\
-html5doctor.com Reset Stylesheet\n\
-v1.6.1\n\
-Last Updated: 2010-09-17\n\
-Author: Richard Clark - http://richclarkdesign.com \n\
-Twitter: @rich_clark\n\n\
-Permission is hereby granted, free of charge, to any person \n\
-obtaining a copy of any version of this file on Google Code \n\
-or this file on Github (the "Software"), to deal in the \n\
-Software under the terms of the CC0 Public Domain Dedication, \n\
-or,alternatively, to deal in the Software under the terms of \n\
-the MIT License.\n'
-};
-	return true;
-}
-
-//
 // Put licenses to file
 //
 function putLicensesFile(file, licenses_obj)
@@ -359,7 +352,7 @@ function putLicensesFile(file, licenses_obj)
 
 	// build contents which includes JSON from licenses object.
 	var	output_contents = '/* eslint-disable no-useless-escape */\n';
-	output_contents		+= 'export const r3LicensesJsonString = \'' + JSON.stringify(licenses_obj).replace(/\'/g, '\\\'').replace(/\\n/g, '\\\\n').replace(/\\\"/g, '\\\\\"') + '\';\n';
+	output_contents		+= 'export const r3LicensesJsonString = \'' + JSON.stringify(licenses_obj).replace(/\'/g, '\\\'').replace(/\\r/g, '').replace(/\\n/g, '\\\\n').replace(/\\\"/g, '\\\\\"') + '\';\n';
 	output_contents		+= '/* eslint-enable no-useless-escape */\n';
 
 	try{
@@ -516,13 +509,6 @@ function main(use_package_json)
 			licenseType:	raw_licenses_obj[package_name].licenses,
 			licenseText:	license_text
 		}
-	}
-
-	//
-	// Special add for Reset Stylesheet
-	//
-	if(!addSpecialLicenses(all_licenses_obj)){
-		return false
 	}
 //	console.log('\nAll package licenses = {');
 //	console.dir(all_licenses_obj);
