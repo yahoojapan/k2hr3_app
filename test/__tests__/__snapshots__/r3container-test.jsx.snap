@@ -1,1201 +1,504 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`R3Container test snapshot for R3Container 1`] = `
-<div
-  className="r3Container"
->
-  <div>
-    <div>
-      <div
-        style={
-          Object {
-            "WebkitTapHighlightColor": "rgba(0,0,0,0)",
-            "backgroundColor": "#673ab7",
-            "borderRadius": "0px",
-            "boxShadow": "0 1px 6px rgba(49, 27, 146, 0.12),
-         0 1px 4px rgba(49, 27, 146, 0.12)",
-            "boxSizing": "border-box",
-            "color": "#212121",
-            "display": "flex",
-            "fontFamily": "Roboto, sans-serif",
-            "muiPrepared": true,
-            "paddingLeft": 24,
-            "paddingRight": 24,
-            "position": "relative",
-            "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-            "width": "100%",
-            "zIndex": 1100,
-          }
-        }
+Array [
+  <header
+    className="MuiPaper-root-19 MuiPaper-elevation4-25 MuiAppBar-root-10 MuiAppBar-positionStatic-14 MuiAppBar-colorPrimary-17 R3AppBar-root-3"
+  >
+    <div
+      className="MuiToolbar-root-46 MuiToolbar-regular-48 MuiToolbar-gutters-47 R3AppBar-toolbar-4"
+    >
+      <button
+        aria-describedby={null}
+        aria-haspopup="true"
+        aria-label="main menu"
+        className="MuiButtonBase-root-64 MuiIconButton-root-58 MuiIconButton-colorInherit-59"
+        disabled={false}
+        label="main-menu"
+        onBlur={[Function]}
+        onClick={[Function]}
+        onContextMenu={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onMouseOver={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        tabIndex="0"
+        title="Main menu"
+        type="button"
       >
-        <div
-          style={
-            Object {
-              "marginLeft": -16,
-              "marginRight": 8,
-              "marginTop": 8,
-              "muiPrepared": true,
-            }
-          }
+        <span
+          className="MuiIconButton-label-63"
+        >
+          <svg
+            aria-hidden="true"
+            className="MuiSvgIcon-root-67"
+            focusable="false"
+            role="presentation"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M0 0h24v24H0z"
+              fill="none"
+            />
+            <path
+              d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
+            />
+          </svg>
+        </span>
+        <span
+          className="MuiTouchRipple-root-303"
+        />
+      </button>
+      <h6
+        className="MuiTypography-root-80 MuiTypography-h6-97 MuiTypography-colorInherit-109 MuiTypography-noWrap-106 R3AppBar-title-5"
+      >
+        K2HR3
+      </h6>
+      <button
+        aria-describedby={null}
+        aria-haspopup="true"
+        aria-label="signin menu"
+        className="MuiButtonBase-root-64 MuiIconButton-root-58 MuiIconButton-colorInherit-59 R3AppBar-signinButton-8"
+        disabled={false}
+        label="signin-menu"
+        onBlur={[Function]}
+        onClick={[Function]}
+        onContextMenu={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onMouseOver={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        tabIndex="0"
+        title="Account"
+        type="button"
+      >
+        <span
+          className="MuiIconButton-label-63"
+        >
+          <svg
+            aria-hidden="true"
+            className="MuiSvgIcon-root-67"
+            focusable="false"
+            role="presentation"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+            />
+            <path
+              d="M0 0h24v24H0z"
+              fill="none"
+            />
+          </svg>
+        </span>
+        <span
+          className="MuiTouchRipple-root-303"
+        />
+      </button>
+    </div>
+  </header>,
+  <div>
+    <div
+      className="R3MainTree-dockedList-154"
+    >
+      <div>
+        <header
+          className="MuiPaper-root-19 MuiPaper-elevation0-21 MuiAppBar-root-10 MuiAppBar-positionStatic-14 MuiAppBar-colorPrimary-17 R3MainTree-subheaderAppbar-147"
         >
           <div
-            onMouseDown={[Function]}
-            onMouseEnter={[Function]}
-            onMouseLeave={[Function]}
-            onMouseUp={[Function]}
-            onTouchTap={[Function]}
-            style={
-              Object {
-                "display": "inline-block",
-                "muiPrepared": true,
-                "position": "relative",
-              }
-            }
+            className="MuiToolbar-root-46 MuiToolbar-regular-48 MuiToolbar-gutters-47 R3MainTree-subheaderToolbar-148"
           >
+            <div
+              className="MuiChip-root-162 MuiChip-colorPrimary-163 R3MainTree-chip-151"
+              onKeyDown={[Function]}
+              onKeyUp={[Function]}
+              role="button"
+              tabIndex={-1}
+            >
+              <span
+                className="MuiChip-label-181"
+              >
+                <span
+                  className="MuiTypography-root-80 MuiTypography-subtitle2-99 R3MainTree-chipText-152"
+                >
+                  TENANT
+                </span>
+              </span>
+            </div>
+            <span
+              className="MuiTypography-root-80 MuiTypography-subtitle2-99 MuiTypography-colorTextSecondary-113 R3MainTree-tenantListText-144"
+            >
+              No tenant list
+            </span>
             <button
+              aria-describedby={null}
+              aria-label="select tenant"
+              className="MuiButtonBase-root-64 MuiIconButton-root-58"
               disabled={false}
+              label="select-tenant"
               onBlur={[Function]}
               onClick={[Function]}
+              onContextMenu={[Function]}
               onFocus={[Function]}
               onKeyDown={[Function]}
               onKeyUp={[Function]}
+              onMouseDown={[Function]}
               onMouseEnter={[Function]}
               onMouseLeave={[Function]}
-              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+              onMouseUp={[Function]}
+              onTouchEnd={[Function]}
+              onTouchMove={[Function]}
               onTouchStart={[Function]}
-              onTouchTap={[Function]}
-              style={
-                Object {
-                  "WebkitTapHighlightColor": "rgba(0, 0, 0, 0)",
-                  "background": "none",
-                  "border": 10,
-                  "boxSizing": "border-box",
-                  "cursor": "pointer",
-                  "display": "inline-block",
-                  "fontFamily": "Roboto, sans-serif",
-                  "fontSize": 0,
-                  "fontWeight": "inherit",
-                  "height": 48,
-                  "margin": 0,
-                  "muiPrepared": true,
-                  "outline": "none",
-                  "overflow": "visible",
-                  "padding": 0,
-                  "position": "relative",
-                  "textDecoration": "none",
-                  "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                  "verticalAlign": null,
-                  "width": 48,
-                  "zIndex": 1,
-                }
-              }
-              tabIndex={0}
+              tabIndex="0"
+              title="Select tenant"
               type="button"
             >
-              <div
-                onMouseDown={[Function]}
-                onMouseLeave={[Function]}
-                onMouseUp={[Function]}
-                onTouchEnd={[Function]}
-                onTouchStart={[Function]}
+              <span
+                className="MuiIconButton-label-63"
               >
-                <span
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  style={
-                    Object {
-                      "color": "#ffffff",
-                      "display": "inline-block",
-                      "fontSize": 24,
-                      "muiPrepared": true,
-                      "position": "relative",
-                      "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                      "userSelect": "none",
-                    }
-                  }
-                />
-              </div>
+                <svg
+                  aria-hidden="true"
+                  className="MuiSvgIcon-root-67"
+                  focusable="false"
+                  role="presentation"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M0 0h24v24H0z"
+                    fill="none"
+                  />
+                  <path
+                    d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                  />
+                </svg>
+              </span>
+              <span
+                className="MuiTouchRipple-root-303"
+              />
             </button>
+          </div>
+        </header>
+      </div>
+      <div
+        className="MuiList-root-187"
+        id="mainTree-top-list"
+      >
+        <div>
+          <div
+            className="MuiButtonBase-root-64 MuiListItem-root-191 MuiListItem-default-194 MuiListItem-gutters-199 MuiListItem-button-200"
+            onBlur={[Function]}
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            role="button"
+            tabIndex="0"
+          >
             <div
-              style={
-                Object {
-                  "display": "none",
-                }
-              }
+              className="MuiListItemIcon-root-203"
+            >
+              <svg
+                aria-hidden="true"
+                className="MuiSvgIcon-root-67"
+                focusable="false"
+                role="presentation"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M0 0h24v24H0z"
+                  fill="none"
+                />
+                <path
+                  d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"
+                />
+              </svg>
+            </div>
+            <div
+              className="MuiListItemText-root-204 R3MainTree-listItemText-159"
+            >
+              <span
+                className="MuiTypography-root-80 MuiTypography-subtitle2-99 MuiTypography-colorTextSecondary-113 MuiListItemText-primary-207"
+              >
+                SERVICE
+              </span>
+            </div>
+            <span
+              className="MuiTouchRipple-root-303"
             />
           </div>
         </div>
-        <h1
-          onTouchTap={[Function]}
-          style={
-            Object {
-              "boxFlex": 1,
-              "color": "#ffffff",
-              "flex": "1",
-              "fontSize": 24,
-              "fontWeight": 400,
-              "height": 64,
-              "letterSpacing": 0,
-              "lineHeight": "64px",
-              "margin": 0,
-              "muiPrepared": true,
-              "overflow": "hidden",
-              "paddingTop": 0,
-              "textOverflow": "ellipsis",
-              "whiteSpace": "nowrap",
-            }
-          }
-        >
-          K2HR3
-        </h1>
-        <div
-          style={
-            Object {
-              "marginLeft": "auto",
-              "marginRight": -16,
-              "marginTop": 8,
-              "muiPrepared": true,
-            }
-          }
-        >
+        <div>
           <div
+            className="MuiButtonBase-root-64 MuiListItem-root-191 MuiListItem-default-194 MuiListItem-gutters-199 MuiListItem-button-200"
+            onBlur={[Function]}
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
             onMouseDown={[Function]}
-            onMouseEnter={[Function]}
             onMouseLeave={[Function]}
             onMouseUp={[Function]}
-            onTouchTap={[Function]}
-            style={
-              Object {
-                "display": "inline-block",
-                "muiPrepared": true,
-                "position": "relative",
-              }
-            }
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            role="button"
+            tabIndex="0"
           >
-            <button
-              disabled={false}
-              onBlur={[Function]}
-              onClick={[Function]}
-              onFocus={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseEnter={[Function]}
-              onMouseLeave={[Function]}
-              onMouseOut={[Function]}
-              onTouchStart={[Function]}
-              onTouchTap={[Function]}
-              style={
-                Object {
-                  "WebkitTapHighlightColor": "rgba(0, 0, 0, 0)",
-                  "background": "none",
-                  "border": 10,
-                  "boxSizing": "border-box",
-                  "cursor": "pointer",
-                  "display": "inline-block",
-                  "fontFamily": "Roboto, sans-serif",
-                  "fontSize": 0,
-                  "fontWeight": "inherit",
-                  "height": 48,
-                  "margin": 0,
-                  "muiPrepared": true,
-                  "outline": "none",
-                  "overflow": "visible",
-                  "padding": 0,
-                  "position": "relative",
-                  "textDecoration": "none",
-                  "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                  "verticalAlign": null,
-                  "width": 48,
-                  "zIndex": 1,
-                }
-              }
-              tabIndex={0}
-              type="button"
-            >
-              <div
-                onMouseDown={[Function]}
-                onMouseLeave={[Function]}
-                onMouseUp={[Function]}
-                onTouchEnd={[Function]}
-                onTouchStart={[Function]}
-              >
-                <div
-                  style={
-                    Object {
-                      "borderRadius": 2,
-                      "boxSizing": "border-box",
-                      "color": "#ffffff",
-                      "fontFamily": "Roboto, sans-serif",
-                      "fontSize": "10px",
-                      "left": -26,
-                      "lineHeight": "22px",
-                      "muiPrepared": true,
-                      "opacity": 0,
-                      "overflow": "hidden",
-                      "padding": "0 8px",
-                      "position": "absolute",
-                      "right": null,
-                      "top": -10000,
-                      "transition": "top 0ms cubic-bezier(0.23, 1, 0.32, 1) 450ms, transform 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                      "userSelect": "none",
-                      "zIndex": 3000,
-                    }
-                  }
-                >
-                  <div
-                    style={
-                      Object {
-                        "backgroundColor": "transparent",
-                        "borderRadius": "50%",
-                        "left": "50%",
-                        "muiPrepared": true,
-                        "position": "absolute",
-                        "top": 0,
-                        "transform": "translate(-50%, -50%)",
-                        "transition": "width 0ms cubic-bezier(0.23, 1, 0.32, 1) 450ms, height 0ms cubic-bezier(0.23, 1, 0.32, 1) 450ms, backgroundColor 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                      }
-                    }
-                  />
-                  <span
-                    style={
-                      Object {
-                        "muiPrepared": true,
-                        "position": "relative",
-                        "whiteSpace": "nowrap",
-                      }
-                    }
-                  >
-                    Account
-                  </span>
-                </div>
-                <span
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  style={
-                    Object {
-                      "color": "#ffffff",
-                      "display": "inline-block",
-                      "fill": "#ffffff",
-                      "fontSize": 24,
-                      "muiPrepared": true,
-                      "position": "relative",
-                      "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                      "userSelect": "none",
-                    }
-                  }
-                />
-              </div>
-            </button>
             <div
-              style={
-                Object {
-                  "display": "none",
-                }
-              }
+              className="MuiListItemIcon-root-203"
+            >
+              <svg
+                aria-hidden="true"
+                className="MuiSvgIcon-root-67"
+                focusable="false"
+                role="presentation"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M0 0h24v24H0z"
+                  fill="none"
+                />
+                <path
+                  d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"
+                />
+              </svg>
+            </div>
+            <div
+              className="MuiListItemText-root-204 R3MainTree-listItemText-159"
+            >
+              <span
+                className="MuiTypography-root-80 MuiTypography-subtitle2-99 MuiTypography-colorTextSecondary-113 MuiListItemText-primary-207"
+              >
+                ROLE
+              </span>
+            </div>
+            <span
+              className="MuiTouchRipple-root-303"
+            />
+          </div>
+        </div>
+        <div>
+          <div
+            className="MuiButtonBase-root-64 MuiListItem-root-191 MuiListItem-default-194 MuiListItem-gutters-199 MuiListItem-button-200"
+            onBlur={[Function]}
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            role="button"
+            tabIndex="0"
+          >
+            <div
+              className="MuiListItemIcon-root-203"
+            >
+              <svg
+                aria-hidden="true"
+                className="MuiSvgIcon-root-67"
+                focusable="false"
+                role="presentation"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M0 0h24v24H0z"
+                  fill="none"
+                />
+                <path
+                  d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"
+                />
+              </svg>
+            </div>
+            <div
+              className="MuiListItemText-root-204 R3MainTree-listItemText-159"
+            >
+              <span
+                className="MuiTypography-root-80 MuiTypography-subtitle2-99 MuiTypography-colorTextSecondary-113 MuiListItemText-primary-207"
+              >
+                RESOURCE
+              </span>
+            </div>
+            <span
+              className="MuiTouchRipple-root-303"
+            />
+          </div>
+        </div>
+        <div>
+          <div
+            className="MuiButtonBase-root-64 MuiListItem-root-191 MuiListItem-default-194 MuiListItem-gutters-199 MuiListItem-button-200"
+            onBlur={[Function]}
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            role="button"
+            tabIndex="0"
+          >
+            <div
+              className="MuiListItemIcon-root-203"
+            >
+              <svg
+                aria-hidden="true"
+                className="MuiSvgIcon-root-67"
+                focusable="false"
+                role="presentation"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M0 0h24v24H0z"
+                  fill="none"
+                />
+                <path
+                  d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"
+                />
+              </svg>
+            </div>
+            <div
+              className="MuiListItemText-root-204 R3MainTree-listItemText-159"
+            >
+              <span
+                className="MuiTypography-root-80 MuiTypography-subtitle2-99 MuiTypography-colorTextSecondary-113 MuiListItemText-primary-207"
+              >
+                POLICY
+              </span>
+            </div>
+            <span
+              className="MuiTouchRipple-root-303"
             />
           </div>
         </div>
       </div>
     </div>
     <div>
-      <div
-        style={
-          Object {
-            "float": "left",
-          }
-        }
-      >
-        <div
-          style={
-            Object {
-              "muiPrepared": true,
-              "padding": 0,
-            }
-          }
-        >
-          <div>
-            <div
-              style={
-                Object {
-                  "backgroundColor": "#b388ff",
-                  "boxSizing": "border-box",
-                  "color": "#ede7f6",
-                  "fontFamily": "Roboto, sans-serif",
-                  "fontSize": "14px",
-                  "fontWeight": 500,
-                  "lineHeight": "48px",
-                  "muiPrepared": true,
-                  "paddingBottom": "4px",
-                  "paddingLeft": 16,
-                  "paddingTop": "4px",
-                  "verticalAlign": "middle",
-                  "width": "100%",
-                }
-              }
-            >
-              <span
-                style={
-                  Object {
-                    "MozBorderRadius": "20px",
-                    "WebkitBorderRadius": "20px",
-                    "backgroundColor": "#673ab7",
-                    "border": 0,
-                    "borderRadius": "20px",
-                    "color": "#ede7f6",
-                    "fontWeight": "bold",
-                    "marginRight": "12px",
-                    "padding": "6px 12px",
-                  }
-                }
-              >
-                TENANT
-              </span>
-              <span
-                style={
-                  Object {
-                    "fontWeight": "bold",
-                  }
-                }
-              >
-                No tenant list
-              </span>
-              <div
-                onMouseDown={[Function]}
-                onMouseEnter={[Function]}
-                onMouseLeave={[Function]}
-                onMouseUp={[Function]}
-                onTouchTap={[Function]}
-                style={
-                  Object {
-                    "display": "inline-block",
-                    "float": "right",
-                    "muiPrepared": true,
-                    "position": "relative",
-                  }
-                }
-              >
-                <button
-                  disabled={false}
-                  onBlur={[Function]}
-                  onClick={[Function]}
-                  onFocus={[Function]}
-                  onKeyDown={[Function]}
-                  onKeyUp={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  onMouseOut={[Function]}
-                  onTouchStart={[Function]}
-                  onTouchTap={[Function]}
-                  style={
-                    Object {
-                      "WebkitTapHighlightColor": "rgba(0, 0, 0, 0)",
-                      "background": "none",
-                      "border": 10,
-                      "boxSizing": "border-box",
-                      "cursor": "pointer",
-                      "display": "inline-block",
-                      "fontFamily": "Roboto, sans-serif",
-                      "fontSize": 0,
-                      "fontWeight": "inherit",
-                      "height": 48,
-                      "margin": 0,
-                      "muiPrepared": true,
-                      "outline": "none",
-                      "overflow": "visible",
-                      "padding": 0,
-                      "position": "relative",
-                      "textDecoration": "none",
-                      "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                      "verticalAlign": null,
-                      "width": 48,
-                      "zIndex": 1,
-                    }
-                  }
-                  tabIndex={0}
-                  type="button"
-                >
-                  <div
-                    onMouseDown={[Function]}
-                    onMouseLeave={[Function]}
-                    onMouseUp={[Function]}
-                    onTouchEnd={[Function]}
-                    onTouchStart={[Function]}
-                  >
-                    <div
-                      style={
-                        Object {
-                          "borderRadius": 2,
-                          "boxSizing": "border-box",
-                          "color": "#ffffff",
-                          "fontFamily": "Roboto, sans-serif",
-                          "fontSize": "10px",
-                          "left": -26,
-                          "lineHeight": "22px",
-                          "muiPrepared": true,
-                          "opacity": 0,
-                          "overflow": "hidden",
-                          "padding": "0 8px",
-                          "position": "absolute",
-                          "right": null,
-                          "top": -10000,
-                          "transition": "top 0ms cubic-bezier(0.23, 1, 0.32, 1) 450ms, transform 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms, opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                          "userSelect": "none",
-                          "zIndex": 3000,
-                        }
-                      }
-                    >
-                      <div
-                        style={
-                          Object {
-                            "backgroundColor": "transparent",
-                            "borderRadius": "50%",
-                            "left": "50%",
-                            "muiPrepared": true,
-                            "position": "absolute",
-                            "top": 0,
-                            "transform": "translate(-50%, -50%)",
-                            "transition": "width 0ms cubic-bezier(0.23, 1, 0.32, 1) 450ms, height 0ms cubic-bezier(0.23, 1, 0.32, 1) 450ms, backgroundColor 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                          }
-                        }
-                      />
-                      <span
-                        style={
-                          Object {
-                            "muiPrepared": true,
-                            "position": "relative",
-                            "whiteSpace": "nowrap",
-                          }
-                        }
-                      >
-                        Select Tenant
-                      </span>
-                    </div>
-                    <span
-                      onMouseEnter={[Function]}
-                      onMouseLeave={[Function]}
-                      style={
-                        Object {
-                          "color": "#ede7f6",
-                          "display": "inline-block",
-                          "fontSize": 24,
-                          "muiPrepared": true,
-                          "position": "relative",
-                          "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                          "userSelect": "none",
-                        }
-                      }
-                    />
-                  </div>
-                </button>
-                <div
-                  style={
-                    Object {
-                      "display": "none",
-                    }
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div>
-            <span
-              disabled={false}
-              onBlur={[Function]}
-              onClick={[Function]}
-              onFocus={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseEnter={[Function]}
-              onMouseLeave={[Function]}
-              onTouchEnd={[Function]}
-              onTouchStart={[Function]}
-              onTouchTap={[Function]}
-              open={null}
-              style={
-                Object {
-                  "WebkitTapHighlightColor": "rgba(0, 0, 0, 0)",
-                  "background": "none",
-                  "backgroundColor": null,
-                  "border": 10,
-                  "boxSizing": "border-box",
-                  "color": "#673ab7",
-                  "cursor": "pointer",
-                  "display": "block",
-                  "fontFamily": "Roboto, sans-serif",
-                  "fontSize": Object {
-                    "fontFamily": "Roboto, sans-serif",
-                    "fontSize": "14px",
-                  },
-                  "fontWeight": "bold",
-                  "lineHeight": "16px",
-                  "margin": 0,
-                  "muiPrepared": true,
-                  "outline": "none",
-                  "padding": 0,
-                  "position": "relative",
-                  "textDecoration": "none",
-                  "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                  "verticalAlign": null,
-                  "zIndex": 1,
-                }
-              }
-              tabIndex={0}
-            >
-              <div
-                onMouseDown={[Function]}
-                onMouseLeave={[Function]}
-                onMouseUp={[Function]}
-                onTouchEnd={[Function]}
-                onTouchStart={[Function]}
-              >
-                <div
-                  style={
-                    Object {
-                      "marginLeft": 0,
-                      "muiPrepared": true,
-                      "paddingBottom": 16,
-                      "paddingLeft": 72,
-                      "paddingRight": 16,
-                      "paddingTop": 16,
-                      "position": "relative",
-                    }
-                  }
-                >
-                  <span
-                    color="#757575"
-                    onMouseEnter={[Function]}
-                    onMouseLeave={[Function]}
-                    style={
-                      Object {
-                        "color": "#757575",
-                        "display": "block",
-                        "fontSize": 24,
-                        "height": 24,
-                        "left": 4,
-                        "margin": 12,
-                        "muiPrepared": true,
-                        "position": "absolute",
-                        "top": 0,
-                        "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                        "userSelect": "none",
-                        "width": 24,
-                      }
-                    }
-                  />
-                  <div
-                    style={
-                      Object {
-                        "muiPrepared": true,
-                      }
-                    }
-                  >
-                    SERVICE
-                  </div>
-                </div>
-              </div>
-            </span>
-          </div>
-          <div>
-            <span
-              disabled={false}
-              onBlur={[Function]}
-              onClick={[Function]}
-              onFocus={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseEnter={[Function]}
-              onMouseLeave={[Function]}
-              onTouchEnd={[Function]}
-              onTouchStart={[Function]}
-              onTouchTap={[Function]}
-              open={null}
-              style={
-                Object {
-                  "WebkitTapHighlightColor": "rgba(0, 0, 0, 0)",
-                  "background": "none",
-                  "backgroundColor": null,
-                  "border": 10,
-                  "boxSizing": "border-box",
-                  "color": "#673ab7",
-                  "cursor": "pointer",
-                  "display": "block",
-                  "fontFamily": "Roboto, sans-serif",
-                  "fontSize": Object {
-                    "fontFamily": "Roboto, sans-serif",
-                    "fontSize": "14px",
-                  },
-                  "fontWeight": "bold",
-                  "lineHeight": "16px",
-                  "margin": 0,
-                  "muiPrepared": true,
-                  "outline": "none",
-                  "padding": 0,
-                  "position": "relative",
-                  "textDecoration": "none",
-                  "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                  "verticalAlign": null,
-                  "zIndex": 1,
-                }
-              }
-              tabIndex={0}
-            >
-              <div
-                onMouseDown={[Function]}
-                onMouseLeave={[Function]}
-                onMouseUp={[Function]}
-                onTouchEnd={[Function]}
-                onTouchStart={[Function]}
-              >
-                <div
-                  style={
-                    Object {
-                      "marginLeft": 0,
-                      "muiPrepared": true,
-                      "paddingBottom": 16,
-                      "paddingLeft": 72,
-                      "paddingRight": 16,
-                      "paddingTop": 16,
-                      "position": "relative",
-                    }
-                  }
-                >
-                  <span
-                    color="#757575"
-                    onMouseEnter={[Function]}
-                    onMouseLeave={[Function]}
-                    style={
-                      Object {
-                        "color": "#757575",
-                        "display": "block",
-                        "fontSize": 24,
-                        "height": 24,
-                        "left": 4,
-                        "margin": 12,
-                        "muiPrepared": true,
-                        "position": "absolute",
-                        "top": 0,
-                        "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                        "userSelect": "none",
-                        "width": 24,
-                      }
-                    }
-                  />
-                  <div
-                    style={
-                      Object {
-                        "muiPrepared": true,
-                      }
-                    }
-                  >
-                    ROLE
-                  </div>
-                </div>
-              </div>
-            </span>
-          </div>
-          <div>
-            <span
-              disabled={false}
-              onBlur={[Function]}
-              onClick={[Function]}
-              onFocus={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseEnter={[Function]}
-              onMouseLeave={[Function]}
-              onTouchEnd={[Function]}
-              onTouchStart={[Function]}
-              onTouchTap={[Function]}
-              open={null}
-              style={
-                Object {
-                  "WebkitTapHighlightColor": "rgba(0, 0, 0, 0)",
-                  "background": "none",
-                  "backgroundColor": null,
-                  "border": 10,
-                  "boxSizing": "border-box",
-                  "color": "#673ab7",
-                  "cursor": "pointer",
-                  "display": "block",
-                  "fontFamily": "Roboto, sans-serif",
-                  "fontSize": Object {
-                    "fontFamily": "Roboto, sans-serif",
-                    "fontSize": "14px",
-                  },
-                  "fontWeight": "bold",
-                  "lineHeight": "16px",
-                  "margin": 0,
-                  "muiPrepared": true,
-                  "outline": "none",
-                  "padding": 0,
-                  "position": "relative",
-                  "textDecoration": "none",
-                  "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                  "verticalAlign": null,
-                  "zIndex": 1,
-                }
-              }
-              tabIndex={0}
-            >
-              <div
-                onMouseDown={[Function]}
-                onMouseLeave={[Function]}
-                onMouseUp={[Function]}
-                onTouchEnd={[Function]}
-                onTouchStart={[Function]}
-              >
-                <div
-                  style={
-                    Object {
-                      "marginLeft": 0,
-                      "muiPrepared": true,
-                      "paddingBottom": 16,
-                      "paddingLeft": 72,
-                      "paddingRight": 16,
-                      "paddingTop": 16,
-                      "position": "relative",
-                    }
-                  }
-                >
-                  <span
-                    color="#757575"
-                    onMouseEnter={[Function]}
-                    onMouseLeave={[Function]}
-                    style={
-                      Object {
-                        "color": "#757575",
-                        "display": "block",
-                        "fontSize": 24,
-                        "height": 24,
-                        "left": 4,
-                        "margin": 12,
-                        "muiPrepared": true,
-                        "position": "absolute",
-                        "top": 0,
-                        "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                        "userSelect": "none",
-                        "width": 24,
-                      }
-                    }
-                  />
-                  <div
-                    style={
-                      Object {
-                        "muiPrepared": true,
-                      }
-                    }
-                  >
-                    RESOURCE
-                  </div>
-                </div>
-              </div>
-            </span>
-          </div>
-          <div>
-            <span
-              disabled={false}
-              onBlur={[Function]}
-              onClick={[Function]}
-              onFocus={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseEnter={[Function]}
-              onMouseLeave={[Function]}
-              onTouchEnd={[Function]}
-              onTouchStart={[Function]}
-              onTouchTap={[Function]}
-              open={null}
-              style={
-                Object {
-                  "WebkitTapHighlightColor": "rgba(0, 0, 0, 0)",
-                  "background": "none",
-                  "backgroundColor": null,
-                  "border": 10,
-                  "boxSizing": "border-box",
-                  "color": "#673ab7",
-                  "cursor": "pointer",
-                  "display": "block",
-                  "fontFamily": "Roboto, sans-serif",
-                  "fontSize": Object {
-                    "fontFamily": "Roboto, sans-serif",
-                    "fontSize": "14px",
-                  },
-                  "fontWeight": "bold",
-                  "lineHeight": "16px",
-                  "margin": 0,
-                  "muiPrepared": true,
-                  "outline": "none",
-                  "padding": 0,
-                  "position": "relative",
-                  "textDecoration": "none",
-                  "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                  "verticalAlign": null,
-                  "zIndex": 1,
-                }
-              }
-              tabIndex={0}
-            >
-              <div
-                onMouseDown={[Function]}
-                onMouseLeave={[Function]}
-                onMouseUp={[Function]}
-                onTouchEnd={[Function]}
-                onTouchStart={[Function]}
-              >
-                <div
-                  style={
-                    Object {
-                      "marginLeft": 0,
-                      "muiPrepared": true,
-                      "paddingBottom": 16,
-                      "paddingLeft": 72,
-                      "paddingRight": 16,
-                      "paddingTop": 16,
-                      "position": "relative",
-                    }
-                  }
-                >
-                  <span
-                    color="#757575"
-                    onMouseEnter={[Function]}
-                    onMouseLeave={[Function]}
-                    style={
-                      Object {
-                        "color": "#757575",
-                        "display": "block",
-                        "fontSize": 24,
-                        "height": 24,
-                        "left": 4,
-                        "margin": 12,
-                        "muiPrepared": true,
-                        "position": "absolute",
-                        "top": 0,
-                        "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                        "userSelect": "none",
-                        "width": 24,
-                      }
-                    }
-                  />
-                  <div
-                    style={
-                      Object {
-                        "muiPrepared": true,
-                      }
-                    }
-                  >
-                    POLICY
-                  </div>
-                </div>
-              </div>
-            </span>
-          </div>
-        </div>
-      </div>
       <div>
-        <div>
+        <header
+          className="MuiPaper-root-19 MuiPaper-elevation0-21 MuiAppBar-root-10 MuiAppBar-positionStatic-14 MuiAppBar-colorPrimary-17 R3Toolbar-root-210"
+        >
           <div
-            style={
-              Object {
-                "WebkitTapHighlightColor": "rgba(0,0,0,0)",
-                "backgroundColor": "#b388ff",
-                "boxSizing": "border-box",
-                "display": "flex",
-                "height": 56,
-                "justifyContent": "space-between",
-                "muiPrepared": true,
-                "padding": "0px 24px",
-                "paddingLeft": 0,
-                "paddingRight": 0,
-              }
-            }
+            className="MuiToolbar-root-46 MuiToolbar-regular-48 MuiToolbar-gutters-47 R3Toolbar-toolbar-211"
           >
             <div
-              style={
-                Object {
-                  "alignItems": "center",
-                  "display": "flex",
-                  "justifyContent": "space-between",
-                  "marginLeft": 0,
-                  "marginRight": 0,
-                  "muiPrepared": true,
-                  "position": "relative",
-                }
-              }
+              aria-describedby={null}
+              aria-label="current display item and its path"
+              className="MuiChip-root-162 MuiChip-colorPrimary-163 MuiChip-clickable-165 MuiChip-clickableColorPrimary-166 R3Toolbar-chip-213"
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onKeyDown={[Function]}
+              onKeyUp={[Function]}
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+              onMouseOver={[Function]}
+              onTouchEnd={[Function]}
+              onTouchStart={[Function]}
+              role="button"
+              tabIndex={0}
+              title="Display path information"
             >
               <div
-                onBlur={[Function]}
-                onClick={[Function]}
-                onFocus={[Function]}
-                onKeyDown={[Function]}
-                onKeyUp={[Function]}
-                onMouseDown={[Function]}
-                onMouseEnter={[Function]}
-                onMouseLeave={[Function]}
-                onMouseUp={[Function]}
-                onTouchEnd={[Function]}
-                onTouchStart={[Function]}
-                onTouchTap={[Function]}
-                style={
-                  Object {
-                    "WebkitTapHighlightColor": "rgba(0, 0, 0, 0)",
-                    "backgroundColor": "#673ab7",
-                    "border": 10,
-                    "borderRadius": 16,
-                    "boxShadow": null,
-                    "boxSizing": "border-box",
-                    "cursor": "default",
-                    "display": "flex",
-                    "fontFamily": "Roboto, sans-serif",
-                    "fontSize": "inherit",
-                    "fontWeight": "inherit",
-                    "margin": 0,
-                    "marginLeft": "4px",
-                    "marginRight": "12px",
-                    "muiPrepared": true,
-                    "outline": "none",
-                    "padding": 0,
-                    "position": "relative",
-                    "textDecoration": "none",
-                    "verticalAlign": null,
-                    "whiteSpace": "nowrap",
-                    "width": "fit-content",
-                    "zIndex": 1,
-                  }
-                }
-                tabIndex={0}
+                className="MuiAvatar-root-219 MuiAvatar-colorDefault-220 MuiChip-avatar-174 R3Toolbar-avatar-216 MuiChip-avatarColorPrimary-175"
               >
-                <div
-                  color="#ff5722"
-                  size={32}
-                  style={
-                    Object {
-                      "alignItems": "center",
-                      "backgroundColor": "#ede7f6",
-                      "borderRadius": "50%",
-                      "color": "#ff5722",
-                      "display": "inline-flex",
-                      "fontSize": 16,
-                      "height": 32,
-                      "justifyContent": "center",
-                      "marginRight": -4,
-                      "muiPrepared": true,
-                      "userSelect": "none",
-                      "width": 32,
-                    }
-                  }
+                <svg
+                  aria-hidden="true"
+                  className="MuiSvgIcon-root-67 MuiChip-avatarChildren-177 R3Toolbar-descriptionIcon-217"
+                  focusable="false"
+                  role="presentation"
+                  viewBox="0 0 24 24"
                 >
-                  <span
-                    color="#ff5722"
-                    onMouseEnter={[Function]}
-                    onMouseLeave={[Function]}
-                    style={
-                      Object {
-                        "color": "#ff5722",
-                        "display": "inline-block",
-                        "fontSize": 24,
-                        "muiPrepared": true,
-                        "position": "relative",
-                        "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                        "userSelect": "none",
-                      }
-                    }
+                  <path
+                    d="M0 0h24v24H0z"
+                    fill="none"
                   />
-                </div>
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <span
+                className="MuiChip-label-181"
+              >
                 <span
-                  style={
-                    Object {
-                      "color": "#ede7f6",
-                      "fontFamily": "Roboto, sans-serif",
-                      "fontSize": "14px",
-                      "fontWeight": "bold",
-                      "lineHeight": "32px",
-                      "muiPrepared": true,
-                      "paddingLeft": 12,
-                      "paddingRight": 12,
-                      "userSelect": "none",
-                      "verticalAlign": "middle",
-                      "whiteSpace": "nowrap",
-                    }
-                  }
+                  className="MuiTypography-root-80 MuiTypography-subtitle2-99 R3Toolbar-chipText-214"
                 >
                   Unselected
                 </span>
-              </div>
-              <span
-                style={
-                  Object {
-                    "color": "#ede7f6",
-                    "fontFamily": "Roboto, sans-serif",
-                    "fontSize": "14px",
-                    "fontWeight": "bold",
-                    "lineHeight": "56px",
-                    "maxHeight": "-webkit-fill-available",
-                    "muiPrepared": true,
-                    "overflow": "hidden",
-                    "paddingLeft": 0,
-                    "paddingRight": 0,
-                    "position": "relative",
-                    "textOverflow": "ellipsis",
-                    "whiteSpace": "normal",
-                    "wordBreak": "break-all",
-                  }
-                }
-              >
-                
               </span>
             </div>
-          </div>
-        </div>
-        <div
-          style={
-            Object {
-              "WebkitTapHighlightColor": "rgba(0,0,0,0)",
-              "backgroundColor": "#ede7f6",
-              "borderRadius": 2,
-              "boxShadow": "0 14px 45px rgba(49, 27, 146, 0.25),
-         0 10px 18px rgba(49, 27, 146, 0.22)",
-              "boxSizing": "border-box",
-              "color": "#212121",
-              "display": "flex",
-              "fontFamily": "Roboto, sans-serif",
-              "margin": "6px",
-              "muiPrepared": true,
-              "padding": "24px",
-              "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-            }
-          }
-        >
-          <div
-            className="clearof"
-            style={
-              Object {
-                "width": "100%",
-              }
-            }
-          >
             <span
-              onMouseEnter={[Function]}
-              onMouseLeave={[Function]}
-              style={
-                Object {
-                  "color": "#283593",
-                  "display": "inline-block",
-                  "float": "left",
-                  "fontSize": 24,
-                  "marginRight": 12,
-                  "muiPrepared": true,
-                  "padding": 0,
-                  "position": "relative",
-                  "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-                  "userSelect": "none",
-                }
-              }
-            />
+              className="MuiTypography-root-80 MuiTypography-subtitle2-99 MuiTypography-colorTextSecondary-113 MuiTypography-noWrap-106 R3Toolbar-title-212"
+            >
+              
+            </span>
             <div
-              style={
-                Object {
-                  "color": "#283593",
-                  "display": "inline-block",
-                  "fontFamily": "Roboto, sans-serif",
-                  "fontSize": "14px",
-                  "width": "calc(100% - 40px)",
-                }
-              }
-            >
-              <div>
-                <span>
-                  First select the tenant, then select ROLE / RESOURCE / POLICY, then browse and edit.
-                </span>
-              </div>
-            </div>
+              className="R3Toolbar-spacerInToolbar-218"
+            />
           </div>
-        </div>
+        </header>
       </div>
-    </div>
-    <div
-      style={
-        Object {
-          "WebkitTapHighlightColor": "rgba(0,0,0,0)",
-          "backgroundColor": "rgba(0,0,0,0)",
-          "borderRadius": 2,
-          "boxShadow": undefined,
-          "boxSizing": "border-box",
-          "color": "#212121",
-          "fontFamily": "Roboto, sans-serif",
-          "height": "100vh",
-          "left": 0,
-          "muiPrepared": true,
-          "position": "fixed",
-          "top": 0,
-          "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
-          "width": "100vw",
-          "zIndex": 1500,
-        }
-      }
-    >
-      <div>
-        <div
-          color="#ff5722"
-          max={100}
-          min={0}
-          mode="indeterminate"
-          style={
-            Object {
-              "display": "inline-block",
-              "height": 40,
-              "left": "45vw",
-              "muiPrepared": true,
-              "position": "fixed",
-              "top": "45vh",
-              "width": 40,
-            }
-          }
-          value={0}
+      <div
+        className="MuiPaper-root-19 MuiPaper-elevation2-23 MuiPaper-rounded-20 R3MsgBox-root-273"
+      >
+        <svg
+          aria-hidden="true"
+          className="MuiSvgIcon-root-67 R3MsgBox-informationIcon-279"
+          focusable="false"
+          role="presentation"
+          viewBox="0 0 24 24"
         >
-          <div
-            style={
-              Object {
-                "display": "inline-block",
-                "height": 40,
-                "muiPrepared": true,
-                "transition": "20s transform linear 0ms",
-                "transitionTimingFunction": "linear",
-                "width": 40,
-              }
-            }
-          >
-            <svg
-              style={
-                Object {
-                  "height": 40,
-                  "muiPrepared": true,
-                  "position": "relative",
-                  "width": 40,
-                }
-              }
-              viewBox="0 0 40 40"
-            >
-              <circle
-                cx={20}
-                cy={20}
-                fill="none"
-                r={16.5}
-                strokeMiterlimit="20"
-                strokeWidth={7}
-                style={
-                  Object {
-                    "muiPrepared": true,
-                    "stroke": "#ff5722",
-                    "strokeLinecap": "round",
-                    "transition": "1.5s all ease-in-out 0ms",
-                  }
-                }
-              />
-            </svg>
-          </div>
-        </div>
+          <path
+            d="M0 0h24v24H0V0z"
+            fill="none"
+          />
+          <path
+            d="M11 7h2v2h-2zM11 11h2v6h-2z"
+          />
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+          />
+        </svg>
+        <span
+          className="MuiTypography-root-80 MuiTypography-body2-88 R3MsgBox-dialogInformationContentText-276"
+        >
+          First select the tenant, then select ROLE / RESOURCE / POLICY, then browse and edit.
+          <br />
+        </span>
       </div>
     </div>
-  </div>
-</div>
+  </div>,
+]
 `;

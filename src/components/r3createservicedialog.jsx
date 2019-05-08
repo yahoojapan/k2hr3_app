@@ -19,31 +19,68 @@
  *
  */
 
-import React			from 'react';
-import ReactDOM			from 'react-dom';									// eslint-disable-line no-unused-vars
-import PropTypes		from 'prop-types';
+import React						from 'react';
+import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
+import PropTypes					from 'prop-types';
 
-import TextField		from 'material-ui/TextField';
-import FontIcon			from 'material-ui/FontIcon';
-import RaisedButton		from 'material-ui/RaisedButton';
-import Dialog			from 'material-ui/Dialog';
+import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
+import TextField					from '@material-ui/core/TextField';
+import Button						from '@material-ui/core/Button';
+import Dialog						from '@material-ui/core/Dialog';
+import DialogTitle					from '@material-ui/core/DialogTitle';
+import DialogContent				from '@material-ui/core/DialogContent';
+import DialogActions				from '@material-ui/core/DialogActions';
+import Typography					from '@material-ui/core/Typography';
+import CheckCircleIcon				from '@material-ui/icons/CheckCircle';
+import CancelIcon					from '@material-ui/icons/Cancel';
 
-import { r3IsEmptyStringObject } from '../util/r3util';
+import { r3CreateServiceDialog }	from './r3styles';
+import { r3IsEmptyString, r3IsEmptyStringObject } from '../util/r3util';
+
+//
+// Local variables
+//
+const serviceTextFieldId	= 'new-service-textfield-id';
+const verifyTextFieldId		= 'new-verify-textfield-id';
 
 //
 // Create New Path Dialog Class
 //
+@withTheme()
+@withStyles(r3CreateServiceDialog)
 export default class R3CreateServiceDialog extends React.Component
 {
+	static contextTypes = {
+		r3Context:		PropTypes.object.isRequired
+	};
+
+	static propTypes = {
+		r3provider:		PropTypes.object.isRequired,
+		open:			PropTypes.bool,
+		tenant:			PropTypes.object,
+		newServiceName:	PropTypes.string,
+		newVerify:		PropTypes.string,
+
+		onClose:		PropTypes.func.isRequired
+	};
+
+	static defaultProps = {
+		open:			false,
+		tenant:			null,
+		newServiceName:	'',
+		newVerify:		''
+	};
+
+	state = {
+		newServiceName:	this.props.newServiceName,
+		newVerify:		this.props.newVerify
+	};
+
 	constructor(props)
 	{
 		super(props);
 
-		this.state = {
-			newServiceName:	this.props.newServiceName,
-			newVerify:		this.props.newVerify
-		};
-
+		// Binding(do not define handlers as arrow functions for performance)
 		this.handleNewServiceNameChange	= this.handleNewServiceNameChange.bind(this);
 		this.handleNewVerifyChange		= this.handleNewVerifyChange.bind(this);
 	}
@@ -56,101 +93,129 @@ export default class R3CreateServiceDialog extends React.Component
 		});
 	}
 
-	handleNewServiceNameChange(event, changedValue)								// eslint-disable-line no-unused-vars
+	handleNewServiceNameChange(event)
 	{
 		this.setState({
-			newServiceName:	changedValue
+			newServiceName:	event.target.value
 		});
 	}
 
-	handleNewVerifyChange(event, changedValue)									// eslint-disable-line no-unused-vars
+	handleNewVerifyChange(event)
 	{
 		this.setState({
-			newVerify:	changedValue
+			newVerify:	event.target.value
 		});
 	}
 
 	render()
 	{
-		let	tenant		= r3IsEmptyStringObject(this.props.tenant, 'display') ? '(Unselected)' : this.props.tenant.display;
-		let	actions		= [
-			<RaisedButton
-				label={ 'CANCEL' }
-				labelPosition={ 'after' }
-				secondary={ true }
-				style={ this.context.muiTheme.r3FormButtons.raisedButtonStyle }
-				disabled={ false }
-				onClick={ (event) => this.props.onClose(event, false, null, null) }
-				icon={
-					<FontIcon className={ this.context.muiTheme.r3IconFonts.cancelIconFont } />
-				}
-			/>,
-			<RaisedButton
-				label={ 'OK' }
-				labelPosition={ 'after' }
-				primary={ true }
-				style={ this.context.muiTheme.r3FormButtons.raisedButtonStyle }
-				disabled={ ('' === this.state.newServiceName) }
-				onClick={ (event) => this.props.onClose(event, true, this.state.newServiceName, this.state.newVerify) }
-				icon={
-					<FontIcon className={ this.context.muiTheme.r3IconFonts.checkIconFont } />
-				}
-			/>
-		];
+		const { theme, classes, r3provider } = this.props;
+
+		let	tenant;
+		let	tenantClass;
+		if(!r3IsEmptyStringObject(this.props.tenant, 'display')){
+			tenant		= this.props.tenant.display;
+			tenantClass	= classes.value;
+		}else{
+			tenant		= r3provider.getR3TextRes().tResUnselected;
+			tenantClass	= classes.valueItalic;
+		}
 
 		return (
 			<Dialog
-				title={ this.props.r3provider.getR3TextRes().cCreateServiceTitle }
-				actions={ actions }
-				modal={ true }
 				open={ this.props.open }
-				onRequestClose={ (event) => this.props.onClose(event, false, null, null) }
+				onClose={ (event) => this.props.onClose(event, false, null, null) }
+				{ ...theme.r3CreateServiceDialog.root }
+				className={ classes.root }
 			>
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >TENANT for SERVICE owner</p>
-				<p style={ this.context.muiTheme.dialogSimple.valueStyle } >{ tenant }</p>
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >CREATE SERVICE</p>
-				<TextField
-					name={ 'new_service_name' }
-					value={ this.state.newServiceName }
-					hintText={ 'Input create service name'  }
-					style={ this.context.muiTheme.dialogSimple.TextFieldStyle }
-					onChange={ (event, value) => this.handleNewServiceNameChange(event, value) }
-				/>
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >VERIFY URL or STATIC RESOURCE</p>
-				<TextField
-					name={ 'new_verify' }
-					value={ this.state.newVerify }
-					hintText={ 'Input verify'  }
-					style={ this.context.muiTheme.dialogSimple.TextFieldStyle }
-					onChange={ (event, value) => this.handleNewVerifyChange(event, value) }
-				/>
+				<DialogTitle
+					{ ...theme.r3CreateServiceDialog.dialogTitle }
+					className={ classes.dialogTitle }
+				>
+					<Typography
+						{ ...theme.r3CreateServiceDialog.title }
+						className={ classes.title }
+					>
+						{ r3provider.getR3TextRes().cCreateServiceTitle }
+					</Typography>
+				</DialogTitle>
+
+				<DialogContent
+					className={ classes.dialogContent }
+				>
+					<Typography
+						{ ...theme.r3CreateServiceDialog.keyTitle }
+						className={ classes.keyTitle }
+					>
+						{ r3provider.getR3TextRes().tResTenantServiceSubTitle }
+					</Typography>
+					<Typography
+						{ ...theme.r3CreateServiceDialog.value }
+						className={ tenantClass }
+					>
+						{ tenant }
+					</Typography>
+
+					<Typography
+						{ ...theme.r3CreateServiceDialog.keyTitle }
+						className={ classes.keyTitle }
+					>
+						{ r3provider.getR3TextRes().tResCreateServiceSubTitle }
+					</Typography>
+					<TextField
+						id={ serviceTextFieldId }
+						value={ this.state.newServiceName }
+						placeholder={ r3provider.getR3TextRes().tResCreateServiceHint }
+						onChange={ (event) => this.handleNewServiceNameChange(event) }
+						InputProps={{ className: classes.inputTextField }}
+						{ ...theme.r3CreatePathDialog.textField }
+						className={ classes.textField }
+					/>
+
+					<Typography
+						{ ...theme.r3CreateServiceDialog.keyTitle }
+						className={ classes.keyTitle }
+					>
+						{ r3provider.getR3TextRes().tResVURLorResourceSubTitle }
+					</Typography>
+					<TextField
+						id={ verifyTextFieldId }
+						value={ this.state.newVerify }
+						placeholder={ r3provider.getR3TextRes().tResVURLorResourceHint }
+						onChange={ (event) => this.handleNewVerifyChange(event) }
+						InputProps={{ className: classes.inputTextField }}
+						{ ...theme.r3CreatePathDialog.textField }
+						className={ classes.textField }
+					/>
+				</DialogContent>
+
+				<DialogActions>
+					<Button
+						onClick={ (event) => this.props.onClose(event, false, null, null) }
+						{ ...theme.r3CreateServiceDialog.cancelButton }
+						className={ classes.cancelButton }
+					>
+						{ r3provider.getR3TextRes().tResButtonCancel }
+						<CancelIcon
+							className={ classes.buttonIcon }
+						/>
+					</Button>
+					<Button
+						disabled={ r3IsEmptyString(this.state.newServiceName, true) }
+						onClick={ (event) => this.props.onClose(event, true, this.state.newServiceName, this.state.newVerify) }
+						{ ...theme.r3CreateServiceDialog.okButton }
+						className={ classes.okButton }
+					>
+						{ r3provider.getR3TextRes().tResButtonOk }
+						<CheckCircleIcon
+							className={ classes.buttonIcon }
+						/>
+					</Button>
+				</DialogActions>
 			</Dialog>
 		);
-
 	}
 }
-
-R3CreateServiceDialog.contextTypes = {
-	muiTheme:		PropTypes.object.isRequired,
-	r3Context:		PropTypes.object.isRequired
-};
-
-R3CreateServiceDialog.propTypes = {
-	r3provider:		PropTypes.object.isRequired,
-	open:			PropTypes.bool,
-	tenant:			PropTypes.object,
-	newServiceName:	PropTypes.string,
-	newVerify:		PropTypes.string,
-
-	onClose:		PropTypes.func.isRequired
-};
-
-R3CreateServiceDialog.defaultProps = {
-	open:			false,
-	tenant:			null,
-	newServiceName:	'',
-	newVerify:		''
-};
 
 /*
  * VIM modelines

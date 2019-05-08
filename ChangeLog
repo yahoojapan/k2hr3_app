@@ -1,3 +1,9 @@
+k2hr3-app (0.9.1) unstable ; urgency=low
+
+  * Upgraded material-ui to 3.x and React/Webpack/Babel/etc
+
+ -- Takeshi Nakatani <ggtakec@gmail.com> Wed, 08 May 2019 11:25:15 +0900
+
 k2hr3-app (0.9.0) unstable ; urgency=low
 
   * Beta version.

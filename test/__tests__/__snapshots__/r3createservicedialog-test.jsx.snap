@@ -1,3 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `null`;
+exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
+<div
+  aria-label="create service dialog"
+  className="MuiModal-root-27 MuiDialog-root-13 R3CreateServiceDialog-root-1"
+  label="create-service-dialog"
+  onKeyDown={[Function]}
+  role="dialog"
+/>
+`;

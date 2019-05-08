@@ -19,36 +19,82 @@
  *
  */
 
-import React			from 'react';
-import ReactDOM			from 'react-dom';										// eslint-disable-line no-unused-vars
-import PropTypes		from 'prop-types';
+import React						from 'react';
+import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
+import PropTypes					from 'prop-types';
 
-import TextField		from 'material-ui/TextField';
-import FontIcon			from 'material-ui/FontIcon';
-import RaisedButton		from 'material-ui/RaisedButton';
-import Dialog			from 'material-ui/Dialog';
+import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
+import TextField					from '@material-ui/core/TextField';
+import Button						from '@material-ui/core/Button';
+import IconButton					from '@material-ui/core/IconButton';
+import Dialog						from '@material-ui/core/Dialog';
+import DialogTitle					from '@material-ui/core/DialogTitle';
+import DialogContent				from '@material-ui/core/DialogContent';
+import DialogContentText			from '@material-ui/core/DialogContentText';
+import DialogActions				from '@material-ui/core/DialogActions';
+import InputAdornment				from '@material-ui/core/InputAdornment';
+import Typography					from '@material-ui/core/Typography';
+import Paper						from '@material-ui/core/Paper';
+import VisibilityIcon				from '@material-ui/icons/Visibility';
+import VisibilityOffIcon			from '@material-ui/icons/VisibilityOff';
+import CheckCircleIcon				from '@material-ui/icons/CheckCircle';
+import CancelIcon					from '@material-ui/icons/Cancel';
+import WarningIcon					from '@material-ui/icons/WarningRounded';
 
-import { r3IsEmptyString }	from '../util/r3util';
+import { r3IsEmptyString }			from '../util/r3util';
+import { r3SigninCredDialogStyles }	from './r3styles';
+
+//
+// Local variables
+//
+const userNameTextFieldId		= 'username-textfield-id';
+const passphraseTextFieldId		= 'passphrase-textfield-id';
 
 //
 // SignIn by Credential Dialog
 //
+@withTheme()
+@withStyles(r3SigninCredDialogStyles)
 export default class R3SigninCredDialog extends React.Component
 {
+	static contextTypes = {
+		r3Context:		PropTypes.object.isRequired
+	};
+
+	static propTypes = {
+		r3provider:		PropTypes.object.isRequired,
+		open:			PropTypes.bool,
+		name:			PropTypes.string,
+		passphrase:		PropTypes.string,
+		message:		PropTypes.string,
+
+		onClose:		PropTypes.func.isRequired
+	};
+
+	static defaultProps = {
+		open:			false,
+		name:			'',
+		passphrase:		'',
+		message:		''
+	};
+
+	state = {
+		name:			this.props.name,
+		passphrase:		this.props.passphrase,
+		showPassphrase:	false
+	};
+
 	constructor(props)
 	{
 		super(props);
 
-		this.state = {
-			name:		this.props.name,
-			passphrase:	this.props.passphrase,
-		};
-
-		this.handleUserNameChange	= this.handleUserNameChange.bind(this);
-		this.handlePassPhraseChange	= this.handlePassPhraseChange.bind(this);
+		// Binding(do not define handlers as arrow functions for performance)
+		this.handleUserNameChange		= this.handleUserNameChange.bind(this);
+		this.handlePassPhraseChange		= this.handlePassPhraseChange.bind(this);
+		this.handleClickShowPassphrase	= this.handleClickShowPassphrase.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps)										// eslint-disable-line no-unused-vars
+	componentWillReceiveProps(nextProps)
 	{
 		this.setState({
 			name:		nextProps.name,
@@ -56,113 +102,153 @@ export default class R3SigninCredDialog extends React.Component
 		});
 	}
 
-	handleUserNameChange(event, changedValue)									// eslint-disable-line no-unused-vars
+	handleUserNameChange(event)
 	{
 		this.setState({
-			name:		changedValue
+			name:		event.target.value
 		});
 	}
 
-	handlePassPhraseChange(event, changedValue)									// eslint-disable-line no-unused-vars
+	handlePassPhraseChange(event)
 	{
 		this.setState({
-			passphrase:	changedValue
+			passphrase:	event.target.value
+		});
+	}
+
+	handleClickShowPassphrase()
+	{
+		this.setState({
+			showPassphrase:	!this.state.showPassphrase
 		});
 	}
 
 	getMessageBox()
 	{
+		const { theme, classes } = this.props;
+
 		if(!r3IsEmptyString(this.props.message)){
 			return (
-				<div style={ this.context.muiTheme.r3MsgBox.warnTextStyle }>
-					{ this.props.message }
-				</div>
+				<Paper
+					{ ...theme.r3SigninCredDialog.messagePaper }
+					className={ classes.messagePaper }
+				>
+					<WarningIcon
+						{ ...theme.r3SigninCredDialog.messageIcon }
+						className={ classes.messageIcon }
+					/>
+					<Typography
+						{ ...theme.r3SigninCredDialog.message }
+						className={ classes.message }
+					>
+						{ this.props.message }
+					</Typography>
+				</Paper>
 			);
 		}
 	}
 
 	render()
 	{
+		const { theme, classes, r3provider } = this.props;
+
 		let	name		= r3IsEmptyString(this.state.name, true) ?			'' : this.state.name.trim();
 		let	passphrase	= r3IsEmptyString(this.state.passphrase, true) ?	'' : this.state.passphrase.trim();
 
-		let	actions		= [
-			<RaisedButton
-				label={ 'CANCEL' }
-				labelPosition={ 'after' }
-				secondary={ true }
-				style={ this.context.muiTheme.r3FormButtons.raisedButtonStyle }
-				disabled={ false }
-				onClick={ (event) => this.props.onClose(event, false, null, null) }
-				icon={
-					<FontIcon className={ this.context.muiTheme.r3IconFonts.cancelIconFont } />
-				}
-			/>,
-			<RaisedButton
-				label={ 'LOGIN' }
-				labelPosition={ 'after' }
-				primary={ true }
-				style={ this.context.muiTheme.r3FormButtons.raisedButtonStyle }
-				disabled={ ('' === name) }
-				onClick={ (event) => this.props.onClose(event, true, this.state.name, this.state.passphrase) }
-				icon={
-					<FontIcon className={ this.context.muiTheme.r3IconFonts.checkIconFont } />
-				}
-			/>
-		];
-
 		return (
 			<Dialog
-				title={ this.props.r3provider.getR3TextRes().cDirectSignInTitle }
-				actions={ actions }
-				modal={ true }
 				open={ this.props.open }
-				onRequestClose={ (event) => this.props.onClose(event, false, null) }
+				onClose={ (event) => this.props.onClose(event, false, null) }
+				{ ...theme.r3SigninCredDialog.root }
+				className={ classes.root }
 			>
-				{ this.getMessageBox() }
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >USER NAME</p>
-				<TextField
-					name={ 'user_name' }
-					value={ name }
-					hintText={ 'Input user name' }
-					style={ this.context.muiTheme.dialogSimple.TextFieldStyle }
-					onChange={ (event, value) => this.handleUserNameChange(event, value) }
-				/>
-				<p style={ this.context.muiTheme.dialogSimple.keyTitleStyle } >PASS PHRASE</p>
-				<TextField
-					name={ 'pass_phrase' }
-					value={ passphrase }
-					hintText={ 'Input pass phrase' }
-					type={ 'password' }
-					style={ this.context.muiTheme.dialogSimple.TextFieldStyle }
-					onChange={ (event, value) => this.handlePassPhraseChange(event, value) }
-				/>
+				<DialogTitle
+					{ ...theme.r3SigninCredDialog.dialogTitle }
+					className={ classes.dialogTitle }
+				>
+					<Typography
+						{ ...theme.r3SigninCredDialog.title }
+						className={ classes.title }
+					>
+						{ r3provider.getR3TextRes().cDirectSignInTitle }
+					</Typography>
+				</DialogTitle>
+
+				<DialogContent
+					className={ classes.dialogContent }
+				>
+					<DialogContentText
+						{ ...theme.r3SigninCredDialog.dialogContentText }
+						className={ classes.dialogContentText }
+					>
+						{ this.getMessageBox() }
+					</DialogContentText>
+
+					<TextField
+						id={ userNameTextFieldId }
+						label={ r3provider.getR3TextRes().tResUserNameTitle }
+						value={ name }
+						placeholder={ r3provider.getR3TextRes().tResUserNamePlaceHolder }
+						onChange={ (event) => this.handleUserNameChange(event) }
+						InputProps={{ className: classes.inputTextField }}
+						{ ...theme.r3SigninCredDialog.textField }
+						className={ classes.textField }
+					/>
+
+					<TextField
+						id={ passphraseTextFieldId }
+						label={ r3provider.getR3TextRes().tResPassphraseTitle }
+						value={ passphrase }
+						type={ this.state.showPassphrase ? 'text' : 'password' }
+						placeholder={ r3provider.getR3TextRes().tResPassphrasePlaceHolder }
+						onChange={ (event) => this.handlePassPhraseChange(event) }
+						InputProps={{
+							endAdornment: (
+								<InputAdornment
+									{ ...theme.r3SigninCredDialog.inputAdornment }
+								>
+									<IconButton
+										onClick={ this.handleClickShowPassphrase }
+										{ ...theme.r3SigninCredDialog.passphraseIconButton }
+									>
+										{ this.state.showPassphrase ? <VisibilityOffIcon /> : <VisibilityIcon />}
+									</IconButton>
+								</InputAdornment>
+							),
+							className:	classes.inputTextField
+						}}
+						{ ...theme.r3SigninCredDialog.textField }
+						className={ classes.textField }
+					/>
+				</DialogContent>
+
+				<DialogActions>
+					<Button
+						onClick={ (event) => this.props.onClose(event, false, null, null) }
+						{ ...theme.r3SigninCredDialog.cancelButton }
+						className={ classes.cancelButton }
+					>
+						{ r3provider.getR3TextRes().tResButtonCancel }
+						<CancelIcon
+							className={ classes.buttonIcon }
+						/>
+					</Button>
+					<Button
+						disabled={ ('' === name) }
+						onClick={ (event) => this.props.onClose(event, true, this.state.name, this.state.passphrase) }
+						{ ...theme.r3SigninCredDialog.signinButton }
+						className={ classes.signinButton }
+					>
+						{ r3provider.getR3TextRes().tResButtonSignin }
+						<CheckCircleIcon
+							className={ classes.buttonIcon }
+						/>
+					</Button>
+				</DialogActions>
 			</Dialog>
 		);
 	}
 }
-
-R3SigninCredDialog.contextTypes = {
-	muiTheme:		PropTypes.object.isRequired,
-	r3Context:		PropTypes.object.isRequired
-};
-
-R3SigninCredDialog.propTypes = {
-	r3provider:		PropTypes.object.isRequired,
-	open:			PropTypes.bool,
-	name:			PropTypes.string,
-	passphrase:		PropTypes.string,
-	message:		PropTypes.string,
-
-	onClose:		PropTypes.func.isRequired
-};
-
-R3SigninCredDialog.defaultProps = {
-	open:			false,
-	name:			'',
-	passphrase:		'',
-	message:		''
-};
 
 /*
  * VIM modelines

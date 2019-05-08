@@ -19,18 +19,18 @@
  *
  */
 
-import React					from 'react';							// eslint-disable-line no-unused-vars
-import getMuiTheme				from 'material-ui/styles/getMuiTheme';
+import React					from 'react';										// eslint-disable-line no-unused-vars
 import renderer					from 'react-test-renderer';
-import getElementWithContext	from 'react-test-context-provider';		// for context provider
+import getElementWithContext	from 'react-test-context-provider';					// for context provider
+import MuiThemeProvider			from '@material-ui/core/styles/MuiThemeProvider';	// for custom theme
+import CssBaseline				from '@material-ui/core/CssBaseline';				// for reset.css
 
+import r3Theme					from '../../src/components/r3theme';				// custom theme
 import R3Toolbar				from '../../src/components//r3toolbar';
 import R3Provider				from '../../src/util/r3provider';
-import r3Theme					from '../../src/components/r3theme';
 
-import mock_fetch				from '../__mocks__/fetchMock';			// eslint-disable-line no-unused-vars
-import { createNodeMock }		from '../__mocks__/materialUiMock';		// for material-ui
-import mock_injecttap			from '../__mocks__/injectTapMock';		// eslint-disable-line no-unused-vars
+import mock_fetch				from '../__mocks__/fetchMock';						// eslint-disable-line no-unused-vars
+import { createNodeMock }		from '../__mocks__/materialUiMock';					// for material-ui
 
 //
 // Mock functions
@@ -86,23 +86,25 @@ describe('R3ToolBar', () => {											// eslint-disable-line no-undef
 	it('test snapshot for R3ToolBar', () => {							// eslint-disable-line no-undef
 		/* eslint-disable indent */
 		const element		= getElementWithContext({
-									muiTheme:	getMuiTheme(r3Theme),
 									r3Context:	r3provider.getR3Context()
 								},
-								<R3Toolbar
-									toolbarData={ toolbardata }
-									r3provider={ r3provider }
-									userData={ userdata }
-									onArrawUpward={ ArrawUpward }
-									onCreatePath={ CreatePath }
-									onCheckPath={ CheckPath }
-									onDeletePath={ DeletePath }
-									onCreateService={ CreateService }
-									onCreateServiceTenant={ CreateServiceTenant }
-									onCheckServiceName={ CheckServiceName }
-									onDeleteService={ DeleteService }
-									onCheckUpdating={ CheckUpdating }
-								/>
+								<MuiThemeProvider theme={ r3Theme } >
+									<CssBaseline />
+									<R3Toolbar
+										toolbarData={ toolbardata }
+										r3provider={ r3provider }
+										userData={ userdata }
+										onArrawUpward={ ArrawUpward }
+										onCreatePath={ CreatePath }
+										onCheckPath={ CheckPath }
+										onDeletePath={ DeletePath }
+										onCreateService={ CreateService }
+										onCreateServiceTenant={ CreateServiceTenant }
+										onCheckServiceName={ CheckServiceName }
+										onDeleteService={ DeleteService }
+										onCheckUpdating={ CheckUpdating }
+									/>
+								</MuiThemeProvider>
 							);
 		/* eslint-enable indent */
 

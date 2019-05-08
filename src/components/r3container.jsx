@@ -19,50 +19,124 @@
  *
  */
 
-import React			from 'react';
-import ReactDOM			from 'react-dom';									// eslint-disable-line no-unused-vars
-import PropTypes		from 'prop-types';
+import React						from 'react';
+import ReactDOM						from 'react-dom';									// eslint-disable-line no-unused-vars
+import PropTypes					from 'prop-types';
 
-// For Theme
-//import baseTheme		from 'material-ui/styles/baseThemes/lightBaseTheme';
-import r3Theme			from './r3theme';									// custom theme
-import getMuiTheme		from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider	from 'material-ui/styles/MuiThemeProvider';			// for custom theme
+import { withTheme, withStyles }	from '@material-ui/core/styles';					// decorator
+import Paper						from '@material-ui/core/Paper';						// For contents wrap
+
+// Styles
+import { r3Container }				from './r3styles';									// But nothing for r3Container now.
 
 // Parts
-import Paper			from 'material-ui/Paper';							// For contents wrap
-import R3AppBar			from './r3appbar';									// AppBar
-import R3MainTree		from './r3maintree';								// Main TreeView
-import R3Toolbar		from './r3toolbar';									// Toolbar
-import R3MsgBox			from './r3msgbox';									// Message Box
-import R3AboutDialog	from './r3aboutdialog';								// About Dialog
-import R3SigninDialog	from './r3signincreddialog';						// SignIn by Credential Dialog
-import R3Progress		from './r3progress';								// Progress
+import R3AppBar						from './r3appbar';									// AppBar
+import R3MainTree					from './r3maintree';								// Main TreeView
+import R3Toolbar					from './r3toolbar';									// Toolbar
+import R3MsgBox						from './r3msgbox';									// Message Box
+import R3AboutDialog				from './r3aboutdialog';								// About Dialog
+import R3SigninDialog				from './r3signincreddialog';						// SignIn by Credential Dialog
+import R3Progress					from './r3progress';								// Progress
 
 // For contents
-import R3Resource		from './r3resource';
-import R3Role			from './r3role';
-import R3Policy			from './r3policy';
-import R3Service		from './r3service';
+import R3Resource					from './r3resource';
+import R3Role						from './r3role';
+import R3Policy						from './r3policy';
+import R3Service					from './r3service';
 
 // Utilities
-import R3Provider		from '../util/r3provider';
-import R3Message		from '../util/r3message';
-import { clientTypes }	from '../util/r3device';
-import { r3LicensesJsonString }	from '../util/r3licenses';
-import { r3DeepCompare, r3IsEmptyStringObject, r3CompareString, r3CompareCaseString, r3IsEmptyString, r3IsEmptyEntityObject, r3ConvertFromJSON }		from '../util/r3util';
-import { resourceType, roleType, policyType, serviceType, errorType, warningType, infoType, signinUnknownType, signinUnscopedToken, signinCredential }	from '../util/r3types';	// eslint-disable-line no-unused-vars
+import R3Provider					from '../util/r3provider';
+import R3Message					from '../util/r3message';
+import { clientTypes }				from '../util/r3device';
+import { r3LicensesJsonString }		from '../util/r3licenses';
+import { resourceType, roleType, policyType, serviceType, errorType, warningType, infoType, signinUnknownType, signinUnscopedToken, signinCredential } from '../util/r3types';		// eslint-disable-line no-unused-vars
+import { r3DeepCompare, r3IsEmptyStringObject, r3CompareString, r3CompareCaseString, r3IsEmptyString, r3IsEmptyEntity, r3IsEmptyEntityObject, r3ConvertFromJSON, r3IsSafeTypedEntity } from '../util/r3util';
 
 //
 // Container Class
 //
+@withTheme()
+@withStyles(r3Container)
 export default class R3Container extends React.Component
 {
+	static childContextTypes = {
+		r3Context:		PropTypes.object.isRequired
+	};
+
+	static propTypes = {
+		title:			PropTypes.string
+	};
+
+	static defaultProps = {
+		title:			'K2HR3'
+	};
+
+	// State for not render
+	r3provider			= new R3Provider(this.cbProgressControl);	// [NOTE] signin must not be specified here.
+	contentUpdating		= false;
+	progressDisplayFunc	= null;										// Callback from R3Progress for registering its method function.
+
+	// Licenses
+	licensesObj			= r3ConvertFromJSON(r3LicensesJsonString);
+
+	// State
+	//
+	// [NOTE] type/service in selected
+	// 
+	// If selected.type is ROLE or POLICY or RESOURCE and selected.service
+	// is empty, it means that "ROLE/POLICY/RESOURCE" top or the pass under
+	// those is selected.
+	// If selected.type is SERVICE, it means SERVICE top or "service name"
+	// under SERVICE top is selected.
+	// On this case, selected.service is set empty or "service name".
+	// If selected.service is empty, it means that SERVICE top is selected.
+	// If selected.service is not empty, "service name" under SERVICE top is
+	// selected.
+	// If selected.service is not empty and selected.type is ROLE or POLICY
+	// or RESOURCE, it means that ROLE/POLICY/RESOURCE under "service name"
+	// (under SERVICE) is selected.
+	// At this case, when selected.path is not empty,
+	// "SERVICE > service name > ROLE/POLICY/RESOURCE > path" is selected.
+	// 
+	// <<DETAIL EXAMPLE>>
+	// [type]				[service]		[path]		[selected item]
+	// ROLE/POLICY/RESOURCE	empty			empty/path	ROLE/POLICY/RESOURCE top or path under it
+	// SERVICE				empty			empty		SERVICE top
+	// SERVICE				service name	empty		"SERVICE > service name"
+	// ROLE/POLICY/RESOURCE	service name	empty		"SERVICE > service name > ROLE/POLICY/RESOURCE"
+	// ROLE/POLICY/RESOURCE	service name	path		"SERVICE > service name > ROLE/POLICY/RESOURCE > path"
+	//
+	state = {
+		selected: {
+			tenant:				null,
+			type:				null,
+			service:			null,
+			path:				null
+		},
+		tenants:				[],
+		mainTree:				this.r3provider.getEmptyTreeList(true),
+		mainTreeEndock:			!clientTypes.isMobile,
+		mainTreeDocked:			(clientTypes.isMobile || clientTypes.isTablet ? false : true),
+		mainTreeOpen:			false,
+		service:				{},
+		role:					{},
+		policy:					{},
+		resource:				{},
+		toolbarData:			this.r3provider.getPathDetailInfo(null, null, false, false, null, null),
+		userData:				null,
+		message:				new R3Message(this.r3provider.getR3TextRes().iNotSelectTenant),
+		aboutDialogOpen:		false,
+		licensePackage:			null,
+		licenseType:			null,
+		licenseText:			null,
+		signinDialogOpen:		false
+	};
+
 	constructor(props)
 	{
 		super(props);
 
-		// Binding
+		// Binding(do not define handlers as arrow functions for performance)
 		this.handleIsContentUpdating		= this.handleIsContentUpdating.bind(this);
 
 		this.handleTenantChange				= this.handleTenantChange.bind(this);
@@ -74,7 +148,7 @@ export default class R3Container extends React.Component
 
 		this.handleTreeDetach				= this.handleTreeDetach.bind(this);
 		this.handleTreeOpen					= this.handleTreeOpen.bind(this);
-		this.handleTreeOpenToggle			= this.handleTreeOpenToggle.bind(this);
+		this.handleTreePopupClose			= this.handleTreePopupClose.bind(this);
 		this.handleTreeDocking				= this.handleTreeDocking.bind(this);
 
 		this.handleMoveToUpPath				= this.handleMoveToUpPath.bind(this);
@@ -95,66 +169,7 @@ export default class R3Container extends React.Component
 		this.handAboutDialogClose			= this.handAboutDialogClose.bind(this);
 		this.handSignInDialogClose			= this.handSignInDialogClose.bind(this);
 		this.cbProgressControl				= this.cbProgressControl.bind(this);		// For progress callback from provider
-
-		// State for not render
-		this.r3provider						= new R3Provider(this.cbProgressControl);	// [NOTE] signin must not be specified here.
-		this.contentUpdating				= false;
-
-		// Licenses
-		this.licensesObj					= r3ConvertFromJSON(r3LicensesJsonString);
-
-		// State
-		//
-		// [NOTE] type/service in selected
-		// 
-		// If selected.type is ROLE or POLICY or RESOURCE and selected.service
-		// is empty, it means that "ROLE/POLICY/RESOURCE" top or the pass under
-		// those is selected.
-		// If selected.type is SERVICE, it means SERVICE top or "service name"
-		// under SERVICE top is selected.
-		// On this case, selected.service is set empty or "service name".
-		// If selected.service is empty, it means that SERVICE top is selected.
-		// If selected.service is not empty, "service name" under SERVICE top is
-		// selected.
-		// If selected.service is not empty and selected.type is ROLE or POLICY
-		// or RESOURCE, it means that ROLE/POLICY/RESOURCE under "service name"
-		// (under SERVICE) is selected.
-		// At this case, when selected.path is not empty,
-		// "SERVICE > service name > ROLE/POLICY/RESOURCE > path" is selected.
-		// 
-		// <<DETAIL EXAMPLE>>
-		// [type]				[service]		[path]		[selected item]
-		// ROLE/POLICY/RESOURCE	empty			empty/path	ROLE/POLICY/RESOURCE top or path under it
-		// SERVICE				empty			empty		SERVICE top
-		// SERVICE				service name	empty		"SERVICE > service name"
-		// ROLE/POLICY/RESOURCE	service name	empty		"SERVICE > service name > ROLE/POLICY/RESOURCE"
-		// ROLE/POLICY/RESOURCE	service name	path		"SERVICE > service name > ROLE/POLICY/RESOURCE > path"
-		//
-		this.state = {
-			selected: {
-				tenant:				null,
-				type:				null,
-				service:			null,
-				path:				null
-			},
-			tenants:				[],
-			mainTree:				this.r3provider.getEmptyTreeList(true),
-			mainTreeEndock:			!clientTypes.isMobile,
-			mainTreeDocked:			(clientTypes.isMobile || clientTypes.isTablet ? false : true),
-			mainTreeOpen:			false,
-			service:				{},
-			role:					{},
-			policy:					{},
-			resource:				{},
-			toolbarData:			this.r3provider.getPathDetailInfo(null, null, false, false, null, null),
-			userData:				null,
-			message:				new R3Message(this.r3provider.getR3TextRes().iNotSelectTenant),
-			aboutDialogOpen:		false,
-			licensePackage:			null,
-			licenseType:			null,
-			licenseText:			null,
-			signinDialogOpen:		false
-		};
+		this.cbRefRegister					= this.cbRefRegister.bind(this);			// For registering callback from progress
 	}
 
 	componentDidMount()
@@ -207,12 +222,11 @@ export default class R3Container extends React.Component
 	}
 
 	//
-	// Set children's context for muiTheme and r3Context
+	// Set children's context for r3Context
 	//
 	getChildContext()
 	{
 		return {
-			muiTheme:	getMuiTheme(r3Theme),								// Inherit from lightBaseTheme in material-ui. ( usage: getMuiTheme(baseTheme) )
 			r3Context:	this.r3provider.getR3Context()
 		};
 	}
@@ -222,12 +236,12 @@ export default class R3Container extends React.Component
 	//
 	updateState(newState, message = null, type = infoType)
 	{
-		if(undefined === newState || null === newState || !(newState instanceof Object)){
+		if(r3IsEmptyEntity(newState)){
 			newState = {};
 		}
 		if(!this.r3provider.getR3Context().isLogin()){
 			var	r3providerMsg = this.r3provider.getR3Context().getErrorMsg();
-			if(null !== r3providerMsg && 'string' == typeof r3providerMsg && '' != r3providerMsg){
+			if(!r3IsEmptyString(r3providerMsg)){
 				newState.message = new R3Message(r3providerMsg, errorType);
 			}else{
 				newState.message = new R3Message(this.r3provider.getR3TextRes().iNotSignin);
@@ -264,7 +278,7 @@ export default class R3Container extends React.Component
 		}else{
 			this.updateState({
 				tenants:	tenants
-			}, ((undefined === tenants || null === tenants || !(tenants instanceof Array) || 0 === tenants.length) ? this.r3provider.getR3TextRes().iNotHaveAnyTenant : null));
+			}, ((r3IsSafeTypedEntity(tenants, 'array') || 0 === tenants.length) ? this.r3provider.getR3TextRes().iNotHaveAnyTenant : null));
 		}
 	}
 
@@ -666,12 +680,12 @@ export default class R3Container extends React.Component
 	}
 
 	//
-	// Handle MainTree open
+	// Handle MainTree popup close
 	//
-	handleTreeOpenToggle()
+	handleTreePopupClose()
 	{
 		this.updateState({
-			mainTreeOpen:		!this.state.mainTreeOpen
+			mainTreeOpen:		false
 		});
 	}
 
@@ -846,7 +860,7 @@ export default class R3Container extends React.Component
 	//
 	findCheckConflictPath(items, itemPath, isCheckNest)
 	{
-		if(undefined === items || null === items || !(items instanceof Array) || r3IsEmptyString(itemPath)){
+		if(!r3IsSafeTypedEntity(items, 'array') || r3IsEmptyString(itemPath)){
 			return false;
 		}
 		for(let cnt = 0; cnt < items.length; ++cnt){
@@ -867,7 +881,7 @@ export default class R3Container extends React.Component
 	{
 		console.info('CALL DELETE PATH');
 
-		if(undefined === this.state.selected.path || null === this.state.selected.path){
+		if(r3IsEmptyEntity(this.state.selected.path)){
 			return;
 		}
 		this.r3provider.removeData(this.state.selected.tenant, this.state.selected.type, this.state.selected.path, (error) =>
@@ -886,9 +900,9 @@ export default class R3Container extends React.Component
 	{
 		console.info('CALL DELETE SERVICE');
 
-		if(	r3IsEmptyString(this.state.selected.service)														||
-			undefined === isServiceTenant	|| null === isServiceTenant	|| 'boolean' !== typeof isServiceTenant	||
-			undefined === isServiceOwner	|| null === isServiceOwner	|| 'boolean' !== typeof isServiceOwner	)
+		if(	r3IsEmptyString(this.state.selected.service)	||
+			!r3IsSafeTypedEntity(isServiceTenant, 'boolean')||
+			!r3IsSafeTypedEntity(isServiceOwner, 'boolean')	)
 		{
 			return;
 		}
@@ -929,7 +943,7 @@ export default class R3Container extends React.Component
 	//
 	handleContentUpdating(isUpdating)
 	{
-		if(undefined !== isUpdating && null !== isUpdating && 'boolean' === typeof isUpdating){
+		if(r3IsSafeTypedEntity(isUpdating, 'boolean')){
 			this.contentUpdating = isUpdating;
 		}
 	}
@@ -1137,11 +1151,28 @@ export default class R3Container extends React.Component
 	//
 	cbProgressControl(isDisplay)
 	{
-		if(r3IsEmptyEntityObject(this, 'refs') || r3IsEmptyEntityObject(this.refs, 'r3progress')){
-			console.error('R3Progress object is not found.');
+		if(this.progressDisplayFunc){
+			this.progressDisplayFunc(isDisplay);
+		}
+	}
+
+	//
+	// Callback from R3Progress for register object reference
+	//
+	// [NOTE][TODO]
+	// The components that use withTheme/withStyle can not directly reference objects
+	// in ref(reference), then we need to deal with it using innerRef etc.
+	// The material-ui tries to change from innerRef to forwardRef in version 4.
+	// Then we use another low-level technique instead of these logics.
+	// This is an interim process, so I'll fix it later.
+	//
+	cbRefRegister(func)
+	{
+		if(!r3IsSafeTypedEntity(func, 'function')){
+			console.error('call cbRefRegister with invalid function parameter.');
 			return;
 		}
-		this.refs.r3progress.handleDisplay(isDisplay);
+		this.progressDisplayFunc = func;
 	}
 
 	//
@@ -1149,12 +1180,14 @@ export default class R3Container extends React.Component
 	//
 	getContent()
 	{
-		let	muiTheme = this.getChildContext().muiTheme;
+		const { classes } = this.props;
 
 		if(r3CompareCaseString(resourceType, this.state.selected.type)){
-			if(undefined !== this.state.selected.path && null !== this.state.selected.path){
+			if(!r3IsEmptyEntity(this.state.selected.path)){
 				return (
-					<Paper style={ muiTheme.r3Paper.paperStyle } zDepth={1} >
+					<Paper
+						className={ classes.paper }
+					>
 						<R3Resource
 							r3provider={ this.r3provider }
 							resource={ this.state.resource }
@@ -1166,9 +1199,11 @@ export default class R3Container extends React.Component
 				);
 			}
 		}else if(r3CompareCaseString(roleType, this.state.selected.type)){
-			if(undefined !== this.state.selected.path && null !== this.state.selected.path){
+			if(!r3IsEmptyEntity(this.state.selected.path)){
 				return (
-					<Paper style={ muiTheme.r3Paper.paperStyle } zDepth={1} >
+					<Paper
+						className={ classes.paper }
+					>
 						<R3Role
 							r3provider={ this.r3provider }
 							role={ this.state.role }
@@ -1180,9 +1215,11 @@ export default class R3Container extends React.Component
 				);
 			}
 		}else if(r3CompareCaseString(policyType, this.state.selected.type)){
-			if(undefined !== this.state.selected.path && null !== this.state.selected.path){
+			if(!r3IsEmptyEntity(this.state.selected.path)){
 				return (
-					<Paper style={ muiTheme.r3Paper.paperStyle } zDepth={1} >
+					<Paper
+						className={ classes.paper }
+					>
 						<R3Policy
 							r3provider={ this.r3provider }
 							policy={ this.state.policy }
@@ -1197,7 +1234,9 @@ export default class R3Container extends React.Component
 			// content is displaied at only service owner
 			if(this.r3provider.checkServiceOwnerInTreeList(this.state.mainTree, this.state.selected.service)){
 				return (
-					<Paper style={ muiTheme.r3Paper.paperStyle } zDepth={1} >
+					<Paper
+						className={ classes.paper }
+					>
 						<R3Service
 							r3provider={ this.r3provider }
 							tenant={ this.state.selected.tenant.name }
@@ -1220,106 +1259,90 @@ export default class R3Container extends React.Component
 	//
 	render()
 	{
-		let	muiTheme		= this.getChildContext().muiTheme;
 		let	signinDialogMsg	= (r3CompareCaseString('http', this.r3provider.getR3Context().getSafeApiScheme()) ? this.r3provider.getR3TextRes().wDeprecateAuth : '');
 
 		return (
-			<div className='r3Container'>
-				<MuiThemeProvider muiTheme={ muiTheme } >
+			<React.Fragment>
+				<R3AppBar
+					r3provider={ this.r3provider }
+					title={ this.props.title }
+					enDock={ this.state.mainTreeEndock }
+					isDocking={ this.state.mainTreeDocked }
+					licensesObj={ this.licensesObj }
+					onTreeDetach={ this.handleTreeDetach }
+					onOpenTree={ this.handleTreeOpen }
+					onCheckUpdating={ this.handleIsContentUpdating }
+					onAbout={ this.handleAbout }
+					onSign={ this.handleSign }
+				/>
+				<div>
+					<R3MainTree
+						r3provider={ this.r3provider }
+						title={ this.props.title }
+						enDock={ this.state.mainTreeEndock }
+						isDocking={ this.state.mainTreeDocked }
+						licensesObj={ this.licensesObj }
+						open={ this.state.mainTreeOpen }
+						tenants={ this.state.tenants }
+						treeList={ this.state.mainTree }
+						selectedTenant={ this.state.selected.tenant }
+						selectedType={ this.state.selected.type }
+						selectedService={ this.state.selected.service }
+						selectedPath={ this.state.selected.path }
+						onTenantChange={ this.handleTenantChange }
+						onTypeItemChange={ this.handleTypeChange }
+						onListItemChange={ this.handleListItemChange }
+						onNameItemInServiceChange={ this.handleNameItemInServiceChange }
+						onTypeInServiceChange={ this.handleTypeInServiceChange }
+						onListItemInServiceChange={ this.handleListItemInServiceChange }
+						onPopupClose={ this.handleTreePopupClose }
+						onTreeDocking={ this.handleTreeDocking }
+						onCheckUpdating={ this.handleIsContentUpdating }
+						onAbout={ this.handleAbout }
+					/>
 					<div>
-						<R3AppBar
+						<R3Toolbar
 							r3provider={ this.r3provider }
-							title={ this.props.title }
 							enDock={ this.state.mainTreeEndock }
-							isDocking={ this.state.mainTreeDocked }
-							licensesObj={ this.licensesObj }
-							onTreeDetach={ this.handleTreeDetach }
-							onOpenTree={ this.handleTreeOpen }
+							toolbarData={ this.state.toolbarData }
+							userData={ this.state.userData }
+							onArrawUpward={ this.handleMoveToUpPath }
+							onCreatePath={ this.handleCreatePath }
+							onCheckPath={ this.handleCheckConflictPath }
+							onDeletePath={ this.handleDeletePath }
+							onCreateService={ this.handleCreateService }
+							onCreateServiceTenant={ this.handleCreateServiceTenant }
+							onCheckServiceName={ this.handleCheckConflictServiceName }
+							onDeleteService={ this.handleDeleteService }
 							onCheckUpdating={ this.handleIsContentUpdating }
-							onAbout={ this.handleAbout }
-							onSign={ this.handleSign }
 						/>
-						<div>
-							<R3MainTree
-								r3provider={ this.r3provider }
-								title={ this.props.title }
-								enDock={ this.state.mainTreeEndock }
-								isDocking={ this.state.mainTreeDocked }
-								licensesObj={ this.licensesObj }
-								open={ this.state.mainTreeOpen }
-								tenants={ this.state.tenants }
-								treeList={ this.state.mainTree }
-								selectedTenant={ this.state.selected.tenant }
-								selectedType={ this.state.selected.type }
-								selectedService={ this.state.selected.service }
-								selectedPath={ this.state.selected.path }
-								onTenantChange={ this.handleTenantChange }
-								onTypeItemChange={ this.handleTypeChange }
-								onListItemChange={ this.handleListItemChange }
-								onNameItemInServiceChange={ this.handleNameItemInServiceChange }
-								onTypeInServiceChange={ this.handleTypeInServiceChange }
-								onListItemInServiceChange={ this.handleListItemInServiceChange }
-								onOpenChange={ this.handleTreeOpenToggle }
-								onTreeDocking={ this.handleTreeDocking }
-								onCheckUpdating={ this.handleIsContentUpdating }
-								onAbout={ this.handleAbout }
-							/>
-							<div>
-								<R3Toolbar
-									r3provider={ this.r3provider }
-									toolbarData={ this.state.toolbarData }
-									userData={ this.state.userData }
-									onArrawUpward={ this.handleMoveToUpPath }
-									onCreatePath={ this.handleCreatePath }
-									onCheckPath={ this.handleCheckConflictPath }
-									onDeletePath={ this.handleDeletePath }
-									onCreateService={ this.handleCreateService }
-									onCreateServiceTenant={ this.handleCreateServiceTenant }
-									onCheckServiceName={ this.handleCheckConflictServiceName }
-									onDeleteService={ this.handleDeleteService }
-									onCheckUpdating={ this.handleIsContentUpdating }
-								/>
-								<R3MsgBox message={ this.state.message }/>
-								{ this.getContent() }
-							</div>
-						</div>
-						<R3AboutDialog
-							open={ this.state.aboutDialogOpen }
-							onClose={ this.handAboutDialogClose }
-							licensePackage={ this.state.licensePackage }
-							licenseType={ this.state.licenseType }
-							licenseText={ this.state.licenseText }
-						/>
-						<R3SigninDialog
-							r3provider={ this.r3provider }
-							open={ this.state.signinDialogOpen }
-							name={ null }
-							passphrase={ null }
-							message={ signinDialogMsg }
-							onClose={ this.handSignInDialogClose }
-						/>
-						<R3Progress
-							ref='r3progress'
-						/>
+						<R3MsgBox message={ this.state.message }/>
+						{ this.getContent() }
 					</div>
-				</MuiThemeProvider>
-			</div>
+				</div>
+				<R3AboutDialog
+					r3provider={ this.r3provider }
+					open={ this.state.aboutDialogOpen }
+					onClose={ this.handAboutDialogClose }
+					licensePackage={ this.state.licensePackage }
+					licenseType={ this.state.licenseType }
+					licenseText={ this.state.licenseText }
+				/>
+				<R3SigninDialog
+					r3provider={ this.r3provider }
+					open={ this.state.signinDialogOpen }
+					name={ null }
+					passphrase={ null }
+					message={ signinDialogMsg }
+					onClose={ this.handSignInDialogClose }
+				/>
+				<R3Progress
+					cbRefRegister={ this.cbRefRegister }
+				/>
+			</React.Fragment>
 		);
 	}
 }
-
-R3Container.childContextTypes = {
-	muiTheme:		PropTypes.object.isRequired,
-	r3Context:		PropTypes.object.isRequired
-};
-
-R3Container.propTypes = {
-	title:			PropTypes.string
-};
-
-R3Container.defaultProps = {
-	title:			'K2HR3'
-};
 
 /*
  * VIM modelines

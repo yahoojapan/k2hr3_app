@@ -19,31 +19,49 @@
  *
  */
 
-import React			from 'react';
-import ReactDOM			from 'react-dom';									// eslint-disable-line no-unused-vars
-import PropTypes		from 'prop-types';
+import React						from 'react';
+import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
+import PropTypes					from 'prop-types';
 
-import Paper			from 'material-ui/Paper';
-import CircularProgress	from 'material-ui/CircularProgress';
+import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
+import Paper						from '@material-ui/core/Paper';
+import CircularProgress				from '@material-ui/core/CircularProgress';
+
+import { r3Progress }				from './r3styles';
 
 //
 // Progress Modal Class
 //
+@withTheme()
+@withStyles(r3Progress)
 export default class R3Progress extends React.Component
 {
+	static propTypes = {
+		cbRefRegister:	PropTypes.func,
+		onClose:		PropTypes.func
+	};
+
+	static defaultProps = {
+		cbRefRegister:	null,
+		onClose:		null
+	};
+
+	state = {
+		open:			false
+	};
+
+	displayCounter		= 0;			// internal data
+
 	constructor(props)
 	{
 		super(props);
 
-		this.state = {
-			open:	false
-		};
-
-		// internal data
-		this.displayCounter		= 0;
-
-		// Binding
+		// Binding(do not define handlers as arrow functions for performance)
 		this.handleDisplay		= this.handleDisplay.bind(this);
+
+		if(this.props.cbRefRegister){
+			this.props.cbRefRegister(this.handleDisplay);
+		}
 	}
 
 	handleDisplay(isDisplay)
@@ -66,41 +84,25 @@ export default class R3Progress extends React.Component
 
 	render()
 	{
+		const { theme, classes  } = this.props;
+
 		if(!this.state.open){
 			return null;
 		}
 
-		let	paperchild = (
-			<div>
-				<CircularProgress
-					color={ this.context.muiTheme.palette.accent1Color }
-					thickness={ 7 }
-					style={ this.context.muiTheme.r3progress.circularProgressStyle }
-				/>
-			</div>
-		);
-
 		return (
 			<Paper
-				style={ this.context.muiTheme.r3progress.pageStyle }
-				zDepth={ 0 }
-				children={ paperchild }
-			/>
+				{ ...theme.r3progress.root }
+				className={ classes.root }
+			>
+				<CircularProgress
+					{ ...theme.r3progress.circularProgress }
+					className={ classes.circularProgress }
+				/>
+			</Paper>
 		);
 	}
 }
-
-R3Progress.contextTypes = {
-	muiTheme:		PropTypes.object.isRequired,
-};
-
-R3Progress.propTypes = {
-	onClose:		PropTypes.func
-};
-
-R3Progress.defaultProps = {
-	onClose:		null
-};
 
 /*
  * VIM modelines

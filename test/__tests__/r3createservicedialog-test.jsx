@@ -19,18 +19,64 @@
  *
  */
 
-import React					from 'react';							// eslint-disable-line no-unused-vars
-import getMuiTheme				from 'material-ui/styles/getMuiTheme';
+import React					from 'react';										// eslint-disable-line no-unused-vars
 import renderer					from 'react-test-renderer';
-import getElementWithContext	from 'react-test-context-provider';		// for context provider
+import getElementWithContext	from 'react-test-context-provider';					// for context provider
+import MuiThemeProvider			from '@material-ui/core/styles/MuiThemeProvider';	// for custom theme
+import CssBaseline				from '@material-ui/core/CssBaseline';				// for reset.css
 
+import r3Theme					from '../../src/components/r3theme';				// custom theme
 import R3CreateServiceDialog	from '../../src/components/r3createservicedialog';
 import R3Provider				from '../../src/util/r3provider';
-import r3Theme					from '../../src/components/r3theme';
 
-import mock_fetch				from '../__mocks__/fetchMock';			// eslint-disable-line no-unused-vars
-import { createNodeMock }		from '../__mocks__/materialUiMock';		// for material-ui
-import mock_injecttap			from '../__mocks__/injectTapMock';		// eslint-disable-line no-unused-vars
+import mock_fetch				from '../__mocks__/fetchMock';						// eslint-disable-line no-unused-vars
+import { createNodeMock }		from '../__mocks__/materialUiMock';					// for material-ui
+
+// [NOTE]
+// There is a problem with the Dialog class JEST snapshot.
+// At the moment, we have mocked the Fade class and have not taken a
+// snapshot of the following elements.
+// Please refer to the following FIXME for details. We hope for future
+// corrections.
+//
+
+// [NOTE][FIXME]
+// ReactDOM has Portal, but not react-test-renderer. (React 16.x)
+// When testing with react-test-renderer, an error occurs because DOM can
+// not have multiple tails.
+// "An invalid container has been provided. This may indicate that another
+//	renderer is being used in addition to the test renderer. (For example,
+//	ReactDOM.createPortal inside of a ReactTestRenderer tree.) This is not
+//	supported."
+// To avoid this, define createPortal as mock.
+// Along with this, an error will occur in Modal/Fade.(described later)
+//
+import ReactDOM					from 'react-dom';									// For mock of createPortal
+
+const mockCreatePortal = jest.fn((element, node) => {								// eslint-disable-line no-undef, no-unused-vars
+	return element;
+});
+
+// [NOTE][FIXME]
+// Modal generates an error because it accesses without the scrollTop
+// property.
+// -> https://github.com/mui-org/material-ui/blob/474e56bd90b4edc5c6431ecfcffbb525b1f58806/packages/material-ui/src/Modal/Modal.js#L108
+// This error can be avoided by setting the disablePortal property of
+// the Dialog class to true.
+//
+r3Theme.r3CreateServiceDialog.root['disablePortal'] = true;
+
+// [NOTE][FIXME]
+// The Transition class used in this dialog is Fade.
+// As mentioned above, DOM Portal's mock causes errors in the Fade
+// class in the following places.
+// -> https://github.com/mui-org/material-ui/blob/474e56bd90b4edc5c6431ecfcffbb525b1f58806/packages/material-ui/src/Fade/Fade.js#L32-L33
+// Even this handler for the Fade class can be avoided only by mocking,
+// property avoidance, style forcing, etc.
+// Therefore, the Fade class itself is mock. Along with this, snapshot
+// has become insufficient.
+//
+jest.mock('@material-ui/core/Fade');												// eslint-disable-line no-undef
 
 //
 // Mock functions
@@ -45,7 +91,7 @@ import mock_injecttap			from '../__mocks__/injectTapMock';		// eslint-disable-li
 //			.mockReturnValueOnce('x')
 //			.mockReturnValue(true);
 //
-const close	= jest.fn();												// eslint-disable-line no-undef
+const close	= jest.fn();															// eslint-disable-line no-undef
 
 //
 // Dummy datas
@@ -55,32 +101,41 @@ const tenant = {
 	display: 'GROUP0:TENANT0'
 };
 
-
 //
 // Main test
 //
-describe('R3CreateServiceDialog', () => {								// eslint-disable-line no-undef
-	it('test snapshot for R3CreateServiceDialog', () => {				// eslint-disable-line no-undef
+describe('R3CreateServiceDialog', () => {											// eslint-disable-line no-undef
+	beforeAll(() => {																// eslint-disable-line no-undef
+		ReactDOM.createPortal = mockCreatePortal;
+	});
+
+	afterEach(() => {																// eslint-disable-line no-undef
+		ReactDOM.createPortal.mockClear();
+	});
+
+	it('test snapshot for R3CreateServiceDialog', () => {							// eslint-disable-line no-undef
 		/* eslint-disable indent */
 		const r3provider	= new R3Provider(null);
 		const element		= getElementWithContext({
-									muiTheme:	getMuiTheme(r3Theme),
 									r3Context:	r3provider.getR3Context()
 								},
-								<R3CreateServiceDialog
-									r3provider={ r3provider }
-									open={ true }
-									tenant={ tenant }
-									newServiceName={ '' }
-									newVerify={ '' }
-									onClose={ close }
-								/>
+								<MuiThemeProvider theme={ r3Theme } >
+									<CssBaseline />
+									<R3CreateServiceDialog
+										r3provider={ r3provider }
+										open={ true }
+										tenant={ tenant }
+										newServiceName={ '' }
+										newVerify={ '' }
+										onClose={ close }
+									/>
+								</MuiThemeProvider>
 							);
 		/* eslint-enable indent */
 
 		const component = renderer.create(element, { createNodeMock });
 		let tree		= component.toJSON();
-		expect(tree).toMatchSnapshot();									// eslint-disable-line no-undef
+		expect(tree).toMatchSnapshot();												// eslint-disable-line no-undef
 	});
 });
 

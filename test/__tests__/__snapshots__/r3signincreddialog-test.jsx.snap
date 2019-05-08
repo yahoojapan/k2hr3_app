@@ -1,3 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `null`;
+exports[`R3CreateServiceDialog test snapshot for Rr3SigninCredDialog 1`] = `
+<div
+  aria-label="signin credential dialog"
+  className="MuiModal-root-28 MuiDialog-root-14 R3SigninCredDialog-root-1"
+  label="signin-dialog"
+  onKeyDown={[Function]}
+  role="dialog"
+/>
+`;

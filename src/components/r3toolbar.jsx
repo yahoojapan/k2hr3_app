@@ -23,44 +23,100 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import FontIcon						from 'material-ui/FontIcon';
-import IconButton					from 'material-ui/IconButton';
-import Avatar						from 'material-ui/Avatar';
-import Chip							from 'material-ui/Chip';
-import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
+import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
+import IconButton					from '@material-ui/core/IconButton';
+import Avatar						from '@material-ui/core/Avatar';
+import Chip							from '@material-ui/core/Chip';
+import AppBar						from '@material-ui/core/AppBar';
+import Toolbar						from '@material-ui/core/Toolbar';
+import Typography					from '@material-ui/core/Typography';
+import Tooltip						from '@material-ui/core/Tooltip';
 
+import DescriptionIcon				from '@material-ui/icons/Description';
+import ArrowUpwardIcon				from '@material-ui/icons/ArrowUpwardRounded';
+import AddIcon						from '@material-ui/icons/AddRounded';
+import DeleteIcon					from '@material-ui/icons/ClearRounded';
+
+import { r3Toolbar }				from './r3styles';
 import R3PathInfoDialog				from './r3pathinfodialog';
 import R3CreatePathDialog			from './r3createpathdialog';
 import R3CreateServiceDialog		from './r3createservicedialog';
 import R3CreateServiceTenantDialog	from './r3createservicetenantdialog';
 import R3PopupMsgDialog				from './r3popupmsgdialog';
 import R3Message					from '../util/r3message';
+
 import { errorType, infoType, resourceType, roleType, policyType, serviceType } from '../util/r3types';
-import { r3CompareCaseString, r3IsEmptyStringObject, r3IsEmptyString } from '../util/r3util';
+import { r3CompareCaseString, r3IsEmptyStringObject, r3IsEmptyEntityObject, r3IsEmptyString, r3IsSafeTypedEntity } from '../util/r3util';
+
+//
+// Local variables
+//
+const tooltipValues = {
+	pathInfoChip:	'pathInfoChipButton',
+	toUpperPath:	'toUpperPathButton',
+	createPath:		'createPathButton',
+	deletePath:		'deletePathButton'
+};
 
 //
 // Toolbar Class
 //
+@withTheme()
+@withStyles(r3Toolbar)
 export default class R3Toolbar extends React.Component
 {
+	static contextTypes = {
+		r3Context:				PropTypes.object.isRequired
+	};
+
+	static propTypes = {
+		r3provider:				PropTypes.object.isRequired,
+		enDock:					PropTypes.bool,
+		toolbarData:			PropTypes.object.isRequired,
+		userData:				PropTypes.object,
+
+		onArrawUpward:			PropTypes.func.isRequired,
+		onCreatePath:			PropTypes.func.isRequired,
+		onCheckPath:			PropTypes.func.isRequired,
+		onDeletePath:			PropTypes.func.isRequired,
+		onCreateServiceTenant:	PropTypes.func.isRequired,
+		onCreateService:		PropTypes.func.isRequired,
+		onCheckServiceName:		PropTypes.func.isRequired,
+		onDeleteService:		PropTypes.func.isRequired,
+		onCheckUpdating:		PropTypes.func
+	};
+
+	static defaultProps = {
+		enDock:					true,
+		userData:				null,
+		onCheckUpdating:		null
+	};
+
+	state = {
+		pathInfoDialogOpen:				false,
+		createPathDialogOpen:			false,
+		createServiceDialogOpen:		false,
+		createServiceTenantDialogOpen:	false,
+		newServiceName:					'',
+		newVerify:						'',
+		aliasRole:						'',
+		r3DeleteServiceMessage:			null,
+		newPath:						'',
+		r3Message:						null,
+
+		tooltips: {
+			toUpperPathTooltip:			false,
+			pathInfoChipTooltip:		false,
+			createPathTooltip:			false,
+			deletePathTooltip:			false
+		}
+	};
+
 	constructor(props)
 	{
 		super(props);
 
-		this.state = {
-			pathInfoDialogOpen:						false,
-			createPathDialogOpen:					false,
-			createServiceDialogOpen:				false,
-			createServiceTenantDialogOpen:			false,
-			newServiceName:							'',
-			newVerify:								'',
-			aliasRole:								'',
-			r3DeleteServiceMessage:					null,
-			newPath:								'',
-			r3Message:								null
-		};
-
-		// Binding
+		// Binding(do not define handlers as arrow functions for performance)
 		this.handlePathInfoDialogOpen				= this.handlePathInfoDialogOpen.bind(this);
 		this.handlePathInfoDialogClose				= this.handlePathInfoDialogClose.bind(this);
 		this.handleCreatePathDialogOpen				= this.handleCreatePathDialogOpen.bind(this);
@@ -72,13 +128,18 @@ export default class R3Toolbar extends React.Component
 		this.handleCreateServiceTenantDialogClose	= this.handleCreateServiceTenantDialogClose.bind(this);
 		this.handleDeleteService					= this.handleDeleteService.bind(this);
 		this.handleDeleteServiceDialogClose			= this.handleDeleteServiceDialogClose.bind(this);
-		this.handleArrawUpwardButton				= this.handleArrawUpwardButton.bind(this);
+		this.handleToUpperPathButton				= this.handleToUpperPathButton.bind(this);
 		this.handleMessageDialogClose				= this.handleMessageDialogClose.bind(this);
 	}
 
 	handlePathInfoDialogOpen(event)											// eslint-disable-line no-unused-vars
 	{
-		this.setState({ pathInfoDialogOpen:	true });
+		this.setState({
+			pathInfoDialogOpen:			true,
+			tooltips: {
+				pathInfoChipTooltip:	false
+			}
+		});
 	}
 
 	handlePathInfoDialogClose(event)										// eslint-disable-line no-unused-vars
@@ -93,7 +154,10 @@ export default class R3Toolbar extends React.Component
 		}
 		this.setState({
 			newPath:				'',
-			createPathDialogOpen:	true
+			createPathDialogOpen:	true,
+			tooltips: {
+				createPathTooltip:	false
+			}
 		});
 	}
 
@@ -153,7 +217,10 @@ export default class R3Toolbar extends React.Component
 		this.setState({
 			newServiceName:				'',
 			newVerify:					'',
-			createServiceDialogOpen:	true
+			createServiceDialogOpen:	true,
+			tooltips: {
+				createPathTooltip:		false
+			}
 		});
 	}
 
@@ -262,7 +329,10 @@ export default class R3Toolbar extends React.Component
 		if(!isAgree){
 			this.setState({
 				aliasRole:						'',
-				createServiceTenantDialogOpen:	false
+				createServiceTenantDialogOpen:	false,
+				tooltips: {
+					createPathTooltip:			false
+				}
 			});
 			return;
 		}
@@ -273,16 +343,56 @@ export default class R3Toolbar extends React.Component
 		// close dialog
 		this.setState({
 			aliasRole:						'',
-			createServiceTenantDialogOpen:	false
+			createServiceTenantDialogOpen:	false,
+			tooltips: {
+				createPathTooltip:			false
+			}
 		});
 	}
 
-	handleArrawUpwardButton(event)											// eslint-disable-line no-unused-vars
+	handleToUpperPathButton(event)											// eslint-disable-line no-unused-vars
 	{
 		if(!this.checkContentUpdating()){
 			return;
 		}
+
+		// undisplay tooltip
+		this.setState({
+			tooltips: {
+				toUpperPathTooltip:			false
+			}
+		});
+
 		this.props.onArrawUpward();
+	}
+
+	handTooltipChange = (event, type, isOpen) =>							// eslint-disable-line no-unused-vars
+	{
+		if(tooltipValues.pathInfoChip === type){
+			this.setState({
+				tooltips: {
+					pathInfoChipTooltip:	isOpen
+				}
+			});
+		}else if(tooltipValues.toUpperPath === type){
+			this.setState({
+				tooltips: {
+					toUpperPathTooltip:		isOpen
+				}
+			});
+		}else if(tooltipValues.createPath === type){
+			this.setState({
+				tooltips: {
+					createPathTooltip:		isOpen
+				}
+			});
+		}else if(tooltipValues.deletePath === type){
+			this.setState({
+				tooltips: {
+					deletePathTooltip:		isOpen
+				}
+			});
+		}
 	}
 
 	handleDeletePath(event)													// eslint-disable-line no-unused-vars
@@ -290,6 +400,14 @@ export default class R3Toolbar extends React.Component
 		if(!this.checkContentUpdating()){
 			return;
 		}
+
+		// undisplay tooltip
+		this.setState({
+			tooltips: {
+				deletePathTooltip:	false
+			}
+		});
+
 		this.props.onDeletePath();
 	}
 
@@ -310,7 +428,10 @@ export default class R3Toolbar extends React.Component
 
 		// confirm message
 		this.setState({
-			r3DeleteServiceMessage:	message
+			r3DeleteServiceMessage:	message,
+			tooltips: {
+				deletePathTooltip:	false
+			}
 		});
 	}
 
@@ -358,63 +479,72 @@ export default class R3Toolbar extends React.Component
 
 	getArrawUpwardButton()
 	{
+		const { theme, r3provider } = this.props;
+
 		if(r3IsEmptyString(this.props.toolbarData.service) && r3IsEmptyString(this.props.toolbarData.currentpath)){
 			return;
 		}
 
 		return (
-			<IconButton
-				tooltip="Move to upper path"
-				iconStyle={ this.context.muiTheme.r3Toolbar.iconButtonColor }
-				onClick={ this.handleArrawUpwardButton }
-				style={ this.context.muiTheme.r3Toolbar.iconButtonStyle }
+			<Tooltip
+				title={ r3provider.getR3TextRes().tResToUpperPathTT }
+				open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.toUpperPathTooltip, 'boolean')) ? false : this.state.tooltips.toUpperPathTooltip) }
 			>
-				<FontIcon
-					className={ this.context.muiTheme.r3IconFonts.arrowUpwardIconFont }
-				/>
-			</IconButton>
+				<IconButton
+					onClick={ this.handleToUpperPathButton }
+					onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.toUpperPath, true) }
+					onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.toUpperPath, false) }
+					{ ...theme.r3AppBar.toUpperPathButton }
+				>
+					<ArrowUpwardIcon />
+				</IconButton>
+			</Tooltip>
 		);
 	}
 
-	getAddPathButton()
+	getCreatePathButton()
 	{
-		let	toolchipText;
-		let	handler;
+		const { theme, r3provider } = this.props;
 
+		let	tooltipText;
+		let	handler;
 		if(this.props.toolbarData.canCreatePath){
 			// Create Path under ROLE/POLICY/RESOURCE
-			toolchipText= 'Create child path';
+			tooltipText	= r3provider.getR3TextRes().tResCreateChildPathTT;
 			handler		= this.handleCreatePathDialogOpen;
-
 		}else if(this.props.toolbarData.canCreateService){
 			// Create SERVICE
-			toolchipText= 'Create SERVICE(owner)';
+			tooltipText	= r3provider.getR3TextRes().tResCreateOwnerServiceTT;
 			handler		= this.handleCreateServiceDialogOpen;
-
 		}else if(r3CompareCaseString(serviceType, this.props.toolbarData.type) && !r3IsEmptyString(this.props.toolbarData.service) && !this.props.toolbarData.hasServiceTenant){
 			// Create SERVICE/TENANT for service name under SERVICE
-			toolchipText= 'Create SERVICE under TENANT';
+			tooltipText	= r3provider.getR3TextRes().tResCreateServiceTT;
 			handler		= this.handleCreateServiceTenant;
 		}else{
 			return;
 		}
 
 		return (
-			<IconButton
-				iconStyle={ this.context.muiTheme.r3Toolbar.iconButtonColor }
-				tooltip={ toolchipText }
-				style={ this.context.muiTheme.r3Toolbar.iconButtonStyle }
-				onClick={ handler }
+			<Tooltip
+				title={ tooltipText }
+				open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.createPathTooltip, 'boolean')) ? false : this.state.tooltips.createPathTooltip) }
 			>
-				<FontIcon
-					className={ this.context.muiTheme.r3IconFonts.addIconFont }
-				/>
-			</IconButton>
+				<IconButton
+					onClick={ handler }
+					onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.createPath, true) }
+					onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.createPath, false) }
+					{ ...theme.r3AppBar.createPathButton }
+				>
+					<AddIcon />
+				</IconButton>
+			</Tooltip>
 		);
 	}
 
-	getDeleteButtonToolbarGroup()
+	getDeletePathButton()
 	{
+		const { theme, r3provider } = this.props;
+
 		let	isDeleteService	= false;
 		let	isServiceTenant	= false;
 		if(r3CompareCaseString(serviceType, this.props.toolbarData.type) || !r3IsEmptyString(this.props.toolbarData.service)){
@@ -460,25 +590,42 @@ export default class R3Toolbar extends React.Component
 			}
 		}
 
+		let	tooltipText;
+		let	handler;
+		if(!isDeleteService){
+			tooltipText		= r3provider.getR3TextRes().tResDeletePathTT;
+			handler			= this.handleDeletePath;
+		}else{
+			if(isServiceTenant){
+				tooltipText	= r3provider.getR3TextRes().tResDeleteOwnerServiceTT;
+			}else{
+				tooltipText	= r3provider.getR3TextRes().tResDeleteServiceTT;
+			}
+			handler			= this.handleDeleteService;
+		}
+
 		return (
-			<ToolbarGroup style={ this.context.muiTheme.r3Toolbar.toolbarGrp } >
+			<Tooltip
+				title={ tooltipText }
+				open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deletePathTooltip, 'boolean')) ? false : this.state.tooltips.deletePathTooltip) }
+			>
 				<IconButton
-					iconStyle={ this.context.muiTheme.r3Toolbar.iconButtonColor }
-					tooltip={ (!isDeleteService ? 'Delete path' : isServiceTenant ? 'Delete SERVICE/TENANT' : 'Delete SERVICE') }
-					style={ this.context.muiTheme.r3Toolbar.iconButtonStyle }
-					onClick={ (!isDeleteService ? this.handleDeletePath : this.handleDeleteService) }
+					onClick={ handler }
+					onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deletePath, true) }
+					onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deletePath, false) }
+					{ ...theme.r3AppBar.deletePathButton }
 				>
-					<FontIcon
-						className={ this.context.muiTheme.r3IconFonts.deleteIconFont }
-					/>
+					<DeleteIcon />
 				</IconButton>
-			</ToolbarGroup>
+			</Tooltip>
 		);
 	}
 
 	getChipInToolbar()
 	{
-		let	strLabel = 'Unselected';
+		const { theme, classes, r3provider } = this.props;
+
+		let	strLabel = r3provider.getR3TextRes().tResUnselected;
 
 		if(r3CompareCaseString(serviceType, this.props.toolbarData.type)){
 			strLabel = this.props.toolbarData.type.toUpperCase();
@@ -490,42 +637,68 @@ export default class R3Toolbar extends React.Component
 				strLabel = strLabel.toUpperCase();
 			}
 		}else if(!r3IsEmptyStringObject(this.props.toolbarData.tenant, 'name') ){
-			strLabel = 'TENANT';
+			strLabel = r3provider.getR3TextRes().tResTenantPathLabel;
 		}
 
-		return (
-			<Chip
-				backgroundColor={ this.context.muiTheme.palette.primary1Color }
-				labelColor={ this.context.muiTheme.palette.primary3Color }
-				labelStyle={ this.context.muiTheme.r3Toolbar.chipLabelStyle }
-				onClick={ this.handlePathInfoDialogOpen }
-				style={ this.context.muiTheme.r3Toolbar.chipStyle }
+		let	avatar = (
+			<Avatar
+				className={ classes.avatar }
 			>
-				<Avatar
-					backgroundColor={ this.context.muiTheme.palette.primary3Color }
-					color={ this.context.muiTheme.palette.accent1Color }
-				>
-					<FontIcon
-						className={ this.context.muiTheme.r3IconFonts.pathIconFont }
-						color={ this.context.muiTheme.palette.accent1Color }
-					/>
-				</Avatar>
+				<DescriptionIcon
+					className={ classes.descriptionIcon }
+				/>
+			</Avatar>
+		);
+
+		let	label = (
+			<Typography
+				{ ...theme.r3Toolbar.chipText }
+				className={ classes.chipText }
+			>
 				{ strLabel }
-			</Chip>
+			</Typography>
+		);
+
+		return (
+			<Tooltip
+				title={ r3provider.getR3TextRes().tResPathChipTT }
+				open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.pathInfoChipTooltip, 'boolean')) ? false : this.state.tooltips.pathInfoChipTooltip) }
+			>
+				<Chip
+					avatar={ avatar }
+					label={ label }
+					onClick={ this.handlePathInfoDialogOpen }
+					onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.pathInfoChip, true) }
+					onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.pathInfoChip, false) }
+					{ ...theme.r3Toolbar.chip }
+					className={ classes.chip }
+				/>
+			</Tooltip>
 		);
 	}
 
 	render()
 	{
-		let	userDataScript	= r3IsEmptyStringObject(this.props.userData, 'userDataScript') ? null : this.props.userData.userDataScript;
-		let	roleToken		= r3IsEmptyStringObject(this.props.userData, 'roleToken') ? null : this.props.userData.roleToken;
+		const { theme, classes, r3provider } = this.props;
+
+		let	userDataScript	= r3IsEmptyStringObject(this.props.userData, 'userDataScript')	? null : this.props.userData.userDataScript;
+		let	roleToken		= r3IsEmptyStringObject(this.props.userData, 'roleToken')		? null : this.props.userData.roleToken;
+		let	themeToolbar	= this.props.enDock ? theme.r3Toolbar.toolbar : theme.r3Toolbar.smallToolbar;
+
 		let	name			= '';
+		let	ownerTag;
 		if(r3IsEmptyString(this.props.toolbarData.name)){
 			if(r3CompareCaseString(serviceType, this.props.toolbarData.type) && !r3IsEmptyString(this.props.toolbarData.service)){
+				name		= this.props.toolbarData.service;
 				if(this.props.toolbarData.serviceOwner){
-					name	= 'OWNER: ' + this.props.toolbarData.service;
-				}else{
-					name	= this.props.toolbarData.service;
+					ownerTag = (
+						<Typography
+							{ ...theme.r3Toolbar.ownerText }
+							className={ classes.ownerText }
+						>
+							{ r3provider.getR3TextRes().tResOwnerServiceTag }
+						</Typography>
+					);
 				}
 			}
 		}else{
@@ -534,19 +707,36 @@ export default class R3Toolbar extends React.Component
 
 		return (
 			<div>
-				<Toolbar style={ this.context.muiTheme.r3Toolbar.toolbar } >
-					<ToolbarGroup firstChild={true} style={ this.context.muiTheme.r3Toolbar.toolbarGrp } >
+				<AppBar
+					{ ...theme.r3Toolbar.root }
+					className={ classes.root }
+				>
+					<Toolbar
+						{ ...themeToolbar }
+						className={ classes.toolbar }
+					>
 						{ this.getChipInToolbar() }
-						<ToolbarTitle
-							style={ this.context.muiTheme.r3Toolbar.toolbarTitleStyle }
-							text={ name }
-						/>
+
+						{ ownerTag }
+						<Typography
+							{ ...theme.r3Toolbar.title }
+							className={ classes.title }
+						>
+							{ name }
+						</Typography>
+
 						{ this.getArrawUpwardButton() }
-						{ this.getAddPathButton() }
-					</ToolbarGroup>
-					{ this.getDeleteButtonToolbarGroup() }
-				</Toolbar>
+
+						<div
+							className={ classes.spacerInToolbar }
+						/>
+
+						{ this.getCreatePathButton() }
+						{ this.getDeletePathButton() }
+					</Toolbar>
+				</AppBar>
 				<R3PathInfoDialog
+					r3provider={ this.props.r3provider }
 					open={ this.state.pathInfoDialogOpen }
 					tenant={ this.props.toolbarData.tenant }
 					service={ this.props.toolbarData.service }
@@ -582,12 +772,14 @@ export default class R3Toolbar extends React.Component
 					onClose={ this.handleCreateServiceTenantDialogClose }
 				/>
 				<R3PopupMsgDialog
+					r3provider={ this.props.r3provider }
 					title={ this.props.r3provider.getR3TextRes().cUpdatingTitle }
 					r3Message={ this.state.r3DeleteServiceMessage }
 					twoButton={ true }
 					onClose={ this.handleDeleteServiceDialogClose }
 				/>
 				<R3PopupMsgDialog
+					r3provider={ this.props.r3provider }
 					r3Message={ this.state.r3Message }
 					onClose={ this.handleMessageDialogClose }
 				/>
@@ -595,32 +787,6 @@ export default class R3Toolbar extends React.Component
 		);
 	}
 }
-
-R3Toolbar.contextTypes = {
-	muiTheme:				PropTypes.object.isRequired,
-	r3Context:				PropTypes.object.isRequired
-};
-
-R3Toolbar.propTypes = {
-	r3provider:				PropTypes.object.isRequired,
-	toolbarData:			PropTypes.object.isRequired,
-	userData:				PropTypes.object,
-
-	onArrawUpward:			PropTypes.func.isRequired,
-	onCreatePath:			PropTypes.func.isRequired,
-	onCheckPath:			PropTypes.func.isRequired,
-	onDeletePath:			PropTypes.func.isRequired,
-	onCreateServiceTenant:	PropTypes.func.isRequired,
-	onCreateService:		PropTypes.func.isRequired,
-	onCheckServiceName:		PropTypes.func.isRequired,
-	onDeleteService:		PropTypes.func.isRequired,
-	onCheckUpdating:		PropTypes.func
-};
-
-R3Toolbar.defaultProps = {
-	userData:				null,
-	onCheckUpdating:		null
-};
 
 /*
  * VIM modelines

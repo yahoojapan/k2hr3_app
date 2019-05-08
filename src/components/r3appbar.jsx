@@ -19,54 +19,142 @@
  *
  */
 
-import React			from 'react';
-import ReactDOM			from 'react-dom';									// eslint-disable-line no-unused-vars
-import PropTypes		from 'prop-types';
+import React						from 'react';
+import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
+import PropTypes					from 'prop-types';
 
 // For AppBar
-import AppBar			from 'material-ui/AppBar';
-import FontIcon			from 'material-ui/FontIcon';
-import IconButton		from 'material-ui/IconButton';
-import IconMenu			from 'material-ui/IconMenu';
-import MenuItem			from 'material-ui/MenuItem';
-import Divider			from 'material-ui/Divider';
-import ArrowDropRight	from 'material-ui/svg-icons/navigation-arrow-drop-right';
+import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
+import AppBar						from '@material-ui/core/AppBar';
+import Toolbar						from '@material-ui/core/Toolbar';
+import Typography					from '@material-ui/core/Typography';
+import Menu							from '@material-ui/core/Menu';
+import MenuItem						from '@material-ui/core/MenuItem';
+import IconButton					from '@material-ui/core/IconButton';
+import ListItemIcon					from '@material-ui/core/ListItemIcon';
+import Divider						from '@material-ui/core/Divider';
+import Tooltip						from '@material-ui/core/Tooltip';
+import MenuIcon						from '@material-ui/icons/Menu';
+import AccountCircleIcon			from '@material-ui/icons/AccountCircle';
+import ArrowRightIcon				from '@material-ui/icons/ArrowRight';
 
-// For dialog
-import R3PopupMsgDialog			from './r3popupmsgdialog';
-import R3Message				from '../util/r3message';
-import { errorType }			from '../util/r3types';
-import { r3IsEmptyEntity, r3IsEmptyString, r3IsEmptyStringObject }	from '../util/r3util';
+import { r3AppBar }					from './r3styles';
+import R3PopupMsgDialog				from './r3popupmsgdialog';
+import R3Message					from '../util/r3message';
+import { errorType }				from '../util/r3types';
+import { r3IsEmptyEntity, r3IsEmptyString, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity }	from '../util/r3util';
+
+//
+// Local variables
+//
+const menuValues = {
+	detach:			'DETACH',
+	about:			'ABOUT',
+	license:		'LICENSES_TOP',
+	noLicense:		'NOLICENSE',
+	sign:			'SIGNINOUT',
+	userName:		'USERNAME'
+};
+
+const tooltipValues = {
+	accountMenu:	'accountMenu',
+	mainMenu:		'mainMenu'
+};
+
+const mainMenuId		= 'appbar-main-menu';
+const licenseMenuId		= 'appbar-license-menu';
+const accountMenuId		= 'appbar-sign-menu';
 
 //
 // AppBar Class
 //
+@withTheme()
+@withStyles(r3AppBar)
 export default class R3AppBar extends React.Component
 {
+	static contextTypes = {
+		r3Context:			PropTypes.object.isRequired
+	};
+
+	static propTypes = {
+		r3provider:			PropTypes.object.isRequired,
+		title:				PropTypes.string.isRequired,
+		enDock:				PropTypes.bool,
+		isDocking:			PropTypes.bool,
+		licensesObj:		PropTypes.object,
+
+		onTreeDetach:		PropTypes.func.isRequired,
+		onOpenTree:			PropTypes.func.isRequired,
+		onCheckUpdating:	PropTypes.func,
+		onAbout:			PropTypes.func.isRequired,
+		onSign:				PropTypes.func.isRequired
+	};
+
+	static defaultProps = {
+		enDock:				true,
+		isDocking:			true,
+		licensesObj:		null,
+
+		onCheckUpdating:	null
+	};
+
+	state = {
+		r3Message:				null,
+		mainMenuAnchorEl:		null,
+		signMenuAnchorEl:		null,
+		licenseMenuAnchorEl:	null,
+
+		tooltips: {
+			accountMenuTooltip:	false,
+			mainMenuTooltip:	false
+		}
+	};
+
 	constructor(props)
 	{
 		super(props);
 
-		this.state = {
-			r3Message:				null
-		};
-
-		// Binding
-		this.handleSignMenuChange	= this.handleSignMenuChange.bind(this);
-		this.handleMenuChange		= this.handleMenuChange.bind(this);
-		this.handleLeftButton		= this.handleLeftButton.bind(this);
-
-		this.handMessageDialogClose	= this.handMessageDialogClose.bind(this);
+		// Binding(do not define handlers as arrow functions for performance)
+		this.handleSignButton			= this.handleSignButton.bind(this);
+		this.handleSignMenuClose		= this.handleSignMenuClose.bind(this);
+		this.handleMainButton			= this.handleMainButton.bind(this);
+		this.handleMainMenuClose		= this.handleMainMenuClose.bind(this);
+		this.handleDetachedMainButton	= this.handleDetachedMainButton.bind(this);
+		this.handMessageDialogClose		= this.handMessageDialogClose.bind(this);
 	}
 
-	handleSignMenuChange(event, value)
+	handleSignMenuChange = (event, value) =>					// eslint-disable-line no-unused-vars
 	{
-		if('SIGNINOUT' === value){
-			this.props.onSign();
+		if(this.checkContentUpdating()){
+			if('SIGNINOUT' === value){
+				this.props.onSign();
+			}
 		}
+
+		// closing menu
+		this.setState({
+			signMenuAnchorEl:		null
+		});
 	}
 
-	handleMenuChange(event, value)
+	handleSignButton(event)										// eslint-disable-line no-unused-vars
+	{
+		this.setState({
+			signMenuAnchorEl:		event.currentTarget,
+			tooltips: {
+				accountMenuTooltip:	false
+			}
+		});
+	}
+
+	handleSignMenuClose(event)									// eslint-disable-line no-unused-vars
+	{
+		this.setState({
+			signMenuAnchorEl:	null
+		});
+	}
+
+	handleMenuChange = (event, value) =>
 	{
 		// [NOTE]
 		// The sub MenuItem for licenses menu is received in the OnClick event,
@@ -75,19 +163,32 @@ export default class R3AppBar extends React.Component
 		// behavior of the function with this value.
 		//
 		if(r3IsEmptyEntity(value)){
-			// Licenses
-			if(!r3IsEmptyString(event.target.innerText)){
-				this.props.onAbout(event.target.innerText);
+			if(this.checkContentUpdating()){
+				// Licenses
+				if(!r3IsEmptyString(event.target.innerText)){
+					this.props.onAbout(event.target.innerText);
+				}
 			}
 		}else{
-			if('DETACH' === value){
-				this.props.onTreeDetach();
+			if(menuValues.detach === value){
+				if(this.checkContentUpdating()){
+					this.props.onTreeDetach();
+				}
 
-			}else if('ABOUT' === value){
-				this.props.onAbout(null);
+			}else if(menuValues.about === value){
+				if(this.checkContentUpdating()){
+					this.props.onAbout(null);
+				}
 
-			}else if('NOLICENSE' === value || 'LICENSES_TOP' === value){
-				// nothing to do(why was this called?)
+			}else if(menuValues.noLicense === value || menuValues.license === value){
+				if(this.checkContentUpdating()){
+					if(!this.state.licenseMenuAnchorEl){
+						this.setState({
+							licenseMenuAnchorEl:	event.currentTarget
+						});
+						return;
+					}
+				}
 
 			}else if(!isNaN(value)){
 				let	_appmenu= this.context.r3Context.getSafeAppMenu();
@@ -100,15 +201,46 @@ export default class R3AppBar extends React.Component
 				}
 			}
 		}
+		// closing menu
+		this.setState({
+			mainMenuAnchorEl:		null,
+			licenseMenuAnchorEl:	null,
+			tooltips: {
+				mainMenuTooltip:	false
+			}
+		});
 	}
 
-	handleLeftButton(event)								// eslint-disable-line no-unused-vars
+	handleDetachedMainButton(event)								// eslint-disable-line no-unused-vars
 	{
-		if(this.props.isDocking){
-			this.props.onTreeDetach();
-		}else{
-			this.props.onOpenTree();
+		if(this.checkContentUpdating()){
+			if(this.props.isDocking){
+				this.props.onTreeDetach();
+			}else{
+				this.props.onOpenTree();
+			}
 		}
+		this.setState({
+			tooltips: {
+				mainMenuTooltip:	false
+			}
+		});
+	}
+
+	handleMainButton(event)										// eslint-disable-line no-unused-vars
+	{
+		this.setState({
+			mainMenuAnchorEl:		event.currentTarget,
+			licenseMenuAnchorEl:	null
+		});
+	}
+
+	handleMainMenuClose(event)									// eslint-disable-line no-unused-vars
+	{
+		this.setState({
+			mainMenuAnchorEl:		null,
+			licenseMenuAnchorEl:	null
+		});
 	}
 
 	handMessageDialogClose()
@@ -116,6 +248,23 @@ export default class R3AppBar extends React.Component
 		this.setState({
 			r3Message:	null
 		});
+	}
+
+	handTooltipChange = (event, type, isOpen) =>				// eslint-disable-line no-unused-vars
+	{
+		if(tooltipValues.accountMenu === type){
+			this.setState({
+				tooltips: {
+					accountMenuTooltip:		isOpen
+				}
+			});
+		}else if(tooltipValues.mainMenu === type){
+			this.setState({
+				tooltips: {
+					mainMenuTooltip:		isOpen
+				}
+			});
+		}
 	}
 
 	checkContentUpdating()
@@ -129,92 +278,116 @@ export default class R3AppBar extends React.Component
 		return true;
 	}
 
-	getAccountIcon()
+	getAccountButton()
 	{
-		let	iconStyle		= (this.context.r3Context.isLogin() ? this.context.muiTheme.r3AppBar.loginIconButtonColor : this.context.muiTheme.r3AppBar.logoutIconButtonColor);
-		let	btnText			= (this.context.r3Context.isLogin() ? 'Sign out' : 'Sign in');
+		const { theme, classes, r3provider } = this.props;
+
+		let accountButton		= (this.context.r3Context.isLogin() ? theme.r3AppBar.signinButton : theme.r3AppBar.signoutButton);
+		let accountButtonIcon	= (this.context.r3Context.isLogin() ? classes.signinButton : classes.signoutButton);
+		let	btnText				= (this.context.r3Context.isLogin() ? r3provider.getR3TextRes().tResSignoutMenu : r3provider.getR3TextRes().tResSigninMenu);
 
 		let	userMenuItem;
-		let	userDivider;
+		let	menuDivider;
 		if(this.context.r3Context.isLogin()){
 			userMenuItem = (
 				<MenuItem
-					primaryText={ 'Signed in as ' + this.context.r3Context.getSafeUserName() }
+					key={ menuValues.userName }
 					disabled={ true }
-					style={ this.context.muiTheme.r3AppBar.userNameMenuItem }
-				/>
+				>
+					<Typography
+						className={ classes.signinedMenu }
+					>
+						{ r3provider.getR3TextRes().tResSigninName + this.context.r3Context.getSafeUserName() }
+					</Typography>
+				</MenuItem>
 			);
-			userDivider = (
-				<Divider
-					style={ this.context.muiTheme.r3AppBar.userNameDivider }
-				/>
+			menuDivider = (
+				<Divider />
 			);
 		}
 
 		return (
-			<IconMenu
-				iconButtonElement={
-					<IconButton iconStyle={ iconStyle } tooltip='Account' style={ this.context.muiTheme.r3AppBar.iconButtonStyle } >
-						<FontIcon
-							className={ this.context.muiTheme.r3IconFonts.accountIconFont }
-						/>
+			<React.Fragment>
+				<Tooltip
+					title={ r3provider.getR3TextRes().tResAccountMenuTT }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.accountMenuTooltip, 'boolean')) ? false : this.state.tooltips.accountMenuTooltip) }
+				>
+					<IconButton
+						aria-owns={ this.state.signMenuAnchorEl ? accountMenuId : undefined }
+						onClick={ this.handleSignButton }
+						onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.accountMenu, true) }
+						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.accountMenu, false) }
+						{ ...accountButton }
+						className={ accountButtonIcon }
+					>
+						<AccountCircleIcon />
 					</IconButton>
-				}
-				onChange={ this.handleSignMenuChange }
-				targetOrigin={ this.context.muiTheme.r3AppBar.iconRightMenuTarget }
-				anchorOrigin={ this.context.muiTheme.r3AppBar.iconRightMenuAnchor }
-			>
-				{ userMenuItem }
-				{ userDivider }
-				<MenuItem
-					primaryText={ btnText }
-					value={ 'SIGNINOUT' }
-				/>
-			</IconMenu>
+				</Tooltip>
+				<Menu
+					id={ accountMenuId }
+					anchorEl={ this.state.signMenuAnchorEl }
+					open={ Boolean(this.state.signMenuAnchorEl) }
+					onClose={ this.handleSignMenuClose }
+					getContentAnchorEl={ null }
+					{ ...theme.r3AppBar.accountMenu }
+				>
+					{ userMenuItem }
+					{ menuDivider }
+					<MenuItem
+						key={ menuValues.sign }
+						onClick={ event => this.handleSignMenuChange(event, menuValues.sign) }
+					>
+						{ btnText }
+					</MenuItem>
+				</Menu>
+			</React.Fragment>
 		);
 	}
 
 	getLicensesMenuItems()
 	{
-		let	_menuitems	= [];
+		const { r3provider } = this.props;
+
+		let	_menuitems = [];
 
 		if(r3IsEmptyEntity(this.props.licensesObj)){
 			_menuitems.push(
 				<MenuItem
-					primaryText={ this.props.r3provider.getR3TextRes().tResNoLicenseMenu }
 					disabled={ true }
-					value={ 'NOLICENSE' }
-					key={ 'NOLICENSE' }
-				/>
+					key={ menuValues.noLicense }
+				>
+					{ r3provider.getR3TextRes().tResNoLicenseMenu }
+				</MenuItem>
 			);
 		}else{
 			let	packages = Object.keys(this.props.licensesObj);
 			for(let cnt = 0; cnt < packages.length; ++cnt){
 				_menuitems.push(
 					<MenuItem
-						primaryText={ packages[cnt] }
-						disabled={ false }
-						value={ packages[cnt] }
 						key={ packages[cnt] }
-						onClick={ this.handleMenuChange }
-					/>
+						onClick={ event => this.handleMenuChange(event, null) }
+					>
+						{ packages[cnt] }
+					</MenuItem>
 				);
 			}
 		}
 		return _menuitems;
 	}
 
-	getMenuItems()
+	getMainMenuItems()
 	{
+		const { theme, classes, r3provider } = this.props;
 		let	_menuitems = [];
+
 		if(this.props.enDock){
 			_menuitems.push(
 				<MenuItem
-					primaryText='Detach Tree'
-					disabled={ false }
-					value={ 'DETACH' }
-					key={ 'DETACH' }
-				/>
+					key={ menuValues.detach }
+					onClick={ event => this.handleMenuChange(event, menuValues.detach) }
+				>
+					{ r3provider.getR3TextRes().tResDetachTreeMenu }
+				</MenuItem>
 			);
 		}
 
@@ -226,11 +399,11 @@ export default class R3AppBar extends React.Component
 				}
 				_menuitems.push(
 					<MenuItem
-						primaryText={ _appmenu[cnt].name }
-						disabled={ false }
-						value={ cnt }
 						key={ cnt }
-					/>
+						onClick={ event => this.handleMenuChange(event, cnt) }
+					>
+						{ _appmenu[cnt].name }
+					</MenuItem>
 				);
 			}
 		}
@@ -238,51 +411,101 @@ export default class R3AppBar extends React.Component
 		// Licenses
 		_menuitems.push(
 			<MenuItem
-				primaryText={ this.props.r3provider.getR3TextRes().tResLicensesMenu }
-				rightIcon={<ArrowDropRight />}
-				menuItems={ this.getLicensesMenuItems() }
-				value={ 'LICENSES_TOP' }
-				key={ 'LICENSES_TOP' }
-			/>,
+				key={ menuValues.license }
+				onClick={ event => this.handleMenuChange(event, menuValues.license) }
+			>
+				{ r3provider.getR3TextRes().tResLicensesMenu }
+				<ListItemIcon>
+					<ArrowRightIcon
+						className={ classes.menuRightIcon }
+					/>
+				</ListItemIcon>
+
+				<Menu
+					id={ licenseMenuId }
+					anchorEl={ this.state.licenseMenuAnchorEl }
+					open={ Boolean(this.state.licenseMenuAnchorEl) }
+					onClose={ this.handleMainMenuClose }
+					getContentAnchorEl={ null }
+					{ ...theme.r3AppBar.licenseMenu }
+				>
+					{ this.getLicensesMenuItems() }
+				</Menu>
+			</MenuItem>
 		);
 
 		// About
 		_menuitems.push(
 			<MenuItem
-				primaryText={ this.props.r3provider.getR3TextRes().tResAboutMenu }
-				disabled={ false }
-				value={ 'ABOUT' }
-				key={ 'ABOUT' }
-			/>
+				key={ menuValues.about }
+				onClick={ event => this.handleMenuChange(event, menuValues.about) }
+			>
+				{ r3provider.getR3TextRes().tResAboutMenu }
+			</MenuItem>
 		);
 
 		return _menuitems;
 	}
 
-	getMenuIcon()
+	getMainMenuButton()
 	{
-		return (
-			<IconMenu
-				iconButtonElement={
-					<IconButton iconStyle={ this.context.muiTheme.r3AppBar.menuIconButtonColor } style={ this.context.muiTheme.r3AppBar.iconButtonStyle } >
-						<FontIcon
-							className={ this.context.muiTheme.r3IconFonts.dehazeIconFont }
-						/>
-					</IconButton>
-				}
-				targetOrigin={ this.context.muiTheme.r3AppBar.iconLeftMenuTarget }
-				anchorOrigin={ this.context.muiTheme.r3AppBar.iconLeftMenuAnchor }
-				onChange={ this.handleMenuChange }
-			>
-				{ this.getMenuItems() }
-			</IconMenu>
-		);
+		const { theme, r3provider } = this.props;
+
+		if(this.props.isDocking){
+			return (
+				<React.Fragment>
+					<Tooltip
+						title={ r3provider.getR3TextRes().tResMainMenuTT }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.mainMenuTooltip, 'boolean')) ? false : this.state.tooltips.mainMenuTooltip) }
+					>
+						<IconButton
+							onClick={ this.handleMainButton }
+							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.mainMenu, true) }
+							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.mainMenu, false) }
+							aria-owns={ this.state.mainMenuAnchorEl ? mainMenuId : undefined }
+							{ ...theme.r3AppBar.mainMenuButton }
+						>
+							<MenuIcon />
+						</IconButton>
+					</Tooltip>
+					<Menu
+						id={ mainMenuId }
+						anchorEl={ this.state.mainMenuAnchorEl }
+						open={ Boolean(this.state.mainMenuAnchorEl) }
+						onClose={ this.handleMainMenuClose }
+						getContentAnchorEl={ null }
+						{ ...theme.r3AppBar.mainMenu }
+					>
+						{ this.getMainMenuItems() }
+					</Menu>
+				</React.Fragment>
+			);
+		}else{
+			return (
+				<React.Fragment>
+					<Tooltip
+						title={ r3provider.getR3TextRes().tResMainMenuTT }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.mainMenuTooltip, 'boolean')) ? false : this.state.tooltips.mainMenuTooltip) }
+					>
+						<IconButton
+							onClick={ this.handleDetachedMainButton }
+							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.mainMenu, true) }
+							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.mainMenu, false) }
+							{ ...theme.r3AppBar.mainMenuButton }
+						>
+							<MenuIcon />
+						</IconButton>
+					</Tooltip>
+				</React.Fragment>
+			);
+		}
 	}
 
 	getPopupMessageDialog()
 	{
 		return (
 			<R3PopupMsgDialog
+				r3provider={ this.props.r3provider }
 				r3Message={ this.state.r3Message }
 				onClose={ this.handMessageDialogClose }
 			/>
@@ -291,58 +514,35 @@ export default class R3AppBar extends React.Component
 
 	render()
 	{
-		if(this.props.isDocking){
-			return (
-				<div>
-					<AppBar
-						title={ this.props.title }
-						iconElementLeft={ this.getMenuIcon() }
-						iconElementRight={ this.getAccountIcon() }
-					/>
-					{ this.getPopupMessageDialog() }
-				</div>
-			);
-		}else{
-			return (
-				<div>
-					<AppBar
-						title={ this.props.title }
-						iconElementRight={ this.getAccountIcon() }
-						onLeftIconButtonTouchTap={ this.handleLeftButton }
-					/>
-					{ this.getPopupMessageDialog() }
-				</div>
-			);
-		}
+		const { theme, classes  } = this.props;
+
+		let	themeToolbar = (this.props.enDock ? theme.r3AppBar.toolbar : theme.r3AppBar.smallToolbar);
+
+		return (
+			<React.Fragment>
+				<AppBar
+					{ ...theme.r3AppBar.root }
+					className={ classes.root }
+				>
+					<Toolbar
+						{ ...themeToolbar }
+						className={ classes.toolbar }
+					>
+						{ this.getMainMenuButton() }
+						<Typography
+							{ ...theme.r3AppBar.title }
+							className={ classes.title }
+						>
+							{ this.props.title }
+						</Typography>
+						{ this.getAccountButton() }
+					</Toolbar>
+				</AppBar>
+				{ this.getPopupMessageDialog() }
+			</React.Fragment>
+		);
 	}
 }
-
-R3AppBar.contextTypes = {
-	muiTheme:			PropTypes.object.isRequired,
-	r3Context:			PropTypes.object.isRequired
-};
-
-R3AppBar.propTypes = {
-	r3provider:			PropTypes.object.isRequired,
-	title:				PropTypes.string.isRequired,
-	enDock:				PropTypes.bool,
-	isDocking:			PropTypes.bool,
-	licensesObj:		PropTypes.object,
-
-	onTreeDetach:		PropTypes.func.isRequired,
-	onOpenTree:			PropTypes.func.isRequired,
-	onCheckUpdating:	PropTypes.func,
-	onAbout:			PropTypes.func.isRequired,
-	onSign:				PropTypes.func.isRequired
-};
-
-R3AppBar.defaultProps = {
-	enDock:				true,
-	isDocking:			true,
-	licensesObj:		null,
-
-	onCheckUpdating:	null
-};
 
 /*
  * VIM modelines

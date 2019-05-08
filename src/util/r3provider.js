@@ -22,7 +22,7 @@
 import R3Context		from '../util/r3context';
 import { r3GetTextRes }	from '../util/r3define';
 import { resourceType, roleType, policyType, serviceType } from '../util/r3types';
-import { r3ObjMerge, parseCombineHostObject, r3IsEmptyStringObject, r3IsEmptyString, r3CompareCaseString, r3IsJSON, r3ConvertFromJSON, r3IsSafeUrl } from '../util/r3util';
+import { r3ObjMerge, parseCombineHostObject, r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity, r3IsEmptyString, r3CompareCaseString, r3IsJSON, r3ConvertFromJSON, r3IsSafeUrl } from '../util/r3util';
 
 //
 // K2HR3 Data Provider Class
@@ -81,7 +81,7 @@ export default class R3Provider
 	//
 	_fetch(path, method, headers, tokenType, body, isCvtBodyJSON, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -92,8 +92,8 @@ export default class R3Provider
 
 		let	_length		= 0;
 		let	_strBody;
-		if(undefined !== body && null !== body){
-			if(undefined === isCvtBodyJSON || null === isCvtBodyJSON || 'boolean' !== typeof isCvtBodyJSON || !isCvtBodyJSON){
+		if(!r3IsEmptyEntity(body)){
+			if(!r3IsSafeTypedEntity(isCvtBodyJSON, 'boolean') || !isCvtBodyJSON){
 				_strBody = body;
 			}else{
 				_strBody = JSON.stringify(body);
@@ -102,7 +102,7 @@ export default class R3Provider
 		}
 
 		/* eslint-disable indent, no-mixed-spaces-and-tabs */
-		let	_headers	= (undefined === headers || null === headers) ? {} : headers;
+		let	_headers	= r3IsEmptyEntity(headers) ? {} : headers;
 		_headers		= r3ObjMerge(_headers,
 		{
 			'Content-Type':		'application/json',
@@ -119,7 +119,7 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(undefined !== token && null !== token){
+			if(r3IsSafeTypedEntity(token, 'string')){
 				_headers['x-auth-token'] = 'U=' + token;
 			}
 
@@ -162,7 +162,7 @@ export default class R3Provider
 			}).then(resobj => {
 				this.stopProgress();														// stop progressing
 
-				if(undefined === resobj || null === resobj || (undefined !== resobj.result && true !== resobj.result)){
+				if(r3IsEmptyEntity(resobj) || (r3IsSafeTypedEntity(resobj.result, 'boolean') && true !== resobj.result)){
 					throw new Error('REQUEST = ' + decodeURI(_path) + ', ERROR = Response is sonmething wrong or false: ' + JSON.stringify(resobj));
 				}
 				_callback(null, resobj);
@@ -171,7 +171,7 @@ export default class R3Provider
 			}).catch(error => {
 				this.stopProgress();														// stop progressing
 
-				if(undefined === error || null === error || !(error instanceof Object)){
+				if(r3IsEmptyEntity(error)){
 					error			= new Error('K2HR3 API ERROR => Unknown reason.');
 					error.status	= 500;
 				}else{
@@ -247,7 +247,7 @@ export default class R3Provider
 	//
 	getUnscopedUserToken(username, passphrase, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -295,7 +295,7 @@ export default class R3Provider
 	//
 	getScopedUserToken(tenantname, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -358,13 +358,13 @@ export default class R3Provider
 	//
 	getUserTokenByType(tokenType, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
 
 		let	error;
-		if(undefined === tokenType || null === tokenType){
+		if(r3IsEmptyEntity(tokenType)){
 			error = new Error('tokenType parameter is wrong.');
 			console.error(error.message);
 			callback(error, null);
@@ -378,7 +378,7 @@ export default class R3Provider
 				// unscoped token
 				callback(null, this.r3Context.getSafeUnscopedToken());
 
-			}else if(!isNaN(tokenType) || ('string' === typeof tokenType && '' !== tokenType)){
+			}else if(!isNaN(tokenType) || !r3IsEmptyString(tokenType)){
 				if(!isNaN(tokenType)){
 					// force string
 					tokenType = String(tokenType);
@@ -415,7 +415,7 @@ export default class R3Provider
 	//
 	getTenantList(callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -457,7 +457,7 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(undefined === resobj.tenants || null === resobj.tenants || !(resobj.tenants instanceof Array)){
+			if(!r3IsSafeTypedEntity(resobj.tenants, 'array')){
 				this.tenantList = [];
 			}else{
 				this.tenantList = resobj.tenants;
@@ -486,7 +486,7 @@ export default class R3Provider
 	//
 	rawGetTreeList(tenant, service, type, path, expand, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -515,7 +515,7 @@ export default class R3Provider
 			_url		+= '/' + path;
 		}
 		let	_urlargs	= undefined;
-		if(undefined !== expand && null !== expand && 'boolean' === typeof expand){
+		if(r3IsSafeTypedEntity(expand, 'boolean')){
 			_urlargs	= 'expand=' + (expand ? 'true' : 'false');
 		}
 
@@ -536,7 +536,7 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(undefined === resobj.children || null === resobj.children || !(resobj.children instanceof Array)){
+			if(!r3IsSafeTypedEntity(resobj.children, 'array')){
 				_callback(null, this.rawCvtTreeListForContainer([], _path));
 			}else{
 				_callback(null, this.rawCvtTreeListForContainer(resobj.children, _path));
@@ -549,7 +549,7 @@ export default class R3Provider
 	//
 	rawCvtTreeListForContainer(treeList, parentPath)
 	{
-		if(undefined === treeList || null === treeList || !(treeList instanceof Array)){
+		if(!r3IsSafeTypedEntity(treeList, 'array')){
 			treeList = [];
 		}
 		let	separator = '';
@@ -562,7 +562,7 @@ export default class R3Provider
 			treeList[cnt].path = parentPath + separator + treeList[cnt].name;
 
 			// reentrant
-			if(undefined === treeList[cnt].children || null === treeList[cnt].children || !(treeList[cnt].children instanceof Array)){
+			if(!r3IsSafeTypedEntity(treeList[cnt].children, 'array')){
 				treeList[cnt].children = [];
 			}
 			treeList[cnt].children = this.rawCvtTreeListForContainer(treeList[cnt].children, treeList[cnt].path);
@@ -608,7 +608,7 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(undefined === serviceChildren || null === serviceChildren || !(serviceChildren instanceof Array)){
+			if(!r3IsSafeTypedEntity(serviceChildren, 'array')){
 				console.info('SERVICE Tree list is something wrong.');
 
 				this.stopProgress();														// stop progressing
@@ -616,26 +616,42 @@ export default class R3Provider
 				return;
 			}
 
+
 			//
 			// Check each service for distributed
 			//
-			for(var cnt = 0; cnt < serviceChildren.length; ++cnt){
-				((pos) =>
-				{
-					var	_pos = pos;
-					if(r3IsEmptyStringObject(serviceChildren[_pos], 'name')){
-						return;
-					}
-					this.rawGetTreeListInServiceTenant(_tenant, serviceChildren[_pos].name, _expand, (children, disributed) =>
+			if(0 < serviceChildren.length){
+				var	_tenant2		= _tenant;
+				var	_expand2		= _expand;
+				var	_callback2		= _callback;
+				var	_serviceChildren= serviceChildren;
+
+				for(var cnt = 0; cnt < _serviceChildren.length; ++cnt){
+					((pos) =>
 					{
-						serviceChildren[_pos].children		= children;
-						serviceChildren[_pos].distributed	= disributed;
-					});
-				})(cnt);
+						if(r3IsEmptyStringObject(_serviceChildren[pos], 'name')){
+							return;
+						}
+						var	_pos				= pos;
+						var	_callback3			= _callback2;
+						var	_serviceChildren2	= _serviceChildren;
+
+						this.rawGetTreeListInServiceTenant(_tenant2, _serviceChildren[pos].name, _expand2, (children, disributed) =>
+						{
+							_serviceChildren2[_pos].children	= children;
+							_serviceChildren2[_pos].distributed	= disributed;
+
+							if((_pos + 1) == _serviceChildren2.length){
+								this.stopProgress();										// stop progressing
+								_callback3(null, _serviceChildren2);
+							}
+						});
+					})(cnt);
+				}
+			}else{
+				this.stopProgress();														// stop progressing
+				_callback(null, serviceChildren);
 			}
-			this.stopProgress();															// stop progressing
-			_callback(null, serviceChildren);
-			return;
 		});
 	}
 
@@ -648,7 +664,7 @@ export default class R3Provider
 		var	_callback	= callback;
 		var	_distributed= false;
 
-		if(undefined === _tenant || null === _tenant || r3IsEmptyString(_servicename)){
+		if(r3IsEmptyEntity(_tenant) || r3IsEmptyString(_servicename)){
 			_callback(_children, _distributed);
 			return;
 		}
@@ -667,7 +683,7 @@ export default class R3Provider
 			//
 			// Set distributed flag for service
 			//
-			if(null !== error || undefined === roleChildren || null === roleChildren || !(roleChildren instanceof Array) || 0 === roleChildren.length){
+			if(null !== error || !r3IsSafeTypedEntity(roleChildren, 'array') || 0 === roleChildren.length){
 				_distributed = false;
 			}else{
 				// Role under service+tenant is existed(distributed).
@@ -692,7 +708,7 @@ export default class R3Provider
 			//
 			this.getResourceTreeList(_tenant, _servicename, null, _expand, (error, resourceChildren) =>
 			{
-				if(null !== error || undefined === resourceChildren || null === resourceChildren){
+				if(null !== error || r3IsEmptyEntity(resourceChildren)){
 					console.info('Could not get RESOURCE Tree list in SERVICE+TENANT by ' + (null !== error ? error.message : ''));
 				}else{
 					this.rawSetTreeListChildren(_children, resourceType, resourceChildren);
@@ -703,7 +719,7 @@ export default class R3Provider
 				//
 				this.getPolicyTreeList(_tenant, _servicename, null, _expand, (error, policyChildren) =>
 				{
-					if(null !== error || undefined === policyChildren || null === policyChildren){
+					if(null !== error || r3IsEmptyEntity(policyChildren)){
 						console.info('Could not get POLICY Tree list in SERVICE+TENANT by ' + (null !== error ? error.message : ''));
 					}else{
 						this.rawSetTreeListChildren(_children, policyType, policyChildren);
@@ -835,7 +851,7 @@ export default class R3Provider
 
 	rawSetTreeListChildren(allTreeList, path, children)
 	{
-		if(undefined === allTreeList || null === allTreeList || !(allTreeList instanceof Array)){
+		if(!r3IsSafeTypedEntity(allTreeList, 'array')){
 			return false;
 		}
 		for(let cnt = 0; cnt < allTreeList.length; ++cnt){
@@ -851,7 +867,7 @@ export default class R3Provider
 	{
 		let	treelist = [];
 
-		if(undefined !== is_service && null !== is_service && 'boolean' === typeof is_service && is_service){
+		if(r3IsSafeTypedEntity(is_service, 'boolean') && is_service){
 			treelist.push({
 				name:		serviceType.toUpperCase(),
 				path:		serviceType,
@@ -891,7 +907,7 @@ export default class R3Provider
 	//
 	selectTreeList(treeList, service, type, path)
 	{
-		if(undefined === treeList || null === treeList || !(treeList instanceof Array) || 0 === treeList.length){
+		if(!r3IsSafeTypedEntity(treeList, 'array') || 0 === treeList.length){
 			return false;
 		}
 		if(r3IsEmptyString(type, true)){
@@ -923,7 +939,7 @@ export default class R3Provider
 				}
 
 				// search 'service name' top in children
-				if(undefined === treeList[cnt].children || null === treeList[cnt].children || !(treeList[cnt].children instanceof Array) || 0 === treeList[cnt].children.length){
+				if(!r3IsSafeTypedEntity(treeList[cnt].children, 'array') || 0 === treeList[cnt].children.length){
 					continue;									// SERVICE does not have children
 				}
 				for(cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
@@ -956,7 +972,7 @@ export default class R3Provider
 					// found 'path' == 'service'
 
 					// search 'service name' top in children
-					if(undefined === treeList[cnt].children || null === treeList[cnt].children || !(treeList[cnt].children instanceof Array) || 0 === treeList[cnt].children.length){
+					if(!r3IsSafeTypedEntity(treeList[cnt].children, 'array') || 0 === treeList[cnt].children.length){
 						continue;								// SERVICE does not have children
 					}
 					for(cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
@@ -980,7 +996,7 @@ export default class R3Provider
 
 	selectSubTreeList(subTreeList, path)
 	{
-		if(undefined === subTreeList || null === subTreeList || !(subTreeList instanceof Array) || 0 === subTreeList.length){
+		if(!r3IsSafeTypedEntity(subTreeList, 'array') || 0 === subTreeList.length){
 			return false;
 		}
 		if(r3IsEmptyString(path, true)){
@@ -1007,7 +1023,7 @@ export default class R3Provider
 				}
 
 				// search child path under current path in children
-				if(undefined === subTreeList[cnt].children || null === subTreeList[cnt].children || !(subTreeList[cnt].children instanceof Array) || 0 === subTreeList[cnt].children.length){
+				if(!r3IsSafeTypedEntity(subTreeList[cnt].children, 'array') || 0 === subTreeList[cnt].children.length){
 					continue;										// current path does not have children
 				}
 				// reentrant
@@ -1022,7 +1038,7 @@ export default class R3Provider
 	//
 	checkServiceOwnerInTreeList(treeList, service)
 	{
-		if(undefined === treeList || null === treeList || !(treeList instanceof Array) || 0 === treeList.length || r3IsEmptyString(service, true)){
+		if(!r3IsSafeTypedEntity(treeList, 'array') || 0 === treeList.length || r3IsEmptyString(service, true)){
 			return false;
 		}
 		let	_service = service.trim();
@@ -1033,17 +1049,13 @@ export default class R3Provider
 				continue;									// not target tree
 			}
 			// search 'service name' top in children
-			if(undefined === treeList[cnt].children || null === treeList[cnt].children || !(treeList[cnt].children instanceof Array) || 0 === treeList[cnt].children.length){
+			if(!r3IsSafeTypedEntity(treeList[cnt].children, 'array') || 0 === treeList[cnt].children.length){
 				continue;									// SERVICE does not have children
 			}
 			for(let cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
 				if(!r3IsEmptyStringObject(treeList[cnt].children[cnt2], 'path') && r3CompareCaseString(_service, treeList[cnt].children[cnt2].path)){
 					// found 'path' == 'service name'
-					if(	undefined !== treeList[cnt].children[cnt2].owner		&&
-						null !== treeList[cnt].children[cnt2].owner				&&
-						'boolean' === typeof treeList[cnt].children[cnt2].owner	&&
-						true === treeList[cnt].children[cnt2].owner				)
-					{
+					if(r3IsSafeTypedEntity(treeList[cnt].children[cnt2].owner, 'boolean') && true === treeList[cnt].children[cnt2].owner){
 						// service owner is tenant
 						return true;
 					}
@@ -1058,7 +1070,7 @@ export default class R3Provider
 	//
 	checkServiceTenantInTreeList(treeList, service)
 	{
-		if(undefined === treeList || null === treeList || !(treeList instanceof Array) || 0 === treeList.length || r3IsEmptyString(service, true)){
+		if(!r3IsSafeTypedEntity(treeList, 'array') || 0 === treeList.length || r3IsEmptyString(service, true)){
 			return false;
 		}
 		let	_service = service.trim();
@@ -1069,17 +1081,13 @@ export default class R3Provider
 				continue;									// not target tree
 			}
 			// search 'service name' top in children
-			if(undefined === treeList[cnt].children || null === treeList[cnt].children || !(treeList[cnt].children instanceof Array) || 0 === treeList[cnt].children.length){
+			if(!r3IsSafeTypedEntity(treeList[cnt].children, 'array') || 0 === treeList[cnt].children.length){
 				continue;									// SERVICE does not have children
 			}
 			for(let cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
 				if(!r3IsEmptyStringObject(treeList[cnt].children[cnt2], 'path') && r3CompareCaseString(_service, treeList[cnt].children[cnt2].path)){
 					// found 'path' == 'service name'
-					if(	undefined !== treeList[cnt].children[cnt2].children		&&
-						null !== treeList[cnt].children[cnt2].children			&&
-						treeList[cnt].children[cnt2].children instanceof Array	&&
-						0 < treeList[cnt].children[cnt2].children.length		)
-					{
+					if(r3IsSafeTypedEntity(treeList[cnt].children[cnt2].children, 'array') && 0 < treeList[cnt].children[cnt2].children.length){
 						// service has children, thus service is mapped service tenant.
 						return true;
 					}
@@ -1253,7 +1261,7 @@ export default class R3Provider
 	//
 	getServiceData(tenant, servicename, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -1287,7 +1295,7 @@ export default class R3Provider
 				return;
 			}
 
-			if(undefined === resobj.service || null === resobj.service){
+			if(r3IsEmptyEntity(resobj.service)){
 				_callback(null, null);
 			}else{
 				_callback(null, resobj.service);
@@ -1310,7 +1318,7 @@ export default class R3Provider
 	//
 	updateServiceData(tenant, servicename, tenants, clear_tenant, verify, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -1329,16 +1337,16 @@ export default class R3Provider
 		let	_verify		= null;
 
 		if(undefined !== tenants){
-			if(undefined !== clear_tenant && null !== clear_tenant && 'boolean' === typeof clear_tenant && true === clear_tenant){
+			if(r3IsSafeTypedEntity(clear_tenant, 'boolean') && true === clear_tenant){
 				_is_clear = true;
 			}
-			if(null !== tenants && tenants instanceof Array && 0 < tenants.length){
+			if(r3IsSafeTypedEntity(tenants, 'array') && 0 < tenants.length){
 				_tenants = tenants;
 			}else if(!r3IsEmptyString(tenants)){
 				_tenants = [tenants];
 			}
 		}
-		if(undefined !== verify && null !== verify){
+		if(!r3IsEmptyEntity(verify)){
 			_verify = verify;
 		}
 		if(null === _tenants && false === _is_clear && null === _verify){
@@ -1351,7 +1359,7 @@ export default class R3Provider
 		let	_tenant		= tenant.name;
 		let	_url		= '/v1/service/' + _service;
 		let	_urlargs	= undefined;
-		if(null !== _tenants){
+		if(!r3IsEmptyString(_tenants)){
 			_urlargs	= 'tenant=' + JSON.stringify(_tenants);
 		}
 		if(_is_clear){
@@ -1397,13 +1405,13 @@ export default class R3Provider
 	//
 	createInitializedService(tenant, servicename, verify, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
 		let	_callback	= callback;
 		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(servicename, true) || undefined === verify || null === verify || (('string' === typeof verify && r3IsEmptyString(verify, true)) && !(verify instanceof Object))){
+		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(servicename, true) || r3IsEmptyEntity(verify) || (r3IsSafeTypedEntity(verify, 'string') && r3IsEmptyString(verify, true)) ){
 			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ') or verify(' + JSON.stringify(verify) + ') parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
@@ -1444,7 +1452,7 @@ export default class R3Provider
 	//
 	removeService(tenant, servicename, isServiceTenant, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -1461,7 +1469,7 @@ export default class R3Provider
 		let	_service	= servicename.trim();
 		let	_url		= '/v1/service/' + _service;
 		let	_urlargs	= undefined;
-		if(undefined !== isServiceTenant && null !== isServiceTenant && 'boolean' === typeof isServiceTenant && true === isServiceTenant){
+		if(r3IsSafeTypedEntity(isServiceTenant, 'boolean') && true === isServiceTenant){
 			_urlargs	= 'tenant=' + tenant.name;
 		}
 
@@ -1505,7 +1513,7 @@ export default class R3Provider
 	//	]
 	checkVerifyStaticObject(verify)
 	{
-		if(undefined === verify || null === verify || !(verify instanceof Array) || 0 === verify.length){
+		if(!r3IsSafeTypedEntity(verify, 'array') || 0 === verify.length){
 			return false;
 		}
 
@@ -1553,7 +1561,7 @@ export default class R3Provider
 	//
 	createServiceTenant(tenant, servicename, role, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -1613,7 +1621,7 @@ export default class R3Provider
 	//
 	setServiceTenantRoleAlias(tenant, servicename, role, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -1693,7 +1701,7 @@ export default class R3Provider
 	//
 	getRoleData(tenant, service, path, expand, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -1716,7 +1724,7 @@ export default class R3Provider
 			_url		+= 'yrn:yahoo:' + service + '::' + tenant.name + ':role:' + _path;
 		}
 		let	_urlargs	= undefined;
-		if(undefined !== expand && null !== expand && 'boolean' === typeof expand){
+		if(r3IsSafeTypedEntity(expand, 'boolean')){
 			_urlargs	= 'expand=' + (expand ? 'true' : 'false');
 		}
 
@@ -1737,7 +1745,7 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(undefined === resobj.role || null === resobj.role){
+			if(r3IsEmptyEntity(resobj.role)){
 				_callback(null, null);
 			}else{
 				_callback(null, resobj.role);
@@ -1750,14 +1758,14 @@ export default class R3Provider
 	//
 	updateRoleData(tenant, path, data, isOWHosts, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
 
 		let	_callback	= callback;
-		let	_role		= (undefined === data || null === data) ? null : data;
-		let	_isow		= (undefined === isOWHosts || null === isOWHosts || 'boolean' !== typeof isOWHosts) ? false : isOWHosts;
+		let	_role		= r3IsEmptyEntity(data) ? null : data;
+		let	_isow		= r3IsSafeTypedEntity(isOWHosts, 'boolean') ? isOWHosts : false;
 		let	_error;
 		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true)){
 			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
@@ -1771,10 +1779,10 @@ export default class R3Provider
 		let	_url		= '/v1/role';
 		let	_urlargs	= 'name=' + _path;
 
-		if(null !== _role && undefined !== _role.policies && null !== _role.policies && _role.policies instanceof Array){
+		if(!r3IsEmptyEntityObject(_role, 'policies') && r3IsSafeTypedEntity(_role.policies, 'array')){
 			_urlargs += '&policies=' + JSON.stringify(_role.policies);
 		}
-		if(null !== _role && undefined !== _role.aliases && null !== _role.aliases && _role.aliases instanceof Array){
+		if(!r3IsEmptyEntityObject(_role, 'aliases') && r3IsSafeTypedEntity(_role.aliases, 'array')){
 			_urlargs += '&alias=' + JSON.stringify(_role.aliases);
 		}
 
@@ -1800,10 +1808,10 @@ export default class R3Provider
 
 			// check hosts.{hostnames, ips}
 			let	hosts = [];
-			if(null !== _role && undefined !== _role.hosts && null !== _role.hosts && undefined !== _role.hosts.hostnames && null !== _role.hosts.hostnames && _role.hosts.hostnames instanceof Array){
+			if(!r3IsEmptyEntityObject(_role, 'hosts') && !r3IsEmptyEntityObject(_role.hosts, 'hostnames') && r3IsSafeTypedEntity(_role.hosts.hostnames, 'array')){
 				hosts = hosts.concat(_role.hosts.hostnames);
 			}
-			if(null !== _role && undefined !== _role.hosts && null !== _role.hosts && undefined !== _role.hosts.ips && null !== _role.hosts.ips && _role.hosts.ips instanceof Array){
+			if(!r3IsEmptyEntityObject(_role, 'hosts') && !r3IsEmptyEntityObject(_role.hosts, 'ips') && r3IsSafeTypedEntity(_role.hosts.ips, 'array')){
 				hosts = hosts.concat(_role.hosts.ips);
 			}
 			if(0 === hosts.length && !_isow){
@@ -1864,7 +1872,7 @@ export default class R3Provider
 	//
 	removeRoleData(tenant, path, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -1911,7 +1919,7 @@ export default class R3Provider
 	//
 	getPolicyData(tenant, service, path, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -1957,7 +1965,7 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(undefined === resobj.policy || null === resobj.policy){
+			if(r3IsEmptyEntity(resobj.policy)){
 				_callback(null, null);
 			}else{
 				_callback(null, resobj.policy);
@@ -1970,13 +1978,13 @@ export default class R3Provider
 	//
 	updatePolicyData(tenant, path, data, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
 
 		let	_callback	= callback;
-		let	_policy		= (undefined === data || null === data) ? null : data;
+		let	_policy		= r3IsEmptyEntity(data) ? null : data;
 		let	_error;
 		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true)){
 			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
@@ -1992,13 +2000,13 @@ export default class R3Provider
 		if(!r3IsEmptyStringObject(_policy, 'effect')){
 			_urlargs	+= '&effect=' + _policy.effect;
 		}
-		if(null !== _policy && undefined !== _policy.action && null !== _policy.action && _policy.action instanceof Array){
+		if(!r3IsEmptyEntityObject(_policy, 'action') && r3IsSafeTypedEntity(_policy.action, 'array')){
 			_urlargs	+= '&action=' + JSON.stringify(_policy.action);
 		}
-		if(null !== _policy && undefined !== _policy.resource && null !== _policy.resource && _policy.resource instanceof Array){
+		if(!r3IsEmptyEntityObject(_policy, 'resource') && r3IsSafeTypedEntity(_policy.resource, 'array')){
 			_urlargs	+= '&resource=' + JSON.stringify(_policy.resource);
 		}
-		if(null !== _policy && undefined !== _policy.alias && null !== _policy.alias && _policy.alias instanceof Array){
+		if(!r3IsEmptyEntityObject(_policy, 'alias') && r3IsSafeTypedEntity(_policy.alias, 'array')){
 			_urlargs	+= '&alias=' + JSON.stringify(_policy.alias);
 		}
 
@@ -2038,7 +2046,7 @@ export default class R3Provider
 	//
 	removePolicyData(tenant, path, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -2085,7 +2093,7 @@ export default class R3Provider
 	//
 	getResourceData(tenant, service, path, expand, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -2114,7 +2122,7 @@ export default class R3Provider
 			_url		+= 'yrn:yahoo:' + service + '::' + tenant.name + ':resource:' + _path;
 		}
 		let	_urlargs	= undefined;
-		if(undefined !== expand && null !== expand && 'boolean' === typeof expand){
+		if(r3IsSafeTypedEntity(expand, 'boolean')){
 			_urlargs	= 'expand=' + (expand ? 'true' : 'false');
 		}
 
@@ -2135,7 +2143,7 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(undefined === resobj.resource || null === resobj.resource){
+			if(r3IsEmptyEntity(resobj.resource)){
 				_callback(null, null);
 			}else{
 				_callback(null, resobj.resource);
@@ -2148,13 +2156,13 @@ export default class R3Provider
 	//
 	updateResourceData(tenant, path, data, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
 
 		let	_callback	= callback;
-		let	_resource	= (undefined === data || null === data) ? null : data;
+		let	_resource	= r3IsEmptyEntity(data) ? null : data;
 		let	_error;
 		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true)){
 			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
@@ -2171,17 +2179,17 @@ export default class R3Provider
 		if(!r3IsEmptyStringObject(_resource, 'string')){
 			_urlargs	+= '&type=string';
 			_urlargs	+= '&data=' + JSON.stringify(_resource.string);
-		}else if(null !== _resource && undefined !== _resource.object && null !== _resource.object){
+		}else if(!r3IsEmptyEntityObject(_resource, 'object')){
 			_urlargs	+= '&type=object';
 			_urlargs	+= '&data=' + JSON.stringify(_resource.object);
 		}else{
 			_urlargs	+= '&type=string';
 			_urlargs	+= '&data=';
 		}
-		if(null !== _resource && undefined !== _resource.keys && null !== _resource.keys && _resource.keys instanceof Object){
+		if(!r3IsEmptyEntityObject(_resource, 'keys') && !r3IsEmptyEntity(_resource.keys)){
 			_urlargs	+= '&keys=' + JSON.stringify(_resource.keys);
 		}
-		if(null !== _resource && undefined !== _resource.aliases && null !== _resource.aliases && _resource.aliases instanceof Array){
+		if(!r3IsEmptyEntityObject(_resource, 'aliases') && r3IsSafeTypedEntity(_resource.aliases, 'array')){
 			_urlargs	+= '&alias=' + JSON.stringify(_resource.aliases);
 		}
 
@@ -2219,7 +2227,7 @@ export default class R3Provider
 	//
 	removeResourceData(tenant, path, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -2267,7 +2275,7 @@ export default class R3Provider
 	//
 	getRoleToken(tenant, role, callback)
 	{
-		if(undefined === callback || null === callback){
+		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}

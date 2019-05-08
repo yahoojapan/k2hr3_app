@@ -1,3 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `null`;
+exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
+<div
+  aria-label="path information dialog"
+  className="MuiModal-root-30 MuiDialog-root-16 R3PathInfoDialog-root-1"
+  label="path-information-dialog"
+  onKeyDown={[Function]}
+  role="dialog"
+/>
+`;

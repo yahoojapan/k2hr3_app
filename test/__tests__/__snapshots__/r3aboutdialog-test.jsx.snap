@@ -1,3 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `null`;
+exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
+<div
+  aria-label="about dialog"
+  className="MuiModal-root-23 MuiDialog-root-9 R3AboutDialog-root-1"
+  label="about-dialog"
+  onKeyDown={[Function]}
+  role="dialog"
+/>
+`;

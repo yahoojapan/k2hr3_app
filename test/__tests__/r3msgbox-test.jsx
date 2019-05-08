@@ -19,20 +19,20 @@
  *
  */
 
-import React					from 'react';							// eslint-disable-line no-unused-vars
-import getMuiTheme				from 'material-ui/styles/getMuiTheme';
+import React					from 'react';										// eslint-disable-line no-unused-vars
 import renderer					from 'react-test-renderer';
-import getElementWithContext	from 'react-test-context-provider';		// for context provider
+import getElementWithContext	from 'react-test-context-provider';					// for context provider
+import MuiThemeProvider			from '@material-ui/core/styles/MuiThemeProvider';	// for custom theme
+import CssBaseline				from '@material-ui/core/CssBaseline';				// for reset.css
 
+import r3Theme					from '../../src/components/r3theme';				// custom theme
 import R3MsgBox					from '../../src/components/r3msgbox';
 import R3Message				from '../../src/util/r3message';
 import { errorType }			from '../../src/util/r3types';
 import R3Provider				from '../../src/util/r3provider';
-import r3Theme					from '../../src/components/r3theme';
 
-import mock_fetch				from '../__mocks__/fetchMock';			// eslint-disable-line no-unused-vars
-import { createNodeMock }		from '../__mocks__/materialUiMock';		// for material-ui
-import mock_injecttap			from '../__mocks__/injectTapMock';		// eslint-disable-line no-unused-vars
+import mock_fetch				from '../__mocks__/fetchMock';						// eslint-disable-line no-unused-vars
+import { createNodeMock }		from '../__mocks__/materialUiMock';					// for material-ui
 
 //
 // Dummy data
@@ -47,12 +47,14 @@ describe('R3MsgBox', () => {											// eslint-disable-line no-undef
 		/* eslint-disable indent */
 		const r3provider	= new R3Provider(null);
 		const element		= getElementWithContext({
-									muiTheme:	getMuiTheme(r3Theme),
 									r3Context:	r3provider.getR3Context()
 								},
-								<R3MsgBox
-									message={ message }
-								/>
+								<MuiThemeProvider theme={ r3Theme } >
+									<CssBaseline />
+									<R3MsgBox
+										message={ message }
+									/>
+								</MuiThemeProvider>
 							);
 		/* eslint-enable indent */
 

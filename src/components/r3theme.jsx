@@ -19,548 +19,986 @@
  *
  */
 
-import * as Colors		from 'material-ui/styles/colors';
-import { fade }			from 'material-ui/utils/colorManipulator';
-import Spacing			from 'material-ui/styles/spacing';
+import * as Colors		from '@material-ui/core/colors';
+import Spacing			from '@material-ui/core/styles/spacing';
+import createMuiTheme	from '@material-ui/core/styles/createMuiTheme';
 
-// For IconFont
-import styleIconFont	from '../../public/css/styleiconfont.css';
-
-// Utility
-import { r3ObjMerge }	from '../util/r3util';
-
+/* eslint-disable indent */
+// [NOTE]
+// Default theme from material-ui
+// https://material-ui.com/customization/default-theme/
 //
-// Customize theme from material-ui/lightBaseTheme
-// https://github.com/callemall/material-ui/blob/master/src/styles/baseThemes/lightBaseTheme.js
-//
+const r3Theme = createMuiTheme({
+	//
+	// palette
+	//
+	palette: {
+		// [NOTE]
+		// You can set palette which is made by https://material-ui.com/style/color/#color-tool
+		// (or https://material.io/tools/color/ )
+		// And you do not set contrastText which is is calculated automatically.
+		//
+		primary: {
+			light:					Colors.deepPurple[100],
+			main:					Colors.deepPurple[500],
+			dark:					Colors.deepPurple[900],
+			// linear gradient from deepPurple[500] to deepPurple[900]
+			mainGradient:			`linear-gradient(#673ab7, #311b92)`	// eslint-disable-line quotes
+		},
+		secondary: {
+			light:					Colors.deepOrange[100],
+			main:					Colors.deepOrange[500],
+			dark:					Colors.deepOrange[900]
+		},
+		error: {
+			light:					Colors.red[100],
+			main:					Colors.red[500],
+			dark:					Colors.red[900]
+		},
+		background: {
+			paper:					Colors.deepPurple[50]
+		},
 
-const r3CommonFontFamily	=	'Roboto, sans-serif';
-const r3CommonLargeSize		=	'20px';
-const r3CommonMiddleSize	=	'14px';
-const r3CommonSmallSize		=	'14px';
+		// custom palette
+		warning: {
+			light:					Colors.yellow[600],
+			main:					Colors.yellow[800],
+			dark:					Colors.yellow[900],
+			contrastText:			Colors.white
+		},
+		information: {
+			light:					'rgba(0, 0, 0, 0.87)',				// same as default's pallete.text.primary
+			main:					'rgba(0, 0, 0, 0.54)',				// same as default's pallete.text.secondary
+			dark:					'rgba(0, 0, 0, 0.38)',				// same as default's pallete.text.disabled
+			contrastText:			Colors.white
+		}
+	},
 
-const r3CommonFontMiddle	= {
-	fontSize:					r3CommonMiddleSize,
-	fontFamily:					r3CommonFontFamily
-};
+	//
+	// typography
+	//
+	typography: {
+		// v2
+		useNextVariants:			true,
 
-const r3CommonFontSmall		= {
-	fontSize:					r3CommonSmallSize,
-	fontFamily:					r3CommonFontFamily
-};
+		// [NOTE]
+		// Force subtitle1 to be in bold
+		// The value was taken from the default value of subtitle1
+		// 
+		subtitle2: {
+			fontSize:				'1rem',
+			lineHeight:				1.75,
+			letterSpacing:			'0.00938em'
+		}
+	},
 
-const r3CommonFontLarge		= {
-	fontSize:					r3CommonLargeSize,
-	fontFamily:					r3CommonFontFamily
-};
-
-const r3CommonPalette		= {
-	primary1Color:				Colors.deepPurple500,
-	primary2Color:				Colors.deepPurpleA100,					// for toolbar
-	primary3Color:				Colors.deepPurple50,					// for toolbar
-	accent1Color:				Colors.deepOrange500,					// for RaisedButton
-	accent2Color:				Colors.blueGrey500,						// for RaisedButton
-	accent3Color:				Colors.deepPurple100,					// for RaisedButton
-	textColor:					Colors.grey900,							// original: darkBlack
-	secondaryTextColor:			fade(Colors.darkBlack, 0.54),
-	alternateTextColor:			Colors.white,
-	canvasColor:				Colors.deepPurple50,					// ex. Paper background
-	borderColor:				Colors.deepPurple300,					// ex. Divider in menu
-	disabledColor:				fade(Colors.darkBlack, 0.3),
-	shadowColor:				Colors.deepPurple900,					// for Paper shadow
-	errorColor:					Colors.pink800,							// for error
-	warningColor:				Colors.yellow800,						// for warning
-	informationColor:			Colors.indigo800,						// for information
-	white:						Colors.white
-};
-
-const r3CommonInfoIconFont	= {
-	marginRight:				12,
-	padding:					0,
-	float:						'left'
-};
-
-const r3CommonContents = {
-	textLabelStyle:				r3ObjMerge(r3CommonFontMiddle, {
-		fontWeight:				'bold'
-	}),
-	oneButtonTextFieldSize:		r3ObjMerge(r3CommonFontMiddle, {
-		width:					'calc(100% - 60px)'						// 48px + some
-	}),
-	oneButtonTwoTextFieldSize:	r3ObjMerge(r3CommonFontMiddle, {
-		width:					'calc(50% - 42px)'						// 48px / 2 + 12px + some
-	}),
-	threeButtonTextFieldSize:	r3ObjMerge(r3CommonFontMiddle, {
-		width:					'calc(100% - 180px)'					// 48px * 3 + some
-	})
-};
-
-export default {
+	//
 	// Common material-ui
-	spacing:					Spacing,
-	fontFamily:					r3CommonFontFamily,
-	palette:					r3CommonPalette,
+	//
+	spacing:						Spacing,
 
-	// For font
-	r3FontMiddle:				r3CommonFontMiddle,
+	//
+	// override components
+	//
+	overrides: {
+		MuiIconButton: {
+			root: {
+				padding:			'8px'
+			}
+		}
+	},
 
-	// For appbar
+	//
+	// R3Container
+	//
+	r3Container: {
+		root: {
+		}
+	},
+
+	//
+	// R3AppBar
+	//
 	r3AppBar: {
-		loginIconButtonColor: {
-			color:				r3CommonPalette.white
+		root: {
+			position:				'static'
 		},
-		logoutIconButtonColor: {
-			color:				r3CommonPalette.accent2Color
-		},
-		menuIconButtonColor: {
-			color:				r3CommonPalette.white
-		},
-		userNameMenuItem: {
-			fontWeight:			'bold'
-		},
-		userNameDivider: {
-			backgroundColor:	r3CommonPalette.accent2Color
-		},
-		iconButtonStyle: {
-			padding:			0
-		},
-		iconLeftMenuTarget: {
-			horizontal:			'left',
-			vertical:			'bottom'
-		},
-		iconLeftMenuAnchor: {
-			horizontal:			'left',
-			vertical:			'top'
-		},
-		iconRightMenuTarget: {
-			horizontal:			'right',
-			vertical:			'bottom'
-		},
-		iconRightMenuAnchor: {
-			horizontal:			'right',
-			vertical:			'top'
-		}
-	},
-
-	// For TreeList
-	r3MainTree: {
-		//
-		// Dummy AppBar styles in Popup(in Drawer) menu
-		//
-		treeDummyBarStyle: {
-			float:				'left'
-		},
-		textSubHeaderDummyBarStyle: {
-			backgroundColor:	r3CommonPalette.primary1Color,
-			color:				r3CommonPalette.white,
-			marginTop:			0,
-			paddingLeft:		'8px',
-			lineHeight:			'60px'
-		},
-		textTitleDummyBarStyle:	r3ObjMerge(r3CommonFontLarge, {
-			backgroundColor:	r3CommonPalette.primary1Color,
-			color:				r3CommonPalette.white,
-			paddingLeft:		'8px'
-		}),
-		iconButtonDummyBarStyle: {
-			padding:			'12px',
-			verticalAlign:		'middle'
-		},
-		iconDummyBarStyle: {
-			color:				r3CommonPalette.white
-		},
-		iconMenuDummyBarTarget: {
-			horizontal:			'left',
-			vertical:			'bottom'
-		},
-		iconMenuDummyBarAnchor: {
-			horizontal:			'left',
-			vertical:			'top'
-		},
-		drawerWidth:			'100%',
-		drawerContainerStyle: {
-			overflowX:			'hidden',
-			width:				'auto'
-		},
-
-		//
-		// Main Tree styles
-		//
-		treeLististStyle: {
-			padding:			0
-		},
-		treeStyle: {
-			float:				'left'
-		},
-		textSubHeaderStyle:		r3ObjMerge(r3CommonFontMiddle, {
-			backgroundColor:	r3CommonPalette.primary2Color,
-			color:				r3CommonPalette.primary3Color,
-			paddingTop:			'4px',
-			paddingBottom:		'4px',
-			verticalAlign:		'middle'
-		}),
-
-		shButtomStyle:	{
-			marginTop:			'-3px',
-			paddingLeft:		'4px',
-			height:				'48px',
-			textAlign:			'left'
-		},
-		shButtomLavelStyle:		r3ObjMerge(r3CommonFontMiddle, {
-			color:				r3CommonPalette.primary1Color,
-			fontWeight:			'bold',
-			verticalAlign:		'middle',
-			paddingLeft:		'32px'
-		}),
-		textLabelInSHStyle: {
-			marginRight:		'12px'
-		},
-		textTitleLabelInSHStyle: {
-			fontWeight:			'bold'
-		},
-		textServiceOwnerLabelStyle: {
-			verticalAlign:		'text-top',
-			paddingRight:		'8px'
-		},
-		topListItem: {
-			color:				r3CommonPalette.primary1Color,
-			fontSize:			r3CommonFontMiddle,
-			fontWeight:			'bold'
-		},
-		topSelectedListItem: {
-			color:				r3CommonPalette.accent1Color,
-			fontSize:			r3CommonFontMiddle,
-			fontWeight:			'bold'
-		},
-		selectedColor: {
-			color:				r3CommonPalette.accent1Color
-		},
-		noStyle: {
-			color:				r3CommonPalette.primary1Color
-		},
-		iconMenuStyle: {
-			float:				'right'
-		},
-		iconButtonStyle: {
-			padding:			0,
-		},
-		iconRightButtonStyle: {
-			color:				r3CommonPalette.primary3Color
-		},
-		iconMenuTarget: {
-			horizontal:			'left',
-			vertical:			'bottom'
-		},
-		iconMenuAnchor: {
-			horizontal:			'left',
-			vertical:			'top'
-		},
-	},
-
-	enhancedButton: {
-		backgroundColor: r3CommonPalette.primary2Color, textColor: r3CommonPalette.white
-	},
-
-	// For toolbar
-	r3Toolbar: {
 		toolbar: {
-			backgroundColor:	r3CommonPalette.primary2Color,
-			paddingLeft:		0,
-			paddingRight:		0
 		},
-		toolbarGrp: {
-			marginLeft:			0,
-			marginRight:		0
+		smallToolbar: {
+			variant:				'dense'
 		},
-		toolbarTitleStyle:		r3ObjMerge(r3CommonFontMiddle, {
-			paddingLeft:		0,
-			paddingRight:		0,
-			color:				r3CommonPalette.primary3Color,
-			fontWeight:			'bold',
-			wordBreak:			'break-all',
-			whiteSpace:			'normal',
-			maxHeight:			'-webkit-fill-available'
-		}),
-		chipStyle: {
-			marginLeft:			'4px',
-			marginRight:		'12px'
+		title: {
+			color:					'inherit',
+			variant:				'h6',
+			noWrap:					true
 		},
-		chipLabelStyle:			r3ObjMerge(r3CommonFontMiddle, {
-			fontWeight:			'bold',
-			verticalAlign:		'middle'
-		}),
-		iconButtonStyle: {
-			padding:			0
+		mainMenuButton: {
+			color:					'inherit',
+			label:					'main-menu',
+			'aria-label':			'main menu',
+			'aria-haspopup':		'true'
 		},
-		iconButtonColor: {
-			color:				r3CommonPalette.primary3Color
+		mainMenu: {
+			anchorOrigin: {
+				vertical:			'bottom',
+				horizontal:			'left'
+			},
+			transformOrigin: {
+				vertical:			'top',
+				horizontal:			'left'
+			}
+		},
+		licenseMenu: {
+			anchorOrigin: {
+				vertical:			'top',
+				horizontal:			'right'
+			},
+			transformOrigin: {
+				vertical:			'top',
+				horizontal:			'left'
+			}
+		},
+		signinButton: {
+			color:					'inherit',
+			label:					'signin-menu',
+			'aria-label':			'signin menu',
+			'aria-haspopup':		'true'
+		},
+		signoutButton: {
+			label:					'signout-menu',
+			'aria-label':			'signout menu',
+			'aria-haspopup':		'true'
+		},
+		accountMenu: {
+			anchorOrigin: {
+				vertical:			'bottom',
+				horizontal:			'right'
+			},
+			transformOrigin: {
+				vertical:			'top',
+				horizontal:			'right'
+			}
+		},
+		signinedMenu: {
 		}
 	},
 
-	// Dialog
-	dialogSimple: {
-		keyTitleStyle: 		r3ObjMerge(r3CommonFontMiddle, {
-			color:			r3CommonPalette.primary1Color
-		}),
-		keyLeftTitleStyle: 	r3ObjMerge(r3CommonFontMiddle, {
-			color:			r3CommonPalette.primary1Color,
-			float:			'left',
-			paddingTop:		'12px',
-			paddingBottom:	'12px'
-		}),
-		valueStyle: {
-			paddingLeft:	'48px',
-			color:			r3CommonPalette.primary2Color
+	//
+	// R3MainTree
+	//
+	r3MainTree: {
+		root: {
 		},
-		TextFieldStyle: {
-			paddingLeft:	'48px',
-			width:			'calc(100% - 96px)'
+		dummyBarAppbar: {
+			position:				'static'
 		},
-		HiddenTextFieldStyle: {
-			paddingLeft:	'48px',
-			width:			'1px',
-			height:			'1px'
+		dummyBarToolbar: {
 		},
-		HiddenTextareaStyle: {
-			color:			r3CommonPalette.primary2Color,
-			whiteSpace:		'nowrap',
-			height:			'1px'
+		smallDummyBarToolbar: {
+			variant:				'dense'
 		},
-		centerTitleStyle: r3ObjMerge(r3CommonFontLarge, {
-			color:			r3CommonPalette.primary1Color,
-			textAlign:		'center',
-			paddingRight:	'48px',
-			paddingLeft:	'48px'
-		}),
-		centerContextStyle:	r3ObjMerge(r3CommonFontMiddle, {
-			color:			r3CommonPalette.primary1Color,
-			textAlign:		'center',
-			paddingRight:	'48px',
-			paddingLeft:	'48px'
-		}),
-		licensesTextStyle:	r3ObjMerge(r3CommonFontSmall, {
-			color:			r3CommonPalette.textColor,
-			textAlign:		'left',
-			paddingRight:	'48px',
-			paddingLeft:	'48px'
-		}),
-		licensesTypeStyle:	r3ObjMerge(r3CommonFontSmall, {
-			color:			r3CommonPalette.textColor,
-			textAlign:		'left',
-			fontWeight:		'bold'
-		}),
-		scrollDevStyle:		{
-			maxHeight:		'inherit',
-			overflowY:		'auto'
+		subheaderAppbar: {
+			position:				'static',
+			elevation:				0
 		},
-		iconButtonStyle: {
-			padding:		0
+		subheaderToolbar: {
+		},
+		smallSubheaderToolbar: {
+			variant:				'dense'
+		},
+		dummyBarMainMenuButton: {
+			color:					'inherit',
+			label:					'main-menu',
+			'aria-label':			'main menu',
+			'aria-haspopup':		'true'
+		},
+		dummyBarMainMenu: {
+			anchorOrigin: {
+				vertical:			'bottom',
+				horizontal:			'left'
+			},
+			transformOrigin: {
+				vertical:			'top',
+				horizontal:			'left'
+			}
+		},
+		chip: {
+			clickable:				false,
+			color:					'primary'
+		},
+		chipText: {
+			variant:				'subtitle2',
+			component:				'span'
+		},
+		title: {
+			color:					'inherit',
+			variant:				'h6',
+			noWrap:					true
+		},
+		tenantListText: {
+			color:					'textSecondary',
+			variant:				'subtitle2',
+			component:				'span'
+		},
+		tenantListButton: {
+			label:					'select-tenant',
+			'aria-label':			'select tenant'
+		},
+		tenantListMenu: {
+			anchorOrigin: {
+				horizontal:			'left',
+				vertical:			'bottom'
+			},
+			transformOrigin: {
+				horizontal:			'left',
+				vertical:			'top'
+			}
+		},
+		licenseMenu: {
+			anchorOrigin: {
+				vertical:			'top',
+				horizontal:			'right'
+			},
+			transformOrigin: {
+				vertical:			'top',
+				horizontal:			'left'
+			}
+		},
+		collapse: {
+			timeout:				'auto'
+		},
+		list: {
+			component:				'div',
+			disablePadding:			true
+		},
+		listItem: {
+			button:					true
+		},
+		topItemText: {
+			primaryTypographyProps: {
+				variant:			'subtitle2',
+				color:				'textSecondary'
+			}
+		},
+		topSelectedItemText: {
+			primaryTypographyProps: {
+				variant:			'subtitle2',
+				color:				'secondary'
+			}
+		},
+		childItemText: {
+			primaryTypographyProps: {
+				variant:			'subtitle1',
+				color:				'textSecondary'
+			}
+		},
+		childSelectedItemText: {
+			primaryTypographyProps: {
+				variant:			'subtitle1',
+				color:				'secondary'
+			}
+		},
+		editIcon: {
+			color:					'secondary'
 		}
 	},
 
-	// For Message Box
+	//
+	// R3Toolbar
+	//
+	r3Toolbar: {
+		root: {
+			position:				'static',
+			elevation:				0
+		},
+		toolbar: {
+		},
+		smallToolbar: {
+			variant:				'dense'
+		},
+		title: {
+			color:					'textSecondary',
+			variant:				'subtitle2',
+			component:				'span',
+			noWrap:					true
+		},
+		chip: {
+			clickable:				true,
+			color:					'primary',
+			'aria-label':			'current display item and its path'
+		},
+		chipText: {
+			variant:				'subtitle2',
+			component:				'span'
+		},
+		ownerText: {
+			variant:				'subtitle2',
+			component:				'span',
+			color:					'secondary'
+		},
+		toUpperPathButton: {
+			color:					'inherit',
+			label:					'move-to-upper-path',
+			'aria-label':			'move to upper path'
+		},
+		createPathButton: {
+			color:					'inherit',
+			label:					'create-path',
+			'aria-label':			'create path or service'
+		},
+		deletePathButton: {
+			color:					'inherit',
+			label:					'delete-path',
+			'aria-label':			'delete path or service'
+		}
+	},
+
+	//
+	// R3 Message Box
+	//
 	r3MsgBox: {
-		errIconFontStyle:	r3ObjMerge(r3CommonInfoIconFont, {
-			color:			r3CommonPalette.errorColor,
-			float:			'left'
-		}),
-		warnIconFontStyle:	r3ObjMerge(r3CommonInfoIconFont, {
-			color:			r3CommonPalette.warningColor,
-			float:			'left'
-		}),
-		infoIconFontStyle:	r3ObjMerge(r3CommonInfoIconFont, {
-			color:			r3CommonPalette.informationColor,
-			float:			'left'
-		}),
-		errTextStyle:		r3ObjMerge(r3CommonFontMiddle, {
-			color:			r3CommonPalette.errorColor,
-			display:		'inline-block',
-			width:			'calc(100% - 40px)'					// 36px + some
-		}),
-		warnTextStyle:		r3ObjMerge(r3CommonFontMiddle, {
-			color:			r3CommonPalette.warningColor,
-			display:		'inline-block',
-			width:			'calc(100% - 40px)'					// 36px + some
-		}),
-		infoTextStyle:		r3ObjMerge(r3CommonFontMiddle, {
-			color:			r3CommonPalette.informationColor,
-			display:		'inline-block',
-			width:			'calc(100% - 40px)'					// 36px + some
-		})
-	},
-
-	// For Paper
-	r3Paper: {
-		paperStyle: {
-			margin:				'6px',
-			display:			'flex',
-			padding:			'24px',
+		root: {
+			elevation:				2
+		},
+		dialogErrorContentText: {
+			component:				'span',
+			color:					'error'
+		},
+		dialogWarningContentText: {
+			component:				'span'
+		},
+		dialogInformationContentText: {
+			component:				'span'
+		},
+		errorIcon: {
+			color:					'error'
+		},
+		warningIcon: {
+		},
+		informationIcon: {
 		}
 	},
 
-	// For form button
-	raisedButton: {
-		color:					r3CommonPalette.white,
-		textColor:				r3CommonPalette.white,
-		primaryColor:			r3CommonPalette.accent1Color,
-		primaryTextColor:		r3CommonPalette.white,
-		secondaryColor:			r3CommonPalette.accent2Color,
-		secondaryTextColor:		r3CommonPalette.white,
-		disabledColor:			r3CommonPalette.accent3Color,
-		disabledTextColor:		r3CommonPalette.primary3Color
+	//
+	// R3 Resource Page
+	//
+	r3Resource: {
+		root: {
+		},
+		subTitle: {
+			variant:				'subtitle2',
+			color:					'primary',
+			noWrap:					true
+		},
+		valueFormControl: {
+		},
+		valueRadioGroup: {
+			'aria-label':			'select resource value type'
+		},
+		valueFormControlLabel: {
+			variant:				'body2',
+			color:					'textSecondary',
+			noWrap:					true
+		},
+		valueStringTextField: {
+			fullWidth:				true,
+			multiline:				true,
+			rows:					1,
+			rowsMax:				10
+		},
+		valueObjectTextField: {
+			fullWidth:				true,
+			multiline:				false
+		},
+		keysKeySubTitle: {
+			variant:				'body1',
+			color:					'textSecondary',
+			noWrap:					true
+		},
+		keysValueSubTitle: {
+			variant:				'body1',
+			color:					'textSecondary',
+			noWrap:					true
+		},
+		keysKeyTextField: {
+			multiline:				false,
+			rows:					1
+		},
+		keysValueTextField: {
+			multiline:				false,
+			rows:					1
+		},
+		deleteKeysButton: {
+			label:					'delete-keys',
+			'aria-label':			'delete key and value'
+		},
+		addKeysButton: {
+			label:					'add-keys',
+			'aria-label':			'add key and value'
+		},
+		aliasTextField: {
+			multiline:				false,
+			rows:					1
+		},
+		downAliasButton: {
+			label:					'move-down-alias',
+			'aria-label':			'move to down position in list'
+		},
+		upAliasButton: {
+			label:					'move-up-alias',
+			'aria-label':			'move to up position in list'
+		},
+		addAliasButton: {
+			label:					'add-alias',
+			'aria-label':			'add alias'
+		},
+		deleteAliasButton: {
+			label:					'delete-alias',
+			'aria-label':			'delete alias'
+		}
 	},
+
+	//
+	// R3 Policy Page
+	//
+	r3Policy: {
+		root: {
+		},
+		subTitle: {
+			variant:				'subtitle2',
+			color:					'primary',
+			noWrap:					true
+		},
+		effectSelect: {
+		},
+		actionCheckbox: {
+		},
+		actionLabel: {
+		},
+		actionFormControlLabel: {
+			variant:				'body1',
+			color:					'textSecondary',
+			noWrap:					true
+		},
+		resourceTextField: {
+			multiline:				false,
+			rows:					1
+		},
+		addResourceButton: {
+			label:					'add-resource',
+			'aria-label':			'add resource'
+		},
+		deleteResourceButton: {
+			label:					'delete-resource',
+			'aria-label':			'delete resource'
+		},
+		aliasTextField: {
+			multiline:				false,
+			rows:					1
+		},
+		downAliasButton: {
+			label:					'move-down-alias',
+			'aria-label':			'move to down position in list'
+		},
+		upAliasButton: {
+			label:					'move-up-alias',
+			'aria-label':			'move to up position in list'
+		},
+		addAliasButton: {
+			label:					'add-alias',
+			'aria-label':			'add alias'
+		},
+		deleteAliasButton: {
+			label:					'delete-alias',
+			'aria-label':			'delete alias'
+		}
+	},
+
+	//
+	// R3 Role Page
+	//
+	r3Role: {
+		root: {
+		},
+		subTitle: {
+			variant:				'subtitle2',
+			color:					'primary',
+			noWrap:					true
+		},
+		hostnameSubTitle: {
+			variant:				'body1',
+			color:					'textSecondary',
+			noWrap:					true
+		},
+		hostnameAUXSubTitle: {
+			variant:				'body1',
+			color:					'textSecondary',
+			noWrap:					true
+		},
+		hostnameTextField: {
+			multiline:				false,
+			rows:					1
+		},
+		hostnameAUXTextField: {
+			multiline:				false,
+			rows:					1
+		},
+		deleteHostnameButton: {
+			label:					'delete-hostname',
+			'aria-label':			'delete hostname information'
+		},
+		addHostnameButton: {
+			label:					'add-hostname',
+			'aria-label':			'add hostname and AUX'
+		},
+		ipSubTitle: {
+			variant:				'body1',
+			color:					'textSecondary',
+			noWrap:					true
+		},
+		ipAUXSubTitle: {
+			variant:				'body1',
+			color:					'textSecondary',
+			noWrap:					true
+		},
+		ipTextField: {
+			multiline:				false,
+			rows:					1
+		},
+		ipAUXTextField: {
+			multiline:				false,
+			rows:					1
+		},
+		deleteIpButton: {
+			label:					'delete-ip',
+			'aria-label':			'delete ip information'
+		},
+		addIpButton: {
+			label:					'add-ip',
+			'aria-label':			'add ip and AUX'
+		},
+		policyTextField: {
+			multiline:				false,
+			rows:					1
+		},
+		addPolicyButton: {
+			label:					'add-policy',
+			'aria-label':			'add policy'
+		},
+		deletePolicyButton: {
+			label:					'delete-policy',
+			'aria-label':			'delete policy'
+		},
+
+		aliasTextField: {
+			multiline:				false,
+			rows:					1
+		},
+		downAliasButton: {
+			label:					'move-down-alias',
+			'aria-label':			'move to down position in list'
+		},
+		upAliasButton: {
+			label:					'move-up-alias',
+			'aria-label':			'move to up position in list'
+		},
+		addAliasButton: {
+			label:					'add-alias',
+			'aria-label':			'add alias'
+		},
+		deleteAliasButton: {
+			label:					'delete-alias',
+			'aria-label':			'delete alias'
+		}
+	},
+
+	//
+	// R3 Service Page
+	//
+	r3Service: {
+		root: {
+		},
+		subTitle: {
+			variant:				'subtitle2',
+			color:					'primary',
+			noWrap:					true
+		},
+		resourceTextField: {
+			multiline:				false,
+			rows:					1
+		},
+		tenantTextField: {
+			multiline:				false,
+			rows:					1
+		},
+		deleteTenantButton: {
+			label:					'delete-tenant',
+			'aria-label':			'delete tenant'
+		}
+	},
+
+	//
+	// R3 Form Button
+	//
 	r3FormButtons: {
-		raisedButtonStyle: {
-			margin:				4
+		root: {
+		},
+		saveButton: {
+			variant:				'contained',
+			color:					'secondary',
+			'aria-label':			'save'
+		},
+		cancelButton: {
+			variant:				'contained',
+			color:					'primary',
+			'aria-label':			'cancel'
 		}
 	},
 
-	// For Contents
-	r3Contents: {
-		subcomponent: {
-			marginLeft:				'64px'
-		},
-		componentSpacer: {
-			marginTop:				'48px'
-		},
-		labelStyle:					r3CommonContents.textLabelStyle,
-		wrapperDivStyle: {
-			height:					'48px'
-		},
-
-		aliasesTextFieldStyle:		r3CommonContents.threeButtonTextFieldSize,
-		resourcesTextFieldStyle:	r3CommonContents.oneButtonTextFieldSize,
-		policyTextFieldStyle:		r3CommonContents.oneButtonTextFieldSize,
-		tenantsTextFieldStyle:		r3CommonContents.oneButtonTextFieldSize,
-
-		firstInTwoTextFieldStyle:	r3ObjMerge(r3CommonContents.oneButtonTwoTextFieldSize, {
-			float:					'left'
-		}),
-		secondInTwoTextFieldStyle:	r3ObjMerge(r3CommonContents.oneButtonTwoTextFieldSize, {
-			marginLeft:				'12px'
-		}),
-
-		firstInTwoTextStyle:		r3ObjMerge(r3CommonContents.oneButtonTwoTextFieldSize, r3CommonFontSmall, {
-			paddingTop:				'12px',
-			borderBottom:			'solid',
-			borderBottomWidth:		'1px',
-			borderBottomColor:		r3CommonPalette.primary2Color,
-			float:					'left'
-		}),
-		secondInTwoTextStyle:		r3ObjMerge(r3CommonContents.oneButtonTwoTextFieldSize, r3CommonFontSmall, {
-			marginLeft:				'12px',
-			paddingTop:				'12px',
-			borderBottom:			'solid',
-			borderBottomWidth:		'1px',
-			borderBottomColor:		r3CommonPalette.primary2Color,
-			float:					'left'
-		}),
-		firstInTwoLabelStyle:		r3ObjMerge(r3CommonFontMiddle, r3CommonContents.oneButtonTwoTextFieldSize, {
-			color:					r3CommonPalette.primary2Color,
-			float:					'left'
-		}),
-		secondInTwoLabelStyle:		r3ObjMerge(r3CommonFontMiddle, r3CommonContents.oneButtonTwoTextFieldSize, {
-			color:					r3CommonPalette.primary2Color,
-			marginLeft:				'12px',
-			float:					'left'
-		}),
-
-		selectButtonStyle: {
-			width:					'300px',
-			marginLeft:				0,
-			marginBottom:			16
-		},
-		iconButtonColor: {
-			color:					r3CommonPalette.accent2Color
-		},
-		iconButtonStyle: {
-			float:					'right',
-			padding:				0,
-			marginLeft:				6,
-		},
-		dummyButtonStyle: {
-			float:					'right',
-			width:					'48px',
-			height:					'48px',
-			padding:				0,
-			marginLeft:				6,
-		},
-
-		dropdownMenuStyle: {
-			marginLeft:				0,
-			paddingLeft:			0,
-			marginBottom:			16
-		},
-		dropdownMenuTarget: {
-			horizontal:				'right',
-			vertical:				'top'
-		},
-		dropdownMenuAnchor: {
-			horizontal:				'right',
-			vertical:				'bottom'
-		}
-	},
-
-	// For Progress
+	//
+	// R3 Progress
+	//
 	r3progress: {
-		pageStyle: {											// Full screen and most foreground
-			width:					'100vw',
-			height:					'100vh',
-			top:					0,
-			left:					0,
-			position:				'fixed',
-			zIndex:					1500,
-			backgroundColor:		'rgba(0,0,0,0)'
+		root: {
+			elevation:				0
 		},
-		circularProgressStyle: {								// center of page
-			top:					'45vh',
-			left:					'45vw',
-			position:				'fixed'
+		circularProgress: {
+			thickness:				7,
+			color:					'secondary'
 		}
 	},
 
-	// For IconFonts
 	//
-	// [NOTE][TODO]
-	// It is better to specify SVG icon of material-ui directly than using IconFont.
-	// https://www.materialui.co/icons
+	// R3 About Dialog
 	//
-	// [NOTE]
-	// Now could not specify FontIcon size, only you can change it by "space" property.
-	// But it will include bad result for another items.
-	//
-	r3IconFonts: {
-		closeIconFont:			styleIconFont['material-icons-close'],
-		dehazeIconFont:			styleIconFont['material-icons-dehaze'],
-
-		accountIconFont:		styleIconFont['material-icons-account-box-large'],
-		pathIconFont:			styleIconFont['material-icons-description'],
-		accountLoginIconFont:	styleIconFont['material-icons-account-login'],
-
-		addIconFont:			styleIconFont['material-icons-add-btn'],
-		deleteIconFont:			styleIconFont['material-icons-delete-forever-btn'],
-
-		errIconFont:			styleIconFont['material-icons-error'],
-		warnIconFont:			styleIconFont['material-icons-warning'],
-		infoIconFont:			styleIconFont['material-icons-information'],
-
-		saveIconFont:			styleIconFont['material-icons-save'],
-		checkIconFont:			styleIconFont['material-icons-check'],
-		cancelIconFont:			styleIconFont['material-icons-cancel'],
-
-		moreVertIconFont:		styleIconFont['material-icons-more-vert'],
-		rightIconFont:			styleIconFont['material-icons-arrow-right'],
-		upIconFont:				styleIconFont['material-icons-move-up'],
-		downIconFont:			styleIconFont['material-icons-move-down'],
-
-		treeTopIconFont:		styleIconFont['material-icons-label-top'],
-		downArrowIconFont:		styleIconFont['material-icons-down-arrow'],
-		arrowUpwardIconFont:	styleIconFont['material-icons-arrow-upward'],
-
-		clipboardCopyIconFont:	styleIconFont['material-icons-clipcopy'],
-		SettingIconFont:		styleIconFont['material-icons-edit']
+	r3AboutDialog: {
+		root: {
+			scroll:					'body',
+			disableBackdropClick:	true,
+			label:					'about-dialog',
+			'aria-label':			'about dialog'
+		},
+		dialogTitle: {
+			label:					'about-dialog'
+		},
+		title: {
+			variant:				'h5',
+			component:				'span',
+			color:					'primary',
+			noWrap:					true
+		},
+		dialogContentText: {
+			component:				'span'
+		},
+		button: {
+			variant:				'contained',
+			color:					'secondary',
+			'aria-label':			'close about dialog'
+		},
+		licenseType: {
+			variant:				'h6',
+			component:				'span',
+			color:					'textSecondary'
+		},
+		content: {
+			component:				'span',
+			variant:				'body1'
+		}
 	},
-};
+
+	//
+	// R3 Signin Credential Dialog
+	//
+	r3SigninCredDialog: {
+		root: {
+			scroll:					'body',
+			disableBackdropClick:	true,
+			label:					'signin-dialog',
+			'aria-label':			'signin credential dialog'
+		},
+		dialogTitle: {
+			label:					'signin-dialog'
+		},
+		title: {
+			variant:				'h5',
+			component:				'span',
+			color:					'primary',
+			noWrap:					true
+		},
+		dialogContentText: {
+			component:				'span'
+		},
+		messagePaper: {
+			square:					false,
+			elevation:				1
+		},
+		message: {
+			variant:				'body2',
+			color:					'error'
+		},
+		messageIcon: {
+			color:					'error'
+		},
+		textField: {
+			margin:					'normal',
+			fullWidth:				true
+		},
+		inputAdornment: {
+			position:				'end'
+		},
+		passphraseIconButton: {
+			color:					'secondary',
+			'aria-label':			'toggle passphrase visibility'
+		},
+		signinButton: {
+			variant:				'contained',
+			color:					'secondary',
+			'aria-label':			'sign in'
+		},
+		cancelButton: {
+			variant:				'contained',
+			color:					'primary',
+			'aria-label':			'cancel'
+		}
+	},
+
+	//
+	// R3 Popup Message Dialog
+	//
+	r3PopupMsgDialog: {
+		root: {
+			scroll:					'body',
+			disableBackdropClick:	true,
+			label:					'message-dialog',
+			'aria-label':			'message dialog'
+		},
+		dialogTitle: {
+			label:					'message-dialog'
+		},
+		title: {
+			variant:				'h5',
+			component:				'span',
+			color:					'primary',
+			noWrap:					true
+		},
+		dialogErrorContentText: {
+			component:				'span',
+			color:					'error'
+		},
+		dialogWarningContentText: {
+			component:				'span'
+		},
+		dialogInformationContentText: {
+			component:				'span'
+		},
+		errorIcon: {
+			color:					'error'
+		},
+		warningIcon: {
+		},
+		informationIcon: {
+		},
+		primaryButton: {
+			variant:				'contained',
+			color:					'secondary',
+			'aria-label':			'confirm contents and close dialog'
+		},
+		cancelButton: {
+			variant:				'contained',
+			color:					'primary',
+			'aria-label':			'cancel'
+		}
+	},
+
+	//
+	// R3 Path Information Dialog
+	//
+	r3PathInfoDialog: {
+		root: {
+			scroll:					'body',
+			disableBackdropClick:	true,
+			label:					'path-information-dialog',
+			'aria-label':			'path information dialog'
+		},
+		dialogTitle: {
+			label:					'path-information-dialog'
+		},
+		title: {
+			variant:				'h5',
+			component:				'span',
+			color:					'primary',
+			noWrap:					true
+		},
+		keyTitle: {
+			variant:				'subtitle2',
+			color:					'primary',
+			component:				'span',
+			noWrap:					true
+		},
+		value: {
+			variant:				'body2',
+			component:				'span',
+			color:					'textSecondary'
+		},
+		copyUDSButton: {
+			label:					'copy-uds-button',
+			'aria-label':			'copy user data script to clipboard'
+		},
+		textFieldUDS: {
+			disabled:				false,
+			multiline:				true,
+			rows:					10,
+			rowsMax:				12
+		},
+		button: {
+			variant:				'contained',
+			color:					'secondary',
+			'aria-label':			'close dialog'
+		}
+	},
+
+	//
+	// R3 Create Path Dialog
+	//
+	r3CreatePathDialog: {
+		root: {
+			scroll:					'body',
+			disableBackdropClick:	true,
+			label:					'create-path-dialog',
+			'aria-label':			'create path dialog'
+		},
+		dialogTitle: {
+			label:					'create-path-dialog'
+		},
+		title: {
+			variant:				'h5',
+			component:				'span',
+			color:					'primary',
+			noWrap:					true
+		},
+		keyTitle: {
+			variant:				'subtitle2',
+			color:					'primary',
+			component:				'span',
+			noWrap:					true
+		},
+		value: {
+			variant:				'body2',
+			component:				'span',
+			color:					'textSecondary'
+		},
+		textField: {
+			disabled:				false,
+			inputProps: {
+				'aria-label':		'input create path',
+			}
+		},
+		cancelButton: {
+			variant:				'contained',
+			color:					'primary',
+			'aria-label':			'cancel'
+		},
+		okButton: {
+			variant:				'contained',
+			color:					'secondary',
+			'aria-label':			'ok'
+		}
+	},
+
+	//
+	// R3 Create Service Dialog
+	//
+	r3CreateServiceDialog: {
+		root: {
+			scroll:					'body',
+			disableBackdropClick:	true,
+			label:					'create-service-dialog',
+			'aria-label':			'create service dialog'
+		},
+		dialogTitle: {
+			label:					'create-service-dialog'
+		},
+		title: {
+			variant:				'h5',
+			component:				'span',
+			color:					'primary',
+			noWrap:					true
+		},
+		keyTitle: {
+			variant:				'subtitle2',
+			color:					'primary',
+			component:				'span',
+			noWrap:					true
+		},
+		value: {
+			variant:				'body2',
+			component:				'span',
+			color:					'textSecondary'
+		},
+		textField: {
+			disabled:				false
+		},
+		cancelButton: {
+			variant:				'contained',
+			color:					'primary',
+			'aria-label':			'cancel'
+		},
+		okButton: {
+			variant:				'contained',
+			color:					'secondary',
+			'aria-label':			'ok'
+		}
+	},
+
+	//
+	// R3 Create Service Tenant Dialog
+	//
+	r3CreateServiceTenantDialog: {
+		root: {
+			scroll:					'body',
+			disableBackdropClick:	true,
+			label:					'create-service-tenant-dialog',
+			'aria-label':			'create service attached tenant dialog'
+		},
+		dialogTitle: {
+			label:					'create-service-tenant-dialog'
+		},
+		title: {
+			variant:				'h5',
+			component:				'span',
+			color:					'primary',
+			noWrap:					true
+		},
+		keyTitle: {
+			variant:				'subtitle2',
+			color:					'primary',
+			component:				'span',
+			noWrap:					true
+		},
+		value: {
+			variant:				'body2',
+			component:				'span',
+			color:					'textSecondary'
+		},
+		textField: {
+			disabled:				false
+		},
+		cancelButton: {
+			variant:				'contained',
+			color:					'primary',
+			'aria-label':			'cancel'
+		},
+		okButton: {
+			variant:				'contained',
+			color:					'secondary',
+			'aria-label':			'ok'
+		}
+	}
+});
+/* eslint-enable indent */
+
+export default r3Theme;
 
 /*
  * VIM modelines

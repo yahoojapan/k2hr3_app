@@ -19,122 +19,178 @@
  *
  */
 
-import React			from 'react';
-import ReactDOM			from 'react-dom';									// eslint-disable-line no-unused-vars
-import PropTypes		from 'prop-types';
+import React						from 'react';
+import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
+import PropTypes					from 'prop-types';
 
-import FontIcon			from 'material-ui/FontIcon';
-import RaisedButton		from 'material-ui/RaisedButton';
-import Dialog			from 'material-ui/Dialog';
+import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
+import Button						from '@material-ui/core/Button';
+import Dialog						from '@material-ui/core/Dialog';
+import DialogTitle					from '@material-ui/core/DialogTitle';
+import DialogContent				from '@material-ui/core/DialogContent';
+import DialogContentText			from '@material-ui/core/DialogContentText';
+import DialogActions				from '@material-ui/core/DialogActions';
+import Typography					from '@material-ui/core/Typography';
+import CancelIcon					from '@material-ui/icons/Cancel';
 
-import { r3IsEmptyString }	from '../util/r3util';
+import { r3IsEmptyString }			from '../util/r3util';
+import { r3AboutDialogStyles }		from './r3styles';
+
+//
+// Local variables
+//
+const k2hr3Title		=	'K2HR3';
+const k2hr3LicenseType	=	'MIT';
+const k2hr3Content		=	'K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers common' + 
+							'management information for the cloud.' + 
+							'K2HR3 can dynamically manage information as "who", "what", "operate".' + 
+							'These are stored as roles, resources, policies in K2hdkc, and the client' +
+							'system can dynamically read and modify these information.';
+const k2hr3License		=	'Copyright(C) 2017 Yahoo Japan Corporation.';
 
 //
 // User Data(with role token) Information Class
 //
+@withTheme()
+@withStyles(r3AboutDialogStyles)
 export default class R3AboutDialog extends React.Component
 {
+	static contextTypes = {
+		r3Context:		PropTypes.object.isRequired
+	};
+
+	static propTypes = {
+		r3provider:		PropTypes.object.isRequired,
+		open:			PropTypes.bool.isRequired,
+		onClose:		PropTypes.func.isRequired,
+
+		licensePackage:	PropTypes.string,
+		licenseType:	PropTypes.string,
+		licenseText:	PropTypes.string
+	};
+
+	static defaultProps = {
+		licensePackage:	null,
+		licenseType:	null,
+		licenseText:	null
+	};
+
 	constructor(props)
 	{
 		super(props);
 
-		// Binding
+		// Binding(do not define handlers as arrow functions for performance)
 		this.handleClose	= this.handleClose.bind(this);
 	}
 
-	handleClose(event)														// eslint-disable-line no-unused-vars
+	handleClose()
 	{
 		this.props.onClose();
 	}
 
 	getHtmlLicenseText()
 	{
+
 		// Output by <p> tag per line
 		//
 		let	lines = this.props.licenseText.split('\n');
+
 		return (
-			lines.map( (item, pos) => {										// eslint-disable-line no-unused-vars
+			lines.map( (item, pos) => {						// eslint-disable-line no-unused-vars
 				return (
-					<p>{ item }</p>
+					<Typography key={ pos }>
+						{ item }
+						<br />
+					</Typography>
 				);
 			})
 		);
 	}
 
-	render()
+	getLicenseType()
 	{
-		const actions = [
-			<RaisedButton
-				label={ 'CLOSE' }
-				primary={ true }
-				onClick={ this.handleClose }
-				icon={
-					<FontIcon className={ this.context.muiTheme.r3IconFonts.closeIconFont } />
-				}
-			/>
-		];
+		return (
+			<Typography { ...this.props.theme.r3AboutDialog.licenseType }>
+				License: { (r3IsEmptyString(this.props.licensePackage) ? k2hr3LicenseType : this.props.licenseType) }
+				<br />
+			</Typography>
+		);
+	}
 
+	getContentText()
+	{
 		if(r3IsEmptyString(this.props.licensePackage)){
-			// About K2HR3
 			return (
-				<Dialog
-					title={ 'K2HR3' }
-					actions={ actions }
-					modal={ false }
-					open={ this.props.open }
-					onRequestClose={ this.handleClose }
-					titleStyle={ this.context.muiTheme.dialogSimple.centerTitleStyle }
-					style={ this.context.muiTheme.dialogSimple.centerContextStyle }
-				>
-					<div style={ this.context.muiTheme.dialogSimple.scrollDevStyle }>
-						<p>K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers common management information for the cloud. K2HR3 can dynamically manage information as "who", "what", "operate". These are stored as roles, resources, policies in K2hdkc, and the client system can dynamically read and modify these information.</p>
-						<br />
-						<p>Copyright(C) 2017 Yahoo Japan Corporation.</p>
-					</div>
-				</Dialog>
+				<Typography { ...this.props.theme.r3AboutDialog.content }>
+					{ k2hr3Content }
+					<br />
+					<br />
+					{ k2hr3License }
+				</Typography>
 			);
 		}else{
-			// Licenses
 			return (
-				<Dialog
-					title={ this.props.licensePackage }
-					actions={ actions }
-					modal={ false }
-					open={ this.props.open }
-					onRequestClose={ this.handleClose }
-					titleStyle={ this.context.muiTheme.dialogSimple.centerTitleStyle }
-					style={ this.context.muiTheme.dialogSimple.licensesTextStyle }
-				>
-					<div style={ this.context.muiTheme.dialogSimple.scrollDevStyle }>
-						<p style={ this.context.muiTheme.dialogSimple.licensesTypeStyle }> License: { this.props.licenseType }</p>
-						<br />
-						{ this.getHtmlLicenseText() }
-					</div>
-				</Dialog>
+				<Typography { ...this.props.theme.r3AboutDialog.content }>
+					{ this.getHtmlLicenseText() }
+				</Typography>
 			);
 		}
 	}
+
+	render()
+	{
+		const { theme, classes, r3provider } = this.props;
+
+		let	licenseType	= this.getLicenseType();
+		let	contentText	= this.getContentText();
+
+		return (
+			<Dialog
+				open={ this.props.open }
+				onClose={ this.handleClose }
+				{ ...theme.r3AboutDialog.root }
+				className={ classes.root }
+			>
+				<DialogTitle
+					{ ...theme.r3AboutDialog.dialogTitle }
+					className={ classes.dialogTitle }
+				>
+					<Typography
+						{ ...theme.r3AboutDialog.title }
+						className={ classes.title }
+					>
+						About { (r3IsEmptyString(this.props.licensePackage) ? k2hr3Title : this.props.licensePackage) }
+					</Typography>
+				</DialogTitle>
+				<DialogContent 
+					className={ classes.dialogContent }
+				>
+					<DialogContentText
+						{ ...theme.r3AboutDialog.dialogContentText }
+						className={ classes.dialogContentText }
+					>
+						{ licenseType }
+						{ contentText }
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions
+					className={ classes.dialogAction }
+				>
+					<Button
+						onClick={ this.handleClose }
+						{ ...theme.r3AboutDialog.button }
+						className={ classes.button }
+					>
+						{ r3provider.getR3TextRes().tResButtonClose }
+						<CancelIcon
+							className={ classes.buttonIcon }
+						/>
+					</Button>
+				</DialogActions>
+			</Dialog>
+		);
+	}
 }
-
-R3AboutDialog.contextTypes = {
-	muiTheme:		PropTypes.object.isRequired,
-	r3Context:		PropTypes.object.isRequired
-};
-
-R3AboutDialog.propTypes = {
-	open:			PropTypes.bool.isRequired,
-	onClose:		PropTypes.func.isRequired,
-
-	licensePackage:	PropTypes.string,
-	licenseType:	PropTypes.string,
-	licenseText:	PropTypes.string
-};
-
-R3AboutDialog.defaultProps = {
-	licensePackage:	null,
-	licenseType:	null,
-	licenseText:	null
-};
 
 /*
  * VIM modelines
