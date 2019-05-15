@@ -35,6 +35,11 @@ User can manipulate **Roles**, **policy Rules**, **Resource**, **Service** data 
 
 ![K2HR3 Web Application](https://k2hr3.antpick.ax/images/usage_top_app_overview.png)
 
+### Demonstration site
+You can access the [demonstration site](https://demo.k2hr3.antpick.ax) of K2HR3 Web Application by accessing here.  
+You can learn about **R**esource, **R**oles, policy **R**ules and **SERVICE** provided by K2HR3 on this site now.  
+_The data operated on this site can not be saved._
+
 ### Documents
 [K2HR3 Document](https://k2hr3.antpick.ax/index.html)  
 [K2HR3 Web Application Usage](https://k2hr3.antpick.ax/usage_app.html)  
@@ -42,6 +47,7 @@ User can manipulate **Roles**, **policy Rules**, **Resource**, **Service** data 
 [K2HR3 OpenStack Notification Listener Usage](https://k2hr3.antpick.ax/detail_osnl.html)  
 [K2HR3 Watcher Usage](https://k2hr3.antpick.ax/tools.html)  
 [K2HR3 Utilities for Setup](https://k2hr3.antpick.ax/setup.html)  
+[K2HR3 Demonstration](https://demo.k2hr3.antpick.ax/)  
 
 [About k2hdkc](https://k2hdkc.antpick.ax/)  
 [About k2hash](https://k2hash.antpick.ax/)  

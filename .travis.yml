@@ -27,6 +27,8 @@ env:
   global:
     - PCUSER=antpickax
     - PCREPO=stable
+    - TRAVIS_ENCRYPTION_KEY_NAME=encrypted_${TRAVIS_ENCRYPTION_LABEL}_key
+    - TRAVIS_ENCRYPTION_IV_NAME=encrypted_${TRAVIS_ENCRYPTION_LABEL}_iv
   matrix:
     - OS=ubuntu
       TAG=18.04
@@ -66,6 +68,8 @@ script:
     -e NODE_MAJOR_VERSION=${NODE_MAJOR_VERSION}
     -e USE_PC_REPO=${USE_PC_REPO}
     -e PUBLISHER=${PUBLISHER}
+    -e TRAVIS_ENCRYPTION_KEY=`eval echo '$'${TRAVIS_ENCRYPTION_KEY_NAME}`
+    -e TRAVIS_ENCRYPTION_IV=`eval echo '$'${TRAVIS_ENCRYPTION_IV_NAME}`
     -v `pwd`:/k2hr3_app:rw
     ${OS}:${TAG}
     /bin/sh -c "/k2hr3_app/.travis_helper.sh -pcuser ${PCUSER} -pcrepo ${PCREPO} ${INSTPKG}"
