@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>K2HR3 Demo</title>
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0" charset="utf-8" />
+</head>
+<script type="text/javascript">
+<!--
+var	k2hr3global = {
+	'r3apischeme':		'https',
+	'r3apihost':		'localhost',
+	'r3apiport':		'443',
+	'r3appmenu':		'[{\"name\":\"K2HR3 document\",\"url\":\"https://k2hr3.antpick.ax/\"}]',
+	'r3userdata':		'\"#include\\n{{= %K2HR3_API_HOST_URI% }}/v1/userdata/{{= %K2HR3_USERDATA_INCLUDE_PATH% }}\\n\"',
+	'username':			'demo',
+	'unscopedtoken':	'demo-unscoped-token',
+	'lang':				'ja',
+	'signintype':		'credential',
+	'signinurl':		'https://localhost/',
+	'signouturl':		'https://localhost/',
+};
+//-->
+</script>
+<noscript>
+You need to enable JavaScript to run this app.
+</noscript>
+<style type="text/css">
+<!--
+.r3demohead {
+	color:				white;
+	background-color:	black;
+	position:			relative;
+	overflow:			hidden;
+	clear:				both;
+	margin:				0px;
+	padding:			4px
+}
+.r3demohead ul {
+	position:			relative;
+	left:				50%;
+	float:				left;
+	list-style-type:	none;
+	margin:				0px;
+	padding:			0px;
+}
+.r3demohead li {
+	position:			relative;
+	float:				left;
+	left:				-50%;
+	padding-right:		50px;
+	padding-left:		50px;
+}
+.r3footer {
+	position:			relative;
+	overflow:			hidden;
+	clear:				both;
+	margin:				24px;
+}
+.r3footer ul {
+	position:			relative;
+	left:				50%;
+	float:				left;
+	list-style-type:	none;
+}
+.r3footer li {
+	position:			relative;
+	float:				left;
+	left:				-50%;
+	padding-right:		50px;
+	padding-left:		50px;
+}
+-->
+</style>
+<body style='margin: 0px;'>
+<div class="r3demohead">
+<ul>
+<li>This page is K2HR3 demonstration</li>
+</ul>
+</div>
+<div id="r3app"></div>
+<meta http-equiv="Content-Style-Type" content="text/css">
+<div class="r3footer">
+<ul>
+<li>Copyright(C) 2019 Yahoo Japan Corporation.</li>
+</ul>
+</div>
+<script src="public/js/bundle.js"></script>
+</body>
+</html>
