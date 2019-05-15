@@ -19,9 +19,6 @@
  *
  */
 
-//TEST : Original ---> CUT
-//	import reset				from '../public/css/reset.css';					// eslint-disable-line no-unused-vars
-//TEST : Original ---> CUT
 import style				from '../public/css/style.css';						// eslint-disable-line no-unused-vars
 
 import React				from 'react';										// eslint-disable-line no-unused-vars
@@ -30,17 +27,7 @@ import MuiThemeProvider		from '@material-ui/core/styles/MuiThemeProvider';	// fo
 import CssBaseline			from '@material-ui/core/CssBaseline';				// for reset.css
 
 import r3Theme				from './components/r3theme';						// custom theme
-
-//TEST : Original ---> No longer using.
-//	import injectTapEventPlugin	from 'react-tap-event-plugin';					// eslint-disable-line no-unused-vars
-//TEST : Original ---> No longer using.
-
 import R3Container			from './components/r3container';
-
-//TEST : Original ---> No longer using.
-//	// Needed for onTouchTap
-//	injectTapEventPlugin();
-//TEST : Original ---> No longer using.
 
 // Do render
 ReactDOM.render(
