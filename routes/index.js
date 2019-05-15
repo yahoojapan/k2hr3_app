@@ -62,6 +62,8 @@ router.get('/', function(req, res, next)							// eslint-disable-line no-unused-
 			//_next(error);
 			//return;
 		}
+		var	dateobj		= new Date();
+		var	copyyear	= dateobj.getFullYear();
 		var	username	= tokensObj.getUserName();
 		var	apischeme	= _appConf.getApiScheme();
 		var	apihost		= _appConf.getApiHost();
@@ -98,7 +100,8 @@ router.get('/', function(req, res, next)							// eslint-disable-line no-unused-
 				dbgheader:		dbgheader,
 				dbgvalue:		dbgvalue,
 				dbgresheader:	dbgresheader,
-				errormsg:		errormsg
+				errormsg:		errormsg,
+				copyyear:		copyyear
 			}
 		);
 	});
