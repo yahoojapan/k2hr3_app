@@ -34,6 +34,8 @@ LICENSE
 .eslintrc.js
 webpack.config.js
 .travis_helper.sh
+travis_id_rsa
+id_rsa
 
 ### Directories
 .github/
@@ -41,6 +43,9 @@ package/
 .nyc_output/
 coverage/
 test/__tests__/__snapshots__/
+demo/
+dist/
+backup/
 
 ### Generated
 artifacts

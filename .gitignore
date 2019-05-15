@@ -138,6 +138,12 @@ public/img/*
 !.gitkeep
 
 #
+# dist/backup directory
+#
+dist
+backup
+
+#
 # Log directory
 #
 log
@@ -152,6 +158,12 @@ package-lock.json
 # auto generated file
 #
 src/util/r3licenses.js
+
+#
+# for deploy
+#
+travis_id_rsa
+id_rsa
 
 #
 # VIM modelines

@@ -58,7 +58,7 @@
     "webpack-cli": "^3.3.2"
   },
   "scripts": {
-    "help": "echo 'command list:\n    npm run start\n    npm run start:prod\n    npm run start:production\n    npm run start:dev\n    npm run start:develop\n    npm run start:dbg\n    npm run start:debug\n    npm run start:debug:break\n    npm run start:debug:nobreak\n    npm run stop\n    npm run build\n    npm run build:dbg\n    npm run build:all\n    npm run build:all:dbg\n    npm run build:webpack\n    npm run build:webpack:dbg\n    npm run build:license\n    npm run test\n    npm run test:all\n    npm run test:lint\n    npm run test:jest\n    npm run test:update\n    npm run test:watch\n'",
+    "help": "echo 'command list:\n    npm run start\n    npm run start:prod\n    npm run start:production\n    npm run start:dev\n    npm run start:develop\n    npm run start:dbg\n    npm run start:debug\n    npm run start:debug:break\n    npm run start:debug:nobreak\n    npm run stop\n    npm run build\n    npm run build:dbg\n    npm run build:all\n    npm run build:all:dbg\n    npm run build:webpack\n    npm run build:webpack:dbg\n    npm run build:license\n    npm run test\n    npm run test:all\n    npm run test:lint\n    npm run test:jest\n    npm run test:update\n    npm run test:watch\n    npm run deploy\n'",
     "start": "npm run start:production",
     "start:prod": "npm run start:production",
     "start:production": "bin/run.sh -bg --production && echo '' && echo 'Start on production - Success' && echo ''",
@@ -83,7 +83,8 @@
     "test:update": "echo 'Update JEST snapshot' && jest --updateSnapshot && echo 'Update JEST snapshot - Success' && echo ''",
     "test:watch": "echo 'Start JEST watch' && jest --watch && echo 'Start JEST watch - Success' && echo ''",
     "publish-please": "publish-please",
-    "prepublishOnly": "publish-please guard"
+    "prepublishOnly": "publish-please guard",
+    "deploy": "echo 'Deploy github pages for demo' && demo/demo_deploy.sh && echo 'Deploy github pages for demo - Success' && echo ''"
   },
   "repository": {
     "type": "git",
@@ -92,7 +93,7 @@
   "bugs": {
     "url": "https://github.com/yahoojapan/k2hr3_app/issues"
   },
-  "homepage": "https://k2hr3.antpick.ax/",
+  "homepage": "https://demo.k2hr3.antpick.ax/",
   "keywords": [
     "K2HR3",
     "K2HASH",

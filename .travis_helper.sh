@@ -329,8 +329,10 @@ if [ ${IS_PUBLISH_TEST} -eq 1 ]; then
 	#
 	if [ ${IS_PUBLISH_REQUEST} -eq 1 -a ${IS_PUBLISHER} -eq 1 ]; then
 		PUBLISH_PLEASE_OPT=""
+		IS_BUILD_DEMO=1
 	else
 		PUBLISH_PLEASE_OPT="--dry-run"
+		IS_BUILD_DEMO=0
 	fi
 
 	#
@@ -340,6 +342,14 @@ if [ ${IS_PUBLISH_TEST} -eq 1 ]; then
 
 	if [ ${IS_PUBLISH_REQUEST} -eq 1 -a ${IS_PUBLISHER} -eq 1 ]; then
 		echo "[NOTICE] Published npm package, MUST CHECK NPM repository!!"
+	fi
+
+	#
+	# Build github pages for demo
+	#
+	if [ ${IS_BUILD_DEMO} -eq 1 ]; then
+		export BUILD_WITHOUT_LICENSE=1
+		run_cmd npm run deploy
 	fi
 fi
 
