@@ -93,6 +93,7 @@ describe('R3Resource', () => {											// eslint-disable-line no-undef
 									<R3Resource
 										r3provider={ r3provider }
 										resource={ resource }
+										dispUnique={ 1 }
 										onSave={ save }
 										onUpdate={ update }
 										isReadMode={ false }

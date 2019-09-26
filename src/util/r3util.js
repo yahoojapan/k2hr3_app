@@ -651,6 +651,80 @@ export const r3UnescapeHTML = (str) =>
 	return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 };
 
+//
+// Date/Time Utility
+//
+// Convert UTC ISO 8601 String to Locale String
+//
+export const convertISOStringToLocaleString = (strIso) =>
+{
+	if(r3IsEmptyString(strIso, true)){
+		return null;
+	}
+	let	dateObj = new Date(strIso);
+
+	let	dateStr	= dateObj.toLocaleDateString();
+	let	timeStr	= dateObj.toLocaleTimeString();
+	if((-1 == dateStr.indexOf('/') && -1 == dateStr.indexOf('-')) || -1 == timeStr.indexOf(':')){
+		return null;
+	}
+	return (dateStr + ' ' + timeStr);
+};
+
+export const getDiffTimeFromISOString = (strIso1, strIso2) =>
+{
+	if(r3IsEmptyString(strIso1, true) || r3IsEmptyString(strIso2, true)){
+		return 0;
+	}
+	let	dateObj1= new Date(strIso1);
+	let	dateObj2= new Date(strIso2);
+	let	diffNum	= dateObj1 - dateObj2;
+	if(isNaN(diffNum)){
+		return 0;
+	}
+	return Math.floor(Math.abs(diffNum) / 1000);			// ms -> s
+};
+
+export const diffRoundType = {
+	days:		'days',
+	hours:		'hours',
+	minutes:	'minutes',
+	seconds:	'seconds'
+};
+export const getDiffRoundStringFromISOString = (strIso1, strIso2) =>
+{
+	let	diffAll = getDiffTimeFromISOString(strIso1, strIso2);
+	let	diffSec	= diffAll % 60;
+	diffAll		= Math.floor(diffAll / 60);
+	let	diffMin	= diffAll % 60;
+	diffAll		= Math.floor(diffAll / 60);
+	let	diffHour= diffAll % 24;
+	let	diffDay	= Math.floor(diffAll / 24);
+	let	result;
+	if(0 < diffDay){
+		result	= {
+			type:	diffRoundType.days,
+			value:	diffDay
+		};
+	}else if(0 < diffHour){
+		result	= {
+			type:	diffRoundType.hours,
+			value:	diffHour
+		};
+	}else if(0 < diffMin){
+		result	= {
+			type:	diffRoundType.minutes,
+			value:	diffMin
+		};
+	}else{
+		result	= {
+			type:	diffRoundType.seconds,
+			value:	diffSec
+		};
+	}
+	return result;
+};
+
 /*
  * VIM modelines
  *

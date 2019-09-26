@@ -71,7 +71,8 @@ export default class R3CreateServiceTenantDialog extends React.Component
 	};
 
 	state = {
-		aliasRole:	this.props.aliasRole
+		aliasRole:	this.props.aliasRole,
+		open:		this.props.open
 	};
 
 	constructor(props)
@@ -82,11 +83,28 @@ export default class R3CreateServiceTenantDialog extends React.Component
 		this.handleAliasRoleChange	= this.handleAliasRoleChange.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps)										// eslint-disable-line no-unused-vars
+	// [NOTE]
+	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
+	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
+	//
+	static getDerivedStateFromProps(nextProps, prevState)
 	{
-		this.setState({
-			aliasRole:	nextProps.aliasRole
-		});
+		if(prevState.open != nextProps.open){
+			if(nextProps.open){
+				// Inivisible to Visible
+				return {
+					aliasRole:	nextProps.aliasRole,
+					open:		nextProps.open
+				};
+			}else{
+				// Visible to Inivisible
+				return {
+					aliasRole:	prevState.aliasRole,
+					open:		nextProps.open
+				};
+			}
+		}
+		return null;															// Return null to indicate no change to state.
 	}
 
 	handleAliasRoleChange(event)

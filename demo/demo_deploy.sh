@@ -167,7 +167,7 @@ fi
 run_cmd git clone ${REPO_GIT_URL} ${DIST_DIR_NAME}
 run_cmd cd ${DIST_DIR}
 run_cmd git config user.name "Travis CI"
-run_cmd git config user.email "antpickax@mail.yahoo.co.jp"
+run_cmd git config user.email "antpickax-support@mail.yahoo.co.jp"
 run_cmd git checkout ${GITHUB_PAGES_REPO}
 
 echo "---> Succeed clone ${GITHUB_PAGES_REPO} to dist directory"

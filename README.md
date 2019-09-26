@@ -62,6 +62,7 @@ _The data operated on this site can not be saved._
 [K2HR3 REST API repository](https://github.com/yahoojapan/k2hr3_api)  
 [K2HR3 OpenStack Notification Listener](https://github.com/yahoojapan/k2hr3_osnl)  
 [K2HR3 Utilities](https://github.com/yahoojapan/k2hr3_utils)  
+[K2HR3 Container Registration Sidecar](https://github.com/yahoojapan/k2hr3_sidecar)  
 
 [k2hdkc](https://github.com/yahoojapan/k2hdkc)  
 [k2hash](https://github.com/yahoojapan/k2hash)  

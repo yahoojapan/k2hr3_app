@@ -50,17 +50,50 @@ stop_old_process()
 	return 0
 }
 
+# Determines the current OS
+#
+# Params::
+#   no params
+#
+# Returns::
+#   0 on success
+#   1 on failure
+#
+setup_os_env() {
+	if [ -f "/etc/os-release" ]; then
+		. /etc/os-release
+		OS_NAME=$ID
+		OS_VERSION=$VERSION_ID
+	elif [ -f "/etc/centos-release" ]; then
+		# falls back to centos-6(or prior to centos-6)
+		OS_NAME="centos"
+		OS_VERSION=6
+	else
+		echo "[ERROR] Unknown OS(should be Ubuntu or CentOS)."
+		return 1
+	fi
+
+	return 0
+}
+
 #
 # node path
 #
-OS_NAME=`cat /etc/issue | head -1 | awk '{print $1}'`
-if [ "X${OS_NAME}" = "XUbuntu" ]; then
+setup_os_env
+if [ $? -ne 0 ]; then
+	exit $?
+fi
+if [ "X${OS_NAME}" = "Xubuntu" ]; then
 	MY_NODE_PATH=""
-elif [ "X${OS_NAME}" = "XCentOS" ]; then
-	MY_NODE_PATH="/home/y/lib/node_modules:/home/y/lib64/node"
+elif [ "X${OS_NAME}" = "Xcentos" ]; then
+	if [ "X${OS_VERSION}" = "X6" ]; then
+		MY_NODE_PATH="/home/y/lib/node_modules:/home/y/lib64/node"
+	elif [ "X${OS_VERSION}" = "X7" ]; then
+		MY_NODE_PATH="/opt/yj/node"
+	fi
 else
-    echo "[ERROR] Unknown OS(should be Ubuntu or CentOS)."
-    exit 1
+	echo "[ERROR] Unknown OS(should be Ubuntu or CentOS)."
+	exit 1
 fi
 
 #

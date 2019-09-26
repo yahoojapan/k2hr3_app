@@ -87,6 +87,7 @@ describe('R3Role', () => {												// eslint-disable-line no-undef
 									<R3Role
 										r3provider={ r3provider }
 										role={ role }
+										dispUnique={ 1 }
 										onSave={ save }
 										onUpdate={ update }
 										isReadMode={ false }

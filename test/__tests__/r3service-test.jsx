@@ -84,6 +84,7 @@ describe('R3Service', () => {											// eslint-disable-line no-undef
 									<R3Service
 										tenant={ 'JEST_TENANT_NAME' }
 										service={ service }
+										dispUnique={ 1 }
 										r3provider={ r3provider }
 										onSave={ save }
 										onUpdate={ update }

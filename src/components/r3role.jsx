@@ -86,8 +86,8 @@ export default class R3Role extends React.Component
 	static propTypes = {
 		r3provider:	PropTypes.object.isRequired,
 		role:		PropTypes.object.isRequired,
+		dispUnique:	PropTypes.number.isRequired,
 		isReadMode:	PropTypes.bool,
-
 		onSave:		PropTypes.func.isRequired,
 		onUpdate:	PropTypes.func.isRequired
 	};
@@ -96,7 +96,7 @@ export default class R3Role extends React.Component
 		isReadMode:	false
 	};
 
-	state = this.createState(this.props.role);
+	state = R3Role.createState(this.props.role, this.props.dispUnique);
 
 	constructor(props)
 	{
@@ -117,13 +117,26 @@ export default class R3Role extends React.Component
 		this.handleAddAliasesChange		= this.handleAddAliasesChange.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps)
+	componentDidMount()
 	{
 		// update State
-		this.setState(this.createState(nextProps.role));
+		this.setState(R3Role.createState(this.props.role, this.props.dispUnique));
 	}
 
-	createState(role)
+	// [NOTE]
+	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
+	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
+	//
+	static getDerivedStateFromProps(nextProps, prevState)
+	{
+		if(nextProps.dispUnique !== prevState.dispUnique){
+			// Switching content
+			return R3Role.createState(nextProps.role, nextProps.dispUnique);
+		}
+		return null;															// Return null to indicate no change to state.
+	}
+
+	static createState(role, dispUnique)
 	{
 		let	localHostnames	= [];
 		let	localIps		= [];
@@ -136,7 +149,7 @@ export default class R3Role extends React.Component
 				oneHost		= parseCombineHostObject(role.hosts.hostnames[cnt]);
 				standars.push(oneHost);
 			}
-			localHostnames	= this.convertStandardToLocal(standars);
+			localHostnames	= R3Role.convertStandardToLocal(standars);
 		}
 		if(!r3IsEmptyEntityObject(role, 'hosts') && !r3IsEmptyEntityObject(role.hosts, 'ips')){
 			standars		= [];
@@ -144,9 +157,11 @@ export default class R3Role extends React.Component
 				oneHost		= parseCombineHostObject(role.hosts.ips[cnt]);
 				standars.push(oneHost);
 			}
-			localIps		= this.convertStandardToLocal(standars);
+			localIps		= R3Role.convertStandardToLocal(standars);
 		}
+
 		return {
+			dispUnique:					dispUnique,
 			role:						r3DeepClone(role),
 			localHostnames:				localHostnames,
 			localIps:					localIps,
@@ -176,20 +191,20 @@ export default class R3Role extends React.Component
 	//
 	// Utility for hostnames/ips
 	//
-	convertStandardToLocal(standards)
+	static convertStandardToLocal(standards)
 	{
 		let	result = [];
 		if(r3IsEmptyEntity(standards) || !(standards instanceof Array)){
 			return result;
 		}
 		for(let cnt = 0; cnt < standards.length; ++cnt){
-			let	local = this.convertOneStandardToLocal(standards[cnt]);
+			let	local = R3Role.convertOneStandardToLocal(standards[cnt]);
 			result.push(local);
 		}
 		return result;
 	}
 
-	convertOneStandardToLocal(standard)
+	static convertOneStandardToLocal(standard)
 	{
 		let	local = {};
 
@@ -397,7 +412,8 @@ export default class R3Role extends React.Component
 		for(let cnt1 = 0; cnt1 < nowHosts.length; ++cnt1){
 			found	= false;
 			oneHost = this.convertOneLocalToStandard(nowHosts[cnt1]);
-			local	= this.convertOneStandardToLocal(oneHost);
+			local	= R3Role.convertOneStandardToLocal(oneHost);
+
 			if(	r3IsEmptyEntityObject(nowHosts[cnt1], 'host')		!== r3IsEmptyEntityObject(local, 'host')			||
 				(!r3IsEmptyEntityObject(nowHosts[cnt1], 'host')		&& (nowHosts[cnt1].host !== local.host))			||
 				r3IsEmptyEntityObject(nowHosts[cnt1], 'auxiliary')	!== r3IsEmptyEntityObject(local, 'auxiliary')		||
@@ -684,7 +700,7 @@ export default class R3Role extends React.Component
 			this.props.onUpdate(false);
 
 			// rewind State
-			this.setState(this.createState(this.props.role));
+			this.setState(R3Role.createState(this.props.role, this.props.dispUnique));
 		}else{
 			// case for 'cancel updating' to cancel
 			this.setState({

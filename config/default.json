@@ -29,7 +29,10 @@
 // Then userdata value is simple template which is filled by k2hr3 for each role/user.
 // The following template's value is used:
 //	{{= %K2HR3_API_HOST_URI% }}				: K2HR3 API host and uri which is made from "apihost"
-//	{{= %K2HR3_USERDATA_INCLUDE_PATH% }}	: Getting compressed userdata url path
+//	{{= %K2HR3_USERDATA_INCLUDE_PATH% }}	: Getting compressed user data script url path
+//	{{= %K2HR3_ROLETOKEN_IN_SECRET% }}		: Replacing role token string
+//	{{= %K2HR3_ROLEYRN_IN_SIDECAR% }}		: Replacing role full yrn path string
+//	{{= %K2HR3_REST_API_HOST% }}			: Replacing k2hr3-k8s-init.sh host/port/schema parameter
 
 //
 // [KEY-VALUE]
@@ -45,6 +48,8 @@
 //	apiport							: API server port for accessing React
 //	appmenu							: Application menu list on React
 //	userdata						: User Data Script
+//	secretyaml						: Secret Yaml
+//	sidecaryaml						: Sidecar Yaml
 //
 {
 	'scheme':			'http',
@@ -84,6 +89,104 @@
 	'userdata':			'\
 #include\n\
 {{= %K2HR3_API_HOST_URI% }}/v1/userdata/{{= %K2HR3_USERDATA_INCLUDE_PATH% }}\n\
+',
+	'secretyaml':		'\
+apiVersion: v1\n\
+kind: Secret\n\
+metadata:\n\
+  name: k2hr3-secret\n\
+  namespace: <input your name space>\n\
+type: Opaque\n\
+data:\n\
+  K2HR3_ROLETOKEN: {{= %K2HR3_ROLETOKEN_IN_SECRET% }}\n\
+',
+	'sidecaryaml':		'\
+apiVersion: v1\n\
+kind: Pod\n\
+metadata:\n\
+  labels:\n\
+    labelName: <label>\n\
+  name: <name>\n\
+spec:\n\
+  #------------------------------------------------------------\n\
+  # K2HR3 Sidecar volume - start\n\
+  #------------------------------------------------------------\n\
+  volumes:\n\
+  - name: k2hr3-volume\n\
+    hostPath:\n\
+      path: /k2hr3-data\n\
+      type: DirectoryOrCreate\n\
+  #------------------------------------------------------------\n\
+  # K2HR3 Sidecar volume - end\n\
+  #------------------------------------------------------------\n\
+  containers:\n\
+    - name: <your container>\n\
+      image: <your image>\n\
+      volumeMounts:\n\
+      - mountPath: /k2hr3-volume\n\
+        name: k2hr3-volume\n\
+      command:\n\
+        - <your command...>\n\
+    #--------------------------------------------------------------------------\n\
+    # K2HR3 Sidecar - start\n\
+    #--------------------------------------------------------------------------\n\
+    - name: k2hr3-sidecar\n\
+      image: docker.io/antpickax/k2hr3.sidecar:0.1\n\
+      envFrom:\n\
+      - secretRef:\n\
+          name: k2hr3-secret\n\
+      env:\n\
+        - name: K2HR3_NODE_NAME\n\
+          valueFrom:\n\
+            fieldRef:\n\
+              fieldPath: spec.nodeName\n\
+        - name: K2HR3_POD_NAME\n\
+          valueFrom:\n\
+            fieldRef:\n\
+              fieldPath: metadata.name\n\
+        - name: K2HR3_POD_NAMESPACE\n\
+          valueFrom:\n\
+            fieldRef:\n\
+              fieldPath: metadata.namespace\n\
+        - name: K2HR3_POD_IP\n\
+          valueFrom:\n\
+            fieldRef:\n\
+              fieldPath: status.podIP\n\
+        - name: K2HR3_POD_SERVICE_ACCOUNT\n\
+          valueFrom:\n\
+            fieldRef:\n\
+              fieldPath: spec.serviceAccountName\n\
+        - name: K2HR3_NODE_IP\n\
+          valueFrom:\n\
+            fieldRef:\n\
+              fieldPath: status.hostIP\n\
+        - name: K2HR3_POD_ID\n\
+          valueFrom:\n\
+            fieldRef:\n\
+              fieldPath: metadata.uid\n\
+      volumeMounts:\n\
+      - mountPath: /k2hr3-volume\n\
+        name: k2hr3-volume\n\
+      command:\n\
+        - sh\n\
+        - -c\n\
+        - "while true; do sleep 30; done"\n\
+      lifecycle:\n\
+        postStart:\n\
+          exec:\n\
+            command:\n\
+              - sh\n\
+              - -c\n\
+              - "/usr/local/bin/k2hr3-k8s-init.sh -reg -rtoken ${K2HR3_ROLETOKEN} -role {{= %K2HR3_ROLEYRN_IN_SIDECAR% }} {{= %K2HR3_REST_API_HOST% }}"\n\
+        preStop:\n\
+          exec:\n\
+            command:\n\
+              - sh\n\
+              - -c\n\
+              - "/usr/local/bin/k2hr3-k8s-init.sh -del -role {{= %K2HR3_ROLEYRN_IN_SIDECAR% }} {{= %K2HR3_REST_API_HOST% }}"\n\
+    #--------------------------------------------------------------------------\n\
+    # K2HR3 Sidecar - end\n\
+    #--------------------------------------------------------------------------\n\
 '
 }
 

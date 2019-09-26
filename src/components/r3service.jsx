@@ -68,12 +68,12 @@ export default class R3Service extends React.Component
 		r3provider:	PropTypes.object.isRequired,
 		tenant:		PropTypes.string.isRequired,
 		service:	PropTypes.object.isRequired,
-
+		dispUnique:	PropTypes.number.isRequired,
 		onSave:		PropTypes.func.isRequired,
 		onUpdate:	PropTypes.func.isRequired
 	};
 
-	state = this.createState(this.props.service);
+	state = R3Service.createState(this.props.service, this.props.dispUnique);
 
 	constructor(props)
 	{
@@ -90,15 +90,29 @@ export default class R3Service extends React.Component
 		this.handleAddTenantsChange		= this.handleAddTenantsChange.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps)
+	componentDidMount()
 	{
 		// update State
-		this.setState(this.createState(nextProps.service));
+		this.setState(R3Service.createState(this.props.service, this.props.dispUnique));
 	}
 
-	createState(service)
+	// [NOTE]
+	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
+	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
+	//
+	static getDerivedStateFromProps(nextProps, prevState)
+	{
+		if(nextProps.dispUnique !== prevState.dispUnique){
+			// Switching content
+			return R3Service.createState(nextProps.service, nextProps.dispUnique);
+		}
+		return null;															// Return null to indicate no change to state.
+	}
+
+	static createState(service, dispUnique)
 	{
 		return {
+			dispUnique:					dispUnique,
 			service:					r3DeepClone(service),
 			addTenant:					'',
 			changed:					false,
@@ -240,7 +254,7 @@ export default class R3Service extends React.Component
 			this.props.onUpdate(false);
 
 			// rewind State
-			this.setState(this.createState(this.props.service));
+			this.setState(R3Service.createState(this.props.service, this.props.dispUnique));
 		}else{
 			// case for 'cancel updating' to cancel
 			this.setState({

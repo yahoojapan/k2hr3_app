@@ -32,6 +32,7 @@ var cookieParser= require('cookie-parser');
 var bodyParser	= require('body-parser');
 var	r3Conf		= require('./routes/lib/libr3appconfig').r3AppConfig;
 var	appConf		= new r3Conf();
+var	r3util		= require('./routes/lib/libr3util');
 
 //
 // Router
@@ -71,6 +72,31 @@ app.use('/',				index);
 app.use('/public/js',		express.static(__dirname + '/public/js'));		// for bundle.js
 app.use('/public/tokens',	tokens);										// for user token
 app.use('/status.html',		express.static(__dirname + '/public/status.html'));
+
+//
+// Setup extension router
+//
+var	cfgExtRouter= appConf.getExtRouter();
+if(r3util.isSafeEntity(cfgExtRouter)){
+	Object.keys(cfgExtRouter).forEach(function(routername){
+		// check name/path
+		if(r3util.isSafeString(cfgExtRouter[routername].name) && r3util.isSafeString(cfgExtRouter[routername].path)){
+			var entry	= require('./routes/' + cfgExtRouter[routername].name);
+			// check setConfig function
+			if(r3util.isSafeEntity(entry.setConfig) && 'function' == typeof entry.setConfig){
+				var	routerConfig = r3util.isSafeEntity(cfgExtRouter[routername].config) ? cfgExtRouter[routername].config : null;
+				if(!entry.setConfig(routerConfig)){
+					console.error('failed to set configuration for extension router(name=' + JSON.stringify(cfgExtRouter[routername].name) + ', path=' + JSON.stringify(cfgExtRouter[routername].path) + ').');
+				}
+			}
+			// set router
+			app.use(cfgExtRouter[routername].path, entry.router);
+			console.log('success set extension router(name=' + JSON.stringify(cfgExtRouter[routername].name) + ', path=' + JSON.stringify(cfgExtRouter[routername].path) + ').');
+		}else{
+			console.error('something wrong extrouter configration(name=' + JSON.stringify(cfgExtRouter[routername].name) + ', path=' + JSON.stringify(cfgExtRouter[routername].path) + ').');
+		}
+	});
+}
 
 //
 // Last handling after all routing

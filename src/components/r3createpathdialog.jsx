@@ -73,7 +73,8 @@ export default class R3CreatePathDialog extends React.Component
 	};
 
 	state = {
-		newPath:	this.props.newPath
+		newPath:	this.props.newPath,
+		open:		this.props.open
 	};
 
 	constructor(props)
@@ -84,11 +85,28 @@ export default class R3CreatePathDialog extends React.Component
 		this.handleNewPathChange	= this.handleNewPathChange.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps)										// eslint-disable-line no-unused-vars
+	// [NOTE]
+	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
+	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
+	//
+	static getDerivedStateFromProps(nextProps, prevState)
 	{
-		this.setState({
-			newPath:	nextProps.newPath
-		});
+		if(prevState.open != nextProps.open){
+			if(nextProps.open){
+				// Inivisible to Visible
+				return {
+					newPath:	nextProps.newPath,
+					open:		nextProps.open
+				};
+			}else{
+				// Visible to Inivisible
+				return {
+					newPath:	prevState.newPath,
+					open:		nextProps.open
+				};
+			}
+		}
+		return null;															// Return null to indicate no change to state.
 	}
 
 	handleNewPathChange(event)

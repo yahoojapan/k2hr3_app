@@ -73,7 +73,8 @@ export default class R3CreateServiceDialog extends React.Component
 
 	state = {
 		newServiceName:	this.props.newServiceName,
-		newVerify:		this.props.newVerify
+		newVerify:		this.props.newVerify,
+		open:			this.props.open
 	};
 
 	constructor(props)
@@ -85,12 +86,30 @@ export default class R3CreateServiceDialog extends React.Component
 		this.handleNewVerifyChange		= this.handleNewVerifyChange.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps)										// eslint-disable-line no-unused-vars
+	// [NOTE]
+	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
+	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
+	//
+	static getDerivedStateFromProps(nextProps, prevState)
 	{
-		this.setState({
-			newServiceName:	nextProps.newServiceName,
-			newVerify:		nextProps.newVerify
-		});
+		if(prevState.open != nextProps.open){
+			if(nextProps.open){
+				// Inivisible to Visible
+				return {
+					newServiceName:	nextProps.newServiceName,
+					newVerify:		nextProps.newVerify,
+					open:			nextProps.open
+				};
+			}else{
+				// Visible to Inivisible
+				return {
+					newServiceName:	prevState.newServiceName,
+					newVerify:		prevState.newVerify,
+					open:			nextProps.open
+				};
+			}
+		}
+		return null;															// Return null to indicate no change to state.
 	}
 
 	handleNewServiceNameChange(event)

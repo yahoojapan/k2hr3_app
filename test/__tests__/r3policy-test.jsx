@@ -96,6 +96,7 @@ describe('R3Policy', () => {											// eslint-disable-line no-undef
 									<R3Policy
 										r3provider={ r3provider }
 										policy={ policy }
+										dispUnique={ 1 }
 										onSave={ save }
 										onUpdate={ update }
 										isReadMode={ false }

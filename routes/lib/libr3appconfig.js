@@ -67,12 +67,27 @@ var	loadedConfig = (function()
 		apischeme:			'http',						// API scheme
 		apiport:			3001,						// API port
 
-		userdata:			'',							// Userdata
+		userdata:			'',							// User Data Script for OpenStack
+		secretyaml:			'',							// Secret Yaml for kubernetes
+		sidecaryaml:		'',							// Sidecar Yaml for kubernetes
 		appmenu:			null,						// The menu array for application
 		validator:			'userValidateDebug',		// Validator object module
 		validobj:			null,						// Generated(required) validator object module
 		rejectUnauthorized:	true,						// reject mode
-		lang:				'en'						// Language for javascript application
+		lang:				'en',						// Language for javascript application
+		extrouter:			{							// Configuration of Router module to be expanded
+			/*
+			* [NOTE]	Define the following objects as an array.
+			*			Define one object for one extended Router.
+			*
+			routername: {
+				name:			'file path',			// Specify JS file name(except js extension) for defining Router. The "/router" directory is current.
+				path:			'route top path',		// Specify the router entry path(ex. "/myenter").
+				config:			{}						// Specify the configuration required for the extended router. (Value, array, object)
+			},
+			...
+			*/
+		}
 	};
 
 	if(r3util.isSafeEntity(config)){
@@ -155,9 +170,17 @@ var	loadedConfig = (function()
 			data.apiport	= config.apiport;
 		}
 
-		// Userdata
+		// User Date Script
 		if(r3util.isSafeString(config.userdata)){
 			data.userdata	= r3util.getSafeString(config.userdata);
+		}
+		// Secret Yaml
+		if(r3util.isSafeString(config.secretyaml)){
+			data.secretyaml	= r3util.getSafeString(config.secretyaml);
+		}
+		// Sidecar Yaml
+		if(r3util.isSafeString(config.sidecaryaml)){
+			data.sidecaryaml	= r3util.getSafeString(config.sidecaryaml);
 		}
 		// App menu
 		if(r3util.isArray(config.appmenu)){
@@ -173,9 +196,21 @@ var	loadedConfig = (function()
 		if((r3util.isSafeBoolean(config.rejectunauth) && !config.rejectunauth) || (process.env.NODE_ENV !== 'production')){
 			data.rejectUnauthorized	= false;
 		}
+
 		// Lang
 		if(r3util.isSafeString(config.lang)){
 			data.lang		= r3util.getSafeString(config.lang).toLowerCase();
+		}
+
+		// Extension Router
+		if(r3util.isSafeEntity(config.extrouter)){
+			// copy objects
+			try{
+				var	tmpstr		= JSON.stringify(config.extrouter);
+				data.extrouter	= JSON.parse(tmpstr);
+			}catch(err){
+				console.error('something wrong extrouter value in configration. then skip this value to load.');
+			}
 		}
 	}
 	return data;
@@ -377,6 +412,25 @@ var R3AppConfig = (function()
 		return this.loadedConfig.userdata;
 	};
 
+	proto.getSecretYaml = function()
+	{
+		return this.loadedConfig.secretyaml;
+	};
+
+	proto.getSidecarYaml = function()
+	{
+		// make k2hr3-k8s-init.sh parameters which is built from configuration.
+		//
+		var	params	= '-host ' + this.loadedConfig.apihost + ' -port ' + this.loadedConfig.apiport + ' -schema ' + this.loadedConfig.apischeme;
+
+		// repace '{{= %K2HR3_REST_API_HOST% }}' in sidecaryaml
+		//
+		// replace keyword in template
+		var	replace	= this.loadedConfig.sidecaryaml.replace(/{{= %K2HR3_REST_API_HOST% }}/g, params);
+
+		return replace;
+	};
+
 	proto.getAppMenu = function()
 	{
 		return this.loadedConfig.appmenu;
@@ -400,6 +454,28 @@ var R3AppConfig = (function()
 	proto.getLang = function()
 	{
 		return this.loadedConfig.lang;
+	};
+
+	proto.getExtRouter = function(routername)
+	{
+		if(r3util.isSafeEntity(routername)){
+			if(!r3util.isSafeString(routername)){
+				console.error('routername('  + JSON.stringify(routername) + ') parameter is not empty but not string.');
+				return null;
+			}
+			if(!r3util.isSafeEntity(this.loadedConfig.extrouter)){
+				console.warn('extrouter configuration does not have router routername('  + JSON.stringify(routername) + ').');
+				return null;
+			}
+			if(!r3util.isSafeEntity(this.loadedConfig.extrouter[routername])){
+				console.warn('extrouter configuration does not have router routername('  + JSON.stringify(routername) + ').');
+				return null;
+			}
+			return this.loadedConfig.extrouter[routername];
+		}else{
+			// return all extrouter object
+			return this.loadedConfig.extrouter;
+		}
 	};
 
 	return R3AppConfig;

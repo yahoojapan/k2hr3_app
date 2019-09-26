@@ -23,6 +23,7 @@ import R3Context		from '../util/r3context';
 import { r3GetTextRes }	from '../util/r3define';
 import { resourceType, roleType, policyType, serviceType } from '../util/r3types';
 import { r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity, r3IsEmptyString, r3CompareCaseString, r3IsJSON, r3ConvertFromJSON, r3IsSafeUrl, r3DeepClone } from '../util/r3util';
+import crypto			from 'crypto';
 
 //
 // Internal demo data
@@ -326,6 +327,65 @@ const DemoInitialInternalData = {
 	]
 };
 
+const DemoInitialRoleTokens = {
+	// Tenant = No service
+	'foo-tenant': [
+		{
+			path:		'foo-tenant-role',
+			roletokens:	{
+				'demo-role-token-for-foo-tenant': {
+					date:			'2019-09-01T00:00:00.000Z',
+					expire:			'2029-09-01T00:00:00.000Z',
+					user:			'demo',
+					hostname:		null,
+					ip:				null,
+					port:			0,
+					cuk:			null,
+					registerpath:	'for-demo-register-dummy-path-for-openstack'
+				}
+			}
+		},
+		{
+			path:		'foo-tenant-role/foo-tenant-role-child',
+			roletokens:	{
+				'demo-role-token-for-foo-tenant-role/foo-tenant-role-child': {
+					date:			'2019-09-01T00:00:00.000Z',
+					expire:			'2029-09-01T00:00:00.000Z',
+					user:			'demo',
+					hostname:		null,
+					ip:				null,
+					port:			0,
+					cuk:			null,
+					registerpath:	'for-demo-register-dummy-path-for-openstack'
+				}
+			}
+		}
+	],
+
+	// Tenant = Service owner
+	'service-owner': [
+	],
+
+	// Tenant = Service user
+	'service-user': [
+		{
+			path:		'service-user-role',
+			roletokens:	{
+				'demo-role-token-for-service-user-role': {
+					date:			'2019-09-01T00:00:00.000Z',
+					expire:			'2029-09-01T00:00:00.000Z',
+					user:			'demo',
+					hostname:		null,
+					ip:				null,
+					port:			0,
+					cuk:			null,
+					registerpath:	'for-demo-register-dummy-path-for-openstack'
+				}
+			}
+		}
+	]
+};
+
 //
 // Singin status for startup
 //
@@ -363,6 +423,7 @@ export default class R3Provider
 
 		// initialize demo data
 		this.demoData			= r3DeepClone(DemoInitialInternalData);
+		this.roleTokens			= r3DeepClone(DemoInitialRoleTokens);
 	}
 
 	getR3Context()
@@ -2550,30 +2611,232 @@ export default class R3Provider
 	// Token
 	//--------------------------------------------------
 	//
-	// Get Role Token
+	// Get New Role Token
 	//
-	getRoleToken(tenant, role, callback)
+	getNewRoleToken(tenant, role, expire, callback)
 	{
 		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(role, true)){
-			let _error = new Error('tenant(' + JSON.stringify(tenant) + ') or role path(' + JSON.stringify(role) + ') parameters are wrong.');
+		let	_callback	= callback;
+		let	_error;
+		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(role, true) || (r3IsSafeTypedEntity(expire, 'number') && expire < 0)){
+			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or role path(' + JSON.stringify(role) + ') or expire(' + JSON.stringify(expire) + ') parameters are wrong.');
 			console.error(_error.message);
-			callback(_error);
+			_callback(_error);
 			return;
 		}
+
 		this.startProgress();																// start progressing
 
-		let	userDataScript = this.r3Context.getExpandUserData(this.demoDummyDatas.registerpath, role);
-		callback(null, {
-			userDataScript:		userDataScript,
-			roleToken:			this.demoDummyDatas.roleToken
+		let	_tenant		= tenant.name;
+		let	_role		= role;
+		let	_expire;
+		if(!r3IsSafeTypedEntity(expire, 'number')){
+			_expire		= 24 * 60 * 60 * 1000;												// default 24H(ms)
+		}else{
+			_expire		= 10 * 365 * 24 * 60 * 60 * 1000;									// no expire(10 years)
+		}
+
+		// make new role token
+		let binRoleToken	= crypto.randomBytes(16);
+		let	strRoleToken	= binRoleToken.toString('hex');
+		let	nowMilliTime	= Math.floor(new Date());
+		let	valueRoleToken	= {
+			date:			(new Date(nowMilliTime)).toISOString(),
+			expire:			(new Date(nowMilliTime + _expire)).toISOString(),
+			user:			'demo',
+			hostname:		null,
+			ip:				null,
+			port:			0,
+			cuk:			null,
+			registerpath:	'for-demo-' + binRoleToken.toString('hex')
+		};
+
+		// search target role
+		let	_target_role = null;
+		for(let cnt = 0; cnt < this.roleTokens[_tenant].length; ++cnt){
+			if(_role == this.roleTokens[_tenant][cnt].path){
+				_target_role = this.roleTokens[_tenant][cnt];
+				break;
+			}
+		}
+		if(null == _target_role){
+			// need to add new role
+			_target_role = {
+				path:		_role,
+				roletokens:	{}
+			};
+			this.roleTokens[_tenant].push(_target_role);
+		}
+
+		// add new role token
+		_target_role.roletokens[strRoleToken] = valueRoleToken;
+
+		this.stopProgress();																// stop progressing
+
+		_callback(null, {
+			roleToken:		strRoleToken,
+			registerPath:	valueRoleToken.registerpath
+		});
+	}
+
+	//
+	// Get Role Token List
+	//
+	getRoleTokenList(tenant, role, expand, callback)
+	{
+		if(!r3IsSafeTypedEntity(callback, 'function')){
+			console.error('callback parameter is wrong.');
+			return;
+		}
+		let	_callback	= callback;
+		let	_error;
+		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(role, true)){
+			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or role path(' + JSON.stringify(role) + ') parameters are wrong.');
+			console.error(_error.message);
+			_callback(_error);
+			return;
+		}
+
+		this.startProgress();																// start progressing
+
+		if(!r3IsSafeTypedEntity(expand, 'boolean')){										// do not care for this value(always expanding)
+			expand		= true;
+		}
+		let	_tenant		= tenant.name;
+		let	_role		= role;
+
+		// search target role
+		let	_target_role = null;
+		for(let cnt = 0; cnt < this.roleTokens[_tenant].length; ++cnt){
+			if(_role == this.roleTokens[_tenant][cnt].path){
+				_target_role = this.roleTokens[_tenant][cnt];
+				break;
+			}
+		}
+		if(null == _target_role){
+			// need to add new role
+			_target_role = {
+				path:		_role,
+				roletokens:	{}
+			};
+			this.roleTokens[_tenant].push(_target_role);
+		}
+
+		// convert object to object array
+		let	tokenArray = [];
+		Object.keys(_target_role.roletokens).forEach(function(oneToken){
+			let	tokendata = r3DeepClone(_target_role.roletokens[oneToken]);
+			tokendata.token = oneToken;														// add element { ..., token: 'role token string' }
+			tokenArray.push(tokendata);
 		});
 
 		this.stopProgress();																// stop progressing
+
+		_callback(null, tokenArray);
+	}
+
+	//
+	// Remove Role Token
+	//
+	deleteRoleToken(tenant, roletoken, callback)
+	{
+		if(!r3IsSafeTypedEntity(callback, 'function')){
+			console.error('callback parameter is wrong.');
+			return;
+		}
+		let	_callback	= callback;
+		let	_error;
+		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(roletoken, true)){
+			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or role token(' + JSON.stringify(roletoken) + ') parameters are wrong.');
+			console.error(_error.message);
+			_callback(_error);
+			return;
+		}
+
+		this.startProgress();																// start progressing
+
+		let	_tenant		= tenant.name;
+		let	_roletoken	= roletoken;
+
+		// search target role token and remove it
+		for(let cnt = 0; cnt < this.roleTokens[_tenant].length; ++cnt){
+			let	_found = false;
+			Object.keys(this.roleTokens[_tenant][cnt].roletokens).forEach(function(oneToken){
+				if(oneToken == _roletoken){
+					_found = true;
+				}
+			});
+			if(_found){
+				delete this.roleTokens[_tenant][cnt].roletokens[_roletoken];
+				break;
+			}
+		}
+
+		this.stopProgress();																// stop progressing
+
+		_callback(null);
+	}
+
+	//
+	// Get User Data Script
+	//
+	getUserDataScript(registerpath)
+	{
+		if(r3IsEmptyString(registerpath, true)){
+			console.error('registerpath(' + JSON.stringify(registerpath) + ') parameter is wrong.');
+			return null;
+		}
+
+		// get user token script by expanding template
+		let	userDataScript = this.r3Context.getExpandUserData(registerpath);
+		if(r3IsEmptyString(userDataScript, true)){
+			console.error('Failed to generate user data script from template.');
+			return null;
+		}
+
+		return userDataScript;
+	}
+
+	//
+	// Get Secret Yaml
+	//
+	getSecretYaml(roletoken)
+	{
+		if(r3IsEmptyString(roletoken, true)){
+			console.error('role token(' + JSON.stringify(roletoken) + ') parameter is wrong.');
+			return null;
+		}
+
+		// get secret yaml by expanding template
+		let	secretYaml = this.r3Context.getExpandSecretYaml(roletoken);
+		if(r3IsEmptyString(secretYaml, true)){
+			console.error('Failed to generate secret yaml from template.');
+			return null;
+		}
+
+		return secretYaml;
+	}
+
+	//
+	// Get Secret Yaml
+	//
+	getSidecarYaml(roleyrn)
+	{
+		if(r3IsEmptyString(roleyrn, true)){
+			console.error('role full yrn path(' + JSON.stringify(roleyrn) + ') parameter is wrong.');
+			return null;
+		}
+
+		// get sidecar yaml by expanding template
+		let	sidecarYaml = this.r3Context.getExpandSidecarYaml(roleyrn);
+		if(r3IsEmptyString(sidecarYaml, true)){
+			console.error('Failed to generate sidecar yaml from template.');
+			return null;
+		}
+		return sidecarYaml;
 	}
 }
 

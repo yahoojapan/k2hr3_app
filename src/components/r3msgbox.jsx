@@ -132,7 +132,7 @@ export default class R3MsgBox extends React.Component
 	{
 		const { theme, classes } = this.props;
 
-		if(this.props.message.empty()){
+		if(null === this.props.message || this.props.message.empty()){
 			return null;
 		}
 

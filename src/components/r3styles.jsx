@@ -714,10 +714,6 @@ export const r3PathInfoDialog = (theme) => ({
 	keyTitle: {
 		marginTop:				theme.spacing.unit * 2
 	},
-	floatKeyTitle: {
-		marginTop:				theme.spacing.unit * 2,
-		float:					'left'
-	},
 	value: {
 		paddingLeft:			theme.spacing.unit * 4
 	},
@@ -725,32 +721,125 @@ export const r3PathInfoDialog = (theme) => ({
 		fontStyle:				'italic',
 		paddingLeft:			theme.spacing.unit * 4
 	},
-	copyUDSButton: {
-		marginTop:				theme.spacing.unit * 2,
-		padding:				theme.spacing.unit / 2
-	},
-	copyUDSIcon: {
-		color:					theme.palette.secondary.main
-	},
-	textFieldWrapper: {
-		overflow:				'hidden',
-		width:					'1px',
-		height:					'1px'
-	},
-	inputBaseUDS: {
-		width:					'3rem',
-		height:					'3rem',
-		paddingTop:				'1px',
-		paddingLeft:			'1px'
-	},
-	inputTextField: {
-		color:					theme.palette.text.secondary
-	},
 	button: {
+		marginTop:				theme.spacing.unit * 2
+	},
+	backPageButton: {
 		marginTop:				theme.spacing.unit * 2
 	},
 	buttonIcon: {
 		marginLeft:				theme.spacing.unit
+	},
+
+	// Main page
+	roleTokenButton: {
+		color:					theme.palette.primary.main,
+		margin:					0,
+		marginLeft:				theme.spacing.unit * 3,
+		paddingLeft:			theme.spacing.unit,
+		paddingRight:			theme.spacing.unit,
+		minWidth:				theme.spacing.unit,
+		textTransform:			'none'
+	},
+	roleTokenButtonIcon: {
+		marginRight:			theme.spacing.unit
+	},
+
+	// Manage Role Token page
+	tableHead: {
+		backgroundColor:		theme.palette.primary.light
+	},
+	textTableHead: {
+		whiteSpace:				'nowrap',
+		textAlign:				'center'
+	},
+	textActionTableHead: {
+		whiteSpace:				'nowrap',
+		textAlign:				'center',
+		paddingTop:				theme.spacing.unit / 2
+	},
+	textTableContent: {
+		whiteSpace:				'nowrap'
+	},
+	textNewTableContent: {
+		whiteSpace:				'nowrap',
+		fontWeight:				'bold'
+	},
+	tableCell: {
+		whiteSpace:				'nowrap',
+		textAlign:				'center',
+		paddingLeft:			theme.spacing.unit,
+		paddingRight:			theme.spacing.unit
+	},
+	wordBreakTooltip: {
+		whiteSpace:				'normal',
+		wordBreak:				'break-all',
+		zIndex:					1500,					// original(3.9.4) property value
+		opacity:				0.9,					// original(3.9.4) property value
+		pointerEvents:			'none'					// original(3.9.4) property value
+	},
+	manageAddButton: {
+		margin:					0,
+		paddingLeft:			theme.spacing.unit,
+		paddingRight:			theme.spacing.unit,
+		minWidth:				theme.spacing.unit,
+		float:					'left'
+	},
+	manageActionButton: {
+		margin:					0,
+		paddingLeft:			theme.spacing.unit,
+		paddingRight:			theme.spacing.unit,
+		minWidth:				theme.spacing.unit,
+		textTransform:			'none'
+	},
+	newRoleTokenPopover: {
+	},
+	newRoleTokenPopoverTitle: {
+		marginLeft:				theme.spacing.unit * 2,
+		marginTop:				theme.spacing.unit,
+		marginBottom:			theme.spacing.unit,
+		marginRight:			theme.spacing.unit
+	},
+	newRoleTokenExpireForm: {
+		margin:					theme.spacing.unit
+	},
+	newRoleTokenExpireCheck: {
+		float:					'left'
+	},
+	newRoleTokenExpireLabel: {
+		marginLeft:				0,
+		marginTop:				theme.spacing.unit,
+		marginBottom:			theme.spacing.unit,
+		marginRight:			theme.spacing.unit
+	},
+	createRoleTokenButton: {
+		margin:					theme.spacing.unit
+	},
+
+	// Display role token and registration code page
+	codeTypeSelect: {
+		marginLeft:				theme.spacing.unit * 4,
+		marginBottom:			theme.spacing.unit
+	},
+	codeTypeSelectInput: {
+		color:					theme.palette.text.secondary
+	},
+	codeInputTextField: {
+		color:					theme.palette.text.secondary,
+		backgroundColor:		theme.palette.common.white,
+		padding:				theme.spacing.unit
+	},
+	codeTextField: {
+		paddingLeft:			theme.spacing.unit * 4,
+		marginBottom:			theme.spacing.unit
+	},
+	copyClipboardButton: {
+		float:					'right',
+		color:					theme.palette.primary.main,
+		textTransform:			'none'
+	},
+	copyClipboardIcon: {
+		marginRight:			theme.spacing.unit
 	}
 });
 

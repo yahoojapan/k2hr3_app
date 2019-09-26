@@ -841,20 +841,93 @@ const r3Theme = createMuiTheme({
 			component:				'span',
 			color:					'textSecondary'
 		},
-		copyUDSButton: {
-			label:					'copy-uds-button',
-			'aria-label':			'copy user data script to clipboard'
-		},
-		textFieldUDS: {
-			disabled:				false,
-			multiline:				true,
-			rows:					10,
-			rowsMax:				12
-		},
 		button: {
 			variant:				'contained',
 			color:					'secondary',
 			'aria-label':			'close dialog'
+		},
+		backPageButton: {
+			variant:				'contained',
+			color:					'primary',
+			'aria-label':			'back to previous page'
+		},
+
+		// Main page
+		manageRoleTokenButton: {
+			'aria-label':			'manage role tokens'
+		},
+		dispCodeNewRoleTokenButton: {
+			'aria-label':			'create a new role token and display the registration code'
+		},
+
+		// Manage Role Token page
+		table: {
+		},
+		textTableHead: {
+			variant:				'subtitle2',
+			component:				'span',
+			color:					'primary'
+		},
+		textTableContent: {
+			variant:				'body2',
+			component:				'span',
+			color:					'textSecondary'
+		},
+		manageAddButton: {
+			color:					'primary',
+			'aria-label':			'generate new role token'
+		},
+		manageDeleteButton: {
+			color:					'primary',
+			'aria-label':			'delete role token'
+		},
+		manageDispCodeButton: {
+			color:					'primary',
+			'aria-label':			'display the registration code with this role token'
+		},
+		newRoleTokenPopover: {
+			anchorOrigin: {
+				vertical:			'bottom',
+				horizontal:			'left',
+			},
+			transformOrigin: {
+				vertical:			'top',
+				horizontal:			'left',
+			}
+		},
+		newRoleTokenPopoverTitle: {
+			variant:				'subtitle2',
+			component:				'span',
+			color:					'primary',
+			noWrap:					true
+		},
+		newRoleTokenExpireLabel: {
+			variant:				'body2',
+			component:				'span',
+			color:					'textSecondary'
+		},
+		createRoleTokenButton: {
+			variant:				'contained',
+			color:					'secondary',
+			'aria-label':			'close dialog'
+		},
+
+		// Display role token and registration code page
+		codetypeSelect: {
+			disabled:				false,
+			autoWidth:				true
+		},
+		codeTextField: {
+			variant:				'outlined',
+			disabled:				false,
+			multiline:				true,
+			fullWidth:				true,
+			rows:					1,
+			rowsMax:				4
+		},
+		copyClipboardButton: {
+			label:					'copy-clipboard-button',
+			'aria-label':			'copy to clipboard'
 		}
 	},
 

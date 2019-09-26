@@ -82,8 +82,8 @@ export default class R3Resource extends React.Component
 	static propTypes = {
 		r3provider:	PropTypes.object.isRequired,
 		resource:	PropTypes.object.isRequired,
+		dispUnique:	PropTypes.number.isRequired,
 		isReadMode:	PropTypes.bool,
-
 		onSave:		PropTypes.func.isRequired,
 		onUpdate:	PropTypes.func.isRequired
 	};
@@ -92,7 +92,7 @@ export default class R3Resource extends React.Component
 		isReadMode:	false
 	};
 
-	state = this.createState(this.props.resource);
+	state = R3Resource.createState(this.props.resource, this.props.dispUnique);
 
 	constructor(props)
 	{
@@ -112,13 +112,26 @@ export default class R3Resource extends React.Component
 		this.handleAddAliasesChange		= this.handleAddAliasesChange.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps)
+	componentDidMount()
 	{
 		// update State
-		this.setState(this.createState(nextProps.resource));
+		this.setState(R3Resource.createState(this.props.resource, this.props.dispUnique));
 	}
 
-	createState(resource)
+	// [NOTE]
+	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
+	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
+	//
+	static getDerivedStateFromProps(nextProps, prevState)
+	{
+		if(nextProps.dispUnique !== prevState.dispUnique){
+			// Switching content
+			return R3Resource.createState(nextProps.resource, nextProps.dispUnique);
+		}
+		return null;															// Return null to indicate no change to state.
+	}
+
+	static createState(resource, dispUnique)
 	{
 		let	resourceType	= resourceTypeString;			// default
 		let	resourceValue	= '';
@@ -133,6 +146,7 @@ export default class R3Resource extends React.Component
 		}
 
 		return {
+			dispUnique:				dispUnique,
 			resource:				r3DeepClone(resource),
 			resourceType:			resourceType,
 			resourceValue:			resourceValue,
@@ -403,7 +417,7 @@ export default class R3Resource extends React.Component
 			this.props.onUpdate(false);
 
 			// rewind State
-			this.setState(this.createState(this.props.resource));
+			this.setState(R3Resource.createState(this.props.resource, this.props.dispUnique));
 		}else{
 			// case for 'cancel updating' to cancel
 			this.setState({
