@@ -1,0 +1,117 @@
+#
+# K2HR3 Web Application
+#
+# Copyright 2017 Yahoo! Japan Corporation.
+#
+# K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers
+# common management information for the cloud.
+# K2HR3 can dynamically manage information as "who", "what", "operate".
+# These are stored as roles, resources, policies in K2hdkc, and the
+# client system can dynamically read and modify these information.
+#
+# For the full copyright and license information, please view
+# the license file that was distributed with this source code.
+#
+# AUTHOR:   Hirotaka Wakabayashi
+# CREATE:   Fri Sep 13 2019
+# REVISION:
+#
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    labelName: <label>
+  name: <name>
+spec:
+  #------------------------------------------------------------
+  # K2HR3 Sidecar volume
+  #   K2HR3 uses volume, this volume contains a file containing
+  #   the 'cuk' parameter that your application in your container
+  #   needs to access the K2HR3 REST API.
+  #------------------------------------------------------------
+  volumes:
+  - name: k2hr3-volume
+    hostPath:
+      path: /k2hr3-data
+      type: DirectoryOrCreate
+  #------------------------------------------------------------
+  # K2HR3 Sidecar volume - end
+  #------------------------------------------------------------
+  containers:
+    - name: <your container>
+      image: <your image>
+      volumeMounts:
+      - mountPath: /k2hr3-volume
+        name: k2hr3-volume
+      command:
+        - sh
+        - -c
+        - "while true; do sleep 30; done"
+    #--------------------------------------------------------------------------
+    # K2HR3 Sidecar
+    #   K2HR3 Sidecar loads docker image including k2hr3-k8s-init.sh. Then run
+    #   it at postStart/preStop lifecycle to automatically register/delete pods
+    #   into K2HR3.
+    #--------------------------------------------------------------------------
+    - name: k2hr3-sidecar
+      image: docker.io/antpickax/k2hr3.sidecar:0.1
+      envFrom:
+      - secretRef:
+          name: k2hr3-secret
+      env:
+        - name: K2HR3_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: K2HR3_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: K2HR3_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: K2HR3_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: K2HR3_POD_SERVICE_ACCOUNT
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceAccountName
+        - name: K2HR3_NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: K2HR3_POD_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.uid
+      volumeMounts:
+      - mountPath: /k2hr3-volume
+        name: k2hr3-volume
+      command:
+        - sh
+        - -c
+        - "while true; do sleep 30; done"
+      lifecycle:
+        postStart:
+          exec:
+            command:
+              - sh
+              - -c
+              - "/usr/local/bin/k2hr3-k8s-init.sh -reg -rtoken ${K2HR3_ROLETOKEN} -role {{= %K2HR3_ROLEYRN_IN_SIDECAR% }} {{= %K2HR3_REST_API_HOST% }}"
+        preStop:
+          exec:
+            command:
+              - sh
+              - -c
+              - "/usr/local/bin/k2hr3-k8s-init.sh -del -role {{= %K2HR3_ROLEYRN_IN_SIDECAR% }} {{= %K2HR3_REST_API_HOST% }}"
+    #--------------------------------------------------------------------------
+    # K2HR3 Sidecar - end
+    #--------------------------------------------------------------------------
+#
+# VIM modelines
+#
+# vim:set ts=4 fenc=utf-8:
+#

@@ -79,6 +79,9 @@ export default class R3Container extends React.Component
 	// Licenses
 	licensesObj			= r3ConvertFromJSON(r3LicensesJsonString);
 
+	// for dispatching contents
+	static dispUnique	= 0;
+
 	// State
 	//
 	// [NOTE] type/service in selected
@@ -123,7 +126,6 @@ export default class R3Container extends React.Component
 		policy:					{},
 		resource:				{},
 		toolbarData:			this.r3provider.getPathDetailInfo(null, null, false, false, null, null),
-		userData:				null,
 		message:				new R3Message(this.r3provider.getR3TextRes().iNotSelectTenant),
 		aboutDialogOpen:		false,
 		licensePackage:			null,
@@ -204,7 +206,6 @@ export default class R3Container extends React.Component
 			policy:					{},
 			resource:				{},
 			toolbarData:			this.r3provider.getPathDetailInfo(null, null, false, false, null, null),
-			userData:				null,
 			aboutDialogOpen:		false,
 			licensePackage:			null,
 			licenseType:			null,
@@ -475,44 +476,6 @@ export default class R3Container extends React.Component
 		});
 	}
 
-	//
-	// Update Role Token/User script data
-	//
-	updateRoleToken(selectedTenant, selectedService, selectedType, selectedPath, callback)
-	{
-		console.info('CALL : updateRoleToken');
-
-		let	_callback	= callback;
-		let	_tenant		= selectedTenant;
-		let	_service	= selectedService;
-		let	_type		= selectedType;
-		let	_path		= selectedPath;
-
-		if(	r3IsEmptyStringObject(_tenant, 'name')	||
-			!r3CompareString(_type, roleType)		||
-			!r3IsEmptyString(_service)				||			// Could not put Role Token under service
-			r3IsEmptyString(_path)					)
-		{
-			// update state
-			_callback(null, {});
-			return;
-		}
-
-		this.r3provider.getRoleToken(_tenant, _path, (error, resobj) =>
-		{
-			if(null !== error){
-				console.info(error.message);
-				_callback(error, null);
-				return;
-			}
-			if(null === resobj){
-				console.error('Could not get role token/user script data for tenant(' + _tenant + '), path(' + _path + ')');
-				resobj = {};
-			}
-			_callback(null, resobj);
-		});
-	}
-
 	updateStateAllParts(tenant, service, type, path, openMainTree, message = null, msgType = infoType)
 	{
 		// new state data
@@ -575,28 +538,17 @@ export default class R3Container extends React.Component
 
 						this.updateResourceData(_tenant, _service, _type, _path, (error, resource) =>
 						{
+							this.cbProgressControl(false);					// collectively undisplay progress
+
 							if(null !== error){
-								this.cbProgressControl(false);				// collectively undisplay progress
 								console.info(error.message);
 								this.updateState(null, error.message, errorType);
 								return;
 							}
 							newState.resource = resource;
 
-							this.updateRoleToken(_tenant, _service, _type, _path, (error, userData) =>
-							{
-								this.cbProgressControl(false);				// collectively undisplay progress
-
-								if(null !== error){
-									console.info(error.message);
-									this.updateState(null, error.message, errorType);
-									return;
-								}
-								newState.userData = userData;
-
-								// update all
-								this.updateState(newState, _message, _msgType);
-							});
+							// update all
+							this.updateState(newState, _message, _msgType);
 						});
 					});
 				});
@@ -1182,6 +1134,13 @@ export default class R3Container extends React.Component
 	{
 		const { classes } = this.props;
 
+		// always increments(32bit cycling)
+		if(R3Container.dispUnique < 0xffffffff){
+			++R3Container.dispUnique;
+		}else{
+			R3Container.dispUnique = 0;
+		}
+
 		if(r3CompareCaseString(resourceType, this.state.selected.type)){
 			if(!r3IsEmptyEntity(this.state.selected.path)){
 				return (
@@ -1191,6 +1150,7 @@ export default class R3Container extends React.Component
 						<R3Resource
 							r3provider={ this.r3provider }
 							resource={ this.state.resource }
+							dispUnique={ R3Container.dispUnique }
 							onSave={ this.handleSave }
 							onUpdate={ this.handleContentUpdating }
 							isReadMode={ !r3IsEmptyString(this.state.selected.service) }
@@ -1207,6 +1167,7 @@ export default class R3Container extends React.Component
 						<R3Role
 							r3provider={ this.r3provider }
 							role={ this.state.role }
+							dispUnique={ R3Container.dispUnique }
 							onSave={ this.handleSave }
 							onUpdate={ this.handleContentUpdating }
 							isReadMode={ !r3IsEmptyString(this.state.selected.service) }
@@ -1223,6 +1184,7 @@ export default class R3Container extends React.Component
 						<R3Policy
 							r3provider={ this.r3provider }
 							policy={ this.state.policy }
+							dispUnique={ R3Container.dispUnique }
 							onSave={ this.handleSave }
 							onUpdate={ this.handleContentUpdating }
 							isReadMode={ !r3IsEmptyString(this.state.selected.service) }
@@ -1241,6 +1203,7 @@ export default class R3Container extends React.Component
 							r3provider={ this.r3provider }
 							tenant={ this.state.selected.tenant.name }
 							service={ this.state.service }
+							dispUnique={ R3Container.dispUnique }
 							r3provider={ this.r3provider }
 							onSave={ this.handleServiceSave }
 							onUpdate={ this.handleContentUpdating }
@@ -1305,7 +1268,6 @@ export default class R3Container extends React.Component
 							r3provider={ this.r3provider }
 							enDock={ this.state.mainTreeEndock }
 							toolbarData={ this.state.toolbarData }
-							userData={ this.state.userData }
 							onArrawUpward={ this.handleMoveToUpPath }
 							onCreatePath={ this.handleCreatePath }
 							onCheckPath={ this.handleCheckConflictPath }

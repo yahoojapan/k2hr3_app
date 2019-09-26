@@ -81,7 +81,8 @@ export default class R3SigninCredDialog extends React.Component
 	state = {
 		name:			this.props.name,
 		passphrase:		this.props.passphrase,
-		showPassphrase:	false
+		showPassphrase:	false,
+		open:			this.props.open
 	};
 
 	constructor(props)
@@ -94,12 +95,32 @@ export default class R3SigninCredDialog extends React.Component
 		this.handleClickShowPassphrase	= this.handleClickShowPassphrase.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps)
+	// [NOTE]
+	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
+	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
+	//
+	static getDerivedStateFromProps(nextProps, prevState)
 	{
-		this.setState({
-			name:		nextProps.name,
-			passphrase:	nextProps.passphrase
-		});
+		if(prevState.open != nextProps.open){
+			if(nextProps.open){
+				// Inivisible to Visible
+				return {
+					name:			nextProps.name,
+					passphrase:		nextProps.passphrase,
+					showPassphrase:	nextProps.showPassphrase,
+					open:			nextProps.open
+				};
+			}else{
+				// Visible to Inivisible
+				return {
+					name:			prevState.name,
+					passphrase:		prevState.passphrase,
+					showPassphrase:	prevState.showPassphrase,
+					open:			nextProps.open
+				};
+			}
+		}
+		return null;															// Return null to indicate no change to state.
 	}
 
 	handleUserNameChange(event)

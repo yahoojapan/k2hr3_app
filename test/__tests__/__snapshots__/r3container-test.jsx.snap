@@ -53,7 +53,7 @@ Array [
           </svg>
         </span>
         <span
-          className="MuiTouchRipple-root-303"
+          className="MuiTouchRipple-root-321"
         />
       </button>
       <h6
@@ -106,7 +106,7 @@ Array [
           </svg>
         </span>
         <span
-          className="MuiTouchRipple-root-303"
+          className="MuiTouchRipple-root-321"
         />
       </button>
     </div>
@@ -188,7 +188,7 @@ Array [
                 </svg>
               </span>
               <span
-                className="MuiTouchRipple-root-303"
+                className="MuiTouchRipple-root-321"
               />
             </button>
           </div>
@@ -245,7 +245,7 @@ Array [
               </span>
             </div>
             <span
-              className="MuiTouchRipple-root-303"
+              className="MuiTouchRipple-root-321"
             />
           </div>
         </div>
@@ -296,7 +296,7 @@ Array [
               </span>
             </div>
             <span
-              className="MuiTouchRipple-root-303"
+              className="MuiTouchRipple-root-321"
             />
           </div>
         </div>
@@ -347,7 +347,7 @@ Array [
               </span>
             </div>
             <span
-              className="MuiTouchRipple-root-303"
+              className="MuiTouchRipple-root-321"
             />
           </div>
         </div>
@@ -398,7 +398,7 @@ Array [
               </span>
             </div>
             <span
-              className="MuiTouchRipple-root-303"
+              className="MuiTouchRipple-root-321"
             />
           </div>
         </div>
@@ -471,11 +471,11 @@ Array [
         </header>
       </div>
       <div
-        className="MuiPaper-root-19 MuiPaper-elevation2-23 MuiPaper-rounded-20 R3MsgBox-root-273"
+        className="MuiPaper-root-19 MuiPaper-elevation2-23 MuiPaper-rounded-20 R3MsgBox-root-291"
       >
         <svg
           aria-hidden="true"
-          className="MuiSvgIcon-root-67 R3MsgBox-informationIcon-279"
+          className="MuiSvgIcon-root-67 R3MsgBox-informationIcon-297"
           focusable="false"
           role="presentation"
           viewBox="0 0 24 24"
@@ -492,7 +492,7 @@ Array [
           />
         </svg>
         <span
-          className="MuiTypography-root-80 MuiTypography-body2-88 R3MsgBox-dialogInformationContentText-276"
+          className="MuiTypography-root-80 MuiTypography-body2-88 R3MsgBox-dialogInformationContentText-294"
         >
           First select the tenant, then select ROLE / RESOURCE / POLICY, then browse and edit.
           <br />

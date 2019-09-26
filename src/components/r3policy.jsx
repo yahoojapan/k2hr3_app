@@ -79,9 +79,9 @@ export default class R3Policy extends React.Component
 	static propTypes = {
 		r3provider:	PropTypes.object.isRequired,
 		policy:		PropTypes.object.isRequired,
+		dispUnique:	PropTypes.number.isRequired,
 		isReadMode:	PropTypes.bool,
 		autoWidth:	PropTypes.bool,
-
 		onSave:		PropTypes.func.isRequired,
 		onUpdate:	PropTypes.func.isRequired
 	};
@@ -91,7 +91,7 @@ export default class R3Policy extends React.Component
 		autoWidth:	true
 	};
 
-	state = this.createState(this.props.policy);
+	state = R3Policy.createState(this.props.policy, this.props.dispUnique);
 
 	constructor(props)
 	{
@@ -111,15 +111,29 @@ export default class R3Policy extends React.Component
 		this.handleAddAliasesChange		= this.handleAddAliasesChange.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps)
+	componentDidMount()
 	{
 		// update State
-		this.setState(this.createState(nextProps.policy));
+		this.setState(R3Policy.createState(this.props.policy, this.props.dispUnique));
 	}
 
-	createState(policy)
+	// [NOTE]
+	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
+	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
+	//
+	static getDerivedStateFromProps(nextProps, prevState)
+	{
+		if(nextProps.dispUnique !== prevState.dispUnique){
+			// Inivisible to Visible
+			return R3Policy.createState(nextProps.policy, nextProps.dispUnique);
+		}
+		return null;															// Return null to indicate no change to state.
+	}
+
+	static createState(policy, dispUnique)
 	{
 		return {
+			dispUnique:					dispUnique,
 			policy:						r3DeepClone(policy),
 			addResource:				'',
 			addAliases:					'',
@@ -383,7 +397,7 @@ export default class R3Policy extends React.Component
 			this.props.onUpdate(false);
 
 			// rewind State
-			this.setState(this.createState(this.props.policy));
+			this.setState(R3Policy.createState(this.props.policy, this.props.dispUnique));
 		}else{
 			// case for 'cancel updating' to cancel
 			this.setState({

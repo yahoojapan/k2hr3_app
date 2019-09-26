@@ -69,7 +69,9 @@ router.get('/', function(req, res, next)							// eslint-disable-line no-unused-
 		var	apihost		= _appConf.getApiHost();
 		var	apiport		= _appConf.getApiPort();
 		var	appmenu		= _appConf.getAppMenu();					// this is object(array)
-		var	userdata	= _appConf.getUserData();					// this is string for script file
+		var	userdata	= _appConf.getUserData();					// this is string for User Date Script
+		var	secretyaml	= _appConf.getSecretYaml();					// this is string for Secret Yaml
+		var	sidecaryaml	= _appConf.getSidecarYaml();				// this is string for Sidecar Yaml
 		var	signintype	= tokensObj.getSignInType();
 		var	signinurl	= tokensObj.getSignInUrl();
 		var	signouturl	= tokensObj.getSignOutUrl();
@@ -91,6 +93,8 @@ router.get('/', function(req, res, next)							// eslint-disable-line no-unused-
 				apiport:		apiport,
 				appmenu:		escape(JSON.stringify(appmenu)),
 				userdata:		escape(JSON.stringify(userdata)),
+				secretyaml:		escape(JSON.stringify(secretyaml)),
+				sidecaryaml:	escape(JSON.stringify(sidecaryaml)),
 				username:		username,
 				unscopedtoken:	token,
 				signintype:		signintype,

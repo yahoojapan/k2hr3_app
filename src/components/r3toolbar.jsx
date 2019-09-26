@@ -73,7 +73,6 @@ export default class R3Toolbar extends React.Component
 		r3provider:				PropTypes.object.isRequired,
 		enDock:					PropTypes.bool,
 		toolbarData:			PropTypes.object.isRequired,
-		userData:				PropTypes.object,
 
 		onArrawUpward:			PropTypes.func.isRequired,
 		onCreatePath:			PropTypes.func.isRequired,
@@ -88,7 +87,6 @@ export default class R3Toolbar extends React.Component
 
 	static defaultProps = {
 		enDock:					true,
-		userData:				null,
 		onCheckUpdating:		null
 	};
 
@@ -681,10 +679,7 @@ export default class R3Toolbar extends React.Component
 	{
 		const { theme, classes, r3provider } = this.props;
 
-		let	userDataScript	= r3IsEmptyStringObject(this.props.userData, 'userDataScript')	? null : this.props.userData.userDataScript;
-		let	roleToken		= r3IsEmptyStringObject(this.props.userData, 'roleToken')		? null : this.props.userData.roleToken;
 		let	themeToolbar	= this.props.enDock ? theme.r3Toolbar.toolbar : theme.r3Toolbar.smallToolbar;
-
 		let	name			= '';
 		let	ownerTag;
 		if(r3IsEmptyString(this.props.toolbarData.name)){
@@ -742,8 +737,7 @@ export default class R3Toolbar extends React.Component
 					service={ this.props.toolbarData.service }
 					type={ this.props.toolbarData.type }
 					fullpath={ this.props.toolbarData.fullpath }
-					userDataScript={ userDataScript }
-					roleToken={ roleToken }
+					currentpath={ this.props.toolbarData.currentpath }
 					onClose={ this.handlePathInfoDialogClose }
 				/>
 				<R3CreatePathDialog

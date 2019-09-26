@@ -19,7 +19,7 @@
  *
  */
 
-import { kwApiHostForUD, kwIncludePathForUD, signinUnknownType, signinUnscopedToken, signinCredential }						from '../util/r3types';
+import { kwApiHostForUD, kwIncludePathForUD, kwRoleTokenForSecret, kwRoleTokenForRoleYrn, signinUnknownType, signinUnscopedToken, signinCredential }	from '../util/r3types';
 import { r3ConvertFromJSON, r3UnescapeHTML, r3CompareCaseString, r3IsEmptyString, r3IsEmptyEntity, r3IsSafeTypedEntity }	from '../util/r3util';
 
 //
@@ -60,6 +60,34 @@ const r3GlobalObject = (function()
 		console.info('There is no user script template.');
 	}
 
+	// secret yaml
+	let	_secretyaml = null;
+	if(!r3IsEmptyEntity(r3globaltmp.r3secretyaml)){
+		let	_decodesecretyaml	= unescape(r3globaltmp.r3secretyaml);	// decode
+		let	_templsecretyaml	= r3ConvertFromJSON(_decodesecretyaml);	// parse
+		if(r3IsSafeTypedEntity(_templsecretyaml, 'string')){
+			_secretyaml = _templsecretyaml;
+		}else{
+			console.info('There is no secret yaml template.');
+		}
+	}else{
+		console.info('There is no secret yaml template.');
+	}
+
+	// sidecar yaml
+	let	_sidecaryaml = null;
+	if(!r3IsEmptyEntity(r3globaltmp.r3sidecaryaml)){
+		let	_decodesidecaryaml	= unescape(r3globaltmp.r3sidecaryaml);	// decode
+		let	_templsidecaryaml	= r3ConvertFromJSON(_decodesidecaryaml);// parse
+		if(r3IsSafeTypedEntity(_templsidecaryaml, 'string')){
+			_sidecaryaml = _templsidecaryaml;
+		}else{
+			console.info('There is no sidecar yaml template.');
+		}
+	}else{
+		console.info('There is no sidecar yaml template.');
+	}
+
 	// default object values
 	let	r3globalobj	= {
 		apischeme:		(r3IsEmptyString(r3globaltmp.r3apischeme)	? '' : r3globaltmp.r3apischeme),
@@ -67,6 +95,8 @@ const r3GlobalObject = (function()
 		apiport:		((r3IsEmptyEntity(r3globaltmp.r3apiport) || isNaN(r3globaltmp.r3apiport)) ? 0 : r3globaltmp.r3apiport),
 		appmenu:		_appmenu,
 		userdata:		_userdata,
+		secretyaml:		_secretyaml,
+		sidecaryaml:	_sidecaryaml,
 		login:			false,
 		username:		'',
 		unscopedtoken:	'',
@@ -106,7 +136,9 @@ export default class R3Context
 		this.apihost					= r3GlobalObject.apihost;		// k2hr3 api hostname
 		this.apiport					= r3GlobalObject.apiport;		// k2hr3 api port
 		this.appmenu					= r3GlobalObject.appmenu;		// k2hr3 app menu array
-		this.userdata					= r3GlobalObject.userdata;		// k2hr3 user script template
+		this.userdata					= r3GlobalObject.userdata;		// k2hr3 user data script template
+		this.secretyaml					= r3GlobalObject.secretyaml;	// k2hr3 secret yaml template
+		this.sidecaryaml				= r3GlobalObject.sidecaryaml;	// k2hr3 sidecar yaml template
 		this.signintype					= r3GlobalObject.signintype;	// SignIn Type
 		this.signinurl					= r3GlobalObject.signinurl;		// SignIn URL
 		this.signouturl					= r3GlobalObject.signouturl;	// SignOut URL
@@ -182,6 +214,16 @@ export default class R3Context
 		return this.userdata;
 	}
 
+	getSecretYaml()
+	{
+		return this.secretyaml;
+	}
+
+	getSidecarYaml()
+	{
+		return this.sidecaryaml;
+	}
+
 	getExpandUserData(registerpath)
 	{
 		if(r3IsEmptyString(this.userdata)){
@@ -196,6 +238,54 @@ export default class R3Context
 		// replace keyword in template
 		let	expanded= this.userdata.replace(kwIncludePathForUD, registerpath);
 		expanded	= expanded.replace(kwApiHostForUD, this.getApiUrlBase());
+
+		return expanded;
+	}
+
+	getExpandSecretYaml(roleToken)
+	{
+		if(r3IsEmptyString(this.secretyaml)){
+			console.info('There is no secret yaml template.');
+			return '';
+		}
+		if(r3IsEmptyString(roleToken)){
+			console.error('role token is empty.');
+			return '';
+		}
+
+		let	roleToken64;
+		try{
+			// encode base64
+			var	buff64	= new Buffer(roleToken, 'ascii');
+			roleToken64	= buff64.toString('base64');
+			if(r3IsEmptyString(roleToken64)){
+				console.error('failed to encoding by base64.');
+				return '';
+			}
+		}catch(exception){
+			console.error('failed to encoding by base64.');
+			return '';
+		}
+
+		// replace keyword in template
+		let	expanded = this.secretyaml.replace(kwRoleTokenForSecret, roleToken64);
+
+		return expanded;
+	}
+
+	getExpandSidecarYaml(roleyrn)
+	{
+		if(r3IsEmptyString(this.sidecaryaml)){
+			console.info('There is no sidecar yaml template.');
+			return '';
+		}
+		if(r3IsEmptyString(roleyrn)){
+			console.error('role full yrn path is empty.');
+			return '';
+		}
+
+		// replace keyword in template
+		let	expanded = this.sidecaryaml.replace(kwRoleTokenForRoleYrn, roleyrn);
 
 		return expanded;
 	}

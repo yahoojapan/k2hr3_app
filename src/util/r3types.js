@@ -53,8 +53,10 @@ export const signinCredential		= 'credential';
 // [TODO]
 // Now we do not have template engine for this, thus we replace following static string.
 //
-export const kwApiHostForUD			= '{{= %K2HR3_API_HOST_URI% }}';
-export const kwIncludePathForUD		= '{{= %K2HR3_USERDATA_INCLUDE_PATH% }}';
+export const kwApiHostForUD			= /{{= %K2HR3_API_HOST_URI% }}/g;
+export const kwIncludePathForUD		= /{{= %K2HR3_USERDATA_INCLUDE_PATH% }}/g;
+export const kwRoleTokenForSecret	= /{{= %K2HR3_ROLETOKEN_IN_SECRET% }}/g;
+export const kwRoleTokenForRoleYrn	= /{{= %K2HR3_ROLEYRN_IN_SIDECAR% }}/g;
 
 /*
  * VIM modelines

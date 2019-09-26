@@ -1359,18 +1359,22 @@ export default class R3Provider
 		let	_tenant		= tenant.name;
 		let	_url		= '/v1/service/' + _service;
 		let	_urlargs	= undefined;
-		if(!r3IsEmptyString(_tenants)){
+		if(r3IsSafeTypedEntity(_tenants, 'array') && 0 < _tenants.length){
 			_urlargs	= 'tenant=' + JSON.stringify(_tenants);
 		}
 		if(_is_clear){
 			if(undefined !== _urlargs){
 				_urlargs += '&';
+			}else{
+				_urlargs = '';
 			}
 			_urlargs	+= 'clear_tenant=true';
 		}
 		if(null !== _verify){
 			if(undefined !== _urlargs){
 				_urlargs += '&';
+			}else{
+				_urlargs = '';
 			}
 			_urlargs	+= 'verify=' + JSON.stringify(_verify);
 		}
@@ -2271,31 +2275,36 @@ export default class R3Provider
 	// Token
 	//--------------------------------------------------
 	//
-	// Get Role Token
+	// Get New Role Token
 	//
-	getRoleToken(tenant, role, callback)
+	getNewRoleToken(tenant, role, expire, callback)
 	{
 		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-
 		let	_callback	= callback;
 		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(role, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or role path(' + JSON.stringify(role) + ') parameters are wrong.');
+		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(role, true) || (r3IsSafeTypedEntity(expire, 'number') && expire < 0)){
+			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or role path(' + JSON.stringify(role) + ') or expire(' + JSON.stringify(expire) + ') parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
-
+		if(!r3IsSafeTypedEntity(expire, 'number')){
+			expire		= null;
+		}
 		let	_tenant		= tenant.name;
 		let	_role		= role;
 		let	_url		= '/v1/role/token/' + _role;
+		let	_urlargs	= undefined;
+		if(r3IsSafeTypedEntity(expire, 'number')){
+			_urlargs	= 'expire=' + String(expire);
+		}
 
 		this.startProgress();																// start progressing
 
-		this._get(_url, null, null, _tenant, (error, resobj) =>
+		this._get(_url, _urlargs, null, _tenant, (error, resobj) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -2323,14 +2332,174 @@ export default class R3Provider
 				return;
 			}
 
-			// get user token script by expanding template
-			let	userDataScript = this.r3Context.getExpandUserData(resobj.registerpath, _role);
-
 			_callback(null, {
-				userDataScript:		userDataScript,
-				roleToken:			resobj.token
+				roleToken:			resobj.token,
+				registerPath:		resobj.registerpath
 			});
 		});
+	}
+
+	//
+	// Get Role Token List
+	//
+	getRoleTokenList(tenant, role, expand, callback)
+	{
+		if(!r3IsSafeTypedEntity(callback, 'function')){
+			console.error('callback parameter is wrong.');
+			return;
+		}
+		let	_callback	= callback;
+		let	_error;
+		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(role, true)){
+			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or role path(' + JSON.stringify(role) + ') parameters are wrong.');
+			console.error(_error.message);
+			_callback(_error);
+			return;
+		}
+		if(!r3IsSafeTypedEntity(expand, 'boolean')){
+			expand		= true;
+		}
+		let	_tenant		= tenant.name;
+		let	_role		= role;
+		let	_url		= '/v1/role/token/list/' + _role;
+		let	_urlargs	= 'expand=' + (expand ? 'true' : 'false');
+
+		this.startProgress();																// start progressing
+
+		this._get(_url, _urlargs, null, _tenant, (error, resobj) =>
+		{
+			this.stopProgress();															// stop progressing
+
+			if(null !== error){
+				console.error(error.message);
+				_callback(error, null);
+				return;
+			}
+			if(true !== resobj.result){
+				error = new Error(resobj.message);
+				console.error(error.message);
+				_callback(error, null);
+				return;
+			}
+			if(r3IsEmptyEntity(resobj.tokens)){
+				error = new Error('Could not get role token list.');
+				console.error(error.message);
+				_callback(error, null);
+				return;
+			}
+
+			// convert object to object array
+			let	tokenArray = [];
+			Object.keys(resobj.tokens).forEach(function(oneToken){
+				resobj.tokens[oneToken].token = oneToken;		// add element { ..., token: 'role token string' }
+				tokenArray.push(resobj.tokens[oneToken]);
+			});
+
+			_callback(null, tokenArray);
+		});
+	}
+
+	//
+	// Remove Role Token
+	//
+	deleteRoleToken(tenant, roletoken, callback)
+	{
+		if(!r3IsSafeTypedEntity(callback, 'function')){
+			console.error('callback parameter is wrong.');
+			return;
+		}
+		let	_callback	= callback;
+		let	_error;
+		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(roletoken, true)){
+			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or role token(' + JSON.stringify(roletoken) + ') parameters are wrong.');
+			console.error(_error.message);
+			_callback(_error);
+			return;
+		}
+		let	_tenant		= tenant.name;
+		let	_roletoken	= roletoken;
+		let	_url		= '/v1/role/token/' + _roletoken;
+
+		this.startProgress();																// start progressing
+
+		this._delete(_url, null, null, _tenant, (error, resobj) =>
+		{
+			this.stopProgress();															// stop progressing
+
+			if(null !== error){
+				console.error(error.message);
+				_callback(error);
+				return;
+			}
+			if(true !== resobj.result){
+				error = new Error(resobj.message);
+				console.error(error.message);
+				_callback(error);
+				return;
+			}
+
+			_callback(null);
+		});
+	}
+
+
+	//
+	// Get User Data Script
+	//
+	getUserDataScript(registerpath)
+	{
+		if(r3IsEmptyString(registerpath, true)){
+			console.error('registerpath(' + JSON.stringify(registerpath) + ') parameter is wrong.');
+			return null;
+		}
+
+		// get user token script by expanding template
+		let	userDataScript = this.r3Context.getExpandUserData(registerpath);
+		if(r3IsEmptyString(userDataScript, true)){
+			console.error('Failed to generate user data script from template.');
+			return null;
+		}
+
+		return userDataScript;
+	}
+
+	//
+	// Get Secret Yaml
+	//
+	getSecretYaml(roletoken)
+	{
+		if(r3IsEmptyString(roletoken, true)){
+			console.error('role token(' + JSON.stringify(roletoken) + ') parameter is wrong.');
+			return null;
+		}
+
+		// get secret yaml by expanding template
+		let	secretYaml = this.r3Context.getExpandSecretYaml(roletoken);
+		if(r3IsEmptyString(secretYaml, true)){
+			console.error('Failed to generate secret yaml from template.');
+			return null;
+		}
+
+		return secretYaml;
+	}
+
+	//
+	// Get Secret Yaml
+	//
+	getSidecarYaml(roleyrn)
+	{
+		if(r3IsEmptyString(roleyrn, true)){
+			console.error('role full yrn path(' + JSON.stringify(roleyrn) + ') parameter is wrong.');
+			return null;
+		}
+
+		// get sidecar yaml by expanding template
+		let	sidecarYaml = this.r3Context.getExpandSidecarYaml(roleyrn);
+		if(r3IsEmptyString(sidecarYaml, true)){
+			console.error('Failed to generate sidecar yaml from template.');
+			return null;
+		}
+		return sidecarYaml;
 	}
 }
 
