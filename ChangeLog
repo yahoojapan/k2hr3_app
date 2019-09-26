@@ -1,18 +1,24 @@
+k2hr3-app (0.9.3) unstable; urgency=low
+
+  * Supports kubernetes pod and container for role member - #5
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Thu, 26 Sep 2019 15:33:21 +0900
+
 k2hr3-app (0.9.2) unstable; urgency=low
 
   * Added gh-pages which updating automatically from Travis-CI - #3
   * Changed copyright year dynamically and cleanup source - #2
 
- -- Takeshi Nakatani <ggtakec@gmail.com> Wed, 15 May 2019 15:32:39 +0900
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Wed, 15 May 2019 15:32:39 +0900
 
 k2hr3-app (0.9.1) unstable; urgency=low
 
   * Upgraded material-ui to 3.x and React/Webpack/Babel/etc - #1
 
- -- Takeshi Nakatani <ggtakec@gmail.com> Wed, 08 May 2019 11:25:15 +0900
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Wed, 08 May 2019 11:25:15 +0900
 
 k2hr3-app (0.9.0) unstable; urgency=low
 
   * Beta version.
 
- -- Takeshi Nakatani <ggtakec@gmail.com> Wed, 06 Mar 2019 12:00:00 +0900
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Wed, 06 Mar 2019 12:00:00 +0900
