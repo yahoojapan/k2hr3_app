@@ -107,6 +107,16 @@ const r3Theme = createMuiTheme({
 			root: {
 				padding:			'8px'
 			}
+		},
+
+		// [NOTE]
+		// @material-ui 4.x.x removed the default value of 'display: block' in Typography.
+		// Since K2HR3 is based on 'display: block', it is set in this overrides to maintain the layout.
+		//
+		MuiTypography: {
+			root: {
+				display:			'block'
+			}
 		}
 	},
 
