@@ -38,7 +38,7 @@ import { errorType, warningType, infoType } from '../util/r3types';			// eslint-
 //
 // Message Box Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3MsgBox)
 export default class R3MsgBox extends React.Component
 {

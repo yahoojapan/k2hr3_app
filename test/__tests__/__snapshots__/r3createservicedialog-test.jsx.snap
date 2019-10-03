@@ -3,9 +3,28 @@
 exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
 <div
   aria-label="create service dialog"
-  className="MuiModal-root-27 MuiDialog-root-13 R3CreateServiceDialog-root-1"
+  className="MuiDialog-root R3CreateServiceDialog-root-1"
   label="create-service-dialog"
   onKeyDown={[Function]}
-  role="dialog"
-/>
+  role="presentation"
+  style={
+    Object {
+      "bottom": 0,
+      "left": 0,
+      "position": "fixed",
+      "right": 0,
+      "top": 0,
+      "zIndex": 1300,
+    }
+  }
+>
+  <div
+    data-test="sentinelStart"
+    tabIndex={0}
+  />
+  <div
+    data-test="sentinelEnd"
+    tabIndex={0}
+  />
+</div>
 `;

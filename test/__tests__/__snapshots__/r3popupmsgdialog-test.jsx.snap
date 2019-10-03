@@ -3,9 +3,28 @@
 exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
 <div
   aria-label="message dialog"
-  className="MuiModal-root-28 MuiDialog-root-14 R3PopupMsgDialog-root-1"
+  className="MuiDialog-root R3PopupMsgDialog-root-1"
   label="message-dialog"
   onKeyDown={[Function]}
-  role="dialog"
-/>
+  role="presentation"
+  style={
+    Object {
+      "bottom": 0,
+      "left": 0,
+      "position": "fixed",
+      "right": 0,
+      "top": 0,
+      "zIndex": 1300,
+    }
+  }
+>
+  <div
+    data-test="sentinelStart"
+    tabIndex={0}
+  />
+  <div
+    data-test="sentinelEnd"
+    tabIndex={0}
+  />
+</div>
 `;

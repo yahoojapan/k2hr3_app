@@ -75,7 +75,7 @@ const roleComponentValues = {
 //
 // Role Contents Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3Role)
 export default class R3Role extends React.Component
 {

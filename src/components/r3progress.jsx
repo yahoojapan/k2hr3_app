@@ -32,7 +32,7 @@ import { r3Progress }				from './r3styles';
 //
 // Progress Modal Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3Progress)
 export default class R3Progress extends React.Component
 {

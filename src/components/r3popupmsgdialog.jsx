@@ -42,7 +42,7 @@ import { r3PopupMsgDialog }			from './r3styles';
 //
 // Popup Message Dialog Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3PopupMsgDialog)
 export default class R3PopupMsgDialog extends React.Component
 {

@@ -45,7 +45,7 @@ const pathTextFieldId = 'new-path-textfield-id';
 //
 // Create New Path Dialog Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3CreatePathDialog)
 export default class R3CreatePathDialog extends React.Component
 {

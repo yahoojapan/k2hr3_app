@@ -86,7 +86,7 @@ const tooltipValues = {
 //
 // Main TreeView Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3MainTree)
 export default class R3MainTree extends React.Component
 {

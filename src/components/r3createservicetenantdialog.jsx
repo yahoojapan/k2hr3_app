@@ -45,7 +45,7 @@ const serviceTenantTextFieldId	= 'service-tenant-textfield-id';
 //
 // Create Service Tenant Dialog Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3CreateServiceTenantDialog)
 export default class R3CreateServiceTenantDialog extends React.Component
 {

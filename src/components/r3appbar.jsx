@@ -68,7 +68,7 @@ const accountMenuId		= 'appbar-sign-menu';
 //
 // AppBar Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3AppBar)
 export default class R3AppBar extends React.Component
 {

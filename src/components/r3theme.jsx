@@ -20,7 +20,7 @@
  */
 
 import * as Colors		from '@material-ui/core/colors';
-import Spacing			from '@material-ui/core/styles/spacing';
+import createSpacing	from '@material-ui/core/styles/createSpacing';
 import createMuiTheme	from '@material-ui/core/styles/createMuiTheme';
 
 /* eslint-disable indent */
@@ -64,13 +64,13 @@ const r3Theme = createMuiTheme({
 			light:					Colors.yellow[600],
 			main:					Colors.yellow[800],
 			dark:					Colors.yellow[900],
-			contrastText:			Colors.white
+			contrastText:			Colors.common.white
 		},
 		information: {
 			light:					'rgba(0, 0, 0, 0.87)',				// same as default's pallete.text.primary
 			main:					'rgba(0, 0, 0, 0.54)',				// same as default's pallete.text.secondary
 			dark:					'rgba(0, 0, 0, 0.38)',				// same as default's pallete.text.disabled
-			contrastText:			Colors.white
+			contrastText:			Colors.common.white
 		}
 	},
 
@@ -78,8 +78,10 @@ const r3Theme = createMuiTheme({
 	// typography
 	//
 	typography: {
-		// v2
-		useNextVariants:			true,
+		// [NOTE]
+		// material-ui 4.x.x said "12px is recommended as the default font size for Japanese."
+		//
+		fontSize:					12,
 
 		// [NOTE]
 		// Force subtitle1 to be in bold
@@ -95,7 +97,7 @@ const r3Theme = createMuiTheme({
 	//
 	// Common material-ui
 	//
-	spacing:						Spacing,
+	spacing:						createSpacing(),
 
 	//
 	// override components
@@ -397,7 +399,7 @@ const r3Theme = createMuiTheme({
 			'aria-label':			'select resource value type'
 		},
 		valueFormControlLabel: {
-			variant:				'body2',
+			variant:				'body1',
 			color:					'textSecondary',
 			noWrap:					true
 		},
@@ -412,12 +414,12 @@ const r3Theme = createMuiTheme({
 			multiline:				false
 		},
 		keysKeySubTitle: {
-			variant:				'body1',
+			variant:				'body2',
 			color:					'textSecondary',
 			noWrap:					true
 		},
 		keysValueSubTitle: {
-			variant:				'body1',
+			variant:				'body2',
 			color:					'textSecondary',
 			noWrap:					true
 		},
@@ -477,7 +479,7 @@ const r3Theme = createMuiTheme({
 		actionLabel: {
 		},
 		actionFormControlLabel: {
-			variant:				'body1',
+			variant:				'body2',
 			color:					'textSecondary',
 			noWrap:					true
 		},
@@ -527,12 +529,12 @@ const r3Theme = createMuiTheme({
 			noWrap:					true
 		},
 		hostnameSubTitle: {
-			variant:				'body1',
+			variant:				'body2',
 			color:					'textSecondary',
 			noWrap:					true
 		},
 		hostnameAUXSubTitle: {
-			variant:				'body1',
+			variant:				'body2',
 			color:					'textSecondary',
 			noWrap:					true
 		},
@@ -553,12 +555,12 @@ const r3Theme = createMuiTheme({
 			'aria-label':			'add hostname and AUX'
 		},
 		ipSubTitle: {
-			variant:				'body1',
+			variant:				'body2',
 			color:					'textSecondary',
 			noWrap:					true
 		},
 		ipAUXSubTitle: {
-			variant:				'body1',
+			variant:				'body2',
 			color:					'textSecondary',
 			noWrap:					true
 		},
@@ -703,7 +705,7 @@ const r3Theme = createMuiTheme({
 		},
 		content: {
 			component:				'span',
-			variant:				'body1'
+			variant:				'body2'
 		}
 	},
 
@@ -734,7 +736,7 @@ const r3Theme = createMuiTheme({
 			elevation:				1
 		},
 		message: {
-			variant:				'body2',
+			variant:				'body1',
 			color:					'error'
 		},
 		messageIcon: {
@@ -837,7 +839,7 @@ const r3Theme = createMuiTheme({
 			noWrap:					true
 		},
 		value: {
-			variant:				'body2',
+			variant:				'body1',
 			component:				'span',
 			color:					'textSecondary'
 		},
@@ -869,7 +871,7 @@ const r3Theme = createMuiTheme({
 			color:					'primary'
 		},
 		textTableContent: {
-			variant:				'body2',
+			variant:				'body1',
 			component:				'span',
 			color:					'textSecondary'
 		},
@@ -902,7 +904,7 @@ const r3Theme = createMuiTheme({
 			noWrap:					true
 		},
 		newRoleTokenExpireLabel: {
-			variant:				'body2',
+			variant:				'body1',
 			component:				'span',
 			color:					'textSecondary'
 		},
@@ -957,7 +959,7 @@ const r3Theme = createMuiTheme({
 			noWrap:					true
 		},
 		value: {
-			variant:				'body2',
+			variant:				'body1',
 			component:				'span',
 			color:					'textSecondary'
 		},
@@ -1005,7 +1007,7 @@ const r3Theme = createMuiTheme({
 			noWrap:					true
 		},
 		value: {
-			variant:				'body2',
+			variant:				'body1',
 			component:				'span',
 			color:					'textSecondary'
 		},
@@ -1050,7 +1052,7 @@ const r3Theme = createMuiTheme({
 			noWrap:					true
 		},
 		value: {
-			variant:				'body2',
+			variant:				'body1',
 			component:				'span',
 			color:					'textSecondary'
 		},

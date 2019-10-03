@@ -32,11 +32,6 @@ env:
   matrix:
     - OS=ubuntu
       TAG=18.04
-      NODE_MAJOR_VERSION=6
-      PUBLISHER=false
-      INSTPKG=
-    - OS=ubuntu
-      TAG=18.04
       NODE_MAJOR_VERSION=8
       PUBLISHER=false
       INSTPKG=
@@ -44,6 +39,11 @@ env:
       TAG=18.04
       NODE_MAJOR_VERSION=10
       PUBLISHER=true
+      INSTPKG=
+    - OS=ubuntu
+      TAG=18.04
+      NODE_MAJOR_VERSION=12
+      PUBLISHER=false
       INSTPKG=
 
 cache: apt

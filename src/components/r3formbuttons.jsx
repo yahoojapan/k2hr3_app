@@ -33,7 +33,7 @@ import { r3FormButtons }			from './r3styles';
 //
 // Form Button Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3FormButtons)
 export default class R3FormButtons extends React.Component
 {

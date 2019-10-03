@@ -27,8 +27,8 @@ export const r3Container = (theme) => ({
 	},
 	paper: {
 		display:				'flex',
-		margin:					theme.spacing.unit,
-		padding:				theme.spacing.unit * 2
+		margin:					theme.spacing(1),
+		padding:				theme.spacing(2)
 	}
 });
 
@@ -48,7 +48,7 @@ export const r3AppBar = (theme) => ({
 		fontWeight:				'bold'
 	},
 	menuRightIcon: {
-		marginLeft:				theme.spacing.unit
+		marginLeft:				theme.spacing(1)
 	},
 	signinButton: {
 	},
@@ -77,7 +77,7 @@ export const r3MainTree = (theme) => ({
 		backgroundColor:		theme.palette.primary.light
 	},
 	subheaderToolbar: {
-		paddingRight:			theme.spacing.unit
+		paddingRight:			theme.spacing(1)
 	},
 	title: {
 		flexGrow:				1
@@ -86,8 +86,8 @@ export const r3MainTree = (theme) => ({
 		width:					'100%'
 	},
 	chip: {
-		paddingLeft:			theme.spacing.unit,
-		paddingRight:			theme.spacing.unit
+		paddingLeft:			theme.spacing(1),
+		paddingRight:			theme.spacing(1)
 	},
 	chipText: {
 		color:					theme.palette.primary.contrastText
@@ -107,13 +107,13 @@ export const r3MainTree = (theme) => ({
 		marginRight:			0
 	},
 	collapse: {
-		paddingLeft:			theme.spacing.unit * 2
+		paddingLeft:			theme.spacing(2)
 	},
 	serviceLabelCollapse: {
-		paddingLeft:			(theme.spacing.unit * 2) + (theme.spacing.unit * 2) + theme.spacing.unit
+		paddingLeft:			(theme.spacing(2) + theme.spacing(2) + theme.spacing(1))
 	},
 	childListItemText: {
-		marginLeft:				(theme.spacing.unit * 2) + (theme.spacing.unit * 2) + theme.spacing.unit
+		marginLeft:				(theme.spacing(2) + theme.spacing(2) + theme.spacing(1))
 	},
 	listItemText: {
 		paddingLeft:			0
@@ -122,7 +122,7 @@ export const r3MainTree = (theme) => ({
 		paddingLeft:			0
 	},
 	inServiceChildListItemText: {
-		marginLeft:				(theme.spacing.unit * 2) + theme.spacing.unit
+		marginLeft:				(theme.spacing(2) + theme.spacing(1))
 	}
 });
 
@@ -137,18 +137,18 @@ export const r3Toolbar = (theme) => ({
 	toolbar: {
 	},
 	title: {
-		paddingLeft:			theme.spacing.unit,
-		paddingRight:			theme.spacing.unit
+		paddingLeft:			theme.spacing(1),
+		paddingRight:			theme.spacing(1)
 	},
 	chip: {
-		paddingRight:			theme.spacing.unit
+		paddingRight:			theme.spacing(1)
 	},
 	chipText: {
 		color:					theme.palette.primary.contrastText
 	},
 	ownerText: {
-		paddingLeft:			theme.spacing.unit,
-		paddingRight:			theme.spacing.unit
+		paddingLeft:			theme.spacing(1),
+		paddingRight:			theme.spacing(1)
 	},
 	avatar: {
 		backgroundColor:		theme.palette.common.white,
@@ -167,8 +167,8 @@ export const r3Toolbar = (theme) => ({
 export const r3MsgBox = (theme) => ({
 	root: {
 		display:				'flex',
-		margin:					theme.spacing.unit,
-		padding:				theme.spacing.unit * 2
+		margin:					theme.spacing(1),
+		padding:				theme.spacing(2)
 	},
 	dialogErrorContentText: {
 	},
@@ -180,16 +180,16 @@ export const r3MsgBox = (theme) => ({
 	},
 	errorIcon: {
 		float:					'left',
-		marginRight:			theme.spacing.unit,
+		marginRight:			theme.spacing(1),
 	},
 	warningIcon: {
 		float:					'left',
-		marginRight:			theme.spacing.unit,
+		marginRight:			theme.spacing(1),
 		color:					theme.palette.warning.dark
 	},
 	informationIcon: {
 		float:					'left',
-		marginRight:			theme.spacing.unit,
+		marginRight:			theme.spacing(1),
 		color:					theme.palette.information.main
 	}
 });
@@ -209,10 +209,10 @@ export const r3Resource = (theme) => ({
 	subTitle: {
 		paddingLeft:			'0px',
 		clear:					'both',
-		marginTop:				theme.spacing.unit * 6
+		marginTop:				theme.spacing(6)
 	},
 	valueFormControl: {
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 	valueRadioGroup: {
 		display:				'block'
@@ -221,11 +221,11 @@ export const r3Resource = (theme) => ({
 		float:					'left',
 	},
 	valueRightFormControlLabel: {
-		marginLeft:				theme.spacing.unit * 2
+		marginLeft:				theme.spacing(2)
 	},
 	valueTextField: {
 		display:				'block',
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 
 	// [NOTE]
@@ -237,21 +237,21 @@ export const r3Resource = (theme) => ({
 	keysKeySubTitle: {
 		float:					'left',
 		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 	keysValueSubTitle: {
 		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 2
+		paddingLeft:			theme.spacing(2)
 	},
 	keysKeyTextField: {
 		float:					'left',
 		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 	keysValueTextField: {
 		float:					'left',
 		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 2
+		paddingLeft:			theme.spacing(2)
 	},
 	deleteKeysButton: {
 		display:				'flex'
@@ -266,7 +266,7 @@ export const r3Resource = (theme) => ({
 	aliasTextField: {
 		float:					'left',
 		width:					`calc(100% - 120px)`,			// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 	arrowAliasButton: {
 		float:					'left',
@@ -312,23 +312,23 @@ export const r3Policy = (theme) => ({
 	subTitle: {
 		paddingLeft:			'0px',
 		clear:					'both',
-		marginTop:				theme.spacing.unit * 6
+		marginTop:				theme.spacing(6)
 	},
 	effectSelect: {
-		marginLeft:				theme.spacing.unit * 6
+		marginLeft:				theme.spacing(6)
 	},
 	actionCheckbox: {
 	},
 	actionLeftLabel: {
 		float:					'left',
-		marginLeft:				theme.spacing.unit * 6
+		marginLeft:				theme.spacing(6)
 	},
 	actionMidLabel: {
 		float:					'left',
-		paddingLeft:			theme.spacing.unit
+		paddingLeft:			theme.spacing(1)
 	},
 	actionEndLabel: {
-		paddingLeft:			theme.spacing.unit
+		paddingLeft:			theme.spacing(1)
 	},
 
 	// [NOTE]
@@ -337,7 +337,7 @@ export const r3Policy = (theme) => ({
 	resourceTextField: {
 		float:					'left',
 		width:					`calc(100% - 40px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 	addResourceButton: {
 		display:				'flex'
@@ -352,7 +352,7 @@ export const r3Policy = (theme) => ({
 	aliasTextField: {
 		float:					'left',
 		width:					`calc(100% - 120px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 	arrowAliasButton: {
 		float:					'left',
@@ -398,7 +398,7 @@ export const r3Role = (theme) => ({
 	subTitle: {
 		paddingLeft:			'0px',
 		clear:					'both',
-		marginTop:				theme.spacing.unit * 6
+		marginTop:				theme.spacing(6)
 	},
 
 	// [NOTE]
@@ -407,21 +407,21 @@ export const r3Role = (theme) => ({
 	hostnameSubTitle: {
 		float:					'left',
 		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 	hostnameAUXSubTitle: {
 		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 2
+		paddingLeft:			theme.spacing(2)
 	},
 	hostnameTextField: {
 		float:					'left',
 		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 	hostnameAUXTextField: {
 		float:					'left',
 		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 2
+		paddingLeft:			theme.spacing(2)
 	},
 	deleteHostnameButton: {
 		display:				'flex'
@@ -436,21 +436,21 @@ export const r3Role = (theme) => ({
 	ipSubTitle: {
 		float:					'left',
 		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 	ipAUXSubTitle: {
 		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 2
+		paddingLeft:			theme.spacing(2)
 	},
 	ipTextField: {
 		float:					'left',
 		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 	ipAUXTextField: {
 		float:					'left',
 		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 2
+		paddingLeft:			theme.spacing(2)
 	},
 	deleteIpButton: {
 		display:				'flex'
@@ -462,7 +462,7 @@ export const r3Role = (theme) => ({
 	policyTextField: {
 		float:					'left',
 		width:					`calc(100% - 40px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 	addPolicyButton: {
 		display:				'flex'
@@ -477,7 +477,7 @@ export const r3Role = (theme) => ({
 	aliasTextField: {
 		float:					'left',
 		width:					`calc(100% - 120px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 	arrowAliasButton: {
 		float:					'left',
@@ -523,11 +523,11 @@ export const r3Service = (theme) => ({
 	subTitle: {
 		paddingLeft:			'0px',
 		clear:					'both',
-		marginTop:				theme.spacing.unit * 6
+		marginTop:				theme.spacing(6)
 	},
 	resourceTextField: {
 		width:					'100%',
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 	inputTextField: {
 		color:					theme.palette.text.secondary
@@ -535,7 +535,7 @@ export const r3Service = (theme) => ({
 	tenantTextField: {
 		float:					'left',
 		width:					`calc(100% - 40px)`,				// eslint-disable-line quotes
-		paddingLeft:			theme.spacing.unit * 6
+		paddingLeft:			theme.spacing(6)
 	},
 	deleteTenantButton: {
 		display:				'flex'
@@ -555,16 +555,16 @@ export const r3FormButtons = (theme) => ({
 		display:				'inline-block',
 		position:				'relative',
 		padding:				0,
-		marginTop:				theme.spacing.unit * 6,
+		marginTop:				theme.spacing(6),
 		clear:					'both'
 	},
 	cancelButton: {
 	},
 	saveButton: {
-		marginLeft:				theme.spacing.unit
+		marginLeft:				theme.spacing(1)
 	},
 	buttonIcon: {
-		marginLeft:				theme.spacing.unit,
+		marginLeft:				theme.spacing(1),
 	}
 });
 
@@ -599,7 +599,7 @@ export const r3AboutDialogStyles = (theme) => ({
 	title: {
 	},
 	dialogContent: {
-		marginRight:			theme.spacing.unit
+		marginRight:			theme.spacing(1)
 	},
 	dialogContentText: {
 	},
@@ -608,7 +608,7 @@ export const r3AboutDialogStyles = (theme) => ({
 	button: {
 	},
 	buttonIcon: {
-		marginLeft:				theme.spacing.unit,
+		marginLeft:				theme.spacing(1),
 	}
 });
 
@@ -628,29 +628,29 @@ export const r3SigninCredDialogStyles = (theme) => ({
 	},
 	messagePaper: {
 		background: 			theme.palette.common.white,
-		padding:				theme.spacing.unit * 2
+		padding:				theme.spacing(2)
 	},
 	messageIcon: {
 		float:					'left'
 	},
 	message: {
-		marginRight:			theme.spacing.unit
+		marginRight:			theme.spacing(1)
 	},
 	textField: {
 		clear:					'both',
-		margin:					theme.spacing.unit
+		margin:					theme.spacing(1)
 	},
 	inputTextField: {
 		color:					theme.palette.text.secondary
 	},
 	cancelButton: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	signinButton: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	buttonIcon: {
-		marginLeft:				theme.spacing.unit
+		marginLeft:				theme.spacing(1)
 	}
 });
 
@@ -676,26 +676,26 @@ export const r3PopupMsgDialog = (theme) => ({
 	},
 	errorIcon: {
 		float:					'left',
-		marginRight:			theme.spacing.unit,
+		marginRight:			theme.spacing(1),
 	},
 	warningIcon: {
 		float:					'left',
-		marginRight:			theme.spacing.unit,
+		marginRight:			theme.spacing(1),
 		color:					theme.palette.warning.dark
 	},
 	informationIcon: {
 		float:					'left',
-		marginRight:			theme.spacing.unit,
+		marginRight:			theme.spacing(1),
 		color:					theme.palette.information.main
 	},
 	primaryButton: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	cancelButton: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	buttonIcon: {
-		marginLeft:				theme.spacing.unit
+		marginLeft:				theme.spacing(1)
 	}
 });
 
@@ -712,37 +712,37 @@ export const r3PathInfoDialog = (theme) => ({
 	dialogContent: {
 	},
 	keyTitle: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	value: {
-		paddingLeft:			theme.spacing.unit * 4
+		paddingLeft:			theme.spacing(4)
 	},
 	valueItalic: {
 		fontStyle:				'italic',
-		paddingLeft:			theme.spacing.unit * 4
+		paddingLeft:			theme.spacing(4)
 	},
 	button: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	backPageButton: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	buttonIcon: {
-		marginLeft:				theme.spacing.unit
+		marginLeft:				theme.spacing(1)
 	},
 
 	// Main page
 	roleTokenButton: {
 		color:					theme.palette.primary.main,
 		margin:					0,
-		marginLeft:				theme.spacing.unit * 3,
-		paddingLeft:			theme.spacing.unit,
-		paddingRight:			theme.spacing.unit,
-		minWidth:				theme.spacing.unit,
+		marginLeft:				theme.spacing(3),
+		paddingLeft:			theme.spacing(1),
+		paddingRight:			theme.spacing(1),
+		minWidth:				theme.spacing(1),
 		textTransform:			'none'
 	},
 	roleTokenButtonIcon: {
-		marginRight:			theme.spacing.unit
+		marginRight:			theme.spacing(1)
 	},
 
 	// Manage Role Token page
@@ -756,7 +756,7 @@ export const r3PathInfoDialog = (theme) => ({
 	textActionTableHead: {
 		whiteSpace:				'nowrap',
 		textAlign:				'center',
-		paddingTop:				theme.spacing.unit / 2
+		paddingTop:				theme.spacing(0.5)
 	},
 	textTableContent: {
 		whiteSpace:				'nowrap'
@@ -768,8 +768,8 @@ export const r3PathInfoDialog = (theme) => ({
 	tableCell: {
 		whiteSpace:				'nowrap',
 		textAlign:				'center',
-		paddingLeft:			theme.spacing.unit,
-		paddingRight:			theme.spacing.unit
+		paddingLeft:			theme.spacing(1),
+		paddingRight:			theme.spacing(1)
 	},
 	wordBreakTooltip: {
 		whiteSpace:				'normal',
@@ -780,46 +780,46 @@ export const r3PathInfoDialog = (theme) => ({
 	},
 	manageAddButton: {
 		margin:					0,
-		paddingLeft:			theme.spacing.unit,
-		paddingRight:			theme.spacing.unit,
-		minWidth:				theme.spacing.unit,
+		paddingLeft:			theme.spacing(1),
+		paddingRight:			theme.spacing(1),
+		minWidth:				theme.spacing(1),
 		float:					'left'
 	},
 	manageActionButton: {
 		margin:					0,
-		paddingLeft:			theme.spacing.unit,
-		paddingRight:			theme.spacing.unit,
-		minWidth:				theme.spacing.unit,
+		paddingLeft:			theme.spacing(1),
+		paddingRight:			theme.spacing(1),
+		minWidth:				theme.spacing(1),
 		textTransform:			'none'
 	},
 	newRoleTokenPopover: {
 	},
 	newRoleTokenPopoverTitle: {
-		marginLeft:				theme.spacing.unit * 2,
-		marginTop:				theme.spacing.unit,
-		marginBottom:			theme.spacing.unit,
-		marginRight:			theme.spacing.unit
+		marginLeft:				theme.spacing(2),
+		marginTop:				theme.spacing(1),
+		marginBottom:			theme.spacing(1),
+		marginRight:			theme.spacing(1)
 	},
 	newRoleTokenExpireForm: {
-		margin:					theme.spacing.unit
+		margin:					theme.spacing(1)
 	},
 	newRoleTokenExpireCheck: {
 		float:					'left'
 	},
 	newRoleTokenExpireLabel: {
 		marginLeft:				0,
-		marginTop:				theme.spacing.unit,
-		marginBottom:			theme.spacing.unit,
-		marginRight:			theme.spacing.unit
+		marginTop:				theme.spacing(1),
+		marginBottom:			theme.spacing(1),
+		marginRight:			theme.spacing(1)
 	},
 	createRoleTokenButton: {
-		margin:					theme.spacing.unit
+		margin:					theme.spacing(1)
 	},
 
 	// Display role token and registration code page
 	codeTypeSelect: {
-		marginLeft:				theme.spacing.unit * 4,
-		marginBottom:			theme.spacing.unit
+		marginLeft:				theme.spacing(4),
+		marginBottom:			theme.spacing(1)
 	},
 	codeTypeSelectInput: {
 		color:					theme.palette.text.secondary
@@ -827,11 +827,11 @@ export const r3PathInfoDialog = (theme) => ({
 	codeInputTextField: {
 		color:					theme.palette.text.secondary,
 		backgroundColor:		theme.palette.common.white,
-		padding:				theme.spacing.unit
+		padding:				theme.spacing(1)
 	},
 	codeTextField: {
-		paddingLeft:			theme.spacing.unit * 4,
-		marginBottom:			theme.spacing.unit
+		paddingLeft:			theme.spacing(4),
+		marginBottom:			theme.spacing(1)
 	},
 	copyClipboardButton: {
 		float:					'right',
@@ -839,7 +839,7 @@ export const r3PathInfoDialog = (theme) => ({
 		textTransform:			'none'
 	},
 	copyClipboardIcon: {
-		marginRight:			theme.spacing.unit
+		marginRight:			theme.spacing(1)
 	}
 });
 
@@ -856,31 +856,31 @@ export const r3CreatePathDialog = (theme) => ({
 	dialogContent: {
 	},
 	keyTitle: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	value: {
-		paddingLeft:			theme.spacing.unit * 4
+		paddingLeft:			theme.spacing(4)
 	},
 	valueItalic: {
 		fontStyle:				'italic',
-		paddingLeft:			theme.spacing.unit * 4
+		paddingLeft:			theme.spacing(4)
 	},
 	textField: {
 		width:					'100%',
-		paddingLeft:			theme.spacing.unit * 4,
-		paddingRight:			theme.spacing.unit * 4
+		paddingLeft:			theme.spacing(4),
+		paddingRight:			theme.spacing(4)
 	},
 	inputTextField: {
 		color:					theme.palette.text.secondary
 	},
 	cancelButton: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	okButton: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	buttonIcon: {
-		marginLeft:				theme.spacing.unit
+		marginLeft:				theme.spacing(1)
 	}
 });
 
@@ -897,31 +897,31 @@ export const r3CreateServiceDialog = (theme) => ({
 	dialogContent: {
 	},
 	keyTitle: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	value: {
-		paddingLeft:			theme.spacing.unit * 4
+		paddingLeft:			theme.spacing(4)
 	},
 	valueItalic: {
 		fontStyle:				'italic',
-		paddingLeft:			theme.spacing.unit * 4
+		paddingLeft:			theme.spacing(4)
 	},
 	textField: {
 		width:					'100%',
-		paddingLeft:			theme.spacing.unit * 4,
-		paddingRight:			theme.spacing.unit * 4
+		paddingLeft:			theme.spacing(4),
+		paddingRight:			theme.spacing(4)
 	},
 	inputTextField: {
 		color:					theme.palette.text.secondary
 	},
 	cancelButton: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	okButton: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	buttonIcon: {
-		marginLeft:				theme.spacing.unit
+		marginLeft:				theme.spacing(1)
 	}
 });
 
@@ -940,31 +940,31 @@ export const r3CreateServiceTenantDialog = (theme) => ({
 	dialogContent: {
 	},
 	keyTitle: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	value: {
-		paddingLeft:			theme.spacing.unit * 4
+		paddingLeft:			theme.spacing(4)
 	},
 	valueItalic: {
 		fontStyle:				'italic',
-		paddingLeft:			theme.spacing.unit * 4
+		paddingLeft:			theme.spacing(4)
 	},
 	textField: {
 		width:					'100%',
-		paddingLeft:			theme.spacing.unit * 4,
-		paddingRight:			theme.spacing.unit * 4
+		paddingLeft:			theme.spacing(4),
+		paddingRight:			theme.spacing(4)
 	},
 	inputTextField: {
 		color:					theme.palette.text.secondary
 	},
 	cancelButton: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	okButton: {
-		marginTop:				theme.spacing.unit * 2
+		marginTop:				theme.spacing(2)
 	},
 	buttonIcon: {
-		marginLeft:				theme.spacing.unit
+		marginLeft:				theme.spacing(1)
 	}
 });
 

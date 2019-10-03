@@ -3,9 +3,28 @@
 exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
 <div
   aria-label="path information dialog"
-  className="MuiModal-root-48 MuiDialog-root-34 R3PathInfoDialog-root-1"
+  className="MuiDialog-root R3PathInfoDialog-root-1"
   label="path-information-dialog"
   onKeyDown={[Function]}
-  role="dialog"
-/>
+  role="presentation"
+  style={
+    Object {
+      "bottom": 0,
+      "left": 0,
+      "position": "fixed",
+      "right": 0,
+      "top": 0,
+      "zIndex": 1300,
+    }
+  }
+>
+  <div
+    data-test="sentinelStart"
+    tabIndex={0}
+  />
+  <div
+    data-test="sentinelEnd"
+    tabIndex={0}
+  />
+</div>
 `;

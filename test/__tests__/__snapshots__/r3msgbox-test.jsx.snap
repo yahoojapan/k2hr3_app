@@ -2,11 +2,11 @@
 
 exports[`R3MsgBox test snapshot for R3MsgBox 1`] = `
 <div
-  className="MuiPaper-root-8 MuiPaper-elevation2-12 MuiPaper-rounded-9 R3MsgBox-root-1"
+  className="MuiPaper-root MuiPaper-elevation2 R3MsgBox-root-1 MuiPaper-rounded"
 >
   <svg
     aria-hidden="true"
-    className="MuiSvgIcon-root-35 MuiSvgIcon-colorError-39 R3MsgBox-errorIcon-5"
+    className="MuiSvgIcon-root R3MsgBox-errorIcon-5 MuiSvgIcon-colorError"
     focusable="false"
     role="presentation"
     viewBox="0 0 24 24"
@@ -16,7 +16,7 @@ exports[`R3MsgBox test snapshot for R3MsgBox 1`] = `
     />
   </svg>
   <span
-    className="MuiTypography-root-44 MuiTypography-body2-52 MuiTypography-colorError-78 R3MsgBox-dialogErrorContentText-2"
+    className="MuiTypography-root R3MsgBox-dialogErrorContentText-2 MuiTypography-body1 MuiTypography-colorError"
   >
     Dummy error message
     <br />

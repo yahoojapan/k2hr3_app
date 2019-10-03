@@ -56,7 +56,7 @@ const serviceComponentValues = {
 //
 // Service Contents Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3Service)
 export default class R3Service extends React.Component
 {

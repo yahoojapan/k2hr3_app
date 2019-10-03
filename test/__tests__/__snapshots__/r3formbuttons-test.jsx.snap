@@ -6,11 +6,11 @@ exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
 >
   <button
     aria-label="cancel"
-    className="MuiButtonBase-root-31 MuiButton-root-5 MuiButton-contained-16 MuiButton-containedPrimary-17 MuiButton-raised-19 MuiButton-raisedPrimary-20 R3FormButtons-cancelButton-2"
+    className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary R3FormButtons-cancelButton-2"
     disabled={false}
     onBlur={[Function]}
     onClick={[Function]}
-    onContextMenu={[Function]}
+    onDragLeave={[Function]}
     onFocus={[Function]}
     onKeyDown={[Function]}
     onKeyUp={[Function]}
@@ -20,16 +20,16 @@ exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
     onTouchEnd={[Function]}
     onTouchMove={[Function]}
     onTouchStart={[Function]}
-    tabIndex="0"
+    tabIndex={0}
     type="button"
   >
     <span
-      className="MuiButton-label-6"
+      className="MuiButton-label"
     >
       CANCEL
       <svg
         aria-hidden="true"
-        className="MuiSvgIcon-root-34 R3FormButtons-buttonIcon-4"
+        className="MuiSvgIcon-root R3FormButtons-buttonIcon-4"
         focusable="false"
         role="presentation"
         viewBox="0 0 24 24"
@@ -37,23 +37,16 @@ exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
         <path
           d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"
         />
-        <path
-          d="M0 0h24v24H0z"
-          fill="none"
-        />
       </svg>
     </span>
-    <span
-      className="MuiTouchRipple-root-43"
-    />
   </button>
   <button
     aria-label="save"
-    className="MuiButtonBase-root-31 MuiButton-root-5 MuiButton-contained-16 MuiButton-containedSecondary-18 MuiButton-raised-19 MuiButton-raisedSecondary-21 R3FormButtons-saveButton-3"
+    className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary R3FormButtons-saveButton-3"
     disabled={false}
     onBlur={[Function]}
     onClick={[Function]}
-    onContextMenu={[Function]}
+    onDragLeave={[Function]}
     onFocus={[Function]}
     onKeyDown={[Function]}
     onKeyUp={[Function]}
@@ -63,32 +56,25 @@ exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
     onTouchEnd={[Function]}
     onTouchMove={[Function]}
     onTouchStart={[Function]}
-    tabIndex="0"
+    tabIndex={0}
     type="button"
   >
     <span
-      className="MuiButton-label-6"
+      className="MuiButton-label"
     >
       SAVE
       <svg
         aria-hidden="true"
-        className="MuiSvgIcon-root-34 R3FormButtons-buttonIcon-4"
+        className="MuiSvgIcon-root R3FormButtons-buttonIcon-4"
         focusable="false"
         role="presentation"
         viewBox="0 0 24 24"
       >
         <path
-          d="M0 0h24v24H0z"
-          fill="none"
-        />
-        <path
           d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
         />
       </svg>
     </span>
-    <span
-      className="MuiTouchRipple-root-43"
-    />
   </button>
 </div>
 `;

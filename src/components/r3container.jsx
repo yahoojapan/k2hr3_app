@@ -55,7 +55,7 @@ import { r3DeepCompare, r3IsEmptyStringObject, r3CompareString, r3CompareCaseStr
 //
 // Container Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3Container)
 export default class R3Container extends React.Component
 {

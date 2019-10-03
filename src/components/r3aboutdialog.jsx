@@ -51,7 +51,7 @@ const k2hr3License		=	'Copyright(C) 2017 Yahoo Japan Corporation.';
 //
 // User Data(with role token) Information Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3AboutDialogStyles)
 export default class R3AboutDialog extends React.Component
 {

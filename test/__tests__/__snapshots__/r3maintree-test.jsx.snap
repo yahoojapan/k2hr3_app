@@ -6,42 +6,40 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
 >
   <div>
     <header
-      className="MuiPaper-root-29 MuiPaper-elevation0-31 MuiAppBar-root-20 MuiAppBar-positionStatic-24 MuiAppBar-colorPrimary-27 R3MainTree-subheaderAppbar-5"
+      className="MuiPaper-root MuiPaper-elevation0 MuiAppBar-root MuiAppBar-positionStatic R3MainTree-subheaderAppbar-5 MuiAppBar-colorPrimary"
     >
       <div
-        className="MuiToolbar-root-56 MuiToolbar-dense-59 MuiToolbar-gutters-57 R3MainTree-subheaderToolbar-6"
+        className="MuiToolbar-root MuiToolbar-dense R3MainTree-subheaderToolbar-6 MuiToolbar-gutters"
       >
         <div
-          className="MuiChip-root-60 MuiChip-colorPrimary-61 R3MainTree-chip-9"
+          className="MuiChip-root R3MainTree-chip-9 MuiChip-colorPrimary"
           onKeyDown={[Function]}
           onKeyUp={[Function]}
-          role="button"
-          tabIndex={-1}
         >
           <span
-            className="MuiChip-label-79"
+            className="MuiChip-label"
           >
             <span
-              className="MuiTypography-root-85 MuiTypography-subtitle2-104 R3MainTree-chipText-10"
+              className="MuiTypography-root R3MainTree-chipText-10 MuiTypography-subtitle2"
             >
               TENANT
             </span>
           </span>
         </div>
         <span
-          className="MuiTypography-root-85 MuiTypography-subtitle2-104 MuiTypography-colorTextSecondary-118 R3MainTree-tenantListText-2"
+          className="MuiTypography-root R3MainTree-tenantListText-2 MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
         >
           GROUP0:TENANT0
         </span>
         <button
           aria-describedby={null}
           aria-label="select tenant"
-          className="MuiButtonBase-root-135 MuiIconButton-root-129"
+          className="MuiButtonBase-root MuiIconButton-root"
           disabled={false}
           label="select-tenant"
           onBlur={[Function]}
           onClick={[Function]}
-          onContextMenu={[Function]}
+          onDragLeave={[Function]}
           onFocus={[Function]}
           onKeyDown={[Function]}
           onKeyUp={[Function]}
@@ -53,46 +51,43 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           onTouchEnd={[Function]}
           onTouchMove={[Function]}
           onTouchStart={[Function]}
-          tabIndex="0"
+          tabIndex={0}
           title="Select tenant"
           type="button"
         >
           <span
-            className="MuiIconButton-label-134"
+            className="MuiIconButton-label"
           >
             <svg
               aria-hidden="true"
-              className="MuiSvgIcon-root-138"
+              className="MuiSvgIcon-root"
               focusable="false"
               role="presentation"
               viewBox="0 0 24 24"
             >
-              <path
-                d="M0 0h24v24H0z"
-                fill="none"
-              />
               <path
                 d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
               />
             </svg>
           </span>
           <span
-            className="MuiTouchRipple-root-205"
+            className="MuiTouchRipple-root"
           />
         </button>
       </div>
     </header>
   </div>
   <div
-    className="MuiList-root-151"
+    className="MuiList-root"
     id="mainTree-top-list"
   >
     <div>
       <div
-        className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+        aria-disabled={false}
+        className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
         onBlur={[Function]}
         onClick={[Function]}
-        onContextMenu={[Function]}
+        onDragLeave={[Function]}
         onFocus={[Function]}
         onKeyDown={[Function]}
         onKeyUp={[Function]}
@@ -103,42 +98,38 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         onTouchMove={[Function]}
         onTouchStart={[Function]}
         role="button"
-        tabIndex="0"
+        tabIndex={0}
       >
         <div
-          className="MuiListItemIcon-root-167"
+          className="MuiListItemIcon-root"
         >
           <svg
             aria-hidden="true"
-            className="MuiSvgIcon-root-138"
+            className="MuiSvgIcon-root"
             focusable="false"
             role="presentation"
             viewBox="0 0 24 24"
           >
-            <path
-              d="M0 0h24v24H0z"
-              fill="none"
-            />
             <path
               d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"
             />
           </svg>
         </div>
         <div
-          className="MuiListItemText-root-168 R3MainTree-listItemText-17"
+          className="MuiListItemText-root R3MainTree-listItemText-17"
         >
           <span
-            className="MuiTypography-root-85 MuiTypography-subtitle2-104 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+            className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
           >
             SERVICE
           </span>
         </div>
         <div
-          className="MuiListItemIcon-root-167 R3MainTree-expandListItemIcon-13"
+          className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
         >
           <svg
             aria-hidden="true"
-            className="MuiSvgIcon-root-138"
+            className="MuiSvgIcon-root"
             focusable="false"
             role="presentation"
             viewBox="0 0 24 24"
@@ -146,18 +137,14 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
             <path
               d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
             />
-            <path
-              d="M0 0h24v24H0z"
-              fill="none"
-            />
           </svg>
         </div>
         <span
-          className="MuiTouchRipple-root-205"
+          className="MuiTouchRipple-root"
         />
       </div>
       <div
-        className="MuiCollapse-container-174"
+        className="MuiCollapse-container MuiCollapse-hidden"
         style={
           Object {
             "minHeight": "0px",
@@ -165,20 +152,21 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         }
       >
         <div
-          className="MuiCollapse-wrapper-176"
+          className="MuiCollapse-wrapper"
         >
           <div
-            className="MuiCollapse-wrapperInner-177"
+            className="MuiCollapse-wrapperInner"
           >
             <div
-              className="MuiList-root-151"
+              className="MuiList-root"
             >
               <div>
                 <div
-                  className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+                  aria-disabled={false}
+                  className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                   onBlur={[Function]}
                   onClick={[Function]}
-                  onContextMenu={[Function]}
+                  onDragLeave={[Function]}
                   onFocus={[Function]}
                   onKeyDown={[Function]}
                   onKeyUp={[Function]}
@@ -189,23 +177,23 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   onTouchMove={[Function]}
                   onTouchStart={[Function]}
                   role="button"
-                  tabIndex="0"
+                  tabIndex={0}
                 >
                   <div
-                    className="MuiListItemText-root-168 R3MainTree-childListItemText-16"
+                    className="MuiListItemText-root R3MainTree-childListItemText-16"
                   >
                     <span
-                      className="MuiTypography-root-85 MuiTypography-subtitle1-103 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+                      className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
                     >
                       child_service
                     </span>
                   </div>
                   <div
-                    className="MuiListItemIcon-root-167 R3MainTree-expandListItemIcon-13"
+                    className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
                   >
                     <svg
                       aria-hidden="true"
-                      className="MuiSvgIcon-root-138"
+                      className="MuiSvgIcon-root"
                       focusable="false"
                       role="presentation"
                       viewBox="0 0 24 24"
@@ -213,18 +201,14 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                       <path
                         d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
                       />
-                      <path
-                        d="M0 0h24v24H0z"
-                        fill="none"
-                      />
                     </svg>
                   </div>
                   <span
-                    className="MuiTouchRipple-root-205"
+                    className="MuiTouchRipple-root"
                   />
                 </div>
                 <div
-                  className="MuiCollapse-container-174 R3MainTree-collapse-14"
+                  className="MuiCollapse-container R3MainTree-collapse-14 MuiCollapse-hidden"
                   style={
                     Object {
                       "minHeight": "0px",
@@ -232,20 +216,21 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   }
                 >
                   <div
-                    className="MuiCollapse-wrapper-176"
+                    className="MuiCollapse-wrapper"
                   >
                     <div
-                      className="MuiCollapse-wrapperInner-177"
+                      className="MuiCollapse-wrapperInner"
                     >
                       <div
-                        className="MuiList-root-151"
+                        className="MuiList-root"
                       >
                         <div>
                           <div
-                            className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+                            aria-disabled={false}
+                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                             onBlur={[Function]}
                             onClick={[Function]}
-                            onContextMenu={[Function]}
+                            onDragLeave={[Function]}
                             onFocus={[Function]}
                             onKeyDown={[Function]}
                             onKeyUp={[Function]}
@@ -256,23 +241,23 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             onTouchMove={[Function]}
                             onTouchStart={[Function]}
                             role="button"
-                            tabIndex="0"
+                            tabIndex={0}
                           >
                             <div
-                              className="MuiListItemText-root-168 R3MainTree-childListItemText-16"
+                              className="MuiListItemText-root R3MainTree-childListItemText-16"
                             >
                               <span
-                                className="MuiTypography-root-85 MuiTypography-subtitle1-103 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
                               >
                                 ROLE
                               </span>
                             </div>
                             <div
-                              className="MuiListItemIcon-root-167 R3MainTree-expandListItemIcon-13"
+                              className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
                             >
                               <svg
                                 aria-hidden="true"
-                                className="MuiSvgIcon-root-138"
+                                className="MuiSvgIcon-root"
                                 focusable="false"
                                 role="presentation"
                                 viewBox="0 0 24 24"
@@ -280,18 +265,14 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                 <path
                                   d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
                                 />
-                                <path
-                                  d="M0 0h24v24H0z"
-                                  fill="none"
-                                />
                               </svg>
                             </div>
                             <span
-                              className="MuiTouchRipple-root-205"
+                              className="MuiTouchRipple-root"
                             />
                           </div>
                           <div
-                            className="MuiCollapse-container-174 R3MainTree-collapse-14"
+                            className="MuiCollapse-container R3MainTree-collapse-14 MuiCollapse-hidden"
                             style={
                               Object {
                                 "minHeight": "0px",
@@ -299,20 +280,21 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             }
                           >
                             <div
-                              className="MuiCollapse-wrapper-176"
+                              className="MuiCollapse-wrapper"
                             >
                               <div
-                                className="MuiCollapse-wrapperInner-177"
+                                className="MuiCollapse-wrapperInner"
                               >
                                 <div
-                                  className="MuiList-root-151"
+                                  className="MuiList-root"
                                 >
                                   <div>
                                     <div
-                                      className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+                                      aria-disabled={false}
+                                      className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                                       onBlur={[Function]}
                                       onClick={[Function]}
-                                      onContextMenu={[Function]}
+                                      onDragLeave={[Function]}
                                       onFocus={[Function]}
                                       onKeyDown={[Function]}
                                       onKeyUp={[Function]}
@@ -323,19 +305,19 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                       onTouchMove={[Function]}
                                       onTouchStart={[Function]}
                                       role="button"
-                                      tabIndex="0"
+                                      tabIndex={0}
                                     >
                                       <div
-                                        className="MuiListItemText-root-168 R3MainTree-childListItemText-16"
+                                        className="MuiListItemText-root R3MainTree-childListItemText-16"
                                       >
                                         <span
-                                          className="MuiTypography-root-85 MuiTypography-subtitle1-103 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+                                          className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
                                         >
                                           dummyservicerole
                                         </span>
                                       </div>
                                       <span
-                                        className="MuiTouchRipple-root-205"
+                                        className="MuiTouchRipple-root"
                                       />
                                     </div>
                                   </div>
@@ -346,10 +328,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                         </div>
                         <div>
                           <div
-                            className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+                            aria-disabled={false}
+                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                             onBlur={[Function]}
                             onClick={[Function]}
-                            onContextMenu={[Function]}
+                            onDragLeave={[Function]}
                             onFocus={[Function]}
                             onKeyDown={[Function]}
                             onKeyUp={[Function]}
@@ -360,23 +343,23 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             onTouchMove={[Function]}
                             onTouchStart={[Function]}
                             role="button"
-                            tabIndex="0"
+                            tabIndex={0}
                           >
                             <div
-                              className="MuiListItemText-root-168 R3MainTree-childListItemText-16"
+                              className="MuiListItemText-root R3MainTree-childListItemText-16"
                             >
                               <span
-                                className="MuiTypography-root-85 MuiTypography-subtitle1-103 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
                               >
                                 RESOURCE
                               </span>
                             </div>
                             <div
-                              className="MuiListItemIcon-root-167 R3MainTree-expandListItemIcon-13"
+                              className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
                             >
                               <svg
                                 aria-hidden="true"
-                                className="MuiSvgIcon-root-138"
+                                className="MuiSvgIcon-root"
                                 focusable="false"
                                 role="presentation"
                                 viewBox="0 0 24 24"
@@ -384,18 +367,14 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                 <path
                                   d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
                                 />
-                                <path
-                                  d="M0 0h24v24H0z"
-                                  fill="none"
-                                />
                               </svg>
                             </div>
                             <span
-                              className="MuiTouchRipple-root-205"
+                              className="MuiTouchRipple-root"
                             />
                           </div>
                           <div
-                            className="MuiCollapse-container-174 R3MainTree-collapse-14"
+                            className="MuiCollapse-container R3MainTree-collapse-14 MuiCollapse-hidden"
                             style={
                               Object {
                                 "minHeight": "0px",
@@ -403,20 +382,21 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             }
                           >
                             <div
-                              className="MuiCollapse-wrapper-176"
+                              className="MuiCollapse-wrapper"
                             >
                               <div
-                                className="MuiCollapse-wrapperInner-177"
+                                className="MuiCollapse-wrapperInner"
                               >
                                 <div
-                                  className="MuiList-root-151"
+                                  className="MuiList-root"
                                 >
                                   <div>
                                     <div
-                                      className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+                                      aria-disabled={false}
+                                      className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                                       onBlur={[Function]}
                                       onClick={[Function]}
-                                      onContextMenu={[Function]}
+                                      onDragLeave={[Function]}
                                       onFocus={[Function]}
                                       onKeyDown={[Function]}
                                       onKeyUp={[Function]}
@@ -427,19 +407,19 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                       onTouchMove={[Function]}
                                       onTouchStart={[Function]}
                                       role="button"
-                                      tabIndex="0"
+                                      tabIndex={0}
                                     >
                                       <div
-                                        className="MuiListItemText-root-168 R3MainTree-childListItemText-16"
+                                        className="MuiListItemText-root R3MainTree-childListItemText-16"
                                       >
                                         <span
-                                          className="MuiTypography-root-85 MuiTypography-subtitle1-103 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+                                          className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
                                         >
                                           dummyserviceresource
                                         </span>
                                       </div>
                                       <span
-                                        className="MuiTouchRipple-root-205"
+                                        className="MuiTouchRipple-root"
                                       />
                                     </div>
                                   </div>
@@ -450,10 +430,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                         </div>
                         <div>
                           <div
-                            className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+                            aria-disabled={false}
+                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                             onBlur={[Function]}
                             onClick={[Function]}
-                            onContextMenu={[Function]}
+                            onDragLeave={[Function]}
                             onFocus={[Function]}
                             onKeyDown={[Function]}
                             onKeyUp={[Function]}
@@ -464,23 +445,23 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             onTouchMove={[Function]}
                             onTouchStart={[Function]}
                             role="button"
-                            tabIndex="0"
+                            tabIndex={0}
                           >
                             <div
-                              className="MuiListItemText-root-168 R3MainTree-childListItemText-16"
+                              className="MuiListItemText-root R3MainTree-childListItemText-16"
                             >
                               <span
-                                className="MuiTypography-root-85 MuiTypography-subtitle1-103 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
                               >
                                 POLICY
                               </span>
                             </div>
                             <div
-                              className="MuiListItemIcon-root-167 R3MainTree-expandListItemIcon-13"
+                              className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
                             >
                               <svg
                                 aria-hidden="true"
-                                className="MuiSvgIcon-root-138"
+                                className="MuiSvgIcon-root"
                                 focusable="false"
                                 role="presentation"
                                 viewBox="0 0 24 24"
@@ -488,18 +469,14 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                 <path
                                   d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
                                 />
-                                <path
-                                  d="M0 0h24v24H0z"
-                                  fill="none"
-                                />
                               </svg>
                             </div>
                             <span
-                              className="MuiTouchRipple-root-205"
+                              className="MuiTouchRipple-root"
                             />
                           </div>
                           <div
-                            className="MuiCollapse-container-174 R3MainTree-collapse-14"
+                            className="MuiCollapse-container R3MainTree-collapse-14 MuiCollapse-hidden"
                             style={
                               Object {
                                 "minHeight": "0px",
@@ -507,20 +484,21 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             }
                           >
                             <div
-                              className="MuiCollapse-wrapper-176"
+                              className="MuiCollapse-wrapper"
                             >
                               <div
-                                className="MuiCollapse-wrapperInner-177"
+                                className="MuiCollapse-wrapperInner"
                               >
                                 <div
-                                  className="MuiList-root-151"
+                                  className="MuiList-root"
                                 >
                                   <div>
                                     <div
-                                      className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+                                      aria-disabled={false}
+                                      className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                                       onBlur={[Function]}
                                       onClick={[Function]}
-                                      onContextMenu={[Function]}
+                                      onDragLeave={[Function]}
                                       onFocus={[Function]}
                                       onKeyDown={[Function]}
                                       onKeyUp={[Function]}
@@ -531,19 +509,19 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                       onTouchMove={[Function]}
                                       onTouchStart={[Function]}
                                       role="button"
-                                      tabIndex="0"
+                                      tabIndex={0}
                                     >
                                       <div
-                                        className="MuiListItemText-root-168 R3MainTree-childListItemText-16"
+                                        className="MuiListItemText-root R3MainTree-childListItemText-16"
                                       >
                                         <span
-                                          className="MuiTypography-root-85 MuiTypography-subtitle1-103 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+                                          className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
                                         >
                                           dummyservicepolicy
                                         </span>
                                       </div>
                                       <span
-                                        className="MuiTouchRipple-root-205"
+                                        className="MuiTouchRipple-root"
                                       />
                                     </div>
                                   </div>
@@ -564,10 +542,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
     </div>
     <div>
       <div
-        className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+        aria-disabled={false}
+        className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
         onBlur={[Function]}
         onClick={[Function]}
-        onContextMenu={[Function]}
+        onDragLeave={[Function]}
         onFocus={[Function]}
         onKeyDown={[Function]}
         onKeyUp={[Function]}
@@ -578,42 +557,38 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         onTouchMove={[Function]}
         onTouchStart={[Function]}
         role="button"
-        tabIndex="0"
+        tabIndex={0}
       >
         <div
-          className="MuiListItemIcon-root-167"
+          className="MuiListItemIcon-root"
         >
           <svg
             aria-hidden="true"
-            className="MuiSvgIcon-root-138"
+            className="MuiSvgIcon-root"
             focusable="false"
             role="presentation"
             viewBox="0 0 24 24"
           >
-            <path
-              d="M0 0h24v24H0z"
-              fill="none"
-            />
             <path
               d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"
             />
           </svg>
         </div>
         <div
-          className="MuiListItemText-root-168 R3MainTree-listItemText-17"
+          className="MuiListItemText-root R3MainTree-listItemText-17"
         >
           <span
-            className="MuiTypography-root-85 MuiTypography-subtitle2-104 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+            className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
           >
             ROLE
           </span>
         </div>
         <div
-          className="MuiListItemIcon-root-167 R3MainTree-expandListItemIcon-13"
+          className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
         >
           <svg
             aria-hidden="true"
-            className="MuiSvgIcon-root-138"
+            className="MuiSvgIcon-root"
             focusable="false"
             role="presentation"
             viewBox="0 0 24 24"
@@ -621,18 +596,14 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
             <path
               d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
             />
-            <path
-              d="M0 0h24v24H0z"
-              fill="none"
-            />
           </svg>
         </div>
         <span
-          className="MuiTouchRipple-root-205"
+          className="MuiTouchRipple-root"
         />
       </div>
       <div
-        className="MuiCollapse-container-174"
+        className="MuiCollapse-container MuiCollapse-hidden"
         style={
           Object {
             "minHeight": "0px",
@@ -640,20 +611,21 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         }
       >
         <div
-          className="MuiCollapse-wrapper-176"
+          className="MuiCollapse-wrapper"
         >
           <div
-            className="MuiCollapse-wrapperInner-177"
+            className="MuiCollapse-wrapperInner"
           >
             <div
-              className="MuiList-root-151"
+              className="MuiList-root"
             >
               <div>
                 <div
-                  className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+                  aria-disabled={false}
+                  className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                   onBlur={[Function]}
                   onClick={[Function]}
-                  onContextMenu={[Function]}
+                  onDragLeave={[Function]}
                   onFocus={[Function]}
                   onKeyDown={[Function]}
                   onKeyUp={[Function]}
@@ -664,23 +636,23 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   onTouchMove={[Function]}
                   onTouchStart={[Function]}
                   role="button"
-                  tabIndex="0"
+                  tabIndex={0}
                 >
                   <div
-                    className="MuiListItemText-root-168 R3MainTree-childListItemText-16"
+                    className="MuiListItemText-root R3MainTree-childListItemText-16"
                   >
                     <span
-                      className="MuiTypography-root-85 MuiTypography-subtitle1-103 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+                      className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
                     >
                       dummyrole
                     </span>
                   </div>
                   <div
-                    className="MuiListItemIcon-root-167 R3MainTree-expandListItemIcon-13"
+                    className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
                   >
                     <svg
                       aria-hidden="true"
-                      className="MuiSvgIcon-root-138"
+                      className="MuiSvgIcon-root"
                       focusable="false"
                       role="presentation"
                       viewBox="0 0 24 24"
@@ -688,18 +660,14 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                       <path
                         d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
                       />
-                      <path
-                        d="M0 0h24v24H0z"
-                        fill="none"
-                      />
                     </svg>
                   </div>
                   <span
-                    className="MuiTouchRipple-root-205"
+                    className="MuiTouchRipple-root"
                   />
                 </div>
                 <div
-                  className="MuiCollapse-container-174 R3MainTree-collapse-14"
+                  className="MuiCollapse-container R3MainTree-collapse-14 MuiCollapse-hidden"
                   style={
                     Object {
                       "minHeight": "0px",
@@ -707,20 +675,21 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   }
                 >
                   <div
-                    className="MuiCollapse-wrapper-176"
+                    className="MuiCollapse-wrapper"
                   >
                     <div
-                      className="MuiCollapse-wrapperInner-177"
+                      className="MuiCollapse-wrapperInner"
                     >
                       <div
-                        className="MuiList-root-151"
+                        className="MuiList-root"
                       >
                         <div>
                           <div
-                            className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+                            aria-disabled={false}
+                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                             onBlur={[Function]}
                             onClick={[Function]}
-                            onContextMenu={[Function]}
+                            onDragLeave={[Function]}
                             onFocus={[Function]}
                             onKeyDown={[Function]}
                             onKeyUp={[Function]}
@@ -731,19 +700,19 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             onTouchMove={[Function]}
                             onTouchStart={[Function]}
                             role="button"
-                            tabIndex="0"
+                            tabIndex={0}
                           >
                             <div
-                              className="MuiListItemText-root-168 R3MainTree-childListItemText-16"
+                              className="MuiListItemText-root R3MainTree-childListItemText-16"
                             >
                               <span
-                                className="MuiTypography-root-85 MuiTypography-subtitle1-103 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
                               >
                                 dummysubrole
                               </span>
                             </div>
                             <span
-                              className="MuiTouchRipple-root-205"
+                              className="MuiTouchRipple-root"
                             />
                           </div>
                         </div>
@@ -759,10 +728,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
     </div>
     <div>
       <div
-        className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+        aria-disabled={false}
+        className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
         onBlur={[Function]}
         onClick={[Function]}
-        onContextMenu={[Function]}
+        onDragLeave={[Function]}
         onFocus={[Function]}
         onKeyDown={[Function]}
         onKeyUp={[Function]}
@@ -773,42 +743,38 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         onTouchMove={[Function]}
         onTouchStart={[Function]}
         role="button"
-        tabIndex="0"
+        tabIndex={0}
       >
         <div
-          className="MuiListItemIcon-root-167"
+          className="MuiListItemIcon-root"
         >
           <svg
             aria-hidden="true"
-            className="MuiSvgIcon-root-138"
+            className="MuiSvgIcon-root"
             focusable="false"
             role="presentation"
             viewBox="0 0 24 24"
           >
-            <path
-              d="M0 0h24v24H0z"
-              fill="none"
-            />
             <path
               d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"
             />
           </svg>
         </div>
         <div
-          className="MuiListItemText-root-168 R3MainTree-listItemText-17"
+          className="MuiListItemText-root R3MainTree-listItemText-17"
         >
           <span
-            className="MuiTypography-root-85 MuiTypography-subtitle2-104 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+            className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
           >
             RESOURCE
           </span>
         </div>
         <div
-          className="MuiListItemIcon-root-167 R3MainTree-expandListItemIcon-13"
+          className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
         >
           <svg
             aria-hidden="true"
-            className="MuiSvgIcon-root-138"
+            className="MuiSvgIcon-root"
             focusable="false"
             role="presentation"
             viewBox="0 0 24 24"
@@ -816,18 +782,14 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
             <path
               d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
             />
-            <path
-              d="M0 0h24v24H0z"
-              fill="none"
-            />
           </svg>
         </div>
         <span
-          className="MuiTouchRipple-root-205"
+          className="MuiTouchRipple-root"
         />
       </div>
       <div
-        className="MuiCollapse-container-174"
+        className="MuiCollapse-container MuiCollapse-hidden"
         style={
           Object {
             "minHeight": "0px",
@@ -835,20 +797,21 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         }
       >
         <div
-          className="MuiCollapse-wrapper-176"
+          className="MuiCollapse-wrapper"
         >
           <div
-            className="MuiCollapse-wrapperInner-177"
+            className="MuiCollapse-wrapperInner"
           >
             <div
-              className="MuiList-root-151"
+              className="MuiList-root"
             >
               <div>
                 <div
-                  className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+                  aria-disabled={false}
+                  className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                   onBlur={[Function]}
                   onClick={[Function]}
-                  onContextMenu={[Function]}
+                  onDragLeave={[Function]}
                   onFocus={[Function]}
                   onKeyDown={[Function]}
                   onKeyUp={[Function]}
@@ -859,23 +822,23 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   onTouchMove={[Function]}
                   onTouchStart={[Function]}
                   role="button"
-                  tabIndex="0"
+                  tabIndex={0}
                 >
                   <div
-                    className="MuiListItemText-root-168 R3MainTree-childListItemText-16"
+                    className="MuiListItemText-root R3MainTree-childListItemText-16"
                   >
                     <span
-                      className="MuiTypography-root-85 MuiTypography-subtitle1-103 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+                      className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
                     >
                       dummyresource
                     </span>
                   </div>
                   <div
-                    className="MuiListItemIcon-root-167 R3MainTree-expandListItemIcon-13"
+                    className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
                   >
                     <svg
                       aria-hidden="true"
-                      className="MuiSvgIcon-root-138"
+                      className="MuiSvgIcon-root"
                       focusable="false"
                       role="presentation"
                       viewBox="0 0 24 24"
@@ -883,18 +846,14 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                       <path
                         d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
                       />
-                      <path
-                        d="M0 0h24v24H0z"
-                        fill="none"
-                      />
                     </svg>
                   </div>
                   <span
-                    className="MuiTouchRipple-root-205"
+                    className="MuiTouchRipple-root"
                   />
                 </div>
                 <div
-                  className="MuiCollapse-container-174 R3MainTree-collapse-14"
+                  className="MuiCollapse-container R3MainTree-collapse-14 MuiCollapse-hidden"
                   style={
                     Object {
                       "minHeight": "0px",
@@ -902,20 +861,21 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   }
                 >
                   <div
-                    className="MuiCollapse-wrapper-176"
+                    className="MuiCollapse-wrapper"
                   >
                     <div
-                      className="MuiCollapse-wrapperInner-177"
+                      className="MuiCollapse-wrapperInner"
                     >
                       <div
-                        className="MuiList-root-151"
+                        className="MuiList-root"
                       >
                         <div>
                           <div
-                            className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+                            aria-disabled={false}
+                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                             onBlur={[Function]}
                             onClick={[Function]}
-                            onContextMenu={[Function]}
+                            onDragLeave={[Function]}
                             onFocus={[Function]}
                             onKeyDown={[Function]}
                             onKeyUp={[Function]}
@@ -926,19 +886,19 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             onTouchMove={[Function]}
                             onTouchStart={[Function]}
                             role="button"
-                            tabIndex="0"
+                            tabIndex={0}
                           >
                             <div
-                              className="MuiListItemText-root-168 R3MainTree-childListItemText-16"
+                              className="MuiListItemText-root R3MainTree-childListItemText-16"
                             >
                               <span
-                                className="MuiTypography-root-85 MuiTypography-subtitle1-103 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
                               >
                                 dummysubresource
                               </span>
                             </div>
                             <span
-                              className="MuiTouchRipple-root-205"
+                              className="MuiTouchRipple-root"
                             />
                           </div>
                         </div>
@@ -954,10 +914,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
     </div>
     <div>
       <div
-        className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+        aria-disabled={false}
+        className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
         onBlur={[Function]}
         onClick={[Function]}
-        onContextMenu={[Function]}
+        onDragLeave={[Function]}
         onFocus={[Function]}
         onKeyDown={[Function]}
         onKeyUp={[Function]}
@@ -968,42 +929,38 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         onTouchMove={[Function]}
         onTouchStart={[Function]}
         role="button"
-        tabIndex="0"
+        tabIndex={0}
       >
         <div
-          className="MuiListItemIcon-root-167"
+          className="MuiListItemIcon-root"
         >
           <svg
             aria-hidden="true"
-            className="MuiSvgIcon-root-138"
+            className="MuiSvgIcon-root"
             focusable="false"
             role="presentation"
             viewBox="0 0 24 24"
           >
-            <path
-              d="M0 0h24v24H0z"
-              fill="none"
-            />
             <path
               d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"
             />
           </svg>
         </div>
         <div
-          className="MuiListItemText-root-168 R3MainTree-listItemText-17"
+          className="MuiListItemText-root R3MainTree-listItemText-17"
         >
           <span
-            className="MuiTypography-root-85 MuiTypography-subtitle2-104 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+            className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
           >
             POLICY
           </span>
         </div>
         <div
-          className="MuiListItemIcon-root-167 R3MainTree-expandListItemIcon-13"
+          className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
         >
           <svg
             aria-hidden="true"
-            className="MuiSvgIcon-root-138"
+            className="MuiSvgIcon-root"
             focusable="false"
             role="presentation"
             viewBox="0 0 24 24"
@@ -1011,18 +968,14 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
             <path
               d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
             />
-            <path
-              d="M0 0h24v24H0z"
-              fill="none"
-            />
           </svg>
         </div>
         <span
-          className="MuiTouchRipple-root-205"
+          className="MuiTouchRipple-root"
         />
       </div>
       <div
-        className="MuiCollapse-container-174"
+        className="MuiCollapse-container MuiCollapse-hidden"
         style={
           Object {
             "minHeight": "0px",
@@ -1030,20 +983,21 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         }
       >
         <div
-          className="MuiCollapse-wrapper-176"
+          className="MuiCollapse-wrapper"
         >
           <div
-            className="MuiCollapse-wrapperInner-177"
+            className="MuiCollapse-wrapperInner"
           >
             <div
-              className="MuiList-root-151"
+              className="MuiList-root"
             >
               <div>
                 <div
-                  className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+                  aria-disabled={false}
+                  className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                   onBlur={[Function]}
                   onClick={[Function]}
-                  onContextMenu={[Function]}
+                  onDragLeave={[Function]}
                   onFocus={[Function]}
                   onKeyDown={[Function]}
                   onKeyUp={[Function]}
@@ -1054,23 +1008,23 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   onTouchMove={[Function]}
                   onTouchStart={[Function]}
                   role="button"
-                  tabIndex="0"
+                  tabIndex={0}
                 >
                   <div
-                    className="MuiListItemText-root-168 R3MainTree-childListItemText-16"
+                    className="MuiListItemText-root R3MainTree-childListItemText-16"
                   >
                     <span
-                      className="MuiTypography-root-85 MuiTypography-subtitle1-103 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+                      className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
                     >
                       dummypolicy
                     </span>
                   </div>
                   <div
-                    className="MuiListItemIcon-root-167 R3MainTree-expandListItemIcon-13"
+                    className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
                   >
                     <svg
                       aria-hidden="true"
-                      className="MuiSvgIcon-root-138"
+                      className="MuiSvgIcon-root"
                       focusable="false"
                       role="presentation"
                       viewBox="0 0 24 24"
@@ -1078,18 +1032,14 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                       <path
                         d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
                       />
-                      <path
-                        d="M0 0h24v24H0z"
-                        fill="none"
-                      />
                     </svg>
                   </div>
                   <span
-                    className="MuiTouchRipple-root-205"
+                    className="MuiTouchRipple-root"
                   />
                 </div>
                 <div
-                  className="MuiCollapse-container-174 R3MainTree-collapse-14"
+                  className="MuiCollapse-container R3MainTree-collapse-14 MuiCollapse-hidden"
                   style={
                     Object {
                       "minHeight": "0px",
@@ -1097,20 +1047,21 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   }
                 >
                   <div
-                    className="MuiCollapse-wrapper-176"
+                    className="MuiCollapse-wrapper"
                   >
                     <div
-                      className="MuiCollapse-wrapperInner-177"
+                      className="MuiCollapse-wrapperInner"
                     >
                       <div
-                        className="MuiList-root-151"
+                        className="MuiList-root"
                       >
                         <div>
                           <div
-                            className="MuiButtonBase-root-135 MuiListItem-root-155 MuiListItem-default-158 MuiListItem-gutters-163 MuiListItem-button-164"
+                            aria-disabled={false}
+                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                             onBlur={[Function]}
                             onClick={[Function]}
-                            onContextMenu={[Function]}
+                            onDragLeave={[Function]}
                             onFocus={[Function]}
                             onKeyDown={[Function]}
                             onKeyUp={[Function]}
@@ -1121,19 +1072,19 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             onTouchMove={[Function]}
                             onTouchStart={[Function]}
                             role="button"
-                            tabIndex="0"
+                            tabIndex={0}
                           >
                             <div
-                              className="MuiListItemText-root-168 R3MainTree-childListItemText-16"
+                              className="MuiListItemText-root R3MainTree-childListItemText-16"
                             >
                               <span
-                                className="MuiTypography-root-85 MuiTypography-subtitle1-103 MuiTypography-colorTextSecondary-118 MuiListItemText-primary-171"
+                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
                               >
                                 dummysubpolicy
                               </span>
                             </div>
                             <span
-                              className="MuiTouchRipple-root-205"
+                              className="MuiTouchRipple-root"
                             />
                           </div>
                         </div>

@@ -5,62 +5,59 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
   className="R3Policy-root-1"
 >
   <h6
-    className="MuiTypography-root-21 MuiTypography-subtitle2-40 MuiTypography-colorPrimary-51 MuiTypography-noWrap-47 R3Policy-subTitleTop-2"
+    className="MuiTypography-root R3Policy-subTitleTop-2 MuiTypography-subtitle2 MuiTypography-colorPrimary MuiTypography-noWrap"
   >
     EFFECT
   </h6>
   <div
-    className="MuiInputBase-root-77 MuiInput-root-64 MuiInput-underline-68 R3Policy-effectSelect-4"
+    className="MuiInputBase-root MuiInput-root MuiInput-underline R3Policy-effectSelect-4"
     onClick={[Function]}
   >
     <div
-      className="MuiSelect-root-57"
+      aria-haspopup="listbox"
+      className="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input MuiInputBase-inputSelect"
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      role="button"
+      tabIndex={0}
     >
-      <div
-        aria-haspopup="true"
-        aria-pressed="false"
-        className="MuiSelect-select-58 MuiSelect-selectMenu-61 MuiInputBase-input-87 MuiInput-input-72"
-        onBlur={[Function]}
-        onClick={[Function]}
-        onFocus={[Function]}
-        onKeyDown={[Function]}
-        role="button"
-        tabIndex={0}
-      >
-        ALLOW
-      </div>
-      <input
-        type="hidden"
-        value="allow"
-      />
-      <svg
-        aria-hidden="true"
-        className="MuiSvgIcon-root-94 MuiSelect-icon-63"
-        focusable="false"
-        role="presentation"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M7 10l5 5 5-5z"
-        />
-      </svg>
+      ALLOW
     </div>
+    <input
+      onAnimationStart={[Function]}
+      type="hidden"
+      value="allow"
+    />
+    <svg
+      aria-hidden="true"
+      className="MuiSvgIcon-root MuiSelect-icon"
+      focusable="false"
+      role="presentation"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M7 10l5 5 5-5z"
+      />
+    </svg>
   </div>
   <h6
-    className="MuiTypography-root-21 MuiTypography-subtitle2-40 MuiTypography-colorPrimary-51 MuiTypography-noWrap-47 R3Policy-subTitle-3"
+    className="MuiTypography-root R3Policy-subTitle-3 MuiTypography-subtitle2 MuiTypography-colorPrimary MuiTypography-noWrap"
   >
     ACTION
   </h6>
   <div
-    className="MuiFormGroup-root-107 MuiFormGroup-row-108"
+    className="MuiFormGroup-root MuiFormGroup-row"
   >
     <label
-      className="MuiFormControlLabel-root-109 R3Policy-actionLeftLabel-6"
+      className="MuiFormControlLabel-root R3Policy-actionLeftLabel-6"
     >
       <span
-        className="MuiButtonBase-root-131 MuiIconButton-root-125 MuiPrivateSwitchBase-root-121 MuiCheckbox-root-115 MuiCheckbox-colorSecondary-120 MuiPrivateSwitchBase-checked-122 MuiCheckbox-checked-116 R3Policy-actionCheckbox-5"
+        aria-disabled={false}
+        className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-118 MuiCheckbox-root MuiCheckbox-colorSecondary R3Policy-actionCheckbox-5 PrivateSwitchBase-checked-119 Mui-checked MuiIconButton-colorSecondary"
         onBlur={[Function]}
-        onContextMenu={[Function]}
+        onDragLeave={[Function]}
         onFocus={[Function]}
         onKeyDown={[Function]}
         onKeyUp={[Function]}
@@ -73,11 +70,20 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
         tabIndex={null}
       >
         <span
-          className="MuiIconButton-label-130"
+          className="MuiIconButton-label"
         >
+          <input
+            checked={true}
+            className="PrivateSwitchBase-input-121"
+            data-indeterminate={false}
+            disabled={false}
+            onChange={[Function]}
+            type="checkbox"
+            value="yrn:yahoo::::action:read"
+          />
           <svg
             aria-hidden="true"
-            className="MuiSvgIcon-root-94"
+            className="MuiSvgIcon-root"
             focusable="false"
             role="presentation"
             viewBox="0 0 24 24"
@@ -86,37 +92,29 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
               d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
             />
           </svg>
-          <input
-            checked={true}
-            className="MuiPrivateSwitchBase-input-124"
-            data-indeterminate={false}
-            disabled={false}
-            onChange={[Function]}
-            type="checkbox"
-            value="yrn:yahoo::::action:read"
-          />
         </span>
         <span
-          className="MuiTouchRipple-root-203"
+          className="MuiTouchRipple-root"
         />
       </span>
       <span
-        className="MuiTypography-root-21 MuiTypography-body2-29 MuiFormControlLabel-label-114"
+        className="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
       >
         <p
-          className="MuiTypography-root-21 MuiTypography-body1-30 MuiTypography-colorTextSecondary-54 MuiTypography-noWrap-47"
+          className="MuiTypography-root MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-noWrap"
         >
           READ
         </p>
       </span>
     </label>
     <label
-      className="MuiFormControlLabel-root-109 R3Policy-actionEndLabel-8"
+      className="MuiFormControlLabel-root R3Policy-actionEndLabel-8"
     >
       <span
-        className="MuiButtonBase-root-131 MuiIconButton-root-125 MuiPrivateSwitchBase-root-121 MuiCheckbox-root-115 MuiCheckbox-colorSecondary-120 R3Policy-actionCheckbox-5"
+        aria-disabled={false}
+        className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-118 MuiCheckbox-root MuiCheckbox-colorSecondary R3Policy-actionCheckbox-5 MuiIconButton-colorSecondary"
         onBlur={[Function]}
-        onContextMenu={[Function]}
+        onDragLeave={[Function]}
         onFocus={[Function]}
         onKeyDown={[Function]}
         onKeyUp={[Function]}
@@ -129,11 +127,20 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
         tabIndex={null}
       >
         <span
-          className="MuiIconButton-label-130"
+          className="MuiIconButton-label"
         >
+          <input
+            checked={false}
+            className="PrivateSwitchBase-input-121"
+            data-indeterminate={false}
+            disabled={false}
+            onChange={[Function]}
+            type="checkbox"
+            value="yrn:yahoo::::action:write"
+          />
           <svg
             aria-hidden="true"
-            className="MuiSvgIcon-root-94"
+            className="MuiSvgIcon-root"
             focusable="false"
             role="presentation"
             viewBox="0 0 24 24"
@@ -142,25 +149,16 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
               d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
             />
           </svg>
-          <input
-            checked={false}
-            className="MuiPrivateSwitchBase-input-124"
-            data-indeterminate={false}
-            disabled={false}
-            onChange={[Function]}
-            type="checkbox"
-            value="yrn:yahoo::::action:write"
-          />
         </span>
         <span
-          className="MuiTouchRipple-root-203"
+          className="MuiTouchRipple-root"
         />
       </span>
       <span
-        className="MuiTypography-root-21 MuiTypography-body2-29 MuiFormControlLabel-label-114"
+        className="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
       >
         <p
-          className="MuiTypography-root-21 MuiTypography-body1-30 MuiTypography-colorTextSecondary-54 MuiTypography-noWrap-47"
+          className="MuiTypography-root MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-noWrap"
         >
           WRITE
         </p>
@@ -168,7 +166,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     </label>
   </div>
   <h6
-    className="MuiTypography-root-21 MuiTypography-subtitle2-40 MuiTypography-colorPrimary-51 MuiTypography-noWrap-47 R3Policy-subTitle-3"
+    className="MuiTypography-root R3Policy-subTitle-3 MuiTypography-subtitle2 MuiTypography-colorPrimary MuiTypography-noWrap"
   >
     RESOURCE(YRN)
   </h6>
@@ -176,17 +174,18 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     className="R3Policy-enclosureElement-20"
   >
     <div
-      className="MuiFormControl-root-134 R3Policy-resourceTextField-9"
+      className="MuiFormControl-root MuiTextField-root R3Policy-resourceTextField-9"
     >
       <div
-        className="MuiInputBase-root-77 MuiInput-root-64 MuiInput-underline-68 MuiInputBase-formControl-78 MuiInput-formControl-65 R3Policy-inputTextField-19"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline R3Policy-inputTextField-19 MuiInputBase-formControl MuiInput-formControl"
         onClick={[Function]}
       >
         <input
           aria-invalid={false}
-          className="MuiInputBase-input-87 MuiInput-input-72"
+          className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="policyResource_0"
+          onAnimationStart={[Function]}
           onBlur={[Function]}
           onChange={[Function]}
           onFocus={[Function]}
@@ -201,12 +200,12 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     <button
       aria-describedby={null}
       aria-label="delete resource"
-      className="MuiButtonBase-root-131 MuiIconButton-root-125 R3Policy-deleteResourceButton-11"
+      className="MuiButtonBase-root MuiIconButton-root R3Policy-deleteResourceButton-11"
       disabled={false}
       label="delete-resource"
       onBlur={[Function]}
       onClick={[Function]}
-      onContextMenu={[Function]}
+      onDragLeave={[Function]}
       onFocus={[Function]}
       onKeyDown={[Function]}
       onKeyUp={[Function]}
@@ -218,31 +217,27 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       onTouchEnd={[Function]}
       onTouchMove={[Function]}
       onTouchStart={[Function]}
-      tabIndex="0"
+      tabIndex={0}
       title="Delete resource YRN path"
       type="button"
     >
       <span
-        className="MuiIconButton-label-130"
+        className="MuiIconButton-label"
       >
         <svg
           aria-hidden="true"
-          className="MuiSvgIcon-root-94"
+          className="MuiSvgIcon-root"
           focusable="false"
           role="presentation"
           viewBox="0 0 24 24"
         >
           <path
-            d="M0 0h24v24H0V0z"
-            fill="none"
-          />
-          <path
-            d="M18.3 5.71a.9959.9959 0 0 0-1.41 0L12 10.59 7.11 5.7a.9959.9959 0 0 0-1.41 0c-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+            d="M18.3 5.71a.9959.9959 0 00-1.41 0L12 10.59 7.11 5.7a.9959.9959 0 00-1.41 0c-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
           />
         </svg>
       </span>
       <span
-        className="MuiTouchRipple-root-203"
+        className="MuiTouchRipple-root"
       />
     </button>
   </div>
@@ -250,17 +245,18 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     className="R3Policy-enclosureElement-20"
   >
     <div
-      className="MuiFormControl-root-134 R3Policy-resourceTextField-9"
+      className="MuiFormControl-root MuiTextField-root R3Policy-resourceTextField-9"
     >
       <div
-        className="MuiInputBase-root-77 MuiInput-root-64 MuiInput-underline-68 MuiInputBase-formControl-78 MuiInput-formControl-65 R3Policy-inputTextField-19"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline R3Policy-inputTextField-19 MuiInputBase-formControl MuiInput-formControl"
         onClick={[Function]}
       >
         <input
           aria-invalid={false}
-          className="MuiInputBase-input-87 MuiInput-input-72"
+          className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="resourceNew"
+          onAnimationStart={[Function]}
           onBlur={[Function]}
           onChange={[Function]}
           onFocus={[Function]}
@@ -275,12 +271,12 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     <button
       aria-describedby={null}
       aria-label="add resource"
-      className="MuiButtonBase-root-131 MuiIconButton-root-125 R3Policy-addResourceButton-10"
+      className="MuiButtonBase-root MuiIconButton-root R3Policy-addResourceButton-10"
       disabled={false}
       label="add-resource"
       onBlur={[Function]}
       onClick={[Function]}
-      onContextMenu={[Function]}
+      onDragLeave={[Function]}
       onFocus={[Function]}
       onKeyDown={[Function]}
       onKeyUp={[Function]}
@@ -292,36 +288,32 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       onTouchEnd={[Function]}
       onTouchMove={[Function]}
       onTouchStart={[Function]}
-      tabIndex="0"
+      tabIndex={0}
       title="Add resource YRN path"
       type="button"
     >
       <span
-        className="MuiIconButton-label-130"
+        className="MuiIconButton-label"
       >
         <svg
           aria-hidden="true"
-          className="MuiSvgIcon-root-94"
+          className="MuiSvgIcon-root"
           focusable="false"
           role="presentation"
           viewBox="0 0 24 24"
         >
-          <path
-            d="M0 0h24v24H0V0z"
-            fill="none"
-          />
           <path
             d="M18 13h-5v5c0 .55-.45 1-1 1s-1-.45-1-1v-5H6c-.55 0-1-.45-1-1s.45-1 1-1h5V6c0-.55.45-1 1-1s1 .45 1 1v5h5c.55 0 1 .45 1 1s-.45 1-1 1z"
           />
         </svg>
       </span>
       <span
-        className="MuiTouchRipple-root-203"
+        className="MuiTouchRipple-root"
       />
     </button>
   </div>
   <h6
-    className="MuiTypography-root-21 MuiTypography-subtitle2-40 MuiTypography-colorPrimary-51 MuiTypography-noWrap-47 R3Policy-subTitle-3"
+    className="MuiTypography-root R3Policy-subTitle-3 MuiTypography-subtitle2 MuiTypography-colorPrimary MuiTypography-noWrap"
   >
     ALIASES
   </h6>
@@ -329,17 +321,18 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     className="R3Policy-enclosureElement-20"
   >
     <div
-      className="MuiFormControl-root-134 R3Policy-aliasTextField-13"
+      className="MuiFormControl-root MuiTextField-root R3Policy-aliasTextField-13"
     >
       <div
-        className="MuiInputBase-root-77 MuiInput-root-64 MuiInput-underline-68 MuiInputBase-formControl-78 MuiInput-formControl-65 R3Policy-inputTextField-19"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline R3Policy-inputTextField-19 MuiInputBase-formControl MuiInput-formControl"
         onClick={[Function]}
       >
         <input
           aria-invalid={false}
-          className="MuiInputBase-input-87 MuiInput-input-72"
+          className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="aliasNew"
+          onAnimationStart={[Function]}
           onBlur={[Function]}
           onChange={[Function]}
           onFocus={[Function]}
@@ -354,12 +347,12 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     <button
       aria-describedby={null}
       aria-label="add alias"
-      className="MuiButtonBase-root-131 MuiIconButton-root-125 R3Policy-addAliasButton-16"
+      className="MuiButtonBase-root MuiIconButton-root R3Policy-addAliasButton-16"
       disabled={false}
       label="add-alias"
       onBlur={[Function]}
       onClick={[Function]}
-      onContextMenu={[Function]}
+      onDragLeave={[Function]}
       onFocus={[Function]}
       onKeyDown={[Function]}
       onKeyUp={[Function]}
@@ -371,44 +364,40 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       onTouchEnd={[Function]}
       onTouchMove={[Function]}
       onTouchStart={[Function]}
-      tabIndex="0"
+      tabIndex={0}
       title="Add alias"
       type="button"
     >
       <span
-        className="MuiIconButton-label-130"
+        className="MuiIconButton-label"
       >
         <svg
           aria-hidden="true"
-          className="MuiSvgIcon-root-94"
+          className="MuiSvgIcon-root"
           focusable="false"
           role="presentation"
           viewBox="0 0 24 24"
         >
-          <path
-            d="M0 0h24v24H0V0z"
-            fill="none"
-          />
           <path
             d="M18 13h-5v5c0 .55-.45 1-1 1s-1-.45-1-1v-5H6c-.55 0-1-.45-1-1s.45-1 1-1h5V6c0-.55.45-1 1-1s1 .45 1 1v5h5c.55 0 1 .45 1 1s-.45 1-1 1z"
           />
         </svg>
       </span>
       <span
-        className="MuiTouchRipple-root-203"
+        className="MuiTouchRipple-root"
       />
     </button>
   </div>
   <div
-    className="R3FormButtons-root-146"
+    className="R3FormButtons-root-147"
   >
     <button
       aria-label="cancel"
-      className="MuiButtonBase-root-131 MuiButtonBase-disabled-132 MuiButton-root-150 MuiButton-contained-161 MuiButton-containedPrimary-162 MuiButton-raised-164 MuiButton-raisedPrimary-165 MuiButton-disabled-170 R3FormButtons-cancelButton-147"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary R3FormButtons-cancelButton-148 Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
-      onContextMenu={[Function]}
+      onDragLeave={[Function]}
       onFocus={[Function]}
       onKeyDown={[Function]}
       onKeyUp={[Function]}
@@ -418,16 +407,16 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       onTouchEnd={[Function]}
       onTouchMove={[Function]}
       onTouchStart={[Function]}
-      tabIndex="-1"
+      tabIndex={-1}
       type="button"
     >
       <span
-        className="MuiButton-label-151"
+        className="MuiButton-label"
       >
         CANCEL
         <svg
           aria-hidden="true"
-          className="MuiSvgIcon-root-94 R3FormButtons-buttonIcon-149"
+          className="MuiSvgIcon-root R3FormButtons-buttonIcon-150"
           focusable="false"
           role="presentation"
           viewBox="0 0 24 24"
@@ -435,20 +424,16 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           <path
             d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"
           />
-          <path
-            d="M0 0h24v24H0z"
-            fill="none"
-          />
         </svg>
       </span>
     </button>
     <button
       aria-label="save"
-      className="MuiButtonBase-root-131 MuiButtonBase-disabled-132 MuiButton-root-150 MuiButton-contained-161 MuiButton-containedSecondary-163 MuiButton-raised-164 MuiButton-raisedSecondary-166 MuiButton-disabled-170 R3FormButtons-saveButton-148"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary R3FormButtons-saveButton-149 Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
-      onContextMenu={[Function]}
+      onDragLeave={[Function]}
       onFocus={[Function]}
       onKeyDown={[Function]}
       onKeyUp={[Function]}
@@ -458,24 +443,20 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       onTouchEnd={[Function]}
       onTouchMove={[Function]}
       onTouchStart={[Function]}
-      tabIndex="-1"
+      tabIndex={-1}
       type="button"
     >
       <span
-        className="MuiButton-label-151"
+        className="MuiButton-label"
       >
         SAVE
         <svg
           aria-hidden="true"
-          className="MuiSvgIcon-root-94 R3FormButtons-buttonIcon-149"
+          className="MuiSvgIcon-root R3FormButtons-buttonIcon-150"
           focusable="false"
           role="presentation"
           viewBox="0 0 24 24"
         >
-          <path
-            d="M0 0h24v24H0z"
-            fill="none"
-          />
           <path
             d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
           />

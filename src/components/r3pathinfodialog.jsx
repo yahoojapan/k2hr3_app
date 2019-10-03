@@ -108,7 +108,7 @@ const codeTextFieldName	= 'register-code-textfield';
 //
 // Path Information Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3PathInfoDialog)
 export default class R3PathInfoDialog extends React.Component
 {

@@ -61,7 +61,7 @@ const tooltipValues = {
 //
 // Toolbar Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3Toolbar)
 export default class R3Toolbar extends React.Component
 {

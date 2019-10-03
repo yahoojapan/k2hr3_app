@@ -71,7 +71,7 @@ const resourceComponentValues = {
 //
 // Resource Contents Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3Resource)
 export default class R3Resource extends React.Component
 {

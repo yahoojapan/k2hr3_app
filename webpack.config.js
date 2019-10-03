@@ -50,11 +50,21 @@ module.exports = {
 				}
 			},
 			{
-				loaders: [
-					'style-loader',
-					'css-loader?modules&localIdentName=[path][name]-[local]-[hash:base64:5]'
-				],
-				test:	/\.css$/
+				test:	/\.css$/,
+				use: [
+					{
+						loader:	'style-loader'
+					},
+					{
+						loader:	'css-loader',
+						options: {
+							importLoaders:	1,
+							modules: {
+								localIdentName:	'[path][name]-[local]-[hash:base64:5]'
+							}
+						}
+					}
+				]
 			},
 			{
 				loader:	'url-loader?limit=8192',

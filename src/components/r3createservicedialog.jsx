@@ -46,7 +46,7 @@ const verifyTextFieldId		= 'new-verify-textfield-id';
 //
 // Create New Path Dialog Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3CreateServiceDialog)
 export default class R3CreateServiceDialog extends React.Component
 {

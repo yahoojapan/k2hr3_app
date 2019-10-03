@@ -68,7 +68,7 @@ const policyComponentValues = {
 //
 // Policy Contents Class
 //
-@withTheme()
+@withTheme
 @withStyles(r3Policy)
 export default class R3Policy extends React.Component
 {

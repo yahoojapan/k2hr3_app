@@ -53,7 +53,7 @@ const passphraseTextFieldId		= 'passphrase-textfield-id';
 //
 // SignIn by Credential Dialog
 //
-@withTheme()
+@withTheme
 @withStyles(r3SigninCredDialogStyles)
 export default class R3SigninCredDialog extends React.Component
 {
