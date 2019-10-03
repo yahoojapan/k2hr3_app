@@ -67,6 +67,19 @@ function printHelp(process_name)
 }
 
 //
+// Utility: check '.git' directory
+//
+function isDotGitDirectory()
+{
+	try{
+		fs.statSync('.git');
+	}catch(err){
+		return false;
+	}
+	return true;
+}
+
+//
 // Utility: load file contents
 //
 function loadFileContents(file)
@@ -535,7 +548,12 @@ if(args.help){
 	result = true;
 }else{
 	console.log('\nStart to make all package licenses JSON object file.\n');
-	result = main(args.use_package_json);
+	var	use_package_json = args.use_package_json;
+	if(!isDotGitDirectory()){
+		console.log('[INFO] Since the .git directory does not exist, force to use package.json to find the dependent package');
+		use_package_json = true;
+	}
+	result = main(use_package_json);
 	console.log('\nFinish with ' + (result ? 'no error' : 'error') + '.\n');
 }
 process.exit(result ? 0 : 1);
