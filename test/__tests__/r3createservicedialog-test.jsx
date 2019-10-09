@@ -124,6 +124,7 @@ describe('R3CreateServiceDialog', () => {											// eslint-disable-line no-un
 									<R3CreateServiceDialog
 										r3provider={ r3provider }
 										open={ true }
+										createMode={ true }
 										tenant={ tenant }
 										newServiceName={ '' }
 										newVerify={ '' }

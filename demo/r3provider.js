@@ -19,11 +19,13 @@
  *
  */
 
+import crypto			from 'crypto';
+
 import R3Context		from '../util/r3context';
 import { r3GetTextRes }	from '../util/r3define';
-import { resourceType, roleType, policyType, serviceType } from '../util/r3types';
-import { r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity, r3IsEmptyString, r3CompareCaseString, r3IsJSON, r3ConvertFromJSON, r3IsSafeUrl, r3DeepClone } from '../util/r3util';
-import crypto			from 'crypto';
+import { resourceType, roleType, policyType, serviceType }	from '../util/r3types';
+import { checkServiceResourceValue }						from '../util/r3verifyutil';
+import { r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity, r3IsEmptyString, r3CompareCaseString, r3DeepClone } from '../util/r3util';
 
 //
 // Internal demo data
@@ -1310,8 +1312,8 @@ export default class R3Provider
 						if(!r3IsEmptyEntityObject(serviceChild, 'tenant')){
 							tenants = r3DeepClone(serviceChild.tenant);
 						}
-						if(!r3IsEmptyStringObject(serviceChild, 'verify')){
-							verify = serviceChild.verify;
+						if(!r3IsEmptyEntityObject(serviceChild, 'verify')){
+							verify = r3DeepClone(serviceChild.verify);
 						}
 						result = {
 							name:		_servicename,
@@ -1393,7 +1395,7 @@ export default class R3Provider
 							serviceChild.tenant = [];
 						}
 						if(null !== _tenants){
-							serviceChild.tenant = serviceChild.tenant.concat(tenants);
+							serviceChild.tenant = serviceChild.tenant.concat(_tenants);
 						}
 						if(null !== _verify){
 							serviceChild.verify = _verify;
@@ -1422,8 +1424,12 @@ export default class R3Provider
 			});
 		}
 
-		let	needRemoveTenants	= oldTenants.filter(oldTenant => tenants.indexOf(oldTenant) === -1);
-		let	needAddTenants		= tenants.filter(newTenant => oldTenants.indexOf(newTenant) === -1);
+		if(!r3IsSafeTypedEntity(_tenants, 'array')){
+			_tenants = [];
+		}
+
+		let	needRemoveTenants	= oldTenants.filter(oldTenant => _tenants.indexOf(oldTenant) === -1);
+		let	needAddTenants		= _tenants.filter(newTenant => oldTenants.indexOf(newTenant) === -1);
 		let	regpath				= /^yrn:yahoo:::(.*)$/;
 
 		// remove service from tenant that has been incorporated
@@ -1459,7 +1465,7 @@ export default class R3Provider
 					this.demoData[_tenant].forEach((element) => {
 						if(element.path === serviceType){
 							let	found = false;
-							element.children.forEach((serviceChild, pos) => {
+							element.children.forEach((serviceChild, pos) => {				// eslint-disable-line no-unused-vars
 								if(serviceChild.name === _service){
 									// Found service -> nothing to do
 									found = true;
@@ -1611,44 +1617,20 @@ export default class R3Provider
 	}
 
 	//
-	// Utility : Check verify for static resource object
+	// Utility: Get error string which is result of verifying service resource
 	//
-	checkVerifyStaticObject(verify)
+	getErrorServiceResourceVerify(serviceResource)
 	{
-		if(!r3IsSafeTypedEntity(verify, 'array') || 0 === verify.length){
-			return false;
-		}
-
-		for(let cnt = 0; cnt < verify.length; ++cnt){
-			if(r3IsEmptyString(verify[cnt].name)){
-				// name key must be existed.
-				return false;
-			}
-			if(!r3CompareCaseString('string', verify[cnt].type) && !r3CompareCaseString('object', verify[cnt].type)){
-				// type must be string or object
-				return false;
+		let	checkResult	= checkServiceResourceValue(serviceResource);
+		let	result		= null;
+		if(null != checkResult.error){
+			if(r3IsEmptyStringObject(this.r3TextRes, checkResult.error)){
+				result = this.r3TextRes.eUnknownErrorKey;
+			}else{
+				result = this.r3TextRes[checkResult.error];
 			}
 		}
-		return true;
-	}
-
-	//
-	// Utility : Check verify for string style verify
-	//
-	isErrorServiceVerifyString(stringVerify)
-	{
-		if(r3IsEmptyString(stringVerify)){
-			return this.r3TextRes.eNewEmptyVerify;
-		}
-		if(r3IsJSON(stringVerify)){
-			let	objVerify = r3ConvertFromJSON(stringVerify);
-			if(!this.checkVerifyStaticObject(objVerify)){
-				return this.r3TextRes.eNewWrongVerifyObject;
-			}
-		}else if(!r3IsSafeUrl(stringVerify)){
-			return this.r3TextRes.eNewWrongVerifyUrl;
-		}
-		return null;
+		return result;
 	}
 
 	//--------------------------------------------------
@@ -1682,7 +1664,7 @@ export default class R3Provider
 		// check service tenant
 		demoTenantData.forEach((element) => {
 			if(element.path === serviceType){
-				element.children.forEach((serviceChild, pos) => {
+				element.children.forEach((serviceChild, pos) => {							// eslint-disable-line no-unused-vars
 					if(serviceChild.name === _service){
 						// Found service
 						if(0 !== serviceChild.children.length){
@@ -1767,7 +1749,7 @@ export default class R3Provider
 		demoTenantData.forEach((element) => {
 			if(element.path === serviceType){
 				let	found = false;
-				element.children.forEach((serviceChild, pos) => {
+				element.children.forEach((serviceChild, pos) => {						// eslint-disable-line no-unused-vars
 					if(serviceChild.name === _service){
 						found = true;
 						serviceChild.distributed	= true;

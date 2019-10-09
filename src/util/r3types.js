@@ -34,6 +34,11 @@ export const infoType				= 'information';
 export const resourceTypeString		= 'string';
 export const resourceTypeObject		= 'object';
 
+// for resource view
+export const serviceResTypeUrl		= 'verifyUrl';
+export const serviceResTypeObject	= 'staticResourceObject';
+export const serviceResTypeUnknown	= 'unknown';
+
 // for action
 export const actionTypeName			= 'name';
 export const actionTypeValue		= 'value';

@@ -529,6 +529,45 @@ export const r3Service = (theme) => ({
 		width:					'100%',
 		paddingLeft:			theme.spacing(6)
 	},
+	staticResourceTextField: {
+		width:					'100%'
+	},
+	valueRadioGroup: {
+		display:				'block',
+		paddingLeft:			theme.spacing(6)
+	},
+	valueLeftFormControlLabel: {
+		float:					'left',
+	},
+	valueRightFormControlLabel: {
+		marginLeft:				theme.spacing(2)
+	},
+	tableBox: {
+		paddingLeft:			theme.spacing(6)
+	},
+	table: {
+	},
+	tableHead: {
+		backgroundColor:		theme.palette.primary.light
+	},
+	tableCell: {
+		whiteSpace:				'nowrap',
+		textAlign:				'left',
+		paddingTop:				theme.spacing(0.25),
+		paddingBottom:			theme.spacing(0.25)
+	},
+	textTableHead: {
+		whiteSpace:				'nowrap',
+		textAlign:				'left'
+	},
+	textTableContent: {
+		whiteSpace:				'nowrap'
+	},
+	unknownMessage: {
+		clear:					'both',
+		paddingLeft:			theme.spacing(6),
+		color:					theme.palette.warning.dark
+	},
 	inputTextField: {
 		color:					theme.palette.text.secondary
 	},
@@ -536,6 +575,22 @@ export const r3Service = (theme) => ({
 		float:					'left',
 		width:					`calc(100% - 40px)`,				// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
+	},
+	addResStaticObjButton: {
+		float:					'right',
+		display:				'flex'
+	},
+	editResStaticObjButton: {
+		float:					'right',
+		display:				'flex'
+	},
+	delResStaticObjButton: {
+		float:					'right',
+		display:				'flex'
+	},
+	addTenantButton: {
+		float:					'right',
+		display:				'flex'
 	},
 	deleteTenantButton: {
 		display:				'flex'
@@ -724,7 +779,7 @@ export const r3PathInfoDialog = (theme) => ({
 	button: {
 		marginTop:				theme.spacing(2)
 	},
-	backPageButton: {
+	previousButton: {
 		marginTop:				theme.spacing(2)
 	},
 	buttonIcon: {
@@ -746,6 +801,8 @@ export const r3PathInfoDialog = (theme) => ({
 	},
 
 	// Manage Role Token page
+	table: {
+	},
 	tableHead: {
 		backgroundColor:		theme.palette.primary.light
 	},
@@ -768,8 +825,8 @@ export const r3PathInfoDialog = (theme) => ({
 	tableCell: {
 		whiteSpace:				'nowrap',
 		textAlign:				'center',
-		paddingLeft:			theme.spacing(1),
-		paddingRight:			theme.spacing(1)
+		paddingTop:				theme.spacing(0.25),
+		paddingBottom:			theme.spacing(0.25)
 	},
 	wordBreakTooltip: {
 		whiteSpace:				'normal',
@@ -913,6 +970,89 @@ export const r3CreateServiceDialog = (theme) => ({
 	},
 	inputTextField: {
 		color:					theme.palette.text.secondary
+	},
+	reesourceStaticTextField: {
+		width:					'100%'
+	},
+	valueRadioGroup: {
+		display:				'block',
+		paddingLeft:			theme.spacing(4)
+	},
+	valueLeftFormControlLabel: {
+		float:					'left',
+	},
+	valueRightFormControlLabel: {
+		marginLeft:				theme.spacing(2)
+	},
+	tableBox: {
+		paddingLeft:			theme.spacing(4),
+		paddingRight:			theme.spacing(4)
+	},
+	table: {
+	},
+	tableHead: {
+		backgroundColor:		theme.palette.primary.light
+	},
+	tableLeftCell: {
+		whiteSpace:				'nowrap',
+		textAlign:				'left',
+		paddingTop:				theme.spacing(0.25),
+		paddingBottom:			theme.spacing(0.25),
+		paddingLeft:			0,
+		paddingRight:			theme.spacing(8)			// [FIXME] for floating left buttons
+	},
+	tableCell: {
+		whiteSpace:				'nowrap',
+		textAlign:				'left',
+		paddingTop:				theme.spacing(0.25),
+		paddingBottom:			theme.spacing(0.25),
+		paddingLeft:			0
+	},
+	textTableHead: {
+		whiteSpace:				'nowrap',
+		textAlign:				'left',
+		paddingTop:				theme.spacing(0.25),
+		paddingBottom:			theme.spacing(0.25)
+	},
+	textTableContent: {
+		whiteSpace:				'nowrap',
+		textAlign:				'left',
+		lineHeight:				'200%',						// [FIXME] for centering text and icons
+		paddingTop:				theme.spacing(0.25),
+		paddingBottom:			theme.spacing(0.25)
+	},
+	actionResStaticObjButton: {
+		margin:					0,
+		paddingLeft:			theme.spacing(1),
+		paddingRight:			theme.spacing(1),
+		minWidth:				theme.spacing(1),
+		float:					'left'
+	},
+
+	// Popover for editing key in static resource
+	staticResKeyPopover: {
+	},
+	staticResKeyPopoverTitle: {
+		marginLeft:				theme.spacing(2),
+		marginTop:				theme.spacing(1),
+		marginBottom:			theme.spacing(1),
+		marginRight:			theme.spacing(1)
+	},
+	staticResKeyPopoverButton: {
+		float:					'right',
+		display:				'flex',
+		margin:					theme.spacing(1)
+	},
+	staticResKeyPopoverSubtitle: {
+		marginLeft:				theme.spacing(2),
+		marginTop:				theme.spacing(1),
+		marginBottom:			theme.spacing(1),
+		marginRight:			theme.spacing(1)
+	},
+	staticResMessage: {
+		clear:					'both',
+		paddingLeft:			theme.spacing(6),
+		color:					theme.palette.warning.dark
 	},
 	cancelButton: {
 		marginTop:				theme.spacing(2)

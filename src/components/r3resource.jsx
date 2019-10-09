@@ -128,12 +128,12 @@ export default class R3Resource extends React.Component
 			// Switching content
 			return R3Resource.createState(nextProps.resource, nextProps.dispUnique);
 		}
-		return null;															// Return null to indicate no change to state.
+		return null;	// Return null to indicate no change to state.
 	}
 
 	static createState(resource, dispUnique)
 	{
-		let	resourceType	= resourceTypeString;			// default
+		let	resourceType	= resourceTypeString;	// default
 		let	resourceValue	= '';
 		if(!r3IsEmptyEntity(resource)){
 			if(r3IsSafeTypedEntity(resource.string, 'string')){
@@ -158,11 +158,11 @@ export default class R3Resource extends React.Component
 			messageDialogObject:	null,
 
 			tooltips: {
-				deleteKeysTooltip:	null,		// keyname
+				deleteKeysTooltip:	null,			// keyname
 				addKeysTooltip:		false,
-				downAliasTooltip:	-1,			// position
-				upAliasTooltip:		-1,			// position
-				deleteAliasTooltip:	-1,			// position
+				downAliasTooltip:	-1,				// position
+				upAliasTooltip:		-1,				// position
+				deleteAliasTooltip:	-1,				// position
 				addAliasTooltip:	false
 			}
 		};
@@ -690,7 +690,7 @@ export default class R3Resource extends React.Component
 		});
 	}
 
-	handTooltipChange = (event, type, extData) =>									// eslint-disable-line no-unused-vars
+	handTooltipChange = (event, type, extData) =>							// eslint-disable-line no-unused-vars
 	{
 		if(tooltipValues.deleteKeysTooltip === type){
 			this.setState({
@@ -831,7 +831,7 @@ export default class R3Resource extends React.Component
 		});
 
 		return (
-			elementArray.map( (item, pos) => {							// eslint-disable-line no-unused-vars
+			elementArray.map( (item, pos) => {								// eslint-disable-line no-unused-vars
 				return item;
 			})
 		);

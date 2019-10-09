@@ -19,10 +19,11 @@
  *
  */
 
-import R3Context		from '../util/r3context';
-import { r3GetTextRes }	from '../util/r3define';
-import { resourceType, roleType, policyType, serviceType } from '../util/r3types';
-import { r3ObjMerge, parseCombineHostObject, r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity, r3IsEmptyString, r3CompareCaseString, r3IsJSON, r3ConvertFromJSON, r3IsSafeUrl } from '../util/r3util';
+import R3Context			from '../util/r3context';
+import { r3GetTextRes }		from '../util/r3define';
+import { resourceType, roleType, policyType, serviceType }	from '../util/r3types';
+import { checkServiceResourceValue }						from '../util/r3verifyutil';
+import { r3ObjMerge, parseCombineHostObject, r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity, r3IsEmptyString, r3CompareCaseString } from '../util/r3util';
 
 //
 // K2HR3 Data Provider Class
@@ -1499,58 +1500,20 @@ export default class R3Provider
 	}
 
 	//
-	// Utility : Check verify for static resource object
+	// Utility: Get error string which is result of verifying service resource
 	//
-	// allowed static resource data is following:
-	//	verify	= [					:	An array with at least one element object
-	//		{
-	//			name				:	resource name which is key name(path) for resource
-	//			expire				:	undefined/null or integer
-	//			type				:	resource data type(string or object), if date is null or '', this value must be string.
-	//			data				:	resource data which must be string or object or null/undefined.
-	//			keys = {			:	resource has keys(associative array), or null/undefined.
-	//				'foo':	bar,	:	any value is allowed
-	//				...				:
-	//			}					:
-	//		},
-	//		...
-	//	]
-	checkVerifyStaticObject(verify)
+	getErrorServiceResourceVerify(serviceResource)
 	{
-		if(!r3IsSafeTypedEntity(verify, 'array') || 0 === verify.length){
-			return false;
-		}
-
-		for(let cnt = 0; cnt < verify.length; ++cnt){
-			if(r3IsEmptyString(verify[cnt].name)){
-				// name key must be existed.
-				return false;
-			}
-			if(!r3CompareCaseString('string', verify[cnt].type) && !r3CompareCaseString('object', verify[cnt].type)){
-				// type must be string or object
-				return false;
+		let	checkResult	= checkServiceResourceValue(serviceResource);
+		let	result		= null;
+		if(null != checkResult.error){
+			if(r3IsEmptyStringObject(this.r3TextRes, checkResult.error)){
+				result = this.r3TextRes.eUnknownErrorKey;
+			}else{
+				result = this.r3TextRes[checkResult.error];
 			}
 		}
-		return true;
-	}
-
-	//
-	// Utility : Check verify for string style verify
-	//
-	isErrorServiceVerifyString(stringVerify)
-	{
-		if(r3IsEmptyString(stringVerify)){
-			return this.r3TextRes.eNewEmptyVerify;
-		}
-		if(r3IsJSON(stringVerify)){
-			let	objVerify = r3ConvertFromJSON(stringVerify);
-			if(!this.checkVerifyStaticObject(objVerify)){
-				return this.r3TextRes.eNewWrongVerifyObject;
-			}
-		}else if(!r3IsSafeUrl(stringVerify)){
-			return this.r3TextRes.eNewWrongVerifyUrl;
-		}
-		return null;
+		return result;
 	}
 
 	//--------------------------------------------------
