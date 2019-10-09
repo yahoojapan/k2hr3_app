@@ -45,8 +45,8 @@ import R3CreateServiceTenantDialog	from './r3createservicetenantdialog';
 import R3PopupMsgDialog				from './r3popupmsgdialog';
 import R3Message					from '../util/r3message';
 
-import { errorType, infoType, resourceType, roleType, policyType, serviceType } from '../util/r3types';
-import { r3CompareCaseString, r3IsEmptyStringObject, r3IsEmptyEntityObject, r3IsEmptyString, r3IsSafeTypedEntity } from '../util/r3util';
+import { errorType, infoType, resourceType, roleType, policyType, serviceType, serviceResTypeUrl }					from '../util/r3types';
+import { r3CompareCaseString, r3IsEmptyStringObject, r3IsEmptyEntityObject, r3IsEmptyString, r3IsSafeTypedEntity }	from '../util/r3util';
 
 //
 // Local variables
@@ -96,7 +96,9 @@ export default class R3Toolbar extends React.Component
 		createServiceDialogOpen:		false,
 		createServiceTenantDialogOpen:	false,
 		newServiceName:					'',
+		newServiceResType:				serviceResTypeUrl,
 		newVerify:						'',
+		newStaticRes:					[],
 		aliasRole:						'',
 		r3DeleteServiceMessage:			null,
 		newPath:						'',
@@ -214,7 +216,9 @@ export default class R3Toolbar extends React.Component
 		// create service confirm dialog
 		this.setState({
 			newServiceName:				'',
+			newServiceResType:			serviceResTypeUrl,
 			newVerify:					'',
+			newStaticRes:				[],
 			createServiceDialogOpen:	true,
 			tooltips: {
 				createPathTooltip:		false
@@ -222,12 +226,14 @@ export default class R3Toolbar extends React.Component
 		});
 	}
 
-	handleCreateServiceDialogClose(event, isAgree, newServiceName, newVerify)	// eslint-disable-line no-unused-vars
+	handleCreateServiceDialogClose(event, isAgree, newServiceName, newServiceResType, newVerify, newStaticRes)	// eslint-disable-line no-unused-vars
 	{
 		if(!isAgree){
 			this.setState({
 				newServiceName:			'',
+				newServiceResType:		serviceResTypeUrl,
 				newVerify:				'',
+				newStaticRes:			[],
 				createServiceDialogOpen:false
 			});
 			return;
@@ -235,77 +241,58 @@ export default class R3Toolbar extends React.Component
 		if(r3IsEmptyString(newServiceName)){
 			this.setState({
 				newServiceName:			newServiceName,
+				newServiceResType:		newServiceResType,
 				newVerify:				newVerify,
+				newStaticRes:			newStaticRes,
 				r3Message:				new R3Message(this.props.r3provider.getR3TextRes().eNewServiceName, errorType)
 			});
 			return;
 		}
+
 		// check service name conflict
 		if(this.props.onCheckServiceName(newServiceName)){
 			this.setState({
 				newServiceName:			newServiceName,
+				newServiceResType:		newServiceResType,
 				newVerify:				newVerify,
+				newStaticRes:			newStaticRes,
 				r3Message:				new R3Message(this.props.r3provider.getR3TextRes().eNewServiceNameConflict, errorType)
 			});
 			return;
 		}
 
-		// check verify
-		let	errorVerify = this.props.r3provider.isErrorServiceVerifyString(newVerify);
+		// check type and verify/static resource
+		let	serviceData;
+		if(serviceResTypeUrl == newServiceResType){
+			serviceData = newVerify;
+		}else{	// serviceResTypeObject == newServiceResType
+			serviceData = JSON.stringify(newStaticRes);
+		}
+
+		// check service data
+		let	errorVerify = this.props.r3provider.getErrorServiceResourceVerify(serviceData);
 		if(null !== errorVerify){
 			this.setState({
 				newServiceName:			newServiceName,
+				newServiceResType:		newServiceResType,
 				newVerify:				newVerify,
+				newStaticRes:			newStaticRes,
 				r3Message:				new R3Message(errorVerify, errorType)
 			});
 			return;
 		}
 
 		// create service name
-		this.props.onCreateService(newServiceName, newVerify);
+		this.props.onCreateService(newServiceName, serviceData);
 
 		// close dialog
 		this.setState({
 			newServiceName:				'',
+			newServiceResType:			serviceResTypeUrl,
 			newVerify:					'',
+			newStaticRes:				[],
 			createServiceDialogOpen:	false
 		});
-	}
-
-	//
-	// Utility : Check verify for static resource object
-	//
-	// allowed static resource data is following:
-	//	verify	= [					:	An array with at least one element object
-	//		{
-	//			name				:	resource name which is key name(path) for resource
-	//			expire				:	undefined/null or integer
-	//			type				:	resource data type(string or object), if date is null or '', this value must be string.
-	//			data				:	resource data which must be string or object or null/undefined.
-	//			keys = {			:	resource has keys(associative array), or null/undefined.
-	//				'foo':	bar,	:	any value is allowed
-	//				...				:
-	//			}					:
-	//		},
-	//		...
-	//	]
-	checkVerifyStaticObject(verify)
-	{
-		if(undefined === verify || null === verify || !(verify instanceof Array) || 0 === verify.length){
-			return false;
-		}
-
-		for(let cnt = 0; cnt < verify.length; ++cnt){
-			if(r3IsEmptyString(verify[cnt].name)){
-				// name key must be existed.
-				return false;
-			}
-			if(!r3CompareCaseString('string', verify[cnt].type) && !r3CompareCaseString('object', verify[cnt].type)){
-				// type must be string or object
-				return false;
-			}
-		}
-		return true;
 	}
 
 	handleCreateServiceTenant(event)										// eslint-disable-line no-unused-vars
@@ -319,7 +306,6 @@ export default class R3Toolbar extends React.Component
 			aliasRole:						'',
 			createServiceTenantDialogOpen:	true
 		});
-
 	}
 
 	handleCreateServiceTenantDialogClose(event, isAgree, aliasRole)			// eslint-disable-line no-unused-vars
@@ -752,9 +738,12 @@ export default class R3Toolbar extends React.Component
 				<R3CreateServiceDialog
 					r3provider={ this.props.r3provider }
 					open={ this.state.createServiceDialogOpen }
+					createMode={ true }
 					tenant={ this.props.toolbarData.tenant }
 					newServiceName={ this.state.newServiceName }
+					newServiceResType={ this.state.serviceResTypeUrl }
 					newVerify={ this.state.newVerify }
+					newStaticRes={ this.state.newStaticRes }
 					onClose={ this.handleCreateServiceDialogClose }
 				/>
 				<R3CreateServiceTenantDialog

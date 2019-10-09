@@ -7,13 +7,163 @@ exports[`R3Service test snapshot for R3Service 1`] = `
   <h6
     className="MuiTypography-root R3Service-subTitleTop-2 MuiTypography-subtitle2 MuiTypography-colorPrimary MuiTypography-noWrap"
   >
-    VERIFY URL or STATIC JSON OBJECT STRING
+    SERVICE RESOURCES
   </h6>
+  <div
+    aria-label="select type verify url or static resource"
+    className="MuiFormGroup-root R3Service-valueRadioGroup-6"
+    role="radiogroup"
+  >
+    <label
+      className="MuiFormControlLabel-root R3Service-valueLeftFormControlLabel-7"
+    >
+      <span
+        aria-disabled={false}
+        className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-67 MuiRadio-root MuiRadio-colorSecondary PrivateSwitchBase-checked-68 Mui-checked MuiIconButton-colorSecondary"
+        onBlur={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        tabIndex={null}
+      >
+        <span
+          className="MuiIconButton-label"
+        >
+          <input
+            checked={true}
+            className="PrivateSwitchBase-input-70"
+            disabled={false}
+            name="serviceResourceType"
+            onChange={[Function]}
+            type="radio"
+            value="verifyUrl"
+          />
+          <div
+            className="PrivateRadioButtonIcon-root-83 PrivateRadioButtonIcon-checked-85"
+          >
+            <svg
+              aria-hidden="true"
+              className="MuiSvgIcon-root"
+              focusable="false"
+              role="presentation"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
+              />
+            </svg>
+            <svg
+              aria-hidden="true"
+              className="MuiSvgIcon-root PrivateRadioButtonIcon-layer-84"
+              focusable="false"
+              role="presentation"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M8.465 8.465C9.37 7.56 10.62 7 12 7C14.76 7 17 9.24 17 12C17 13.38 16.44 14.63 15.535 15.535C14.63 16.44 13.38 17 12 17C9.24 17 7 14.76 7 12C7 10.62 7.56 9.37 8.465 8.465Z"
+              />
+            </svg>
+          </div>
+        </span>
+        <span
+          className="MuiTouchRipple-root"
+        />
+      </span>
+      <span
+        className="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
+      >
+        <p
+          className="MuiTypography-root MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap"
+        >
+          VERIFY URL
+        </p>
+      </span>
+    </label>
+    <label
+      className="MuiFormControlLabel-root R3Service-valueRightFormControlLabel-8"
+    >
+      <span
+        aria-disabled={false}
+        className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-67 MuiRadio-root MuiRadio-colorSecondary MuiIconButton-colorSecondary"
+        onBlur={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        tabIndex={null}
+      >
+        <span
+          className="MuiIconButton-label"
+        >
+          <input
+            checked={false}
+            className="PrivateSwitchBase-input-70"
+            disabled={false}
+            name="serviceResourceType"
+            onChange={[Function]}
+            type="radio"
+            value="staticResourceObject"
+          />
+          <div
+            className="PrivateRadioButtonIcon-root-83"
+          >
+            <svg
+              aria-hidden="true"
+              className="MuiSvgIcon-root"
+              focusable="false"
+              role="presentation"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
+              />
+            </svg>
+            <svg
+              aria-hidden="true"
+              className="MuiSvgIcon-root PrivateRadioButtonIcon-layer-84"
+              focusable="false"
+              role="presentation"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M8.465 8.465C9.37 7.56 10.62 7 12 7C14.76 7 17 9.24 17 12C17 13.38 16.44 14.63 15.535 15.535C14.63 16.44 13.38 17 12 17C9.24 17 7 14.76 7 12C7 10.62 7.56 9.37 8.465 8.465Z"
+              />
+            </svg>
+          </div>
+        </span>
+        <span
+          className="MuiTouchRipple-root"
+        />
+      </span>
+      <span
+        className="MuiTypography-root MuiFormControlLabel-label MuiTypography-body1"
+      >
+        <p
+          className="MuiTypography-root MuiTypography-body1 MuiTypography-colorTextSecondary MuiTypography-noWrap"
+        >
+          STATIC RESOURCE OBJECT
+        </p>
+      </span>
+    </label>
+  </div>
   <div
     className="MuiFormControl-root MuiTextField-root R3Service-resourceTextField-4"
   >
     <div
-      className="MuiInputBase-root MuiInput-root MuiInput-underline R3Service-inputTextField-5 MuiInputBase-formControl MuiInput-formControl"
+      className="MuiInputBase-root MuiInput-root MuiInput-underline R3Service-inputTextField-16 MuiInputBase-formControl MuiInput-formControl"
       onClick={[Function]}
     >
       <input
@@ -25,7 +175,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
-        placeholder="Input verify URL or Text string or false or Object formatted by JSON"
+        placeholder="Input verify URL"
         required={false}
         rows={1}
         type="text"
@@ -39,13 +189,13 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     TENANTS
   </h6>
   <div
-    className="R3Service-enclosureElement-8"
+    className="R3Service-enclosureElement-23"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Service-tenantTextField-6"
+      className="MuiFormControl-root MuiTextField-root R3Service-tenantTextField-17"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline R3Service-inputTextField-5 MuiInputBase-formControl MuiInput-formControl"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline R3Service-inputTextField-16 MuiInputBase-formControl MuiInput-formControl"
         onClick={[Function]}
       >
         <input
@@ -68,7 +218,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     <button
       aria-describedby={null}
       aria-label="delete tenant"
-      className="MuiButtonBase-root MuiIconButton-root R3Service-deleteTenantButton-7"
+      className="MuiButtonBase-root MuiIconButton-root R3Service-deleteTenantButton-22"
       disabled={false}
       label="delete-tenant"
       onBlur={[Function]}
@@ -110,13 +260,13 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     </button>
   </div>
   <div
-    className="R3Service-enclosureElement-8"
+    className="R3Service-enclosureElement-23"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Service-tenantTextField-6"
+      className="MuiFormControl-root MuiTextField-root R3Service-tenantTextField-17"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline R3Service-inputTextField-5 MuiInputBase-formControl MuiInput-formControl"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline R3Service-inputTextField-16 MuiInputBase-formControl MuiInput-formControl"
         onClick={[Function]}
       >
         <input
@@ -139,7 +289,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     <button
       aria-describedby={null}
       aria-label="delete tenant"
-      className="MuiButtonBase-root MuiIconButton-root R3Service-deleteTenantButton-7"
+      className="MuiButtonBase-root MuiIconButton-root R3Service-deleteTenantButton-22"
       disabled={false}
       label="delete-tenant"
       onBlur={[Function]}
@@ -181,13 +331,13 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     </button>
   </div>
   <div
-    className="R3Service-enclosureElement-8"
+    className="R3Service-enclosureElement-23"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Service-tenantTextField-6"
+      className="MuiFormControl-root MuiTextField-root R3Service-tenantTextField-17"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline R3Service-inputTextField-5 MuiInputBase-formControl MuiInput-formControl"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline R3Service-inputTextField-16 MuiInputBase-formControl MuiInput-formControl"
         onClick={[Function]}
       >
         <input
@@ -209,8 +359,10 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     </div>
     <button
       aria-describedby={null}
-      className="MuiButtonBase-root MuiIconButton-root"
+      aria-label="add tenant"
+      className="MuiButtonBase-root MuiIconButton-root R3Service-addTenantButton-21"
       disabled={false}
+      label="add-tenant"
       onBlur={[Function]}
       onClick={[Function]}
       onDragLeave={[Function]}
@@ -250,11 +402,11 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     </button>
   </div>
   <div
-    className="R3FormButtons-root-105"
+    className="R3FormButtons-root-140"
   >
     <button
       aria-label="cancel"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary R3FormButtons-cancelButton-106 Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary R3FormButtons-cancelButton-141 Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -277,7 +429,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
         CANCEL
         <svg
           aria-hidden="true"
-          className="MuiSvgIcon-root R3FormButtons-buttonIcon-108"
+          className="MuiSvgIcon-root R3FormButtons-buttonIcon-143"
           focusable="false"
           role="presentation"
           viewBox="0 0 24 24"
@@ -290,7 +442,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     </button>
     <button
       aria-label="save"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary R3FormButtons-saveButton-107 Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary R3FormButtons-saveButton-142 Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -313,7 +465,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
         SAVE
         <svg
           aria-hidden="true"
-          className="MuiSvgIcon-root R3FormButtons-buttonIcon-108"
+          className="MuiSvgIcon-root R3FormButtons-buttonIcon-143"
           focusable="false"
           role="presentation"
           viewBox="0 0 24 24"

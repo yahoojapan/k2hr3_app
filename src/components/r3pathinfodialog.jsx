@@ -134,7 +134,7 @@ export default class R3PathInfoDialog extends React.Component
 		type:			null,
 		fullpath:		null,
 		currentpath:	null,
-		tableRawCount:	5,
+		tableRawCount:	5
 	};
 
 	codeInputElement	= null;													// input textfield for registration code.
@@ -288,7 +288,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleDispCodeNewRoleToken(event)											// eslint-disable-line no-unused-vars
+	handleDispCodeNewRoleToken(event)										// eslint-disable-line no-unused-vars
 	{
 		const { r3provider } = this.props;
 
@@ -362,7 +362,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleDispCode(event, pos)													// eslint-disable-line no-unused-vars
+	handleDispCode(event, pos)												// eslint-disable-line no-unused-vars
 	{
 		if(!r3IsSafeTypedEntity(this.state.roleTokenList, 'array') || pos < 0 || this.state.roleTokenList.length <= pos || r3IsEmptyEntity(this.state.roleTokenList[pos])){
 			return;
@@ -423,7 +423,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleConfirmNewRoleToken(event)											// eslint-disable-line no-unused-vars
+	handleConfirmNewRoleToken(event)										// eslint-disable-line no-unused-vars
 	{
 		const { r3provider } = this.props;
 
@@ -1375,10 +1375,10 @@ export default class R3PathInfoDialog extends React.Component
 		return (
 			<Button
 				onClick={ this.handleBackPage }
-				{ ...theme.r3PathInfoDialog.backPageButton }
-				className={ classes.backPageButton }
+				{ ...theme.r3PathInfoDialog.previousButton }
+				className={ classes.previousButton }
 			>
-				{ r3provider.getR3TextRes().tResBackPageButton }
+				{ r3provider.getR3TextRes().tResButtonPrevious }
 				<BackPageIcon
 					className={ classes.buttonIcon }
 				/>

@@ -413,6 +413,10 @@ const r3Theme = createMuiTheme({
 			color:					'textSecondary',
 			noWrap:					true
 		},
+		valueLeftFormControlLabel: {
+		},
+		valueRightFormControlLabel: {
+		},
 		valueStringTextField: {
 			fullWidth:				true,
 			multiline:				true,
@@ -640,9 +644,53 @@ const r3Theme = createMuiTheme({
 			multiline:				false,
 			rows:					1
 		},
+		valueRadioGroup: {
+			'aria-label':			'select type verify url or static resource'
+		},
+		valueFormControlLabel: {
+			variant:				'body1',
+			color:					'textSecondary',
+			noWrap:					true
+		},
+		valueLeftFormControlLabel: {
+		},
+		valueRightFormControlLabel: {
+		},
+		table: {
+		},
+		textTableHead: {
+			variant:				'subtitle2',
+			component:				'span',
+			color:					'primary'
+		},
+		textTableContent: {
+			variant:				'body1',
+			component:				'span',
+			color:					'textSecondary'
+		},
+		unknownMessage: {
+			variant:				'body1',
+			noWrap:					true
+		},
 		tenantTextField: {
 			multiline:				false,
 			rows:					1
+		},
+		addResStaticObjButton: {
+			label:					'add-static-resource',
+			'aria-label':			'add static resource'
+		},
+		editResStaticObjButton: {
+			label:					'edit-static-resource',
+			'aria-label':			'edit static resource'
+		},
+		delResStaticObjButton: {
+			label:					'del-static-resource',
+			'aria-label':			'delete static resource'
+		},
+		addTenantButton: {
+			label:					'add-tenant',
+			'aria-label':			'add tenant'
 		},
 		deleteTenantButton: {
 			label:					'delete-tenant',
@@ -688,6 +736,7 @@ const r3Theme = createMuiTheme({
 		root: {
 			scroll:					'body',
 			disableBackdropClick:	true,
+			fullWidth:				true,
 			label:					'about-dialog',
 			'aria-label':			'about dialog'
 		},
@@ -726,6 +775,7 @@ const r3Theme = createMuiTheme({
 		root: {
 			scroll:					'body',
 			disableBackdropClick:	true,
+			fullWidth:				true,
 			label:					'signin-dialog',
 			'aria-label':			'signin credential dialog'
 		},
@@ -782,6 +832,7 @@ const r3Theme = createMuiTheme({
 		root: {
 			scroll:					'body',
 			disableBackdropClick:	true,
+			fullWidth:				true,
 			label:					'message-dialog',
 			'aria-label':			'message dialog'
 		},
@@ -830,6 +881,7 @@ const r3Theme = createMuiTheme({
 		root: {
 			scroll:					'body',
 			disableBackdropClick:	true,
+			fullWidth:				true,
 			label:					'path-information-dialog',
 			'aria-label':			'path information dialog'
 		},
@@ -858,7 +910,7 @@ const r3Theme = createMuiTheme({
 			color:					'secondary',
 			'aria-label':			'close dialog'
 		},
-		backPageButton: {
+		previousButton: {
 			variant:				'contained',
 			color:					'primary',
 			'aria-label':			'back to previous page'
@@ -950,6 +1002,7 @@ const r3Theme = createMuiTheme({
 		root: {
 			scroll:					'body',
 			disableBackdropClick:	true,
+			fullWidth:				true,
 			label:					'create-path-dialog',
 			'aria-label':			'create path dialog'
 		},
@@ -998,6 +1051,7 @@ const r3Theme = createMuiTheme({
 		root: {
 			scroll:					'body',
 			disableBackdropClick:	true,
+			fullWidth:				true,
 			label:					'create-service-dialog',
 			'aria-label':			'create service dialog'
 		},
@@ -1021,8 +1075,82 @@ const r3Theme = createMuiTheme({
 			component:				'span',
 			color:					'textSecondary'
 		},
+		valueRadioGroup: {
+			'aria-label':			'select type verify url or static resource'
+		},
+		valueFormControlLabel: {
+			variant:				'body1',
+			color:					'textSecondary',
+			noWrap:					true
+		},
+		valueLeftFormControlLabel: {
+		},
+		valueRightFormControlLabel: {
+		},
+		table: {
+		},
+		textTableHead: {
+			variant:				'subtitle2',
+			component:				'span',
+			color:					'primary'
+		},
+		textTableContent: {
+			variant:				'body1',
+			component:				'span',
+			color:					'textSecondary'
+		},
 		textField: {
-			disabled:				false
+			disabled:				false,
+			multiline:				false,
+			rows:					1
+		},
+		addResStaticObjButton: {
+			color:					'primary',
+			label:					'add-static-resource',
+			'aria-label':			'add static resource'
+		},
+		editResStaticObjButton: {
+			color:					'primary',
+			label:					'edit-static-resource',
+			'aria-label':			'edit static resource'
+		},
+		delResStaticObjButton: {
+			color:					'primary',
+			label:					'del-static-resource',
+			'aria-label':			'delete static resource'
+		},
+
+		// Popover for editing key in static resource
+		staticResKeyPopover: {
+			anchorOrigin: {
+				vertical:			'bottom',
+				horizontal:			'left',
+			},
+			transformOrigin: {
+				vertical:			'top',
+				horizontal:			'left',
+			}
+		},
+		staticResKeyPopoverTitle: {
+			variant:				'subtitle2',
+			component:				'span',
+			color:					'primary',
+			noWrap:					true
+		},
+		staticResKeyPopoverButton: {
+			variant:				'contained',
+			color:					'secondary',
+			'aria-label':			'close dialog'
+		},
+		staticResKeyPopoverSubtitle: {
+			variant:				'body1',
+			component:				'span',
+			color:					'primary',
+			noWrap:					true
+		},
+		staticResMessage: {
+			variant:				'body1',
+			noWrap:					true
 		},
 		cancelButton: {
 			variant:				'contained',
@@ -1043,6 +1171,7 @@ const r3Theme = createMuiTheme({
 		root: {
 			scroll:					'body',
 			disableBackdropClick:	true,
+			fullWidth:				true,
 			label:					'create-service-tenant-dialog',
 			'aria-label':			'create service attached tenant dialog'
 		},

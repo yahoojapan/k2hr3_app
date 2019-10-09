@@ -45,7 +45,7 @@ import ExpandMoreIcon				from '@material-ui/icons/ExpandMore';
 import MenuIcon						from '@material-ui/icons/Menu';
 import ArrowRightIcon				from '@material-ui/icons/ArrowRight';
 import LabelIcon					from '@material-ui/icons/Label';
-import EditIcon						from '@material-ui/icons/Edit';
+import OwnerIcon					from '@material-ui/icons/Person';
 import MoreVertIcon					from '@material-ui/icons/MoreVert';
 
 import { r3MainTree }				from './r3styles';
@@ -795,7 +795,7 @@ export default class R3MainTree extends React.Component
 				if(r3IsSafeTypedEntity(item.owner, 'boolean') && true === item.owner){
 					ownerIcon = (
 						<ListItemIcon>
-							<EditIcon
+							<OwnerIcon
 								{ ...theme.r3MainTree.editIcon }
 							/>
 						</ListItemIcon>
