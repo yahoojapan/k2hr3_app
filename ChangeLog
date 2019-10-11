@@ -1,3 +1,15 @@
+k2hr3-app (0.9.4) unstable; urgency=low
+
+  * Updated text resource and package dependencies - #13
+  * Updated node package dependencies - #12
+  * Improved service resource input method - #11
+  * For material-ui 4.x by changing Typography display prop as default to block - #10
+  * Fixed build_all_licenses tools for .git directory is not existed - #9
+  * Updated index.html for demonstration site - #8
+  * Version upgrade of dependent packages(@material-ui 4.x, etc) - #7
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Fri, 11 Oct 2019 13:39:52 +0900
+
 k2hr3-app (0.9.3) unstable; urgency=low
 
   * Supports kubernetes pod and container for role member - #5

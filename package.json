@@ -1,6 +1,6 @@
 {
   "name": "k2hr3-app",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "dependencies": {
     "@material-ui/core": "^4.5.0",
     "@material-ui/icons": "^4.4.3",
