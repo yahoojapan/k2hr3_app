@@ -202,7 +202,7 @@ export const r3TextRes = {
 	tResServiceUrlResSubTitle:	'SERVICE RESOURCES',
 	tResServiceResTypeUrl:		'VERIFY URL',
 	tResServiceResTypeStatic:	'STATIC RESOURCE OBJECT',
-	tResServiceNameTableHead:	'STATIC RESOURCE NAME',
+	tResServiceNameTableHead:	'RESOURCES',
 	tResServiceJsonTableHead:	'JSON',
 	tResServiceAddStaticResTT:	'add new STATIC RESOURCE',
 	tResServiceEditStaticResTT:	'edit this STATIC RESOURCE',
