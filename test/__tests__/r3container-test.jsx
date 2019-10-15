@@ -22,7 +22,7 @@
 import React				from 'react';										// eslint-disable-line no-unused-vars
 import R3Container			from '../../src/components/r3container';
 import renderer				from 'react-test-renderer';
-import MuiThemeProvider		from '@material-ui/core/styles/MuiThemeProvider';	// for custom theme
+import { ThemeProvider }	from '@material-ui/styles';							// for custom theme
 import CssBaseline			from '@material-ui/core/CssBaseline';				// for reset.css
 
 import r3Theme				from '../../src/components/r3theme';				// custom theme
@@ -33,12 +33,12 @@ import { createNodeMock }	from '../__mocks__/materialUiMock';					// for materia
 describe('R3Container', () => {										// eslint-disable-line no-undef
 	it('test snapshot for R3Container', () => {						// eslint-disable-line no-undef
 		const component = renderer.create(
-			<MuiThemeProvider theme={ r3Theme } >
+			<ThemeProvider theme={ r3Theme } >
 				<CssBaseline />
 				<R3Container
 					title='K2HR3'
 				/>
-			</MuiThemeProvider>,
+			</ThemeProvider>,
 			{ createNodeMock }
 		);
 

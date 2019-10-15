@@ -152,6 +152,14 @@ export const r3Toolbar = (theme) => ({
 	},
 	avatar: {
 		backgroundColor:		theme.palette.common.white,
+		// [NOTE][FIXME]
+		// These values are the same as .MuiChip-avatar class.
+		// If we build with development mode by webpack, .MuiChip-avatar class values can be applied.
+		// But if we build without development mode, the .MuiAvatar-root class values will overwrite it.
+		// So we are forcing the size here.
+		//
+		width:					theme.spacing(3),				// 24px( as same as .MuiChip-avatar class value )
+		height:					theme.spacing(3),				// 24px( as same as .MuiChip-avatar class value )
 	},
 	descriptionIcon: {
 		color:					theme.palette.secondary.main
@@ -336,7 +344,7 @@ export const r3Policy = (theme) => ({
 	//
 	resourceTextField: {
 		float:					'left',
-		width:					`calc(100% - 40px)`,				// eslint-disable-line quotes
+		width:					`calc(100% - 40px)`,			// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	addResourceButton: {
@@ -351,7 +359,7 @@ export const r3Policy = (theme) => ({
 	},
 	aliasTextField: {
 		float:					'left',
-		width:					`calc(100% - 120px)`,				// eslint-disable-line quotes
+		width:					`calc(100% - 120px)`,			// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	arrowAliasButton: {
@@ -461,7 +469,7 @@ export const r3Role = (theme) => ({
 	},
 	policyTextField: {
 		float:					'left',
-		width:					`calc(100% - 40px)`,				// eslint-disable-line quotes
+		width:					`calc(100% - 40px)`,			// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	addPolicyButton: {
@@ -476,7 +484,7 @@ export const r3Role = (theme) => ({
 	},
 	aliasTextField: {
 		float:					'left',
-		width:					`calc(100% - 120px)`,				// eslint-disable-line quotes
+		width:					`calc(100% - 120px)`,			// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	arrowAliasButton: {
@@ -573,7 +581,7 @@ export const r3Service = (theme) => ({
 	},
 	tenantTextField: {
 		float:					'left',
-		width:					`calc(100% - 40px)`,				// eslint-disable-line quotes
+		width:					`calc(100% - 40px)`,			// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	addResStaticObjButton: {
@@ -626,8 +634,8 @@ export const r3FormButtons = (theme) => ({
 //
 // Styles for Progress
 //
-export const r3Progress = (theme) => ({				// eslint-disable-line no-unused-vars
-	root: {											// Full screen and most foreground
+export const r3Progress = (theme) => ({							// eslint-disable-line no-unused-vars
+	root: {														// Full screen and most foreground
 		width:					'100vw',
 		height:					'100vh',
 		top:					0,
@@ -636,7 +644,7 @@ export const r3Progress = (theme) => ({				// eslint-disable-line no-unused-vars
 		zIndex:					1500,
 		backgroundColor:		'rgba(0,0,0,0)'
 	},
-	circularProgress: {								// center of page
+	circularProgress: {											// center of page
 		top:					'45vh',
 		left:					'45vw',
 		position:				'fixed'
@@ -831,9 +839,9 @@ export const r3PathInfoDialog = (theme) => ({
 	wordBreakTooltip: {
 		whiteSpace:				'normal',
 		wordBreak:				'break-all',
-		zIndex:					1500,					// original(3.9.4) property value
-		opacity:				0.9,					// original(3.9.4) property value
-		pointerEvents:			'none'					// original(3.9.4) property value
+		zIndex:					1500,							// original(3.9.4) property value
+		opacity:				0.9,							// original(3.9.4) property value
+		pointerEvents:			'none'							// original(3.9.4) property value
 	},
 	manageAddButton: {
 		margin:					0,
@@ -999,7 +1007,7 @@ export const r3CreateServiceDialog = (theme) => ({
 		paddingTop:				theme.spacing(0.25),
 		paddingBottom:			theme.spacing(0.25),
 		paddingLeft:			0,
-		paddingRight:			theme.spacing(8)			// [FIXME] for floating left buttons
+		paddingRight:			theme.spacing(8)				// [FIXME] for floating left buttons
 	},
 	tableCell: {
 		whiteSpace:				'nowrap',
@@ -1017,7 +1025,7 @@ export const r3CreateServiceDialog = (theme) => ({
 	textTableContent: {
 		whiteSpace:				'nowrap',
 		textAlign:				'left',
-		lineHeight:				'200%',						// [FIXME] for centering text and icons
+		lineHeight:				'200%',							// [FIXME] for centering text and icons
 		paddingTop:				theme.spacing(0.25),
 		paddingBottom:			theme.spacing(0.25)
 	},

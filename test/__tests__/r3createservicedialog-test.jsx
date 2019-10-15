@@ -22,7 +22,7 @@
 import React					from 'react';										// eslint-disable-line no-unused-vars
 import renderer					from 'react-test-renderer';
 import getElementWithContext	from 'react-test-context-provider';					// for context provider
-import MuiThemeProvider			from '@material-ui/core/styles/MuiThemeProvider';	// for custom theme
+import { ThemeProvider }		from '@material-ui/styles';							// for custom theme
 import CssBaseline				from '@material-ui/core/CssBaseline';				// for reset.css
 
 import r3Theme					from '../../src/components/r3theme';				// custom theme
@@ -119,7 +119,7 @@ describe('R3CreateServiceDialog', () => {											// eslint-disable-line no-un
 		const element		= getElementWithContext({
 									r3Context:	r3provider.getR3Context()
 								},
-								<MuiThemeProvider theme={ r3Theme } >
+								<ThemeProvider theme={ r3Theme } >
 									<CssBaseline />
 									<R3CreateServiceDialog
 										r3provider={ r3provider }
@@ -130,7 +130,7 @@ describe('R3CreateServiceDialog', () => {											// eslint-disable-line no-un
 										newVerify={ '' }
 										onClose={ close }
 									/>
-								</MuiThemeProvider>
+								</ThemeProvider>
 							);
 		/* eslint-enable indent */
 

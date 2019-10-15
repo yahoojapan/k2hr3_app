@@ -803,7 +803,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
   >
     <button
       aria-label="cancel"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary R3FormButtons-cancelButton-141 Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-cancelButton-141 MuiButton-containedPrimary Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -839,7 +839,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     </button>
     <button
       aria-label="save"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary R3FormButtons-saveButton-142 Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-saveButton-142 MuiButton-containedSecondary Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
