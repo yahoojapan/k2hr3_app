@@ -967,7 +967,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
   >
     <button
       aria-label="cancel"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary R3FormButtons-cancelButton-126 Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-cancelButton-126 MuiButton-containedPrimary Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -1003,7 +1003,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
     <button
       aria-label="save"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary R3FormButtons-saveButton-127 Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-saveButton-127 MuiButton-containedSecondary Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}

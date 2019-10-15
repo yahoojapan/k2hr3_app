@@ -6,7 +6,7 @@ exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
 >
   <button
     aria-label="cancel"
-    className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary R3FormButtons-cancelButton-2"
+    className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-cancelButton-2 MuiButton-containedPrimary"
     disabled={false}
     onBlur={[Function]}
     onClick={[Function]}
@@ -42,7 +42,7 @@ exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
   </button>
   <button
     aria-label="save"
-    className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary R3FormButtons-saveButton-3"
+    className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-saveButton-3 MuiButton-containedSecondary"
     disabled={false}
     onBlur={[Function]}
     onClick={[Function]}

@@ -23,7 +23,7 @@ import style				from '../public/css/style.css';						// eslint-disable-line no-u
 
 import React				from 'react';										// eslint-disable-line no-unused-vars
 import ReactDOM				from 'react-dom';
-import MuiThemeProvider		from '@material-ui/core/styles/MuiThemeProvider';	// for custom theme
+import { ThemeProvider }	from '@material-ui/styles';							// for custom theme
 import CssBaseline			from '@material-ui/core/CssBaseline';				// for reset.css
 
 import r3Theme				from './components/r3theme';						// custom theme
@@ -31,12 +31,12 @@ import R3Container			from './components/r3container';
 
 // Do render
 ReactDOM.render(
-	<MuiThemeProvider theme={ r3Theme } >
+	<ThemeProvider theme={ r3Theme } >
 		<CssBaseline />
 		<R3Container
 			title='K2HR3'
 		/>
-	</MuiThemeProvider>,
+	</ThemeProvider>,
 	document.getElementById('r3app')
 );
 
