@@ -2,8 +2,8 @@
   "name": "k2hr3-app",
   "version": "0.9.4",
   "dependencies": {
-    "@material-ui/core": "^4.5.0",
-    "@material-ui/icons": "^4.4.3",
+    "@material-ui/core": "^4.5.1",
+    "@material-ui/icons": "^4.5.1",
     "ajv": "^6.10.2",
     "body-parser": "^1.19.0",
     "config": "^3.2.3",
@@ -54,7 +54,7 @@
     "react-test-context-provider": "^2.2.0",
     "react-test-renderer": "^16.10.2",
     "style-loader": "^1.0.0",
-    "webpack": "^4.41.0",
+    "webpack": "^4.41.1",
     "webpack-cli": "^3.3.9"
   },
   "scripts": {

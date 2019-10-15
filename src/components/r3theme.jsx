@@ -19,9 +19,8 @@
  *
  */
 
-import * as Colors		from '@material-ui/core/colors';
-import createSpacing	from '@material-ui/core/styles/createSpacing';
-import createMuiTheme	from '@material-ui/core/styles/createMuiTheme';
+import * as Colors			from '@material-ui/core/colors';
+import { createMuiTheme }	from '@material-ui/core/styles';
 
 /* eslint-disable indent */
 // [NOTE]
@@ -97,7 +96,7 @@ const r3Theme = createMuiTheme({
 	//
 	// Common material-ui
 	//
-	spacing:						createSpacing(),
+	spacing:						createMuiTheme.spacing,
 
 	//
 	// override components
