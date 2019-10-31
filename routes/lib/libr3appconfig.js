@@ -71,7 +71,7 @@ var	loadedConfig = (function()
 		secretyaml:			'',							// Secret Yaml for kubernetes
 		sidecaryaml:		'',							// Sidecar Yaml for kubernetes
 		appmenu:			null,						// The menu array for application
-		validator:			'userValidateDebug',		// Validator object module
+		validator:			'userValidateCredential',	// Validator object module
 		validobj:			null,						// Generated(required) validator object module
 		rejectUnauthorized:	true,						// reject mode
 		lang:				'en',						// Language for javascript application

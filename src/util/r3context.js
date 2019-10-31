@@ -256,7 +256,7 @@ export default class R3Context
 		let	roleToken64;
 		try{
 			// encode base64
-			var	buff64	= new Buffer(roleToken, 'ascii');
+			var	buff64	= Buffer.from(roleToken, 'ascii');
 			roleToken64	= buff64.toString('base64');
 			if(r3IsEmptyString(roleToken64)){
 				console.error('failed to encoding by base64.');
