@@ -49,10 +49,9 @@ exports[`R3Service test snapshot for R3Service 1`] = `
             className="PrivateRadioButtonIcon-root-83 PrivateRadioButtonIcon-checked-85"
           >
             <svg
-              aria-hidden="true"
+              aria-hidden={true}
               className="MuiSvgIcon-root"
               focusable="false"
-              role="presentation"
               viewBox="0 0 24 24"
             >
               <path
@@ -60,10 +59,9 @@ exports[`R3Service test snapshot for R3Service 1`] = `
               />
             </svg>
             <svg
-              aria-hidden="true"
+              aria-hidden={true}
               className="MuiSvgIcon-root PrivateRadioButtonIcon-layer-84"
               focusable="false"
-              role="presentation"
               viewBox="0 0 24 24"
             >
               <path
@@ -121,10 +119,9 @@ exports[`R3Service test snapshot for R3Service 1`] = `
             className="PrivateRadioButtonIcon-root-83"
           >
             <svg
-              aria-hidden="true"
+              aria-hidden={true}
               className="MuiSvgIcon-root"
               focusable="false"
-              role="presentation"
               viewBox="0 0 24 24"
             >
               <path
@@ -132,10 +129,9 @@ exports[`R3Service test snapshot for R3Service 1`] = `
               />
             </svg>
             <svg
-              aria-hidden="true"
+              aria-hidden={true}
               className="MuiSvgIcon-root PrivateRadioButtonIcon-layer-84"
               focusable="false"
-              role="presentation"
               viewBox="0 0 24 24"
             >
               <path
@@ -168,6 +164,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     >
       <input
         aria-invalid={false}
+        autoFocus={false}
         className="MuiInputBase-input MuiInput-input"
         disabled={false}
         name="serviceVerifyUrlResource"
@@ -200,6 +197,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="tenantValue_0"
@@ -243,10 +241,9 @@ exports[`R3Service test snapshot for R3Service 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -271,6 +268,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="tenantValue_1"
@@ -314,10 +312,9 @@ exports[`R3Service test snapshot for R3Service 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -342,6 +339,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="tenantNew"
@@ -385,10 +383,9 @@ exports[`R3Service test snapshot for R3Service 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -402,11 +399,11 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     </button>
   </div>
   <div
-    className="R3FormButtons-root-140"
+    className="R3FormButtons-root-143"
   >
     <button
       aria-label="cancel"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-cancelButton-141 MuiButton-containedPrimary Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-cancelButton-144 MuiButton-containedPrimary Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -428,10 +425,9 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       >
         CANCEL
         <svg
-          aria-hidden="true"
-          className="MuiSvgIcon-root R3FormButtons-buttonIcon-143"
+          aria-hidden={true}
+          className="MuiSvgIcon-root R3FormButtons-buttonIcon-146"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -442,7 +438,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     </button>
     <button
       aria-label="save"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-saveButton-142 MuiButton-containedSecondary Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-saveButton-145 MuiButton-containedSecondary Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -464,10 +460,9 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       >
         SAVE
         <svg
-          aria-hidden="true"
-          className="MuiSvgIcon-root R3FormButtons-buttonIcon-143"
+          aria-hidden={true}
+          className="MuiSvgIcon-root R3FormButtons-buttonIcon-146"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path

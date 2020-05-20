@@ -19,8 +19,8 @@
  *
  */
 
-import { kwApiHostForUD, kwIncludePathForUD, kwRoleTokenForSecret, kwRoleTokenForRoleYrn, signinUnknownType, signinUnscopedToken, signinCredential }	from '../util/r3types';
-import { r3ConvertFromJSON, r3UnescapeHTML, r3CompareCaseString, r3IsEmptyString, r3IsEmptyEntity, r3IsSafeTypedEntity }	from '../util/r3util';
+import { kwApiHostForUD, kwIncludePathForUD, kwRoleTokenForSecret, kwRawRoleToken, kwRoleTokenForRoleYrn, signinUnknownType, signinUnscopedToken, signinCredential }	from '../util/r3types';
+import { r3ConvertFromJSON, r3UnescapeHTML, r3CompareCaseString, r3IsEmptyString, r3IsEmptyEntity, r3IsSafeTypedEntity, r3DeepClone }	from '../util/r3util';
 
 //
 // Load Global object for K2HR3 Context
@@ -88,6 +88,41 @@ const r3GlobalObject = (function()
 		console.info('There is no sidecar yaml template.');
 	}
 
+	// custom registration codes
+	let	_crcobj = {};
+	if(!r3IsEmptyEntity(r3globaltmp.r3crcobj)){
+		let	_decodecrcobj	= unescape(r3globaltmp.r3crcobj);			// decode
+		let	_objcrcobj		= r3ConvertFromJSON(_decodecrcobj);			// parse
+
+		if(r3IsSafeTypedEntity(_objcrcobj, 'object')){
+			Object.keys(_objcrcobj).forEach(function(key){
+				let	_tmporgobj	= _objcrcobj[key];
+				let	_tmpobj		= {};
+
+				if(r3IsSafeTypedEntity(_tmporgobj, 'object')){
+					Object.keys(_tmporgobj).forEach(function(subkey){
+						if(r3IsSafeTypedEntity(_tmporgobj[subkey], 'string')){
+							_tmpobj[subkey] = _tmporgobj[subkey];
+						}else{
+							console.warn('object(' + subkey + ') in crcobj(' + key + ') is not string, skip it.');
+						}
+					});
+				}else{
+					console.warn('crcobj(' + key + ') entity is not object, skip it.');
+				}
+				if(0 < Object.keys(_tmpobj).length){
+					_crcobj[key] = _tmpobj;
+				}else{
+					console.warn('crcobj(' + key + ') entity is empty, skip it.');
+				}
+			});
+		}else{
+			console.info('There is no crcobj.');
+		}
+	}else{
+		console.info('There is no crcobj.');
+	}
+
 	// default object values
 	let	r3globalobj	= {
 		apischeme:		(r3IsEmptyString(r3globaltmp.r3apischeme)	? '' : r3globaltmp.r3apischeme),
@@ -97,6 +132,7 @@ const r3GlobalObject = (function()
 		userdata:		_userdata,
 		secretyaml:		_secretyaml,
 		sidecaryaml:	_sidecaryaml,
+		crcobj:			_crcobj,
 		login:			false,
 		username:		'',
 		unscopedtoken:	'',
@@ -132,21 +168,22 @@ export default class R3Context
 	//
 	constructor(signin, username, unscopedtoken)
 	{
-		this.apischeme					= r3GlobalObject.apischeme;		// k2hr3 api scheme
-		this.apihost					= r3GlobalObject.apihost;		// k2hr3 api hostname
-		this.apiport					= r3GlobalObject.apiport;		// k2hr3 api port
-		this.appmenu					= r3GlobalObject.appmenu;		// k2hr3 app menu array
-		this.userdata					= r3GlobalObject.userdata;		// k2hr3 user data script template
-		this.secretyaml					= r3GlobalObject.secretyaml;	// k2hr3 secret yaml template
-		this.sidecaryaml				= r3GlobalObject.sidecaryaml;	// k2hr3 sidecar yaml template
-		this.signintype					= r3GlobalObject.signintype;	// SignIn Type
-		this.signinurl					= r3GlobalObject.signinurl;		// SignIn URL
-		this.signouturl					= r3GlobalObject.signouturl;	// SignOut URL
-		this.lang						= r3GlobalObject.lang;			// Text resource language
-		this.dbgHeaderName				= r3GlobalObject.dbgheader;		// Debug header name(= 'x-k2hr3-debug')
-		this.dbgHeaderValue				= r3GlobalObject.dbgvalue;		// Debug header value
-		this.dbgResHeaderName			= r3GlobalObject.dbgresheader;	// Debug response header name(= 'x-k2hr3-error')
-		this.errormsg					= r3GlobalObject.errormsg;		// Error message
+		this.apischeme			= r3GlobalObject.apischeme;		// k2hr3 api scheme
+		this.apihost			= r3GlobalObject.apihost;		// k2hr3 api hostname
+		this.apiport			= r3GlobalObject.apiport;		// k2hr3 api port
+		this.appmenu			= r3GlobalObject.appmenu;		// k2hr3 app menu array
+		this.userdata			= r3GlobalObject.userdata;		// k2hr3 user data script template
+		this.secretyaml			= r3GlobalObject.secretyaml;	// k2hr3 secret yaml template
+		this.sidecaryaml		= r3GlobalObject.sidecaryaml;	// k2hr3 sidecar yaml template
+		this.crcobj				= r3GlobalObject.crcobj;		// k2hr3 Custom Registration Code(CRC) object
+		this.signintype			= r3GlobalObject.signintype;	// SignIn Type
+		this.signinurl			= r3GlobalObject.signinurl;		// SignIn URL
+		this.signouturl			= r3GlobalObject.signouturl;	// SignOut URL
+		this.lang				= r3GlobalObject.lang;			// Text resource language
+		this.dbgHeaderName		= r3GlobalObject.dbgheader;		// Debug header name(= 'x-k2hr3-debug')
+		this.dbgHeaderValue		= r3GlobalObject.dbgvalue;		// Debug header value
+		this.dbgResHeaderName	= r3GlobalObject.dbgresheader;	// Debug response header name(= 'x-k2hr3-error')
+		this.errormsg			= r3GlobalObject.errormsg;		// Error message
 
 		// User name and Unscoped User Token
 		if(	r3IsSafeTypedEntity(signin, 'boolean')	&&
@@ -224,6 +261,11 @@ export default class R3Context
 		return this.sidecaryaml;
 	}
 
+	getCRCObject()
+	{
+		return this.crcobj;
+	}
+
 	getExpandUserData(registerpath)
 	{
 		if(r3IsEmptyString(this.userdata)){
@@ -288,6 +330,78 @@ export default class R3Context
 		let	expanded = this.sidecaryaml.replace(kwRoleTokenForRoleYrn, roleyrn);
 
 		return expanded;
+	}
+
+	getExpandCRCObject(roleToken, roleyrn, registerpath)
+	{
+		let	expandedall = {};
+		if(!r3IsSafeTypedEntity(this.crcobj, 'object') || r3IsSafeTypedEntity(this.crcobj, 'array')){
+			console.info('There is no safe crcobj');
+			return expandedall;
+		}
+		let	apiHost		= this.getApiUrlBase();
+		let	_localcrc	= this.crcobj;
+
+		Object.keys(_localcrc).forEach(function(key){
+			let	_subobj = _localcrc[key];
+
+			if(r3IsSafeTypedEntity(_subobj, 'object') && !r3IsSafeTypedEntity(_subobj, 'array')){
+				let	_expanded_subobj = {};
+
+				Object.keys(_subobj).forEach(function(subkey){
+					if(!r3IsEmptyString(_subobj[subkey])){
+						// API host
+						let	expanded = _subobj[subkey].replace(kwApiHostForUD, apiHost);
+
+						// Role token
+						if(!r3IsEmptyString(roleToken)){
+							expanded = expanded.replace(kwRawRoleToken, roleToken);
+
+							try{
+								// encode base64
+								let	buff64		= Buffer.from(roleToken, 'ascii');
+								let	roleToken64	= buff64.toString('base64');
+								if(!r3IsEmptyString(roleToken64)){
+									expanded = expanded.replace(kwRoleTokenForSecret, roleToken64);
+								}else{
+									console.error('failed to encoding by base64.');
+								}
+							}catch(exception){
+								console.error('failed to encoding by base64.');
+							}
+						}
+
+						// Role YRN path
+						if(!r3IsEmptyString(roleyrn)){
+							expanded = expanded.replace(kwRoleTokenForRoleYrn, roleyrn);
+						}
+
+						// RegisterPath
+						if(!r3IsEmptyString(registerpath)){
+							expanded = expanded.replace(kwIncludePathForUD, registerpath);
+						}
+
+						// set
+						_expanded_subobj[subkey] = expanded;
+
+					}else{
+						console.info('sub object(' + key + ') key(' + subkey + ') in crcobj is not safe string, skip it.');
+
+						// set empty
+						_expanded_subobj[subkey] = '';
+					}
+				});
+
+				if(0 < Object.keys(_expanded_subobj).length){
+					expandedall[key] = r3DeepClone(_expanded_subobj);
+				}
+			}else{
+				console.info('sub object(' + key + ') in crcobj is not safe object, skip it.');
+				expandedall[key] = {};
+			}
+		});
+
+		return expandedall;
 	}
 
 	getApiUrlBase()

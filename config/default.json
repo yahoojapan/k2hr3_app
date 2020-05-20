@@ -30,7 +30,8 @@
 // The following template's value is used:
 //	{{= %K2HR3_API_HOST_URI% }}				: K2HR3 API host and uri which is made from "apihost"
 //	{{= %K2HR3_USERDATA_INCLUDE_PATH% }}	: Getting compressed user data script url path
-//	{{= %K2HR3_ROLETOKEN_IN_SECRET% }}		: Replacing role token string
+//	{{= %K2HR3_ROLETOKEN_IN_SECRET% }}		: Replacing base64 encoded role token string
+//	{{= %K2HR3_ROLETOKEN_RAW% }}			: Replacing raw role token string
 //	{{= %K2HR3_ROLEYRN_IN_SIDECAR% }}		: Replacing role full yrn path string
 //	{{= %K2HR3_REST_API_HOST% }}			: Replacing k2hr3-k8s-init.sh host/port/schema parameter
 
@@ -187,7 +188,16 @@ spec:\n\
     #--------------------------------------------------------------------------\n\
     # K2HR3 Sidecar - end\n\
     #--------------------------------------------------------------------------\n\
-'
+',
+	'crcobj': {
+		'Test custom registration code': {
+			'CRC_K2HR3_API_HOST_URI':			'{{= %K2HR3_API_HOST_URI% }}',
+			'CRC_K2HR3_USERDATA_INCLUDE_PATH':	'{{= %K2HR3_USERDATA_INCLUDE_PATH% }}',
+			'CRC_K2HR3_ROLETOKEN_IN_SECRET':	'{{= %K2HR3_ROLETOKEN_IN_SECRET% }}',
+			'CRC_K2HR3_ROLETOKEN_RAW':			'{{= %K2HR3_ROLETOKEN_RAW% }}',
+			'CRC_K2HR3_ROLEYRN_IN_SIDECAR':		'{{= %K2HR3_ROLEYRN_IN_SIDECAR% }}'
+		}
+	}
 }
 
 /*

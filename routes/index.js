@@ -72,6 +72,7 @@ router.get('/', function(req, res, next)							// eslint-disable-line no-unused-
 		var	userdata	= _appConf.getUserData();					// this is string for User Date Script
 		var	secretyaml	= _appConf.getSecretYaml();					// this is string for Secret Yaml
 		var	sidecaryaml	= _appConf.getSidecarYaml();				// this is string for Sidecar Yaml
+		var	crcobj		= _appConf.getCRCObject();					// Custom Registration Codes(CRC) object
 		var	signintype	= tokensObj.getSignInType();
 		var	signinurl	= tokensObj.getSignInUrl();
 		var	signouturl	= tokensObj.getSignOutUrl();
@@ -84,6 +85,7 @@ router.get('/', function(req, res, next)							// eslint-disable-line no-unused-
 			dbgvalue	= 'debug';
 			dbgresheader= 'x-k2hr3-error';
 		}
+
 		_res.render(
 			'index',
 			{
@@ -95,6 +97,7 @@ router.get('/', function(req, res, next)							// eslint-disable-line no-unused-
 				userdata:		escape(JSON.stringify(userdata)),
 				secretyaml:		escape(JSON.stringify(secretyaml)),
 				sidecaryaml:	escape(JSON.stringify(sidecaryaml)),
+				crcobj:			escape(JSON.stringify(crcobj)),
 				username:		username,
 				unscopedtoken:	token,
 				signintype:		signintype,

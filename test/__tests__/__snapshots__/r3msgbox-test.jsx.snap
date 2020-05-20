@@ -2,13 +2,12 @@
 
 exports[`R3MsgBox test snapshot for R3MsgBox 1`] = `
 <div
-  className="MuiPaper-root MuiPaper-elevation2 R3MsgBox-root-1 MuiPaper-rounded"
+  className="MuiPaper-root R3MsgBox-root-1 MuiPaper-elevation2 MuiPaper-rounded"
 >
   <svg
-    aria-hidden="true"
+    aria-hidden={true}
     className="MuiSvgIcon-root R3MsgBox-errorIcon-5 MuiSvgIcon-colorError"
     focusable="false"
-    role="presentation"
     viewBox="0 0 24 24"
   >
     <path

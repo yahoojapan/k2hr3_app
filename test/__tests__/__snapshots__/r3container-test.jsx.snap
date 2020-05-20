@@ -3,7 +3,7 @@
 exports[`R3Container test snapshot for R3Container 1`] = `
 Array [
   <header
-    className="MuiPaper-root MuiPaper-elevation4 MuiAppBar-root MuiAppBar-positionStatic R3AppBar-root-3 MuiAppBar-colorPrimary"
+    className="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary R3AppBar-root-3 MuiPaper-elevation4"
   >
     <div
       className="MuiToolbar-root MuiToolbar-regular R3AppBar-toolbar-4 MuiToolbar-gutters"
@@ -37,10 +37,9 @@ Array [
           className="MuiIconButton-label"
         >
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -86,10 +85,9 @@ Array [
           className="MuiIconButton-label"
         >
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -105,17 +103,17 @@ Array [
   </header>,
   <div>
     <div
-      className="R3MainTree-dockedList-152"
+      className="R3MainTree-dockedList-158"
     >
       <div>
         <header
-          className="MuiPaper-root MuiPaper-elevation0 MuiAppBar-root MuiAppBar-positionStatic R3MainTree-subheaderAppbar-145 MuiAppBar-colorPrimary"
+          className="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary R3MainTree-subheaderAppbar-151 MuiPaper-elevation0"
         >
           <div
-            className="MuiToolbar-root MuiToolbar-regular R3MainTree-subheaderToolbar-146 MuiToolbar-gutters"
+            className="MuiToolbar-root MuiToolbar-regular R3MainTree-subheaderToolbar-152 MuiToolbar-gutters"
           >
             <div
-              className="MuiChip-root R3MainTree-chip-149 MuiChip-colorPrimary"
+              className="MuiChip-root R3MainTree-chip-155 MuiChip-colorPrimary"
               onKeyDown={[Function]}
               onKeyUp={[Function]}
             >
@@ -123,14 +121,14 @@ Array [
                 className="MuiChip-label"
               >
                 <span
-                  className="MuiTypography-root R3MainTree-chipText-150 MuiTypography-subtitle2"
+                  className="MuiTypography-root R3MainTree-chipText-156 MuiTypography-subtitle2"
                 >
                   TENANT
                 </span>
               </span>
             </div>
             <span
-              className="MuiTypography-root R3MainTree-tenantListText-142 MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
+              className="MuiTypography-root R3MainTree-tenantListText-148 MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
             >
               No tenant list
             </span>
@@ -162,10 +160,9 @@ Array [
                 className="MuiIconButton-label"
               >
                 <svg
-                  aria-hidden="true"
+                  aria-hidden={true}
                   className="MuiSvgIcon-root"
                   focusable="false"
-                  role="presentation"
                   viewBox="0 0 24 24"
                 >
                   <path
@@ -207,10 +204,9 @@ Array [
               className="MuiListItemIcon-root"
             >
               <svg
-                aria-hidden="true"
+                aria-hidden={true}
                 className="MuiSvgIcon-root"
                 focusable="false"
-                role="presentation"
                 viewBox="0 0 24 24"
               >
                 <path
@@ -219,10 +215,10 @@ Array [
               </svg>
             </div>
             <div
-              className="MuiListItemText-root R3MainTree-listItemText-157"
+              className="MuiListItemText-root R3MainTree-listItemText-163"
             >
               <span
-                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
+                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
               >
                 SERVICE
               </span>
@@ -255,10 +251,9 @@ Array [
               className="MuiListItemIcon-root"
             >
               <svg
-                aria-hidden="true"
+                aria-hidden={true}
                 className="MuiSvgIcon-root"
                 focusable="false"
-                role="presentation"
                 viewBox="0 0 24 24"
               >
                 <path
@@ -267,10 +262,10 @@ Array [
               </svg>
             </div>
             <div
-              className="MuiListItemText-root R3MainTree-listItemText-157"
+              className="MuiListItemText-root R3MainTree-listItemText-163"
             >
               <span
-                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
+                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
               >
                 ROLE
               </span>
@@ -303,10 +298,9 @@ Array [
               className="MuiListItemIcon-root"
             >
               <svg
-                aria-hidden="true"
+                aria-hidden={true}
                 className="MuiSvgIcon-root"
                 focusable="false"
-                role="presentation"
                 viewBox="0 0 24 24"
               >
                 <path
@@ -315,10 +309,10 @@ Array [
               </svg>
             </div>
             <div
-              className="MuiListItemText-root R3MainTree-listItemText-157"
+              className="MuiListItemText-root R3MainTree-listItemText-163"
             >
               <span
-                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
+                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
               >
                 RESOURCE
               </span>
@@ -351,10 +345,9 @@ Array [
               className="MuiListItemIcon-root"
             >
               <svg
-                aria-hidden="true"
+                aria-hidden={true}
                 className="MuiSvgIcon-root"
                 focusable="false"
-                role="presentation"
                 viewBox="0 0 24 24"
               >
                 <path
@@ -363,10 +356,10 @@ Array [
               </svg>
             </div>
             <div
-              className="MuiListItemText-root R3MainTree-listItemText-157"
+              className="MuiListItemText-root R3MainTree-listItemText-163"
             >
               <span
-                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
+                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
               >
                 POLICY
               </span>
@@ -381,37 +374,40 @@ Array [
     <div>
       <div>
         <header
-          className="MuiPaper-root MuiPaper-elevation0 MuiAppBar-root MuiAppBar-positionStatic R3Toolbar-root-213 MuiAppBar-colorPrimary"
+          className="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary R3Toolbar-root-219 MuiPaper-elevation0"
         >
           <div
-            className="MuiToolbar-root MuiToolbar-regular R3Toolbar-toolbar-214 MuiToolbar-gutters"
+            className="MuiToolbar-root MuiToolbar-regular R3Toolbar-toolbar-220 MuiToolbar-gutters"
           >
             <div
               aria-describedby={null}
               aria-label="current display item and its path"
-              className="MuiChip-root R3Toolbar-chip-216 MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable"
+              className="MuiButtonBase-root MuiChip-root R3Toolbar-chip-222 MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable"
               onBlur={[Function]}
               onClick={[Function]}
+              onDragLeave={[Function]}
               onFocus={[Function]}
               onKeyDown={[Function]}
               onKeyUp={[Function]}
+              onMouseDown={[Function]}
               onMouseEnter={[Function]}
               onMouseLeave={[Function]}
               onMouseOver={[Function]}
+              onMouseUp={[Function]}
               onTouchEnd={[Function]}
+              onTouchMove={[Function]}
               onTouchStart={[Function]}
               role="button"
               tabIndex={0}
               title="Display path information"
             >
               <div
-                className="MuiAvatar-root MuiChip-avatar R3Toolbar-avatar-219 MuiChip-avatarColorPrimary MuiAvatar-colorDefault"
+                className="MuiAvatar-root MuiAvatar-circle MuiChip-avatar R3Toolbar-avatar-225 MuiChip-avatarColorPrimary MuiAvatar-colorDefault"
               >
                 <svg
-                  aria-hidden="true"
-                  className="MuiSvgIcon-root R3Toolbar-descriptionIcon-220"
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root R3Toolbar-descriptionIcon-226"
                   focusable="false"
-                  role="presentation"
                   viewBox="0 0 24 24"
                 >
                   <path
@@ -423,31 +419,33 @@ Array [
                 className="MuiChip-label"
               >
                 <span
-                  className="MuiTypography-root R3Toolbar-chipText-217 MuiTypography-subtitle2"
+                  className="MuiTypography-root R3Toolbar-chipText-223 MuiTypography-subtitle2"
                 >
                   Unselected
                 </span>
               </span>
+              <span
+                className="MuiTouchRipple-root"
+              />
             </div>
             <span
-              className="MuiTypography-root R3Toolbar-title-215 MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-noWrap"
+              className="MuiTypography-root R3Toolbar-title-221 MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-noWrap"
             >
               
             </span>
             <div
-              className="R3Toolbar-spacerInToolbar-221"
+              className="R3Toolbar-spacerInToolbar-227"
             />
           </div>
         </header>
       </div>
       <div
-        className="MuiPaper-root MuiPaper-elevation2 R3MsgBox-root-312 MuiPaper-rounded"
+        className="MuiPaper-root R3MsgBox-root-322 MuiPaper-elevation2 MuiPaper-rounded"
       >
         <svg
-          aria-hidden="true"
-          className="MuiSvgIcon-root R3MsgBox-informationIcon-318"
+          aria-hidden={true}
+          className="MuiSvgIcon-root R3MsgBox-informationIcon-328"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -455,7 +453,7 @@ Array [
           />
         </svg>
         <span
-          className="MuiTypography-root R3MsgBox-dialogInformationContentText-315 MuiTypography-body1"
+          className="MuiTypography-root R3MsgBox-dialogInformationContentText-325 MuiTypography-body1"
         >
           First select the tenant, then select ROLE / RESOURCE / POLICY, then browse and edit.
           <br />

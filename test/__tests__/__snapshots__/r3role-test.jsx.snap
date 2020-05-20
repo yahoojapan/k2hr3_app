@@ -31,6 +31,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="roleHostname0"
@@ -55,6 +56,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="roleHostnameAUX_0"
@@ -98,10 +100,9 @@ exports[`R3Role test snapshot for R3Role 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -126,6 +127,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="roleHostname1"
@@ -150,6 +152,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="roleHostnameAUX_1"
@@ -193,10 +196,9 @@ exports[`R3Role test snapshot for R3Role 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -221,6 +223,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="roleNewHostname"
@@ -245,6 +248,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="roleNewHostnameAUX"
@@ -288,10 +292,9 @@ exports[`R3Role test snapshot for R3Role 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -331,6 +334,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input Mui-disabled Mui-disabled"
           disabled={true}
           name="roleIp0"
@@ -354,6 +358,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input Mui-disabled Mui-disabled"
           disabled={true}
           name="roleIpAUX_0"
@@ -396,10 +401,9 @@ exports[`R3Role test snapshot for R3Role 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -424,6 +428,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input Mui-disabled Mui-disabled"
           disabled={true}
           name="roleIp1"
@@ -447,6 +452,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input Mui-disabled Mui-disabled"
           disabled={true}
           name="roleIpAUX_1"
@@ -489,10 +495,9 @@ exports[`R3Role test snapshot for R3Role 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -517,6 +522,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input Mui-disabled Mui-disabled"
           disabled={true}
           name="roleIp2"
@@ -540,6 +546,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input Mui-disabled Mui-disabled"
           disabled={true}
           name="roleIpAUX_2"
@@ -582,10 +589,9 @@ exports[`R3Role test snapshot for R3Role 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -615,6 +621,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="rolePolicy_0"
@@ -658,10 +665,9 @@ exports[`R3Role test snapshot for R3Role 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -686,6 +692,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="roleNewPolicy"
@@ -729,10 +736,9 @@ exports[`R3Role test snapshot for R3Role 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -762,6 +768,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="aliasValue_0"
@@ -800,10 +807,9 @@ exports[`R3Role test snapshot for R3Role 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -835,10 +841,9 @@ exports[`R3Role test snapshot for R3Role 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -875,10 +880,9 @@ exports[`R3Role test snapshot for R3Role 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -903,6 +907,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="aliasNew"
@@ -946,10 +951,9 @@ exports[`R3Role test snapshot for R3Role 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -963,11 +967,11 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
   </div>
   <div
-    className="R3FormButtons-root-125"
+    className="R3FormButtons-root-128"
   >
     <button
       aria-label="cancel"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-cancelButton-126 MuiButton-containedPrimary Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-cancelButton-129 MuiButton-containedPrimary Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -989,10 +993,9 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         CANCEL
         <svg
-          aria-hidden="true"
-          className="MuiSvgIcon-root R3FormButtons-buttonIcon-128"
+          aria-hidden={true}
+          className="MuiSvgIcon-root R3FormButtons-buttonIcon-131"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -1003,7 +1006,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
     <button
       aria-label="save"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-saveButton-127 MuiButton-containedSecondary Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-saveButton-130 MuiButton-containedSecondary Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -1025,10 +1028,9 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       >
         SAVE
         <svg
-          aria-hidden="true"
-          className="MuiSvgIcon-root R3FormButtons-buttonIcon-128"
+          aria-hidden={true}
+          className="MuiSvgIcon-root R3FormButtons-buttonIcon-131"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path

@@ -6,7 +6,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
 >
   <div>
     <header
-      className="MuiPaper-root MuiPaper-elevation0 MuiAppBar-root MuiAppBar-positionStatic R3MainTree-subheaderAppbar-5 MuiAppBar-colorPrimary"
+      className="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary R3MainTree-subheaderAppbar-5 MuiPaper-elevation0"
     >
       <div
         className="MuiToolbar-root MuiToolbar-dense R3MainTree-subheaderToolbar-6 MuiToolbar-gutters"
@@ -59,10 +59,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
             className="MuiIconButton-label"
           >
             <svg
-              aria-hidden="true"
+              aria-hidden={true}
               className="MuiSvgIcon-root"
               focusable="false"
-              role="presentation"
               viewBox="0 0 24 24"
             >
               <path
@@ -104,10 +103,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           className="MuiListItemIcon-root"
         >
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -119,7 +117,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           className="MuiListItemText-root R3MainTree-listItemText-17"
         >
           <span
-            className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
+            className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
           >
             SERVICE
           </span>
@@ -128,10 +126,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
         >
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -183,7 +180,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                     className="MuiListItemText-root R3MainTree-childListItemText-16"
                   >
                     <span
-                      className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
+                      className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                     >
                       child_service
                     </span>
@@ -192,10 +189,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                     className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
                   >
                     <svg
-                      aria-hidden="true"
+                      aria-hidden={true}
                       className="MuiSvgIcon-root"
                       focusable="false"
-                      role="presentation"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -247,7 +243,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                               className="MuiListItemText-root R3MainTree-childListItemText-16"
                             >
                               <span
-                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
+                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                               >
                                 ROLE
                               </span>
@@ -256,10 +252,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                               className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
                             >
                               <svg
-                                aria-hidden="true"
+                                aria-hidden={true}
                                 className="MuiSvgIcon-root"
                                 focusable="false"
-                                role="presentation"
                                 viewBox="0 0 24 24"
                               >
                                 <path
@@ -311,7 +306,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                         className="MuiListItemText-root R3MainTree-childListItemText-16"
                                       >
                                         <span
-                                          className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
+                                          className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                                         >
                                           dummyservicerole
                                         </span>
@@ -349,7 +344,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                               className="MuiListItemText-root R3MainTree-childListItemText-16"
                             >
                               <span
-                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
+                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                               >
                                 RESOURCE
                               </span>
@@ -358,10 +353,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                               className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
                             >
                               <svg
-                                aria-hidden="true"
+                                aria-hidden={true}
                                 className="MuiSvgIcon-root"
                                 focusable="false"
-                                role="presentation"
                                 viewBox="0 0 24 24"
                               >
                                 <path
@@ -413,7 +407,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                         className="MuiListItemText-root R3MainTree-childListItemText-16"
                                       >
                                         <span
-                                          className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
+                                          className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                                         >
                                           dummyserviceresource
                                         </span>
@@ -451,7 +445,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                               className="MuiListItemText-root R3MainTree-childListItemText-16"
                             >
                               <span
-                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
+                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                               >
                                 POLICY
                               </span>
@@ -460,10 +454,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                               className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
                             >
                               <svg
-                                aria-hidden="true"
+                                aria-hidden={true}
                                 className="MuiSvgIcon-root"
                                 focusable="false"
-                                role="presentation"
                                 viewBox="0 0 24 24"
                               >
                                 <path
@@ -515,7 +508,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                         className="MuiListItemText-root R3MainTree-childListItemText-16"
                                       >
                                         <span
-                                          className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
+                                          className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                                         >
                                           dummyservicepolicy
                                         </span>
@@ -563,10 +556,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           className="MuiListItemIcon-root"
         >
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -578,7 +570,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           className="MuiListItemText-root R3MainTree-listItemText-17"
         >
           <span
-            className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
+            className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
           >
             ROLE
           </span>
@@ -587,10 +579,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
         >
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -642,7 +633,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                     className="MuiListItemText-root R3MainTree-childListItemText-16"
                   >
                     <span
-                      className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
+                      className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                     >
                       dummyrole
                     </span>
@@ -651,10 +642,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                     className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
                   >
                     <svg
-                      aria-hidden="true"
+                      aria-hidden={true}
                       className="MuiSvgIcon-root"
                       focusable="false"
-                      role="presentation"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -706,7 +696,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                               className="MuiListItemText-root R3MainTree-childListItemText-16"
                             >
                               <span
-                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
+                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                               >
                                 dummysubrole
                               </span>
@@ -749,10 +739,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           className="MuiListItemIcon-root"
         >
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -764,7 +753,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           className="MuiListItemText-root R3MainTree-listItemText-17"
         >
           <span
-            className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
+            className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
           >
             RESOURCE
           </span>
@@ -773,10 +762,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
         >
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -828,7 +816,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                     className="MuiListItemText-root R3MainTree-childListItemText-16"
                   >
                     <span
-                      className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
+                      className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                     >
                       dummyresource
                     </span>
@@ -837,10 +825,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                     className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
                   >
                     <svg
-                      aria-hidden="true"
+                      aria-hidden={true}
                       className="MuiSvgIcon-root"
                       focusable="false"
-                      role="presentation"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -892,7 +879,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                               className="MuiListItemText-root R3MainTree-childListItemText-16"
                             >
                               <span
-                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
+                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                               >
                                 dummysubresource
                               </span>
@@ -935,10 +922,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           className="MuiListItemIcon-root"
         >
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -950,7 +936,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           className="MuiListItemText-root R3MainTree-listItemText-17"
         >
           <span
-            className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
+            className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
           >
             POLICY
           </span>
@@ -959,10 +945,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
         >
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -1014,7 +999,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                     className="MuiListItemText-root R3MainTree-childListItemText-16"
                   >
                     <span
-                      className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
+                      className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                     >
                       dummypolicy
                     </span>
@@ -1023,10 +1008,9 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                     className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13"
                   >
                     <svg
-                      aria-hidden="true"
+                      aria-hidden={true}
                       className="MuiSvgIcon-root"
                       focusable="false"
-                      role="presentation"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -1078,7 +1062,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                               className="MuiListItemText-root R3MainTree-childListItemText-16"
                             >
                               <span
-                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary"
+                                className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle1 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
                               >
                                 dummysubpolicy
                               </span>
