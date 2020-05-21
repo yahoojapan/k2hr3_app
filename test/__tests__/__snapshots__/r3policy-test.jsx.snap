@@ -15,12 +15,11 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
   >
     <div
       aria-haspopup="listbox"
-      aria-labelledby=" "
-      className="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input MuiInputBase-inputSelect"
+      className="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input"
       onBlur={[Function]}
-      onClick={[Function]}
       onFocus={[Function]}
       onKeyDown={[Function]}
+      onMouseDown={[Function]}
       role="button"
       tabIndex={0}
     >
@@ -32,10 +31,9 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       value="allow"
     />
     <svg
-      aria-hidden="true"
+      aria-hidden={true}
       className="MuiSvgIcon-root MuiSelect-icon"
       focusable="false"
-      role="presentation"
       viewBox="0 0 24 24"
     >
       <path
@@ -83,10 +81,9 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
             value="yrn:yahoo::::action:read"
           />
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -140,10 +137,9 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
             value="yrn:yahoo::::action:write"
           />
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -183,6 +179,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="policyResource_0"
@@ -226,10 +223,9 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -254,6 +250,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="resourceNew"
@@ -297,10 +294,9 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -330,6 +326,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       >
         <input
           aria-invalid={false}
+          autoFocus={false}
           className="MuiInputBase-input MuiInput-input"
           disabled={false}
           name="aliasNew"
@@ -373,10 +370,9 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -390,11 +386,11 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     </button>
   </div>
   <div
-    className="R3FormButtons-root-149"
+    className="R3FormButtons-root-152"
   >
     <button
       aria-label="cancel"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-cancelButton-150 MuiButton-containedPrimary Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-cancelButton-153 MuiButton-containedPrimary Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -416,10 +412,9 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       >
         CANCEL
         <svg
-          aria-hidden="true"
-          className="MuiSvgIcon-root R3FormButtons-buttonIcon-152"
+          aria-hidden={true}
+          className="MuiSvgIcon-root R3FormButtons-buttonIcon-155"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -430,7 +425,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     </button>
     <button
       aria-label="save"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-saveButton-151 MuiButton-containedSecondary Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-saveButton-154 MuiButton-containedSecondary Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -452,10 +447,9 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       >
         SAVE
         <svg
-          aria-hidden="true"
-          className="MuiSvgIcon-root R3FormButtons-buttonIcon-152"
+          aria-hidden={true}
+          className="MuiSvgIcon-root R3FormButtons-buttonIcon-155"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path

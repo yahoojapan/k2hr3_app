@@ -116,6 +116,19 @@ const r3Theme = createMuiTheme({
 			root: {
 				display:			'block'
 			}
+		},
+
+		// [NOTE]
+		// For Avater in Chip, its style using avatarColorPrimary property.
+		// But its backgroundColor is set theme.palette.primary.dark.
+		// We use avatar in chip only in toolbar, and it needs white.
+		//
+		MuiChip: {
+			root: {
+				'& $avatarColorPrimary': {
+					backgroundColor:	Colors.common.white
+				}
+			}
 		}
 	},
 

@@ -3,7 +3,7 @@
 exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
 <div>
   <header
-    className="MuiPaper-root MuiPaper-elevation0 MuiAppBar-root MuiAppBar-positionStatic R3Toolbar-root-1 MuiAppBar-colorPrimary"
+    className="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary R3Toolbar-root-1 MuiPaper-elevation0"
   >
     <div
       className="MuiToolbar-root MuiToolbar-regular R3Toolbar-toolbar-2 MuiToolbar-gutters"
@@ -11,29 +11,32 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
       <div
         aria-describedby={null}
         aria-label="current display item and its path"
-        className="MuiChip-root R3Toolbar-chip-4 MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable"
+        className="MuiButtonBase-root MuiChip-root R3Toolbar-chip-4 MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable"
         onBlur={[Function]}
         onClick={[Function]}
+        onDragLeave={[Function]}
         onFocus={[Function]}
         onKeyDown={[Function]}
         onKeyUp={[Function]}
+        onMouseDown={[Function]}
         onMouseEnter={[Function]}
         onMouseLeave={[Function]}
         onMouseOver={[Function]}
+        onMouseUp={[Function]}
         onTouchEnd={[Function]}
+        onTouchMove={[Function]}
         onTouchStart={[Function]}
         role="button"
         tabIndex={0}
         title="Display path information"
       >
         <div
-          className="MuiAvatar-root MuiChip-avatar R3Toolbar-avatar-7 MuiChip-avatarColorPrimary MuiAvatar-colorDefault"
+          className="MuiAvatar-root MuiAvatar-circle MuiChip-avatar R3Toolbar-avatar-7 MuiChip-avatarColorPrimary MuiAvatar-colorDefault"
         >
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root R3Toolbar-descriptionIcon-8"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -50,6 +53,9 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
             SERVICE
           </span>
         </span>
+        <span
+          className="MuiTouchRipple-root"
+        />
       </div>
       <span
         className="MuiTypography-root R3Toolbar-title-3 MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-noWrap"
@@ -82,10 +88,9 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
           className="MuiIconButton-label"
         >
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -126,10 +131,9 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
           className="MuiIconButton-label"
         >
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path
@@ -167,10 +171,9 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
           className="MuiIconButton-label"
         >
           <svg
-            aria-hidden="true"
+            aria-hidden={true}
             className="MuiSvgIcon-root"
             focusable="false"
-            role="presentation"
             viewBox="0 0 24 24"
           >
             <path

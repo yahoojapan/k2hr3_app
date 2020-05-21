@@ -28,10 +28,9 @@ exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
     >
       CANCEL
       <svg
-        aria-hidden="true"
+        aria-hidden={true}
         className="MuiSvgIcon-root R3FormButtons-buttonIcon-4"
         focusable="false"
-        role="presentation"
         viewBox="0 0 24 24"
       >
         <path
@@ -64,10 +63,9 @@ exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
     >
       SAVE
       <svg
-        aria-hidden="true"
+        aria-hidden={true}
         className="MuiSvgIcon-root R3FormButtons-buttonIcon-4"
         focusable="false"
-        role="presentation"
         viewBox="0 0 24 24"
       >
         <path

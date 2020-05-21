@@ -2820,6 +2820,25 @@ export default class R3Provider
 		}
 		return sidecarYaml;
 	}
+
+	//
+	// Get Custom Registration Codes
+	//
+	getCRCObject(roleToken, roleyrn, registerpath)
+	{
+		if(r3IsEmptyString(roleToken, true) || r3IsEmptyString(roleyrn, true) || r3IsEmptyString(registerpath, true)){
+			console.error('role token(not printed) or full yrn path(' + JSON.stringify(roleyrn) + ') or registerpath(not printed) parameters are wrong.');
+			return null;
+		}
+
+		// get sidecar yaml by expanding template
+		let	crcObject = this.r3Context.getExpandCRCObject(roleToken, roleyrn, registerpath);
+		if(!r3IsSafeTypedEntity(crcObject, 'object') || r3IsSafeTypedEntity(crcObject, 'array')){
+			console.error('Failed to generate CRC object from template.');
+			return null;
+		}
+		return crcObject;
+	}
 }
 
 /*

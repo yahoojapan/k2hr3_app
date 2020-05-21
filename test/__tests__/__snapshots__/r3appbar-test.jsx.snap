@@ -2,7 +2,7 @@
 
 exports[`R3AppBar test snapshot for R3AppBar 1`] = `
 <header
-  className="MuiPaper-root MuiPaper-elevation4 MuiAppBar-root MuiAppBar-positionStatic R3AppBar-root-1 MuiAppBar-colorPrimary"
+  className="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary R3AppBar-root-1 MuiPaper-elevation4"
 >
   <div
     className="MuiToolbar-root MuiToolbar-dense R3AppBar-toolbar-2 MuiToolbar-gutters"
@@ -36,10 +36,9 @@ exports[`R3AppBar test snapshot for R3AppBar 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path
@@ -85,10 +84,9 @@ exports[`R3AppBar test snapshot for R3AppBar 1`] = `
         className="MuiIconButton-label"
       >
         <svg
-          aria-hidden="true"
+          aria-hidden={true}
           className="MuiSvgIcon-root"
           focusable="false"
-          role="presentation"
           viewBox="0 0 24 24"
         >
           <path

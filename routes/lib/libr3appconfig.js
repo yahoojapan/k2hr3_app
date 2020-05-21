@@ -70,6 +70,7 @@ var	loadedConfig = (function()
 		userdata:			'',							// User Data Script for OpenStack
 		secretyaml:			'',							// Secret Yaml for kubernetes
 		sidecaryaml:		'',							// Sidecar Yaml for kubernetes
+		crcobj:				{},							// Custom Registration Codes(CRC) object
 		appmenu:			null,						// The menu array for application
 		validator:			'userValidateCredential',	// Validator object module
 		validobj:			null,						// Generated(required) validator object module
@@ -148,7 +149,7 @@ var	loadedConfig = (function()
 		// log rotation option
 		if(r3util.isSafeEntity(config.logrotateopt) && 'object' == typeof config.logrotateopt && !r3util.isArray(config.logrotateopt)){
 			Object.keys(config.logrotateopt).forEach(function(key){
-				if(r3util.isSafeEntity(data.logrotateopt[key])){
+				if(r3util.isSafeEntity(config.logrotateopt[key])){
 					data.logrotateopt[key] = config.logrotateopt[key];
 				}else{
 					// [NOTE] Not allow keyname
@@ -181,6 +182,16 @@ var	loadedConfig = (function()
 		// Sidecar Yaml
 		if(r3util.isSafeString(config.sidecaryaml)){
 			data.sidecaryaml	= r3util.getSafeString(config.sidecaryaml);
+		}
+		// Custom Configuration Codes(CRC) object
+		if(r3util.isSafeEntity(config.crcobj) && 'object' == typeof config.crcobj && !r3util.isArray(config.crcobj)){
+			Object.keys(config.crcobj).forEach(function(key){
+				if(r3util.isSafeEntity(config.crcobj[key]) && 'object' == typeof config.crcobj[key]){
+					data.crcobj[key] = config.crcobj[key];
+				}else{
+					// [NOTE] Something wrong object, skip it.
+				}
+			});
 		}
 		// App menu
 		if(r3util.isArray(config.appmenu)){
@@ -429,6 +440,11 @@ var R3AppConfig = (function()
 		var	replace	= this.loadedConfig.sidecaryaml.replace(/{{= %K2HR3_REST_API_HOST% }}/g, params);
 
 		return replace;
+	};
+
+	proto.getCRCObject = function()
+	{
+		return this.loadedConfig.crcobj;
 	};
 
 	proto.getAppMenu = function()

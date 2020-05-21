@@ -57,7 +57,7 @@ import R3Message					from '../util/r3message';
 
 import { r3PathInfoDialog }			from './r3styles';
 import { roleType, errorType }		from '../util/r3types';
-import { r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3CompareCaseString, r3IsEmptyString, r3IsSafeTypedEntity, r3CompareString, convertISOStringToLocaleString, getDiffTimeFromISOString, diffRoundType, getDiffRoundStringFromISOString } from '../util/r3util';
+import { r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3CompareCaseString, r3IsEmptyString, r3IsSafeTypedEntity, r3CompareString, convertISOStringToLocaleString, getDiffTimeFromISOString, diffRoundType, getDiffRoundStringFromISOString, r3DeepClone } from '../util/r3util';
 
 //
 // Local variables
@@ -85,7 +85,8 @@ const roleTokenSortKeys = {
 const codeTypeValues = {
 	uds:			'uds',
 	secretYaml:		'secret',
-	sidecarYaml:	'sidecar'
+	sidecarYaml:	'sidecar',
+	crcObject:		'crc:'
 };
 
 const codeType = [
@@ -161,6 +162,7 @@ export default class R3PathInfoDialog extends React.Component
 		codeUDS:							null,
 		codeSecretYaml:						null,
 		codeSidecarYaml:					null,
+		objCrc:								{},
 
 		tooltips: {
 			// In main page
@@ -226,7 +228,8 @@ export default class R3PathInfoDialog extends React.Component
 				selectedRoleTokenTime:	null,
 				codeUDS:				null,
 				codeSecretYaml:			null,
-				codeSidecarYaml:		null
+				codeSidecarYaml:		null,
+				objCrc:					{}
 			};
 		}
 		return null;														// Return null to indicate no change to state.
@@ -346,7 +349,8 @@ export default class R3PathInfoDialog extends React.Component
 							selectedRoleTokenTime:	resobj[cnt].dispTime,
 							codeUDS:				resobj[cnt].codeUDS,
 							codeSecretYaml:			resobj[cnt].codeSecretYaml,
-							codeSidecarYaml:		resobj[cnt].codeSidecarYaml
+							codeSidecarYaml:		resobj[cnt].codeSidecarYaml,
+							objCrc:					resobj[cnt].objCrc
 						});
 						return;
 					}
@@ -380,7 +384,8 @@ export default class R3PathInfoDialog extends React.Component
 			selectedRoleTokenTime:	this.state.roleTokenList[pos].dispTime,
 			codeUDS:				this.state.roleTokenList[pos].codeUDS,
 			codeSecretYaml:			this.state.roleTokenList[pos].codeSecretYaml,
-			codeSidecarYaml:		this.state.roleTokenList[pos].codeSidecarYaml
+			codeSidecarYaml:		this.state.roleTokenList[pos].codeSidecarYaml,
+			objCrc:					this.state.roleTokenList[pos].objCrc
 		});
 	}
 
@@ -718,6 +723,7 @@ export default class R3PathInfoDialog extends React.Component
 			let	codeUDS			= r3provider.getUserDataScript(roleTokens[cnt].registerpath);
 			let	codeSecretYaml	= r3provider.getSecretYaml(roleTokens[cnt].token);
 			let	codeSidecarYaml	= r3provider.getSidecarYaml(this.props.fullpath);
+			let	objCrc			= r3provider.getCRCObject(roleTokens[cnt].token, this.props.fullpath, roleTokens[cnt].registerpath);
 
 			// set
 			roleTokens[cnt].newToken		= isNewToken;
@@ -729,6 +735,7 @@ export default class R3PathInfoDialog extends React.Component
 			roleTokens[cnt].codeUDS			= codeUDS;
 			roleTokens[cnt].codeSecretYaml	= codeSecretYaml;
 			roleTokens[cnt].codeSidecarYaml	= codeSidecarYaml;
+			roleTokens[cnt].objCrc			= objCrc;
 		}
 	}
 
@@ -1284,14 +1291,40 @@ export default class R3PathInfoDialog extends React.Component
 			</React.Fragment>
 		);
 
-		let	codeText;
-		if(codeTypeValues.secretYaml == this.state.codeType){
-			codeText = (null === this.state.codeSecretYaml ? '' : this.state.codeSecretYaml);
-		}else if(codeTypeValues.sidecarYaml == this.state.codeType){
-			codeText = (null === this.state.codeSidecarYaml ? '' : this.state.codeSidecarYaml);
-		}else{	// codeTypeValues.uds == this.state.codeType
-			codeText = (null === this.state.codeUDS ? '' : this.state.codeUDS);
+		let	codeText = null;
+		if(codeTypeValues.crcObject == this.state.codeType.substr(0, codeTypeValues.crcObject.length)){
+			let	_crcKey = this.state.codeType.substr(codeTypeValues.crcObject.length);
+			if(r3IsSafeTypedEntity(this.state.objCrc[_crcKey], 'object') && !r3IsSafeTypedEntity(this.state.objCrc[_crcKey], 'array')){
+				codeText = '';
+				let	_crcSubobj = this.state.objCrc[_crcKey];
+				Object.keys(_crcSubobj).forEach(function(subobjkey){
+					if(0 < codeText.length){
+						codeText += '\n';
+					}
+					codeText += subobjkey;
+					codeText += '=';
+					codeText += _crcSubobj[subobjkey];
+				});
+			}
 		}
+		if(null == codeText){
+			if(codeTypeValues.secretYaml == this.state.codeType){
+				codeText = (null === this.state.codeSecretYaml ? '' : this.state.codeSecretYaml);
+			}else if(codeTypeValues.sidecarYaml == this.state.codeType){
+				codeText = (null === this.state.codeSidecarYaml ? '' : this.state.codeSidecarYaml);
+			}else{	// codeTypeValues.uds == this.state.codeType
+				codeText = (null === this.state.codeUDS ? '' : this.state.codeUDS);
+			}
+		}
+
+		// make select items
+		let	_margedCodeType = r3DeepClone(codeType);
+		Object.keys(this.state.objCrc).forEach(function(crcKey){
+			_margedCodeType.push({
+				name:	crcKey,
+				value:	codeTypeValues.crcObject + crcKey
+			});
+		});
 
 		let	codeContents = (
 			<React.Fragment>
@@ -1310,7 +1343,7 @@ export default class R3PathInfoDialog extends React.Component
 					className={ classes.codeTypeSelect }
 				>
 					{
-						codeType.map( (item, pos) => {
+						_margedCodeType.map( (item, pos) => {
 							return (
 								<MenuItem
 									key={ pos }
