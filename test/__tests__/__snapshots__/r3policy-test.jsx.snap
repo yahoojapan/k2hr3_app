@@ -26,8 +26,11 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       ALLOW
     </div>
     <input
+      aria-hidden={true}
+      className="MuiSelect-nativeInput"
       onAnimationStart={[Function]}
-      type="hidden"
+      onChange={[Function]}
+      tabIndex={-1}
       value="allow"
     />
     <svg
@@ -54,7 +57,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     >
       <span
         aria-disabled={false}
-        className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-120 MuiCheckbox-root MuiCheckbox-colorSecondary R3Policy-actionCheckbox-5 PrivateSwitchBase-checked-121 Mui-checked MuiIconButton-colorSecondary"
+        className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-21 MuiCheckbox-root MuiCheckbox-colorSecondary R3Policy-actionCheckbox-5 PrivateSwitchBase-checked-22 Mui-checked MuiIconButton-colorSecondary"
         onBlur={[Function]}
         onDragLeave={[Function]}
         onFocus={[Function]}
@@ -73,7 +76,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
         >
           <input
             checked={true}
-            className="PrivateSwitchBase-input-123"
+            className="PrivateSwitchBase-input-24"
             data-indeterminate={false}
             disabled={false}
             onChange={[Function]}
@@ -110,7 +113,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     >
       <span
         aria-disabled={false}
-        className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-120 MuiCheckbox-root MuiCheckbox-colorSecondary R3Policy-actionCheckbox-5 MuiIconButton-colorSecondary"
+        className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-21 MuiCheckbox-root MuiCheckbox-colorSecondary R3Policy-actionCheckbox-5 MuiIconButton-colorSecondary"
         onBlur={[Function]}
         onDragLeave={[Function]}
         onFocus={[Function]}
@@ -129,7 +132,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
         >
           <input
             checked={false}
-            className="PrivateSwitchBase-input-123"
+            className="PrivateSwitchBase-input-24"
             data-indeterminate={false}
             disabled={false}
             onChange={[Function]}
@@ -386,11 +389,11 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     </button>
   </div>
   <div
-    className="R3FormButtons-root-152"
+    className="R3FormButtons-root-25"
   >
     <button
       aria-label="cancel"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-cancelButton-153 MuiButton-containedPrimary Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-cancelButton-26 MuiButton-containedPrimary Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -413,7 +416,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
         CANCEL
         <svg
           aria-hidden={true}
-          className="MuiSvgIcon-root R3FormButtons-buttonIcon-155"
+          className="MuiSvgIcon-root R3FormButtons-buttonIcon-28"
           focusable="false"
           viewBox="0 0 24 24"
         >
@@ -425,7 +428,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     </button>
     <button
       aria-label="save"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-saveButton-154 MuiButton-containedSecondary Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-saveButton-27 MuiButton-containedSecondary Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -448,7 +451,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
         SAVE
         <svg
           aria-hidden={true}
-          className="MuiSvgIcon-root R3FormButtons-buttonIcon-155"
+          className="MuiSvgIcon-root R3FormButtons-buttonIcon-28"
           focusable="false"
           viewBox="0 0 24 24"
         >

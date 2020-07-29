@@ -393,7 +393,8 @@ export const parseCombineHostObject = (combineHostObject) =>
 		hostname:	'',
 		port:		0,
 		cuk:		null,
-		extra:		null														// this value is reserved now.
+		extra:		null,
+		tag:		null
 	};
 
 	if(r3IsEmptyString(combineHostObject, true)){
@@ -403,6 +404,7 @@ export const parseCombineHostObject = (combineHostObject) =>
 	let	port	= 0;
 	let	cuk		= null;
 	let	extra	= null;
+	let	tag		= null;
 
 	// 1) hostname
 	var	sepPos					= combineHostObject.indexOf(' ');				// separator is ' '
@@ -443,21 +445,36 @@ export const parseCombineHostObject = (combineHostObject) =>
 		}
 
 		// 3) cuk
-		// 4) extra
-		sepPos			= combineHostObject.indexOf(' ');						// separator is ' '
+		sepPos						= combineHostObject.indexOf(' ');			// separator is ' '
 		if(-1 === sepPos){
-			cuk			= combineHostObject;
+			cuk						= combineHostObject;
+			combineHostObject		= '';
 		}else{
 			if(0 === sepPos){
-				cuk		= null;
-				extra	= combineHostObject.substr(sepPos + 1);
+				cuk					= null;
+				combineHostObject	= combineHostObject.substr(sepPos + 1);
 			}else{
-				cuk		= combineHostObject.substr(0, sepPos);
-				extra	= combineHostObject.substr(sepPos + 1);
+				cuk					= combineHostObject.substr(0, sepPos);
+				combineHostObject	= combineHostObject.substr(sepPos + 1);
+			}
+		}
+
+		// 4) extra
+		// 5) tag
+		sepPos			= combineHostObject.indexOf(' ');						// separator is ' '
+		if(-1 === sepPos){
+			extra		= combineHostObject;
+		}else{
+			if(0 === sepPos){
+				extra	= null;
+				tag		= combineHostObject.substr(sepPos + 1);
+			}else{
+				extra	= combineHostObject.substr(0, sepPos);
+				tag		= combineHostObject.substr(sepPos + 1);
 			}
 		}
 	}
-	if(!getCombineHostObject(hostname, port, cuk, extra)){
+	if(r3IsEmptyString(getCombineHostObject(hostname, port, cuk, extra, tag))){
 		// something error in values
 		return result;
 	}
@@ -465,6 +482,7 @@ export const parseCombineHostObject = (combineHostObject) =>
 	result.port		= port;
 	result.cuk		= cuk;
 	result.extra	= extra;
+	result.tag		= tag;
 
 	return result;
 };
@@ -472,10 +490,7 @@ export const parseCombineHostObject = (combineHostObject) =>
 //
 // utility methods for hostname + port + cuk
 //
-// [NOTE]
-// extra is reserved.
-//
-export const getCombineHostObject = (hostname, port, cuk, extra) =>										// eslint-disable-line no-unused-vars
+export const getCombineHostObject = (hostname, port, cuk, extra, tag) =>									// eslint-disable-line no-unused-vars
 {
 	let	result = '';
 	if(	r3IsEmptyString(hostname, true)																	&&
@@ -513,6 +528,12 @@ export const getCombineHostObject = (hostname, port, cuk, extra) =>										// 
 
 	if(!r3IsEmptyString(extra)){
 		result += ' ' + extra;
+	}else if(!r3IsEmptyString(tag)){
+		result += ' ';
+	}
+
+	if(!r3IsEmptyString(tag)){
+		result += ' ' + tag;
 	}
 
 	return result;

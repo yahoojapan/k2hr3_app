@@ -1801,7 +1801,8 @@ export default class R3Provider
 					host:		tmpCombine.hostname,
 					port:		parseInt(tmpCombine.port),
 					cuk:		tmpCombine.cuk,
-					extra:		tmpCombine.extra
+					extra:		tmpCombine.extra,
+					tag:		tmpCombine.tag
 				});
 			}
 

@@ -103,17 +103,17 @@ Array [
   </header>,
   <div>
     <div
-      className="R3MainTree-dockedList-158"
+      className="R3MainTree-dockedList-34"
     >
       <div>
         <header
-          className="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary R3MainTree-subheaderAppbar-151 MuiPaper-elevation0"
+          className="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary R3MainTree-subheaderAppbar-27 MuiPaper-elevation0"
         >
           <div
-            className="MuiToolbar-root MuiToolbar-regular R3MainTree-subheaderToolbar-152 MuiToolbar-gutters"
+            className="MuiToolbar-root MuiToolbar-regular R3MainTree-subheaderToolbar-28 MuiToolbar-gutters"
           >
             <div
-              className="MuiChip-root R3MainTree-chip-155 MuiChip-colorPrimary"
+              className="MuiChip-root R3MainTree-chip-31 MuiChip-colorPrimary"
               onKeyDown={[Function]}
               onKeyUp={[Function]}
             >
@@ -121,14 +121,14 @@ Array [
                 className="MuiChip-label"
               >
                 <span
-                  className="MuiTypography-root R3MainTree-chipText-156 MuiTypography-subtitle2"
+                  className="MuiTypography-root R3MainTree-chipText-32 MuiTypography-subtitle2"
                 >
                   TENANT
                 </span>
               </span>
             </div>
             <span
-              className="MuiTypography-root R3MainTree-tenantListText-148 MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
+              className="MuiTypography-root R3MainTree-tenantListText-24 MuiTypography-subtitle2 MuiTypography-colorTextSecondary"
             >
               No tenant list
             </span>
@@ -215,7 +215,7 @@ Array [
               </svg>
             </div>
             <div
-              className="MuiListItemText-root R3MainTree-listItemText-163"
+              className="MuiListItemText-root R3MainTree-listItemText-39"
             >
               <span
                 className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
@@ -262,7 +262,7 @@ Array [
               </svg>
             </div>
             <div
-              className="MuiListItemText-root R3MainTree-listItemText-163"
+              className="MuiListItemText-root R3MainTree-listItemText-39"
             >
               <span
                 className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
@@ -309,7 +309,7 @@ Array [
               </svg>
             </div>
             <div
-              className="MuiListItemText-root R3MainTree-listItemText-163"
+              className="MuiListItemText-root R3MainTree-listItemText-39"
             >
               <span
                 className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
@@ -356,7 +356,7 @@ Array [
               </svg>
             </div>
             <div
-              className="MuiListItemText-root R3MainTree-listItemText-163"
+              className="MuiListItemText-root R3MainTree-listItemText-39"
             >
               <span
                 className="MuiTypography-root MuiListItemText-primary MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
@@ -374,15 +374,15 @@ Array [
     <div>
       <div>
         <header
-          className="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary R3Toolbar-root-219 MuiPaper-elevation0"
+          className="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary R3Toolbar-root-42 MuiPaper-elevation0"
         >
           <div
-            className="MuiToolbar-root MuiToolbar-regular R3Toolbar-toolbar-220 MuiToolbar-gutters"
+            className="MuiToolbar-root MuiToolbar-regular R3Toolbar-toolbar-43 MuiToolbar-gutters"
           >
             <div
               aria-describedby={null}
               aria-label="current display item and its path"
-              className="MuiButtonBase-root MuiChip-root R3Toolbar-chip-222 MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable"
+              className="MuiButtonBase-root MuiChip-root R3Toolbar-chip-45 MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable"
               onBlur={[Function]}
               onClick={[Function]}
               onDragLeave={[Function]}
@@ -402,11 +402,11 @@ Array [
               title="Display path information"
             >
               <div
-                className="MuiAvatar-root MuiAvatar-circle MuiChip-avatar R3Toolbar-avatar-225 MuiChip-avatarColorPrimary MuiAvatar-colorDefault"
+                className="MuiAvatar-root MuiAvatar-circle MuiChip-avatar R3Toolbar-avatar-48 MuiChip-avatarColorPrimary MuiAvatar-colorDefault"
               >
                 <svg
                   aria-hidden={true}
-                  className="MuiSvgIcon-root R3Toolbar-descriptionIcon-226"
+                  className="MuiSvgIcon-root R3Toolbar-descriptionIcon-49"
                   focusable="false"
                   viewBox="0 0 24 24"
                 >
@@ -419,7 +419,7 @@ Array [
                 className="MuiChip-label"
               >
                 <span
-                  className="MuiTypography-root R3Toolbar-chipText-223 MuiTypography-subtitle2"
+                  className="MuiTypography-root R3Toolbar-chipText-46 MuiTypography-subtitle2"
                 >
                   Unselected
                 </span>
@@ -429,22 +429,22 @@ Array [
               />
             </div>
             <span
-              className="MuiTypography-root R3Toolbar-title-221 MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-noWrap"
+              className="MuiTypography-root R3Toolbar-title-44 MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-noWrap"
             >
               
             </span>
             <div
-              className="R3Toolbar-spacerInToolbar-227"
+              className="R3Toolbar-spacerInToolbar-50"
             />
           </div>
         </header>
       </div>
       <div
-        className="MuiPaper-root R3MsgBox-root-322 MuiPaper-elevation2 MuiPaper-rounded"
+        className="MuiPaper-root R3MsgBox-root-138 MuiPaper-elevation2 MuiPaper-rounded"
       >
         <svg
           aria-hidden={true}
-          className="MuiSvgIcon-root R3MsgBox-informationIcon-328"
+          className="MuiSvgIcon-root R3MsgBox-informationIcon-144"
           focusable="false"
           viewBox="0 0 24 24"
         >
@@ -453,7 +453,7 @@ Array [
           />
         </svg>
         <span
-          className="MuiTypography-root R3MsgBox-dialogInformationContentText-325 MuiTypography-body1"
+          className="MuiTypography-root R3MsgBox-dialogInformationContentText-141 MuiTypography-body1"
         >
           First select the tenant, then select ROLE / RESOURCE / POLICY, then browse and edit.
           <br />
