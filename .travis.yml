@@ -18,10 +18,8 @@
 #
 
 language: cpp
-
-sudo: required
-
 dist: trusty
+os: linux
 
 env:
   global:
@@ -29,12 +27,7 @@ env:
     - PCREPO=stable
     - TRAVIS_ENCRYPTION_KEY_NAME=encrypted_${TRAVIS_ENCRYPTION_LABEL}_key
     - TRAVIS_ENCRYPTION_IV_NAME=encrypted_${TRAVIS_ENCRYPTION_LABEL}_iv
-  matrix:
-    - OS=ubuntu
-      TAG=18.04
-      NODE_MAJOR_VERSION=8
-      PUBLISHER=false
-      INSTPKG=
+  jobs:
     - OS=ubuntu
       TAG=18.04
       NODE_MAJOR_VERSION=10

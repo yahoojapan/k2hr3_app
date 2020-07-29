@@ -19,7 +19,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     >
       <span
         aria-disabled={false}
-        className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-67 MuiRadio-root MuiRadio-colorSecondary PrivateSwitchBase-checked-68 Mui-checked MuiIconButton-colorSecondary"
+        className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-24 MuiRadio-root MuiRadio-colorSecondary PrivateSwitchBase-checked-25 Mui-checked MuiIconButton-colorSecondary"
         onBlur={[Function]}
         onDragLeave={[Function]}
         onFocus={[Function]}
@@ -38,7 +38,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
         >
           <input
             checked={true}
-            className="PrivateSwitchBase-input-70"
+            className="PrivateSwitchBase-input-27"
             disabled={false}
             name="serviceResourceType"
             onChange={[Function]}
@@ -46,7 +46,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
             value="verifyUrl"
           />
           <div
-            className="PrivateRadioButtonIcon-root-83 PrivateRadioButtonIcon-checked-85"
+            className="PrivateRadioButtonIcon-root-28 PrivateRadioButtonIcon-checked-30"
           >
             <svg
               aria-hidden={true}
@@ -60,7 +60,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
             </svg>
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root PrivateRadioButtonIcon-layer-84"
+              className="MuiSvgIcon-root PrivateRadioButtonIcon-layer-29"
               focusable="false"
               viewBox="0 0 24 24"
             >
@@ -89,7 +89,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     >
       <span
         aria-disabled={false}
-        className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-67 MuiRadio-root MuiRadio-colorSecondary MuiIconButton-colorSecondary"
+        className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-24 MuiRadio-root MuiRadio-colorSecondary MuiIconButton-colorSecondary"
         onBlur={[Function]}
         onDragLeave={[Function]}
         onFocus={[Function]}
@@ -108,7 +108,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
         >
           <input
             checked={false}
-            className="PrivateSwitchBase-input-70"
+            className="PrivateSwitchBase-input-27"
             disabled={false}
             name="serviceResourceType"
             onChange={[Function]}
@@ -116,7 +116,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
             value="staticResourceObject"
           />
           <div
-            className="PrivateRadioButtonIcon-root-83"
+            className="PrivateRadioButtonIcon-root-28"
           >
             <svg
               aria-hidden={true}
@@ -130,7 +130,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
             </svg>
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root PrivateRadioButtonIcon-layer-84"
+              className="MuiSvgIcon-root PrivateRadioButtonIcon-layer-29"
               focusable="false"
               viewBox="0 0 24 24"
             >
@@ -399,11 +399,11 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     </button>
   </div>
   <div
-    className="R3FormButtons-root-143"
+    className="R3FormButtons-root-31"
   >
     <button
       aria-label="cancel"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-cancelButton-144 MuiButton-containedPrimary Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-cancelButton-32 MuiButton-containedPrimary Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -426,7 +426,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
         CANCEL
         <svg
           aria-hidden={true}
-          className="MuiSvgIcon-root R3FormButtons-buttonIcon-146"
+          className="MuiSvgIcon-root R3FormButtons-buttonIcon-34"
           focusable="false"
           viewBox="0 0 24 24"
         >
@@ -438,7 +438,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
     </button>
     <button
       aria-label="save"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-saveButton-145 MuiButton-containedSecondary Mui-disabled Mui-disabled"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-saveButton-33 MuiButton-containedSecondary Mui-disabled Mui-disabled"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -461,7 +461,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
         SAVE
         <svg
           aria-hidden={true}
-          className="MuiSvgIcon-root R3FormButtons-buttonIcon-146"
+          className="MuiSvgIcon-root R3FormButtons-buttonIcon-34"
           focusable="false"
           viewBox="0 0 24 24"
         >

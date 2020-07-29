@@ -247,6 +247,11 @@ export default class R3Role extends React.Component
 		if(!r3IsEmptyStringObject(standard, 'extra') && !r3IsEmptyString(standard.extra.trim())){
 			local.auxiliary += ', EXT=' + standard.extra.trim();
 		}
+
+		// tag in auxiliary
+		if(!r3IsEmptyStringObject(standard, 'tag') && !r3IsEmptyString(standard.tag.trim())){
+			local.auxiliary += ', TAG=' + standard.tag.trim();
+		}
 		return local;
 	}
 
@@ -285,6 +290,7 @@ export default class R3Role extends React.Component
 			result.port	= 0;
 			result.cuk	= null;
 			result.extra= null;
+			result.tag	= null;
 		}else{
 			let	tmpstr	= local.auxiliary;
 
@@ -326,6 +332,15 @@ export default class R3Role extends React.Component
 			}else{
 				result.extra= null;
 			}
+
+			// TAG
+			parsed			= parseKVString(tmpstr, 'TAG');
+			if(!r3IsEmptyString(parsed.value, true)){
+				result.tag	= parsed.value;
+				tmpstr		= parsed.reststr;
+			}else{
+				result.tag	= null;
+			}
 		}
 		return result;
 	}
@@ -348,6 +363,9 @@ export default class R3Role extends React.Component
 			return false;
 		}
 		if(!r3IsEmptyStringObject(standard, 'extra') && -1 !== standard.extra.indexOf(' ')){
+			return false;
+		}
+		if(!r3IsEmptyStringObject(standard, 'tag') && -1 !== standard.tag.indexOf(' ')){
 			return false;
 		}
 		return true;
@@ -375,6 +393,12 @@ export default class R3Role extends React.Component
 		if(	(r3IsEmptyStringObject(standard1, 'extra')	!== r3IsEmptyStringObject(standard2, 'extra')	)	||
 			(r3IsEmptyString(standard1.extra, true)		!== r3IsEmptyString(standard2.extra, true)		)	||
 			(!r3IsEmptyString(standard1.extra, true)	&& (standard1.extra !== standard2.extra)		)	)
+		{
+			return false;
+		}
+		if(	(r3IsEmptyStringObject(standard1, 'tag')	!== r3IsEmptyStringObject(standard2, 'tag')	)	||
+			(r3IsEmptyString(standard1.tag, true)		!== r3IsEmptyString(standard2.tag, true)	)	||
+			(!r3IsEmptyString(standard1.tag, true)		&& (standard1.tag !== standard2.tag)		)	)
 		{
 			return false;
 		}
@@ -562,7 +586,7 @@ export default class R3Role extends React.Component
 				}
 				newHostnames.push(oneHost);
 
-				combineObject = getCombineHostObject(oneHost.hostname, oneHost.port, oneHost.cuk, oneHost.extra);
+				combineObject = getCombineHostObject(oneHost.hostname, oneHost.port, oneHost.cuk, oneHost.extra, oneHost.tag);
 				if(!r3IsEmptyEntity(combineObject)){
 					newStandardHostnames.push(combineObject);
 				}
@@ -597,7 +621,7 @@ export default class R3Role extends React.Component
 				}
 				newIps.push(oneIp);
 
-				combineObject = getCombineHostObject(oneIp.hostname, oneIp.port, oneIp.cuk, oneIp.extra);
+				combineObject = getCombineHostObject(oneIp.hostname, oneIp.port, oneIp.cuk, oneIp.extra, oneIp.tag);
 				if(!r3IsEmptyEntity(combineObject)){
 					newStandardIps.push(combineObject);
 				}
