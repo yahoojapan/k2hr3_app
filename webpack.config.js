@@ -36,7 +36,7 @@ module.exports = {
 				loader:		'babel-loader',
 				exclude:	/node_modules/,
 				test:		/\.js[x]?$/,
-				query: {
+				options: {
 					babelrc:		false,
 					cacheDirectory:	true,
 					presets: [
@@ -52,9 +52,7 @@ module.exports = {
 			{
 				test:	/\.css$/,
 				use: [
-					{
-						loader:	'style-loader'
-					},
+					'style-loader',
 					{
 						loader:	'css-loader',
 						options: {
@@ -67,8 +65,10 @@ module.exports = {
 				]
 			},
 			{
-				loader:	'url-loader?limit=8192',
-				test:	/\.(png|jpg)$/
+				test:	/\.(png|jpg)$/,
+				use : [
+					'url-loader?limit=8192'
+				]
 			}
 		]
 	},
