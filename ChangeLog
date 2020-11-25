@@ -1,3 +1,9 @@
+k2hr3-app (0.9.10) unstable; urgency=low
+
+  * Corrected an error in the description of ci.yml - #26
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Wed, 25 Nov 2020 12:54:23 +0900
+
 k2hr3-app (0.9.9) unstable; urgency=low
 
   * Switched Travis CI to Github actions - #24
