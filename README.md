@@ -1,6 +1,6 @@
 K2HR3 Web Application(k2hr3-app)
 --------------------------------
-[![Build Status](https://travis-ci.org/yahoojapan/k2hr3_app.svg?branch=master)](https://travis-ci.org/yahoojapan/k2hr3_app)
+[![Node.js AntPickax CI](https://github.com/yahoojapan/k2hr3_app/workflows/Node.js%20AntPickax%20CI/badge.svg)](https://github.com/yahoojapan/k2hr3_app/actions)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/yahoojapan/k2hr3_app/master/LICENSE)
 [![GitHub forks](https://img.shields.io/github/forks/yahoojapan/k2hr3_app.svg)](https://github.com/yahoojapan/k2hr3_app/network)
 [![GitHub stars](https://img.shields.io/github/stars/yahoojapan/k2hr3_app.svg)](https://github.com/yahoojapan/k2hr3_app/stargazers)

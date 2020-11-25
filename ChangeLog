@@ -1,3 +1,10 @@
+k2hr3-app (0.9.9) unstable; urgency=low
+
+  * Switched Travis CI to Github actions - #24
+  * Supported Node.js 12 and 14 - #23
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Wed, 25 Nov 2020 12:06:42 +0900
+
 k2hr3-app (0.9.8) unstable; urgency=low
 
   * Added tag key for each role member host - #21
