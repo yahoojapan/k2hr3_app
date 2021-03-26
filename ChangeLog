@@ -1,3 +1,10 @@
+k2hr3-app (1.0.0) unstable; urgency=low
+
+  * Updated README.md for adding k2hr3 cli - #29
+  * Updated README.md for K2HR3 Get Resource - #28
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Fri, 26 Mar 2021 13:42:54 +0900
+
 k2hr3-app (0.9.10) unstable; urgency=low
 
   * Corrected an error in the description of ci.yml - #26
