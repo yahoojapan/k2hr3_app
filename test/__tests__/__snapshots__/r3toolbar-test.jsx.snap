@@ -31,7 +31,7 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
         title="Display path information"
       >
         <div
-          className="MuiAvatar-root MuiAvatar-circle MuiChip-avatar R3Toolbar-avatar-7 MuiChip-avatarColorPrimary MuiAvatar-colorDefault"
+          className="MuiAvatar-root MuiAvatar-circular MuiChip-avatar R3Toolbar-avatar-7 MuiChip-avatarColorPrimary MuiAvatar-colorDefault"
         >
           <svg
             aria-hidden={true}

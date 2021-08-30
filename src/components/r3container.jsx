@@ -279,7 +279,7 @@ export default class R3Container extends React.Component
 		}else{
 			this.updateState({
 				tenants:	tenants
-			}, ((r3IsSafeTypedEntity(tenants, 'array') || 0 === tenants.length) ? this.r3provider.getR3TextRes().iNotHaveAnyTenant : null));
+			}, ((!r3IsSafeTypedEntity(tenants, 'array') || 0 === tenants.length) ? this.r3provider.getR3TextRes().iNotHaveAnyTenant : null));
 		}
 	}
 
@@ -1061,7 +1061,7 @@ export default class R3Container extends React.Component
 	//
 	// Handle Close About Dialog
 	//
-	handAboutDialogClose()
+	handAboutDialogClose(event, reason)										// eslint-disable-line no-unused-vars
 	{
 		this.updateState({
 			aboutDialogOpen:	false,
@@ -1074,7 +1074,7 @@ export default class R3Container extends React.Component
 	//
 	// Handle Close Direct SignIn Dialog
 	//
-	handSignInDialogClose(event, doSignIn, username, passphrase)			// eslint-disable-line no-unused-vars
+	handSignInDialogClose(event, reason, doSignIn, username, passphrase)	// eslint-disable-line no-unused-vars
 	{
 		if(doSignIn){
 			// [NOTE]

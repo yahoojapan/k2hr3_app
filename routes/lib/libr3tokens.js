@@ -84,7 +84,7 @@ var R3UserToken = (function()
 	proto.rawGetUserToken = function(callback, token, tenant)
 	{
 		if(!r3util.isSafeString(this.username)){
-			var	errobj = new Error('User name is not specified(not found backyard cookie)');
+			var	errobj = new Error('User name is not specified(not found other cookie)');
 			console.error(errobj.message);
 			_callback(errobj, null);
 			return;

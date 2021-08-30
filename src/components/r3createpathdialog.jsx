@@ -153,7 +153,7 @@ export default class R3CreatePathDialog extends React.Component
 		return (
 			<Dialog
 				open={ this.props.open }
-				onClose={ (event) => this.props.onClose(event, false, null) }
+				onClose={ (event, reason) => this.props.onClose(event, reason, false, null) }
 				{ ...theme.r3CreatePathDialog.root }
 				className={ classes.root }
 			>

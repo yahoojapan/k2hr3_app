@@ -83,9 +83,9 @@ export default class R3AboutDialog extends React.Component
 		this.handleClose	= this.handleClose.bind(this);
 	}
 
-	handleClose()
+	handleClose(event, reason)
 	{
-		this.props.onClose();
+		this.props.onClose(event, reason);
 	}
 
 	getHtmlLicenseText()

@@ -19,15 +19,15 @@
  *
  */
 
-import * as Colors			from '@material-ui/core/colors';
-import { createMuiTheme }	from '@material-ui/core/styles';
+import * as Colors		from '@material-ui/core/colors';
+import { createTheme }	from '@material-ui/core/styles';
 
 /* eslint-disable indent */
 // [NOTE]
 // Default theme from material-ui
 // https://material-ui.com/customization/default-theme/
 //
-const r3Theme = createMuiTheme({
+const r3Theme = createTheme({
 	//
 	// palette
 	//
@@ -96,7 +96,7 @@ const r3Theme = createMuiTheme({
 	//
 	// Common material-ui
 	//
-	spacing:						createMuiTheme.spacing,
+	spacing:						createTheme.spacing,
 
 	//
 	// override components
@@ -747,7 +747,6 @@ const r3Theme = createMuiTheme({
 	r3AboutDialog: {
 		root: {
 			scroll:					'body',
-			disableBackdropClick:	true,
 			fullWidth:				true,
 			label:					'about-dialog',
 			'aria-label':			'about dialog'
@@ -786,7 +785,6 @@ const r3Theme = createMuiTheme({
 	r3SigninCredDialog: {
 		root: {
 			scroll:					'body',
-			disableBackdropClick:	true,
 			fullWidth:				true,
 			label:					'signin-dialog',
 			'aria-label':			'signin credential dialog'
@@ -843,7 +841,6 @@ const r3Theme = createMuiTheme({
 	r3PopupMsgDialog: {
 		root: {
 			scroll:					'body',
-			disableBackdropClick:	true,
 			fullWidth:				true,
 			label:					'message-dialog',
 			'aria-label':			'message dialog'
@@ -892,7 +889,6 @@ const r3Theme = createMuiTheme({
 	r3PathInfoDialog: {
 		root: {
 			scroll:					'body',
-			disableBackdropClick:	true,
 			fullWidth:				true,
 			label:					'path-information-dialog',
 			'aria-label':			'path information dialog'
@@ -1013,7 +1009,6 @@ const r3Theme = createMuiTheme({
 	r3CreatePathDialog: {
 		root: {
 			scroll:					'body',
-			disableBackdropClick:	true,
 			fullWidth:				true,
 			label:					'create-path-dialog',
 			'aria-label':			'create path dialog'
@@ -1062,7 +1057,6 @@ const r3Theme = createMuiTheme({
 	r3CreateServiceDialog: {
 		root: {
 			scroll:					'body',
-			disableBackdropClick:	true,
 			fullWidth:				true,
 			label:					'create-service-dialog',
 			'aria-label':			'create service dialog'
@@ -1182,7 +1176,6 @@ const r3Theme = createMuiTheme({
 	r3CreateServiceTenantDialog: {
 		root: {
 			scroll:					'body',
-			disableBackdropClick:	true,
 			fullWidth:				true,
 			label:					'create-service-tenant-dialog',
 			'aria-label':			'create service attached tenant dialog'

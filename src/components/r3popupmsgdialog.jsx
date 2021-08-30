@@ -200,7 +200,7 @@ export default class R3PopupMsgDialog extends React.Component
 		return (
 			<Dialog
 				open={ (null !== this.props.r3Message) }
-				onClose={ (event) => { if(null !== this.props.onClose){ this.props.onClose(event, true); } } }
+				onClose={ (event, reason) => { if(null !== this.props.onClose){ this.props.onClose(event, reason, true); } } }
 				{ ...theme.r3PopupMsgDialog.root }
 				className={ classes.root }
 			>

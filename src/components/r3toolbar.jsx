@@ -142,7 +142,7 @@ export default class R3Toolbar extends React.Component
 		});
 	}
 
-	handlePathInfoDialogClose(event)										// eslint-disable-line no-unused-vars
+	handlePathInfoDialogClose(event, reason)								// eslint-disable-line no-unused-vars
 	{
 		this.setState({ pathInfoDialogOpen:	false });
 	}
@@ -161,7 +161,7 @@ export default class R3Toolbar extends React.Component
 		});
 	}
 
-	handleCreatePathDialogClose(event, isAgree, newPath)					// eslint-disable-line no-unused-vars
+	handleCreatePathDialogClose(event, reason, isAgree, newPath)			// eslint-disable-line no-unused-vars
 	{
 		if(!isAgree){
 			this.setState({
@@ -308,7 +308,7 @@ export default class R3Toolbar extends React.Component
 		});
 	}
 
-	handleCreateServiceTenantDialogClose(event, isAgree, aliasRole)			// eslint-disable-line no-unused-vars
+	handleCreateServiceTenantDialogClose(event, reason, isAgree, aliasRole)	// eslint-disable-line no-unused-vars
 	{
 		if(!isAgree){
 			this.setState({
@@ -422,7 +422,7 @@ export default class R3Toolbar extends React.Component
 	//
 	// Handle Confirm Dialog for Delete Service(Tenant): Close( OK / Cancel )
 	//
-	handleDeleteServiceDialogClose(event, result)							// eslint-disable-line no-unused-vars
+	handleDeleteServiceDialogClose(event, reason, result)					// eslint-disable-line no-unused-vars
 	{
 		if(result){
 			// case for 'deleting' to do
@@ -443,7 +443,7 @@ export default class R3Toolbar extends React.Component
 		});
 	}
 
-	handleMessageDialogClose()
+	handleMessageDialogClose(event, reason, result)							// eslint-disable-line no-unused-vars
 	{
 		this.setState({
 			r3Message:	null

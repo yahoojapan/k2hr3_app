@@ -369,7 +369,7 @@ var R3AppConfig = (function()
 			return logstream;
 		}
 		try{
-			logstream = rotatefs(filename, this.loadedConfig.logrotateopt);
+			logstream = rotatefs.createStream(filename, this.loadedConfig.logrotateopt);
 		}catch(error){
 			console.warn('Could not create log rotate option by : ' + JSON.stringify(error.message));
 			logstream = null;

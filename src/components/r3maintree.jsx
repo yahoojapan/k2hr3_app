@@ -368,7 +368,7 @@ export default class R3MainTree extends React.Component
 		});
 	}
 
-	handMessageDialogClose()
+	handMessageDialogClose(event, reason, result)				// eslint-disable-line no-unused-vars
 	{
 		this.setState({
 			r3Message:	null

@@ -179,7 +179,7 @@ export default class R3SigninCredDialog extends React.Component
 		return (
 			<Dialog
 				open={ this.props.open }
-				onClose={ (event) => this.props.onClose(event, false, null) }
+				onClose={ (event, reson) => this.props.onClose(event, reson, false, null) }
 				{ ...theme.r3SigninCredDialog.root }
 				className={ classes.root }
 			>

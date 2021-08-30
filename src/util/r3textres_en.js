@@ -49,7 +49,7 @@ export const r3TextRes = {
 	iSucceedDeleteService:		'SERVICE has been deleted.',
 	iSucceedDeleteServiceTenant:'The SERVICE associated with TENANT has been deleted.',
 	iSucceedUpdate:				'Content data has been updated(saved).',
-	iNotHaveAnyTenant:			'TENANT is missing. The account must be associated with one or more OpenStack server groups.',
+	iNotHaveAnyTenant:			'TENANT is missing. The account must be associated with one or more tenant(project/server/namespace groups).',
 	iSignouted:					'Signed out. ',
 	iSignined:					'Signed in. ',
 

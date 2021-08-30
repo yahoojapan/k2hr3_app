@@ -327,7 +327,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Confirm Dialog : Close( OK / Cancel )
 	//
-	handleConfirmDialogClose(event, result)									// eslint-disable-line no-unused-vars
+	handleConfirmDialogClose(event, reason, result)							// eslint-disable-line no-unused-vars
 	{
 		if(result){
 			// case for 'cancel updating' to do
@@ -346,7 +346,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Message Dialog : Close
 	//
-	handleMessageDialogClose(event, result)									// eslint-disable-line no-unused-vars
+	handleMessageDialogClose(event, reason, result)							// eslint-disable-line no-unused-vars
 	{
 		this.setState({
 			messageDialogObject:	null
@@ -725,7 +725,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Close static resource dialog
 	//
-	handleCloseStaticResourceDialog(event, isAgree, newOneStaticRes)		// eslint-disable-line no-unused-vars
+	handleCloseStaticResourceDialog(event, reason, isAgree, newOneStaticRes)	// eslint-disable-line no-unused-vars
 	{
 		if(!isAgree){
 			this.setState({

@@ -26,7 +26,7 @@ module.exports = {
 		'commonjs':	true,
 		'es6':		true
 	},
-	'parser': 'babel-eslint',
+	'parser': '@babel/eslint-parser',
 	'extends': 'eslint:recommended',
 	'rules': {
 		'indent': [
@@ -57,6 +57,12 @@ module.exports = {
 		'ecmaFeatures': {
 			'jsx':				true,
 			'legacyDecorators':	true 
+		},
+		'requireConfigFile': false,
+		'babelOptions': {
+			'presets': [
+				"@babel/preset-react"
+			]
 		}
 	},
 	'plugins': [
