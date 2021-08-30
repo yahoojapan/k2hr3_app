@@ -235,9 +235,9 @@ export default class R3PathInfoDialog extends React.Component
 		return null;														// Return null to indicate no change to state.
 	}
 
-	handleClose(event)														// eslint-disable-line no-unused-vars
+	handleClose(event, reason)
 	{
-		this.props.onClose(event);
+		this.props.onClose(event, reason);
 	}
 
 	handleBackPage(event)													// eslint-disable-line no-unused-vars

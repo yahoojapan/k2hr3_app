@@ -28,7 +28,11 @@ MYSCRIPTDIR=`dirname ${CMDLINE_PROCESS_NAME}`
 MYSCRIPTDIR=`cd ${MYSCRIPTDIR}; pwd`
 SRCTOP=`cd ${MYSCRIPTDIR}/..; pwd`
 HOST=`hostname`
-MYPROCIDFILE="/tmp/${PROGRAM_NAME}.pid"
+
+MYPROCIDFILE=""
+MYPID_BASEDIR="/var/run/antpickax"
+MYPID_TMPDIR="/tmp"
+MYPROCIDFILENAME="${PROGRAM_NAME}.pid"
 
 #
 # utility
@@ -36,13 +40,20 @@ MYPROCIDFILE="/tmp/${PROGRAM_NAME}.pid"
 stop_old_process()
 {
 	if [ -f ${MYPROCIDFILE} ]; then
-		ps p `cat ${MYPROCIDFILE}` > /dev/null 2>&1
+		ps ax | grep `cat ${MYPROCIDFILE}` | grep -v grep | grep ${PROGRAM_NAME} > /dev/null 2>&1
 		if [ $? -eq 0 ]; then
 			OLDPROCID=`cat ${MYPROCIDFILE}`
-			kill -HUP ${OLDPROCID} `pgrep -d' ' -P ${OLDPROCID}` > /dev/null 2>&1
+			OLD_CIHLD_PIDS=`pgrep -P ${OLDPROCID}`
+			kill -HUP ${OLDPROCID} ${OLD_CIHLD_PIDS} > /dev/null 2>&1
 			if [ $? -ne 0 ]; then
-				echo "[ERROR] could not stop old process."
-				return 1
+				echo "[WARNING] could not stop old process."
+				kill -KILL ${OLDPROCID} ${OLD_CIHLD_PIDS} > /dev/null 2>&1
+
+				ps ax | grep `cat ${MYPROCIDFILE}` | grep -v grep | grep ${PROGRAM_NAME} > /dev/null 2>&1
+				if [ $? -eq 0 ]; then
+					echo "[ERROR] could not stop old process."
+					return 1
+				fi
 			fi
 			echo "[INFO] old process pid file exists, then try to stop it."
 		fi
@@ -80,21 +91,6 @@ setup_os_env() {
 # node path
 #
 setup_os_env
-if [ $? -ne 0 ]; then
-	exit $?
-fi
-if [ "X${OS_NAME}" = "Xubuntu" ]; then
-	MY_NODE_PATH=""
-elif [ "X${OS_NAME}" = "Xcentos" ]; then
-	if [ "X${OS_VERSION}" = "X6" ]; then
-		MY_NODE_PATH="/home/y/lib/node_modules:/home/y/lib64/node"
-	elif [ "X${OS_VERSION}" = "X7" ]; then
-		MY_NODE_PATH="/opt/yj/node"
-	fi
-else
-	echo "[ERROR] Unknown OS(should be Ubuntu or CentOS)."
-	exit 1
-fi
 
 #
 # Parse arguments
@@ -148,6 +144,15 @@ while [ ${OPTCOUNT} -ne 0 ]; do
 	OPTCOUNT=`expr ${OPTCOUNT} - 1`
 	shift
 done
+
+#
+# Check PID directory
+#
+if [ -d ${MYPID_BASEDIR} ]; then
+	MYPROCIDFILE="${MYPID_BASEDIR}/${MYPROCIDFILENAME}"
+else
+	MYPROCIDFILE="${MYPID_TMPDIR}/${MYPROCIDFILENAME}"
+fi
 
 #
 # Check run background

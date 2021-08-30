@@ -717,7 +717,7 @@ export default class R3Role extends React.Component
 	//
 	// Handle Confirm Dialog : Close( OK / Cancel )
 	//
-	handleConfirmDialogClose(event, result)									// eslint-disable-line no-unused-vars
+	handleConfirmDialogClose(event, reason, result)							// eslint-disable-line no-unused-vars
 	{
 		if(result){
 			// case for 'cancel updating' to do
@@ -736,7 +736,7 @@ export default class R3Role extends React.Component
 	//
 	// Handle Message Dialog : Close
 	//
-	handleMessageDialogClose(event, result)									// eslint-disable-line no-unused-vars
+	handleMessageDialogClose(event, reason, result)							// eslint-disable-line no-unused-vars
 	{
 		this.setState({
 			messageDialogObject:	null

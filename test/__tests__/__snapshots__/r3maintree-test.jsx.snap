@@ -141,7 +141,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         />
       </div>
       <div
-        className="MuiCollapse-container MuiCollapse-hidden"
+        className="MuiCollapse-root MuiCollapse-hidden"
         style={
           Object {
             "minHeight": "0px",
@@ -204,7 +204,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   />
                 </div>
                 <div
-                  className="MuiCollapse-container R3MainTree-collapse-14 MuiCollapse-hidden"
+                  className="MuiCollapse-root R3MainTree-collapse-14 MuiCollapse-hidden"
                   style={
                     Object {
                       "minHeight": "0px",
@@ -267,7 +267,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             />
                           </div>
                           <div
-                            className="MuiCollapse-container R3MainTree-collapse-14 MuiCollapse-hidden"
+                            className="MuiCollapse-root R3MainTree-collapse-14 MuiCollapse-hidden"
                             style={
                               Object {
                                 "minHeight": "0px",
@@ -368,7 +368,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             />
                           </div>
                           <div
-                            className="MuiCollapse-container R3MainTree-collapse-14 MuiCollapse-hidden"
+                            className="MuiCollapse-root R3MainTree-collapse-14 MuiCollapse-hidden"
                             style={
                               Object {
                                 "minHeight": "0px",
@@ -469,7 +469,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             />
                           </div>
                           <div
-                            className="MuiCollapse-container R3MainTree-collapse-14 MuiCollapse-hidden"
+                            className="MuiCollapse-root R3MainTree-collapse-14 MuiCollapse-hidden"
                             style={
                               Object {
                                 "minHeight": "0px",
@@ -594,7 +594,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         />
       </div>
       <div
-        className="MuiCollapse-container MuiCollapse-hidden"
+        className="MuiCollapse-root MuiCollapse-hidden"
         style={
           Object {
             "minHeight": "0px",
@@ -657,7 +657,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   />
                 </div>
                 <div
-                  className="MuiCollapse-container R3MainTree-collapse-14 MuiCollapse-hidden"
+                  className="MuiCollapse-root R3MainTree-collapse-14 MuiCollapse-hidden"
                   style={
                     Object {
                       "minHeight": "0px",
@@ -777,7 +777,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         />
       </div>
       <div
-        className="MuiCollapse-container MuiCollapse-hidden"
+        className="MuiCollapse-root MuiCollapse-hidden"
         style={
           Object {
             "minHeight": "0px",
@@ -840,7 +840,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   />
                 </div>
                 <div
-                  className="MuiCollapse-container R3MainTree-collapse-14 MuiCollapse-hidden"
+                  className="MuiCollapse-root R3MainTree-collapse-14 MuiCollapse-hidden"
                   style={
                     Object {
                       "minHeight": "0px",
@@ -960,7 +960,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         />
       </div>
       <div
-        className="MuiCollapse-container MuiCollapse-hidden"
+        className="MuiCollapse-root MuiCollapse-hidden"
         style={
           Object {
             "minHeight": "0px",
@@ -1023,7 +1023,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   />
                 </div>
                 <div
-                  className="MuiCollapse-container R3MainTree-collapse-14 MuiCollapse-hidden"
+                  className="MuiCollapse-root R3MainTree-collapse-14 MuiCollapse-hidden"
                   style={
                     Object {
                       "minHeight": "0px",

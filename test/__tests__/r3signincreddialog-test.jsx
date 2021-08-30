@@ -66,17 +66,22 @@ const mockCreatePortal = jest.fn((element, node) => {								// eslint-disable-l
 //
 r3Theme.r3SigninCredDialog.root['disablePortal'] = true;
 
-// [NOTE][FIXME]
+// [NOTE]
 // The Transition class used in this dialog is Fade.
-// As mentioned above, DOM Portal's mock causes errors in the Fade
-// class in the following places.
-// -> https://github.com/mui-org/material-ui/blob/474e56bd90b4edc5c6431ecfcffbb525b1f58806/packages/material-ui/src/Fade/Fade.js#L32-L33
-// Even this handler for the Fade class can be avoided only by mocking,
-// property avoidance, style forcing, etc.
-// Therefore, the Fade class itself is mock. Along with this, snapshot
-// has become insufficient.
+// As mentioned earlier, DOM Portal mocking causes the following error
+// in the Fade and Modal classes:
+//	'The above error occurred in the <ForwardRef (Modal)> component'
 //
-jest.mock('@material-ui/core/Fade');												// eslint-disable-line no-undef
+// Avoid this error by replacing the Fade and Modal classes with mock.
+// Unlike before, by changing the mock content, you can fully check
+// the snapshots in the Dialog.
+//
+jest.mock('@material-ui/core/Fade', () => {												// eslint-disable-line no-undef
+	return '';
+});
+jest.mock('@material-ui/core/Modal', () => {											// eslint-disable-line no-undef
+	return '';
+});
 
 //
 // Mock functions

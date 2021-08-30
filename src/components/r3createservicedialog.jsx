@@ -1818,7 +1818,7 @@ export default class R3CreateServiceDialog extends React.Component
 		return (
 			<Dialog
 				open={ this.props.open }
-				onClose={ (event) => this.props.onClose(event, false, null, null) }
+				onClose={ (event, reason) => this.props.onClose(event, reason, false, null, null) }
 				{ ...theme.r3CreateServiceDialog.root }
 				className={ classes.root }
 			>

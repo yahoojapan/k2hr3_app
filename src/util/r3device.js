@@ -19,7 +19,19 @@
  *
  */
 
-export const clientTypes = ((userAgent) => {
+export const clientTypes = (() => {
+	//
+	// [NOTE][TODO]
+	// Since the window object does not exist in the test with JEST, adjust it here.
+	// I should be able to adjust the environment with "@ jest-environment", but it didn't work.
+	// 
+	let userAgent;
+	if('undefined' != typeof window){
+		userAgent = window.navigator.userAgent.toLowerCase();
+	}else{
+		userAgent = '';
+	}
+
 	/* eslint-disable indent, no-mixed-spaces-and-tabs */
 	let	mobileType = {
 		all: (
@@ -55,7 +67,7 @@ export const clientTypes = ((userAgent) => {
 		isTablet:	tabletType,
 		isPC:		pcType
 	};
-})(window.navigator.userAgent.toLowerCase());
+})();
 
 /*
  * VIM modelines

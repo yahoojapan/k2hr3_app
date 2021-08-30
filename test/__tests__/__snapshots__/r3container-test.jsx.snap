@@ -402,7 +402,7 @@ Array [
               title="Display path information"
             >
               <div
-                className="MuiAvatar-root MuiAvatar-circle MuiChip-avatar R3Toolbar-avatar-48 MuiChip-avatarColorPrimary MuiAvatar-colorDefault"
+                className="MuiAvatar-root MuiAvatar-circular MuiChip-avatar R3Toolbar-avatar-48 MuiChip-avatarColorPrimary MuiAvatar-colorDefault"
               >
                 <svg
                   aria-hidden={true}
