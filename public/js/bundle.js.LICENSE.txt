@@ -26,7 +26,7 @@ object-assign
  * @license Modernizr 3.0.0pre (Custom Build) | MIT
  */
 
-/** @license React v0.19.1
+/** @license React v0.20.2
  * scheduler-tracing.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -35,7 +35,7 @@ object-assign
  * LICENSE file in the root directory of this source tree.
  */
 
-/** @license React v0.19.1
+/** @license React v0.20.2
  * scheduler-tracing.production.min.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -44,7 +44,7 @@ object-assign
  * LICENSE file in the root directory of this source tree.
  */
 
-/** @license React v0.19.1
+/** @license React v0.20.2
  * scheduler.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -53,7 +53,7 @@ object-assign
  * LICENSE file in the root directory of this source tree.
  */
 
-/** @license React v0.19.1
+/** @license React v0.20.2
  * scheduler.production.min.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -80,7 +80,7 @@ object-assign
  * LICENSE file in the root directory of this source tree.
  */
 
-/** @license React v16.14.0
+/** @license React v17.0.2
  * react-dom.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -89,26 +89,8 @@ object-assign
  * LICENSE file in the root directory of this source tree.
  */
 
-/** @license React v16.14.0
+/** @license React v17.0.2
  * react-dom.production.min.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-/** @license React v16.14.0
- * react.development.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-/** @license React v16.14.0
- * react.production.min.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
@@ -118,6 +100,24 @@ object-assign
 
 /** @license React v17.0.2
  * react-is.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/** @license React v17.0.2
+ * react.development.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/** @license React v17.0.2
+ * react.production.min.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
