@@ -39,13 +39,34 @@ var R3UserToken = (function()
 		}
 
 		this.appConfig	= new appConfig();
-		this.username	= this.appConfig.getUserValidatorObj().getUserName(req);
-		if(null === this.username){
-			console.error('could not get user name, it is not login status.');
+		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getUserName)){
+			this.username	= this.appConfig.getUserValidatorObj().getUserName(req);
+			if(null === this.username){
+				console.error('could not get user name, it is not login status.');
+			}
+		}else{
+			this.username	= null;
 		}
-		this.sinintype	= this.appConfig.getUserValidatorObj().getSignInType();
-		this.signinUrl	= this.appConfig.getUserValidatorObj().getSginInUri(req);
-		this.signoutUrl	= this.appConfig.getUserValidatorObj().getSginOutUri(req);
+		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getSignInType)){
+			this.sinintype	= this.appConfig.getUserValidatorObj().getSignInType();
+		}else{
+			this.sinintype	= null;
+		}
+		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getSginInUri)){
+			this.signinUrl	= this.appConfig.getUserValidatorObj().getSginInUri(req);
+		}else{
+			this.signinUrl	= null;
+		}
+		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getSginOutUri)){
+			this.signoutUrl	= this.appConfig.getUserValidatorObj().getSginOutUri(req);
+		}else{
+			this.signoutUrl	= null;
+		}
+		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getOtherToken)){
+			this.otherToken	= this.appConfig.getUserValidatorObj().getOtherToken(req);
+		}else{
+			this.otherToken	= null;
+		}
 	};
 
 	var proto = R3UserToken.prototype;
@@ -81,14 +102,8 @@ var R3UserToken = (function()
 		return token;
 	};
 
-	proto.rawGetUserToken = function(callback, token, tenant)
+	proto.rawGetUserToken = function(callback, username, token, tenant)
 	{
-		if(!r3util.isSafeString(this.username)){
-			var	errobj = new Error('User name is not specified(not found other cookie)');
-			console.error(errobj.message);
-			_callback(errobj, null);
-			return;
-		}
 		var	secure		= false;
 		var	httpobj		= null;
 		var agent		= null;			// for HTTPS
@@ -114,13 +129,16 @@ var R3UserToken = (function()
 
 		// arguments for the request to API server
 		/* eslint-disable indent, no-mixed-spaces-and-tabs */
-		var urlarg		= '?username=' + this.username + (isscoped ? ('&tenantname=' + tenant) : '');
+		var urlarg		=  r3util.isSafeString(username) ? ('?username=' + this.username + (isscoped ? ('&tenantname=' + tenant) : '')) : '';
 		var	headers		= {
 							'Content-Type':		'application/json',
 							'Content-Length':	0
 						   };
 		if(isscoped){
 			headers['x-auth-token'] = 'U=' + token;
+		}else if(r3util.isSafeString(token)){
+			// token is other token
+			headers['x-auth-token'] = token;
 		}
 		var	options		= {	'host':				this.appConfig.getApiHost(),
 							'port':				this.appConfig.getApiPort(),
@@ -209,14 +227,14 @@ var R3UserToken = (function()
 			callback(errobj, null);
 			return;
 		}
-		return this.rawGetUserToken(callback);
+		return this.rawGetUserToken(callback, null, this.otherToken);
 	};
 
 	proto.getScopedUserToken = function(req, tenant, callback)
 	{
 		var	errobj;
 		if(!r3util.isSafeString(this.username)){
-			errobj = new Error('User name is not specified(not found backyard cookie)');
+			errobj = new Error('Not find user name.');
 			console.error(errobj.message);
 			callback(errobj, null);
 			return;
@@ -228,7 +246,7 @@ var R3UserToken = (function()
 			callback(errobj, null);
 			return;
 		}
-		return this.rawGetUserToken(callback, token, tenant);
+		return this.rawGetUserToken(callback, this.username, token, tenant);
 	};
 
 	proto.getSignInType = function()
@@ -255,8 +273,10 @@ var R3UserToken = (function()
 exports.r3UserToken = R3UserToken;
 
 /*
- * VIM modelines
- *
- * vim:set ts=4 fenc=utf-8:
- *
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noexpandtab sw=4 ts=4 fdm=marker
+ * vim<600: noexpandtab sw=4 ts=4
  */
