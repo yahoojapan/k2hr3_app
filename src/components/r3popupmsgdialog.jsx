@@ -146,7 +146,7 @@ export default class R3PopupMsgDialog extends React.Component
 
 			return (
 				<Button
-					onClick={ (event) => { if(null !== this.props.onClose){ this.props.onClose(event, false); } } }
+					onClick={ (event) => { if(null !== this.props.onClose){ this.props.onClose(event, null, false); } } }
 					{ ...theme.r3PopupMsgDialog.cancelButton }
 					className={ classes.cancelButton }
 				>
@@ -172,7 +172,7 @@ export default class R3PopupMsgDialog extends React.Component
 
 		return (
 			<Button
-				onClick={ (event) => { if(null !== this.props.onClose){ this.props.onClose(event, true); } } }
+				onClick={ (event) => { if(null !== this.props.onClose){ this.props.onClose(event, null, true); } } }
 				{ ...theme.r3PopupMsgDialog.primaryButton }
 				className={ classes.primaryButton }
 			>

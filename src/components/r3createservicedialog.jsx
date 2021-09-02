@@ -595,7 +595,7 @@ export default class R3CreateServiceDialog extends React.Component
 				});
 			}else{
 				// close dialog
-				this.props.onClose(event, false, null);
+				this.props.onClose(event, null, false, null);
 			}
 			return;
 		}
@@ -715,7 +715,7 @@ export default class R3CreateServiceDialog extends React.Component
 			});
 		}else{
 			// close dialog
-			this.props.onClose(event, true, newOneStaticRes);
+			this.props.onClose(event, null, true, newOneStaticRes);
 		}
 	}
 
@@ -1776,7 +1776,7 @@ export default class R3CreateServiceDialog extends React.Component
 
 				<DialogActions>
 					<Button
-						onClick={ (event) => this.props.onClose(event, false, null, null, null, null) }
+						onClick={ (event) => this.props.onClose(event, null, false, null, null, null, null) }
 						{ ...theme.r3CreateServiceDialog.cancelButton }
 						className={ classes.cancelButton }
 					>
@@ -1787,7 +1787,7 @@ export default class R3CreateServiceDialog extends React.Component
 					</Button>
 					<Button
 						disabled={ r3IsEmptyString(this.state.newServiceName, true) }
-						onClick={ (event) => this.props.onClose(event, true, this.state.newServiceName, this.state.newServiceResType, this.state.newVerify, this.state.newStaticRes) }
+						onClick={ (event) => this.props.onClose(event, null, true, this.state.newServiceName, this.state.newServiceResType, this.state.newVerify, this.state.newStaticRes) }
 						{ ...theme.r3CreateServiceDialog.okButton }
 						className={ classes.okButton }
 					>
@@ -1818,7 +1818,7 @@ export default class R3CreateServiceDialog extends React.Component
 		return (
 			<Dialog
 				open={ this.props.open }
-				onClose={ (event, reason) => this.props.onClose(event, reason, false, null, null) }
+				onClose={ (event, reason) => this.props.onClose(event, reason, false, null) }
 				{ ...theme.r3CreateServiceDialog.root }
 				className={ classes.root }
 			>

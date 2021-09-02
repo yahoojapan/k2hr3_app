@@ -528,8 +528,8 @@ export default class R3Service extends React.Component
 					>
 						<IconButton
 							onClick={ (event) => this.handleTenantsChange(event, actionTypeDelete, pos) }
-							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deleteTenantTooltip, pos) }
-							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deleteTenantTooltip, -1) }
+							onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.deleteTenantTooltip, pos) }
+							onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.deleteTenantTooltip, -1) }
 							{ ...theme.r3Service.deleteTenantButton }
 							className={ classes.deleteTenantButton }
 						>
@@ -583,8 +583,8 @@ export default class R3Service extends React.Component
 				>
 					<IconButton
 						onClick={ (event) => this.handleTenantsChange(event, actionTypeAdd, 0) }
-						onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.addTenantTooltip, true) }
-						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addTenantTooltip, false) }
+						onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.addTenantTooltip, true) }
+						onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.addTenantTooltip, false) }
 						{ ...theme.r3Service.addTenantButton }
 						className={ classes.addTenantButton }
 					>
@@ -846,8 +846,8 @@ export default class R3Service extends React.Component
 						>
 							<IconButton
 								onClick={ this.handleNewStaticResourceObj }
-								onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.addResStaticObjTooltip, true) }
-								onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addResStaticObjTooltip, false) }
+								onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.addResStaticObjTooltip, true) }
+								onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.addResStaticObjTooltip, false) }
 								{ ...theme.r3Service.addResStaticObjButton }
 								className={ classes.addResStaticObjButton }
 							>
@@ -901,8 +901,8 @@ export default class R3Service extends React.Component
 									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.nameResStaticObjTooltip, 'number') || (this.state.tooltips.nameResStaticObjTooltip != pos)) ? false : true) }
 								>
 									<Typography
-										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, pos) }
-										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, -1) }
+										onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, pos) }
+										onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, -1) }
 										{ ...theme.r3Service.textTableContent }
 										className={ classes.textTableContent }
 									>
@@ -919,8 +919,8 @@ export default class R3Service extends React.Component
 									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.jsonResStaticObjTooltip, 'number') || (this.state.tooltips.jsonResStaticObjTooltip != pos)) ? false : true) }
 								>
 									<Typography
-										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, pos) }
-										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, -1) }
+										onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, pos) }
+										onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, -1) }
 										{ ...theme.r3Service.textTableContent }
 										className={ classes.textTableContent }
 									>
@@ -937,8 +937,8 @@ export default class R3Service extends React.Component
 								>
 									<IconButton
 										onClick={ (event) => this.handleDelStaticResourceObj(event, pos) }
-										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.delResStaticObjTooltip, pos) }
-										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.delResStaticObjTooltip, -1) }
+										onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.delResStaticObjTooltip, pos) }
+										onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.delResStaticObjTooltip, -1) }
 										{ ...theme.r3Service.delResStaticObjButton }
 										className={ classes.delResStaticObjButton }
 									>
@@ -951,8 +951,8 @@ export default class R3Service extends React.Component
 								>
 									<IconButton
 										onClick={ (event) => this.handleEditStaticResourceObj(event, pos) }
-										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.editResStaticObjTooltip, pos) }
-										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.editResStaticObjTooltip, -1) }
+										onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.editResStaticObjTooltip, pos) }
+										onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.editResStaticObjTooltip, -1) }
 										{ ...theme.r3Service.editResStaticObjButton }
 										className={ classes.editResStaticObjButton }
 									>
@@ -996,7 +996,7 @@ export default class R3Service extends React.Component
 					rowsPerPage={ this.props.tableRawCount }
 					page={ this.state.serviceResStaticObjPageNum }
 					rowsPerPageOptions={ [] }
-					onChangePage={ this.handleResStaticObjPageChange }
+					onChangePage={ (event) => this.handleResStaticObjPageChange(event) }
 				/>
 				<TextField
 					name={ serviceComponentValues.resStaticObjTextFieldName }
@@ -1078,7 +1078,7 @@ export default class R3Service extends React.Component
 				<RadioGroup
 					name={ serviceComponentValues.serviceResourceTypeName }
 					value={ radioValue }
-					onChange={ this.handleResourceTypeChange }
+					onChange={ (event) => this.handleResourceTypeChange(event) }
 					{ ...theme.r3Service.valueRadioGroup }
 					className={ classes.valueRadioGroup }
 				>
@@ -1139,8 +1139,8 @@ export default class R3Service extends React.Component
 				<R3FormButtons
 					r3provider={ this.props.r3provider }
 					status={ this.state.changed }
-					onSave={ this.handleSave }
-					onCancel={ this.handleCancel }
+					onSave={ (event) => this.handleSave(event) }
+					onCancel={ (event) => this.handleCancel(event) }
 				/>
 
 				<R3CreateServiceDialog

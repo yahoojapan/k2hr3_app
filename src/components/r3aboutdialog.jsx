@@ -147,7 +147,7 @@ export default class R3AboutDialog extends React.Component
 		return (
 			<Dialog
 				open={ this.props.open }
-				onClose={ this.handleClose }
+				onClose={ (event, reason) => this.handleClose(event, reason) }
 				{ ...theme.r3AboutDialog.root }
 				className={ classes.root }
 			>
@@ -177,7 +177,7 @@ export default class R3AboutDialog extends React.Component
 					className={ classes.dialogAction }
 				>
 					<Button
-						onClick={ this.handleClose }
+						onClick={ (event) => this.handleClose(event, null) }
 						{ ...theme.r3AboutDialog.button }
 						className={ classes.button }
 					>

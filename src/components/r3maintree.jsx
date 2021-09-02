@@ -426,7 +426,7 @@ export default class R3MainTree extends React.Component
 				_menuitems.push(
 					<MenuItem
 						key={ packages[cnt] }
-						onClick={ event => this.handleDummyBarClick(event, null) }
+						onClick={ (event) => this.handleDummyBarClick(event, null) }
 					>
 						{ packages[cnt] }
 					</MenuItem>
@@ -1208,7 +1208,7 @@ export default class R3MainTree extends React.Component
 				<React.Fragment>
 					<Drawer
 						open={ this.props.open }
-						onClose={ this.handleTreePopupClose }
+						onClose={ (event) => this.handleTreePopupClose(event) }
 						className={ classes.drawer }
 					>
 						<div

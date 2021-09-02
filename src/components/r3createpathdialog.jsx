@@ -230,7 +230,7 @@ export default class R3CreatePathDialog extends React.Component
 
 				<DialogActions>
 					<Button
-						onClick={ (event) => this.props.onClose(event, false, null) }
+						onClick={ (event) => this.props.onClose(event, null, false, null) }
 						{ ...theme.r3CreatePathDialog.cancelButton }
 						className={ classes.cancelButton }
 					>
@@ -241,7 +241,7 @@ export default class R3CreatePathDialog extends React.Component
 					</Button>
 					<Button
 						disabled={ r3IsEmptyString(this.state.newPath, true) }
-						onClick={ (event) => this.props.onClose(event, true, this.state.newPath) }
+						onClick={ (event) => this.props.onClose(event, null, true, this.state.newPath) }
 						{ ...theme.r3CreatePathDialog.okButton }
 						className={ classes.okButton }
 					>
