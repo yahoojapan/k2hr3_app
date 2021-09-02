@@ -226,7 +226,7 @@ export default class R3Toolbar extends React.Component
 		});
 	}
 
-	handleCreateServiceDialogClose(event, isAgree, newServiceName, newServiceResType, newVerify, newStaticRes)	// eslint-disable-line no-unused-vars
+	handleCreateServiceDialogClose(event, reason, isAgree, newServiceName, newServiceResType, newVerify, newStaticRes)	// eslint-disable-line no-unused-vars
 	{
 		if(!isAgree){
 			this.setState({

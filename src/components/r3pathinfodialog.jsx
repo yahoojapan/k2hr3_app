@@ -1445,7 +1445,7 @@ export default class R3PathInfoDialog extends React.Component
 		return (
 			<Dialog
 				open={ this.props.open }
-				onClose={ this.handleClose }
+				onClose={ (event, reason) => this.handleClose(event, reason) }
 				{ ...theme.r3PathInfoDialog.root }
 				className={ classes.root }
 			>
@@ -1471,7 +1471,7 @@ export default class R3PathInfoDialog extends React.Component
 				<DialogActions>
 					{ backpagebutton }
 					<Button
-						onClick={ this.handleClose }
+						onClick={ (event, reason) => this.handleClose(event, reason) }
 						{ ...theme.r3PathInfoDialog.button }
 						className={ classes.button }
 					>

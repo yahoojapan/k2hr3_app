@@ -144,7 +144,7 @@ export default class R3CreateServiceTenantDialog extends React.Component
 		return (
 			<Dialog
 				open={ this.props.open }
-				onClose={ (event, reason) => this.props.onClose(event, reason, false, null, null) }
+				onClose={ (event, reason) => this.props.onClose(event, reason, false, null) }
 				{ ...theme.r3CreateServiceDialog.root }
 				className={ classes.root }
 			>
@@ -221,7 +221,7 @@ export default class R3CreateServiceTenantDialog extends React.Component
 
 				<DialogActions>
 					<Button
-						onClick={ (event) => this.props.onClose(event, false, null) }
+						onClick={ (event) => this.props.onClose(event, null, false, null) }
 						{ ...theme.r3CreateServiceDialog.cancelButton }
 						className={ classes.cancelButton }
 					>
@@ -231,7 +231,7 @@ export default class R3CreateServiceTenantDialog extends React.Component
 						/>
 					</Button>
 					<Button
-						onClick={ (event) => this.props.onClose(event, true, this.state.aliasRole) }
+						onClick={ (event) => this.props.onClose(event, null, true, this.state.aliasRole) }
 						{ ...theme.r3CreateServiceDialog.okButton }
 						className={ classes.okButton }
 					>

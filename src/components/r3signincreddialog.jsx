@@ -179,7 +179,7 @@ export default class R3SigninCredDialog extends React.Component
 		return (
 			<Dialog
 				open={ this.props.open }
-				onClose={ (event, reson) => this.props.onClose(event, reson, false, null) }
+				onClose={ (event, reason) => this.props.onClose(event, reason, false, null, null) }
 				{ ...theme.r3SigninCredDialog.root }
 				className={ classes.root }
 			>
@@ -245,7 +245,7 @@ export default class R3SigninCredDialog extends React.Component
 
 				<DialogActions>
 					<Button
-						onClick={ (event) => this.props.onClose(event, false, null, null) }
+						onClick={ (event) => this.props.onClose(event, null, false, null, null) }
 						{ ...theme.r3SigninCredDialog.cancelButton }
 						className={ classes.cancelButton }
 					>
@@ -256,7 +256,7 @@ export default class R3SigninCredDialog extends React.Component
 					</Button>
 					<Button
 						disabled={ ('' === name) }
-						onClick={ (event) => this.props.onClose(event, true, this.state.name, this.state.passphrase) }
+						onClick={ (event) => this.props.onClose(event, null, true, this.state.name, this.state.passphrase) }
 						{ ...theme.r3SigninCredDialog.signinButton }
 						className={ classes.signinButton }
 					>
