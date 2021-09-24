@@ -55,6 +55,7 @@ export const r3TextRes = {
 
 	cUpdatingTitle:				'確認',
 	cUpdatingCancel:			'編集中の内容を破棄しますか ?',
+	cAccountTitle:				'アカウント情報',
 	cCreateNewPathTitle:		'新規パス作成',
 	cCreateServiceTitle:		'新規SERVICE作成',
 	cStaticResourceTitle:		'静的リソース',
@@ -214,6 +215,11 @@ export const r3TextRes = {
 	tResServiceTenantAddTT:		'テナント（YRNパス）を追加',
 	tResServiceStaticObjHint:	'静的リソースが設定されていません',
 	tResServiceUnknownType:		'不正な静的リソース（JSON）が設定されているため、詳細を表示できません。',
+	tResAccoutUsernameTitle:	'ユーザ名',
+	tResUnscopedTokenTitle:		'トークン',
+	tResUnknownUsernameLabel:	'不明',
+	tResNoUnscopedTokenLabel:	'トークンはありません',
+	tResAccountMenu:			'アカウント情報',
 
 	wDeprecateAuth:				'[非推奨] このシステムはパスフレーズは暗号化されずに送信します。',
 

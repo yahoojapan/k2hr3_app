@@ -104,7 +104,8 @@ const codeType = [
 	}
 ];
 
-const codeTextFieldName	= 'register-code-textfield';
+const roletokenTextFieldName= 'roletoken-textfield';
+const codeTextFieldName		= 'register-code-textfield';
 
 //
 // Path Information Class
@@ -138,7 +139,8 @@ export default class R3PathInfoDialog extends React.Component
 		tableRawCount:	5
 	};
 
-	codeInputElement	= null;													// input textfield for registration code.
+	roletokenInputElement	= null;												// input textfield for registration code.
+	codeInputElement		= null;												// input textfield for registration code.
 
 	state = {
 		// common
@@ -178,6 +180,7 @@ export default class R3PathInfoDialog extends React.Component
 			detailRoleTokenTooltip:				-1,
 
 			// In OpenStack page
+			roletokenClipboardButtonTooltip:	false,
 			copyClipboardButtonTooltip:			false
 		}
 	};
@@ -207,6 +210,7 @@ export default class R3PathInfoDialog extends React.Component
 
 		// In openstack page
 		this.handleCodeTypeChange			= this.handleCodeTypeChange.bind(this);
+		this.handleRoleTokenClipboard		= this.handleRoleTokenClipboard.bind(this);
 		this.handleCopyClipboard 			= this.handleCopyClipboard.bind(this);
 	}
 
@@ -591,6 +595,32 @@ export default class R3PathInfoDialog extends React.Component
 				}
 			});
 		}
+	}
+
+	handleRoleTokenClipboardButtonTooltipChange = (event, isOpen) =>		// eslint-disable-line no-unused-vars
+	{
+		this.setState({
+			tooltips: {
+				roletokenClipboardButtonTooltip:	isOpen
+			}
+		});
+	}
+
+	handleRoleTokenClipboard(event)											// eslint-disable-line no-unused-vars
+	{
+		if(r3IsEmptyEntityObject(this.roletokenInputElement, 'select') || !r3IsSafeTypedEntity(this.roletokenInputElement.select, 'function')){
+			return;
+		}
+		this.roletokenInputElement.select();		// select all text in text field
+		document.execCommand('copy');				// cpoy to clipboard
+		window.getSelection().removeAllRanges();	// unselect text
+		this.roletokenInputElement.blur();			// off furcus
+
+		this.setState({
+			tooltips: {
+				roletokenClipboardButtonTooltip:	false
+			}
+		});
 	}
 
 	handleCopyClipboardButtonTooltipChange = (event, isOpen) =>				// eslint-disable-line no-unused-vars
@@ -1244,7 +1274,7 @@ export default class R3PathInfoDialog extends React.Component
 					rowsPerPage={ this.props.tableRawCount }
 					page={ this.state.manageRoleTokenPageNum }
 					rowsPerPageOptions={ [] }
-					onChangePage={ this.handleManageRoleTokenPageChange }
+					onPageChange={ this.handleManageRoleTokenPageChange }
 				/>
 			</React.Fragment>
 		);
@@ -1265,12 +1295,31 @@ export default class R3PathInfoDialog extends React.Component
 				>
 					{ r3provider.getR3TextRes().tResRoleTokenSubTitle }
 				</Typography>
-				<Typography
-					{ ...theme.r3PathInfoDialog.value }
-					className={ classes.value }
+				<TextField
+					name={ roletokenTextFieldName }
+					value={ this.state.selectedRoleToken }
+					inputRef = { (element) => { this.roletokenInputElement = element; } } 
+					InputProps={{ className: classes.roletokenInputTextField }}
+					{ ...theme.r3PathInfoDialog.roletokenTextField }
+					className={ classes.roletokenTextField }
+				/>
+				<Tooltip
+					title={ r3provider.getR3TextRes().tResCopyClipboardTT }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.roletokenClipboardButtonTooltip, 'boolean')) ? false : this.state.tooltips.roletokenClipboardButtonTooltip) }
 				>
-					{ this.state.selectedRoleToken }
-				</Typography>
+					<Button
+						onClick={ this.handleRoleTokenClipboard  }
+						onMouseEnter={ event => this.handleRoleTokenClipboardButtonTooltipChange(event, true) }
+						onMouseLeave={ event => this.handleRoleTokenClipboardButtonTooltipChange(event, false) }
+						{ ...theme.r3PathInfoDialog.roletokenClipboardButton }
+						className={ classes.roletokenClipboardButton }
+					>
+						<CopyClipBoardIcon
+							className={ classes.copyClipboardIcon }
+						/>
+						{ r3provider.getR3TextRes().tResCopyClipboardButton }
+					</Button>
+				</Tooltip>
 			</React.Fragment>
 		);
 

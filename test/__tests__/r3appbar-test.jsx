@@ -50,6 +50,7 @@ const opentree		= jest.fn();										// eslint-disable-line no-undef
 const checkupdating	= jest.fn();										// eslint-disable-line no-undef
 const about			= jest.fn();										// eslint-disable-line no-undef
 const sign			= jest.fn();										// eslint-disable-line no-undef
+const account		= jest.fn();										// eslint-disable-line no-undef
 
 //
 // Main test
@@ -73,6 +74,7 @@ describe('R3AppBar', () => {											// eslint-disable-line no-undef
 										onCheckUpdating={ checkupdating }
 										onAbout={ about }
 										onSign={ sign }
+										onAccount={ account }
 									/>
 								</ThemeProvider>
 							);

@@ -35,6 +35,7 @@ import R3MainTree					from './r3maintree';								// Main TreeView
 import R3Toolbar					from './r3toolbar';									// Toolbar
 import R3MsgBox						from './r3msgbox';									// Message Box
 import R3AboutDialog				from './r3aboutdialog';								// About Dialog
+import R3AccountDialog				from './r3accountdialog';							// Account Dialog
 import R3SigninDialog				from './r3signincreddialog';						// SignIn by Credential Dialog
 import R3Progress					from './r3progress';								// Progress
 
@@ -131,6 +132,9 @@ export default class R3Container extends React.Component
 		licensePackage:			null,
 		licenseType:			null,
 		licenseText:			null,
+		accountDialogOpen:		false,
+		username:				this.r3provider.getR3Context().getSafeUserName(),
+		unscopedtoken:			this.r3provider.getR3Context().getSafeUnscopedToken(),
 		signinDialogOpen:		false
 	};
 
@@ -169,6 +173,8 @@ export default class R3Container extends React.Component
 		this.handleSign						= this.handleSign.bind(this);
 		this.handleAbout					= this.handleAbout.bind(this);
 		this.handAboutDialogClose			= this.handAboutDialogClose.bind(this);
+		this.handleAccount					= this.handleAccount.bind(this);
+		this.handAccountDialogClose			= this.handAccountDialogClose.bind(this);
 		this.handSignInDialogClose			= this.handSignInDialogClose.bind(this);
 		this.cbProgressControl				= this.cbProgressControl.bind(this);		// For progress callback from provider
 		this.cbRefRegister					= this.cbRefRegister.bind(this);			// For registering callback from progress
@@ -210,6 +216,9 @@ export default class R3Container extends React.Component
 			licensePackage:			null,
 			licenseType:			null,
 			licenseText:			null,
+			accountDialogOpen:		false,
+			username:				username,
+			unscopedtoken:			unscopedtoken,
 			signinDialogOpen:		false
 		});
 
@@ -1072,6 +1081,26 @@ export default class R3Container extends React.Component
 	}
 
 	//
+	// Handle Open Account Dialog
+	//
+	handleAccount()
+	{
+		this.updateState({
+			accountDialogOpen:	true
+		});
+	}
+
+	//
+	// Handle Close Account Dialog
+	//
+	handAccountDialogClose(event, reason)									// eslint-disable-line no-unused-vars
+	{
+		this.updateState({
+			accountDialogOpen:	false
+		});
+	}
+
+	//
 	// Handle Close Direct SignIn Dialog
 	//
 	handSignInDialogClose(event, reason, doSignIn, username, passphrase)	// eslint-disable-line no-unused-vars
@@ -1237,6 +1266,7 @@ export default class R3Container extends React.Component
 					onCheckUpdating={ this.handleIsContentUpdating }
 					onAbout={ this.handleAbout }
 					onSign={ this.handleSign }
+					onAccount={ this.handleAccount }
 				/>
 				<div>
 					<R3MainTree
@@ -1289,6 +1319,13 @@ export default class R3Container extends React.Component
 					licensePackage={ this.state.licensePackage }
 					licenseType={ this.state.licenseType }
 					licenseText={ this.state.licenseText }
+				/>
+				<R3AccountDialog
+					r3provider={ this.r3provider }
+					open={ this.state.accountDialogOpen }
+					onClose={ this.handAccountDialogClose }
+					username={ this.state.username }
+					unscopedtoken={ this.state.unscopedtoken }
 				/>
 				<R3SigninDialog
 					r3provider={ this.r3provider }

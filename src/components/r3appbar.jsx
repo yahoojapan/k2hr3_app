@@ -53,7 +53,8 @@ const menuValues = {
 	license:		'LICENSES_TOP',
 	noLicense:		'NOLICENSE',
 	sign:			'SIGNINOUT',
-	userName:		'USERNAME'
+	userName:		'USERNAME',
+	account:		'ACCOUNT'
 };
 
 const tooltipValues = {
@@ -87,7 +88,8 @@ export default class R3AppBar extends React.Component
 		onOpenTree:			PropTypes.func.isRequired,
 		onCheckUpdating:	PropTypes.func,
 		onAbout:			PropTypes.func.isRequired,
-		onSign:				PropTypes.func.isRequired
+		onSign:				PropTypes.func.isRequired,
+		onAccount:			PropTypes.func.isRequired
 	};
 
 	static defaultProps = {
@@ -179,6 +181,9 @@ export default class R3AppBar extends React.Component
 				if(this.checkContentUpdating()){
 					this.props.onAbout(null);
 				}
+
+			}else if(menuValues.account === value){
+				this.props.onAccount();
 
 			}else if(menuValues.noLicense === value || menuValues.license === value){
 				if(this.checkContentUpdating()){
@@ -288,6 +293,7 @@ export default class R3AppBar extends React.Component
 
 		let	userMenuItem;
 		let	menuDivider;
+		let	menuAccountItem;
 		if(this.context.r3Context.isLogin()){
 			userMenuItem = (
 				<MenuItem
@@ -303,6 +309,14 @@ export default class R3AppBar extends React.Component
 			);
 			menuDivider = (
 				<Divider />
+			);
+			menuAccountItem = (
+				<MenuItem
+					key={ menuValues.account }
+					onClick={ event => this.handleMenuChange(event, menuValues.account) }
+				>
+					{ r3provider.getR3TextRes().tResAccountMenu }
+				</MenuItem>
 			);
 		}
 
@@ -333,6 +347,7 @@ export default class R3AppBar extends React.Component
 				>
 					{ userMenuItem }
 					{ menuDivider }
+					{ menuAccountItem }
 					<MenuItem
 						key={ menuValues.sign }
 						onClick={ event => this.handleSignMenuChange(event, menuValues.sign) }

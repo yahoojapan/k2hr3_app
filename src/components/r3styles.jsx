@@ -676,6 +676,53 @@ export const r3AboutDialogStyles = (theme) => ({
 });
 
 //
+// Styles for Create Path Dialog
+//
+export const r3AccountDialog = (theme) => ({
+	root: {
+	},
+	dialogTitle: {
+	},
+	title: {
+	},
+	dialogContent: {
+	},
+	subTitle: {
+		marginTop:				theme.spacing(2)
+	},
+	value: {
+		paddingLeft:			theme.spacing(4)
+	},
+	valueItalic: {
+		fontStyle:				'italic',
+		paddingLeft:			theme.spacing(4)
+	},
+	okButton: {
+		marginTop:				theme.spacing(2)
+	},
+	buttonIcon: {
+		marginLeft:				theme.spacing(1)
+	},
+	unscopedtokenInputTextField: {
+		color:					theme.palette.text.secondary,
+		backgroundColor:		theme.palette.common.white,
+		padding:				theme.spacing(1)
+	},
+	unscopedtokenTextField: {
+		paddingLeft:			theme.spacing(4),
+		marginBottom:			theme.spacing(1)
+	},
+	copyClipboardButton: {
+		float:					'right',
+		color:					theme.palette.primary.main,
+		textTransform:			'none'
+	},
+	copyClipboardIcon: {
+		marginRight:			theme.spacing(1)
+	}
+});
+
+//
 // Styles for Signin Credential Dialog
 //
 export const r3SigninCredDialogStyles = (theme) => ({
@@ -882,6 +929,20 @@ export const r3PathInfoDialog = (theme) => ({
 	},
 
 	// Display role token and registration code page
+	roletokenInputTextField: {
+		color:					theme.palette.text.secondary,
+		backgroundColor:		theme.palette.common.white,
+		padding:				theme.spacing(1)
+	},
+	roletokenTextField: {
+		paddingLeft:			theme.spacing(4),
+		marginBottom:			theme.spacing(1)
+	},
+	roletokenClipboardButton: {
+		float:					'right',
+		color:					theme.palette.primary.main,
+		textTransform:			'none'
+	},
 	codeTypeSelect: {
 		marginLeft:				theme.spacing(4),
 		marginBottom:			theme.spacing(1)
