@@ -1300,6 +1300,7 @@ export default class R3PathInfoDialog extends React.Component
 					value={ this.state.selectedRoleToken }
 					inputRef = { (element) => { this.roletokenInputElement = element; } } 
 					InputProps={{ className: classes.roletokenInputTextField }}
+					inputProps={{ style: { padding: 0 } }}
 					{ ...theme.r3PathInfoDialog.roletokenTextField }
 					className={ classes.roletokenTextField }
 				/>

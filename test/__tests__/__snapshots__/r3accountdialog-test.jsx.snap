@@ -402,6 +402,11 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
                 onChange={[Function]}
                 onFocus={[Function]}
                 required={false}
+                style={
+                  Object {
+                    "padding": 0,
+                  }
+                }
                 type="text"
                 value="JEST_TEST_UNSCOPED_TOKEN"
               />
