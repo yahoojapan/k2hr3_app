@@ -262,11 +262,19 @@ export default class R3Provider
 		let	_callback	= callback;
 		let	_username	= username;
 		let	_passphrase	= r3IsEmptyString(passphrase, true) ? null : passphrase.trim();		// allow empty passphrase
-		let	_urlargs	= 'username=' + _username + '&password=' + (null === _passphrase ? '' : _passphrase);
+		let _body		= {
+			'auth': {
+				'tenantName': '',
+				'passwordCredentials': {
+					'username':	_username,
+					'password':	_passphrase
+				}
+			}
+		};
 
 		this.startProgress();																// start progressing
 
-		this._put('/v1/user/tokens', _urlargs, null, this.tokenHeaderType.noUserToken, (error, resobj) =>
+		this._post('/v1/user/tokens', null, this.tokenHeaderType.noUserToken, _body, true, (error, resobj) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -314,11 +322,15 @@ export default class R3Provider
 		}
 		let	_callback	= callback;
 		let	_tenantname	= tenantname;
-		let	_urlargs	= 'tenantname=' + _tenantname;
+		let _body		= {
+			'auth': {
+				'tenantName': _tenantname
+			}
+		};
 
 		this.startProgress();																// start progressing
 
-		this._put('/v1/user/tokens', _urlargs, null, this.tokenHeaderType.unscopedUserToken, (error, resobj) =>
+		this._post('/v1/user/tokens', null, this.tokenHeaderType.unscopedUserToken, _body, true, (error, resobj) =>
 		{
 			this.stopProgress();															// stop progressing
 

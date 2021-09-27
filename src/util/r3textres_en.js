@@ -55,6 +55,7 @@ export const r3TextRes = {
 
 	cUpdatingTitle:				'Confirmation',
 	cUpdatingCancel:			'Discard edited content?',
+	cAccountTitle:				'Account Information',
 	cCreateNewPathTitle:		'Create a new path',
 	cCreateServiceTitle:		'Create a new SERVICE',
 	cStaticResourceTitle:		'STATIC RESOURCE OBJECT',
@@ -214,6 +215,11 @@ export const r3TextRes = {
 	tResServiceTenantAddTT:		'Add tenant YRN path',
 	tResServiceStaticObjHint:	'STATIC RESOURCE OBJECT(JSON) is not set',
 	tResServiceUnknownType:		'Details cannot be displayed because an invalid STATIC RESOURCE OBJECT(JSON) is set.',
+	tResAccoutUsernameTitle:	'User name',
+	tResUnscopedTokenTitle:		'Unscoped Token',
+	tResUnknownUsernameLabel:	'Unknown user',
+	tResNoUnscopedTokenLabel:	'No unscoped token',
+	tResAccountMenu:			'About Account',
 
 	wDeprecateAuth:				'[Deprecated] This system sends passphrases without encryption.',
 

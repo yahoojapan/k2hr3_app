@@ -174,7 +174,6 @@ exports[`R3Service test snapshot for R3Service 1`] = `
         onFocus={[Function]}
         placeholder="Input verify URL"
         required={false}
-        rows={1}
         type="text"
         value="http://localhost:3000/v1/test/verify"
       />
@@ -207,7 +206,6 @@ exports[`R3Service test snapshot for R3Service 1`] = `
           onFocus={[Function]}
           placeholder="Input tenant YRN path"
           required={false}
-          rows={1}
           type="text"
           value="yrn:yahoo:::28862"
         />
@@ -278,7 +276,6 @@ exports[`R3Service test snapshot for R3Service 1`] = `
           onFocus={[Function]}
           placeholder="Input tenant YRN path"
           required={false}
-          rows={1}
           type="text"
           value="yrn:yahoo:::37146"
         />
@@ -349,7 +346,6 @@ exports[`R3Service test snapshot for R3Service 1`] = `
           onFocus={[Function]}
           placeholder="Input tenant YRN path"
           required={false}
-          rows={1}
           type="text"
           value=""
         />

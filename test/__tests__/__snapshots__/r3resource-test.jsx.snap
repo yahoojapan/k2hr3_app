@@ -220,7 +220,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           onFocus={[Function]}
           placeholder="Input key name"
           required={false}
-          rows={1}
           type="text"
           value="k2hr3_entest_obj_res_01_keys_arr"
         />
@@ -245,7 +244,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           onFocus={[Function]}
           placeholder="Input value(allowed JSON fomrat)"
           required={false}
-          rows={1}
           type="text"
           value="[\\"k2hr3_entest_obj_res_01_keys_arr_val00\\",\\"k2hr3_entest_obj_res_01_keys_arr_val01\\"]"
         />
@@ -316,7 +314,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           onFocus={[Function]}
           placeholder="Input key name"
           required={false}
-          rows={1}
           type="text"
           value="k2hr3_entest_obj_res_01_keys_key"
         />
@@ -341,7 +338,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           onFocus={[Function]}
           placeholder="Input value(allowed JSON fomrat)"
           required={false}
-          rows={1}
           type="text"
           value="k2hr3_entest_obj_res_01_keys_val"
         />
@@ -412,7 +408,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           onFocus={[Function]}
           placeholder="Input key name"
           required={false}
-          rows={1}
           type="text"
           value="k2hr3_entest_obj_res_01_keys_obj"
         />
@@ -437,7 +432,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           onFocus={[Function]}
           placeholder="Input value(allowed JSON fomrat)"
           required={false}
-          rows={1}
           type="text"
           value="{\\"k2hr3_entest_obj_res_01_keys_obj_key00\\":\\"k2hr3_entest_obj_res_01_keys_obj_val00\\",\\"k2hr3_entest_obj_res_01_keys_obj_key01\\":\\"k2hr3_entest_obj_res_01_keys_obj_val01\\"}"
         />
@@ -508,7 +502,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           onFocus={[Function]}
           placeholder="Input key name"
           required={false}
-          rows={1}
           type="text"
           value=""
         />
@@ -533,7 +526,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           onFocus={[Function]}
           placeholder="Input value(allowed JSON fomrat)"
           required={false}
-          rows={1}
           type="text"
           value=""
         />
@@ -609,7 +601,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           onFocus={[Function]}
           placeholder="Input alias YRN path"
           required={false}
-          rows={1}
           type="text"
           value="yrn:yahoo:::33348:resource:k2hr3_entest_str_res_03"
         />
@@ -748,7 +739,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           onFocus={[Function]}
           placeholder="Input alias YRN path"
           required={false}
-          rows={1}
           type="text"
           value=""
         />

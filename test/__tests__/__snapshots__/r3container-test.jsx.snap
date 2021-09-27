@@ -440,11 +440,11 @@ Array [
         </header>
       </div>
       <div
-        className="MuiPaper-root R3MsgBox-root-138 MuiPaper-elevation2 MuiPaper-rounded"
+        className="MuiPaper-root R3MsgBox-root-141 MuiPaper-elevation2 MuiPaper-rounded"
       >
         <svg
           aria-hidden={true}
-          className="MuiSvgIcon-root R3MsgBox-informationIcon-144"
+          className="MuiSvgIcon-root R3MsgBox-informationIcon-147"
           focusable="false"
           viewBox="0 0 24 24"
         >
@@ -453,7 +453,7 @@ Array [
           />
         </svg>
         <span
-          className="MuiTypography-root R3MsgBox-dialogInformationContentText-141 MuiTypography-body1"
+          className="MuiTypography-root R3MsgBox-dialogInformationContentText-144 MuiTypography-body1"
         >
           First select the tenant, then select ROLE / RESOURCE / POLICY, then browse and edit.
           <br />

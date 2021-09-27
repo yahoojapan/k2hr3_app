@@ -432,8 +432,8 @@ const r3Theme = createTheme({
 		valueStringTextField: {
 			fullWidth:				true,
 			multiline:				true,
-			rows:					1,
-			rowsMax:				10
+			minRows:				1,
+			maxRows:				10
 		},
 		valueObjectTextField: {
 			fullWidth:				true,
@@ -451,11 +451,11 @@ const r3Theme = createTheme({
 		},
 		keysKeyTextField: {
 			multiline:				false,
-			rows:					1
+			minRows:				1
 		},
 		keysValueTextField: {
 			multiline:				false,
-			rows:					1
+			minRows:				1
 		},
 		deleteKeysButton: {
 			label:					'delete-keys',
@@ -467,7 +467,7 @@ const r3Theme = createTheme({
 		},
 		aliasTextField: {
 			multiline:				false,
-			rows:					1
+			minRows:				1
 		},
 		downAliasButton: {
 			label:					'move-down-alias',
@@ -511,7 +511,7 @@ const r3Theme = createTheme({
 		},
 		resourceTextField: {
 			multiline:				false,
-			rows:					1
+			minRows:				1
 		},
 		addResourceButton: {
 			label:					'add-resource',
@@ -523,7 +523,7 @@ const r3Theme = createTheme({
 		},
 		aliasTextField: {
 			multiline:				false,
-			rows:					1
+			minRows:				1
 		},
 		downAliasButton: {
 			label:					'move-down-alias',
@@ -566,11 +566,11 @@ const r3Theme = createTheme({
 		},
 		hostnameTextField: {
 			multiline:				false,
-			rows:					1
+			minRows:				1
 		},
 		hostnameAUXTextField: {
 			multiline:				false,
-			rows:					1
+			minRows:				1
 		},
 		deleteHostnameButton: {
 			label:					'delete-hostname',
@@ -592,11 +592,11 @@ const r3Theme = createTheme({
 		},
 		ipTextField: {
 			multiline:				false,
-			rows:					1
+			minRows:				1
 		},
 		ipAUXTextField: {
 			multiline:				false,
-			rows:					1
+			minRows:				1
 		},
 		deleteIpButton: {
 			label:					'delete-ip',
@@ -608,7 +608,7 @@ const r3Theme = createTheme({
 		},
 		policyTextField: {
 			multiline:				false,
-			rows:					1
+			minRows:				1
 		},
 		addPolicyButton: {
 			label:					'add-policy',
@@ -621,7 +621,7 @@ const r3Theme = createTheme({
 
 		aliasTextField: {
 			multiline:				false,
-			rows:					1
+			minRows:				1
 		},
 		downAliasButton: {
 			label:					'move-down-alias',
@@ -654,7 +654,7 @@ const r3Theme = createTheme({
 		},
 		resourceTextField: {
 			multiline:				false,
-			rows:					1
+			minRows:				1
 		},
 		valueRadioGroup: {
 			'aria-label':			'select type verify url or static resource'
@@ -686,7 +686,7 @@ const r3Theme = createTheme({
 		},
 		tenantTextField: {
 			multiline:				false,
-			rows:					1
+			minRows:				1
 		},
 		addResStaticObjButton: {
 			label:					'add-static-resource',
@@ -776,6 +776,51 @@ const r3Theme = createTheme({
 		content: {
 			component:				'span',
 			variant:				'body2'
+		}
+	},
+
+	//
+	// R3 Account Dialog
+	//
+	r3AccountDialog: {
+		root: {
+			scroll:					'body',
+			fullWidth:				true,
+			label:					'account-dialog',
+			'aria-label':			'account dialog'
+		},
+		dialogTitle: {
+			label:					'account-dialog'
+		},
+		title: {
+			variant:				'h5',
+			component:				'span',
+			color:					'primary',
+			noWrap:					true
+		},
+		subTitle: {
+			variant:				'subtitle2',
+			color:					'primary',
+			component:				'span',
+			noWrap:					true
+		},
+		value: {
+			variant:				'body1',
+			component:				'span',
+			color:					'textSecondary'
+		},
+		unscopedtokenTextField: {
+			variant:				'outlined',
+			disabled:				false,
+			multiline:				false,
+			fullWidth:				true,
+			minRows:				1,
+			maxRows:				1
+		},
+		okButton: {
+			variant:				'contained',
+			color:					'secondary',
+			'aria-label':			'ok'
 		}
 	},
 
@@ -985,6 +1030,18 @@ const r3Theme = createTheme({
 		},
 
 		// Display role token and registration code page
+		roletokenTextField: {
+			variant:				'outlined',
+			disabled:				false,
+			multiline:				false,
+			fullWidth:				true,
+			minRows:				1,
+			maxRows:				1
+		},
+		roletokenClipboardButton: {
+			label:					'roletoken-clipboard-button',
+			'aria-label':			'copy roletoken to clipboard'
+		},
 		codetypeSelect: {
 			disabled:				false,
 			autoWidth:				true
@@ -994,8 +1051,8 @@ const r3Theme = createTheme({
 			disabled:				false,
 			multiline:				true,
 			fullWidth:				true,
-			rows:					1,
-			rowsMax:				4
+			minRows:				1,
+			maxRows:				4
 		},
 		copyClipboardButton: {
 			label:					'copy-clipboard-button',
@@ -1108,7 +1165,7 @@ const r3Theme = createTheme({
 		textField: {
 			disabled:				false,
 			multiline:				false,
-			rows:					1
+			minRows:				1
 		},
 		addResStaticObjButton: {
 			color:					'primary',

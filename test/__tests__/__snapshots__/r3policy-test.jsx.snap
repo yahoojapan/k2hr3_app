@@ -192,7 +192,6 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           onFocus={[Function]}
           placeholder="Input resource YRN path"
           required={false}
-          rows={1}
           type="text"
           value="yrn:yahoo:::33348:resource:k2hr3_entest_obj_res_01"
         />
@@ -263,7 +262,6 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           onFocus={[Function]}
           placeholder="Input resource YRN path"
           required={false}
-          rows={1}
           type="text"
           value=""
         />
@@ -339,7 +337,6 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           onFocus={[Function]}
           placeholder="Input alias YRN path"
           required={false}
-          rows={1}
           type="text"
           value=""
         />

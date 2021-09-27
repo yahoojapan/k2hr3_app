@@ -1,0 +1,242 @@
+/*
+ *
+ * K2HR3 Web Application
+ *
+ * Copyright 2017 Yahoo! Japan Corporation.
+ *
+ * K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers
+ * common management information for the cloud.
+ * K2HR3 can dynamically manage information as "who", "what", "operate".
+ * These are stored as roles, resources, policies in K2hdkc, and the
+ * client system can dynamically read and modify these information.
+ *
+ * For the full copyright and license information, please view
+ * the license file that was distributed with this source code.
+ *
+ * AUTHOR:   Takeshi Nakatani
+ * CREATE:   Fri Sep 24 2021
+ * REVISION:
+ *
+ */
+
+import React						from 'react';
+import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
+import PropTypes					from 'prop-types';
+
+import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
+import Button						from '@material-ui/core/Button';
+import Dialog						from '@material-ui/core/Dialog';
+import DialogTitle					from '@material-ui/core/DialogTitle';
+import DialogContent				from '@material-ui/core/DialogContent';
+import DialogActions				from '@material-ui/core/DialogActions';
+import Typography					from '@material-ui/core/Typography';
+import Tooltip						from '@material-ui/core/Tooltip';
+import TextField					from '@material-ui/core/TextField';
+import CheckCircleIcon				from '@material-ui/icons/CheckCircle';
+import CopyClipBoardIcon			from '@material-ui/icons/AssignmentTurnedInRounded';
+
+import { r3AccountDialog }			from './r3styles';
+import { r3IsEmptyString, r3IsEmptyEntityObject, r3IsSafeTypedEntity } from '../util/r3util';
+
+const unscopedtokenFieldName	= 'unscopedtoken-textfield';
+
+//
+// Create New Path Dialog Class
+//
+@withTheme
+@withStyles(r3AccountDialog)
+export default class R3AccountDialog extends React.Component
+{
+	static contextTypes = {
+		r3Context:		PropTypes.object.isRequired
+	};
+
+	static propTypes = {
+		r3provider:		PropTypes.object.isRequired,
+		open:			PropTypes.bool,
+		username:		PropTypes.string,
+		unscopedtoken:	PropTypes.string,
+		onClose:		PropTypes.func.isRequired
+	};
+
+	static defaultProps = {
+		open:			false,
+		username:		null,
+		unscopedtoken:	null
+	};
+
+	unscopedtokenInputElement = null;												// unscopedtoken textfield for registration code.
+
+	state = {
+		open:		this.props.open,
+		tooltips: {
+			copyClipboardButtonTooltip:		false
+		}
+	};
+
+	constructor(props)
+	{
+		super(props);
+
+		this.handleCopyClipboard = this.handleCopyClipboard.bind(this);
+	}
+
+	// [NOTE]
+	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
+	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
+	//
+	static getDerivedStateFromProps(nextProps, prevState)
+	{
+		if(prevState.open != nextProps.open){
+			if(nextProps.open){
+				// Inivisible to Visible
+				return {
+					open:	nextProps.open
+				};
+			}else{
+				// Visible to Inivisible
+				return {
+					open:	nextProps.open
+				};
+			}
+		}
+		return null;														// Return null to indicate no change to state.
+	}
+
+	handleCopyClipboardButtonTooltipChange = (event, isOpen) =>				// eslint-disable-line no-unused-vars
+	{
+		this.setState({
+			tooltips: {
+				copyClipboardButtonTooltip:	isOpen
+			}
+		});
+	}
+
+	handleCopyClipboard(event)												// eslint-disable-line no-unused-vars
+	{
+		if(r3IsEmptyEntityObject(this.unscopedtokenInputElement, 'select') || !r3IsSafeTypedEntity(this.unscopedtokenInputElement.select, 'function')){
+			return;
+		}
+		this.unscopedtokenInputElement.select();	// select all text in text field
+		document.execCommand('copy');				// cpoy to clipboard
+		window.getSelection().removeAllRanges();	// unselect text
+		this.unscopedtokenInputElement.blur();		// off furcus
+
+		this.setState({
+			tooltips: {
+				copyClipboardButtonTooltip:	false
+			}
+		});
+	}
+
+	render()
+	{
+		const { theme, classes, r3provider } = this.props;
+
+		let	username;
+		let	usernameClass;
+		if(!r3IsEmptyString(this.props.username)){
+			username		= this.props.username;
+			usernameClass	= classes.value;
+		}else{
+			username		= r3provider.getR3TextRes().tResUnknownUsernameLabel;
+			usernameClass	= classes.valueItalic;
+		}
+
+		let	unscopedtoken;
+		if(!r3IsEmptyString(this.props.unscopedtoken)){
+			unscopedtoken	= this.props.unscopedtoken;
+		}else{
+			unscopedtoken	= r3provider.getR3TextRes().tResNoUnscopedTokenLabel;
+		}
+
+		return (
+			<Dialog
+				open={ this.props.open }
+				onClose={ (event, reason) => this.props.onClose(event, reason) }
+				{ ...theme.r3AccountDialog.root }
+				className={ classes.root }
+			>
+				<DialogTitle
+					{ ...theme.r3AccountDialog.dialogTitle }
+					className={ classes.dialogTitle }
+				>
+					<Typography
+						{ ...theme.r3AccountDialog.title }
+						className={ classes.title }
+					>
+						{ r3provider.getR3TextRes().cAccountTitle }
+					</Typography>
+				</DialogTitle>
+
+				<DialogContent
+					className={ classes.dialogContent }
+				>
+					<Typography
+						{ ...theme.r3AccountDialog.subTitle }
+						className={ classes.subTitle }
+					>
+						{ r3provider.getR3TextRes().tResAccoutUsernameTitle }
+					</Typography>
+					<Typography
+						{ ...theme.r3AccountDialog.value }
+						className={ usernameClass }
+					>
+						{ username }
+					</Typography>
+					<Typography
+						{ ...theme.r3AccountDialog.subTitle }
+						className={ classes.subTitle }
+					>
+						{ r3provider.getR3TextRes().tResUnscopedTokenTitle }
+					</Typography>
+					<TextField
+						name={ unscopedtokenFieldName }
+						value={ unscopedtoken }
+						inputRef = { (element) => { this.unscopedtokenInputElement = element; } } 
+						InputProps={{ className: classes.unscopedtokenInputTextField }}
+						{ ...theme.r3AccountDialog.unscopedtokenTextField }
+						className={ classes.unscopedtokenTextField }
+					/>
+					<Tooltip
+						title={ r3provider.getR3TextRes().tResCopyClipboardTT }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.copyClipboardButtonTooltip, 'boolean')) ? false : this.state.tooltips.copyClipboardButtonTooltip) }
+					>
+						<Button
+							onClick={ this.handleCopyClipboard  }
+							onMouseEnter={ event => this.handleCopyClipboardButtonTooltipChange(event, true) }
+							onMouseLeave={ event => this.handleCopyClipboardButtonTooltipChange(event, false) }
+							{ ...theme.r3AccountDialog.copyClipboardButton }
+							className={ classes.copyClipboardButton }
+						>
+							<CopyClipBoardIcon
+								className={ classes.copyClipboardIcon }
+							/>
+							{ r3provider.getR3TextRes().tResCopyClipboardButton }
+						</Button>
+					</Tooltip>
+				</DialogContent>
+				<DialogActions>
+					<Button
+						disabled={ false }
+						onClick={ (event) => this.props.onClose(event, null) }
+						{ ...theme.r3AccountDialog.okButton }
+						className={ classes.okButton }
+					>
+						{ r3provider.getR3TextRes().tResButtonOk }
+						<CheckCircleIcon
+							className={ classes.buttonIcon }
+						/>
+					</Button>
+				</DialogActions>
+			</Dialog>
+		);
+	}
+}
+
+/*
+ * VIM modelines
+ *
+ * vim:set ts=4 fenc=utf-8:
+ *
+ */
