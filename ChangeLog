@@ -1,3 +1,9 @@
+k2hr3-app (1.0.4) unstable; urgency=low
+
+  * Adjusted padding for some text fields - #40
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Mon, 27 Sep 2021 21:02:36 +0900
+
 k2hr3-app (1.0.3) unstable; urgency=low
 
   * Updated dependency - #38
