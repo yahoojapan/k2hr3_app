@@ -195,6 +195,7 @@ export default class R3AccountDialog extends React.Component
 						value={ unscopedtoken }
 						inputRef = { (element) => { this.unscopedtokenInputElement = element; } } 
 						InputProps={{ className: classes.unscopedtokenInputTextField }}
+						inputProps={{ style: { padding: 0 } }}
 						{ ...theme.r3AccountDialog.unscopedtokenTextField }
 						className={ classes.unscopedtokenTextField }
 					/>
