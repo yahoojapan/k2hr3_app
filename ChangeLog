@@ -1,3 +1,10 @@
+k2hr3-app (1.0.3) unstable; urgency=low
+
+  * Updated dependency - #38
+  * Added a dialog and a menu to display account information - #37
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Mon, 27 Sep 2021 17:48:39 +0900
+
 k2hr3-app (1.0.2) unstable; urgency=low
 
   * Fixed a bug in the code corresponding to React 17 - #35
