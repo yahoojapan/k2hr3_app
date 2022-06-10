@@ -1809,13 +1809,20 @@ export default class R3Provider
 			};
 			for(let cnt = 0; cnt < hosts.length; ++cnt){
 				let	tmpCombine	= parseCombineHostObject(hosts[cnt]);
-				_body.host.push({
+				let	onehost		= {
 					host:		tmpCombine.hostname,
 					port:		parseInt(tmpCombine.port),
 					cuk:		tmpCombine.cuk,
 					extra:		tmpCombine.extra,
 					tag:		tmpCombine.tag
-				});
+				};
+				if(!r3IsEmptyString(tmpCombine.inboundip)){
+					onehost.inboundip	= tmpCombine.inboundip;
+				}
+				if(!r3IsEmptyString(tmpCombine.outboundip)){
+					onehost.outboundip	= tmpCombine.outboundip;
+				}
+				_body.host.push(onehost);
 			}
 
 			// update hosts

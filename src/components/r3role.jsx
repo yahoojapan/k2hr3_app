@@ -141,23 +141,23 @@ export default class R3Role extends React.Component
 		let	localHostnames	= [];
 		let	localIps		= [];
 		let	oneHost;
-		let	standars;
+		let	standards;
 		let	cnt;
 		if(!r3IsEmptyEntityObject(role, 'hosts') && !r3IsEmptyEntityObject(role.hosts, 'hostnames')){
-			standars		= [];
+			standards		= [];
 			for(cnt = 0; cnt < role.hosts.hostnames.length; ++cnt){
 				oneHost		= parseCombineHostObject(role.hosts.hostnames[cnt]);
-				standars.push(oneHost);
+				standards.push(oneHost);
 			}
-			localHostnames	= R3Role.convertStandardToLocal(standars);
+			localHostnames	= R3Role.convertStandardToLocal(standards);
 		}
 		if(!r3IsEmptyEntityObject(role, 'hosts') && !r3IsEmptyEntityObject(role.hosts, 'ips')){
-			standars		= [];
+			standards		= [];
 			for(cnt = 0; cnt < role.hosts.ips.length; ++cnt){
 				oneHost		= parseCombineHostObject(role.hosts.ips[cnt]);
-				standars.push(oneHost);
+				standards.push(oneHost);
 			}
-			localIps		= R3Role.convertStandardToLocal(standars);
+			localIps		= R3Role.convertStandardToLocal(standards);
 		}
 
 		return {
@@ -252,6 +252,16 @@ export default class R3Role extends React.Component
 		if(!r3IsEmptyStringObject(standard, 'tag') && !r3IsEmptyString(standard.tag.trim())){
 			local.auxiliary += ', TAG=' + standard.tag.trim();
 		}
+
+		// inboundip in auxiliary
+		if(!r3IsEmptyStringObject(standard, 'inboundip') && !r3IsEmptyString(standard.inboundip.trim())){
+			local.auxiliary += ', INBOUNDIP=' + standard.inboundip.trim();
+		}
+
+		// outboundip in auxiliary
+		if(!r3IsEmptyStringObject(standard, 'outboundip') && !r3IsEmptyString(standard.outboundip.trim())){
+			local.auxiliary += ', OUTBOUNDIP=' + standard.outboundip.trim();
+		}
 		return local;
 	}
 
@@ -341,6 +351,24 @@ export default class R3Role extends React.Component
 			}else{
 				result.tag	= null;
 			}
+
+			// INBOUNDIP
+			parsed					= parseKVString(tmpstr, 'INBOUNDIP');
+			if(!r3IsEmptyString(parsed.value, true)){
+				result.inboundip	= parsed.value;
+				tmpstr				= parsed.reststr;
+			}else{
+				result.inboundip	= null;
+			}
+
+			// OUTBOUNDIP
+			parsed					= parseKVString(tmpstr, 'OUTBOUNDIP');
+			if(!r3IsEmptyString(parsed.value, true)){
+				result.outboundip	= parsed.value;
+				tmpstr				= parsed.reststr;
+			}else{
+				result.outboundip	= null;
+			}
 		}
 		return result;
 	}
@@ -366,6 +394,12 @@ export default class R3Role extends React.Component
 			return false;
 		}
 		if(!r3IsEmptyStringObject(standard, 'tag') && -1 !== standard.tag.indexOf(' ')){
+			return false;
+		}
+		if(!r3IsEmptyStringObject(standard, 'inboundip') && -1 !== standard.tag.indexOf(' ')){
+			return false;
+		}
+		if(!r3IsEmptyStringObject(standard, 'outboundip') && -1 !== standard.tag.indexOf(' ')){
 			return false;
 		}
 		return true;
@@ -399,6 +433,18 @@ export default class R3Role extends React.Component
 		if(	(r3IsEmptyStringObject(standard1, 'tag')	!== r3IsEmptyStringObject(standard2, 'tag')	)	||
 			(r3IsEmptyString(standard1.tag, true)		!== r3IsEmptyString(standard2.tag, true)	)	||
 			(!r3IsEmptyString(standard1.tag, true)		&& (standard1.tag !== standard2.tag)		)	)
+		{
+			return false;
+		}
+		if(	(r3IsEmptyStringObject(standard1, 'inboundip')	!== r3IsEmptyStringObject(standard2, 'inboundip')	)	||
+			(r3IsEmptyString(standard1.inboundip, true)		!== r3IsEmptyString(standard2.inboundip, true)		)	||
+			(!r3IsEmptyString(standard1.inboundip, true)	&& (standard1.inboundip !== standard2.inboundip)	)	)
+		{
+			return false;
+		}
+		if(	(r3IsEmptyStringObject(standard1, 'outboundip')	!== r3IsEmptyStringObject(standard2, 'outboundip')	)	||
+			(r3IsEmptyString(standard1.outboundip, true)	!== r3IsEmptyString(standard2.outboundip, true)		)	||
+			(!r3IsEmptyString(standard1.outboundip, true)	&& (standard1.outboundip !== standard2.outboundip)	)	)
 		{
 			return false;
 		}
@@ -586,7 +632,7 @@ export default class R3Role extends React.Component
 				}
 				newHostnames.push(oneHost);
 
-				combineObject = getCombineHostObject(oneHost.hostname, oneHost.port, oneHost.cuk, oneHost.extra, oneHost.tag);
+				combineObject = getCombineHostObject(oneHost.hostname, oneHost.port, oneHost.cuk, oneHost.extra, oneHost.tag, oneHost.inboundip, oneHost.outboundip);
 				if(!r3IsEmptyEntity(combineObject)){
 					newStandardHostnames.push(combineObject);
 				}
@@ -621,7 +667,7 @@ export default class R3Role extends React.Component
 				}
 				newIps.push(oneIp);
 
-				combineObject = getCombineHostObject(oneIp.hostname, oneIp.port, oneIp.cuk, oneIp.extra, oneIp.tag);
+				combineObject = getCombineHostObject(oneIp.hostname, oneIp.port, oneIp.cuk, oneIp.extra, oneIp.tag, oneIp.inboundip, oneIp.outboundip);
 				if(!r3IsEmptyEntity(combineObject)){
 					newStandardIps.push(combineObject);
 				}
@@ -1104,7 +1150,7 @@ export default class R3Role extends React.Component
 				}
 			});
 		}
-	}
+	};
 
 	getHostnameContents()
 	{

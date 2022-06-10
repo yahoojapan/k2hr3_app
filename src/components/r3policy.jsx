@@ -672,7 +672,7 @@ export default class R3Policy extends React.Component
 				}
 			});
 		}
-	}
+	};
 
 	getEffectContents()
 	{

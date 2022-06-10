@@ -137,7 +137,7 @@ export default class R3AppBar extends React.Component
 		this.setState({
 			signMenuAnchorEl:		null
 		});
-	}
+	};
 
 	handleSignButton(event)										// eslint-disable-line no-unused-vars
 	{
@@ -214,7 +214,7 @@ export default class R3AppBar extends React.Component
 				mainMenuTooltip:	false
 			}
 		});
-	}
+	};
 
 	handleDetachedMainButton(event)								// eslint-disable-line no-unused-vars
 	{
@@ -270,7 +270,7 @@ export default class R3AppBar extends React.Component
 				}
 			});
 		}
-	}
+	};
 
 	checkContentUpdating()
 	{

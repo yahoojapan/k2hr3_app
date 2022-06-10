@@ -377,7 +377,7 @@ export default class R3Toolbar extends React.Component
 				}
 			});
 		}
-	}
+	};
 
 	handleDeletePath(event)													// eslint-disable-line no-unused-vars
 	{

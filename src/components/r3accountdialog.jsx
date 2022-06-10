@@ -110,7 +110,7 @@ export default class R3AccountDialog extends React.Component
 				copyClipboardButtonTooltip:	isOpen
 			}
 		});
-	}
+	};
 
 	handleCopyClipboard(event)												// eslint-disable-line no-unused-vars
 	{
