@@ -729,7 +729,7 @@ export default class R3Resource extends React.Component
 				}
 			});
 		}
-	}
+	};
 
 	getKeysContents(items)
 	{

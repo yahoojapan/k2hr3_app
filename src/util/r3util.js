@@ -400,16 +400,19 @@ export const parseCombineHostObject = (combineHostObject) =>
 	if(r3IsEmptyString(combineHostObject, true)){
 		return result;
 	}
-	let	hostname= '';
-	let	port	= 0;
-	let	cuk		= null;
-	let	extra	= null;
-	let	tag		= null;
+	let	hostname	= '';
+	let	port		= 0;
+	let	cuk			= null;
+	let	extra		= null;
+	let	tag			= null;
+	let	inboundip	= null;
+	let	outboundip	= null;
 
 	// 1) hostname
 	var	sepPos					= combineHostObject.indexOf(' ');				// separator is ' '
 	if(-1 === sepPos){
 		hostname				= combineHostObject;
+		combineHostObject		= '';
 	}else{
 		if(0 === sepPos){
 			hostname			= '';											// wrong host name
@@ -460,29 +463,85 @@ export const parseCombineHostObject = (combineHostObject) =>
 		}
 
 		// 4) extra
-		// 5) tag
-		sepPos			= combineHostObject.indexOf(' ');						// separator is ' '
-		if(-1 === sepPos){
-			extra		= combineHostObject;
-		}else{
-			if(0 === sepPos){
-				extra	= null;
-				tag		= combineHostObject.substr(sepPos + 1);
+		if(!r3IsEmptyString(combineHostObject)){
+			sepPos						= combineHostObject.indexOf(' ');		// separator is ' '
+			if(-1 === sepPos){
+				extra					= combineHostObject;
+				combineHostObject		= '';
 			}else{
-				extra	= combineHostObject.substr(0, sepPos);
-				tag		= combineHostObject.substr(sepPos + 1);
+				if(0 === sepPos){
+					extra				= null;
+					combineHostObject	= combineHostObject.substr(sepPos + 1);
+				}else{
+					extra				= combineHostObject.substr(0, sepPos);
+					combineHostObject	= combineHostObject.substr(sepPos + 1);
+				}
+			}
+		}
+
+		// 5) tag
+		if(!r3IsEmptyString(combineHostObject)){
+			sepPos						= combineHostObject.indexOf(' ');		// separator is ' '
+			if(-1 === sepPos){
+				tag						= combineHostObject;
+				combineHostObject		= '';
+			}else{
+				if(0 === sepPos){
+					tag					= null;
+					combineHostObject	= combineHostObject.substr(sepPos + 1);
+				}else{
+					tag					= combineHostObject.substr(0, sepPos);
+					combineHostObject	= combineHostObject.substr(sepPos + 1);
+				}
+			}
+		}
+
+		// 6) inboundip
+		if(!r3IsEmptyString(combineHostObject)){
+			sepPos						= combineHostObject.indexOf(' ');		// separator is ' '
+			if(-1 === sepPos){
+				inboundip				= combineHostObject;
+				combineHostObject		= '';
+			}else{
+				if(0 === sepPos){
+					inboundip			= null;
+					combineHostObject	= combineHostObject.substr(sepPos + 1);
+				}else{
+					inboundip			= combineHostObject.substr(0, sepPos);
+					combineHostObject	= combineHostObject.substr(sepPos + 1);
+				}
+			}
+		}
+
+		// 7) outboundip
+		if(!r3IsEmptyString(combineHostObject)){
+			sepPos						= combineHostObject.indexOf(' ');		// separator is ' '
+			if(-1 === sepPos){
+				outboundip				= combineHostObject;
+				combineHostObject		= '';
+			}else{
+				if(0 === sepPos){
+					outboundip			= null;
+					combineHostObject	= combineHostObject.substr(sepPos + 1);
+				}else{
+					outboundip			= combineHostObject.substr(0, sepPos);
+					combineHostObject	= combineHostObject.substr(sepPos + 1);
+				}
 			}
 		}
 	}
-	if(r3IsEmptyString(getCombineHostObject(hostname, port, cuk, extra, tag))){
+
+	if(r3IsEmptyString(getCombineHostObject(hostname, port, cuk, extra, tag, inboundip, outboundip))){
 		// something error in values
 		return result;
 	}
-	result.hostname	= hostname;
-	result.port		= port;
-	result.cuk		= cuk;
-	result.extra	= extra;
-	result.tag		= tag;
+	result.hostname		= hostname;
+	result.port			= port;
+	result.cuk			= cuk;
+	result.extra		= extra;
+	result.tag			= tag;
+	result.inboundip	= inboundip;
+	result.outboundip	= outboundip;
 
 	return result;
 };
@@ -490,7 +549,7 @@ export const parseCombineHostObject = (combineHostObject) =>
 //
 // utility methods for hostname + port + cuk
 //
-export const getCombineHostObject = (hostname, port, cuk, extra, tag) =>									// eslint-disable-line no-unused-vars
+export const getCombineHostObject = (hostname, port, cuk, extra, tag, inboundip, outboundip) =>				// eslint-disable-line no-unused-vars
 {
 	let	result = '';
 	if(	r3IsEmptyString(hostname, true)																	&&
@@ -534,7 +593,23 @@ export const getCombineHostObject = (hostname, port, cuk, extra, tag) =>								
 
 	if(!r3IsEmptyString(tag)){
 		result += ' ' + tag;
+	}else{
+		result += ' ';
 	}
+
+	if(!r3IsEmptyString(inboundip)){
+		result += ' ' + inboundip;
+	}else{
+		result += ' ';
+	}
+
+	if(!r3IsEmptyString(outboundip)){
+		result += ' ' + outboundip;
+	}else{
+		result += ' ';
+	}
+
+	result.trimEnd();
 
 	return result;
 };

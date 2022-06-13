@@ -321,7 +321,7 @@ export default class R3CreateServiceDialog extends React.Component
 				}
 			});
 		}
-	}
+	};
 
 	//
 	// Handle(Main page) Service Name : Change

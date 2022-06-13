@@ -501,7 +501,7 @@ export default class R3Service extends React.Component
 				}
 			});
 		}
-	}
+	};
 
 	getTenantsContents(items)
 	{

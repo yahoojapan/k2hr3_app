@@ -214,7 +214,7 @@ export default class R3MainTree extends React.Component
 		this.setState({
 			tenantMenuAnchorEl:	null
 		});
-	}
+	};
 
 	updateCollapseChange(prevSelected, collapseKey)
 	{
@@ -366,7 +366,7 @@ export default class R3MainTree extends React.Component
 			dummyBarMenuAnchorEl:		null,
 			dummyLicenseMenuAnchorEl:	null
 		});
-	}
+	};
 
 	handMessageDialogClose(event, reason, result)				// eslint-disable-line no-unused-vars
 	{
@@ -390,7 +390,7 @@ export default class R3MainTree extends React.Component
 				}
 			});
 		}
-	}
+	};
 
 	checkContentUpdating()
 	{

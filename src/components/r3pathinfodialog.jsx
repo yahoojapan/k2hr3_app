@@ -542,7 +542,7 @@ export default class R3PathInfoDialog extends React.Component
 				manageRoleTokenButtonTooltip:	isOpen
 			}
 		});
-	}
+	};
 
 	handleDispCodeNewRoleTokenButtonTooltipChange = (event, isOpen) =>		// eslint-disable-line no-unused-vars
 	{
@@ -551,7 +551,7 @@ export default class R3PathInfoDialog extends React.Component
 				dispCodeNewRoleTokenButtonTooltip:	isOpen
 			}
 		});
-	}
+	};
 
 	handleNewRoleTokenButtonTooltipChange = (event, isOpen) =>				// eslint-disable-line no-unused-vars
 	{
@@ -560,7 +560,7 @@ export default class R3PathInfoDialog extends React.Component
 				newRoleTokenButtonTooltip:			isOpen
 			}
 		});
-	}
+	};
 
 	handleInTableTooltipChange = (event, type, extData) =>					// eslint-disable-line no-unused-vars
 	{
@@ -595,7 +595,7 @@ export default class R3PathInfoDialog extends React.Component
 				}
 			});
 		}
-	}
+	};
 
 	handleRoleTokenClipboardButtonTooltipChange = (event, isOpen) =>		// eslint-disable-line no-unused-vars
 	{
@@ -604,7 +604,7 @@ export default class R3PathInfoDialog extends React.Component
 				roletokenClipboardButtonTooltip:	isOpen
 			}
 		});
-	}
+	};
 
 	handleRoleTokenClipboard(event)											// eslint-disable-line no-unused-vars
 	{
@@ -630,7 +630,7 @@ export default class R3PathInfoDialog extends React.Component
 				copyClipboardButtonTooltip:	isOpen
 			}
 		});
-	}
+	};
 
 	handleCopyClipboard(event)												// eslint-disable-line no-unused-vars
 	{
@@ -713,7 +713,7 @@ export default class R3PathInfoDialog extends React.Component
 			}
 		}
 		return result;
-	}
+	};
 
 	sortRoleTokenList(roleTokens)
 	{
