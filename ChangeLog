@@ -1,3 +1,9 @@
+k2hr3-app (1.0.6) unstable; urgency=low
+
+  * Fixed jose require path for updating jose version - #44
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Mon, 13 Jun 2022 16:26:22 +0900
+
 k2hr3-app (1.0.5) unstable; urgency=low
 
   * Added some host information for adding to Role member - #42
