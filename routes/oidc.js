@@ -113,9 +113,9 @@ var	passport		= require('passport');
 var	session			= require('express-session');
 
 var	{ custom, Issuer, Strategy }= require('openid-client');
-var	{ decode }					= require('jose/util/base64url');
-var	{ createRemoteJWKSet }		= require('jose/jwks/remote');
-var	{ jwtVerify }				= require('jose/jwt/verify');
+var	{ decode }					= require('jose').base64url;
+var	{ createRemoteJWKSet }		= require('jose');
+var	{ jwtVerify }				= require('jose');
 
 //
 // Configration for OIDC
