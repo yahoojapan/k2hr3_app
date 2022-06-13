@@ -1,3 +1,9 @@
+k2hr3-app (1.0.5) unstable; urgency=low
+
+  * Added some host information for adding to Role member - #42
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Mon, 13 Jun 2022 11:01:58 +0900
+
 k2hr3-app (1.0.4) unstable; urgency=low
 
   * Adjusted padding for some text fields - #40
