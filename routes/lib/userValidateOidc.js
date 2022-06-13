@@ -23,7 +23,7 @@
 
 var r3util		= require('./libr3util');
 var	oidc		= require('../oidc');
-var { decode }	= require('jose/util/base64url');
+var { decode }	= require('jose').base64url;
 
 //
 // rawGetOtherToken
