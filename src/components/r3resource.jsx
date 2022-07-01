@@ -23,19 +23,20 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
-import TextField					from '@material-ui/core/TextField';
-import Typography					from '@material-ui/core/Typography';
-import IconButton					from '@material-ui/core/IconButton';
-import FormControl					from '@material-ui/core/FormControl';	// For Radio Button
-import FormControlLabel				from '@material-ui/core/FormControlLabel';
-import RadioGroup					from '@material-ui/core/RadioGroup';
-import Radio						from '@material-ui/core/Radio';
-import Tooltip						from '@material-ui/core/Tooltip';
-import DeleteIcon					from '@material-ui/icons/ClearRounded';
-import AddIcon						from '@material-ui/icons/AddRounded';
-import UpIcon						from '@material-ui/icons/ArrowUpwardRounded';
-import DownIcon						from '@material-ui/icons/ArrowDownwardRounded';
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import TextField					from '@mui/material/TextField';
+import Typography					from '@mui/material/Typography';
+import IconButton					from '@mui/material/IconButton';
+import FormControl					from '@mui/material/FormControl';	// For Radio Button
+import FormControlLabel				from '@mui/material/FormControlLabel';
+import RadioGroup					from '@mui/material/RadioGroup';
+import Radio						from '@mui/material/Radio';
+import Tooltip						from '@mui/material/Tooltip';
+import DeleteIcon					from '@mui/icons-material/ClearRounded';
+import AddIcon						from '@mui/icons-material/AddRounded';
+import UpIcon						from '@mui/icons-material/ArrowUpwardRounded';
+import DownIcon						from '@mui/icons-material/ArrowDownwardRounded';
 
 import { r3Resource }				from './r3styles';
 import R3FormButtons				from './r3formbuttons';					// Buttons
@@ -768,6 +769,7 @@ export default class R3Resource extends React.Component
 						disabled={ true }
 						{ ...theme.r3Resource.deleteKeysButton }
 						className={ classes.deleteInvisibleKeysButton }
+						size="large"
 					>
 						<DeleteIcon />
 					</IconButton>
@@ -784,6 +786,7 @@ export default class R3Resource extends React.Component
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deleteKeysTooltip, null) }
 							{ ...theme.r3Resource.deleteKeysButton }
 							className={ classes.deleteKeysButton }
+							size="large"
 						>
 							<DeleteIcon />
 						</IconButton>
@@ -877,6 +880,7 @@ export default class R3Resource extends React.Component
 						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addKeysTooltip, false) }
 						{ ...theme.r3Resource.addKeysButton }
 						className={ classes.addKeysButton }
+						size="large"
 					>
 						<AddIcon />
 					</IconButton>
@@ -894,130 +898,134 @@ export default class R3Resource extends React.Component
 		}
 		let	_items = items;
 
-		return (
-			_items.map( (item, pos) =>
-			{
-				let	downButton;
-				if(this.props.isReadMode || (_items.length <= (pos + 1))){
-					downButton = (
+		return _items.map( (item, pos) =>
+		{
+			let	downButton;
+			if(this.props.isReadMode || (_items.length <= (pos + 1))){
+				downButton = (
+					<IconButton
+						disabled={ true }
+						{ ...theme.r3Resource.downAliasButton }
+						className={ classes.arrowInvisibleAliasButton }
+						size="large"
+					>
+						<DownIcon />
+					</IconButton>
+				);
+			}else{
+				downButton = (
+					<Tooltip
+						title={ r3provider.getR3TextRes().tResAliasDownTT }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.downAliasTooltip, 'number') || (this.state.tooltips.downAliasTooltip != pos)) ? false : true) }
+					>
 						<IconButton
-							disabled={ true }
+							onClick={ (event) => this.handleAliasesChange(event, actionTypeDown, pos) }
+							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.downAliasTooltip, pos) }
+							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.downAliasTooltip, -1) }
 							{ ...theme.r3Resource.downAliasButton }
-							className={ classes.arrowInvisibleAliasButton }
+							className={ classes.arrowAliasButton }
+							size="large"
 						>
 							<DownIcon />
 						</IconButton>
-					);
-				}else{
-					downButton = (
-						<Tooltip
-							title={ r3provider.getR3TextRes().tResAliasDownTT }
-							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.downAliasTooltip, 'number') || (this.state.tooltips.downAliasTooltip != pos)) ? false : true) }
-						>
-							<IconButton
-								onClick={ (event) => this.handleAliasesChange(event, actionTypeDown, pos) }
-								onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.downAliasTooltip, pos) }
-								onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.downAliasTooltip, -1) }
-								{ ...theme.r3Resource.downAliasButton }
-								className={ classes.arrowAliasButton }
-							>
-								<DownIcon />
-							</IconButton>
-						</Tooltip>
-					);
-				}
+					</Tooltip>
+				);
+			}
 
-				let	upButton;
-				if(this.props.isReadMode || (0 === pos)){
-					upButton = (
+			let	upButton;
+			if(this.props.isReadMode || (0 === pos)){
+				upButton = (
+					<IconButton
+						disabled={ true }
+						{ ...theme.r3Resource.upAliasButton }
+						className={ classes.arrowInvisibleAliasButton }
+						size="large"
+					>
+						<UpIcon />
+					</IconButton>
+				);
+			}else{
+				upButton = (
+					<Tooltip
+						title={ r3provider.getR3TextRes().tResAliasUpTT }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.upAliasTooltip, 'number') || (this.state.tooltips.upAliasTooltip != pos)) ? false : true) }
+					>
 						<IconButton
-							disabled={ true }
+							onClick={ (event) => this.handleAliasesChange(event, actionTypeUp, pos) }
+							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.upAliasTooltip, pos) }
+							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.upAliasTooltip, -1) }
 							{ ...theme.r3Resource.upAliasButton }
-							className={ classes.arrowInvisibleAliasButton }
+							className={ classes.arrowAliasButton }
+							size="large"
 						>
 							<UpIcon />
 						</IconButton>
-					);
-				}else{
-					upButton = (
-						<Tooltip
-							title={ r3provider.getR3TextRes().tResAliasUpTT }
-							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.upAliasTooltip, 'number') || (this.state.tooltips.upAliasTooltip != pos)) ? false : true) }
-						>
-							<IconButton
-								onClick={ (event) => this.handleAliasesChange(event, actionTypeUp, pos) }
-								onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.upAliasTooltip, pos) }
-								onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.upAliasTooltip, -1) }
-								{ ...theme.r3Resource.upAliasButton }
-								className={ classes.arrowAliasButton }
-							>
-								<UpIcon />
-							</IconButton>
-						</Tooltip>
-					);
-				}
+					</Tooltip>
+				);
+			}
 
-				let	deleteButton;
-				if(this.props.isReadMode){
-					deleteButton = (
+			let	deleteButton;
+			if(this.props.isReadMode){
+				deleteButton = (
+					<IconButton
+						disabled={ true }
+						{ ...theme.r3Resource.deleteAliasButton }
+						className={ classes.deleteInvisibleAliasButton }
+						size="large"
+					>
+						<DeleteIcon />
+					</IconButton>
+				);
+			}else{
+				deleteButton = (
+					<Tooltip
+						title={ r3provider.getR3TextRes().tResAliasDelTT }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteAliasTooltip, 'number') || (this.state.tooltips.deleteAliasTooltip != pos)) ? false : true) }
+					>
 						<IconButton
-							disabled={ true }
+							onClick={ (event) => this.handleAliasesChange(event, actionTypeDelete, pos) }
+							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deleteAliasTooltip, pos) }
+							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deleteAliasTooltip, -1) }
 							{ ...theme.r3Resource.deleteAliasButton }
-							className={ classes.deleteInvisibleAliasButton }
+							className={ classes.deleteAliasButton }
+							size="large"
 						>
 							<DeleteIcon />
 						</IconButton>
-					);
-				}else{
-					deleteButton = (
-						<Tooltip
-							title={ r3provider.getR3TextRes().tResAliasDelTT }
-							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteAliasTooltip, 'number') || (this.state.tooltips.deleteAliasTooltip != pos)) ? false : true) }
-						>
-							<IconButton
-								onClick={ (event) => this.handleAliasesChange(event, actionTypeDelete, pos) }
-								onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deleteAliasTooltip, pos) }
-								onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deleteAliasTooltip, -1) }
-								{ ...theme.r3Resource.deleteAliasButton }
-								className={ classes.deleteAliasButton }
-							>
-								<DeleteIcon />
-							</IconButton>
-						</Tooltip>
-					);
-				}
-
-				let	inputProps;
-				if(this.props.isReadMode){
-					inputProps = {};
-				}else{
-					inputProps = {
-						className: classes.inputTextField
-					};
-				}
-
-				return (
-					<div
-						key={ pos }
-						className={ classes.enclosureElement }
-					>
-						<TextField
-							name={ resourceComponentValues.aliasTextFieldNamePrefix + String(pos) }
-							disabled={ this.props.isReadMode }
-							value={ item }
-							placeholder={ r3provider.getR3TextRes().tResAliasHint }
-							onChange={ (event) => this.handleAliasesChange(event, actionTypeValue, pos) }
-							InputProps={ inputProps }
-							{ ...theme.r3Resource.aliasTextField }
-							className={ classes.aliasTextField }
-						/>
-						{ downButton }
-						{ upButton }
-						{ deleteButton }
-					</div>
+					</Tooltip>
 				);
-			})
-		);
+			}
+
+			let	inputProps;
+			if(this.props.isReadMode){
+				inputProps = {};
+			}else{
+				inputProps = {
+					className: classes.inputTextField
+				};
+			}
+
+			return (
+				<div
+					key={ pos }
+					className={ classes.enclosureElement }
+				>
+					<TextField
+						name={ resourceComponentValues.aliasTextFieldNamePrefix + String(pos) }
+						disabled={ this.props.isReadMode }
+						value={ item }
+						placeholder={ r3provider.getR3TextRes().tResAliasHint }
+						onChange={ (event) => this.handleAliasesChange(event, actionTypeValue, pos) }
+						InputProps={ inputProps }
+						{ ...theme.r3Resource.aliasTextField }
+						className={ classes.aliasTextField }
+					/>
+					{ downButton }
+					{ upButton }
+					{ deleteButton }
+				</div>
+			);
+		});
 	}
 
 	getAddAliasContents()
@@ -1051,6 +1059,7 @@ export default class R3Resource extends React.Component
 						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addAliasTooltip, false) }
 						{ ...theme.r3Resource.addAliasButton }
 						className={ classes.addAliasButton }
+						size="large"
 					>
 						<AddIcon />
 					</IconButton>

@@ -23,30 +23,30 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-// For MainTree
-import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
-import AppBar						from '@material-ui/core/AppBar';
-import Toolbar						from '@material-ui/core/Toolbar';
-import Drawer						from '@material-ui/core/Drawer';
-import Chip							from '@material-ui/core/Chip';
-import Menu							from '@material-ui/core/Menu';
-import MenuItem						from '@material-ui/core/MenuItem';
-import IconButton					from '@material-ui/core/IconButton';
-import Tooltip						from '@material-ui/core/Tooltip';
-import Typography					from '@material-ui/core/Typography';
-import List							from '@material-ui/core/List';
-import ListItem						from '@material-ui/core/ListItem';
-import ListItemText					from '@material-ui/core/ListItemText';
-import ListItemIcon					from '@material-ui/core/ListItemIcon';
-import Collapse						from '@material-ui/core/Collapse';
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import AppBar						from '@mui/material/AppBar';
+import Toolbar						from '@mui/material/Toolbar';
+import Drawer						from '@mui/material/Drawer';
+import Chip							from '@mui/material/Chip';
+import Menu							from '@mui/material/Menu';
+import MenuItem						from '@mui/material/MenuItem';
+import IconButton					from '@mui/material/IconButton';
+import Tooltip						from '@mui/material/Tooltip';
+import Typography					from '@mui/material/Typography';
+import List							from '@mui/material/List';
+import ListItem						from '@mui/material/ListItem';
+import ListItemText					from '@mui/material/ListItemText';
+import ListItemIcon					from '@mui/material/ListItemIcon';
+import Collapse						from '@mui/material/Collapse';
 
-import ExpandLessIcon				from '@material-ui/icons/ExpandLess';
-import ExpandMoreIcon				from '@material-ui/icons/ExpandMore';
-import MenuIcon						from '@material-ui/icons/Menu';
-import ArrowRightIcon				from '@material-ui/icons/ArrowRight';
-import LabelIcon					from '@material-ui/icons/Label';
-import OwnerIcon					from '@material-ui/icons/Person';
-import MoreVertIcon					from '@material-ui/icons/MoreVert';
+import ExpandLessIcon				from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon				from '@mui/icons-material/ExpandMore';
+import MenuIcon						from '@mui/icons-material/Menu';
+import ArrowRightIcon				from '@mui/icons-material/ArrowRight';
+import LabelIcon					from '@mui/icons-material/Label';
+import OwnerIcon					from '@mui/icons-material/Person';
+import MoreVertIcon					from '@mui/icons-material/MoreVert';
 
 import { r3MainTree }				from './r3styles';
 import R3PopupMsgDialog				from './r3popupmsgdialog';
@@ -487,7 +487,6 @@ export default class R3MainTree extends React.Component
 					anchorEl={ this.state.dummyLicenseMenuAnchorEl }
 					open={ Boolean(this.state.dummyLicenseMenuAnchorEl) }
 					onClose={ this.handleDummyBarMenuClose }
-					getContentAnchorEl={ null }
 					{ ...theme.r3MainTree.licenseMenu }
 				>
 					{ this.getLicensesMenuItems() }
@@ -562,6 +561,7 @@ export default class R3MainTree extends React.Component
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.mainMenu, false) }
 							aria-owns={ this.state.dummyBarMenuAnchorEl ? componentKeyIds.dummyBarMenuId : undefined }
 							{ ...theme.r3MainTree.dummyBarMainMenuButton }
+							size="large"
 						>
 							<MenuIcon />
 						</IconButton>
@@ -572,7 +572,6 @@ export default class R3MainTree extends React.Component
 						anchorEl={ this.state.dummyBarMenuAnchorEl }
 						open={ Boolean(this.state.dummyBarMenuAnchorEl) }
 						onClose={ this.handleDummyBarMenuClose }
-						getContentAnchorEl={ null }
 						{ ...theme.r3MainTree.dummyBarMainMenu }
 					>
 						{ this.getMenuItems() }
@@ -643,6 +642,7 @@ export default class R3MainTree extends React.Component
 							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.tenantMenu, true) }
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.tenantMenu, false) }
 							{ ...theme.r3MainTree.tenantListButton }
+							size="large"
 						>
 							<MoreVertIcon />
 						</IconButton>
@@ -653,7 +653,6 @@ export default class R3MainTree extends React.Component
 						anchorEl={ this.state.tenantMenuAnchorEl }
 						open={ Boolean(this.state.tenantMenuAnchorEl) }
 						onClose={ this.handleTenantMenuClose }
-						getContentAnchorEl={ null }
 						{ ...theme.r3MainTree.tenantListMenu }
 					>
 						{ menuItem }

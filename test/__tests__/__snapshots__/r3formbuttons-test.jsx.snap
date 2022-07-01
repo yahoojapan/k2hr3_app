@@ -6,10 +6,11 @@ exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
 >
   <button
     aria-label="cancel"
-    className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-cancelButton-2 MuiButton-containedPrimary"
+    className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root R3FormButtons-cancelButton-2 css-sghohy-MuiButtonBase-root-MuiButton-root"
     disabled={false}
     onBlur={[Function]}
     onClick={[Function]}
+    onContextMenu={[Function]}
     onDragLeave={[Function]}
     onFocus={[Function]}
     onKeyDown={[Function]}
@@ -23,28 +24,26 @@ exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
     tabIndex={0}
     type="button"
   >
-    <span
-      className="MuiButton-label"
+    CANCEL
+    <svg
+      aria-hidden={true}
+      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3FormButtons-buttonIcon-4 css-i4bv87-MuiSvgIcon-root"
+      data-testid="CancelIcon"
+      focusable="false"
+      viewBox="0 0 24 24"
     >
-      CANCEL
-      <svg
-        aria-hidden={true}
-        className="MuiSvgIcon-root R3FormButtons-buttonIcon-4"
-        focusable="false"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"
-        />
-      </svg>
-    </span>
+      <path
+        d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"
+      />
+    </svg>
   </button>
   <button
     aria-label="save"
-    className="MuiButtonBase-root MuiButton-root MuiButton-contained R3FormButtons-saveButton-3 MuiButton-containedSecondary"
+    className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root R3FormButtons-saveButton-3 css-zcbmsk-MuiButtonBase-root-MuiButton-root"
     disabled={false}
     onBlur={[Function]}
     onClick={[Function]}
+    onContextMenu={[Function]}
     onDragLeave={[Function]}
     onFocus={[Function]}
     onKeyDown={[Function]}
@@ -58,21 +57,18 @@ exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
     tabIndex={0}
     type="button"
   >
-    <span
-      className="MuiButton-label"
+    SAVE
+    <svg
+      aria-hidden={true}
+      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3FormButtons-buttonIcon-4 css-i4bv87-MuiSvgIcon-root"
+      data-testid="CheckCircleIcon"
+      focusable="false"
+      viewBox="0 0 24 24"
     >
-      SAVE
-      <svg
-        aria-hidden={true}
-        className="MuiSvgIcon-root R3FormButtons-buttonIcon-4"
-        focusable="false"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-        />
-      </svg>
-    </span>
+      <path
+        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+      />
+    </svg>
   </button>
 </div>
 `;

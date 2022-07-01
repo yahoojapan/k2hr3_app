@@ -23,24 +23,25 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
-import TextField					from '@material-ui/core/TextField';
-import Typography					from '@material-ui/core/Typography';
-import IconButton					from '@material-ui/core/IconButton';
-import Box							from '@material-ui/core/Box';
-import FormControlLabel				from '@material-ui/core/FormControlLabel';
-import RadioGroup					from '@material-ui/core/RadioGroup';
-import Radio						from '@material-ui/core/Radio';
-import Table						from '@material-ui/core/Table';
-import TableBody					from '@material-ui/core/TableBody';
-import TableCell					from '@material-ui/core/TableCell';
-import TableHead					from '@material-ui/core/TableHead';
-import TablePagination				from '@material-ui/core/TablePagination';
-import TableRow						from '@material-ui/core/TableRow';
-import Tooltip						from '@material-ui/core/Tooltip';
-import DeleteIcon					from '@material-ui/icons/ClearRounded';
-import AddIcon						from '@material-ui/icons/AddRounded';
-import EditIcon						from '@material-ui/icons/Edit';
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import TextField					from '@mui/material/TextField';
+import Typography					from '@mui/material/Typography';
+import IconButton					from '@mui/material/IconButton';
+import Box							from '@mui/material/Box';
+import FormControlLabel				from '@mui/material/FormControlLabel';
+import RadioGroup					from '@mui/material/RadioGroup';
+import Radio						from '@mui/material/Radio';
+import Table						from '@mui/material/Table';
+import TableBody					from '@mui/material/TableBody';
+import TableCell					from '@mui/material/TableCell';
+import TableHead					from '@mui/material/TableHead';
+import TablePagination				from '@mui/material/TablePagination';
+import TableRow						from '@mui/material/TableRow';
+import Tooltip						from '@mui/material/Tooltip';
+import DeleteIcon					from '@mui/icons-material/ClearRounded';
+import AddIcon						from '@mui/icons-material/AddRounded';
+import EditIcon						from '@mui/icons-material/Edit';
 
 import { r3Service }				from './r3styles';
 import R3FormButtons				from './r3formbuttons';					// Buttons
@@ -513,50 +514,49 @@ export default class R3Service extends React.Component
 
 		let	tenantYrn = regYrnTenantPathPrefix + this.props.tenant;
 
-		return (
-			items.map( (item, pos) =>
-			{
-				if(r3CompareCaseString(tenantYrn, item)){
-					// item is owner tenant, this value could not change.
-					return;
-				}
+		return items.map( (item, pos) =>
+		{
+			if(r3CompareCaseString(tenantYrn, item)){
+				// item is owner tenant, this value could not change.
+				return;
+			}
 
-				let	deleteButton = (
-					<Tooltip
-						title={ r3provider.getR3TextRes().tResServiceTenantDelTT }
-						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteTenantTooltip, 'number') || (this.state.tooltips.deleteTenantTooltip != pos)) ? false : true) }
+			let	deleteButton = (
+				<Tooltip
+					title={ r3provider.getR3TextRes().tResServiceTenantDelTT }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteTenantTooltip, 'number') || (this.state.tooltips.deleteTenantTooltip != pos)) ? false : true) }
+				>
+					<IconButton
+						onClick={ (event) => this.handleTenantsChange(event, actionTypeDelete, pos) }
+						onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.deleteTenantTooltip, pos) }
+						onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.deleteTenantTooltip, -1) }
+						{ ...theme.r3Service.deleteTenantButton }
+						className={ classes.deleteTenantButton }
+						size="large"
 					>
-						<IconButton
-							onClick={ (event) => this.handleTenantsChange(event, actionTypeDelete, pos) }
-							onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.deleteTenantTooltip, pos) }
-							onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.deleteTenantTooltip, -1) }
-							{ ...theme.r3Service.deleteTenantButton }
-							className={ classes.deleteTenantButton }
-						>
-							<DeleteIcon />
-						</IconButton>
-					</Tooltip>
-				);
+						<DeleteIcon />
+					</IconButton>
+				</Tooltip>
+			);
 
-				return (
-					<div
-						key={ pos }
-						className={ classes.enclosureElement }
-					>
-						<TextField
-							name={ serviceComponentValues.tenantTextFieldNamePrefix + String(pos) }
-							value={ item }
-							placeholder={ r3provider.getR3TextRes().tResServiceTenantHint }
-							onChange={ (event) => this.handleTenantsChange(event, actionTypeValue, pos) }
-							InputProps={{ className: classes.inputTextField }}
-							{ ...theme.r3Service.tenantTextField }
-							className={ classes.tenantTextField }
-						/>
-						{ deleteButton }
-					</div>
-				);
-			})
-		);
+			return (
+				<div
+					key={ pos }
+					className={ classes.enclosureElement }
+				>
+					<TextField
+						name={ serviceComponentValues.tenantTextFieldNamePrefix + String(pos) }
+						value={ item }
+						placeholder={ r3provider.getR3TextRes().tResServiceTenantHint }
+						onChange={ (event) => this.handleTenantsChange(event, actionTypeValue, pos) }
+						InputProps={{ className: classes.inputTextField }}
+						{ ...theme.r3Service.tenantTextField }
+						className={ classes.tenantTextField }
+					/>
+					{ deleteButton }
+				</div>
+			);
+		});
 	}
 
 	getAddTenantsContents()
@@ -587,6 +587,7 @@ export default class R3Service extends React.Component
 						onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.addTenantTooltip, false) }
 						{ ...theme.r3Service.addTenantButton }
 						className={ classes.addTenantButton }
+						size="large"
 					>
 						<AddIcon />
 					</IconButton>
@@ -850,6 +851,7 @@ export default class R3Service extends React.Component
 								onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.addResStaticObjTooltip, false) }
 								{ ...theme.r3Service.addResStaticObjButton }
 								className={ classes.addResStaticObjButton }
+								size="large"
 							>
 								<AddIcon />
 							</IconButton>
@@ -941,6 +943,7 @@ export default class R3Service extends React.Component
 										onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.delResStaticObjTooltip, -1) }
 										{ ...theme.r3Service.delResStaticObjButton }
 										className={ classes.delResStaticObjButton }
+										size="large"
 									>
 										<DeleteIcon />
 									</IconButton>
@@ -955,6 +958,7 @@ export default class R3Service extends React.Component
 										onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.editResStaticObjTooltip, -1) }
 										{ ...theme.r3Service.editResStaticObjButton }
 										className={ classes.editResStaticObjButton }
+										size="large"
 									>
 										<EditIcon />
 									</IconButton>
@@ -996,7 +1000,7 @@ export default class R3Service extends React.Component
 					rowsPerPage={ this.props.tableRawCount }
 					page={ this.state.serviceResStaticObjPageNum }
 					rowsPerPageOptions={ [] }
-					onChangePage={ (event) => this.handleResStaticObjPageChange(event) }
+					onPageChange={ (event) => this.handleResStaticObjPageChange(event) }
 				/>
 				<TextField
 					name={ serviceComponentValues.resStaticObjTextFieldName }

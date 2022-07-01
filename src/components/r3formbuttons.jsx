@@ -23,10 +23,11 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
-import Button						from '@material-ui/core/Button';
-import CheckCircleIcon				from '@material-ui/icons/CheckCircle';
-import CancelIcon					from '@material-ui/icons/Cancel';
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import Button						from '@mui/material/Button';
+import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
+import CancelIcon					from '@mui/icons-material/Cancel';
 
 import { r3FormButtons }			from './r3styles';
 

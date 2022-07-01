@@ -23,13 +23,13 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-// Components
-import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
-import Paper						from '@material-ui/core/Paper';			// For contents wrap
-import Typography					from '@material-ui/core/Typography';
-import ErrorIcon					from '@material-ui/icons/ErrorRounded';
-import WarningIcon					from '@material-ui/icons/WarningRounded';
-import InformationIcon				from '@material-ui/icons/InfoOutlined';
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import Paper						from '@mui/material/Paper';				// For contents wrap
+import Typography					from '@mui/material/Typography';
+import ErrorIcon					from '@mui/icons-material/ErrorRounded';
+import WarningIcon					from '@mui/icons-material/WarningRounded';
+import InformationIcon				from '@mui/icons-material/InfoOutlined';
 
 import { r3MsgBox }					from './r3styles';
 import R3Message					from '../util/r3message';

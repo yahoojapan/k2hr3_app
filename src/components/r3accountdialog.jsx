@@ -23,17 +23,18 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
-import Button						from '@material-ui/core/Button';
-import Dialog						from '@material-ui/core/Dialog';
-import DialogTitle					from '@material-ui/core/DialogTitle';
-import DialogContent				from '@material-ui/core/DialogContent';
-import DialogActions				from '@material-ui/core/DialogActions';
-import Typography					from '@material-ui/core/Typography';
-import Tooltip						from '@material-ui/core/Tooltip';
-import TextField					from '@material-ui/core/TextField';
-import CheckCircleIcon				from '@material-ui/icons/CheckCircle';
-import CopyClipBoardIcon			from '@material-ui/icons/AssignmentTurnedInRounded';
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import Button						from '@mui/material/Button';
+import Dialog						from '@mui/material/Dialog';
+import DialogTitle					from '@mui/material/DialogTitle';
+import DialogContent				from '@mui/material/DialogContent';
+import DialogActions				from '@mui/material/DialogActions';
+import Typography					from '@mui/material/Typography';
+import Tooltip						from '@mui/material/Tooltip';
+import TextField					from '@mui/material/TextField';
+import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
+import CopyClipBoardIcon			from '@mui/icons-material/AssignmentTurnedInRounded';
 
 import { r3AccountDialog }			from './r3styles';
 import { r3IsEmptyString, r3IsEmptyEntityObject, r3IsSafeTypedEntity } from '../util/r3util';
@@ -204,7 +205,7 @@ export default class R3AccountDialog extends React.Component
 						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.copyClipboardButtonTooltip, 'boolean')) ? false : this.state.tooltips.copyClipboardButtonTooltip) }
 					>
 						<Button
-							onClick={ this.handleCopyClipboard  }
+							onClick={ this.handleCopyClipboard }
 							onMouseEnter={ event => this.handleCopyClipboardButtonTooltipChange(event, true) }
 							onMouseLeave={ event => this.handleCopyClipboardButtonTooltipChange(event, false) }
 							{ ...theme.r3AccountDialog.copyClipboardButton }

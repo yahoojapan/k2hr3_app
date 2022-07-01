@@ -110,10 +110,10 @@ export const r3MainTree = (theme) => ({
 		paddingLeft:			theme.spacing(2)
 	},
 	serviceLabelCollapse: {
-		paddingLeft:			(theme.spacing(2) + theme.spacing(2) + theme.spacing(1))
+		paddingLeft:			theme.spacing(5)				// 2 + 2 + 1
 	},
 	childListItemText: {
-		marginLeft:				(theme.spacing(2) + theme.spacing(2) + theme.spacing(1))
+		marginLeft:				theme.spacing(5)				// 2 + 2 + 1
 	},
 	listItemText: {
 		paddingLeft:			0
@@ -122,7 +122,7 @@ export const r3MainTree = (theme) => ({
 		paddingLeft:			0
 	},
 	inServiceChildListItemText: {
-		marginLeft:				(theme.spacing(2) + theme.spacing(1))
+		marginLeft:				theme.spacing(3)				// 2 + 1
 	}
 });
 
@@ -160,6 +160,15 @@ export const r3Toolbar = (theme) => ({
 		//
 		width:					theme.spacing(3),				// 24px( as same as .MuiChip-avatar class value )
 		height:					theme.spacing(3),				// 24px( as same as .MuiChip-avatar class value )
+
+		// [NOTE][FIXME]
+		// In the migration to MUI v5, this Avatar has the default CSS of ".MuiChip-avatarColorPrimary" applied.
+		// And this default CSS couldn't be overridden by r3theme.jsx.
+		// Also, since this CSS is applied after style, it cannot be applied by r3style.jsx.
+		// Therefore, we chose a method that does not apply the default CSS using "StyledEngineProvider".
+		// Then, we added to set the following "margin-left" which was set in the default CSS.
+		//
+		marginLeft:				'5px'
 	},
 	descriptionIcon: {
 		color:					theme.palette.secondary.main
@@ -239,26 +248,26 @@ export const r3Resource = (theme) => ({
 	// [NOTE]
 	// If the content area is divided into two, the width of one is 50% width size
 	// (this value includes the padding size) minus the size of one half of the button.
-	// Since the button is 40px wide with padding 8px on (24x24)px, we need to subtract
-	// 20px. Because calc can not use variables, it uses numerical values.
+	// Since the button is 40px wide with padding 12px on (24x24)px, we need to subtract
+	// 30px. Because calc can not use variables, it uses numerical values.
 	//
 	keysKeySubTitle: {
 		float:					'left',
-		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
+		width:					`calc(50% - 30px)`,				// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	keysValueSubTitle: {
-		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
+		width:					`calc(50% - 30px)`,				// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(2)
 	},
 	keysKeyTextField: {
 		float:					'left',
-		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
+		width:					`calc(50% - 30px)`,				// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	keysValueTextField: {
 		float:					'left',
-		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
+		width:					`calc(50% - 30px)`,				// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(2)
 	},
 	deleteKeysButton: {
@@ -273,7 +282,7 @@ export const r3Resource = (theme) => ({
 	},
 	aliasTextField: {
 		float:					'left',
-		width:					`calc(100% - 120px)`,			// eslint-disable-line quotes
+		width:					`calc(100% - 150px)`,			// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	arrowAliasButton: {
@@ -287,7 +296,8 @@ export const r3Resource = (theme) => ({
 	},
 	addAliasButton: {
 		float:					'right',
-		display:				'flex'
+		display:				'flex',
+		paddingRight:			theme.spacing(3)
 	},
 	deleteAliasButton: {
 		display:				'flex'
@@ -344,7 +354,7 @@ export const r3Policy = (theme) => ({
 	//
 	resourceTextField: {
 		float:					'left',
-		width:					`calc(100% - 40px)`,			// eslint-disable-line quotes
+		width:					`calc(100% - 60px)`,			// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	addResourceButton: {
@@ -359,7 +369,7 @@ export const r3Policy = (theme) => ({
 	},
 	aliasTextField: {
 		float:					'left',
-		width:					`calc(100% - 120px)`,			// eslint-disable-line quotes
+		width:					`calc(100% - 150px)`,			// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	arrowAliasButton: {
@@ -373,7 +383,8 @@ export const r3Policy = (theme) => ({
 	},
 	addAliasButton: {
 		float:					'right',
-		display:				'flex'
+		display:				'flex',
+		paddingRight:			theme.spacing(3)
 	},
 	deleteAliasButton: {
 		display:				'flex'
@@ -414,21 +425,21 @@ export const r3Role = (theme) => ({
 	//
 	hostnameSubTitle: {
 		float:					'left',
-		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
+		width:					`calc(50% - 30px)`,				// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	hostnameAUXSubTitle: {
-		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
+		width:					`calc(50% - 30px)`,				// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(2)
 	},
 	hostnameTextField: {
 		float:					'left',
-		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
+		width:					`calc(50% - 30px)`,				// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	hostnameAUXTextField: {
 		float:					'left',
-		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
+		width:					`calc(50% - 30px)`,				// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(2)
 	},
 	deleteHostnameButton: {
@@ -443,21 +454,21 @@ export const r3Role = (theme) => ({
 	},
 	ipSubTitle: {
 		float:					'left',
-		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
+		width:					`calc(50% - 30px)`,				// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	ipAUXSubTitle: {
-		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
+		width:					`calc(50% - 30px)`,				// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(2)
 	},
 	ipTextField: {
 		float:					'left',
-		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
+		width:					`calc(50% - 30px)`,				// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	ipAUXTextField: {
 		float:					'left',
-		width:					`calc(50% - 20px)`,				// eslint-disable-line quotes
+		width:					`calc(50% - 30px)`,				// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(2)
 	},
 	deleteIpButton: {
@@ -469,7 +480,7 @@ export const r3Role = (theme) => ({
 	},
 	policyTextField: {
 		float:					'left',
-		width:					`calc(100% - 40px)`,			// eslint-disable-line quotes
+		width:					`calc(100% - 60px)`,			// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	addPolicyButton: {
@@ -484,7 +495,7 @@ export const r3Role = (theme) => ({
 	},
 	aliasTextField: {
 		float:					'left',
-		width:					`calc(100% - 120px)`,			// eslint-disable-line quotes
+		width:					`calc(100% - 150px)`,			// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	arrowAliasButton: {
@@ -498,7 +509,8 @@ export const r3Role = (theme) => ({
 	},
 	addAliasButton: {
 		float:					'right',
-		display:				'flex'
+		display:				'flex',
+		paddingRight:			theme.spacing(3)
 	},
 	deleteAliasButton: {
 		display:				'flex'
@@ -581,7 +593,7 @@ export const r3Service = (theme) => ({
 	},
 	tenantTextField: {
 		float:					'left',
-		width:					`calc(100% - 40px)`,			// eslint-disable-line quotes
+		width:					`calc(100% - 60px)`,			// eslint-disable-line quotes
 		paddingLeft:			theme.spacing(6)
 	},
 	addResStaticObjButton: {

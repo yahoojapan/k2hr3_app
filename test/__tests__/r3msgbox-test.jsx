@@ -22,8 +22,8 @@
 import React					from 'react';										// eslint-disable-line no-unused-vars
 import renderer					from 'react-test-renderer';
 import getElementWithContext	from 'react-test-context-provider';					// for context provider
-import { ThemeProvider }		from '@material-ui/styles';							// for custom theme
-import CssBaseline				from '@material-ui/core/CssBaseline';				// for reset.css
+import { ThemeProvider }		from '@mui/styles';									// for custom theme
+import { StyledEngineProvider, CssBaseline}	from '@mui/material';					// for jss and reset.css
 
 import r3Theme					from '../../src/components/r3theme';				// custom theme
 import R3MsgBox					from '../../src/components/r3msgbox';
@@ -44,19 +44,21 @@ const message = new R3Message('Dummy error message', errorType);
 //
 describe('R3MsgBox', () => {											// eslint-disable-line no-undef
 	it('test snapshot for R3MsgBox', () => {							// eslint-disable-line no-undef
-		/* eslint-disable indent */
 		const r3provider	= new R3Provider(null);
-		const element		= getElementWithContext({
-									r3Context:	r3provider.getR3Context()
-								},
-								<ThemeProvider theme={ r3Theme } >
-									<CssBaseline />
-									<R3MsgBox
-										message={ message }
-									/>
-								</ThemeProvider>
-							);
-		/* eslint-enable indent */
+
+		const element		= getElementWithContext(
+			{
+				r3Context:	r3provider.getR3Context()
+			},
+			<StyledEngineProvider injectFirst>
+				<ThemeProvider theme={ r3Theme } >
+					<CssBaseline />
+					<R3MsgBox
+						message={ message }
+					/>
+				</ThemeProvider>
+			</StyledEngineProvider>
+		);
 
 		const component = renderer.create(element, { createNodeMock });
 		let tree		= component.toJSON();

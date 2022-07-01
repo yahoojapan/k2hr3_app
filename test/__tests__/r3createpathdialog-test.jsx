@@ -22,8 +22,8 @@
 import React					from 'react';										// eslint-disable-line no-unused-vars
 import renderer					from 'react-test-renderer';
 import getElementWithContext	from 'react-test-context-provider';					// for context provider
-import { ThemeProvider }		from '@material-ui/styles';							// for custom theme
-import CssBaseline				from '@material-ui/core/CssBaseline';				// for reset.css
+import { ThemeProvider }		from '@mui/styles';									// for custom theme
+import { StyledEngineProvider, CssBaseline}	from '@mui/material';					// for jss and reset.css
 
 import r3Theme					from '../../src/components/r3theme';				// custom theme
 import R3CreatePathDialog		from '../../src/components/r3createpathdialog';
@@ -76,10 +76,10 @@ r3Theme.r3CreatePathDialog.root['disablePortal'] = true;
 // Unlike before, by changing the mock content, you can fully check
 // the snapshots in the Dialog.
 //
-jest.mock('@material-ui/core/Fade', () => {												// eslint-disable-line no-undef
+jest.mock('@mui/material/Fade', () => {												// eslint-disable-line no-undef
 	return '';
 });
-jest.mock('@material-ui/core/Modal', () => {											// eslint-disable-line no-undef
+jest.mock('@mui/material/Modal', () => {											// eslint-disable-line no-undef
 	return '';
 });
 
@@ -120,29 +120,30 @@ describe('R3CreatePathDialog', () => {												// eslint-disable-line no-unde
 	});
 
 	it('test snapshot for R3CreatePathDialog', () => {								// eslint-disable-line no-undef
-		/* eslint-disable indent */
 		const r3provider	= new R3Provider(null);
 
 		// [NOTE]
 		// We need <div> for Dialog
 		//
-		const element		= getElementWithContext({
-									r3Context:	r3provider.getR3Context()
-								},
-								<ThemeProvider theme={ r3Theme } >
-									<CssBaseline />
-									<R3CreatePathDialog
-										r3provider={ r3provider }
-										open={ true }
-										tenant={ tenant }
-										type={ 'role' }
-										parentPath={ '/JEST_ROLE_PARENT_PATH' }
-										newPath={ '' }
-										onClose={ close }
-									/>
-								</ThemeProvider>
-							);
-		/* eslint-enable indent */
+		const element		= getElementWithContext(
+			{
+				r3Context:	r3provider.getR3Context()
+			},
+			<StyledEngineProvider injectFirst>
+				<ThemeProvider theme={ r3Theme } >
+					<CssBaseline />
+					<R3CreatePathDialog
+						r3provider={ r3provider }
+						open={ true }
+						tenant={ tenant }
+						type={ 'role' }
+						parentPath={ '/JEST_ROLE_PARENT_PATH' }
+						newPath={ '' }
+						onClose={ close }
+					/>
+				</ThemeProvider>
+			</StyledEngineProvider>
+		);
 
 		const component = renderer.create(element, { createNodeMock });
 		let tree		= component.toJSON();
