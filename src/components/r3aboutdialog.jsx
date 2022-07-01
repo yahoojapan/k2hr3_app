@@ -23,15 +23,16 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
-import Button						from '@material-ui/core/Button';
-import Dialog						from '@material-ui/core/Dialog';
-import DialogTitle					from '@material-ui/core/DialogTitle';
-import DialogContent				from '@material-ui/core/DialogContent';
-import DialogContentText			from '@material-ui/core/DialogContentText';
-import DialogActions				from '@material-ui/core/DialogActions';
-import Typography					from '@material-ui/core/Typography';
-import CancelIcon					from '@material-ui/icons/Cancel';
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import Button						from '@mui/material/Button';
+import Dialog						from '@mui/material/Dialog';
+import DialogTitle					from '@mui/material/DialogTitle';
+import DialogContent				from '@mui/material/DialogContent';
+import DialogContentText			from '@mui/material/DialogContentText';
+import DialogActions				from '@mui/material/DialogActions';
+import Typography					from '@mui/material/Typography';
+import CancelIcon					from '@mui/icons-material/Cancel';
 
 import { r3IsEmptyString }			from '../util/r3util';
 import { r3AboutDialogStyles }		from './r3styles';

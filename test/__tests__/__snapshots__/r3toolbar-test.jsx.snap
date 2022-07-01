@@ -3,17 +3,19 @@
 exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
 <div>
   <header
-    className="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary R3Toolbar-root-1 MuiPaper-elevation0"
+    className="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionStatic R3Toolbar-root-1 css-120r8wl-MuiPaper-root-MuiAppBar-root"
   >
     <div
-      className="MuiToolbar-root MuiToolbar-regular R3Toolbar-toolbar-2 MuiToolbar-gutters"
+      className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular R3Toolbar-toolbar-2 css-hyum1k-MuiToolbar-root"
     >
       <div
-        aria-describedby={null}
         aria-label="current display item and its path"
-        className="MuiButtonBase-root MuiChip-root R3Toolbar-chip-4 MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable"
+        aria-labelledby={null}
+        className="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-clickable MuiChip-clickableColorPrimary MuiChip-filledPrimary R3Toolbar-chip-4 css-799jnf-MuiButtonBase-root-MuiChip-root"
+        data-mui-internal-clone-element={true}
         onBlur={[Function]}
         onClick={[Function]}
+        onContextMenu={[Function]}
         onDragLeave={[Function]}
         onFocus={[Function]}
         onKeyDown={[Function]}
@@ -28,14 +30,14 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
         onTouchStart={[Function]}
         role="button"
         tabIndex={0}
-        title="Display path information"
       >
         <div
-          className="MuiAvatar-root MuiAvatar-circular MuiChip-avatar R3Toolbar-avatar-7 MuiChip-avatarColorPrimary MuiAvatar-colorDefault"
+          className="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault R3Toolbar-avatar-7 css-2s90m6-MuiAvatar-root"
         >
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root R3Toolbar-descriptionIcon-8"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3Toolbar-descriptionIcon-8 css-i4bv87-MuiSvgIcon-root"
+            data-testid="DescriptionIcon"
             focusable="false"
             viewBox="0 0 24 24"
           >
@@ -45,29 +47,32 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
           </svg>
         </div>
         <span
-          className="MuiChip-label"
+          className="MuiChip-label MuiChip-labelMedium css-6od3lo-MuiChip-label"
         >
           <span
-            className="MuiTypography-root R3Toolbar-chipText-5 MuiTypography-subtitle2"
+            className="MuiTypography-root MuiTypography-subtitle2 R3Toolbar-chipText-5 css-1sr7afs-MuiTypography-root"
           >
             SERVICE
           </span>
         </span>
         <span
-          className="MuiTouchRipple-root"
+          className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         />
       </div>
       <span
-        className="MuiTypography-root R3Toolbar-title-3 MuiTypography-subtitle2 MuiTypography-colorTextSecondary MuiTypography-noWrap"
+        className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3Toolbar-title-3 css-k76d41-MuiTypography-root"
       >
         .../dummyresource
       </span>
       <button
-        aria-describedby={null}
-        className="MuiButtonBase-root MuiIconButton-root"
+        aria-label="Move to upper path"
+        aria-labelledby={null}
+        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+        data-mui-internal-clone-element={true}
         disabled={false}
         onBlur={[Function]}
         onClick={[Function]}
+        onContextMenu={[Function]}
         onDragLeave={[Function]}
         onFocus={[Function]}
         onKeyDown={[Function]}
@@ -81,36 +86,35 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
         onTouchMove={[Function]}
         onTouchStart={[Function]}
         tabIndex={0}
-        title="Move to upper path"
         type="button"
       >
-        <span
-          className="MuiIconButton-label"
+        <svg
+          aria-hidden={true}
+          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          data-testid="ArrowUpwardRoundedIcon"
+          focusable="false"
+          viewBox="0 0 24 24"
         >
-          <svg
-            aria-hidden={true}
-            className="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M13 19V7.83l4.88 4.88c.39.39 1.03.39 1.42 0 .39-.39.39-1.02 0-1.41l-6.59-6.59a.9959.9959 0 00-1.41 0l-6.6 6.58c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L11 7.83V19c0 .55.45 1 1 1s1-.45 1-1z"
-            />
-          </svg>
-        </span>
+          <path
+            d="M13 19V7.83l4.88 4.88c.39.39 1.03.39 1.42 0 .39-.39.39-1.02 0-1.41l-6.59-6.59a.9959.9959 0 0 0-1.41 0l-6.6 6.58c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L11 7.83V19c0 .55.45 1 1 1s1-.45 1-1z"
+          />
+        </svg>
         <span
-          className="MuiTouchRipple-root"
+          className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         />
       </button>
       <div
         className="R3Toolbar-spacerInToolbar-9"
       />
       <button
-        aria-describedby={null}
-        className="MuiButtonBase-root MuiIconButton-root"
+        aria-label="Create SERVICE under TENANT"
+        aria-labelledby={null}
+        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+        data-mui-internal-clone-element={true}
         disabled={false}
         onBlur={[Function]}
         onClick={[Function]}
+        onContextMenu={[Function]}
         onDragLeave={[Function]}
         onFocus={[Function]}
         onKeyDown={[Function]}
@@ -124,33 +128,32 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
         onTouchMove={[Function]}
         onTouchStart={[Function]}
         tabIndex={0}
-        title="Create SERVICE under TENANT"
         type="button"
       >
-        <span
-          className="MuiIconButton-label"
+        <svg
+          aria-hidden={true}
+          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          data-testid="AddRoundedIcon"
+          focusable="false"
+          viewBox="0 0 24 24"
         >
-          <svg
-            aria-hidden={true}
-            className="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M18 13h-5v5c0 .55-.45 1-1 1s-1-.45-1-1v-5H6c-.55 0-1-.45-1-1s.45-1 1-1h5V6c0-.55.45-1 1-1s1 .45 1 1v5h5c.55 0 1 .45 1 1s-.45 1-1 1z"
-            />
-          </svg>
-        </span>
+          <path
+            d="M18 13h-5v5c0 .55-.45 1-1 1s-1-.45-1-1v-5H6c-.55 0-1-.45-1-1s.45-1 1-1h5V6c0-.55.45-1 1-1s1 .45 1 1v5h5c.55 0 1 .45 1 1s-.45 1-1 1z"
+          />
+        </svg>
         <span
-          className="MuiTouchRipple-root"
+          className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         />
       </button>
       <button
-        aria-describedby={null}
-        className="MuiButtonBase-root MuiIconButton-root"
+        aria-label="Delete SERVICE under TENANT"
+        aria-labelledby={null}
+        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+        data-mui-internal-clone-element={true}
         disabled={false}
         onBlur={[Function]}
         onClick={[Function]}
+        onContextMenu={[Function]}
         onDragLeave={[Function]}
         onFocus={[Function]}
         onKeyDown={[Function]}
@@ -164,25 +167,21 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
         onTouchMove={[Function]}
         onTouchStart={[Function]}
         tabIndex={0}
-        title="Delete SERVICE under TENANT"
         type="button"
       >
-        <span
-          className="MuiIconButton-label"
+        <svg
+          aria-hidden={true}
+          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          data-testid="ClearRoundedIcon"
+          focusable="false"
+          viewBox="0 0 24 24"
         >
-          <svg
-            aria-hidden={true}
-            className="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M18.3 5.71a.9959.9959 0 00-1.41 0L12 10.59 7.11 5.7a.9959.9959 0 00-1.41 0c-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
-            />
-          </svg>
-        </span>
+          <path
+            d="M18.3 5.71a.9959.9959 0 0 0-1.41 0L12 10.59 7.11 5.7a.9959.9959 0 0 0-1.41 0c-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+          />
+        </svg>
         <span
-          className="MuiTouchRipple-root"
+          className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         />
       </button>
     </div>

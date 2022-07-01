@@ -22,8 +22,8 @@
 import React					from 'react';										// eslint-disable-line no-unused-vars
 import renderer					from 'react-test-renderer';
 import getElementWithContext	from 'react-test-context-provider';					// for context provider
-import { ThemeProvider }		from '@material-ui/styles';							// for custom theme
-import CssBaseline				from '@material-ui/core/CssBaseline';				// for reset.css
+import { ThemeProvider }		from '@mui/styles';									// for custom theme
+import { StyledEngineProvider, CssBaseline}	from '@mui/material';					// for jss and reset.css
 
 import r3Theme					from '../../src/components/r3theme';				// custom theme
 import R3Policy					from '../../src/components/r3policy';
@@ -85,26 +85,27 @@ describe('R3Policy', () => {											// eslint-disable-line no-undef
 		// as true if undefined, but it must be false when using JEST. For that, autoWidth is
 		// defined in the property of R3Policy, and in this test it is set to false.
 		//
-
-		/* eslint-disable indent */
 		const r3provider	= new R3Provider(null);
-		const element		= getElementWithContext({
-									r3Context:	r3provider.getR3Context()
-								},
-								<ThemeProvider theme={ r3Theme } >
-									<CssBaseline />
-									<R3Policy
-										r3provider={ r3provider }
-										policy={ policy }
-										dispUnique={ 1 }
-										onSave={ save }
-										onUpdate={ update }
-										isReadMode={ false }
-										autoWidth={ false }
-									/>
-								</ThemeProvider>
-							);
-		/* eslint-enable indent */
+
+		const element		= getElementWithContext(
+			{
+				r3Context:	r3provider.getR3Context()
+			},
+			<StyledEngineProvider injectFirst>
+				<ThemeProvider theme={ r3Theme } >
+					<CssBaseline />
+					<R3Policy
+						r3provider={ r3provider }
+						policy={ policy }
+						dispUnique={ 1 }
+						onSave={ save }
+						onUpdate={ update }
+						isReadMode={ false }
+						autoWidth={ false }
+					/>
+				</ThemeProvider>
+			</StyledEngineProvider>
+		);
 
 		const component = renderer.create(element, { createNodeMock });
 		let tree		= component.toJSON();

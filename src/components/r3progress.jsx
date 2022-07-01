@@ -23,9 +23,10 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
-import Paper						from '@material-ui/core/Paper';
-import CircularProgress				from '@material-ui/core/CircularProgress';
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import Paper						from '@mui/material/Paper';
+import CircularProgress				from '@mui/material/CircularProgress';
 
 import { r3Progress }				from './r3styles';
 
@@ -84,7 +85,7 @@ export default class R3Progress extends React.Component
 
 	render()
 	{
-		const { theme, classes  } = this.props;
+		const { theme, classes } = this.props;
 
 		if(!this.state.open){
 			return null;

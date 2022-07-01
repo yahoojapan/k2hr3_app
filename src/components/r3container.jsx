@@ -23,8 +23,9 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';									// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import { withTheme, withStyles }	from '@material-ui/core/styles';					// decorator
-import Paper						from '@material-ui/core/Paper';						// For contents wrap
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import Paper						from '@mui/material/Paper';							// For contents wrap
 
 // Styles
 import { r3Container }				from './r3styles';									// But nothing for r3Container now.

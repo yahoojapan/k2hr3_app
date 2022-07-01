@@ -23,32 +23,33 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
-import TextField					from '@material-ui/core/TextField';
-import Button						from '@material-ui/core/Button';
-import Dialog						from '@material-ui/core/Dialog';
-import DialogTitle					from '@material-ui/core/DialogTitle';
-import DialogContent				from '@material-ui/core/DialogContent';
-import DialogActions				from '@material-ui/core/DialogActions';
-import Typography					from '@material-ui/core/Typography';
-import Box							from '@material-ui/core/Box';
-import FormControlLabel				from '@material-ui/core/FormControlLabel';
-import RadioGroup					from '@material-ui/core/RadioGroup';
-import Radio						from '@material-ui/core/Radio';
-import Table						from '@material-ui/core/Table';
-import TableBody					from '@material-ui/core/TableBody';
-import TableCell					from '@material-ui/core/TableCell';
-import TableHead					from '@material-ui/core/TableHead';
-import TablePagination				from '@material-ui/core/TablePagination';
-import TableRow						from '@material-ui/core/TableRow';
-import Tooltip						from '@material-ui/core/Tooltip';
-import Popover						from '@material-ui/core/Popover';
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import TextField					from '@mui/material/TextField';
+import Button						from '@mui/material/Button';
+import Dialog						from '@mui/material/Dialog';
+import DialogTitle					from '@mui/material/DialogTitle';
+import DialogContent				from '@mui/material/DialogContent';
+import DialogActions				from '@mui/material/DialogActions';
+import Typography					from '@mui/material/Typography';
+import Box							from '@mui/material/Box';
+import FormControlLabel				from '@mui/material/FormControlLabel';
+import RadioGroup					from '@mui/material/RadioGroup';
+import Radio						from '@mui/material/Radio';
+import Table						from '@mui/material/Table';
+import TableBody					from '@mui/material/TableBody';
+import TableCell					from '@mui/material/TableCell';
+import TableHead					from '@mui/material/TableHead';
+import TablePagination				from '@mui/material/TablePagination';
+import TableRow						from '@mui/material/TableRow';
+import Tooltip						from '@mui/material/Tooltip';
+import Popover						from '@mui/material/Popover';
 
-import AddIcon						from '@material-ui/icons/AddBoxRounded';
-import DeleteIcon					from '@material-ui/icons/Delete';
-import EditIcon						from '@material-ui/icons/Edit';
-import CheckCircleIcon				from '@material-ui/icons/CheckCircle';
-import CancelIcon					from '@material-ui/icons/Cancel';
+import AddIcon						from '@mui/icons-material/AddBoxRounded';
+import DeleteIcon					from '@mui/icons-material/Delete';
+import EditIcon						from '@mui/icons-material/Edit';
+import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
+import CancelIcon					from '@mui/icons-material/Cancel';
 
 import { r3CreateServiceDialog }	from './r3styles';
 import { serviceResTypeUrl, serviceResTypeObject }	from '../util/r3types';
@@ -1198,7 +1199,7 @@ export default class R3CreateServiceDialog extends React.Component
 						rowsPerPage={ this.props.tableKeysRawCount }
 						page={ this.state.staticResKeysPageNum }
 						rowsPerPageOptions={ [] }
-						onChangePage={ this.handleStaticResKeysPageChange }
+						onPageChange={ this.handleStaticResKeysPageChange }
 					/>
 				</Box>
 			</React.Fragment>
@@ -1637,7 +1638,7 @@ export default class R3CreateServiceDialog extends React.Component
 					rowsPerPage={ this.props.tableRawCount }
 					page={ this.state.staticResPageNum }
 					rowsPerPageOptions={ [] }
-					onChangePage={ this.handleResStaticObjPageChange }
+					onPageChange={ this.handleResStaticObjPageChange }
 				/>
 				<TextField
 					id={ dialogComponentsIds.staticObjTextFieldId }

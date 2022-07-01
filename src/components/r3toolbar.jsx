@@ -23,19 +23,21 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
-import IconButton					from '@material-ui/core/IconButton';
-import Avatar						from '@material-ui/core/Avatar';
-import Chip							from '@material-ui/core/Chip';
-import AppBar						from '@material-ui/core/AppBar';
-import Toolbar						from '@material-ui/core/Toolbar';
-import Typography					from '@material-ui/core/Typography';
-import Tooltip						from '@material-ui/core/Tooltip';
+import { StyledEngineProvider }		from '@mui/material/styles';
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import IconButton					from '@mui/material/IconButton';
+import Avatar						from '@mui/material/Avatar';
+import Chip							from '@mui/material/Chip';
+import AppBar						from '@mui/material/AppBar';
+import Toolbar						from '@mui/material/Toolbar';
+import Typography					from '@mui/material/Typography';
+import Tooltip						from '@mui/material/Tooltip';
 
-import DescriptionIcon				from '@material-ui/icons/Description';
-import ArrowUpwardIcon				from '@material-ui/icons/ArrowUpwardRounded';
-import AddIcon						from '@material-ui/icons/AddRounded';
-import DeleteIcon					from '@material-ui/icons/ClearRounded';
+import DescriptionIcon				from '@mui/icons-material/Description';
+import ArrowUpwardIcon				from '@mui/icons-material/ArrowUpwardRounded';
+import AddIcon						from '@mui/icons-material/AddRounded';
+import DeleteIcon					from '@mui/icons-material/ClearRounded';
 
 import { r3Toolbar }				from './r3styles';
 import R3PathInfoDialog				from './r3pathinfodialog';
@@ -479,6 +481,7 @@ export default class R3Toolbar extends React.Component
 					onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.toUpperPath, true) }
 					onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.toUpperPath, false) }
 					{ ...theme.r3AppBar.toUpperPathButton }
+					size="large"
 				>
 					<ArrowUpwardIcon />
 				</IconButton>
@@ -518,6 +521,7 @@ export default class R3Toolbar extends React.Component
 					onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.createPath, true) }
 					onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.createPath, false) }
 					{ ...theme.r3AppBar.createPathButton }
+					size="large"
 				>
 					<AddIcon />
 				</IconButton>
@@ -598,6 +602,7 @@ export default class R3Toolbar extends React.Component
 					onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deletePath, true) }
 					onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deletePath, false) }
 					{ ...theme.r3AppBar.deletePathButton }
+					size="large"
 				>
 					<DeleteIcon />
 				</IconButton>
@@ -624,14 +629,24 @@ export default class R3Toolbar extends React.Component
 			strLabel = r3provider.getR3TextRes().tResTenantPathLabel;
 		}
 
+		// [NOTE][FIXME]
+		// In the migration to MUI v5, this Avatar has the default CSS of ".MuiChip-avatarColorPrimary" applied.
+		// And this default CSS couldn't be overridden by r3theme.jsx.
+		// Also, since this CSS is applied after style, it cannot be applied by r3style.jsx.
+		// Therefore, we chose a method that does not apply the default CSS using "StyledEngineProvider".
+		// Also, in the r3style.jsx file, marginLeft is added to the CSS of r3Toolbar->avatar to make
+		// it consistent.
+		//
 		let	avatar = (
-			<Avatar
-				className={ classes.avatar }
-			>
-				<DescriptionIcon
-					className={ classes.descriptionIcon }
-				/>
-			</Avatar>
+			<StyledEngineProvider injectFirst>
+				<Avatar
+					className={ classes.avatar }
+				>
+					<DescriptionIcon
+						className={ classes.descriptionIcon }
+					/>
+				</Avatar>
+			</StyledEngineProvider>
 		);
 
 		let	label = (

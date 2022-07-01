@@ -23,23 +23,24 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
-import TextField					from '@material-ui/core/TextField';
-import Button						from '@material-ui/core/Button';
-import IconButton					from '@material-ui/core/IconButton';
-import Dialog						from '@material-ui/core/Dialog';
-import DialogTitle					from '@material-ui/core/DialogTitle';
-import DialogContent				from '@material-ui/core/DialogContent';
-import DialogContentText			from '@material-ui/core/DialogContentText';
-import DialogActions				from '@material-ui/core/DialogActions';
-import InputAdornment				from '@material-ui/core/InputAdornment';
-import Typography					from '@material-ui/core/Typography';
-import Paper						from '@material-ui/core/Paper';
-import VisibilityIcon				from '@material-ui/icons/Visibility';
-import VisibilityOffIcon			from '@material-ui/icons/VisibilityOff';
-import CheckCircleIcon				from '@material-ui/icons/CheckCircle';
-import CancelIcon					from '@material-ui/icons/Cancel';
-import WarningIcon					from '@material-ui/icons/WarningRounded';
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import TextField					from '@mui/material/TextField';
+import Button						from '@mui/material/Button';
+import IconButton					from '@mui/material/IconButton';
+import Dialog						from '@mui/material/Dialog';
+import DialogTitle					from '@mui/material/DialogTitle';
+import DialogContent				from '@mui/material/DialogContent';
+import DialogContentText			from '@mui/material/DialogContentText';
+import DialogActions				from '@mui/material/DialogActions';
+import InputAdornment				from '@mui/material/InputAdornment';
+import Typography					from '@mui/material/Typography';
+import Paper						from '@mui/material/Paper';
+import VisibilityIcon				from '@mui/icons-material/Visibility';
+import VisibilityOffIcon			from '@mui/icons-material/VisibilityOff';
+import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
+import CancelIcon					from '@mui/icons-material/Cancel';
+import WarningIcon					from '@mui/icons-material/WarningRounded';
 
 import { r3IsEmptyString }			from '../util/r3util';
 import { r3SigninCredDialogStyles }	from './r3styles';
@@ -231,6 +232,7 @@ export default class R3SigninCredDialog extends React.Component
 									<IconButton
 										onClick={ this.handleClickShowPassphrase }
 										{ ...theme.r3SigninCredDialog.passphraseIconButton }
+										size="large"
 									>
 										{ this.state.showPassphrase ? <VisibilityOffIcon /> : <VisibilityIcon />}
 									</IconButton>

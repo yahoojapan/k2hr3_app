@@ -23,34 +23,35 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
-import Button						from '@material-ui/core/Button';
-import Dialog						from '@material-ui/core/Dialog';
-import DialogTitle					from '@material-ui/core/DialogTitle';
-import DialogContent				from '@material-ui/core/DialogContent';
-import DialogActions				from '@material-ui/core/DialogActions';
-import Typography					from '@material-ui/core/Typography';
-import TextField					from '@material-ui/core/TextField';
-import Tooltip						from '@material-ui/core/Tooltip';
-import Table						from '@material-ui/core/Table';
-import TableBody					from '@material-ui/core/TableBody';
-import TableCell					from '@material-ui/core/TableCell';
-import TableHead					from '@material-ui/core/TableHead';
-import TablePagination				from '@material-ui/core/TablePagination';
-import TableRow						from '@material-ui/core/TableRow';
-import Popover						from '@material-ui/core/Popover';
-import FormControlLabel				from '@material-ui/core/FormControlLabel';
-import Checkbox						from '@material-ui/core/Checkbox';
-import Select						from '@material-ui/core/Select';
-import MenuItem						from '@material-ui/core/MenuItem';		// for select
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import Button						from '@mui/material/Button';
+import Dialog						from '@mui/material/Dialog';
+import DialogTitle					from '@mui/material/DialogTitle';
+import DialogContent				from '@mui/material/DialogContent';
+import DialogActions				from '@mui/material/DialogActions';
+import Typography					from '@mui/material/Typography';
+import TextField					from '@mui/material/TextField';
+import Tooltip						from '@mui/material/Tooltip';
+import Table						from '@mui/material/Table';
+import TableBody					from '@mui/material/TableBody';
+import TableCell					from '@mui/material/TableCell';
+import TableHead					from '@mui/material/TableHead';
+import TablePagination				from '@mui/material/TablePagination';
+import TableRow						from '@mui/material/TableRow';
+import Popover						from '@mui/material/Popover';
+import FormControlLabel				from '@mui/material/FormControlLabel';
+import Checkbox						from '@mui/material/Checkbox';
+import Select						from '@mui/material/Select';
+import MenuItem						from '@mui/material/MenuItem';			// for select
 
-import CheckCircleIcon				from '@material-ui/icons/CheckCircle';
-import CopyClipBoardIcon			from '@material-ui/icons/AssignmentTurnedInRounded';
-import SettingActionIcon			from '@material-ui/icons/SettingsApplicationsRounded';
-import CreateRoleTokenIcon			from '@material-ui/icons/AddBoxRounded';
-import DeleteIcon					from '@material-ui/icons/Delete';
-import DispCodeIcon					from '@material-ui/icons/ViewListRounded';
-import BackPageIcon					from '@material-ui/icons/Cancel';
+import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
+import CopyClipBoardIcon			from '@mui/icons-material/AssignmentTurnedInRounded';
+import SettingActionIcon			from '@mui/icons-material/SettingsApplicationsRounded';
+import CreateRoleTokenIcon			from '@mui/icons-material/AddBoxRounded';
+import DeleteIcon					from '@mui/icons-material/Delete';
+import DispCodeIcon					from '@mui/icons-material/ViewListRounded';
+import BackPageIcon					from '@mui/icons-material/Cancel';
 
 import R3MsgBox						from './r3msgbox';						// Message Box
 import R3Message					from '../util/r3message';
@@ -1309,7 +1310,7 @@ export default class R3PathInfoDialog extends React.Component
 					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.roletokenClipboardButtonTooltip, 'boolean')) ? false : this.state.tooltips.roletokenClipboardButtonTooltip) }
 				>
 					<Button
-						onClick={ this.handleRoleTokenClipboard  }
+						onClick={ this.handleRoleTokenClipboard }
 						onMouseEnter={ event => this.handleRoleTokenClipboardButtonTooltipChange(event, true) }
 						onMouseLeave={ event => this.handleRoleTokenClipboardButtonTooltipChange(event, false) }
 						{ ...theme.r3PathInfoDialog.roletokenClipboardButton }
@@ -1420,7 +1421,7 @@ export default class R3PathInfoDialog extends React.Component
 					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.copyClipboardButtonTooltip, 'boolean')) ? false : this.state.tooltips.copyClipboardButtonTooltip) }
 				>
 					<Button
-						onClick={ this.handleCopyClipboard  }
+						onClick={ this.handleCopyClipboard }
 						onMouseEnter={ event => this.handleCopyClipboardButtonTooltipChange(event, true) }
 						onMouseLeave={ event => this.handleCopyClipboardButtonTooltipChange(event, false) }
 						{ ...theme.r3PathInfoDialog.copyClipboardButton }

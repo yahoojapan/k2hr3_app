@@ -22,11 +22,11 @@
 import React					from 'react';										// eslint-disable-line no-unused-vars
 import renderer					from 'react-test-renderer';
 import getElementWithContext	from 'react-test-context-provider';					// for context provider
-import { ThemeProvider }		from '@material-ui/styles';							// for custom theme
-import CssBaseline				from '@material-ui/core/CssBaseline';				// for reset.css
+import { ThemeProvider }		from '@mui/styles';									// for custom theme
+import { StyledEngineProvider, CssBaseline}	from '@mui/material';					// for jss and reset.css
 
 import r3Theme					from '../../src/components/r3theme';				// custom theme
-import Rr3SigninCredDialog		from '../../src/components/r3signincreddialog';
+import R3SigninCredDialog		from '../../src/components/r3signincreddialog';
 import R3Provider				from '../../src/util/r3provider';
 
 import mock_fetch				from '../__mocks__/fetchMock';						// eslint-disable-line no-unused-vars
@@ -76,10 +76,10 @@ r3Theme.r3SigninCredDialog.root['disablePortal'] = true;
 // Unlike before, by changing the mock content, you can fully check
 // the snapshots in the Dialog.
 //
-jest.mock('@material-ui/core/Fade', () => {												// eslint-disable-line no-undef
+jest.mock('@mui/material/Fade', () => {												// eslint-disable-line no-undef
 	return '';
 });
-jest.mock('@material-ui/core/Modal', () => {											// eslint-disable-line no-undef
+jest.mock('@mui/material/Modal', () => {											// eslint-disable-line no-undef
 	return '';
 });
 
@@ -110,25 +110,27 @@ describe('R3CreateServiceDialog', () => {											// eslint-disable-line no-un
 		ReactDOM.createPortal.mockClear();
 	});
 
-	it('test snapshot for Rr3SigninCredDialog', () => {								// eslint-disable-line no-undef
-		/* eslint-disable indent */
+	it('test snapshot for R3SigninCredDialog', () => {								// eslint-disable-line no-undef
 		const r3provider	= new R3Provider(null);
-		const element		= getElementWithContext({
-									r3Context:	r3provider.getR3Context()
-								},
-								<ThemeProvider theme={ r3Theme } >
-									<CssBaseline />
-									<Rr3SigninCredDialog
-										r3provider={ r3provider }
-										open={ true }
-										name={ null }
-										passphrase={ null }
-										message={ null }
-										onClose={ close }
-									/>
-								</ThemeProvider>
-							);
-		/* eslint-enable indent */
+
+		const element		= getElementWithContext(
+			{
+				r3Context:	r3provider.getR3Context()
+			},
+			<StyledEngineProvider injectFirst>
+				<ThemeProvider theme={ r3Theme } >
+					<CssBaseline />
+					<R3SigninCredDialog
+						r3provider={ r3provider }
+						open={ true }
+						name={ null }
+						passphrase={ null }
+						message={ null }
+						onClose={ close }
+					/>
+				</ThemeProvider>
+			</StyledEngineProvider>
+		);
 
 		const component = renderer.create(element, { createNodeMock });
 		let tree		= component.toJSON();

@@ -2,340 +2,66 @@
 
 exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
 <
-  BackdropComponent={
-    Object {
-      "$$typeof": Symbol(react.forward_ref),
-      "Naked": Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "propTypes": Object {
-          "children": [Function],
-          "className": [Function],
-          "classes": [Function],
-          "invisible": [Function],
-          "open": [Function],
-          "transitionDuration": [Function],
-        },
-        "render": [Function],
-      },
-      "options": Object {
-        "defaultTheme": Object {
-          "breakpoints": Object {
-            "between": [Function],
-            "down": [Function],
-            "keys": Array [
-              "xs",
-              "sm",
-              "md",
-              "lg",
-              "xl",
-            ],
-            "only": [Function],
-            "up": [Function],
-            "values": Object {
-              "lg": 1280,
-              "md": 960,
-              "sm": 600,
-              "xl": 1920,
-              "xs": 0,
-            },
-            "width": [Function],
-          },
-          "direction": "ltr",
-          "mixins": Object {
-            "gutters": [Function],
-            "toolbar": Object {
-              "@media (min-width:0px) and (orientation: landscape)": Object {
-                "minHeight": 48,
-              },
-              "@media (min-width:600px)": Object {
-                "minHeight": 64,
-              },
-              "minHeight": 56,
-            },
-          },
-          "overrides": Object {},
-          "palette": Object {
-            "action": Object {
-              "activatedOpacity": 0.12,
-              "active": "rgba(0, 0, 0, 0.54)",
-              "disabled": "rgba(0, 0, 0, 0.26)",
-              "disabledBackground": "rgba(0, 0, 0, 0.12)",
-              "disabledOpacity": 0.38,
-              "focus": "rgba(0, 0, 0, 0.12)",
-              "focusOpacity": 0.12,
-              "hover": "rgba(0, 0, 0, 0.04)",
-              "hoverOpacity": 0.04,
-              "selected": "rgba(0, 0, 0, 0.08)",
-              "selectedOpacity": 0.08,
-            },
-            "augmentColor": [Function],
-            "background": Object {
-              "default": "#fafafa",
-              "paper": "#fff",
-            },
-            "common": Object {
-              "black": "#000",
-              "white": "#fff",
-            },
-            "contrastThreshold": 3,
-            "divider": "rgba(0, 0, 0, 0.12)",
-            "error": Object {
-              "contrastText": "#fff",
-              "dark": "#d32f2f",
-              "light": "#e57373",
-              "main": "#f44336",
-            },
-            "getContrastText": [Function],
-            "grey": Object {
-              "100": "#f5f5f5",
-              "200": "#eeeeee",
-              "300": "#e0e0e0",
-              "400": "#bdbdbd",
-              "50": "#fafafa",
-              "500": "#9e9e9e",
-              "600": "#757575",
-              "700": "#616161",
-              "800": "#424242",
-              "900": "#212121",
-              "A100": "#d5d5d5",
-              "A200": "#aaaaaa",
-              "A400": "#303030",
-              "A700": "#616161",
-            },
-            "info": Object {
-              "contrastText": "#fff",
-              "dark": "#1976d2",
-              "light": "#64b5f6",
-              "main": "#2196f3",
-            },
-            "primary": Object {
-              "contrastText": "#fff",
-              "dark": "#303f9f",
-              "light": "#7986cb",
-              "main": "#3f51b5",
-            },
-            "secondary": Object {
-              "contrastText": "#fff",
-              "dark": "#c51162",
-              "light": "#ff4081",
-              "main": "#f50057",
-            },
-            "success": Object {
-              "contrastText": "rgba(0, 0, 0, 0.87)",
-              "dark": "#388e3c",
-              "light": "#81c784",
-              "main": "#4caf50",
-            },
-            "text": Object {
-              "disabled": "rgba(0, 0, 0, 0.38)",
-              "hint": "rgba(0, 0, 0, 0.38)",
-              "primary": "rgba(0, 0, 0, 0.87)",
-              "secondary": "rgba(0, 0, 0, 0.54)",
-            },
-            "tonalOffset": 0.2,
-            "type": "light",
-            "warning": Object {
-              "contrastText": "rgba(0, 0, 0, 0.87)",
-              "dark": "#f57c00",
-              "light": "#ffb74d",
-              "main": "#ff9800",
-            },
-          },
-          "props": Object {},
-          "shadows": Array [
-            "none",
-            "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
-            "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
-            "0px 3px 3px -2px rgba(0,0,0,0.2),0px 3px 4px 0px rgba(0,0,0,0.14),0px 1px 8px 0px rgba(0,0,0,0.12)",
-            "0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)",
-            "0px 3px 5px -1px rgba(0,0,0,0.2),0px 5px 8px 0px rgba(0,0,0,0.14),0px 1px 14px 0px rgba(0,0,0,0.12)",
-            "0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)",
-            "0px 4px 5px -2px rgba(0,0,0,0.2),0px 7px 10px 1px rgba(0,0,0,0.14),0px 2px 16px 1px rgba(0,0,0,0.12)",
-            "0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12)",
-            "0px 5px 6px -3px rgba(0,0,0,0.2),0px 9px 12px 1px rgba(0,0,0,0.14),0px 3px 16px 2px rgba(0,0,0,0.12)",
-            "0px 6px 6px -3px rgba(0,0,0,0.2),0px 10px 14px 1px rgba(0,0,0,0.14),0px 4px 18px 3px rgba(0,0,0,0.12)",
-            "0px 6px 7px -4px rgba(0,0,0,0.2),0px 11px 15px 1px rgba(0,0,0,0.14),0px 4px 20px 3px rgba(0,0,0,0.12)",
-            "0px 7px 8px -4px rgba(0,0,0,0.2),0px 12px 17px 2px rgba(0,0,0,0.14),0px 5px 22px 4px rgba(0,0,0,0.12)",
-            "0px 7px 8px -4px rgba(0,0,0,0.2),0px 13px 19px 2px rgba(0,0,0,0.14),0px 5px 24px 4px rgba(0,0,0,0.12)",
-            "0px 7px 9px -4px rgba(0,0,0,0.2),0px 14px 21px 2px rgba(0,0,0,0.14),0px 5px 26px 4px rgba(0,0,0,0.12)",
-            "0px 8px 9px -5px rgba(0,0,0,0.2),0px 15px 22px 2px rgba(0,0,0,0.14),0px 6px 28px 5px rgba(0,0,0,0.12)",
-            "0px 8px 10px -5px rgba(0,0,0,0.2),0px 16px 24px 2px rgba(0,0,0,0.14),0px 6px 30px 5px rgba(0,0,0,0.12)",
-            "0px 8px 11px -5px rgba(0,0,0,0.2),0px 17px 26px 2px rgba(0,0,0,0.14),0px 6px 32px 5px rgba(0,0,0,0.12)",
-            "0px 9px 11px -5px rgba(0,0,0,0.2),0px 18px 28px 2px rgba(0,0,0,0.14),0px 7px 34px 6px rgba(0,0,0,0.12)",
-            "0px 9px 12px -6px rgba(0,0,0,0.2),0px 19px 29px 2px rgba(0,0,0,0.14),0px 7px 36px 6px rgba(0,0,0,0.12)",
-            "0px 10px 13px -6px rgba(0,0,0,0.2),0px 20px 31px 3px rgba(0,0,0,0.14),0px 8px 38px 7px rgba(0,0,0,0.12)",
-            "0px 10px 13px -6px rgba(0,0,0,0.2),0px 21px 33px 3px rgba(0,0,0,0.14),0px 8px 40px 7px rgba(0,0,0,0.12)",
-            "0px 10px 14px -6px rgba(0,0,0,0.2),0px 22px 35px 3px rgba(0,0,0,0.14),0px 8px 42px 7px rgba(0,0,0,0.12)",
-            "0px 11px 14px -7px rgba(0,0,0,0.2),0px 23px 36px 3px rgba(0,0,0,0.14),0px 9px 44px 8px rgba(0,0,0,0.12)",
-            "0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)",
-          ],
-          "shape": Object {
-            "borderRadius": 4,
-          },
-          "spacing": [Function],
-          "transitions": Object {
-            "create": [Function],
-            "duration": Object {
-              "complex": 375,
-              "enteringScreen": 225,
-              "leavingScreen": 195,
-              "short": 250,
-              "shorter": 200,
-              "shortest": 150,
-              "standard": 300,
-            },
-            "easing": Object {
-              "easeIn": "cubic-bezier(0.4, 0, 1, 1)",
-              "easeInOut": "cubic-bezier(0.4, 0, 0.2, 1)",
-              "easeOut": "cubic-bezier(0.0, 0, 0.2, 1)",
-              "sharp": "cubic-bezier(0.4, 0, 0.6, 1)",
-            },
-            "getAutoHeightDuration": [Function],
-          },
-          "typography": Object {
-            "body1": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-              "fontSize": "1rem",
-              "fontWeight": 400,
-              "letterSpacing": "0.00938em",
-              "lineHeight": 1.5,
-            },
-            "body2": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-              "fontSize": "0.875rem",
-              "fontWeight": 400,
-              "letterSpacing": "0.01071em",
-              "lineHeight": 1.43,
-            },
-            "button": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-              "fontSize": "0.875rem",
-              "fontWeight": 500,
-              "letterSpacing": "0.02857em",
-              "lineHeight": 1.75,
-              "textTransform": "uppercase",
-            },
-            "caption": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-              "fontSize": "0.75rem",
-              "fontWeight": 400,
-              "letterSpacing": "0.03333em",
-              "lineHeight": 1.66,
-            },
-            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-            "fontSize": 14,
-            "fontWeightBold": 700,
-            "fontWeightLight": 300,
-            "fontWeightMedium": 500,
-            "fontWeightRegular": 400,
-            "h1": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-              "fontSize": "6rem",
-              "fontWeight": 300,
-              "letterSpacing": "-0.01562em",
-              "lineHeight": 1.167,
-            },
-            "h2": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-              "fontSize": "3.75rem",
-              "fontWeight": 300,
-              "letterSpacing": "-0.00833em",
-              "lineHeight": 1.2,
-            },
-            "h3": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-              "fontSize": "3rem",
-              "fontWeight": 400,
-              "letterSpacing": "0em",
-              "lineHeight": 1.167,
-            },
-            "h4": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-              "fontSize": "2.125rem",
-              "fontWeight": 400,
-              "letterSpacing": "0.00735em",
-              "lineHeight": 1.235,
-            },
-            "h5": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-              "fontSize": "1.5rem",
-              "fontWeight": 400,
-              "letterSpacing": "0em",
-              "lineHeight": 1.334,
-            },
-            "h6": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-              "fontSize": "1.25rem",
-              "fontWeight": 500,
-              "letterSpacing": "0.0075em",
-              "lineHeight": 1.6,
-            },
-            "htmlFontSize": 16,
-            "overline": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-              "fontSize": "0.75rem",
-              "fontWeight": 400,
-              "letterSpacing": "0.08333em",
-              "lineHeight": 2.66,
-              "textTransform": "uppercase",
-            },
-            "pxToRem": [Function],
-            "round": [Function],
-            "subtitle1": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-              "fontSize": "1rem",
-              "fontWeight": 400,
-              "letterSpacing": "0.00938em",
-              "lineHeight": 1.75,
-            },
-            "subtitle2": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
-              "fontSize": "0.875rem",
-              "fontWeight": 500,
-              "letterSpacing": "0.00714em",
-              "lineHeight": 1.57,
-            },
-          },
-          "zIndex": Object {
-            "appBar": 1100,
-            "drawer": 1200,
-            "mobileStepper": 1000,
-            "modal": 1300,
-            "snackbar": 1400,
-            "speedDial": 1050,
-            "tooltip": 1500,
-          },
-        },
-        "name": "MuiBackdrop",
-      },
-      "propTypes": Object {
-        "classes": [Function],
-        "innerRef": [Function],
-      },
-      "render": [Function],
-      "useStyles": [Function],
-    }
-  }
-  BackdropProps={
-    Object {
-      "transitionDuration": Object {
-        "enter": 225,
-        "exit": 195,
-      },
-    }
-  }
   aria-label="account dialog"
-  className="MuiDialog-root R3AccountDialog-root-1"
+  className="MuiDialog-root R3AccountDialog-root-1 css-1h8td7x-MuiDialog-root"
   closeAfterTransition={true}
+  components={
+    Object {
+      "Backdrop": Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "__emotion_base": Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "propTypes": Object {
+            "children": [Function],
+            "className": [Function],
+            "classes": [Function],
+            "component": [Function],
+            "components": [Function],
+            "componentsProps": [Function],
+            "invisible": [Function],
+            "open": [Function],
+            "sx": [Function],
+            "transitionDuration": [Function],
+          },
+          "render": [Function],
+        },
+        "__emotion_forwardProp": [Function],
+        "__emotion_real": [Circular],
+        "__emotion_styles": Array [
+          "label:MuiDialog-backdrop;",
+          Object {
+            "zIndex": -1,
+          },
+          [Function],
+        ],
+        "defaultProps": undefined,
+        "render": [Function],
+        "withComponent": [Function],
+      },
+    }
+  }
+  componentsProps={
+    Object {
+      "backdrop": Object {
+        "as": undefined,
+        "transitionDuration": Object {
+          "enter": 225,
+          "exit": 195,
+        },
+      },
+    }
+  }
   disableEscapeKeyDown={false}
+  disablePortal={true}
   label="account-dialog"
+  onClick={[Function]}
   onClose={[Function]}
   open={true}
 >
   <
     appear={true}
     in={true}
-    role="none presentation"
+    role="presentation"
     timeout={
       Object {
         "enter": 225,
@@ -344,58 +70,56 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
     }
   >
     <div
-      className="MuiDialog-container MuiDialog-scrollBody"
+      className="MuiDialog-container MuiDialog-scrollBody css-iz3z40-MuiDialog-container"
       onMouseDown={[Function]}
-      onMouseUp={[Function]}
     >
       <div
-        className="MuiPaper-root MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth MuiPaper-elevation24 MuiPaper-rounded"
+        aria-labelledby="mui-3"
+        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-zfoovh-MuiPaper-root-MuiDialog-paper"
         role="dialog"
       >
-        <div
-          className="MuiDialogTitle-root R3AccountDialog-dialogTitle-2"
+        <h2
+          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root R3AccountDialog-dialogTitle-2 css-bdhsul-MuiTypography-root-MuiDialogTitle-root"
+          id="mui-3"
           label="account-dialog"
         >
-          <h2
-            className="MuiTypography-root MuiTypography-h6"
+          <span
+            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap R3AccountDialog-title-3 css-idtq1y-MuiTypography-root"
           >
-            <span
-              className="MuiTypography-root R3AccountDialog-title-3 MuiTypography-h5 MuiTypography-colorPrimary MuiTypography-noWrap"
-            >
-              Account Information
-            </span>
-          </h2>
-        </div>
+            Account Information
+          </span>
+        </h2>
         <div
-          className="MuiDialogContent-root R3AccountDialog-dialogContent-4"
+          className="MuiDialogContent-root R3AccountDialog-dialogContent-4 css-ypiqx9-MuiDialogContent-root"
         >
           <span
-            className="MuiTypography-root R3AccountDialog-subTitle-5 MuiTypography-subtitle2 MuiTypography-colorPrimary MuiTypography-noWrap"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3AccountDialog-subTitle-5 css-qxncr6-MuiTypography-root"
           >
             User name
           </span>
           <span
-            className="MuiTypography-root R3AccountDialog-value-6 MuiTypography-body1 MuiTypography-colorTextSecondary"
+            className="MuiTypography-root MuiTypography-body1 R3AccountDialog-value-6 css-nrdprl-MuiTypography-root"
           >
             JEST_TEST_USERNAME
           </span>
           <span
-            className="MuiTypography-root R3AccountDialog-subTitle-5 MuiTypography-subtitle2 MuiTypography-colorPrimary MuiTypography-noWrap"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3AccountDialog-subTitle-5 css-qxncr6-MuiTypography-root"
           >
             Unscoped Token
           </span>
           <div
-            className="MuiFormControl-root MuiTextField-root R3AccountDialog-unscopedtokenTextField-11 MuiFormControl-fullWidth"
+            className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root R3AccountDialog-unscopedtokenTextField-11 css-wb57ya-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiInputBase-root MuiOutlinedInput-root R3AccountDialog-unscopedtokenInputTextField-10 MuiInputBase-fullWidth MuiInputBase-formControl"
+              className="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl R3AccountDialog-unscopedtokenInputTextField-10 css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
               onClick={[Function]}
             >
               <input
                 aria-invalid={false}
                 autoFocus={false}
-                className="MuiInputBase-input MuiOutlinedInput-input"
+                className="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
                 disabled={false}
+                id="mui-1"
                 name="unscopedtoken-textfield"
                 onAnimationStart={[Function]}
                 onBlur={[Function]}
@@ -412,38 +136,29 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
               />
               <fieldset
                 aria-hidden={true}
-                className="PrivateNotchedOutline-root-14 MuiOutlinedInput-notchedOutline"
-                style={
-                  Object {
-                    "paddingLeft": 8,
-                  }
-                }
+                className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
               >
                 <legend
-                  className="PrivateNotchedOutline-legend-15"
-                  style={
-                    Object {
-                      "width": 0.01,
-                    }
-                  }
+                  className="css-hdw1oc"
                 >
                   <span
-                    dangerouslySetInnerHTML={
-                      Object {
-                        "__html": "&#8203;",
-                      }
-                    }
-                  />
+                    className="notranslate"
+                  >
+                    ​
+                  </span>
                 </legend>
               </fieldset>
             </div>
           </div>
           <button
-            aria-describedby={null}
-            className="MuiButtonBase-root MuiButton-root MuiButton-text R3AccountDialog-copyClipboardButton-12"
+            aria-label="Copy to clipboard"
+            aria-labelledby={null}
+            className="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root R3AccountDialog-copyClipboardButton-12 css-1e6y48t-MuiButtonBase-root-MuiButton-root"
+            data-mui-internal-clone-element={true}
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
+            onContextMenu={[Function]}
             onDragLeave={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
@@ -457,38 +172,35 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
             onTouchMove={[Function]}
             onTouchStart={[Function]}
             tabIndex={0}
-            title="Copy to clipboard"
             type="button"
           >
-            <span
-              className="MuiButton-label"
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3AccountDialog-copyClipboardIcon-13 css-i4bv87-MuiSvgIcon-root"
+              data-testid="AssignmentTurnedInRoundedIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
             >
-              <svg
-                aria-hidden={true}
-                className="MuiSvgIcon-root R3AccountDialog-copyClipboardIcon-13"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9.29 16.29L6.7 13.7a.9959.9959 0 010-1.41c.39-.39 1.02-.39 1.41 0L10 14.17l5.88-5.88c.39-.39 1.02-.39 1.41 0 .39.39.39 1.02 0 1.41l-6.59 6.59c-.38.39-1.02.39-1.41 0z"
-                />
-              </svg>
-              Copy to clipboard
-            </span>
+              <path
+                d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9.29 16.29 6.7 13.7a.9959.9959 0 0 1 0-1.41c.39-.39 1.02-.39 1.41 0L10 14.17l5.88-5.88c.39-.39 1.02-.39 1.41 0 .39.39.39 1.02 0 1.41l-6.59 6.59c-.38.39-1.02.39-1.41 0z"
+              />
+            </svg>
+            Copy to clipboard
             <span
-              className="MuiTouchRipple-root"
+              className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
             />
           </button>
         </div>
         <div
-          className="MuiDialogActions-root MuiDialogActions-spacing"
+          className="MuiDialogActions-root MuiDialogActions-spacing css-hlj6pa-MuiDialogActions-root"
         >
           <button
             aria-label="ok"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained R3AccountDialog-okButton-8 MuiButton-containedSecondary"
+            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root R3AccountDialog-okButton-8 css-zcbmsk-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
+            onContextMenu={[Function]}
             onDragLeave={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
@@ -502,23 +214,20 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
             tabIndex={0}
             type="button"
           >
-            <span
-              className="MuiButton-label"
+            OK
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3AccountDialog-buttonIcon-9 css-i4bv87-MuiSvgIcon-root"
+              data-testid="CheckCircleIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
             >
-              OK
-              <svg
-                aria-hidden={true}
-                className="MuiSvgIcon-root R3AccountDialog-buttonIcon-9"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-                />
-              </svg>
-            </span>
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+              />
+            </svg>
             <span
-              className="MuiTouchRipple-root"
+              className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
             />
           </button>
         </div>

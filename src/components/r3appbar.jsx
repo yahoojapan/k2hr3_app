@@ -23,20 +23,20 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-// For AppBar
-import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
-import AppBar						from '@material-ui/core/AppBar';
-import Toolbar						from '@material-ui/core/Toolbar';
-import Typography					from '@material-ui/core/Typography';
-import Menu							from '@material-ui/core/Menu';
-import MenuItem						from '@material-ui/core/MenuItem';
-import IconButton					from '@material-ui/core/IconButton';
-import ListItemIcon					from '@material-ui/core/ListItemIcon';
-import Divider						from '@material-ui/core/Divider';
-import Tooltip						from '@material-ui/core/Tooltip';
-import MenuIcon						from '@material-ui/icons/Menu';
-import AccountCircleIcon			from '@material-ui/icons/AccountCircle';
-import ArrowRightIcon				from '@material-ui/icons/ArrowRight';
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import AppBar						from '@mui/material/AppBar';
+import Toolbar						from '@mui/material/Toolbar';
+import Typography					from '@mui/material/Typography';
+import Menu							from '@mui/material/Menu';
+import MenuItem						from '@mui/material/MenuItem';
+import IconButton					from '@mui/material/IconButton';
+import ListItemIcon					from '@mui/material/ListItemIcon';
+import Divider						from '@mui/material/Divider';
+import Tooltip						from '@mui/material/Tooltip';
+import MenuIcon						from '@mui/icons-material/Menu';
+import AccountCircleIcon			from '@mui/icons-material/AccountCircle';
+import ArrowRightIcon				from '@mui/icons-material/ArrowRight';
 
 import { r3AppBar }					from './r3styles';
 import R3PopupMsgDialog				from './r3popupmsgdialog';
@@ -333,6 +333,7 @@ export default class R3AppBar extends React.Component
 						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.accountMenu, false) }
 						{ ...accountButton }
 						className={ accountButtonIcon }
+						size="large"
 					>
 						<AccountCircleIcon />
 					</IconButton>
@@ -342,7 +343,6 @@ export default class R3AppBar extends React.Component
 					anchorEl={ this.state.signMenuAnchorEl }
 					open={ Boolean(this.state.signMenuAnchorEl) }
 					onClose={ this.handleSignMenuClose }
-					getContentAnchorEl={ null }
 					{ ...theme.r3AppBar.accountMenu }
 				>
 					{ userMenuItem }
@@ -441,7 +441,6 @@ export default class R3AppBar extends React.Component
 					anchorEl={ this.state.licenseMenuAnchorEl }
 					open={ Boolean(this.state.licenseMenuAnchorEl) }
 					onClose={ this.handleMainMenuClose }
-					getContentAnchorEl={ null }
 					{ ...theme.r3AppBar.licenseMenu }
 				>
 					{ this.getLicensesMenuItems() }
@@ -479,6 +478,7 @@ export default class R3AppBar extends React.Component
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.mainMenu, false) }
 							aria-owns={ this.state.mainMenuAnchorEl ? mainMenuId : undefined }
 							{ ...theme.r3AppBar.mainMenuButton }
+							size="large"
 						>
 							<MenuIcon />
 						</IconButton>
@@ -488,7 +488,6 @@ export default class R3AppBar extends React.Component
 						anchorEl={ this.state.mainMenuAnchorEl }
 						open={ Boolean(this.state.mainMenuAnchorEl) }
 						onClose={ this.handleMainMenuClose }
-						getContentAnchorEl={ null }
 						{ ...theme.r3AppBar.mainMenu }
 					>
 						{ this.getMainMenuItems() }
@@ -507,6 +506,7 @@ export default class R3AppBar extends React.Component
 							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.mainMenu, true) }
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.mainMenu, false) }
 							{ ...theme.r3AppBar.mainMenuButton }
+							size="large"
 						>
 							<MenuIcon />
 						</IconButton>
@@ -529,7 +529,7 @@ export default class R3AppBar extends React.Component
 
 	render()
 	{
-		const { theme, classes  } = this.props;
+		const { theme, classes } = this.props;
 
 		let	themeToolbar = (this.props.enDock ? theme.r3AppBar.toolbar : theme.r3AppBar.smallToolbar);
 

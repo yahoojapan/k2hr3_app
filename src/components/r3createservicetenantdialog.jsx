@@ -23,16 +23,17 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import { withTheme, withStyles }	from '@material-ui/core/styles';		// decorator
-import TextField					from '@material-ui/core/TextField';
-import Button						from '@material-ui/core/Button';
-import Dialog						from '@material-ui/core/Dialog';
-import DialogTitle					from '@material-ui/core/DialogTitle';
-import DialogContent				from '@material-ui/core/DialogContent';
-import DialogActions				from '@material-ui/core/DialogActions';
-import Typography					from '@material-ui/core/Typography';
-import CheckCircleIcon				from '@material-ui/icons/CheckCircle';
-import CancelIcon					from '@material-ui/icons/Cancel';
+import withTheme					from '@mui/styles/withTheme';
+import withStyles					from '@mui/styles/withStyles';
+import TextField					from '@mui/material/TextField';
+import Button						from '@mui/material/Button';
+import Dialog						from '@mui/material/Dialog';
+import DialogTitle					from '@mui/material/DialogTitle';
+import DialogContent				from '@mui/material/DialogContent';
+import DialogActions				from '@mui/material/DialogActions';
+import Typography					from '@mui/material/Typography';
+import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
+import CancelIcon					from '@mui/icons-material/Cancel';
 
 import { r3CreateServiceTenantDialog } from './r3styles';
 import { r3IsEmptyStringObject, r3IsEmptyString } from '../util/r3util';

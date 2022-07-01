@@ -19,15 +19,15 @@
  *
  */
 
-import * as Colors		from '@material-ui/core/colors';
-import { createTheme }	from '@material-ui/core/styles';
+import * as Colors		from '@mui/material/colors';
+import { createTheme, adaptV4Theme } from '@mui/material/styles';
 
 /* eslint-disable indent */
 // [NOTE]
 // Default theme from material-ui
 // https://material-ui.com/customization/default-theme/
 //
-const r3Theme = createTheme({
+const r3Theme = createTheme(adaptV4Theme({
 	//
 	// palette
 	//
@@ -101,7 +101,10 @@ const r3Theme = createTheme({
 	//
 	// override components
 	//
-	overrides: {
+	// [NOTE]
+	// Changed "overrides" to "components" in the migration to MUI v5.
+	//
+	components: {
 		MuiIconButton: {
 			root: {
 				padding:			'8px'
@@ -111,6 +114,10 @@ const r3Theme = createTheme({
 		// [NOTE]
 		// @material-ui 4.x.x removed the default value of 'display: block' in Typography.
 		// Since K2HR3 is based on 'display: block', it is set in this overrides to maintain the layout.
+		//
+		// [NOTE][FIXME]
+		// Due to the migration to MUI v5, the following Typography overrides are no longer working.
+		// Instead, the display value is set in the individual Typography theme.
 		//
 		MuiTypography: {
 			root: {
@@ -123,9 +130,18 @@ const r3Theme = createTheme({
 		// But its backgroundColor is set theme.palette.primary.dark.
 		// We use avatar in chip only in toolbar, and it needs white.
 		//
+		// [NOTE][FIXME]
+		// Migrated to MUI v5 and changed "& $avatarColorPrimary" to "& .MuiChip-avatarColorPrimary".
+		// However, this MuiAvatar is used in R3Toolbar->MuiChip->Avatar, but we haven't been able
+		// to override this default CSS.
+		// Therefore, in MuiAvatar rendering(in r3toolbar.jsx), we defined "<StyledEngineProvider injectFirst>"
+		// and disabled this default CSS of MuiAvatar(Chip).
+		// Also, in the r3style.jsx file, marginLeft is added to the CSS of r3Toolbar->avatar to make
+		// it consistent.
+		//
 		MuiChip: {
 			root: {
-				'& $avatarColorPrimary': {
+				'& .MuiChip-avatarColorPrimary': {
 					backgroundColor:	Colors.common.white
 				}
 			}
@@ -155,7 +171,8 @@ const r3Theme = createTheme({
 		title: {
 			color:					'inherit',
 			variant:				'h6',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		mainMenuButton: {
 			color:					'inherit',
@@ -253,17 +270,20 @@ const r3Theme = createTheme({
 		},
 		chipText: {
 			variant:				'subtitle2',
-			component:				'span'
+			component:				'span',
+			display:				'block'
 		},
 		title: {
 			color:					'inherit',
 			variant:				'h6',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		tenantListText: {
 			color:					'textSecondary',
 			variant:				'subtitle2',
-			component:				'span'
+			component:				'span',
+			display:				'block'
 		},
 		tenantListButton: {
 			label:					'select-tenant',
@@ -345,7 +365,8 @@ const r3Theme = createTheme({
 			color:					'textSecondary',
 			variant:				'subtitle2',
 			component:				'span',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		chip: {
 			clickable:				true,
@@ -354,12 +375,14 @@ const r3Theme = createTheme({
 		},
 		chipText: {
 			variant:				'subtitle2',
-			component:				'span'
+			component:				'span',
+			display:				'block'
 		},
 		ownerText: {
 			variant:				'subtitle2',
 			component:				'span',
-			color:					'secondary'
+			color:					'secondary',
+			display:				'block'
 		},
 		toUpperPathButton: {
 			color:					'inherit',
@@ -387,13 +410,16 @@ const r3Theme = createTheme({
 		},
 		dialogErrorContentText: {
 			component:				'span',
-			color:					'error'
+			color:					'error',
+			display:				'block'
 		},
 		dialogWarningContentText: {
-			component:				'span'
+			component:				'span',
+			display:				'block'
 		},
 		dialogInformationContentText: {
-			component:				'span'
+			component:				'span',
+			display:				'block'
 		},
 		errorIcon: {
 			color:					'error'
@@ -413,7 +439,8 @@ const r3Theme = createTheme({
 		subTitle: {
 			variant:				'subtitle2',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		valueFormControl: {
 		},
@@ -423,37 +450,44 @@ const r3Theme = createTheme({
 		valueFormControlLabel: {
 			variant:				'body1',
 			color:					'textSecondary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		valueLeftFormControlLabel: {
 		},
 		valueRightFormControlLabel: {
 		},
 		valueStringTextField: {
+			variant:				'standard',
 			fullWidth:				true,
 			multiline:				true,
 			minRows:				1,
 			maxRows:				10
 		},
 		valueObjectTextField: {
+			variant:				'standard',
 			fullWidth:				true,
 			multiline:				false
 		},
 		keysKeySubTitle: {
 			variant:				'body2',
 			color:					'textSecondary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		keysValueSubTitle: {
 			variant:				'body2',
 			color:					'textSecondary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		keysKeyTextField: {
+			variant:				'standard',
 			multiline:				false,
 			minRows:				1
 		},
 		keysValueTextField: {
+			variant:				'standard',
 			multiline:				false,
 			minRows:				1
 		},
@@ -466,6 +500,7 @@ const r3Theme = createTheme({
 			'aria-label':			'add key and value'
 		},
 		aliasTextField: {
+			variant:				'standard',
 			multiline:				false,
 			minRows:				1
 		},
@@ -496,9 +531,11 @@ const r3Theme = createTheme({
 		subTitle: {
 			variant:				'subtitle2',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		effectSelect: {
+			variant:				'standard'
 		},
 		actionCheckbox: {
 		},
@@ -507,9 +544,11 @@ const r3Theme = createTheme({
 		actionFormControlLabel: {
 			variant:				'body2',
 			color:					'textSecondary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		resourceTextField: {
+			variant:				'standard',
 			multiline:				false,
 			minRows:				1
 		},
@@ -522,6 +561,7 @@ const r3Theme = createTheme({
 			'aria-label':			'delete resource'
 		},
 		aliasTextField: {
+			variant:				'standard',
 			multiline:				false,
 			minRows:				1
 		},
@@ -552,23 +592,28 @@ const r3Theme = createTheme({
 		subTitle: {
 			variant:				'subtitle2',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		hostnameSubTitle: {
 			variant:				'body2',
 			color:					'textSecondary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		hostnameAUXSubTitle: {
 			variant:				'body2',
 			color:					'textSecondary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		hostnameTextField: {
+			variant:				'standard',
 			multiline:				false,
 			minRows:				1
 		},
 		hostnameAUXTextField: {
+			variant:				'standard',
 			multiline:				false,
 			minRows:				1
 		},
@@ -583,18 +628,22 @@ const r3Theme = createTheme({
 		ipSubTitle: {
 			variant:				'body2',
 			color:					'textSecondary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		ipAUXSubTitle: {
 			variant:				'body2',
 			color:					'textSecondary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		ipTextField: {
+			variant:				'standard',
 			multiline:				false,
 			minRows:				1
 		},
 		ipAUXTextField: {
+			variant:				'standard',
 			multiline:				false,
 			minRows:				1
 		},
@@ -607,6 +656,7 @@ const r3Theme = createTheme({
 			'aria-label':			'add ip and AUX'
 		},
 		policyTextField: {
+			variant:				'standard',
 			multiline:				false,
 			minRows:				1
 		},
@@ -620,6 +670,7 @@ const r3Theme = createTheme({
 		},
 
 		aliasTextField: {
+			variant:				'standard',
 			multiline:				false,
 			minRows:				1
 		},
@@ -650,9 +701,11 @@ const r3Theme = createTheme({
 		subTitle: {
 			variant:				'subtitle2',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		resourceTextField: {
+			variant:				'standard',
 			multiline:				false,
 			minRows:				1
 		},
@@ -662,7 +715,8 @@ const r3Theme = createTheme({
 		valueFormControlLabel: {
 			variant:				'body1',
 			color:					'textSecondary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		valueLeftFormControlLabel: {
 		},
@@ -673,18 +727,22 @@ const r3Theme = createTheme({
 		textTableHead: {
 			variant:				'subtitle2',
 			component:				'span',
-			color:					'primary'
+			color:					'primary',
+			display:				'block'
 		},
 		textTableContent: {
 			variant:				'body1',
 			component:				'span',
-			color:					'textSecondary'
+			color:					'textSecondary',
+			display:				'block'
 		},
 		unknownMessage: {
 			variant:				'body1',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		tenantTextField: {
+			variant:				'standard',
 			multiline:				false,
 			minRows:				1
 		},
@@ -758,7 +816,8 @@ const r3Theme = createTheme({
 			variant:				'h5',
 			component:				'span',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		dialogContentText: {
 			component:				'span'
@@ -771,11 +830,13 @@ const r3Theme = createTheme({
 		licenseType: {
 			variant:				'h6',
 			component:				'span',
-			color:					'textSecondary'
+			color:					'textSecondary',
+			display:				'block'
 		},
 		content: {
 			component:				'span',
-			variant:				'body2'
+			variant:				'body2',
+			display:				'block'
 		}
 	},
 
@@ -796,18 +857,21 @@ const r3Theme = createTheme({
 			variant:				'h5',
 			component:				'span',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		subTitle: {
 			variant:				'subtitle2',
 			color:					'primary',
 			component:				'span',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		value: {
 			variant:				'body1',
 			component:				'span',
-			color:					'textSecondary'
+			color:					'textSecondary',
+			display:				'block'
 		},
 		unscopedtokenTextField: {
 			variant:				'outlined',
@@ -841,7 +905,8 @@ const r3Theme = createTheme({
 			variant:				'h5',
 			component:				'span',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		dialogContentText: {
 			component:				'span'
@@ -852,12 +917,14 @@ const r3Theme = createTheme({
 		},
 		message: {
 			variant:				'body1',
-			color:					'error'
+			color:					'error',
+			display:				'block'
 		},
 		messageIcon: {
 			color:					'error'
 		},
 		textField: {
+			variant:				'standard',
 			margin:					'normal',
 			fullWidth:				true
 		},
@@ -897,17 +964,21 @@ const r3Theme = createTheme({
 			variant:				'h5',
 			component:				'span',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		dialogErrorContentText: {
 			component:				'span',
-			color:					'error'
+			color:					'error',
+			display:				'block'
 		},
 		dialogWarningContentText: {
-			component:				'span'
+			component:				'span',
+			display:				'block'
 		},
 		dialogInformationContentText: {
-			component:				'span'
+			component:				'span',
+			display:				'block'
 		},
 		errorIcon: {
 			color:					'error'
@@ -945,18 +1016,21 @@ const r3Theme = createTheme({
 			variant:				'h5',
 			component:				'span',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		keyTitle: {
 			variant:				'subtitle2',
 			color:					'primary',
 			component:				'span',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		value: {
 			variant:				'body1',
 			component:				'span',
-			color:					'textSecondary'
+			color:					'textSecondary',
+			display:				'block'
 		},
 		button: {
 			variant:				'contained',
@@ -983,12 +1057,20 @@ const r3Theme = createTheme({
 		textTableHead: {
 			variant:				'subtitle2',
 			component:				'span',
-			color:					'primary'
+			color:					'primary',
+			display:				'block'
 		},
 		textTableContent: {
 			variant:				'body1',
 			component:				'span',
-			color:					'textSecondary'
+			color:					'textSecondary',
+			display:				'block'
+		},
+		textNewTableContent: {
+			variant:				'body1',
+			component:				'span',
+			color:					'textSecondary',
+			display:				'block'
 		},
 		manageAddButton: {
 			color:					'primary',
@@ -1016,12 +1098,14 @@ const r3Theme = createTheme({
 			variant:				'subtitle2',
 			component:				'span',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		newRoleTokenExpireLabel: {
 			variant:				'body1',
 			component:				'span',
-			color:					'textSecondary'
+			color:					'textSecondary',
+			display:				'block'
 		},
 		createRoleTokenButton: {
 			variant:				'contained',
@@ -1042,7 +1126,8 @@ const r3Theme = createTheme({
 			label:					'roletoken-clipboard-button',
 			'aria-label':			'copy roletoken to clipboard'
 		},
-		codetypeSelect: {
+		codeTypeSelect: {
+			variant:				'standard',
 			disabled:				false,
 			autoWidth:				true
 		},
@@ -1077,20 +1162,24 @@ const r3Theme = createTheme({
 			variant:				'h5',
 			component:				'span',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		keyTitle: {
 			variant:				'subtitle2',
 			color:					'primary',
 			component:				'span',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		value: {
 			variant:				'body1',
 			component:				'span',
-			color:					'textSecondary'
+			color:					'textSecondary',
+			display:				'block'
 		},
 		textField: {
+			variant:				'standard',
 			disabled:				false,
 			inputProps: {
 				'aria-label':		'input create path',
@@ -1125,18 +1214,21 @@ const r3Theme = createTheme({
 			variant:				'h5',
 			component:				'span',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		keyTitle: {
 			variant:				'subtitle2',
 			color:					'primary',
 			component:				'span',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		value: {
 			variant:				'body1',
 			component:				'span',
-			color:					'textSecondary'
+			color:					'textSecondary',
+			display:				'block'
 		},
 		valueRadioGroup: {
 			'aria-label':			'select type verify url or static resource'
@@ -1144,7 +1236,8 @@ const r3Theme = createTheme({
 		valueFormControlLabel: {
 			variant:				'body1',
 			color:					'textSecondary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		valueLeftFormControlLabel: {
 		},
@@ -1155,14 +1248,17 @@ const r3Theme = createTheme({
 		textTableHead: {
 			variant:				'subtitle2',
 			component:				'span',
-			color:					'primary'
+			color:					'primary',
+			display:				'block'
 		},
 		textTableContent: {
 			variant:				'body1',
 			component:				'span',
-			color:					'textSecondary'
+			color:					'textSecondary',
+			display:				'block'
 		},
 		textField: {
+			variant:				'standard',
 			disabled:				false,
 			multiline:				false,
 			minRows:				1
@@ -1198,7 +1294,8 @@ const r3Theme = createTheme({
 			variant:				'subtitle2',
 			component:				'span',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		staticResKeyPopoverButton: {
 			variant:				'contained',
@@ -1209,11 +1306,13 @@ const r3Theme = createTheme({
 			variant:				'body1',
 			component:				'span',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		staticResMessage: {
 			variant:				'body1',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		cancelButton: {
 			variant:				'contained',
@@ -1244,20 +1343,24 @@ const r3Theme = createTheme({
 			variant:				'h5',
 			component:				'span',
 			color:					'primary',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		keyTitle: {
 			variant:				'subtitle2',
 			color:					'primary',
 			component:				'span',
-			noWrap:					true
+			noWrap:					true,
+			display:				'block'
 		},
 		value: {
 			variant:				'body1',
 			component:				'span',
-			color:					'textSecondary'
+			color:					'textSecondary',
+			display:				'block'
 		},
 		textField: {
+			variant:				'standard',
 			disabled:				false
 		},
 		cancelButton: {
@@ -1271,7 +1374,7 @@ const r3Theme = createTheme({
 			'aria-label':			'ok'
 		}
 	}
-});
+}));
 /* eslint-enable indent */
 
 export default r3Theme;
