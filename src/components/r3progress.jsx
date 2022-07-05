@@ -23,8 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import Paper						from '@mui/material/Paper';
 import CircularProgress				from '@mui/material/CircularProgress';
 
@@ -33,10 +31,12 @@ import { r3Progress }				from './r3styles';
 //
 // Progress Modal Class
 //
-@withTheme
-@withStyles(r3Progress)
 export default class R3Progress extends React.Component
 {
+	// [NOTE]
+	// It corresponds with Callback function without using ForwardRef.
+	// Please correct it when using ForwardRef in the future.
+	//
 	static propTypes = {
 		cbRefRegister:	PropTypes.func,
 		onClose:		PropTypes.func
@@ -58,11 +58,14 @@ export default class R3Progress extends React.Component
 		super(props);
 
 		// Binding(do not define handlers as arrow functions for performance)
-		this.handleDisplay		= this.handleDisplay.bind(this);
+		this.handleDisplay = this.handleDisplay.bind(this);
 
 		if(this.props.cbRefRegister){
 			this.props.cbRefRegister(this.handleDisplay);
 		}
+
+		// styles
+		this.sxClasses = r3Progress(props.theme);
 	}
 
 	handleDisplay(isDisplay)
@@ -85,7 +88,7 @@ export default class R3Progress extends React.Component
 
 	render()
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		if(!this.state.open){
 			return null;
@@ -94,11 +97,11 @@ export default class R3Progress extends React.Component
 		return (
 			<Paper
 				{ ...theme.r3progress.root }
-				className={ classes.root }
+				sx={ this.sxClasses.root }
 			>
 				<CircularProgress
 					{ ...theme.r3progress.circularProgress }
-					className={ classes.circularProgress }
+					sx={ this.sxClasses.circularProgress }
 				/>
 			</Paper>
 		);

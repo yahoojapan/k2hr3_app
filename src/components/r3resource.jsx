@@ -23,8 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import TextField					from '@mui/material/TextField';
 import Typography					from '@mui/material/Typography';
 import IconButton					from '@mui/material/IconButton';
@@ -33,6 +31,7 @@ import FormControlLabel				from '@mui/material/FormControlLabel';
 import RadioGroup					from '@mui/material/RadioGroup';
 import Radio						from '@mui/material/Radio';
 import Tooltip						from '@mui/material/Tooltip';
+import Box							from '@mui/material/Box';
 import DeleteIcon					from '@mui/icons-material/ClearRounded';
 import AddIcon						from '@mui/icons-material/AddRounded';
 import UpIcon						from '@mui/icons-material/ArrowUpwardRounded';
@@ -72,14 +71,8 @@ const resourceComponentValues = {
 //
 // Resource Contents Class
 //
-@withTheme
-@withStyles(r3Resource)
 export default class R3Resource extends React.Component
 {
-	static contextTypes = {
-		r3Context:	PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		r3provider:	PropTypes.object.isRequired,
 		resource:	PropTypes.object.isRequired,
@@ -111,6 +104,9 @@ export default class R3Resource extends React.Component
 		this.handleAddKeysChange		= this.handleAddKeysChange.bind(this);
 		this.handleAliasesChange		= this.handleAliasesChange.bind(this);
 		this.handleAddAliasesChange		= this.handleAddAliasesChange.bind(this);
+
+		// styles
+		this.sxClasses					= r3Resource(props.theme);
 	}
 
 	componentDidMount()
@@ -734,7 +730,7 @@ export default class R3Resource extends React.Component
 
 	getKeysContents(items)
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(!r3IsSafeTypedEntity(items, 'object')){
 			return;
@@ -768,7 +764,7 @@ export default class R3Resource extends React.Component
 					<IconButton
 						disabled={ true }
 						{ ...theme.r3Resource.deleteKeysButton }
-						className={ classes.deleteInvisibleKeysButton }
+						sx={ this.sxClasses.deleteInvisibleKeysButton }
 						size="large"
 					>
 						<DeleteIcon />
@@ -785,7 +781,7 @@ export default class R3Resource extends React.Component
 							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deleteKeysTooltip, keyname) }
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deleteKeysTooltip, null) }
 							{ ...theme.r3Resource.deleteKeysButton }
-							className={ classes.deleteKeysButton }
+							sx={ this.sxClasses.deleteKeysButton }
 							size="large"
 						>
 							<DeleteIcon />
@@ -799,14 +795,14 @@ export default class R3Resource extends React.Component
 				inputProps = {};
 			}else{
 				inputProps = {
-					className: classes.inputTextField
+					sx: this.sxClasses.inputTextField
 				};
 			}
 
 			elementArray.push(
-				<div
+				<Box
 					key={ elementCount++ }
-					className={ classes.enclosureElement }
+					sx={ this.sxClasses.enclosureElement }
 				>
 					<TextField
 						name={ resourceComponentValues.keysKeyTextFieldNamePrefix + String(elementCount) }
@@ -816,7 +812,7 @@ export default class R3Resource extends React.Component
 						onChange={ (event) => this.handleKeysChange(event, actionTypeName, keyname) }
 						InputProps={ inputProps }
 						{ ...theme.r3Resource.keysKeyTextField }
-						className={ classes.keysKeyTextField }
+						sx={ this.sxClasses.keysKeyTextField }
 					/>
 					<TextField
 						name={ resourceComponentValues.keysValueTextFieldNamePrefix + String(elementCount) }
@@ -826,10 +822,10 @@ export default class R3Resource extends React.Component
 						onChange={ (event) => this.handleKeysChange(event, actionTypeValue, keyname) }
 						InputProps={ inputProps }
 						{ ...theme.r3Resource.keysValueTextField }
-						className={ classes.keysValueTextField }
+						sx={ this.sxClasses.keysValueTextField }
 					/>
 					{ deleteButton }
-				</div>
+				</Box>
 			);
 		});
 
@@ -842,33 +838,33 @@ export default class R3Resource extends React.Component
 
 	getAddKeysContents()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(this.props.isReadMode){
 			return;
 		}
 
 		return (
-			<div
-				className={ classes.enclosureElement }
+			<Box
+				sx={ this.sxClasses.enclosureElement }
 			>
 				<TextField
 					name={ resourceComponentValues.keysNewKeyTextFieldName }
 					value={ this.state.addKeyName }
 					placeholder={ r3provider.getR3TextRes().tResResourceKeysKeyHint }
 					onChange={ (event) => this.handleAddKeysChange(event, actionTypeNewKey) }
-					InputProps={{ className: classes.inputTextField }}
+					InputProps={{ sx: this.sxClasses.inputTextField }}
 					{ ...theme.r3Resource.keysKeyTextField }
-					className={ classes.keysKeyTextField }
+					sx={ this.sxClasses.keysKeyTextField }
 				/>
 				<TextField
 					name={ resourceComponentValues.keysNewValueTextFieldName }
 					value={ this.state.addKeyValue }
 					placeholder={ r3provider.getR3TextRes().tResResourceKeysValueHint }
 					onChange={ (event) => this.handleAddKeysChange(event, actionTypeNewValue) }
-					InputProps={{ className: classes.inputTextField }}
+					InputProps={{ sx: this.sxClasses.inputTextField }}
 					{ ...theme.r3Resource.keysValueTextField }
-					className={ classes.keysValueTextField }
+					sx={ this.sxClasses.keysValueTextField }
 				/>
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResResourceKeysAddTT }
@@ -879,19 +875,19 @@ export default class R3Resource extends React.Component
 						onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.addKeysTooltip, true) }
 						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addKeysTooltip, false) }
 						{ ...theme.r3Resource.addKeysButton }
-						className={ classes.addKeysButton }
+						sx={ this.sxClasses.addKeysButton }
 						size="large"
 					>
 						<AddIcon />
 					</IconButton>
 				</Tooltip>
-			</div>
+			</Box>
 		);
 	}
 
 	getAliasContents(items)
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(!r3IsSafeTypedEntity(items, 'array')){
 			return;
@@ -906,7 +902,7 @@ export default class R3Resource extends React.Component
 					<IconButton
 						disabled={ true }
 						{ ...theme.r3Resource.downAliasButton }
-						className={ classes.arrowInvisibleAliasButton }
+						sx={ this.sxClasses.arrowInvisibleAliasButton }
 						size="large"
 					>
 						<DownIcon />
@@ -923,7 +919,7 @@ export default class R3Resource extends React.Component
 							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.downAliasTooltip, pos) }
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.downAliasTooltip, -1) }
 							{ ...theme.r3Resource.downAliasButton }
-							className={ classes.arrowAliasButton }
+							sx={ this.sxClasses.arrowAliasButton }
 							size="large"
 						>
 							<DownIcon />
@@ -938,7 +934,7 @@ export default class R3Resource extends React.Component
 					<IconButton
 						disabled={ true }
 						{ ...theme.r3Resource.upAliasButton }
-						className={ classes.arrowInvisibleAliasButton }
+						sx={ this.sxClasses.arrowInvisibleAliasButton }
 						size="large"
 					>
 						<UpIcon />
@@ -955,7 +951,7 @@ export default class R3Resource extends React.Component
 							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.upAliasTooltip, pos) }
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.upAliasTooltip, -1) }
 							{ ...theme.r3Resource.upAliasButton }
-							className={ classes.arrowAliasButton }
+							sx={ this.sxClasses.arrowAliasButton }
 							size="large"
 						>
 							<UpIcon />
@@ -970,7 +966,7 @@ export default class R3Resource extends React.Component
 					<IconButton
 						disabled={ true }
 						{ ...theme.r3Resource.deleteAliasButton }
-						className={ classes.deleteInvisibleAliasButton }
+						sx={ this.sxClasses.deleteInvisibleAliasButton }
 						size="large"
 					>
 						<DeleteIcon />
@@ -987,7 +983,7 @@ export default class R3Resource extends React.Component
 							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deleteAliasTooltip, pos) }
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deleteAliasTooltip, -1) }
 							{ ...theme.r3Resource.deleteAliasButton }
-							className={ classes.deleteAliasButton }
+							sx={ this.sxClasses.deleteAliasButton }
 							size="large"
 						>
 							<DeleteIcon />
@@ -1001,14 +997,14 @@ export default class R3Resource extends React.Component
 				inputProps = {};
 			}else{
 				inputProps = {
-					className: classes.inputTextField
+					sx: this.sxClasses.inputTextField
 				};
 			}
 
 			return (
-				<div
+				<Box
 					key={ pos }
-					className={ classes.enclosureElement }
+					sx={ this.sxClasses.enclosureElement }
 				>
 					<TextField
 						name={ resourceComponentValues.aliasTextFieldNamePrefix + String(pos) }
@@ -1018,36 +1014,36 @@ export default class R3Resource extends React.Component
 						onChange={ (event) => this.handleAliasesChange(event, actionTypeValue, pos) }
 						InputProps={ inputProps }
 						{ ...theme.r3Resource.aliasTextField }
-						className={ classes.aliasTextField }
+						sx={ this.sxClasses.aliasTextField }
 					/>
 					{ downButton }
 					{ upButton }
 					{ deleteButton }
-				</div>
+				</Box>
 			);
 		});
 	}
 
 	getAddAliasContents()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(this.props.isReadMode){
 			return;
 		}
 
 		return (
-			<div
-				className={ classes.enclosureElement }
+			<Box
+				sx={ this.sxClasses.enclosureElement }
 			>
 				<TextField
 					name={ resourceComponentValues.aliasNewTextFieldName }
 					value={ this.state.addAliases }
 					placeholder={ r3provider.getR3TextRes().tResAliasHint }
 					onChange={ (event) => this.handleAddAliasesChange(event) }
-					InputProps={{ className: classes.inputTextField }}
+					InputProps={{ sx: this.sxClasses.inputTextField }}
 					{ ...theme.r3Resource.aliasTextField }
-					className={ classes.aliasTextField }
+					sx={ this.sxClasses.aliasTextField }
 				/>
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResAliasAddTT }
@@ -1058,13 +1054,13 @@ export default class R3Resource extends React.Component
 						onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.addAliasTooltip, true) }
 						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addAliasTooltip, false) }
 						{ ...theme.r3Resource.addAliasButton }
-						className={ classes.addAliasButton }
+						sx={ this.sxClasses.addAliasButton }
 						size="large"
 					>
 						<AddIcon />
 					</IconButton>
 				</Tooltip>
-			</div>
+			</Box>
 		);
 	}
 
@@ -1072,7 +1068,7 @@ export default class R3Resource extends React.Component
 	{
 		console.info('CALL : resource:render()');
 
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let valueTextFieldTheme		= (resourceTypeObject === this.state.resourceType ? theme.r3Resource.valueObjectTextField : theme.r3Resource.valueStringTextField);
 		let	leftValueSelectLabel	= (
@@ -1095,30 +1091,30 @@ export default class R3Resource extends React.Component
 			inputProps = {};
 		}else{
 			inputProps = {
-				className: classes.inputTextField
+				sx: this.sxClasses.inputTextField
 			};
 		}
 
 		return (
-			<div
-				className={ classes.root }
+			<Box
+				sx={ this.sxClasses.root }
 			>
 				<Typography
 					{ ...theme.r3Resource.subTitle }
-					className={ classes.subTitleTop }
+					sx={ this.sxClasses.subTitleTop }
 				>
 					{ r3provider.getR3TextRes().tResResourceValueSubTitle }
 				</Typography>
 				<FormControl
 					{ ...theme.r3Resource.valueFormControl }
-					className={ classes.valueFormControl }
+					sx={ this.sxClasses.valueFormControl }
 				>
 					<RadioGroup
 						name={ resourceComponentValues.valueTypeRadioName }
 						value={ this.state.resourceType }
 						onChange={ this.handleValueTypeChange }
 						{ ...theme.r3Resource.valueRadioGroup }
-						className={ classes.valueRadioGroup }
+						sx={ this.sxClasses.valueRadioGroup }
 					>
 						<FormControlLabel
 							value={ resourceTypeString }
@@ -1126,7 +1122,7 @@ export default class R3Resource extends React.Component
 							disabled={ this.props.isReadMode }
 							control={ <Radio /> }
 							{ ...theme.r3Resource.valueLeftFormControlLabel }
-							className={ classes.valueLeftFormControlLabel }
+							sx={ this.sxClasses.valueLeftFormControlLabel }
 						/>
 						<FormControlLabel
 							value={ resourceTypeObject }
@@ -1134,7 +1130,7 @@ export default class R3Resource extends React.Component
 							disabled={ this.props.isReadMode }
 							control={ <Radio /> }
 							{ ...theme.r3Resource.valueRightFormControlLabel }
-							className={ classes.valueRightFormControlLabel }
+							sx={ this.sxClasses.valueRightFormControlLabel }
 						/>
 					</RadioGroup>
 				</FormControl>
@@ -1147,24 +1143,24 @@ export default class R3Resource extends React.Component
 					onChange={ (event) => this.handleValueChange(event) }
 					InputProps={ inputProps }
 					{ ...valueTextFieldTheme }
-					className={ classes.valueTextField }
+					sx={ this.sxClasses.valueTextField }
 				/>
 
 				<Typography
 					{ ...theme.r3Resource.subTitle }
-					className={ classes.subTitle }
+					sx={ this.sxClasses.subTitle }
 				>
 					{ r3provider.getR3TextRes().tResResourceKeysSubTitle }
 				</Typography>
 				<Typography
 					{ ...theme.r3Resource.keysKeySubTitle }
-					className={ classes.keysKeySubTitle }
+					sx={ this.sxClasses.keysKeySubTitle }
 				>
 					{ r3provider.getR3TextRes().tResResourceKeySubTitle }
 				</Typography>
 				<Typography
 					{ ...theme.r3Resource.keysValueSubTitle }
-					className={ classes.keysValueSubTitle }
+					sx={ this.sxClasses.keysValueSubTitle }
 				>
 					{ r3provider.getR3TextRes().tResResourceKValueSubTitle }
 				</Typography>
@@ -1173,7 +1169,7 @@ export default class R3Resource extends React.Component
 
 				<Typography
 					{ ...theme.r3Resource.subTitle }
-					className={ classes.subTitle }
+					sx={ this.sxClasses.subTitle }
 				>
 					{ r3provider.getR3TextRes().tResAliasSubTitle }
 				</Typography>
@@ -1181,6 +1177,7 @@ export default class R3Resource extends React.Component
 				{ this.getAddAliasContents() }
 
 				<R3FormButtons
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					status={ this.state.changed }
 					onSave={ this.handleSave }
@@ -1188,6 +1185,7 @@ export default class R3Resource extends React.Component
 				/>
 
 				<R3PopupMsgDialog
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					title={ this.props.r3provider.getR3TextRes().cUpdatingTitle }
 					r3Message={ this.state.confirmMessageObject }
@@ -1195,11 +1193,12 @@ export default class R3Resource extends React.Component
 					onClose={ this.handleConfirmDialogClose }
 				/>
 				<R3PopupMsgDialog
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					r3Message={ this.state.messageDialogObject }
 					onClose={ this.handleMessageDialogClose }
 				/>
-			</div>
+			</Box>
 		);
 	}
 }

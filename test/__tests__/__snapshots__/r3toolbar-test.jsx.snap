@@ -1,17 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
-<div>
+<div
+  className="MuiBox-root css-0"
+>
   <header
-    className="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionStatic R3Toolbar-root-1 css-120r8wl-MuiPaper-root-MuiAppBar-root"
+    className="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionStatic css-16hd142-MuiPaper-root-MuiAppBar-root"
   >
     <div
-      className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular R3Toolbar-toolbar-2 css-hyum1k-MuiToolbar-root"
+      className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-hyum1k-MuiToolbar-root"
     >
       <div
         aria-label="current display item and its path"
         aria-labelledby={null}
-        className="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-clickable MuiChip-clickableColorPrimary MuiChip-filledPrimary R3Toolbar-chip-4 css-799jnf-MuiButtonBase-root-MuiChip-root"
+        className="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-clickable MuiChip-clickableColorPrimary MuiChip-filledPrimary css-1kq80ry-MuiButtonBase-root-MuiChip-root"
         data-mui-internal-clone-element={true}
         onBlur={[Function]}
         onClick={[Function]}
@@ -32,11 +34,11 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
         tabIndex={0}
       >
         <div
-          className="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault R3Toolbar-avatar-7 css-2s90m6-MuiAvatar-root"
+          className="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault MuiChip-avatar MuiChip-avatarMedium MuiChip-avatarColorPrimary css-1fc1ggy-MuiAvatar-root"
         >
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3Toolbar-descriptionIcon-8 css-i4bv87-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1eaekgb-MuiSvgIcon-root"
             data-testid="DescriptionIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -47,10 +49,10 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
           </svg>
         </div>
         <span
-          className="MuiChip-label MuiChip-labelMedium css-6od3lo-MuiChip-label"
+          className="MuiChip-label MuiChip-labelMedium css-1dybbl5-MuiChip-label"
         >
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 R3Toolbar-chipText-5 css-1sr7afs-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 css-1e1rx5x-MuiTypography-root"
           >
             SERVICE
           </span>
@@ -60,14 +62,14 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
         />
       </div>
       <span
-        className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3Toolbar-title-3 css-k76d41-MuiTypography-root"
+        className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-4fnb9r-MuiTypography-root"
       >
         .../dummyresource
       </span>
       <button
         aria-label="Move to upper path"
         aria-labelledby={null}
-        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-1bn0rhl-MuiButtonBase-root-MuiIconButton-root"
         data-mui-internal-clone-element={true}
         disabled={false}
         onBlur={[Function]}
@@ -90,7 +92,7 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
       >
         <svg
           aria-hidden={true}
-          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
           data-testid="ArrowUpwardRoundedIcon"
           focusable="false"
           viewBox="0 0 24 24"
@@ -104,12 +106,12 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
         />
       </button>
       <div
-        className="R3Toolbar-spacerInToolbar-9"
+        className="MuiBox-root css-i9gxme"
       />
       <button
         aria-label="Create SERVICE under TENANT"
         aria-labelledby={null}
-        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-1bn0rhl-MuiButtonBase-root-MuiIconButton-root"
         data-mui-internal-clone-element={true}
         disabled={false}
         onBlur={[Function]}
@@ -132,7 +134,7 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
       >
         <svg
           aria-hidden={true}
-          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
           data-testid="AddRoundedIcon"
           focusable="false"
           viewBox="0 0 24 24"
@@ -148,7 +150,7 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
       <button
         aria-label="Delete SERVICE under TENANT"
         aria-labelledby={null}
-        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-1bn0rhl-MuiButtonBase-root-MuiIconButton-root"
         data-mui-internal-clone-element={true}
         disabled={false}
         onBlur={[Function]}
@@ -171,7 +173,7 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
       >
         <svg
           aria-hidden={true}
-          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
           data-testid="ClearRoundedIcon"
           focusable="false"
           viewBox="0 0 24 24"

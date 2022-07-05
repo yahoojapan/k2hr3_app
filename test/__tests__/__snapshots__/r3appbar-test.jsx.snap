@@ -2,16 +2,16 @@
 
 exports[`R3AppBar test snapshot for R3AppBar 1`] = `
 <header
-  className="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionStatic R3AppBar-root-1 css-hip9hq-MuiPaper-root-MuiAppBar-root"
+  className="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionStatic css-ki0gnq-MuiPaper-root-MuiAppBar-root"
 >
   <div
-    className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-dense R3AppBar-toolbar-2 css-10ltm04-MuiToolbar-root"
+    className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-dense css-10ltm04-MuiToolbar-root"
   >
     <button
       aria-haspopup="true"
       aria-label="main menu"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-1pz7awu-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-1fn7xgs-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="main-menu"
@@ -35,7 +35,7 @@ exports[`R3AppBar test snapshot for R3AppBar 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="MenuIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -49,7 +49,7 @@ exports[`R3AppBar test snapshot for R3AppBar 1`] = `
       />
     </button>
     <h6
-      className="MuiTypography-root MuiTypography-h6 MuiTypography-noWrap R3AppBar-title-3 css-8uzb32-MuiTypography-root"
+      className="MuiTypography-root MuiTypography-h6 MuiTypography-noWrap css-az3k0-MuiTypography-root"
     >
       K2HR3
     </h6>
@@ -57,7 +57,7 @@ exports[`R3AppBar test snapshot for R3AppBar 1`] = `
       aria-haspopup="true"
       aria-label="signin menu"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge R3AppBar-signinButton-6 css-1pz7awu-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-1fn7xgs-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="signin-menu"
@@ -81,7 +81,7 @@ exports[`R3AppBar test snapshot for R3AppBar 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="AccountCircleIcon"
         focusable="false"
         viewBox="0 0 24 24"

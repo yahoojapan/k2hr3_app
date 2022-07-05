@@ -23,8 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import AppBar						from '@mui/material/AppBar';
 import Toolbar						from '@mui/material/Toolbar';
 import Typography					from '@mui/material/Typography';
@@ -43,6 +41,9 @@ import R3PopupMsgDialog				from './r3popupmsgdialog';
 import R3Message					from '../util/r3message';
 import { errorType }				from '../util/r3types';
 import { r3IsEmptyEntity, r3IsEmptyString, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity }	from '../util/r3util';
+
+// For context
+import { R3CommonContext }			from './r3commoncontext';
 
 //
 // Local variables
@@ -69,13 +70,10 @@ const accountMenuId		= 'appbar-sign-menu';
 //
 // AppBar Class
 //
-@withTheme
-@withStyles(r3AppBar)
 export default class R3AppBar extends React.Component
 {
-	static contextTypes = {
-		r3Context:			PropTypes.object.isRequired
-	};
+	// Set context as this.context
+	static contextType		= R3CommonContext;
 
 	static propTypes = {
 		r3provider:			PropTypes.object.isRequired,
@@ -123,6 +121,9 @@ export default class R3AppBar extends React.Component
 		this.handleMainMenuClose		= this.handleMainMenuClose.bind(this);
 		this.handleDetachedMainButton	= this.handleDetachedMainButton.bind(this);
 		this.handMessageDialogClose		= this.handMessageDialogClose.bind(this);
+
+		// styles
+		this.sxClasses					= r3AppBar(props.theme);
 	}
 
 	handleSignMenuChange = (event, value) =>					// eslint-disable-line no-unused-vars
@@ -285,10 +286,10 @@ export default class R3AppBar extends React.Component
 
 	getAccountButton()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let accountButton		= (this.context.r3Context.isLogin() ? theme.r3AppBar.signinButton : theme.r3AppBar.signoutButton);
-		let accountButtonIcon	= (this.context.r3Context.isLogin() ? classes.signinButton : classes.signoutButton);
+		let accountButtonIcon	= (this.context.r3Context.isLogin() ? this.sxClasses.signinButton : this.sxClasses.signoutButton);
 		let	btnText				= (this.context.r3Context.isLogin() ? r3provider.getR3TextRes().tResSignoutMenu : r3provider.getR3TextRes().tResSigninMenu);
 
 		let	userMenuItem;
@@ -301,7 +302,7 @@ export default class R3AppBar extends React.Component
 					disabled={ true }
 				>
 					<Typography
-						className={ classes.signinedMenu }
+						sx={ this.sxClasses.signinedMenu }
 					>
 						{ r3provider.getR3TextRes().tResSigninName + this.context.r3Context.getSafeUserName() }
 					</Typography>
@@ -332,7 +333,7 @@ export default class R3AppBar extends React.Component
 						onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.accountMenu, true) }
 						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.accountMenu, false) }
 						{ ...accountButton }
-						className={ accountButtonIcon }
+						sx={ accountButtonIcon }
 						size="large"
 					>
 						<AccountCircleIcon />
@@ -392,7 +393,7 @@ export default class R3AppBar extends React.Component
 
 	getMainMenuItems()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 		let	_menuitems = [];
 
 		if(this.props.enDock){
@@ -432,7 +433,7 @@ export default class R3AppBar extends React.Component
 				{ r3provider.getR3TextRes().tResLicensesMenu }
 				<ListItemIcon>
 					<ArrowRightIcon
-						className={ classes.menuRightIcon }
+						sx={ this.sxClasses.menuRightIcon }
 					/>
 				</ListItemIcon>
 
@@ -520,6 +521,7 @@ export default class R3AppBar extends React.Component
 	{
 		return (
 			<R3PopupMsgDialog
+				theme={ this.props.theme }
 				r3provider={ this.props.r3provider }
 				r3Message={ this.state.r3Message }
 				onClose={ this.handMessageDialogClose }
@@ -529,7 +531,7 @@ export default class R3AppBar extends React.Component
 
 	render()
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		let	themeToolbar = (this.props.enDock ? theme.r3AppBar.toolbar : theme.r3AppBar.smallToolbar);
 
@@ -537,16 +539,16 @@ export default class R3AppBar extends React.Component
 			<React.Fragment>
 				<AppBar
 					{ ...theme.r3AppBar.root }
-					className={ classes.root }
+					sx={ this.sxClasses.root }
 				>
 					<Toolbar
 						{ ...themeToolbar }
-						className={ classes.toolbar }
+						sx={ this.sxClasses.toolbar }
 					>
 						{ this.getMainMenuButton() }
 						<Typography
 							{ ...theme.r3AppBar.title }
-							className={ classes.title }
+							sx={ this.sxClasses.title }
 						>
 							{ this.props.title }
 						</Typography>

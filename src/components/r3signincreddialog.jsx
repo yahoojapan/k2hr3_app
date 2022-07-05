@@ -23,8 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import TextField					from '@mui/material/TextField';
 import Button						from '@mui/material/Button';
 import IconButton					from '@mui/material/IconButton';
@@ -54,14 +52,8 @@ const passphraseTextFieldId		= 'passphrase-textfield-id';
 //
 // SignIn by Credential Dialog
 //
-@withTheme
-@withStyles(r3SigninCredDialogStyles)
 export default class R3SigninCredDialog extends React.Component
 {
-	static contextTypes = {
-		r3Context:		PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		r3provider:		PropTypes.object.isRequired,
 		open:			PropTypes.bool,
@@ -94,6 +86,9 @@ export default class R3SigninCredDialog extends React.Component
 		this.handleUserNameChange		= this.handleUserNameChange.bind(this);
 		this.handlePassPhraseChange		= this.handlePassPhraseChange.bind(this);
 		this.handleClickShowPassphrase	= this.handleClickShowPassphrase.bind(this);
+
+		// styles
+		this.sxClasses					= r3SigninCredDialogStyles(props.theme);
 	}
 
 	// [NOTE]
@@ -147,21 +142,21 @@ export default class R3SigninCredDialog extends React.Component
 
 	getMessageBox()
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		if(!r3IsEmptyString(this.props.message)){
 			return (
 				<Paper
 					{ ...theme.r3SigninCredDialog.messagePaper }
-					className={ classes.messagePaper }
+					sx={ this.sxClasses.messagePaper }
 				>
 					<WarningIcon
 						{ ...theme.r3SigninCredDialog.messageIcon }
-						className={ classes.messageIcon }
+						sx={ this.sxClasses.messageIcon }
 					/>
 					<Typography
 						{ ...theme.r3SigninCredDialog.message }
-						className={ classes.message }
+						sx={ this.sxClasses.message }
 					>
 						{ this.props.message }
 					</Typography>
@@ -172,7 +167,7 @@ export default class R3SigninCredDialog extends React.Component
 
 	render()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	name		= r3IsEmptyString(this.state.name, true) ?			'' : this.state.name.trim();
 		let	passphrase	= r3IsEmptyString(this.state.passphrase, true) ?	'' : this.state.passphrase.trim();
@@ -182,26 +177,26 @@ export default class R3SigninCredDialog extends React.Component
 				open={ this.props.open }
 				onClose={ (event, reason) => this.props.onClose(event, reason, false, null, null) }
 				{ ...theme.r3SigninCredDialog.root }
-				className={ classes.root }
+				sx={ this.sxClasses.root }
 			>
 				<DialogTitle
 					{ ...theme.r3SigninCredDialog.dialogTitle }
-					className={ classes.dialogTitle }
+					sx={ this.sxClasses.dialogTitle }
 				>
 					<Typography
 						{ ...theme.r3SigninCredDialog.title }
-						className={ classes.title }
+						sx={ this.sxClasses.title }
 					>
 						{ r3provider.getR3TextRes().cDirectSignInTitle }
 					</Typography>
 				</DialogTitle>
 
 				<DialogContent
-					className={ classes.dialogContent }
+					sx={ this.sxClasses.dialogContent }
 				>
 					<DialogContentText
 						{ ...theme.r3SigninCredDialog.dialogContentText }
-						className={ classes.dialogContentText }
+						sx={ this.sxClasses.dialogContentText }
 					>
 						{ this.getMessageBox() }
 					</DialogContentText>
@@ -212,9 +207,9 @@ export default class R3SigninCredDialog extends React.Component
 						value={ name }
 						placeholder={ r3provider.getR3TextRes().tResUserNamePlaceHolder }
 						onChange={ (event) => this.handleUserNameChange(event) }
-						InputProps={{ className: classes.inputTextField }}
+						InputProps={{ sx: this.sxClasses.inputTextField }}
 						{ ...theme.r3SigninCredDialog.textField }
-						className={ classes.textField }
+						sx={ this.sxClasses.textField }
 					/>
 
 					<TextField
@@ -238,10 +233,10 @@ export default class R3SigninCredDialog extends React.Component
 									</IconButton>
 								</InputAdornment>
 							),
-							className:	classes.inputTextField
+							sx:	this.sxClasses.inputTextField
 						}}
 						{ ...theme.r3SigninCredDialog.textField }
-						className={ classes.textField }
+						sx={ this.sxClasses.textField }
 					/>
 				</DialogContent>
 
@@ -249,22 +244,22 @@ export default class R3SigninCredDialog extends React.Component
 					<Button
 						onClick={ (event) => this.props.onClose(event, null, false, null, null) }
 						{ ...theme.r3SigninCredDialog.cancelButton }
-						className={ classes.cancelButton }
+						sx={ this.sxClasses.cancelButton }
 					>
 						{ r3provider.getR3TextRes().tResButtonCancel }
 						<CancelIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 					<Button
 						disabled={ ('' === name) }
 						onClick={ (event) => this.props.onClose(event, null, true, this.state.name, this.state.passphrase) }
 						{ ...theme.r3SigninCredDialog.signinButton }
-						className={ classes.signinButton }
+						sx={ this.sxClasses.signinButton }
 					>
 						{ r3provider.getR3TextRes().tResButtonSignin }
 						<CheckCircleIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 				</DialogActions>

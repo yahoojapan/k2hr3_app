@@ -23,8 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import TextField					from '@mui/material/TextField';
 import Button						from '@mui/material/Button';
 import Dialog						from '@mui/material/Dialog';
@@ -115,14 +113,8 @@ const disableAllToolTip = {
 //
 // Create New Path Dialog Class
 //
-@withTheme
-@withStyles(r3CreateServiceDialog)
 export default class R3CreateServiceDialog extends React.Component
 {
-	static contextTypes = {
-		r3Context:			PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		r3provider:				PropTypes.object.isRequired,
 		open:					PropTypes.bool,
@@ -220,6 +212,9 @@ export default class R3CreateServiceDialog extends React.Component
 		this.handleConfirmStaticResKey		= this.handleConfirmStaticResKey.bind(this);
 		this.handleStaticResKeysKeyChange	= this.handleStaticResKeysKeyChange.bind(this);
 		this.handleStaticResKeysValChange	= this.handleStaticResKeysValChange.bind(this);
+
+		// styles
+		this.sxClasses						= r3CreateServiceDialog(props.theme);
 	}
 
 	// [NOTE]
@@ -902,7 +897,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	getNewStaticResKeyPopover()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	title;
 		let	buttonName;
@@ -926,7 +921,7 @@ export default class R3CreateServiceDialog extends React.Component
 			message		= (
 				<Typography
 					{ ...theme.r3Service.staticResMessage }
-					className={ classes.staticResMessage }
+					sx={ this.sxClasses.staticResMessage }
 				>
 					{ this.state.editingComfirmMessage }
 				</Typography>
@@ -939,18 +934,18 @@ export default class R3CreateServiceDialog extends React.Component
 				anchorEl={ this.state.staticResKeyAnchorEl }
 				onClose={ this.handleCancelStaticResKey }
 				{ ...theme.r3CreateServiceDialog.staticResKeyPopover }
-				className={ classes.staticResKeyPopover }
+				sx={ this.sxClasses.staticResKeyPopover }
 			>
 				<Typography
 					{ ...theme.r3CreateServiceDialog.staticResKeyPopoverTitle }
-					className={ classes.staticResKeyPopoverTitle }
+					sx={ this.sxClasses.staticResKeyPopoverTitle }
 				>
 					{ title }
 				</Typography>
 				{ message }
 				<Typography
 					{ ...theme.r3CreateServiceDialog.staticResKeyPopoverSubtitle }
-					className={ classes.staticResKeyPopoverSubtitle }
+					sx={ this.sxClasses.staticResKeyPopoverSubtitle }
 				>
 					{ r3provider.getR3TextRes().tResStaticResKeyPopover }
 				</Typography>
@@ -959,13 +954,13 @@ export default class R3CreateServiceDialog extends React.Component
 					value={ keyname }
 					placeholder={ r3provider.getR3TextRes().tResResourceKeysKeyHint }
 					onChange={ (event) => this.handleStaticResKeysKeyChange(event) }
-					InputProps={{ className: classes.inputTextField }}
+					InputProps={{ sx: this.sxClasses.inputTextField }}
 					{ ...theme.r3CreateServiceDialog.textField }
-					className={ classes.textField }
+					sx={ this.sxClasses.textField }
 				/>
 				<Typography
 					{ ...theme.r3CreateServiceDialog.staticResKeyPopoverSubtitle }
-					className={ classes.staticResKeyPopoverSubtitle }
+					sx={ this.sxClasses.staticResKeyPopoverSubtitle }
 				>
 					{ r3provider.getR3TextRes().tResStaticResKValPopover }
 				</Typography>
@@ -974,19 +969,19 @@ export default class R3CreateServiceDialog extends React.Component
 					value={ value }
 					placeholder={ r3provider.getR3TextRes().tResResourceKeysValueHint }
 					onChange={ (event) => this.handleStaticResKeysValChange(event) }
-					InputProps={{ className: classes.inputTextField }}
+					InputProps={{ sx: this.sxClasses.inputTextField }}
 					{ ...theme.r3CreateServiceDialog.textField }
-					className={ classes.textField }
+					sx={ this.sxClasses.textField }
 				/>
 				<Button
 					disabled={ r3IsEmptyString(keyname, true) }
 					onClick={ this.handleConfirmStaticResKey }
 					{ ...theme.r3CreateServiceDialog.staticResKeyPopoverButton }
-					className={ classes.staticResKeyPopoverButton }
+					sx={ this.sxClasses.staticResKeyPopoverButton }
 				>
 					{ buttonName }
 					<CheckCircleIcon
-						className={ classes.buttonIcon }
+						sx={ this.sxClasses.buttonIcon }
 					/>
 				</Button>
 
@@ -999,7 +994,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	getStaticResKeysTableHead()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	newStaticResKeyPopover = this.getNewStaticResKeyPopover();
 
@@ -1007,11 +1002,11 @@ export default class R3CreateServiceDialog extends React.Component
 			<React.Fragment>
 				{ newStaticResKeyPopover }
 				<TableHead
-					className={ classes.tableHead }
+					sx={ this.sxClasses.tableHead }
 				>
 					<TableRow>
 						<TableCell
-							className={ classes.tableLeftCell }
+							sx={ this.sxClasses.tableLeftCell }
 						>
 							<Tooltip
 								title={ r3provider.getR3TextRes().tResStaticResAddKeyTT }
@@ -1022,24 +1017,24 @@ export default class R3CreateServiceDialog extends React.Component
 									onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.addStaticResKeyTooltip, true) }
 									onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addStaticResKeyTooltip, false) }
 									{ ...theme.r3CreateServiceDialog.addResStaticObjButton }
-									className={ classes.actionResStaticObjButton }
+									sx={ this.sxClasses.actionResStaticObjButton }
 								>
 									<AddIcon />
 								</Button>
 							</Tooltip>
 							<Typography
 								{ ...theme.r3CreateServiceDialog.textTableHead }
-								className={ classes.textTableHead }
+								sx={ this.sxClasses.textTableHead }
 							>
 								{ r3provider.getR3TextRes().tResStaticResKeyTableHead }
 							</Typography>
 						</TableCell>
 						<TableCell
-							className={ classes.tableCell }
+							sx={ this.sxClasses.tableCell }
 						>
 							<Typography
 								{ ...theme.r3CreateServiceDialog.textTableHead }
-								className={ classes.textTableHead }
+								sx={ this.sxClasses.textTableHead }
 							>
 								{ r3provider.getR3TextRes().tResStaticResKValTableHead }
 							</Typography>
@@ -1055,7 +1050,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	getStaticResKeysTableBody(staticResKeys)
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	_staticResKeys	= staticResKeys;
 		let	_sortedKeys		= Object.keys(_staticResKeys).sort();
@@ -1092,7 +1087,7 @@ export default class R3CreateServiceDialog extends React.Component
 							selected={ false }
 						>
 							<TableCell
-								className={ classes.tableLeftCell }
+								sx={ this.sxClasses.tableLeftCell }
 							>
 								<Tooltip
 									title={ r3provider.getR3TextRes().tResServiceDelStaticResTT }
@@ -1103,7 +1098,7 @@ export default class R3CreateServiceDialog extends React.Component
 										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.delStaticResKeyTooltip, pos) }
 										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.delStaticResKeyTooltip, -1) }
 										{ ...theme.r3CreateServiceDialog.delResStaticObjButton }
-										className={ classes.actionResStaticObjButton }
+										sx={ this.sxClasses.actionResStaticObjButton }
 									>
 										<DeleteIcon />
 									</Button>
@@ -1117,7 +1112,7 @@ export default class R3CreateServiceDialog extends React.Component
 										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.editStaticResKeyTooltip, pos) }
 										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.editStaticResKeyTooltip, -1) }
 										{ ...theme.r3CreateServiceDialog.editResStaticObjButton }
-										className={ classes.actionResStaticObjButton }
+										sx={ this.sxClasses.actionResStaticObjButton }
 									>
 										<EditIcon />
 									</Button>
@@ -1130,14 +1125,14 @@ export default class R3CreateServiceDialog extends React.Component
 										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.nameStaticResKeyTooltip, pos) }
 										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.nameStaticResKeyTooltip, -1) }
 										{ ...theme.r3CreateServiceDialog.textTableContent }
-										className={ classes.textTableContent }
+										sx={ this.sxClasses.textTableContent }
 									>
 										{ stripName }
 									</Typography>
 								</Tooltip>
 							</TableCell>
 							<TableCell
-								className={ classes.tableCell }
+								sx={ this.sxClasses.tableCell }
 							>
 								<Tooltip
 									title={ orgJson }
@@ -1147,7 +1142,7 @@ export default class R3CreateServiceDialog extends React.Component
 										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.jsonStaticResKeyTooltip, pos) }
 										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.jsonStaticResKeyTooltip, -1) }
 										{ ...theme.r3CreateServiceDialog.textTableContent }
-										className={ classes.textTableContent }
+										sx={ this.sxClasses.textTableContent }
 									>
 										{ stripJson }
 									</Typography>
@@ -1165,7 +1160,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	renderEditStaticResKeys()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	staticResKeys = this.state.editingStaticRes.keys;
 		if(!r3IsSafeTypedEntity(staticResKeys, 'object')){
@@ -1179,16 +1174,16 @@ export default class R3CreateServiceDialog extends React.Component
 			<React.Fragment>
 				<Typography
 					{ ...theme.r3CreateServiceDialog.keyTitle }
-					className={ classes.keyTitle }
+					sx={ this.sxClasses.keyTitle }
 				>
 					{ r3provider.getR3TextRes().tResStaticResKeysSubTitle }
 				</Typography>
 				<Box
-					className={ classes.tableBox }
+					sx={ this.sxClasses.tableBox }
 				>
 					<Table
 						{ ...theme.r3CreateServiceDialog.table }
-						className={ classes.table }
+						sx={ this.sxClasses.table }
 					>
 						{ tablehead }
 						{ tablebody }
@@ -1211,7 +1206,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	renderEditStaticResPage()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	leftTypeSelectLabel = (
 			<Typography
@@ -1233,7 +1228,7 @@ export default class R3CreateServiceDialog extends React.Component
 			message = (
 				<Typography
 					{ ...theme.r3Service.staticResMessage }
-					className={ classes.staticResMessage }
+					sx={ this.sxClasses.staticResMessage }
 				>
 					{ this.state.staticResMessage }
 				</Typography>
@@ -1284,22 +1279,22 @@ export default class R3CreateServiceDialog extends React.Component
 					<Button
 						onClick={ (event) => this.handleStaticResPageClose(event, true) }
 						{ ...theme.r3CreateServiceDialog.cancelButton }
-						className={ classes.cancelButton }
+						sx={ this.sxClasses.cancelButton }
 					>
 						{ r3provider.getR3TextRes().tResButtonPrevious }
 						<CancelIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 					<Button
 						disabled={ r3IsEmptyString(staticResName, true) }
 						onClick={ (event) => this.handleStaticResPageClose(event, false) }
 						{ ...theme.r3CreateServiceDialog.okButton }
-						className={ classes.okButton }
+						sx={ this.sxClasses.okButton }
 					>
 						{ saveButtonName }
 						<CheckCircleIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 				</DialogActions>
@@ -1311,22 +1306,22 @@ export default class R3CreateServiceDialog extends React.Component
 					<Button
 						onClick={ (event) => this.handleStaticResPageClose(event, true) }
 						{ ...theme.r3CreateServiceDialog.cancelButton }
-						className={ classes.cancelButton }
+						sx={ this.sxClasses.cancelButton }
 					>
 						{ r3provider.getR3TextRes().tResButtonCancel }
 						<CancelIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 					<Button
 						disabled={ r3IsEmptyString(staticResName, true) }
 						onClick={ (event) => this.handleStaticResPageClose(event, false) }
 						{ ...theme.r3CreateServiceDialog.okButton }
-						className={ classes.okButton }
+						sx={ this.sxClasses.okButton }
 					>
 						{ r3provider.getR3TextRes().tResButtonOk }
 						<CheckCircleIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 				</DialogActions>
@@ -1337,23 +1332,23 @@ export default class R3CreateServiceDialog extends React.Component
 			<React.Fragment>
 				<DialogTitle
 					{ ...theme.r3CreateServiceDialog.dialogTitle }
-					className={ classes.dialogTitle }
+					sx={ this.sxClasses.dialogTitle }
 				>
 					<Typography
 						{ ...theme.r3CreateServiceDialog.title }
-						className={ classes.title }
+						sx={ this.sxClasses.title }
 					>
 						{ r3provider.getR3TextRes().cStaticResourceTitle }
 					</Typography>
 				</DialogTitle>
 
 				<DialogContent
-					className={ classes.dialogContent }
+					sx={ this.sxClasses.dialogContent }
 				>
 					{ message }
 					<Typography
 						{ ...theme.r3CreateServiceDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResStaticResNameSubTitle }
 					</Typography>
@@ -1362,13 +1357,13 @@ export default class R3CreateServiceDialog extends React.Component
 						value={ staticResName }
 						placeholder={ r3provider.getR3TextRes().tResStaticResNameHint }
 						onChange={ (event) => this.handleStaticResNameChange(event) }
-						InputProps={{ className: classes.inputTextField }}
+						InputProps={{ sx: this.sxClasses.inputTextField }}
 						{ ...theme.r3CreateServiceDialog.textField }
-						className={ classes.textField }
+						sx={ this.sxClasses.textField }
 					/>
 					<Typography
 						{ ...theme.r3CreateServiceDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResStaticResExpSubTitle }
 					</Typography>
@@ -1377,13 +1372,13 @@ export default class R3CreateServiceDialog extends React.Component
 						value={ staticResExpire }
 						placeholder={ r3provider.getR3TextRes().tResStaticResExpHint }
 						onChange={ (event) => this.handleStaticResExpireChange(event) }
-						InputProps={{ className: classes.inputTextField }}
+						InputProps={{ sx: this.sxClasses.inputTextField }}
 						{ ...theme.r3CreateServiceDialog.textField }
-						className={ classes.textField }
+						sx={ this.sxClasses.textField }
 					/>
 					<Typography
 						{ ...theme.r3CreateServiceDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResStaticResTypeSubTitle }
 					</Typography>
@@ -1392,7 +1387,7 @@ export default class R3CreateServiceDialog extends React.Component
 						value={ staticResType }
 						onChange={ this.handleStaticResTypeChange }
 						{ ...theme.r3CreateServiceDialog.valueRadioGroup }
-						className={ classes.valueRadioGroup }
+						sx={ this.sxClasses.valueRadioGroup }
 					>
 						<FormControlLabel
 							value={ staticResDataType.staticResStringDataType }
@@ -1400,7 +1395,7 @@ export default class R3CreateServiceDialog extends React.Component
 							disabled={ false }
 							control={ <Radio /> }
 							{ ...theme.r3CreateServiceDialog.valueLeftFormControlLabel }
-							className={ classes.valueLeftFormControlLabel }
+							sx={ this.sxClasses.valueLeftFormControlLabel }
 						/>
 						<FormControlLabel
 							value={ staticResDataType.staticResObjectDataType }
@@ -1408,7 +1403,7 @@ export default class R3CreateServiceDialog extends React.Component
 							disabled={ false }
 							control={ <Radio /> }
 							{ ...theme.r3CreateServiceDialog.valueRightFormControlLabel }
-							className={ classes.valueRightFormControlLabel }
+							sx={ this.sxClasses.valueRightFormControlLabel }
 						/>
 					</RadioGroup>
 					<TextField
@@ -1416,9 +1411,9 @@ export default class R3CreateServiceDialog extends React.Component
 						value={ staticResData }
 						placeholder={ staticResDataHint }
 						onChange={ (event) => this.handleStaticResDataChange(event) }
-						InputProps={{ className: classes.inputTextField }}
+						InputProps={{ sx: this.sxClasses.inputTextField }}
 						{ ...theme.r3CreateServiceDialog.textField }
-						className={ classes.textField }
+						sx={ this.sxClasses.textField }
 					/>
 					{ staticResKeys }
 				</DialogContent>
@@ -1435,7 +1430,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	renderResourceVerifyUrl()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		return (
 			<TextField
@@ -1443,9 +1438,9 @@ export default class R3CreateServiceDialog extends React.Component
 				value={ this.state.newVerify }
 				placeholder={ r3provider.getR3TextRes().tResServiceUrlResHint }
 				onChange={ (event) => this.handleNewVerifyChange(event) }
-				InputProps={{ className: classes.inputTextField }}
+				InputProps={{ sx: this.sxClasses.inputTextField }}
 				{ ...theme.r3CreateServiceDialog.textField }
-				className={ classes.textField }
+				sx={ this.sxClasses.textField }
 			/>
 		);
 	}
@@ -1455,15 +1450,15 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	getResStaticObjTableHead()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		return (
 			<TableHead
-				className={ classes.tableHead }
+				sx={ this.sxClasses.tableHead }
 			>
 				<TableRow>
 					<TableCell
-						className={ classes.tableLeftCell }
+						sx={ this.sxClasses.tableLeftCell }
 					>
 						<Tooltip
 							title={ r3provider.getR3TextRes().tResServiceAddStaticResTT }
@@ -1474,24 +1469,24 @@ export default class R3CreateServiceDialog extends React.Component
 								onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.addResStaticObjTooltip, true) }
 								onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addResStaticObjTooltip, false) }
 								{ ...theme.r3CreateServiceDialog.addResStaticObjButton }
-								className={ classes.actionResStaticObjButton }
+								sx={ this.sxClasses.actionResStaticObjButton }
 							>
 								<AddIcon />
 							</Button>
 						</Tooltip>
 						<Typography
 							{ ...theme.r3CreateServiceDialog.textTableHead }
-							className={ classes.textTableHead }
+							sx={ this.sxClasses.textTableHead }
 						>
 							{ r3provider.getR3TextRes().tResServiceNameTableHead }
 						</Typography>
 					</TableCell>
 					<TableCell
-						className={ classes.tableCell }
+						sx={ this.sxClasses.tableCell }
 					>
 						<Typography
 							{ ...theme.r3CreateServiceDialog.textTableHead }
-							className={ classes.textTableHead }
+							sx={ this.sxClasses.textTableHead }
 						>
 							{ r3provider.getR3TextRes().tResServiceJsonTableHead }
 						</Typography>
@@ -1506,7 +1501,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	getResStaticObjTableBody()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(!r3IsSafeTypedEntity(this.state.newStaticRes, 'array')){
 			return;
@@ -1538,7 +1533,7 @@ export default class R3CreateServiceDialog extends React.Component
 							selected={ false }
 						>
 							<TableCell
-								className={ classes.tableLeftCell }
+								sx={ this.sxClasses.tableLeftCell }
 							>
 								<Tooltip
 									title={ r3provider.getR3TextRes().tResServiceEditStaticResTT }
@@ -1549,7 +1544,7 @@ export default class R3CreateServiceDialog extends React.Component
 										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.editResStaticObjTooltip, pos) }
 										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.editResStaticObjTooltip, -1) }
 										{ ...theme.r3CreateServiceDialog.editResStaticObjButton }
-										className={ classes.actionResStaticObjButton }
+										sx={ this.sxClasses.actionResStaticObjButton }
 									>
 										<EditIcon />
 									</Button>
@@ -1563,7 +1558,7 @@ export default class R3CreateServiceDialog extends React.Component
 										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.delResStaticObjTooltip, pos) }
 										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.delResStaticObjTooltip, -1) }
 										{ ...theme.r3CreateServiceDialog.delResStaticObjButton }
-										className={ classes.actionResStaticObjButton }
+										sx={ this.sxClasses.actionResStaticObjButton }
 									>
 										<DeleteIcon />
 									</Button>
@@ -1576,14 +1571,14 @@ export default class R3CreateServiceDialog extends React.Component
 										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, pos) }
 										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, -1) }
 										{ ...theme.r3CreateServiceDialog.textTableContent }
-										className={ classes.textTableContent }
+										sx={ this.sxClasses.textTableContent }
 									>
 										{ stripName }
 									</Typography>
 								</Tooltip>
 							</TableCell>
 							<TableCell
-								className={ classes.tableCell }
+								sx={ this.sxClasses.tableCell }
 							>
 								<Tooltip
 									title={ orgJson }
@@ -1593,7 +1588,7 @@ export default class R3CreateServiceDialog extends React.Component
 										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, pos) }
 										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, -1) }
 										{ ...theme.r3CreateServiceDialog.textTableContent }
-										className={ classes.textTableContent }
+										sx={ this.sxClasses.textTableContent }
 									>
 										{ stripJson }
 									</Typography>
@@ -1611,7 +1606,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	renderResourceStaticObj()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(!r3IsSafeTypedEntity(this.state.newStaticRes, 'array')){
 			return;
@@ -1623,11 +1618,11 @@ export default class R3CreateServiceDialog extends React.Component
 
 		return (
 			<Box
-				className={ classes.tableBox }
+				sx={ this.sxClasses.tableBox }
 			>
 				<Table
 					{ ...theme.r3CreateServiceDialog.table }
-					className={ classes.table }
+					sx={ this.sxClasses.table }
 				>
 					{ tablehead }
 					{ tablebody }
@@ -1645,9 +1640,9 @@ export default class R3CreateServiceDialog extends React.Component
 					value={ textValue }
 					disabled={ true }
 					placeholder={ r3provider.getR3TextRes().tResServiceStaticObjHint }
-					InputProps={{ className: classes.inputTextField }}
+					InputProps={{ sx: this.sxClasses.inputTextField }}
 					{ ...theme.r3CreateServiceDialog.textField }
-					className={ classes.reesourceStaticTextField }
+					sx={ this.sxClasses.reesourceStaticTextField }
 				/>
 			</Box>
 		);
@@ -1658,7 +1653,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	renderCreateMainPage()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	leftTypeSelectLabel = (
 			<Typography
@@ -1679,10 +1674,10 @@ export default class R3CreateServiceDialog extends React.Component
 		let	tenantClass;
 		if(!r3IsEmptyStringObject(this.props.tenant, 'display')){
 			tenant		= this.props.tenant.display;
-			tenantClass	= classes.value;
+			tenantClass	= this.sxClasses.value;
 		}else{
 			tenant		= r3provider.getR3TextRes().tResUnselected;
-			tenantClass	= classes.valueItalic;
+			tenantClass	= this.sxClasses.valueItalic;
 		}
 
 		let	radioValue;
@@ -1699,35 +1694,35 @@ export default class R3CreateServiceDialog extends React.Component
 			<React.Fragment>
 				<DialogTitle
 					{ ...theme.r3CreateServiceDialog.dialogTitle }
-					className={ classes.dialogTitle }
+					sx={ this.sxClasses.dialogTitle }
 				>
 					<Typography
 						{ ...theme.r3CreateServiceDialog.title }
-						className={ classes.title }
+						sx={ this.sxClasses.title }
 					>
 						{ r3provider.getR3TextRes().cCreateServiceTitle }
 					</Typography>
 				</DialogTitle>
 
 				<DialogContent
-					className={ classes.dialogContent }
+					sx={ this.sxClasses.dialogContent }
 				>
 					<Typography
 						{ ...theme.r3CreateServiceDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResTenantServiceSubTitle }
 					</Typography>
 					<Typography
 						{ ...theme.r3CreateServiceDialog.value }
-						className={ tenantClass }
+						sx={ tenantClass }
 					>
 						{ tenant }
 					</Typography>
 
 					<Typography
 						{ ...theme.r3CreateServiceDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResCreateServiceSubTitle }
 					</Typography>
@@ -1736,14 +1731,14 @@ export default class R3CreateServiceDialog extends React.Component
 						value={ this.state.newServiceName }
 						placeholder={ r3provider.getR3TextRes().tResCreateServiceHint }
 						onChange={ (event) => this.handleNewServiceNameChange(event) }
-						InputProps={{ className: classes.inputTextField }}
+						InputProps={{ sx: this.sxClasses.inputTextField }}
 						{ ...theme.r3CreateServiceDialog.textField }
-						className={ classes.textField }
+						sx={ this.sxClasses.textField }
 					/>
 
 					<Typography
 						{ ...theme.r3CreateServiceDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResServiceUrlResSubTitle }
 					</Typography>
@@ -1753,7 +1748,7 @@ export default class R3CreateServiceDialog extends React.Component
 						value={ radioValue }
 						onChange={ this.handleResourceTypeChange }
 						{ ...theme.r3CreateServiceDialog.valueRadioGroup }
-						className={ classes.valueRadioGroup }
+						sx={ this.sxClasses.valueRadioGroup }
 					>
 						<FormControlLabel
 							value={ serviceResTypeUrl }
@@ -1761,7 +1756,7 @@ export default class R3CreateServiceDialog extends React.Component
 							disabled={ false }
 							control={ <Radio /> }
 							{ ...theme.r3CreateServiceDialog.valueLeftFormControlLabel }
-							className={ classes.valueLeftFormControlLabel }
+							sx={ this.sxClasses.valueLeftFormControlLabel }
 						/>
 						<FormControlLabel
 							value={ serviceResTypeObject }
@@ -1769,7 +1764,7 @@ export default class R3CreateServiceDialog extends React.Component
 							disabled={ false }
 							control={ <Radio /> }
 							{ ...theme.r3CreateServiceDialog.valueRightFormControlLabel }
-							className={ classes.valueRightFormControlLabel }
+							sx={ this.sxClasses.valueRightFormControlLabel }
 						/>
 					</RadioGroup>
 					{ serviceResource }
@@ -1779,22 +1774,22 @@ export default class R3CreateServiceDialog extends React.Component
 					<Button
 						onClick={ (event) => this.props.onClose(event, null, false, null, null, null, null) }
 						{ ...theme.r3CreateServiceDialog.cancelButton }
-						className={ classes.cancelButton }
+						sx={ this.sxClasses.cancelButton }
 					>
 						{ r3provider.getR3TextRes().tResButtonCancel }
 						<CancelIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 					<Button
 						disabled={ r3IsEmptyString(this.state.newServiceName, true) }
 						onClick={ (event) => this.props.onClose(event, null, true, this.state.newServiceName, this.state.newServiceResType, this.state.newVerify, this.state.newStaticRes) }
 						{ ...theme.r3CreateServiceDialog.okButton }
-						className={ classes.okButton }
+						sx={ this.sxClasses.okButton }
 					>
 						{ r3provider.getR3TextRes().tResButtonOk }
 						<CheckCircleIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 				</DialogActions>
@@ -1807,7 +1802,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//---------------------------------------------------------
 	render()
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		let	dialogContext;
 		if(this.state.editingStaticResMode){
@@ -1821,7 +1816,7 @@ export default class R3CreateServiceDialog extends React.Component
 				open={ this.props.open }
 				onClose={ (event, reason) => this.props.onClose(event, reason, false, null) }
 				{ ...theme.r3CreateServiceDialog.root }
-				className={ classes.root }
+				sx={ this.sxClasses.root }
 			>
 				{ dialogContext }
 			</Dialog>

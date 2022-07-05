@@ -23,8 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import Button						from '@mui/material/Button';
 import Dialog						from '@mui/material/Dialog';
 import DialogTitle					from '@mui/material/DialogTitle';
@@ -44,14 +42,8 @@ const unscopedtokenFieldName	= 'unscopedtoken-textfield';
 //
 // Create New Path Dialog Class
 //
-@withTheme
-@withStyles(r3AccountDialog)
 export default class R3AccountDialog extends React.Component
 {
-	static contextTypes = {
-		r3Context:		PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		r3provider:		PropTypes.object.isRequired,
 		open:			PropTypes.bool,
@@ -80,6 +72,9 @@ export default class R3AccountDialog extends React.Component
 		super(props);
 
 		this.handleCopyClipboard = this.handleCopyClipboard.bind(this);
+
+		// styles
+		this.sxClasses = r3AccountDialog(props.theme);
 	}
 
 	// [NOTE]
@@ -132,16 +127,16 @@ export default class R3AccountDialog extends React.Component
 
 	render()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	username;
 		let	usernameClass;
 		if(!r3IsEmptyString(this.props.username)){
 			username		= this.props.username;
-			usernameClass	= classes.value;
+			usernameClass	= this.sxClasses.value;
 		}else{
 			username		= r3provider.getR3TextRes().tResUnknownUsernameLabel;
-			usernameClass	= classes.valueItalic;
+			usernameClass	= this.sxClasses.valueItalic;
 		}
 
 		let	unscopedtoken;
@@ -156,38 +151,38 @@ export default class R3AccountDialog extends React.Component
 				open={ this.props.open }
 				onClose={ (event, reason) => this.props.onClose(event, reason) }
 				{ ...theme.r3AccountDialog.root }
-				className={ classes.root }
+				sx={ this.sxClasses.root }
 			>
 				<DialogTitle
 					{ ...theme.r3AccountDialog.dialogTitle }
-					className={ classes.dialogTitle }
+					sx={ this.sxClasses.dialogTitle }
 				>
 					<Typography
 						{ ...theme.r3AccountDialog.title }
-						className={ classes.title }
+						sx={ this.sxClasses.title }
 					>
 						{ r3provider.getR3TextRes().cAccountTitle }
 					</Typography>
 				</DialogTitle>
 
 				<DialogContent
-					className={ classes.dialogContent }
+					sx={ this.sxClasses.dialogContent }
 				>
 					<Typography
 						{ ...theme.r3AccountDialog.subTitle }
-						className={ classes.subTitle }
+						sx={ this.sxClasses.subTitle }
 					>
 						{ r3provider.getR3TextRes().tResAccoutUsernameTitle }
 					</Typography>
 					<Typography
 						{ ...theme.r3AccountDialog.value }
-						className={ usernameClass }
+						sx={ usernameClass }
 					>
 						{ username }
 					</Typography>
 					<Typography
 						{ ...theme.r3AccountDialog.subTitle }
-						className={ classes.subTitle }
+						sx={ this.sxClasses.subTitle }
 					>
 						{ r3provider.getR3TextRes().tResUnscopedTokenTitle }
 					</Typography>
@@ -195,10 +190,10 @@ export default class R3AccountDialog extends React.Component
 						name={ unscopedtokenFieldName }
 						value={ unscopedtoken }
 						inputRef = { (element) => { this.unscopedtokenInputElement = element; } } 
-						InputProps={{ className: classes.unscopedtokenInputTextField }}
+						InputProps={{ sx: this.sxClasses.unscopedtokenInputTextField }}
 						inputProps={{ style: { padding: 0 } }}
 						{ ...theme.r3AccountDialog.unscopedtokenTextField }
-						className={ classes.unscopedtokenTextField }
+						sx={ this.sxClasses.unscopedtokenTextField }
 					/>
 					<Tooltip
 						title={ r3provider.getR3TextRes().tResCopyClipboardTT }
@@ -209,10 +204,10 @@ export default class R3AccountDialog extends React.Component
 							onMouseEnter={ event => this.handleCopyClipboardButtonTooltipChange(event, true) }
 							onMouseLeave={ event => this.handleCopyClipboardButtonTooltipChange(event, false) }
 							{ ...theme.r3AccountDialog.copyClipboardButton }
-							className={ classes.copyClipboardButton }
+							sx={ this.sxClasses.copyClipboardButton }
 						>
 							<CopyClipBoardIcon
-								className={ classes.copyClipboardIcon }
+								sx={ this.sxClasses.copyClipboardIcon }
 							/>
 							{ r3provider.getR3TextRes().tResCopyClipboardButton }
 						</Button>
@@ -223,11 +218,11 @@ export default class R3AccountDialog extends React.Component
 						disabled={ false }
 						onClick={ (event) => this.props.onClose(event, null) }
 						{ ...theme.r3AccountDialog.okButton }
-						className={ classes.okButton }
+						sx={ this.sxClasses.okButton }
 					>
 						{ r3provider.getR3TextRes().tResButtonOk }
 						<CheckCircleIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 				</DialogActions>

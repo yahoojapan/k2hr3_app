@@ -23,8 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import AppBar						from '@mui/material/AppBar';
 import Toolbar						from '@mui/material/Toolbar';
 import Drawer						from '@mui/material/Drawer';
@@ -39,6 +37,7 @@ import ListItem						from '@mui/material/ListItem';
 import ListItemText					from '@mui/material/ListItemText';
 import ListItemIcon					from '@mui/material/ListItemIcon';
 import Collapse						from '@mui/material/Collapse';
+import Box							from '@mui/material/Box';
 
 import ExpandLessIcon				from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon				from '@mui/icons-material/ExpandMore';
@@ -51,9 +50,11 @@ import MoreVertIcon					from '@mui/icons-material/MoreVert';
 import { r3MainTree }				from './r3styles';
 import R3PopupMsgDialog				from './r3popupmsgdialog';
 import R3Message					from '../util/r3message';
-
 import { serviceType, errorType }	from '../util/r3types';
 import { r3DeepCompare, r3IsEmptyEntity, r3IsEmptyStringObject, r3IsEmptyString, r3CompareCaseString, r3IsEmptyEntityObject, r3IsSafeTypedEntity }	from '../util/r3util';
+
+// For context
+import { R3CommonContext }			from './r3commoncontext';
 
 //
 // Local variables
@@ -86,13 +87,10 @@ const tooltipValues = {
 //
 // Main TreeView Class
 //
-@withTheme
-@withStyles(r3MainTree)
 export default class R3MainTree extends React.Component
 {
-	static contextTypes = {
-		r3Context:					PropTypes.object.isRequired
-	};
+	// Set context as this.context
+	static contextType		= R3CommonContext;
 
 	static propTypes = {
 		r3provider:					PropTypes.object.isRequired,
@@ -169,6 +167,9 @@ export default class R3MainTree extends React.Component
 		this.handleTreePopupClose			= this.handleTreePopupClose.bind(this);
 
 		this.handMessageDialogClose			= this.handMessageDialogClose.bind(this);
+
+		// styles
+		this.sxClasses						= r3MainTree(props.theme);
 	}
 
 	handleTenantMenuButton(event)									// eslint-disable-line no-unused-vars
@@ -438,7 +439,7 @@ export default class R3MainTree extends React.Component
 
 	getMenuItems()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 		let	_menuitems = [];
 
 		if(this.props.enDock){
@@ -478,7 +479,7 @@ export default class R3MainTree extends React.Component
 				{ r3provider.getR3TextRes().tResLicensesMenu }
 				<ListItemIcon>
 					<ArrowRightIcon
-						className={ classes.menuRightIcon }
+						sx={ this.sxClasses.menuRightIcon }
 					/>
 				</ListItemIcon>
 
@@ -538,18 +539,18 @@ export default class R3MainTree extends React.Component
 
 	getDummyBarSubHeader()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	themeToolbar = this.props.enDock ? theme.r3MainTree.dummyBarToolbar : theme.r3MainTree.smallDummyBarToolbar;
 
 		return (
 			<AppBar
 				{ ...theme.r3MainTree.dummyBarAppbar }
-				className={ classes.dummyBarAppbar }
+				sx={ this.sxClasses.dummyBarAppbar }
 			>
 				<Toolbar
 					{ ...themeToolbar }
-					className={ classes.dummyBarToolbar }
+					sx={ this.sxClasses.dummyBarToolbar }
 				>
 					<Tooltip
 						title={ r3provider.getR3TextRes().tResMainMenuTT }
@@ -579,7 +580,7 @@ export default class R3MainTree extends React.Component
 
 					<Typography
 						{ ...theme.r3MainTree.title }
-						className={ classes.title }
+						ex={ this.sxClasses.title }
 					>
 						{ this.props.title }
 					</Typography>
@@ -590,7 +591,7 @@ export default class R3MainTree extends React.Component
 
 	getTenantSubHeaders()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	menuItem	= this.getTenantListMenuItems();
 		let	titleName	= ((this.props.tenants instanceof Array && 0 < this.props.tenants.length) ? r3provider.getR3TextRes().tResUnselectedTenantLabel : r3provider.getR3TextRes().tResNoTenantLabel);
@@ -604,7 +605,7 @@ export default class R3MainTree extends React.Component
 		let	textLabel	= (
 			<Typography
 				{ ...theme.r3MainTree.chipText }
-				className={ classes.chipText }
+				sx={ this.sxClasses.chipText }
 			>
 				{ r3provider.getR3TextRes().tResTenantLabel }
 			</Typography>
@@ -613,21 +614,21 @@ export default class R3MainTree extends React.Component
 		return (
 			<AppBar
 				{ ...theme.r3MainTree.subheaderAppbar }
-				className={ classes.subheaderAppbar }
+				sx={ this.sxClasses.subheaderAppbar }
 			>
 				<Toolbar
 					{ ...themeToolbar }
-					className={ classes.subheaderToolbar }
+					sx={ this.sxClasses.subheaderToolbar }
 				>
 					<Chip
 						label={ textLabel }
 						{ ...theme.r3MainTree.chip }
-						className={ classes.chip }
+						sx={ this.sxClasses.chip }
 					/>
 
 					<Typography
 						{ ...theme.r3MainTree.tenantListText }
-						className={ classes.tenantListText }
+						sx={ this.sxClasses.tenantListText }
 					>
 						{ titleName }
 					</Typography>
@@ -671,10 +672,10 @@ export default class R3MainTree extends React.Component
 		}
 
 		return (
-			<div>
+			<Box>
 				{ dummyBarSubHeader }
 				{ this.getTenantSubHeaders() }
-			</div>
+			</Box>
 		);
 	}
 
@@ -683,7 +684,7 @@ export default class R3MainTree extends React.Component
 	//
 	getChildrenListItems(treeList, type)
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		if(undefined === treeList || !(treeList instanceof Array)){
 			return;
@@ -709,7 +710,7 @@ export default class R3MainTree extends React.Component
 						if(isCollapseExpand){
 							expandIcon = (
 								<ListItemIcon
-									className={ classes.expandListItemIcon }
+									ex={ this.sxClasses.expandListItemIcon }
 								>
 									<ExpandLessIcon />
 								</ListItemIcon>
@@ -717,7 +718,7 @@ export default class R3MainTree extends React.Component
 						}else{
 							expandIcon = (
 								<ListItemIcon
-									className={ classes.expandListItemIcon }
+									sx={ this.sxClasses.expandListItemIcon }
 								>
 									<ExpandMoreIcon />
 								</ListItemIcon>
@@ -727,7 +728,7 @@ export default class R3MainTree extends React.Component
 							<Collapse
 								in={ isCollapseExpand }
 								{ ...theme.r3MainTree.collapse }
-								className={ classes.collapse }
+								sx={ this.sxClasses.collapse }
 							>
 								<List
 									{ ...theme.r3MainTree.list }
@@ -750,7 +751,9 @@ export default class R3MainTree extends React.Component
 				// Returning React.Fragment as a top component causes a key props error, so we use div to avoid it.
 				//
 				return (
-					<div key={ listItemKey }>
+					<Box
+						key={ listItemKey }
+					>
 						<ListItem
 							onClick={ (event) => this.handleListItemChange(event, _type, item.path, isSelected, listItemKey) }
 							{ ...theme.r3MainTree.listItem }
@@ -758,12 +761,12 @@ export default class R3MainTree extends React.Component
 							<ListItemText
 								primary={ item.name }
 								{ ...accordingItemText }
-								className={ classes.childListItemText }
+								sx={ this.sxClasses.childListItemText }
 							/>
 							{ expandIcon }
 						</ListItem>
 						{ collapseItem }
-					</div>
+					</Box>
 				);
 			})
 		);
@@ -774,7 +777,7 @@ export default class R3MainTree extends React.Component
 	//
 	getServicesListItems(treeList)
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		if(undefined === treeList || !(treeList instanceof Array)){
 			return;
@@ -809,7 +812,7 @@ export default class R3MainTree extends React.Component
 						if(isCollapseExpand){
 							expandIcon = (
 								<ListItemIcon
-									className={ classes.expandListItemIcon }
+									sx={ this.sxClasses.expandListItemIcon }
 								>
 									<ExpandLessIcon />
 								</ListItemIcon>
@@ -817,7 +820,7 @@ export default class R3MainTree extends React.Component
 						}else{
 							expandIcon = (
 								<ListItemIcon
-									className={ classes.expandListItemIcon }
+									sx={ this.sxClasses.expandListItemIcon }
 								>
 									<ExpandMoreIcon />
 								</ListItemIcon>
@@ -827,7 +830,7 @@ export default class R3MainTree extends React.Component
 							<Collapse
 								in={ isCollapseExpand }
 								{ ...theme.r3MainTree.collapse }
-								className={ classes.serviceLabelCollapse }
+								sx={ this.sxClasses.serviceLabelCollapse }
 							>
 								<List
 									{ ...theme.r3MainTree.list }
@@ -850,7 +853,9 @@ export default class R3MainTree extends React.Component
 				// Returning React.Fragment as a top component causes a key props error, so we use div to avoid it.
 				//
 				return (
-					<div key={ listItemKey }>
+					<Box
+						key={ listItemKey }
+					>
 						<ListItem
 							onClick={ (event) => this.handleNameItemInServiceChange(event, item.path, isSelected, listItemKey) }
 							{ ...theme.r3MainTree.listItem }
@@ -858,13 +863,13 @@ export default class R3MainTree extends React.Component
 							<ListItemText
 								primary={ item.name }
 								{ ...accordingItemText }
-								className={ classes.childListItemText }
+								sx={ this.sxClasses.childListItemText }
 							/>
 							{ ownerIcon }
 							{ expandIcon }
 						</ListItem>
 						{ collapseItem }
-					</div>
+					</Box>
 				);
 			})
 		);
@@ -877,7 +882,7 @@ export default class R3MainTree extends React.Component
 	//
 	getServiceMainListItems(treeList, service_name)
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		if(undefined === treeList || !(treeList instanceof Array)){
 			return;
@@ -903,7 +908,7 @@ export default class R3MainTree extends React.Component
 						if(isCollapseExpand){
 							expandIcon = (
 								<ListItemIcon
-									className={ classes.expandListItemIcon }
+									sx={ this.sxClasses.expandListItemIcon }
 								>
 									<ExpandLessIcon />
 								</ListItemIcon>
@@ -911,7 +916,7 @@ export default class R3MainTree extends React.Component
 						}else{
 							expandIcon = (
 								<ListItemIcon
-									className={ classes.expandListItemIcon }
+									sx={ this.sxClasses.expandListItemIcon }
 								>
 									<ExpandMoreIcon />
 								</ListItemIcon>
@@ -921,7 +926,7 @@ export default class R3MainTree extends React.Component
 							<Collapse
 								in={ isCollapseExpand }
 								{ ...theme.r3MainTree.collapse }
-								className={ classes.collapse }
+								sx={ this.sxClasses.collapse }
 							>
 								<List
 									{ ...theme.r3MainTree.list }
@@ -944,7 +949,9 @@ export default class R3MainTree extends React.Component
 				// Returning React.Fragment as a top component causes a key props error, so we use div to avoid it.
 				//
 				return (
-					<div key={ listItemKey }>
+					<Box
+						key={ listItemKey }
+					>
 						<ListItem
 							onClick={ (event) => this.handleTypeInServiceChange(event, _service_name, item.path, isSelected, listItemKey) }
 							{ ...theme.r3MainTree.listItem }
@@ -955,12 +962,12 @@ export default class R3MainTree extends React.Component
 							<ListItemText
 								primary={ item.name }
 								{ ...accordingItemText }
-								className={ classes.inServiceLabelListItemText }
+								sx={ this.sxClasses.inServiceLabelListItemText }
 							/>
 							{ expandIcon }
 						</ListItem>
 						{ collapseItem }
-					</div>
+					</Box>
 				);
 			})
 		);
@@ -974,7 +981,7 @@ export default class R3MainTree extends React.Component
 	//
 	getServiceChildrenListItems(treeList, service_name, type_in_service)
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		if(undefined === treeList || !(treeList instanceof Array)){
 			return;
@@ -1000,7 +1007,7 @@ export default class R3MainTree extends React.Component
 						if(isCollapseExpand){
 							expandIcon = (
 								<ListItemIcon
-									className={ classes.expandListItemIcon }
+									sx={ this.sxClasses.expandListItemIcon }
 								>
 									<ExpandLessIcon />
 								</ListItemIcon>
@@ -1008,7 +1015,7 @@ export default class R3MainTree extends React.Component
 						}else{
 							expandIcon = (
 								<ListItemIcon
-									className={ classes.expandListItemIcon }
+									sx={ this.sxClasses.expandListItemIcon }
 								>
 									<ExpandMoreIcon />
 								</ListItemIcon>
@@ -1018,7 +1025,7 @@ export default class R3MainTree extends React.Component
 							<Collapse
 								in={ isCollapseExpand }
 								{ ...theme.r3MainTree.collapse }
-								className={ classes.collapse }
+								sx={ this.sxClasses.collapse }
 							>
 								<List
 									{ ...theme.r3MainTree.list }
@@ -1041,7 +1048,9 @@ export default class R3MainTree extends React.Component
 				// Returning React.Fragment as a top component causes a key props error, so we use div to avoid it.
 				//
 				return (
-					<div key={ listItemKey }>
+					<Box
+						key={ listItemKey }
+					>
 						<ListItem
 							onClick={ (event) => this.handleListItemInServiceChange(event, _service_name, _type_in_service, item.path, isSelected, listItemKey) }
 							{ ...theme.r3MainTree.listItem }
@@ -1049,12 +1058,12 @@ export default class R3MainTree extends React.Component
 							<ListItemText
 								primary={ item.name }
 								{ ...accordingItemText }
-								className={ classes.inServiceChildListItemText }
+								sx={ this.sxClasses.inServiceChildListItemText }
 							/>
 							{ expandIcon }
 						</ListItem>
 						{ collapseItem }
-					</div>
+					</Box>
 				);
 
 			})
@@ -1066,7 +1075,7 @@ export default class R3MainTree extends React.Component
 	//
 	getMainListItems(treeList)
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		console.info('CALL : getMainListItems');
 
@@ -1098,7 +1107,7 @@ export default class R3MainTree extends React.Component
 						if(isCollapseExpand){
 							expandIcon = (
 								<ListItemIcon
-									className={ classes.expandListItemIcon }
+									sx={ this.sxClasses.expandListItemIcon }
 								>
 									<ExpandLessIcon />
 								</ListItemIcon>
@@ -1106,7 +1115,7 @@ export default class R3MainTree extends React.Component
 						}else{
 							expandIcon = (
 								<ListItemIcon
-									className={ classes.expandListItemIcon }
+									sx={ this.sxClasses.expandListItemIcon }
 								>
 									<ExpandMoreIcon />
 								</ListItemIcon>
@@ -1138,7 +1147,9 @@ export default class R3MainTree extends React.Component
 				// Returning React.Fragment as a top component causes a key props error, so we use div to avoid it.
 				//
 				return (
-					<div key={ listItemKey }>
+					<Box
+						key={ listItemKey }
+					>
 						<ListItem
 							onClick={ (event) => this.handleTypeItemChange(event, item.path, isSelected, listItemKey) }
 							{ ...theme.r3MainTree.listItem }
@@ -1149,12 +1160,12 @@ export default class R3MainTree extends React.Component
 							<ListItemText
 								primary={ item.name }
 								{ ...accordingItemText }
-								className={ classes.listItemText }
+								sx={ this.sxClasses.listItemText }
 							/>
 							{ expandIcon }
 						</ListItem>
 						{ collapseItem }
-					</div>
+					</Box>
 				);
 			})
 		);
@@ -1164,6 +1175,7 @@ export default class R3MainTree extends React.Component
 	{
 		return (
 			<R3PopupMsgDialog
+				theme={ this.props.theme }
 				r3provider={ this.props.r3provider }
 				r3Message={ this.state.r3Message }
 				onClose={ this.handMessageDialogClose }
@@ -1173,11 +1185,11 @@ export default class R3MainTree extends React.Component
 
 	getMainTreeLists()
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		return (
-			<div
-				className={ (this.props.isDocking ? classes.dockedList : {}) }
+			<Box
+				sx={ (this.props.isDocking ? this.sxClasses.dockedList : {}) }
 			>
 				{ this.getSubHeaders() }
 				<List
@@ -1188,7 +1200,7 @@ export default class R3MainTree extends React.Component
 					{ this.getMainListItems(this.props.treeList) }
 				</List>
 				{ this.getPopupMessageDialog() }
-			</div>
+			</Box>
 		);
 	}
 
@@ -1198,23 +1210,22 @@ export default class R3MainTree extends React.Component
 			return this.getMainTreeLists();
 		}else{
 			// [NOTE]
-			// Since witdh=500 maybe used in the calculation as the initial value, it must be specified.(width=256 in default Theme does not work for me)
+			// Since witdh=500 maybe used in the calculation as the initial value,
+			// it must be specified.(width=256 in default Theme does not work for me)
 			// And containerStyle must be specified.
 			//
-			const { classes } = this.props;
-
 			return (
 				<React.Fragment>
 					<Drawer
 						open={ this.props.open }
 						onClose={ (event) => this.handleTreePopupClose(event) }
-						className={ classes.drawer }
+						sx={ this.sxClasses.drawer }
 					>
-						<div
-							className={ classes.adjustment }
+						<Box
+							sx={ this.sxClasses.adjustment }
 						>
 							{ this.getMainTreeLists() }
-						</div>
+						</Box>
 					</Drawer>
 				</React.Fragment>
 			);

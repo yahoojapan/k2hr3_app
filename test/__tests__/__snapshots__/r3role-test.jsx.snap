@@ -2,31 +2,31 @@
 
 exports[`R3Role test snapshot for R3Role 1`] = `
 <div
-  className="R3Role-root-1"
+  className="MuiBox-root css-7wh13m"
 >
   <h6
-    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3Role-subTitleTop-2 css-qxncr6-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-193s101-MuiTypography-root"
   >
     HOST NAMES
   </h6>
   <p
-    className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap R3Role-hostnameSubTitle-4 css-zq04ye-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap css-xaqhms-MuiTypography-root"
   >
     HOST NAME
   </p>
   <p
-    className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap R3Role-hostnameAUXSubTitle-5 css-zq04ye-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap css-l1khaw-MuiTypography-root"
   >
     AUX
   </p>
   <div
-    className="R3Role-enclosureElement-28"
+    className="MuiBox-root css-1wchkkw"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-hostnameTextField-6 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-m1r7zy-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3Role-inputTextField-27 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -34,7 +34,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id="mui-1"
+          id=":r0:"
           name="roleHostname0"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -48,10 +48,10 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       </div>
     </div>
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-hostnameAUXTextField-7 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-1jul6sg-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3Role-inputTextField-27 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -59,7 +59,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id="mui-2"
+          id=":r1:"
           name="roleHostnameAUX_0"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -75,7 +75,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     <button
       aria-label="delete hostname information"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge R3Role-deleteHostnameButton-8 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-y1883s-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="delete-hostname"
@@ -99,7 +99,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="ClearRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -114,13 +114,13 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
   </div>
   <div
-    className="R3Role-enclosureElement-28"
+    className="MuiBox-root css-1wchkkw"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-hostnameTextField-6 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-m1r7zy-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3Role-inputTextField-27 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -128,7 +128,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id="mui-4"
+          id=":r3:"
           name="roleHostname1"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -142,10 +142,10 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       </div>
     </div>
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-hostnameAUXTextField-7 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-1jul6sg-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3Role-inputTextField-27 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -153,7 +153,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id="mui-5"
+          id=":r4:"
           name="roleHostnameAUX_1"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -169,7 +169,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     <button
       aria-label="delete hostname information"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge R3Role-deleteHostnameButton-8 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-y1883s-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="delete-hostname"
@@ -193,7 +193,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="ClearRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -208,13 +208,13 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
   </div>
   <div
-    className="R3Role-enclosureElement-28"
+    className="MuiBox-root css-1wchkkw"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-hostnameTextField-6 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-m1r7zy-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3Role-inputTextField-27 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -222,7 +222,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id="mui-7"
+          id=":r6:"
           name="roleNewHostname"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -236,10 +236,10 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       </div>
     </div>
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-hostnameAUXTextField-7 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-1jul6sg-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3Role-inputTextField-27 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -247,7 +247,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id="mui-8"
+          id=":r7:"
           name="roleNewHostnameAUX"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -263,7 +263,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     <button
       aria-label="add hostname and AUX"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge R3Role-addHostnameButton-10 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-y1883s-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="add-hostname"
@@ -287,7 +287,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="AddRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -302,28 +302,28 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
   </div>
   <h6
-    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3Role-subTitle-3 css-qxncr6-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1lxji1e-MuiTypography-root"
   >
     IP ADDRESSES
   </h6>
   <p
-    className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap R3Role-ipSubTitle-11 css-zq04ye-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap css-xaqhms-MuiTypography-root"
   >
     IP ADDRESS
   </p>
   <p
-    className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap R3Role-ipAUXSubTitle-12 css-zq04ye-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap css-l1khaw-MuiTypography-root"
   >
     AUX
   </p>
   <div
-    className="R3Role-enclosureElement-28"
+    className="MuiBox-root css-1wchkkw"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-ipTextField-13 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-m1r7zy-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-disabled MuiInputBase-formControl css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-disabled MuiInputBase-formControl css-uu3kpw-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -331,7 +331,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input Mui-disabled css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={true}
-          id="mui-10"
+          id=":r9:"
           name="roleIp0"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -344,10 +344,10 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       </div>
     </div>
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-ipAUXTextField-14 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-1jul6sg-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-disabled MuiInputBase-formControl css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-disabled MuiInputBase-formControl css-uu3kpw-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -355,7 +355,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input Mui-disabled css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={true}
-          id="mui-11"
+          id=":ra:"
           name="roleIpAUX_0"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -370,7 +370,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     <button
       aria-label="delete ip information"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge R3Role-deleteIpButton-15 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-y1883s-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="delete-ip"
@@ -394,7 +394,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="ClearRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -409,13 +409,13 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
   </div>
   <div
-    className="R3Role-enclosureElement-28"
+    className="MuiBox-root css-1wchkkw"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-ipTextField-13 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-m1r7zy-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-disabled MuiInputBase-formControl css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-disabled MuiInputBase-formControl css-uu3kpw-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -423,7 +423,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input Mui-disabled css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={true}
-          id="mui-13"
+          id=":rc:"
           name="roleIp1"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -436,10 +436,10 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       </div>
     </div>
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-ipAUXTextField-14 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-1jul6sg-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-disabled MuiInputBase-formControl css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-disabled MuiInputBase-formControl css-uu3kpw-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -447,7 +447,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input Mui-disabled css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={true}
-          id="mui-14"
+          id=":rd:"
           name="roleIpAUX_1"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -462,7 +462,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     <button
       aria-label="delete ip information"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge R3Role-deleteIpButton-15 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-y1883s-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="delete-ip"
@@ -486,7 +486,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="ClearRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -501,13 +501,13 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
   </div>
   <div
-    className="R3Role-enclosureElement-28"
+    className="MuiBox-root css-1wchkkw"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-ipTextField-13 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-m1r7zy-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-disabled MuiInputBase-formControl css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-disabled MuiInputBase-formControl css-uu3kpw-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -515,7 +515,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input Mui-disabled css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={true}
-          id="mui-16"
+          id=":rf:"
           name="roleIp2"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -528,10 +528,10 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       </div>
     </div>
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-ipAUXTextField-14 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-1jul6sg-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-disabled MuiInputBase-formControl css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-disabled MuiInputBase-formControl css-uu3kpw-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -539,7 +539,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input Mui-disabled css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={true}
-          id="mui-17"
+          id=":rg:"
           name="roleIpAUX_2"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -554,7 +554,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     <button
       aria-label="delete ip information"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge R3Role-deleteIpButton-15 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-y1883s-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="delete-ip"
@@ -578,7 +578,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="ClearRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -593,18 +593,18 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
   </div>
   <h6
-    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3Role-subTitle-3 css-qxncr6-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1lxji1e-MuiTypography-root"
   >
     POLICIES
   </h6>
   <div
-    className="R3Role-enclosureElement-28"
+    className="MuiBox-root css-1wchkkw"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-policyTextField-17 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-5g4ojo-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3Role-inputTextField-27 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -612,7 +612,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id="mui-19"
+          id=":ri:"
           name="rolePolicy_0"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -628,7 +628,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     <button
       aria-label="delete policy"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge R3Role-deletePolicyButton-19 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-y1883s-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="delete-policy"
@@ -652,7 +652,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="ClearRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -667,13 +667,13 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
   </div>
   <div
-    className="R3Role-enclosureElement-28"
+    className="MuiBox-root css-1wchkkw"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-policyTextField-17 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-5g4ojo-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3Role-inputTextField-27 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -681,7 +681,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id="mui-21"
+          id=":rk:"
           name="roleNewPolicy"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -697,7 +697,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     <button
       aria-label="add policy"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge R3Role-addPolicyButton-18 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-y1883s-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="add-policy"
@@ -721,7 +721,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="AddRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -736,18 +736,18 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
   </div>
   <h6
-    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3Role-subTitle-3 css-qxncr6-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1lxji1e-MuiTypography-root"
   >
     ALIASES
   </h6>
   <div
-    className="R3Role-enclosureElement-28"
+    className="MuiBox-root css-1wchkkw"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-aliasTextField-21 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-gemud3-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3Role-inputTextField-27 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -755,7 +755,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id="mui-23"
+          id=":rm:"
           name="aliasValue_0"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -770,7 +770,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </div>
     <button
       aria-label="move to down position in list"
-      className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-sizeLarge R3Role-arrowInvisibleAliasButton-23 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-sizeLarge css-auyrvk-MuiButtonBase-root-MuiIconButton-root"
       disabled={true}
       label="move-down-alias"
       onBlur={[Function]}
@@ -790,7 +790,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="ArrowDownwardRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -802,7 +802,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
     <button
       aria-label="move to up position in list"
-      className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-sizeLarge R3Role-arrowInvisibleAliasButton-23 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-sizeLarge css-auyrvk-MuiButtonBase-root-MuiIconButton-root"
       disabled={true}
       label="move-up-alias"
       onBlur={[Function]}
@@ -822,7 +822,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="ArrowUpwardRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -835,7 +835,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     <button
       aria-label="delete alias"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge R3Role-deleteAliasButton-25 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-y1883s-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="delete-alias"
@@ -859,7 +859,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="ClearRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -874,13 +874,13 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
   </div>
   <div
-    className="R3Role-enclosureElement-28"
+    className="MuiBox-root css-1wchkkw"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Role-aliasTextField-21 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-gemud3-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3Role-inputTextField-27 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -888,7 +888,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id="mui-25"
+          id=":ro:"
           name="aliasNew"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -904,7 +904,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     <button
       aria-label="add alias"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge R3Role-addAliasButton-24 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-huweep-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="add-alias"
@@ -928,7 +928,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="AddRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -943,11 +943,11 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
   </div>
   <div
-    className="R3FormButtons-root-29"
+    className="MuiBox-root css-1uc44nh"
   >
     <button
       aria-label="cancel"
-      className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled R3FormButtons-cancelButton-30 css-sghohy-MuiButtonBase-root-MuiButton-root"
+      className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-jkkg7s-MuiButtonBase-root-MuiButton-root"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -968,7 +968,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       CANCEL
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3FormButtons-buttonIcon-32 css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
         data-testid="CancelIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -980,7 +980,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
     </button>
     <button
       aria-label="save"
-      className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled R3FormButtons-saveButton-31 css-zcbmsk-MuiButtonBase-root-MuiButton-root"
+      className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-ibc20f-MuiButtonBase-root-MuiButton-root"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -1001,7 +1001,7 @@ exports[`R3Role test snapshot for R3Role 1`] = `
       SAVE
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3FormButtons-buttonIcon-32 css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
         data-testid="CheckCircleIcon"
         focusable="false"
         viewBox="0 0 24 24"

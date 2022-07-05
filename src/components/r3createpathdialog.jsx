@@ -23,8 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import TextField					from '@mui/material/TextField';
 import Button						from '@mui/material/Button';
 import Dialog						from '@mui/material/Dialog';
@@ -46,14 +44,8 @@ const pathTextFieldId = 'new-path-textfield-id';
 //
 // Create New Path Dialog Class
 //
-@withTheme
-@withStyles(r3CreatePathDialog)
 export default class R3CreatePathDialog extends React.Component
 {
-	static contextTypes = {
-		r3Context:		PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		r3provider:		PropTypes.object.isRequired,
 		open:			PropTypes.bool,
@@ -84,6 +76,9 @@ export default class R3CreatePathDialog extends React.Component
 
 		// Binding(do not define handlers as arrow functions for performance)
 		this.handleNewPathChange	= this.handleNewPathChange.bind(this);
+
+		// styles
+		this.sxClasses				= r3CreatePathDialog(props.theme);
 	}
 
 	// [NOTE]
@@ -119,36 +114,36 @@ export default class R3CreatePathDialog extends React.Component
 
 	render()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	tenant;
 		let	tenantClass;
 		if(!r3IsEmptyStringObject(this.props.tenant, 'display')){
 			tenant		= this.props.tenant.display;
-			tenantClass	= classes.value;
+			tenantClass	= this.sxClasses.value;
 		}else{
 			tenant		= r3provider.getR3TextRes().tResUnselected;
-			tenantClass	= classes.valueItalic;
+			tenantClass	= this.sxClasses.valueItalic;
 		}
 
 		let	type;
 		let	typeClass;
 		if(!r3IsEmptyString(this.props.type)){
 			type		= this.props.type;
-			typeClass	= classes.value;
+			typeClass	= this.sxClasses.value;
 		}else{
 			type		= r3provider.getR3TextRes().tResUnselected;
-			typeClass	= classes.valueItalic;
+			typeClass	= this.sxClasses.valueItalic;
 		}
 
 		let	parentPath;
 		let	parentPathClass;
 		if(!r3IsEmptyString(this.props.parentPath)){
 			parentPath		= this.props.parentPath;
-			parentPathClass	= classes.value;
+			parentPathClass	= this.sxClasses.value;
 		}else{
 			parentPath		= r3provider.getR3TextRes().tResUnselected;
-			parentPathClass	= classes.valueItalic;
+			parentPathClass	= this.sxClasses.valueItalic;
 		}
 
 		return (
@@ -156,65 +151,65 @@ export default class R3CreatePathDialog extends React.Component
 				open={ this.props.open }
 				onClose={ (event, reason) => this.props.onClose(event, reason, false, null) }
 				{ ...theme.r3CreatePathDialog.root }
-				className={ classes.root }
+				sx={ this.sxClasses.root }
 			>
 				<DialogTitle
 					{ ...theme.r3CreatePathDialog.dialogTitle }
-					className={ classes.dialogTitle }
+					sx={ this.sxClasses.dialogTitle }
 				>
 					<Typography
 						{ ...theme.r3CreatePathDialog.title }
-						className={ classes.title }
+						sx={ this.sxClasses.title }
 					>
 						{ r3provider.getR3TextRes().cCreateNewPathTitle }
 					</Typography>
 				</DialogTitle>
 
 				<DialogContent
-					className={ classes.dialogContent }
+					sx={ this.sxClasses.dialogContent }
 				>
 					<Typography
 						{ ...theme.r3CreatePathDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResTenantSubTitle }
 					</Typography>
 					<Typography
 						{ ...theme.r3CreatePathDialog.value }
-						className={ tenantClass }
+						sx={ tenantClass }
 					>
 						{ tenant }
 					</Typography>
 
 					<Typography
 						{ ...theme.r3CreatePathDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResTypeSubTitle }
 					</Typography>
 					<Typography
 						{ ...theme.r3CreatePathDialog.value }
-						className={ typeClass }
+						sx={ typeClass }
 					>
 						{ type }
 					</Typography>
 
 					<Typography
 						{ ...theme.r3CreatePathDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResParentPathSubTitle }
 					</Typography>
 					<Typography
 						{ ...theme.r3CreatePathDialog.value }
-						className={ parentPathClass }
+						sx={ parentPathClass }
 					>
 						{ parentPath }
 					</Typography>
 
 					<Typography
 						{ ...theme.r3CreatePathDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResCreatePathSubTitle }
 					</Typography>
@@ -223,9 +218,9 @@ export default class R3CreatePathDialog extends React.Component
 						value={ this.state.newPath }
 						placeholder={ r3provider.getR3TextRes().tResCreatePathHint }
 						onChange={ (event) => this.handleNewPathChange(event) }
-						InputProps={{ className: classes.inputTextField }}
+						InputProps={{ sx: this.sxClasses.inputTextField }}
 						{ ...theme.r3CreatePathDialog.textField }
-						className={ classes.textField }
+						sx={ this.sxClasses.textField }
 					/>
 				</DialogContent>
 
@@ -233,22 +228,22 @@ export default class R3CreatePathDialog extends React.Component
 					<Button
 						onClick={ (event) => this.props.onClose(event, null, false, null) }
 						{ ...theme.r3CreatePathDialog.cancelButton }
-						className={ classes.cancelButton }
+						sx={ this.sxClasses.cancelButton }
 					>
 						{ r3provider.getR3TextRes().tResButtonCancel }
 						<CancelIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 					<Button
 						disabled={ r3IsEmptyString(this.state.newPath, true) }
 						onClick={ (event) => this.props.onClose(event, null, true, this.state.newPath) }
 						{ ...theme.r3CreatePathDialog.okButton }
-						className={ classes.okButton }
+						sx={ this.sxClasses.okButton }
 					>
 						{ r3provider.getR3TextRes().tResButtonOk }
 						<CheckCircleIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 				</DialogActions>

@@ -22,7 +22,7 @@
 import React					from 'react';									// eslint-disable-line no-unused-vars
 import renderer					from 'react-test-renderer';
 import getElementWithContext	from 'react-test-context-provider';				// for context provider
-import { ThemeProvider }		from '@mui/styles';								// for custom theme
+import { ThemeProvider }		from '@mui/material/styles';
 import { StyledEngineProvider, CssBaseline}	from '@mui/material';				// for jss and reset.css
 
 import r3Theme					from '../../src/components/r3theme';			// custom theme
@@ -44,6 +44,7 @@ describe('R3Container', () => {										// eslint-disable-line no-undef
 				<ThemeProvider theme={ r3Theme } >
 					<CssBaseline />
 					<R3Container
+						theme={ r3Theme }
 						title='K2HR3'
 					/>
 				</ThemeProvider>

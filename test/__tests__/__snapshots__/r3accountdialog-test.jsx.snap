@@ -3,7 +3,7 @@
 exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
 <
   aria-label="account dialog"
-  className="MuiDialog-root R3AccountDialog-root-1 css-1h8td7x-MuiDialog-root"
+  className="MuiDialog-root css-1h8td7x-MuiDialog-root"
   closeAfterTransition={true}
   components={
     Object {
@@ -74,44 +74,44 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
       onMouseDown={[Function]}
     >
       <div
-        aria-labelledby="mui-3"
-        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-zfoovh-MuiPaper-root-MuiDialog-paper"
+        aria-labelledby=":r0:"
+        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3q99l0-MuiPaper-root-MuiDialog-paper"
         role="dialog"
       >
         <h2
-          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root R3AccountDialog-dialogTitle-2 css-bdhsul-MuiTypography-root-MuiDialogTitle-root"
-          id="mui-3"
+          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-5unaky-MuiTypography-root-MuiDialogTitle-root"
+          id=":r0:"
           label="account-dialog"
         >
           <span
-            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap R3AccountDialog-title-3 css-idtq1y-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-1h4f5vm-MuiTypography-root"
           >
             Account Information
           </span>
         </h2>
         <div
-          className="MuiDialogContent-root R3AccountDialog-dialogContent-4 css-ypiqx9-MuiDialogContent-root"
+          className="MuiDialogContent-root css-ypiqx9-MuiDialogContent-root"
         >
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3AccountDialog-subTitle-5 css-qxncr6-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
           >
             User name
           </span>
           <span
-            className="MuiTypography-root MuiTypography-body1 R3AccountDialog-value-6 css-nrdprl-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-body1 css-1n7958d-MuiTypography-root"
           >
             JEST_TEST_USERNAME
           </span>
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3AccountDialog-subTitle-5 css-qxncr6-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
           >
             Unscoped Token
           </span>
           <div
-            className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root R3AccountDialog-unscopedtokenTextField-11 css-wb57ya-MuiFormControl-root-MuiTextField-root"
+            className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1olotkq-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl R3AccountDialog-unscopedtokenInputTextField-10 css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
+              className="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1efi729-MuiInputBase-root-MuiOutlinedInput-root"
               onClick={[Function]}
             >
               <input
@@ -119,7 +119,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
                 autoFocus={false}
                 className="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
                 disabled={false}
-                id="mui-1"
+                id=":r1:"
                 name="unscopedtoken-textfield"
                 onAnimationStart={[Function]}
                 onBlur={[Function]}
@@ -153,7 +153,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
           <button
             aria-label="Copy to clipboard"
             aria-labelledby={null}
-            className="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root R3AccountDialog-copyClipboardButton-12 css-1e6y48t-MuiButtonBase-root-MuiButton-root"
+            className="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root  css-akrki0-MuiButtonBase-root-MuiButton-root"
             data-mui-internal-clone-element={true}
             disabled={false}
             onBlur={[Function]}
@@ -176,7 +176,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
           >
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3AccountDialog-copyClipboardIcon-13 css-i4bv87-MuiSvgIcon-root"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i2rnez-MuiSvgIcon-root"
               data-testid="AssignmentTurnedInRoundedIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -196,7 +196,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
         >
           <button
             aria-label="ok"
-            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root R3AccountDialog-okButton-8 css-zcbmsk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -217,7 +217,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
             OK
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3AccountDialog-buttonIcon-9 css-i4bv87-MuiSvgIcon-root"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
               data-testid="CheckCircleIcon"
               focusable="false"
               viewBox="0 0 24 24"

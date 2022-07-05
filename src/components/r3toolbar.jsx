@@ -23,9 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import { StyledEngineProvider }		from '@mui/material/styles';
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import IconButton					from '@mui/material/IconButton';
 import Avatar						from '@mui/material/Avatar';
 import Chip							from '@mui/material/Chip';
@@ -33,6 +30,7 @@ import AppBar						from '@mui/material/AppBar';
 import Toolbar						from '@mui/material/Toolbar';
 import Typography					from '@mui/material/Typography';
 import Tooltip						from '@mui/material/Tooltip';
+import Box							from '@mui/material/Box';
 
 import DescriptionIcon				from '@mui/icons-material/Description';
 import ArrowUpwardIcon				from '@mui/icons-material/ArrowUpwardRounded';
@@ -63,14 +61,8 @@ const tooltipValues = {
 //
 // Toolbar Class
 //
-@withTheme
-@withStyles(r3Toolbar)
 export default class R3Toolbar extends React.Component
 {
-	static contextTypes = {
-		r3Context:				PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		r3provider:				PropTypes.object.isRequired,
 		enDock:					PropTypes.bool,
@@ -132,6 +124,9 @@ export default class R3Toolbar extends React.Component
 		this.handleDeleteServiceDialogClose			= this.handleDeleteServiceDialogClose.bind(this);
 		this.handleToUpperPathButton				= this.handleToUpperPathButton.bind(this);
 		this.handleMessageDialogClose				= this.handleMessageDialogClose.bind(this);
+
+		// styles
+		this.sxClasses								= r3Toolbar(props.theme);
 	}
 
 	handlePathInfoDialogOpen(event)											// eslint-disable-line no-unused-vars
@@ -612,7 +607,7 @@ export default class R3Toolbar extends React.Component
 
 	getChipInToolbar()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	strLabel = r3provider.getR3TextRes().tResUnselected;
 
@@ -629,30 +624,20 @@ export default class R3Toolbar extends React.Component
 			strLabel = r3provider.getR3TextRes().tResTenantPathLabel;
 		}
 
-		// [NOTE][FIXME]
-		// In the migration to MUI v5, this Avatar has the default CSS of ".MuiChip-avatarColorPrimary" applied.
-		// And this default CSS couldn't be overridden by r3theme.jsx.
-		// Also, since this CSS is applied after style, it cannot be applied by r3style.jsx.
-		// Therefore, we chose a method that does not apply the default CSS using "StyledEngineProvider".
-		// Also, in the r3style.jsx file, marginLeft is added to the CSS of r3Toolbar->avatar to make
-		// it consistent.
-		//
 		let	avatar = (
-			<StyledEngineProvider injectFirst>
-				<Avatar
-					className={ classes.avatar }
-				>
-					<DescriptionIcon
-						className={ classes.descriptionIcon }
-					/>
-				</Avatar>
-			</StyledEngineProvider>
+			<Avatar
+				sx={ this.sxClasses.avatar }
+			>
+				<DescriptionIcon
+					sx={ this.sxClasses.descriptionIcon }
+				/>
+			</Avatar>
 		);
 
 		let	label = (
 			<Typography
 				{ ...theme.r3Toolbar.chipText }
-				className={ classes.chipText }
+				sx={ this.sxClasses.chipText }
 			>
 				{ strLabel }
 			</Typography>
@@ -670,7 +655,7 @@ export default class R3Toolbar extends React.Component
 					onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.pathInfoChip, true) }
 					onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.pathInfoChip, false) }
 					{ ...theme.r3Toolbar.chip }
-					className={ classes.chip }
+					sx={ this.sxClasses.chip }
 				/>
 			</Tooltip>
 		);
@@ -678,7 +663,7 @@ export default class R3Toolbar extends React.Component
 
 	render()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	themeToolbar	= this.props.enDock ? theme.r3Toolbar.toolbar : theme.r3Toolbar.smallToolbar;
 		let	name			= '';
@@ -690,7 +675,7 @@ export default class R3Toolbar extends React.Component
 					ownerTag = (
 						<Typography
 							{ ...theme.r3Toolbar.ownerText }
-							className={ classes.ownerText }
+							sx={ this.sxClasses.ownerText }
 						>
 							{ r3provider.getR3TextRes().tResOwnerServiceTag }
 						</Typography>
@@ -702,29 +687,29 @@ export default class R3Toolbar extends React.Component
 		}
 
 		return (
-			<div>
+			<Box>
 				<AppBar
 					{ ...theme.r3Toolbar.root }
-					className={ classes.root }
+					sx={ this.sxClasses.root }
 				>
 					<Toolbar
 						{ ...themeToolbar }
-						className={ classes.toolbar }
+						sx={ this.sxClasses.toolbar }
 					>
 						{ this.getChipInToolbar() }
 
 						{ ownerTag }
 						<Typography
 							{ ...theme.r3Toolbar.title }
-							className={ classes.title }
+							sx={ this.sxClasses.title }
 						>
 							{ name }
 						</Typography>
 
 						{ this.getArrawUpwardButton() }
 
-						<div
-							className={ classes.spacerInToolbar }
+						<Box
+							sx={ this.sxClasses.spacerInToolbar }
 						/>
 
 						{ this.getCreatePathButton() }
@@ -732,6 +717,7 @@ export default class R3Toolbar extends React.Component
 					</Toolbar>
 				</AppBar>
 				<R3PathInfoDialog
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					open={ this.state.pathInfoDialogOpen }
 					tenant={ this.props.toolbarData.tenant }
@@ -742,6 +728,7 @@ export default class R3Toolbar extends React.Component
 					onClose={ this.handlePathInfoDialogClose }
 				/>
 				<R3CreatePathDialog
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					open={ this.state.createPathDialogOpen }
 					tenant={ this.props.toolbarData.tenant }
@@ -751,6 +738,7 @@ export default class R3Toolbar extends React.Component
 					onClose={ this.handleCreatePathDialogClose }
 				/>
 				<R3CreateServiceDialog
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					open={ this.state.createServiceDialogOpen }
 					createMode={ true }
@@ -762,6 +750,7 @@ export default class R3Toolbar extends React.Component
 					onClose={ this.handleCreateServiceDialogClose }
 				/>
 				<R3CreateServiceTenantDialog
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					open={ this.state.createServiceTenantDialogOpen }
 					tenant={ this.props.toolbarData.tenant }
@@ -770,6 +759,7 @@ export default class R3Toolbar extends React.Component
 					onClose={ this.handleCreateServiceTenantDialogClose }
 				/>
 				<R3PopupMsgDialog
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					title={ this.props.r3provider.getR3TextRes().cUpdatingTitle }
 					r3Message={ this.state.r3DeleteServiceMessage }
@@ -777,11 +767,12 @@ export default class R3Toolbar extends React.Component
 					onClose={ this.handleDeleteServiceDialogClose }
 				/>
 				<R3PopupMsgDialog
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					r3Message={ this.state.r3Message }
 					onClose={ this.handleMessageDialogClose }
 				/>
-			</div>
+			</Box>
 		);
 	}
 }

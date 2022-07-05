@@ -22,11 +22,12 @@
 import React					from 'react';										// eslint-disable-line no-unused-vars
 import renderer					from 'react-test-renderer';
 import getElementWithContext	from 'react-test-context-provider';					// for context provider
-import { ThemeProvider }		from '@mui/styles';									// for custom theme
+import { ThemeProvider }		from '@mui/material/styles';
 import { StyledEngineProvider, CssBaseline}	from '@mui/material';					// for jss and reset.css
 
 import r3Theme					from '../../src/components/r3theme';				// custom theme
 import R3AppBar					from '../../src/components/r3appbar';
+import { R3CommonContext }		from '../../src/components/r3commoncontext';
 import R3Provider				from '../../src/util/r3provider';
 
 import mock_fetch				from '../__mocks__/fetchMock';						// eslint-disable-line no-unused-vars
@@ -58,6 +59,7 @@ const account		= jest.fn();										// eslint-disable-line no-undef
 describe('R3AppBar', () => {											// eslint-disable-line no-undef
 	it('test snapshot for R3AppBar', () => {							// eslint-disable-line no-undef
 		const r3provider	= new R3Provider(null);
+		const commonContext	= { r3Context: r3provider.getR3Context() };
 
 		const element		= getElementWithContext(
 			{
@@ -66,18 +68,23 @@ describe('R3AppBar', () => {											// eslint-disable-line no-undef
 			<StyledEngineProvider injectFirst>
 				<ThemeProvider theme={ r3Theme } >
 					<CssBaseline />
-					<R3AppBar
-						r3provider={ r3provider }
-						title='K2HR3'
-						enDock={ false }
-						isDocking={ true }
-						onTreeDetach={ treedetach }
-						onOpenTree={ opentree }
-						onCheckUpdating={ checkupdating }
-						onAbout={ about }
-						onSign={ sign }
-						onAccount={ account }
-					/>
+					<R3CommonContext.Provider
+						value={ commonContext }
+					>
+						<R3AppBar
+							theme={ r3Theme }
+							r3provider={ r3provider }
+							title='K2HR3'
+							enDock={ false }
+							isDocking={ true }
+							onTreeDetach={ treedetach }
+							onOpenTree={ opentree }
+							onCheckUpdating={ checkupdating }
+							onAbout={ about }
+							onSign={ sign }
+							onAccount={ account }
+						/>
+					</R3CommonContext.Provider>
 				</ThemeProvider>
 			</StyledEngineProvider>
 		);

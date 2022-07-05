@@ -2,11 +2,11 @@
 
 exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
 <div
-  className="R3FormButtons-root-1"
+  className="MuiBox-root css-1uc44nh"
 >
   <button
     aria-label="cancel"
-    className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root R3FormButtons-cancelButton-2 css-sghohy-MuiButtonBase-root-MuiButton-root"
+    className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-jkkg7s-MuiButtonBase-root-MuiButton-root"
     disabled={false}
     onBlur={[Function]}
     onClick={[Function]}
@@ -27,7 +27,7 @@ exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
     CANCEL
     <svg
       aria-hidden={true}
-      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3FormButtons-buttonIcon-4 css-i4bv87-MuiSvgIcon-root"
+      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
       data-testid="CancelIcon"
       focusable="false"
       viewBox="0 0 24 24"
@@ -39,7 +39,7 @@ exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
   </button>
   <button
     aria-label="save"
-    className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root R3FormButtons-saveButton-3 css-zcbmsk-MuiButtonBase-root-MuiButton-root"
+    className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-ibc20f-MuiButtonBase-root-MuiButton-root"
     disabled={false}
     onBlur={[Function]}
     onClick={[Function]}
@@ -60,7 +60,7 @@ exports[`R3FormButtons test snapshot for R3FormButtons 1`] = `
     SAVE
     <svg
       aria-hidden={true}
-      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3FormButtons-buttonIcon-4 css-i4bv87-MuiSvgIcon-root"
+      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
       data-testid="CheckCircleIcon"
       focusable="false"
       viewBox="0 0 24 24"

@@ -3,7 +3,7 @@
 exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
 <
   aria-label="about dialog"
-  className="MuiDialog-root R3AboutDialog-root-1 css-1h8td7x-MuiDialog-root"
+  className="MuiDialog-root css-1h8td7x-MuiDialog-root"
   closeAfterTransition={true}
   components={
     Object {
@@ -74,35 +74,37 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
       onMouseDown={[Function]}
     >
       <div
-        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-zfoovh-MuiPaper-root-MuiDialog-paper"
+        aria-labelledby=":r0:"
+        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3q99l0-MuiPaper-root-MuiDialog-paper"
         role="dialog"
       >
         <h2
-          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root R3AboutDialog-dialogTitle-2 css-bdhsul-MuiTypography-root-MuiDialogTitle-root"
+          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-5unaky-MuiTypography-root-MuiDialogTitle-root"
+          id=":r0:"
           label="about-dialog"
         >
           <span
-            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap R3AboutDialog-title-3 css-idtq1y-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-1h4f5vm-MuiTypography-root"
           >
             About 
             K2HR3
           </span>
         </h2>
         <div
-          className="MuiDialogContent-root R3AboutDialog-dialogContent-4 css-ypiqx9-MuiDialogContent-root"
+          className="MuiDialogContent-root css-1eb5co6-MuiDialogContent-root"
         >
           <span
-            className="MuiDialogContentText-root MuiTypography-root MuiTypography-body1 R3AboutDialog-dialogContentText-5 css-qfso29-MuiTypography-root-MuiDialogContentText-root"
+            className="MuiDialogContentText-root MuiTypography-root MuiTypography-body1 css-8d6sz0-MuiTypography-root-MuiDialogContentText-root"
           >
             <span
-              className="MuiTypography-root MuiTypography-h6 css-cbexrx-MuiTypography-root"
+              className="MuiTypography-root MuiTypography-h6 css-1noxuy3-MuiTypography-root"
             >
               License: 
               MIT
               <br />
             </span>
             <span
-              className="MuiTypography-root MuiTypography-body2 css-et1ao3-MuiTypography-root"
+              className="MuiTypography-root MuiTypography-body2 css-wa45k7-MuiTypography-root"
             >
               K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers commonmanagement information for the cloud.K2HR3 can dynamically manage information as "who", "what", "operate".These are stored as roles, resources, policies in K2hdkc, and the clientsystem can dynamically read and modify these information.
               <br />
@@ -112,11 +114,11 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
           </span>
         </div>
         <div
-          className="MuiDialogActions-root MuiDialogActions-spacing R3AboutDialog-dialogAction-6 css-hlj6pa-MuiDialogActions-root"
+          className="MuiDialogActions-root MuiDialogActions-spacing css-hlj6pa-MuiDialogActions-root"
         >
           <button
             aria-label="close about dialog"
-            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root R3AboutDialog-button-7 css-zcbmsk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-1rcb7ll-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -137,7 +139,7 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
             CLOSE
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3AboutDialog-buttonIcon-8 css-i4bv87-MuiSvgIcon-root"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
               data-testid="CancelIcon"
               focusable="false"
               viewBox="0 0 24 24"
