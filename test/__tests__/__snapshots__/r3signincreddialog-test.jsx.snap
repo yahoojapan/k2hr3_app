@@ -3,7 +3,7 @@
 exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
 <
   aria-label="signin credential dialog"
-  className="MuiDialog-root R3SigninCredDialog-root-1 css-1h8td7x-MuiDialog-root"
+  className="MuiDialog-root css-1h8td7x-MuiDialog-root"
   closeAfterTransition={true}
   components={
     Object {
@@ -74,30 +74,32 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
       onMouseDown={[Function]}
     >
       <div
-        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-zfoovh-MuiPaper-root-MuiDialog-paper"
+        aria-labelledby=":r0:"
+        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3q99l0-MuiPaper-root-MuiDialog-paper"
         role="dialog"
       >
         <h2
-          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root R3SigninCredDialog-dialogTitle-2 css-bdhsul-MuiTypography-root-MuiDialogTitle-root"
+          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-5unaky-MuiTypography-root-MuiDialogTitle-root"
+          id=":r0:"
           label="signin-dialog"
         >
           <span
-            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap R3SigninCredDialog-title-3 css-idtq1y-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-1h4f5vm-MuiTypography-root"
           >
             Signin
           </span>
         </h2>
         <div
-          className="MuiDialogContent-root R3SigninCredDialog-dialogContent-4 css-ypiqx9-MuiDialogContent-root"
+          className="MuiDialogContent-root css-ypiqx9-MuiDialogContent-root"
         >
           <span
-            className="MuiDialogContentText-root MuiTypography-root MuiTypography-body1 R3SigninCredDialog-dialogContentText-5 css-qfso29-MuiTypography-root-MuiDialogContentText-root"
+            className="MuiDialogContentText-root MuiTypography-root MuiTypography-body1 css-8d6sz0-MuiTypography-root-MuiDialogContentText-root"
           />
           <div
-            className="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root R3SigninCredDialog-textField-9 css-17vbkzs-MuiFormControl-root-MuiTextField-root"
+            className="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-10laqpe-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              className="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root"
+              className="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1vo5tcm-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink={false}
               htmlFor="username-textfield-id"
               id="username-textfield-id-label"
@@ -105,7 +107,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
               USER NAME(ID etc)
             </label>
             <div
-              className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl R3SigninCredDialog-inputTextField-10 css-1a1fmpi-MuiInputBase-root-MuiInput-root"
+              className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-kd2kjo-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
@@ -126,10 +128,10 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
             </div>
           </div>
           <div
-            className="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root R3SigninCredDialog-textField-9 css-17vbkzs-MuiFormControl-root-MuiTextField-root"
+            className="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-10laqpe-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              className="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root"
+              className="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1vo5tcm-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink={false}
               htmlFor="passphrase-textfield-id"
               id="passphrase-textfield-id-label"
@@ -137,7 +139,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
               PASS PHRASE
             </label>
             <div
-              className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd R3SigninCredDialog-inputTextField-10 css-1a1fmpi-MuiInputBase-root-MuiInput-root"
+              className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd css-kd2kjo-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
@@ -160,7 +162,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
               >
                 <button
                   aria-label="toggle passphrase visibility"
-                  className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorSecondary MuiIconButton-sizeLarge css-1f88mc5-MuiButtonBase-root-MuiIconButton-root"
+                  className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorSecondary MuiIconButton-sizeLarge css-wo8fe1-MuiButtonBase-root-MuiIconButton-root"
                   disabled={false}
                   onBlur={[Function]}
                   onClick={[Function]}
@@ -180,7 +182,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
                 >
                   <svg
                     aria-hidden={true}
-                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
                     data-testid="VisibilityIcon"
                     focusable="false"
                     viewBox="0 0 24 24"
@@ -199,7 +201,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
         >
           <button
             aria-label="cancel"
-            className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root R3SigninCredDialog-cancelButton-11 css-sghohy-MuiButtonBase-root-MuiButton-root"
+            className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-rypk7-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -220,7 +222,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
             CANCEL
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3SigninCredDialog-buttonIcon-13 css-i4bv87-MuiSvgIcon-root"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
               data-testid="CancelIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -232,7 +234,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
           </button>
           <button
             aria-label="sign in"
-            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled R3SigninCredDialog-signinButton-12 css-zcbmsk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
             disabled={true}
             onBlur={[Function]}
             onClick={[Function]}
@@ -253,7 +255,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
             SGIN IN
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3SigninCredDialog-buttonIcon-13 css-i4bv87-MuiSvgIcon-root"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
               data-testid="CheckCircleIcon"
               focusable="false"
               viewBox="0 0 24 24"

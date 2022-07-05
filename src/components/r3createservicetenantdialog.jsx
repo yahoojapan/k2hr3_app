@@ -23,8 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import TextField					from '@mui/material/TextField';
 import Button						from '@mui/material/Button';
 import Dialog						from '@mui/material/Dialog';
@@ -46,14 +44,8 @@ const serviceTenantTextFieldId	= 'service-tenant-textfield-id';
 //
 // Create Service Tenant Dialog Class
 //
-@withTheme
-@withStyles(r3CreateServiceTenantDialog)
 export default class R3CreateServiceTenantDialog extends React.Component
 {
-	static contextTypes = {
-		r3Context:		PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		r3provider:		PropTypes.object.isRequired,
 		open:			PropTypes.bool,
@@ -82,6 +74,9 @@ export default class R3CreateServiceTenantDialog extends React.Component
 
 		// Binding(do not define handlers as arrow functions for performance)
 		this.handleAliasRoleChange	= this.handleAliasRoleChange.bind(this);
+
+		// styles
+		this.sxClasses				= r3CreateServiceTenantDialog(props.theme);
 	}
 
 	// [NOTE]
@@ -117,95 +112,95 @@ export default class R3CreateServiceTenantDialog extends React.Component
 
 	render()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	tenant;
 		let	tenantClass;
 		if(!r3IsEmptyStringObject(this.props.tenant, 'display')){
 			tenant		= this.props.tenant.display;
-			tenantClass	= classes.value;
+			tenantClass	= this.sxClasses.value;
 		}else{
 			tenant		= r3provider.getR3TextRes().tResUnselected;
-			tenantClass	= classes.valueItalic;
+			tenantClass	= this.sxClasses.valueItalic;
 		}
 
 		let	service;
 		let	serviceClass;
 		if(!r3IsEmptyString(this.props.service, true)){
 			service			= this.props.service.trim();
-			serviceClass	= classes.value;
+			serviceClass	= this.sxClasses.value;
 		}else{
 			service			= r3provider.getR3TextRes().tResUnselected;
-			serviceClass	= classes.valueItalic;
+			serviceClass	= this.sxClasses.valueItalic;
 		}
 
 		let	path		= 'yrn:yahoo:' + service + '::' + (r3IsEmptyStringObject(this.props.tenant, 'name') ? '' : this.props.tenant.name);
-		let	pathClass	= classes.value;
+		let	pathClass	= this.sxClasses.value;
 
 		return (
 			<Dialog
 				open={ this.props.open }
 				onClose={ (event, reason) => this.props.onClose(event, reason, false, null) }
 				{ ...theme.r3CreateServiceDialog.root }
-				className={ classes.root }
+				sx={ this.sxClasses.root }
 			>
 				<DialogTitle
 					{ ...theme.r3CreateServiceDialog.dialogTitle }
-					className={ classes.dialogTitle }
+					sx={ this.sxClasses.dialogTitle }
 				>
 					<Typography
 						{ ...theme.r3CreateServiceDialog.title }
-						className={ classes.title }
+						sx={ this.sxClasses.title }
 					>
 						{ r3provider.getR3TextRes().cCreateServiceTenantTitle }
 					</Typography>
 				</DialogTitle>
 
 				<DialogContent
-					className={ classes.dialogContent }
+					sx={ this.sxClasses.dialogContent }
 				>
 					<Typography
 						{ ...theme.r3CreateServiceDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResTenantSubTitle }
 					</Typography>
 					<Typography
 						{ ...theme.r3CreateServiceDialog.value }
-						className={ tenantClass }
+						sx={ tenantClass }
 					>
 						{ tenant }
 					</Typography>
 
 					<Typography
 						{ ...theme.r3CreateServiceDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResServiceSubTitle }
 					</Typography>
 					<Typography
 						{ ...theme.r3CreateServiceDialog.value }
-						className={ serviceClass }
+						sx={ serviceClass }
 					>
 						{ service }
 					</Typography>
 
 					<Typography
 						{ ...theme.r3CreateServiceDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResPathSubTitle }
 					</Typography>
 					<Typography
 						{ ...theme.r3CreateServiceDialog.value }
-						className={ pathClass }
+						sx={ pathClass }
 					>
 						{ path }
 					</Typography>
 
 					<Typography
 						{ ...theme.r3CreateServiceDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().cDefaultRoleAlias }
 					</Typography>
@@ -214,9 +209,9 @@ export default class R3CreateServiceTenantDialog extends React.Component
 						value={ this.state.aliasRole }
 						placeholder={ r3provider.getR3TextRes().tResAliasRoleHint }
 						onChange={ (event) => this.handleAliasRoleChange(event) }
-						InputProps={{ className: classes.inputTextField }}
+						InputProps={{ sx: this.sxClasses.inputTextField }}
 						{ ...theme.r3CreatePathDialog.textField }
-						className={ classes.textField }
+						sx={ this.sxClasses.textField }
 					/>
 				</DialogContent>
 
@@ -224,27 +219,26 @@ export default class R3CreateServiceTenantDialog extends React.Component
 					<Button
 						onClick={ (event) => this.props.onClose(event, null, false, null) }
 						{ ...theme.r3CreateServiceDialog.cancelButton }
-						className={ classes.cancelButton }
+						sx={ this.sxClasses.cancelButton }
 					>
 						{ r3provider.getR3TextRes().tResButtonCancel }
 						<CancelIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 					<Button
 						onClick={ (event) => this.props.onClose(event, null, true, this.state.aliasRole) }
 						{ ...theme.r3CreateServiceDialog.okButton }
-						className={ classes.okButton }
+						sx={ this.sxClasses.okButton }
 					>
 						{ r3provider.getR3TextRes().tResButtonOk }
 						<CheckCircleIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 				</DialogActions>
 			</Dialog>
 		);
-
 	}
 }
 

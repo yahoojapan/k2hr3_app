@@ -3,7 +3,7 @@
 exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
 <
   aria-label="create service dialog"
-  className="MuiDialog-root R3CreateServiceDialog-root-1 css-1h8td7x-MuiDialog-root"
+  className="MuiDialog-root css-1h8td7x-MuiDialog-root"
   closeAfterTransition={true}
   components={
     Object {
@@ -74,42 +74,44 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
       onMouseDown={[Function]}
     >
       <div
-        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-zfoovh-MuiPaper-root-MuiDialog-paper"
+        aria-labelledby=":r0:"
+        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3q99l0-MuiPaper-root-MuiDialog-paper"
         role="dialog"
       >
         <h2
-          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root R3CreateServiceDialog-dialogTitle-2 css-bdhsul-MuiTypography-root-MuiDialogTitle-root"
+          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-5unaky-MuiTypography-root-MuiDialogTitle-root"
+          id=":r0:"
           label="create-service-dialog"
         >
           <span
-            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap R3CreateServiceDialog-title-3 css-idtq1y-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-1h4f5vm-MuiTypography-root"
           >
             Create a new SERVICE
           </span>
         </h2>
         <div
-          className="MuiDialogContent-root R3CreateServiceDialog-dialogContent-4 css-ypiqx9-MuiDialogContent-root"
+          className="MuiDialogContent-root css-ypiqx9-MuiDialogContent-root"
         >
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3CreateServiceDialog-keyTitle-5 css-qxncr6-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
           >
             TENANT for SERVICE owner
           </span>
           <span
-            className="MuiTypography-root MuiTypography-body1 R3CreateServiceDialog-value-6 css-nrdprl-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-body1 css-1n7958d-MuiTypography-root"
           >
             GROUP0:TENANT0
           </span>
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3CreateServiceDialog-keyTitle-5 css-qxncr6-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
           >
             CREATE SERVICE
           </span>
           <div
-            className="MuiFormControl-root MuiTextField-root R3CreateServiceDialog-textField-8 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+            className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3CreateServiceDialog-inputTextField-9 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+              className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
@@ -130,21 +132,21 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
             </div>
           </div>
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3CreateServiceDialog-keyTitle-5 css-qxncr6-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
           >
             SERVICE RESOURCES
           </span>
           <div
             aria-label="select type verify url or static resource"
-            className="MuiFormGroup-root R3CreateServiceDialog-valueRadioGroup-11 css-dmmspl-MuiFormGroup-root"
+            className="MuiFormGroup-root css-18timm1-MuiFormGroup-root"
             id="new-service-radiogroup-id"
             role="radiogroup"
           >
             <label
-              className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd R3CreateServiceDialog-valueLeftFormControlLabel-12 css-j204z7-MuiFormControlLabel-root"
+              className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1pmxc0w-MuiFormControlLabel-root"
             >
               <span
-                className="MuiRadio-root MuiRadio-colorPrimary MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root Mui-checked css-vqmohf-MuiButtonBase-root-MuiRadio-root"
+                className="MuiRadio-root MuiRadio-colorPrimary MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root Mui-checked css-17kolh4-MuiButtonBase-root-MuiRadio-root"
                 onBlur={[Function]}
                 onContextMenu={[Function]}
                 onDragLeave={[Function]}
@@ -163,6 +165,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
                   checked={true}
                   className="PrivateSwitchBase-input css-1m9pwf3"
                   disabled={false}
+                  name=":r2:"
                   onChange={[Function]}
                   type="radio"
                   value="verifyUrl"
@@ -172,7 +175,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
                 >
                   <svg
                     aria-hidden={true}
-                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1hbvpl3-MuiSvgIcon-root"
+                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-qtxgh1-MuiSvgIcon-root"
                     data-testid="RadioButtonUncheckedIcon"
                     focusable="false"
                     viewBox="0 0 24 24"
@@ -183,7 +186,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
                   </svg>
                   <svg
                     aria-hidden={true}
-                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-11zohuh-MuiSvgIcon-root"
+                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-gw5thf-MuiSvgIcon-root"
                     data-testid="RadioButtonCheckedIcon"
                     focusable="false"
                     viewBox="0 0 24 24"
@@ -195,16 +198,16 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
                 </span>
               </span>
               <p
-                className="MuiTypography-root MuiTypography-body1 MuiTypography-noWrap css-7podw6-MuiTypography-root"
+                className="MuiTypography-root MuiTypography-body1 MuiTypography-noWrap css-11spxrz-MuiTypography-root"
               >
                 VERIFY URL
               </p>
             </label>
             <label
-              className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd R3CreateServiceDialog-valueRightFormControlLabel-13 css-j204z7-MuiFormControlLabel-root"
+              className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1gdxqa1-MuiFormControlLabel-root"
             >
               <span
-                className="MuiRadio-root MuiRadio-colorPrimary MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root css-vqmohf-MuiButtonBase-root-MuiRadio-root"
+                className="MuiRadio-root MuiRadio-colorPrimary MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root css-17kolh4-MuiButtonBase-root-MuiRadio-root"
                 onBlur={[Function]}
                 onContextMenu={[Function]}
                 onDragLeave={[Function]}
@@ -223,6 +226,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
                   checked={false}
                   className="PrivateSwitchBase-input css-1m9pwf3"
                   disabled={false}
+                  name=":r2:"
                   onChange={[Function]}
                   type="radio"
                   value="staticResourceObject"
@@ -232,7 +236,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
                 >
                   <svg
                     aria-hidden={true}
-                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1hbvpl3-MuiSvgIcon-root"
+                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-qtxgh1-MuiSvgIcon-root"
                     data-testid="RadioButtonUncheckedIcon"
                     focusable="false"
                     viewBox="0 0 24 24"
@@ -243,7 +247,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
                   </svg>
                   <svg
                     aria-hidden={true}
-                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1hhw7if-MuiSvgIcon-root"
+                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-s4grmf-MuiSvgIcon-root"
                     data-testid="RadioButtonCheckedIcon"
                     focusable="false"
                     viewBox="0 0 24 24"
@@ -255,17 +259,17 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
                 </span>
               </span>
               <p
-                className="MuiTypography-root MuiTypography-body1 MuiTypography-noWrap css-7podw6-MuiTypography-root"
+                className="MuiTypography-root MuiTypography-body1 MuiTypography-noWrap css-11spxrz-MuiTypography-root"
               >
                 STATIC RESOURCE OBJECT
               </p>
             </label>
           </div>
           <div
-            className="MuiFormControl-root MuiTextField-root R3CreateServiceDialog-textField-8 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+            className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3CreateServiceDialog-inputTextField-9 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+              className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
@@ -291,7 +295,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
         >
           <button
             aria-label="cancel"
-            className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root R3CreateServiceDialog-cancelButton-27 css-sghohy-MuiButtonBase-root-MuiButton-root"
+            className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-rypk7-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -312,7 +316,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
             CANCEL
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3CreateServiceDialog-buttonIcon-29 css-i4bv87-MuiSvgIcon-root"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
               data-testid="CancelIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -324,7 +328,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
           </button>
           <button
             aria-label="ok"
-            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled R3CreateServiceDialog-okButton-28 css-zcbmsk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
             disabled={true}
             onBlur={[Function]}
             onClick={[Function]}
@@ -345,7 +349,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
             OK
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3CreateServiceDialog-buttonIcon-29 css-i4bv87-MuiSvgIcon-root"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
               data-testid="CheckCircleIcon"
               focusable="false"
               viewBox="0 0 24 24"

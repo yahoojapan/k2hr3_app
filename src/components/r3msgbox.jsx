@@ -23,8 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import Paper						from '@mui/material/Paper';				// For contents wrap
 import Typography					from '@mui/material/Typography';
 import ErrorIcon					from '@mui/icons-material/ErrorRounded';
@@ -38,14 +36,8 @@ import { errorType, warningType, infoType } from '../util/r3types';			// eslint-
 //
 // Message Box Class
 //
-@withTheme
-@withStyles(r3MsgBox)
 export default class R3MsgBox extends React.Component
 {
-	static contextTypes = {
-		r3Context:	PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		message:	PropTypes.object
 	};
@@ -57,11 +49,14 @@ export default class R3MsgBox extends React.Component
 	constructor(props)
 	{
 		super(props);
+
+		// styles
+		this.sxClasses = r3MsgBox(props.theme);
 	}
 
 	getMessageContents()
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		if(null === this.props.message){
 			return;
@@ -71,13 +66,13 @@ export default class R3MsgBox extends React.Component
 		let	classobj;
 		if(this.props.message.isErrorType()){
 			themeobj	= theme.r3PopupMsgDialog.dialogErrorContentText;
-			classobj	= classes.dialogErrorContentText;
+			classobj	= this.sxClasses.dialogErrorContentText;
 		}else if(this.props.message.isWarningType()){
 			themeobj	= theme.r3PopupMsgDialog.dialogWarningContentText;
-			classobj	= classes.dialogWarningContentText;
+			classobj	= this.sxClasses.dialogWarningContentText;
 		}else{	// this.props.message.isInfoType()
 			themeobj	= theme.r3PopupMsgDialog.dialogInformationContentText;
-			classobj	= classes.dialogInformationContentText;
+			classobj	= this.sxClasses.dialogInformationContentText;
 		}
 		let	msgarr = this.props.message.getMessageArray();
 
@@ -88,7 +83,7 @@ export default class R3MsgBox extends React.Component
 					<Typography
 						key={ pos }
 						{ ...themeobj }
-						className={ classobj }
+						sx={ classobj }
 					>
 						{ item }
 						<br />
@@ -100,28 +95,28 @@ export default class R3MsgBox extends React.Component
 
 	getIcon()
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		let	icon;
 		if(null !== this.props.message && this.props.message.isErrorType()){
 			icon = (
 				<ErrorIcon
 					{ ...theme.r3PopupMsgDialog.errorIcon }
-					className={ classes.errorIcon }
+					sx={ this.sxClasses.errorIcon }
 				/>
 			);
 		}else if(null !== this.props.message && this.props.message.isWarningType()){
 			icon = (
 				<WarningIcon
 					{ ...theme.r3PopupMsgDialog.warningIcon }
-					className={ classes.warningIcon }
+					sx={ this.sxClasses.warningIcon }
 				/>
 			);
 		}else{	// this.props.message.isInfoType()
 			icon = (
 				<InformationIcon
 					{ ...theme.r3PopupMsgDialog.informationIcon }
-					className={ classes.informationIcon }
+					sx={ this.sxClasses.informationIcon }
 				/>
 			);
 		}
@@ -130,7 +125,7 @@ export default class R3MsgBox extends React.Component
 
 	render()
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		if(null === this.props.message || this.props.message.empty()){
 			return null;
@@ -139,7 +134,7 @@ export default class R3MsgBox extends React.Component
 		return (
 			<Paper
 				{ ...theme.r3MsgBox.root }
-				className={ classes.root }
+				sx={ this.sxClasses.root }
 			>
 				{ this.getIcon() }
 				{ this.getMessageContents() }

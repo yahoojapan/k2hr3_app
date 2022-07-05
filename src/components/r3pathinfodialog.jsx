@@ -23,8 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import Button						from '@mui/material/Button';
 import Dialog						from '@mui/material/Dialog';
 import DialogTitle					from '@mui/material/DialogTitle';
@@ -44,6 +42,7 @@ import FormControlLabel				from '@mui/material/FormControlLabel';
 import Checkbox						from '@mui/material/Checkbox';
 import Select						from '@mui/material/Select';
 import MenuItem						from '@mui/material/MenuItem';			// for select
+import Box							from '@mui/material/Box';
 
 import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
 import CopyClipBoardIcon			from '@mui/icons-material/AssignmentTurnedInRounded';
@@ -111,14 +110,8 @@ const codeTextFieldName		= 'register-code-textfield';
 //
 // Path Information Class
 //
-@withTheme
-@withStyles(r3PathInfoDialog)
 export default class R3PathInfoDialog extends React.Component
 {
-	static contextTypes = {
-		r3Context:		PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		r3provider:		PropTypes.object.isRequired,
 		open:			PropTypes.bool.isRequired,
@@ -213,6 +206,9 @@ export default class R3PathInfoDialog extends React.Component
 		this.handleCodeTypeChange			= this.handleCodeTypeChange.bind(this);
 		this.handleRoleTokenClipboard		= this.handleRoleTokenClipboard.bind(this);
 		this.handleCopyClipboard 			= this.handleCopyClipboard.bind(this);
+
+		// styles
+		this.sxClasses						= r3PathInfoDialog(props.theme);
 	}
 
 	// [NOTE]
@@ -821,13 +817,13 @@ export default class R3PathInfoDialog extends React.Component
 	//---------------------------------------------------------
 	getActionToRoleTokenButtons()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		return (
 			<React.Fragment>
 				<Typography
 					{ ...theme.r3PathInfoDialog.keyTitle }
-					className={ classes.keyTitle }
+					sx={ this.sxClasses.keyTitle }
 				>
 					{ r3provider.getR3TextRes().tResRoleTokenSubTitle }
 				</Typography>
@@ -840,10 +836,10 @@ export default class R3PathInfoDialog extends React.Component
 						onMouseEnter={ event => this.handleManageRoleTokenButtonTooltipChange(event, true) }
 						onMouseLeave={ event => this.handleManageRoleTokenButtonTooltipChange(event, false) }
 						{ ...theme.r3PathInfoDialog.manageRoleTokenButton }
-						className={ classes.roleTokenButton }
+						sx={ this.sxClasses.roleTokenButton }
 					>
 						<SettingActionIcon
-							className={ classes.roleTokenButtonIcon }
+							sx={ this.sxClasses.roleTokenButtonIcon }
 						/>
 						{ r3provider.getR3TextRes().tResRoleTokenManageButton }
 					</Button>
@@ -857,10 +853,10 @@ export default class R3PathInfoDialog extends React.Component
 						onMouseEnter={ event => this.handleDispCodeNewRoleTokenButtonTooltipChange(event, true) }
 						onMouseLeave={ event => this.handleDispCodeNewRoleTokenButtonTooltipChange(event, false) }
 						{ ...theme.r3PathInfoDialog.dispCodeNewRoleTokenButton }
-						className={ classes.roleTokenButton }
+						sx={ this.sxClasses.roleTokenButton }
 					>
 						<SettingActionIcon
-							className={ classes.roleTokenButtonIcon }
+							sx={ this.sxClasses.roleTokenButtonIcon }
 						/>
 						{ r3provider.getR3TextRes().tResDispCodeNewRoleToken }
 					</Button>
@@ -871,13 +867,13 @@ export default class R3PathInfoDialog extends React.Component
 
 	renderMain()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	tenant;
 		let	tenantKey = (
 			<Typography
 				{ ...theme.r3PathInfoDialog.keyTitle }
-				className={ classes.keyTitle }
+				sx={ this.sxClasses.keyTitle }
 			>
 				{ r3provider.getR3TextRes().tResTenantSubTitle }
 			</Typography>
@@ -888,7 +884,7 @@ export default class R3PathInfoDialog extends React.Component
 					{ tenantKey }
 					<Typography
 						{ ...theme.r3PathInfoDialog.value }
-						className={ classes.valueItalic }
+						sx={ this.sxClasses.valueItalic }
 					>
 						{ r3provider.getR3TextRes().tResUnselected }
 					</Typography>
@@ -900,7 +896,7 @@ export default class R3PathInfoDialog extends React.Component
 					{ tenantKey }
 					<Typography
 						{ ...theme.r3PathInfoDialog.value }
-						className={ classes.value }
+						sx={ this.sxClasses.value }
 					>
 						{ this.props.tenant.display }
 					</Typography>
@@ -914,13 +910,13 @@ export default class R3PathInfoDialog extends React.Component
 				<React.Fragment>
 					<Typography
 						{ ...theme.r3PathInfoDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResServiceSubTitle }
 					</Typography>
 					<Typography
 						{ ...theme.r3PathInfoDialog.value }
-						className={ classes.value }
+						sx={ this.sxClasses.value }
 					>
 						{ this.props.service }
 					</Typography>
@@ -934,13 +930,13 @@ export default class R3PathInfoDialog extends React.Component
 				<React.Fragment>
 					<Typography
 						{ ...theme.r3PathInfoDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResTypeSubTitle }
 					</Typography>
 					<Typography
 						{ ...theme.r3PathInfoDialog.value }
-						className={ classes.value }
+						sx={ this.sxClasses.value }
 					>
 						{ this.props.type }
 					</Typography>
@@ -954,13 +950,13 @@ export default class R3PathInfoDialog extends React.Component
 				<React.Fragment>
 					<Typography
 						{ ...theme.r3PathInfoDialog.keyTitle }
-						className={ classes.keyTitle }
+						sx={ this.sxClasses.keyTitle }
 					>
 						{ r3provider.getR3TextRes().tResPathSubTitle }
 					</Typography>
 					<Typography
 						{ ...theme.r3PathInfoDialog.value }
-						className={ classes.value }
+						sx={ this.sxClasses.value }
 					>
 						{ this.props.fullpath }
 					</Typography>
@@ -989,10 +985,10 @@ export default class R3PathInfoDialog extends React.Component
 	//---------------------------------------------------------
 	getManageRoleTokenInTableButtons(pos)
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		return(
-			<div>
+			<Box>
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResDeleteRoleTokenTT }
 					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteRoleTokenButtonTooltip, 'number') || (this.state.tooltips.deleteRoleTokenButtonTooltip != pos)) ? false : true) }
@@ -1002,7 +998,7 @@ export default class R3PathInfoDialog extends React.Component
 						onMouseEnter={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.deleteRoleTokenButtonTooltip, pos) }
 						onMouseLeave={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.deleteRoleTokenButtonTooltip, -1) }
 						{ ...theme.r3PathInfoDialog.manageDeleteButton }
-						className={ classes.manageActionButton }
+						sx={ this.sxClasses.manageActionButton }
 					>
 						<DeleteIcon />
 					</Button>
@@ -1017,19 +1013,18 @@ export default class R3PathInfoDialog extends React.Component
 						onMouseEnter={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.dispCodeButtonTooltip, pos) }
 						onMouseLeave={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.dispCodeButtonTooltip, -1) }
 						{ ...theme.r3PathInfoDialog.manageDispCodeButton }
-						className={ classes.manageActionButton }
+						sx={ this.sxClasses.manageActionButton }
 					>
 						<DispCodeIcon />
 					</Button>
 				</Tooltip>
-
-			</div>
+			</Box>
 		);
 	}
 
 	getNewRoleTokenPopover()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		return (
 			<Popover
@@ -1037,11 +1032,11 @@ export default class R3PathInfoDialog extends React.Component
 				anchorEl={ this.state.newRoleTokenPopoverAnchorEl }
 				onClose={ this.handleCancelNewRoleToken }
 				{ ...theme.r3PathInfoDialog.newRoleTokenPopover }
-				className={ classes.newRoleTokenPopover }
+				sx={ this.sxClasses.newRoleTokenPopover }
 			>
 				<Typography
 					{ ...theme.r3PathInfoDialog.newRoleTokenPopoverTitle }
-					className={ classes.newRoleTokenPopoverTitle }
+					sx={ this.sxClasses.newRoleTokenPopoverTitle }
 				>
 					{ r3provider.getR3TextRes().tResRoleTokenPopoverTitle }
 				</Typography>
@@ -1053,28 +1048,28 @@ export default class R3PathInfoDialog extends React.Component
 							value={ 'noexpire' }
 							checked={ this.state.newRoleTokenNoExpire }
 							onChange={ this.handleNoExpireCheckboxChange }
-							className={ classes.newRoleTokenExpireCheck }
+							sx={ this.sxClasses.newRoleTokenExpireCheck }
 						/>
 					}
 					label={
 						<Typography
 							{ ...theme.r3PathInfoDialog.newRoleTokenExpireLabel }
-							className={ classes.newRoleTokenExpireLabel }
+							sx={ this.sxClasses.newRoleTokenExpireLabel }
 						>
 							{ r3provider.getR3TextRes().tResRoleTokenExpireCheck }
 						</Typography>
 					}
-					className={ classes.newRoleTokenExpireForm }
+					sx={ this.sxClasses.newRoleTokenExpireForm }
 				/>
 
 				<Button
 					onClick={ this.handleConfirmNewRoleToken }
 					{ ...theme.r3PathInfoDialog.createRoleTokenButton }
-					className={ classes.createRoleTokenButton }
+					sx={ this.sxClasses.createRoleTokenButton }
 				>
 					{ r3provider.getR3TextRes().tResNewRoleTokenButton }
 					<CheckCircleIcon
-						className={ classes.buttonIcon }
+						sx={ this.sxClasses.buttonIcon }
 					/>
 				</Button>
 
@@ -1084,17 +1079,17 @@ export default class R3PathInfoDialog extends React.Component
 
 	getManageRoleTokenTableHead()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	newRoleTokenPopover = this.getNewRoleTokenPopover();
 
 		return (
 			<TableHead
-				className={ classes.tableHead }
+				sx={ this.sxClasses.tableHead }
 			>
 				<TableRow>
 					<TableCell
-						className={ classes.tableCell }
+						sx={ this.sxClasses.tableCell }
 					>
 						<Tooltip
 							title={ r3provider.getR3TextRes().tResAddRoleTokenTT }
@@ -1106,7 +1101,7 @@ export default class R3PathInfoDialog extends React.Component
 									onMouseEnter={ event => this.handleNewRoleTokenButtonTooltipChange(event, true) }
 									onMouseLeave={ event => this.handleNewRoleTokenButtonTooltipChange(event, false) }
 									{ ...theme.r3PathInfoDialog.manageAddButton }
-									className={ classes.manageAddButton }
+									sx={ this.sxClasses.manageAddButton }
 								>
 									<CreateRoleTokenIcon />
 								</Button>
@@ -1115,37 +1110,37 @@ export default class R3PathInfoDialog extends React.Component
 						</Tooltip>
 						<Typography
 							{ ...theme.r3PathInfoDialog.textTableHead }
-							className={ classes.textActionTableHead }
+							sx={ this.sxClasses.textActionTableHead }
 						>
 							{ r3provider.getR3TextRes().tResActionTableHead }
 						</Typography>
 					</TableCell>
 					<TableCell
-						className={ classes.tableCell }
+						sx={ this.sxClasses.tableCell }
 					>
 						<Typography
 							{ ...theme.r3PathInfoDialog.textTableHead }
-							className={ classes.textTableHead }
+							sx={ this.sxClasses.textTableHead }
 						>
 							{ r3provider.getR3TextRes().tResCreateTimeTableHead }
 						</Typography>
 					</TableCell>
 					<TableCell
-						className={ classes.tableCell }
+						sx={ this.sxClasses.tableCell }
 					>
 						<Typography
 							{ ...theme.r3PathInfoDialog.textTableHead }
-							className={ classes.textTableHead }
+							sx={ this.sxClasses.textTableHead }
 						>
 							{ r3provider.getR3TextRes().tResExpireTimeTableHead }
 						</Typography>
 					</TableCell>
 					<TableCell
-						className={ classes.tableCell }
+						sx={ this.sxClasses.tableCell }
 					>
 						<Typography
 							{ ...theme.r3PathInfoDialog.textTableHead }
-							className={ classes.textTableHead }
+							sx={ this.sxClasses.textTableHead }
 						>
 							{ r3provider.getR3TextRes().tResRoleTokenTableHead }
 						</Typography>
@@ -1157,7 +1152,7 @@ export default class R3PathInfoDialog extends React.Component
 
 	getManageRoleTokenTableBody()
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		if(!r3IsSafeTypedEntity(this.state.roleTokenList, 'array')){
 			return;
@@ -1172,7 +1167,7 @@ export default class R3PathInfoDialog extends React.Component
 					}
 
 					let	textTheme	= (item.newToken ? theme.r3PathInfoDialog.textNewTableContent : theme.r3PathInfoDialog.textTableContent);
-					let	textCalsses	= (item.newToken ? classes.textNewTableContent : classes.textTableContent);
+					let	textCalsses	= (item.newToken ? this.sxClasses.textNewTableContent : this.sxClasses.textTableContent);
 
 					return (
 						<TableRow
@@ -1181,17 +1176,17 @@ export default class R3PathInfoDialog extends React.Component
 							selected={ false }
 						>
 							<TableCell
-								className={ classes.tableCell }
+								sx={ this.sxClasses.tableCell }
 							>
 								<Typography
 									{ ...theme.r3PathInfoDialog.textTableContent }
-									className={ classes.textTableContent }
+									sx={ this.sxClasses.textTableContent }
 								>
 									{ this.getManageRoleTokenInTableButtons(pos) }
 								</Typography>
 							</TableCell>
 							<TableCell
-								className={ classes.tableCell }
+								sx={ this.sxClasses.tableCell }
 							>
 								<Tooltip
 									title={ item.expire }
@@ -1201,14 +1196,14 @@ export default class R3PathInfoDialog extends React.Component
 										onMouseEnter={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.detailCreateTimeTooltip, pos) }
 										onMouseLeave={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.detailCreateTimeTooltip, -1) }
 										{ ...textTheme }
-										className={ textCalsses }
+										sx={ textCalsses }
 									>
 										{ item.createTime }
 									</Typography>
 								</Tooltip>
 							</TableCell>
 							<TableCell
-								className={ classes.tableCell }
+								sx={ this.sxClasses.tableCell }
 							>
 								<Tooltip
 									title={ item.expire }
@@ -1218,25 +1213,25 @@ export default class R3PathInfoDialog extends React.Component
 										onMouseEnter={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.detailExpireTimeTooltip, pos) }
 										onMouseLeave={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.detailExpireTimeTooltip, -1) }
 										{ ...textTheme }
-										className={ textCalsses }
+										sx={ textCalsses }
 									>
 										{ item.expireTime }
 									</Typography>
 								</Tooltip>
 							</TableCell>
 							<TableCell
-								className={ classes.tableCell }
+								sx={ this.sxClasses.tableCell }
 							>
 								<Tooltip
 									title={ item.token }
 									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.detailRoleTokenTooltip, 'number') || (this.state.tooltips.detailRoleTokenTooltip != pos)) ? false : true) }
-									PopperProps={ { className: classes.wordBreakTooltip } }
+									PopperProps={{ sx: this.sxClasses.wordBreakTooltip }}
 								>
 									<Typography
 										onMouseEnter={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.detailRoleTokenTooltip, pos) }
 										onMouseLeave={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.detailRoleTokenTooltip, -1) }
 										{ ...textTheme }
-										className={ textCalsses }
+										sx={ textCalsses }
 									>
 										{ item.shortToken }
 									</Typography>
@@ -1251,7 +1246,7 @@ export default class R3PathInfoDialog extends React.Component
 
 	renderManageRoleToken()
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		if(!r3IsSafeTypedEntity(this.state.roleTokenList, 'array')){
 			return;
@@ -1264,7 +1259,7 @@ export default class R3PathInfoDialog extends React.Component
 			<React.Fragment>
 				<Table
 					{ ...theme.r3PathInfoDialog.table }
-					className={ classes.table }
+					sx={ this.sxClasses.table }
 				>
 					{tablehead}
 					{tablebody}
@@ -1286,13 +1281,13 @@ export default class R3PathInfoDialog extends React.Component
 	//---------------------------------------------------------
 	renderDispCode()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	roletokenContents = (
 			<React.Fragment>
 				<Typography
 					{ ...theme.r3PathInfoDialog.keyTitle }
-					className={ classes.keyTitle }
+					sx={ this.sxClasses.keyTitle }
 				>
 					{ r3provider.getR3TextRes().tResRoleTokenSubTitle }
 				</Typography>
@@ -1300,10 +1295,10 @@ export default class R3PathInfoDialog extends React.Component
 					name={ roletokenTextFieldName }
 					value={ this.state.selectedRoleToken }
 					inputRef = { (element) => { this.roletokenInputElement = element; } } 
-					InputProps={{ className: classes.roletokenInputTextField }}
+					InputProps={{ sx: this.sxClasses.roletokenInputTextField }}
 					inputProps={{ style: { padding: 0 } }}
 					{ ...theme.r3PathInfoDialog.roletokenTextField }
-					className={ classes.roletokenTextField }
+					sx={ this.sxClasses.roletokenTextField }
 				/>
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResCopyClipboardTT }
@@ -1314,10 +1309,10 @@ export default class R3PathInfoDialog extends React.Component
 						onMouseEnter={ event => this.handleRoleTokenClipboardButtonTooltipChange(event, true) }
 						onMouseLeave={ event => this.handleRoleTokenClipboardButtonTooltipChange(event, false) }
 						{ ...theme.r3PathInfoDialog.roletokenClipboardButton }
-						className={ classes.roletokenClipboardButton }
+						sx={ this.sxClasses.roletokenClipboardButton }
 					>
 						<CopyClipBoardIcon
-							className={ classes.copyClipboardIcon }
+							sx={ this.sxClasses.copyClipboardIcon }
 						/>
 						{ r3provider.getR3TextRes().tResCopyClipboardButton }
 					</Button>
@@ -1329,13 +1324,13 @@ export default class R3PathInfoDialog extends React.Component
 			<React.Fragment>
 				<Typography
 					{ ...theme.r3PathInfoDialog.keyTitle }
-					className={ classes.keyTitle }
+					sx={ this.sxClasses.keyTitle }
 				>
 					{ r3provider.getR3TextRes().tResRoleTokenTimeSubTitle }
 				</Typography>
 				<Typography
 					{ ...theme.r3PathInfoDialog.value }
-					className={ classes.value }
+					sx={ this.sxClasses.value }
 				>
 					{ this.state.selectedRoleTokenTime }
 				</Typography>
@@ -1381,7 +1376,7 @@ export default class R3PathInfoDialog extends React.Component
 			<React.Fragment>
 				<Typography
 					{ ...theme.r3PathInfoDialog.keyTitle }
-					className={ classes.keyTitle }
+					sx={ this.sxClasses.keyTitle }
 				>
 					{ r3provider.getR3TextRes().tResCodeSubTitle }
 				</Typography>
@@ -1389,9 +1384,9 @@ export default class R3PathInfoDialog extends React.Component
 				<Select
 					value={ this.state.codeType }
 					onChange={ this.handleCodeTypeChange }
-					inputProps={{ className: classes.codeTypeSelectInput }}
+					inputProps={{ sx: this.sxClasses.codeTypeSelectInput }}
 					{ ...theme.r3PathInfoDialog.codeTypeSelect }
-					className={ classes.codeTypeSelect }
+					sx={ this.sxClasses.codeTypeSelect }
 				>
 					{
 						_margedCodeType.map( (item, pos) => {
@@ -1411,9 +1406,9 @@ export default class R3PathInfoDialog extends React.Component
 					name={ codeTextFieldName }
 					value={ codeText }
 					inputRef = { (element) => { this.codeInputElement = element; } } 
-					InputProps={{ className: classes.codeInputTextField }}
+					InputProps={{ sx: this.sxClasses.codeInputTextField }}
 					{ ...theme.r3PathInfoDialog.codeTextField }
-					className={ classes.codeTextField }
+					sx={ this.sxClasses.codeTextField }
 				/>
 
 				<Tooltip
@@ -1425,10 +1420,10 @@ export default class R3PathInfoDialog extends React.Component
 						onMouseEnter={ event => this.handleCopyClipboardButtonTooltipChange(event, true) }
 						onMouseLeave={ event => this.handleCopyClipboardButtonTooltipChange(event, false) }
 						{ ...theme.r3PathInfoDialog.copyClipboardButton }
-						className={ classes.copyClipboardButton }
+						sx={ this.sxClasses.copyClipboardButton }
 					>
 						<CopyClipBoardIcon
-							className={ classes.copyClipboardIcon }
+							sx={ this.sxClasses.copyClipboardIcon }
 						/>
 						{ r3provider.getR3TextRes().tResCopyClipboardButton }
 					</Button>
@@ -1450,7 +1445,7 @@ export default class R3PathInfoDialog extends React.Component
 	//---------------------------------------------------------
 	getBackPageButton()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(!r3IsSafeTypedEntity(this.state.stackedPreviousPages, 'array') || 0 == this.state.stackedPreviousPages.length){
 			return;
@@ -1460,11 +1455,11 @@ export default class R3PathInfoDialog extends React.Component
 			<Button
 				onClick={ this.handleBackPage }
 				{ ...theme.r3PathInfoDialog.previousButton }
-				className={ classes.previousButton }
+				sx={ this.sxClasses.previousButton }
 			>
 				{ r3provider.getR3TextRes().tResButtonPrevious }
 				<BackPageIcon
-					className={ classes.buttonIcon }
+					sx={ this.sxClasses.buttonIcon }
 				/>
 			</Button>
 		);
@@ -1475,7 +1470,7 @@ export default class R3PathInfoDialog extends React.Component
 	//---------------------------------------------------------
 	render()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	title;
 		let contents;
@@ -1498,24 +1493,27 @@ export default class R3PathInfoDialog extends React.Component
 				open={ this.props.open }
 				onClose={ (event, reason) => this.handleClose(event, reason) }
 				{ ...theme.r3PathInfoDialog.root }
-				className={ classes.root }
+				sx={ this.sxClasses.root }
 			>
 				<DialogTitle
 					{ ...theme.r3PathInfoDialog.dialogTitle }
-					className={ classes.dialogTitle }
+					sx={ this.sxClasses.dialogTitle }
 				>
 					<Typography
 						{ ...theme.r3PathInfoDialog.title }
-						className={ classes.title }
+						sx={ this.sxClasses.title }
 					>
 						{ title }
 					</Typography>
 				</DialogTitle>
 
 				<DialogContent
-					className={ classes.dialogContent }
+					sx={ this.sxClasses.dialogContent }
 				>
-					<R3MsgBox message={ this.state.message }/>
+					<R3MsgBox
+						theme={ theme }
+						message={ this.state.message }
+					/>
 					{ contents }
 				</DialogContent>
 
@@ -1524,11 +1522,11 @@ export default class R3PathInfoDialog extends React.Component
 					<Button
 						onClick={ (event, reason) => this.handleClose(event, reason) }
 						{ ...theme.r3PathInfoDialog.button }
-						className={ classes.button }
+						sx={ this.sxClasses.button }
 					>
 						{ r3provider.getR3TextRes().tResButtonClose }
 						<CheckCircleIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 				</DialogActions>

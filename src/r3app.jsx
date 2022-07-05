@@ -22,25 +22,29 @@
 import style				from '../public/css/style.css';						// eslint-disable-line no-unused-vars
 
 import React				from 'react';										// eslint-disable-line no-unused-vars
-import ReactDOM				from 'react-dom';
+import { createRoot }		from 'react-dom/client';
 import { ThemeProvider }	from '@mui/material/styles';
-//import { ThemeProvider }	from '@mui/styles';									// for custom theme
 import { StyledEngineProvider, CssBaseline}	from '@mui/material';				// for jss and reset.css
 
 import r3Theme				from './components/r3theme';						// custom theme
 import R3Container			from './components/r3container';
 
-// Do render
-ReactDOM.render(
-	<StyledEngineProvider injectFirst>
-		<ThemeProvider theme={ r3Theme } >
-			<CssBaseline />
-			<R3Container
-				title='K2HR3'
-			/>
-		</ThemeProvider>
-	</StyledEngineProvider>,
-	document.getElementById('r3app')
+//
+// Main Container
+//
+const root = createRoot(document.getElementById('r3app'));
+root.render(
+	<React.StrictMode>
+		<StyledEngineProvider injectFirst>
+			<ThemeProvider theme={ r3Theme } >
+				<CssBaseline />
+				<R3Container
+					theme={ r3Theme }
+					title='K2HR3'
+				/>
+			</ThemeProvider>
+		</StyledEngineProvider>
+	</React.StrictMode>
 );
 
 /*

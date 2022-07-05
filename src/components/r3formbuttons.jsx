@@ -23,9 +23,8 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import Button						from '@mui/material/Button';
+import Box							from '@mui/material/Box';
 import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
 import CancelIcon					from '@mui/icons-material/Cancel';
 
@@ -34,14 +33,8 @@ import { r3FormButtons }			from './r3styles';
 //
 // Form Button Class
 //
-@withTheme
-@withStyles(r3FormButtons)
 export default class R3FormButtons extends React.Component
 {
-	static contextTypes = {
-		r3Context:	PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		r3provider:	PropTypes.object.isRequired,
 		status:		PropTypes.bool,
@@ -56,39 +49,42 @@ export default class R3FormButtons extends React.Component
 	constructor(props)
 	{
 		super(props);
+
+		// styles
+		this.sxClasses = r3FormButtons(props.theme);
 	}
 
 	render()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		return (
-			<div
-				className={ classes.root }
+			<Box
+				sx={ this.sxClasses.root }
 			>
 				<Button
 					disabled={ !this.props.status }
 					onClick={ (event) => this.props.onCancel(event) }
 					{ ...theme.r3FormButtons.cancelButton }
-					className={ classes.cancelButton }
+					sx={ this.sxClasses.cancelButton }
 				>
 					{ r3provider.getR3TextRes().tResButtonCancel }
 					<CancelIcon
-						className={ classes.buttonIcon }
+						sx={ this.sxClasses.buttonIcon }
 					/>
 				</Button>
 				<Button
 					disabled={ !this.props.status }
 					onClick={ (event) => this.props.onSave(event) }
 					{ ...theme.r3FormButtons.saveButton }
-					className={ classes.saveButton }
+					sx={ this.sxClasses.saveButton }
 				>
 					{ r3provider.getR3TextRes().tResButtonSave }
 					<CheckCircleIcon
-						className={ classes.buttonIcon }
+						sx={ this.sxClasses.buttonIcon }
 					/>
 				</Button>
-			</div>
+			</Box>
 		);
 	}
 }

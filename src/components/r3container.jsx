@@ -23,9 +23,8 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';									// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import Paper						from '@mui/material/Paper';							// For contents wrap
+import Box							from '@mui/material/Box';
 
 // Styles
 import { r3Container }				from './r3styles';									// But nothing for r3Container now.
@@ -46,6 +45,9 @@ import R3Role						from './r3role';
 import R3Policy						from './r3policy';
 import R3Service					from './r3service';
 
+// For context
+import { R3CommonContext }			from './r3commoncontext';
+
 // Utilities
 import R3Provider					from '../util/r3provider';
 import R3Message					from '../util/r3message';
@@ -57,14 +59,8 @@ import { r3DeepCompare, r3IsEmptyStringObject, r3CompareString, r3CompareCaseStr
 //
 // Container Class
 //
-@withTheme
-@withStyles(r3Container)
 export default class R3Container extends React.Component
 {
-	static childContextTypes = {
-		r3Context:		PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		title:			PropTypes.string
 	};
@@ -179,6 +175,9 @@ export default class R3Container extends React.Component
 		this.handSignInDialogClose			= this.handSignInDialogClose.bind(this);
 		this.cbProgressControl				= this.cbProgressControl.bind(this);		// For progress callback from provider
 		this.cbRefRegister					= this.cbRefRegister.bind(this);			// For registering callback from progress
+
+		// styles
+		this.sxClasses						= r3Container(props.theme);
 	}
 
 	componentDidMount()
@@ -230,16 +229,6 @@ export default class R3Container extends React.Component
 			// All parts updates
 			this.updateStateAllParts(this.state.selected.tenant, this.state.selected.service, this.state.selected.type, this.state.selected.path, false, (isSignIn ? (this.r3provider.getR3TextRes().iSignined + this.r3provider.getR3TextRes().iNotSignin) : (this.r3provider.getR3TextRes().iSignouted + this.r3provider.getR3TextRes().iNotSignin)));
 		}
-	}
-
-	//
-	// Set children's context for r3Context
-	//
-	getChildContext()
-	{
-		return {
-			r3Context:	this.r3provider.getR3Context()
-		};
 	}
 
 	//
@@ -1141,13 +1130,6 @@ export default class R3Container extends React.Component
 	//
 	// Callback from R3Progress for register object reference
 	//
-	// [NOTE][TODO]
-	// The components that use withTheme/withStyle can not directly reference objects
-	// in ref(reference), then we need to deal with it using innerRef etc.
-	// The material-ui tries to change from innerRef to forwardRef in version 4.
-	// Then we use another low-level technique instead of these logics.
-	// This is an interim process, so I'll fix it later.
-	//
 	cbRefRegister(func)
 	{
 		if(!r3IsSafeTypedEntity(func, 'function')){
@@ -1162,8 +1144,6 @@ export default class R3Container extends React.Component
 	//
 	getContent()
 	{
-		const { classes } = this.props;
-
 		// always increments(32bit cycling)
 		if(R3Container.dispUnique < 0xffffffff){
 			++R3Container.dispUnique;
@@ -1175,9 +1155,10 @@ export default class R3Container extends React.Component
 			if(!r3IsEmptyEntity(this.state.selected.path)){
 				return (
 					<Paper
-						className={ classes.paper }
+						sx={ this.sxClasses.paper }
 					>
 						<R3Resource
+							theme={ this.props.theme }
 							r3provider={ this.r3provider }
 							resource={ this.state.resource }
 							dispUnique={ R3Container.dispUnique }
@@ -1192,9 +1173,10 @@ export default class R3Container extends React.Component
 			if(!r3IsEmptyEntity(this.state.selected.path)){
 				return (
 					<Paper
-						className={ classes.paper }
+						sx={ this.sxClasses.paper }
 					>
 						<R3Role
+							theme={ this.props.theme }
 							r3provider={ this.r3provider }
 							role={ this.state.role }
 							dispUnique={ R3Container.dispUnique }
@@ -1209,9 +1191,10 @@ export default class R3Container extends React.Component
 			if(!r3IsEmptyEntity(this.state.selected.path)){
 				return (
 					<Paper
-						className={ classes.paper }
+						sx={ this.sxClasses.paper }
 					>
 						<R3Policy
+							theme={ this.props.theme }
 							r3provider={ this.r3provider }
 							policy={ this.state.policy }
 							dispUnique={ R3Container.dispUnique }
@@ -1227,9 +1210,10 @@ export default class R3Container extends React.Component
 			if(this.r3provider.checkServiceOwnerInTreeList(this.state.mainTree, this.state.selected.service)){
 				return (
 					<Paper
-						className={ classes.paper }
+						sx={ this.sxClasses.paper }
 					>
 						<R3Service
+							theme={ this.props.theme }
 							r3provider={ this.r3provider }
 							tenant={ this.state.selected.tenant.name }
 							service={ this.state.service }
@@ -1254,92 +1238,111 @@ export default class R3Container extends React.Component
 	{
 		let	signinDialogMsg	= (r3CompareCaseString('http', this.r3provider.getR3Context().getSafeApiScheme()) ? this.r3provider.getR3TextRes().wDeprecateAuth : '');
 
+		//
+		// Common context for all child components
+		//
+		const commonContext = { r3Context: this.r3provider.getR3Context() };
+
 		return (
-			<React.Fragment>
-				<R3AppBar
-					r3provider={ this.r3provider }
-					title={ this.props.title }
-					enDock={ this.state.mainTreeEndock }
-					isDocking={ this.state.mainTreeDocked }
-					licensesObj={ this.licensesObj }
-					onTreeDetach={ this.handleTreeDetach }
-					onOpenTree={ this.handleTreeOpen }
-					onCheckUpdating={ this.handleIsContentUpdating }
-					onAbout={ this.handleAbout }
-					onSign={ this.handleSign }
-					onAccount={ this.handleAccount }
-				/>
-				<div>
-					<R3MainTree
+			<R3CommonContext.Provider
+				value={ commonContext }
+			>
+				<React.Fragment>
+					<R3AppBar
+						theme={ this.props.theme }
 						r3provider={ this.r3provider }
 						title={ this.props.title }
 						enDock={ this.state.mainTreeEndock }
 						isDocking={ this.state.mainTreeDocked }
 						licensesObj={ this.licensesObj }
-						open={ this.state.mainTreeOpen }
-						tenants={ this.state.tenants }
-						treeList={ this.state.mainTree }
-						selectedTenant={ this.state.selected.tenant }
-						selectedType={ this.state.selected.type }
-						selectedService={ this.state.selected.service }
-						selectedPath={ this.state.selected.path }
-						onTenantChange={ this.handleTenantChange }
-						onTypeItemChange={ this.handleTypeChange }
-						onListItemChange={ this.handleListItemChange }
-						onNameItemInServiceChange={ this.handleNameItemInServiceChange }
-						onTypeInServiceChange={ this.handleTypeInServiceChange }
-						onListItemInServiceChange={ this.handleListItemInServiceChange }
-						onPopupClose={ this.handleTreePopupClose }
-						onTreeDocking={ this.handleTreeDocking }
+						onTreeDetach={ this.handleTreeDetach }
+						onOpenTree={ this.handleTreeOpen }
 						onCheckUpdating={ this.handleIsContentUpdating }
 						onAbout={ this.handleAbout }
+						onSign={ this.handleSign }
+						onAccount={ this.handleAccount }
 					/>
-					<div>
-						<R3Toolbar
+					<Box>
+						<R3MainTree
+							theme={ this.props.theme }
 							r3provider={ this.r3provider }
+							title={ this.props.title }
 							enDock={ this.state.mainTreeEndock }
-							toolbarData={ this.state.toolbarData }
-							onArrawUpward={ this.handleMoveToUpPath }
-							onCreatePath={ this.handleCreatePath }
-							onCheckPath={ this.handleCheckConflictPath }
-							onDeletePath={ this.handleDeletePath }
-							onCreateService={ this.handleCreateService }
-							onCreateServiceTenant={ this.handleCreateServiceTenant }
-							onCheckServiceName={ this.handleCheckConflictServiceName }
-							onDeleteService={ this.handleDeleteService }
+							isDocking={ this.state.mainTreeDocked }
+							licensesObj={ this.licensesObj }
+							open={ this.state.mainTreeOpen }
+							tenants={ this.state.tenants }
+							treeList={ this.state.mainTree }
+							selectedTenant={ this.state.selected.tenant }
+							selectedType={ this.state.selected.type }
+							selectedService={ this.state.selected.service }
+							selectedPath={ this.state.selected.path }
+							onTenantChange={ this.handleTenantChange }
+							onTypeItemChange={ this.handleTypeChange }
+							onListItemChange={ this.handleListItemChange }
+							onNameItemInServiceChange={ this.handleNameItemInServiceChange }
+							onTypeInServiceChange={ this.handleTypeInServiceChange }
+							onListItemInServiceChange={ this.handleListItemInServiceChange }
+							onPopupClose={ this.handleTreePopupClose }
+							onTreeDocking={ this.handleTreeDocking }
 							onCheckUpdating={ this.handleIsContentUpdating }
+							onAbout={ this.handleAbout }
 						/>
-						<R3MsgBox message={ this.state.message }/>
-						{ this.getContent() }
-					</div>
-				</div>
-				<R3AboutDialog
-					r3provider={ this.r3provider }
-					open={ this.state.aboutDialogOpen }
-					onClose={ this.handAboutDialogClose }
-					licensePackage={ this.state.licensePackage }
-					licenseType={ this.state.licenseType }
-					licenseText={ this.state.licenseText }
-				/>
-				<R3AccountDialog
-					r3provider={ this.r3provider }
-					open={ this.state.accountDialogOpen }
-					onClose={ this.handAccountDialogClose }
-					username={ this.state.username }
-					unscopedtoken={ this.state.unscopedtoken }
-				/>
-				<R3SigninDialog
-					r3provider={ this.r3provider }
-					open={ this.state.signinDialogOpen }
-					name={ null }
-					passphrase={ null }
-					message={ signinDialogMsg }
-					onClose={ this.handSignInDialogClose }
-				/>
-				<R3Progress
-					cbRefRegister={ this.cbRefRegister }
-				/>
-			</React.Fragment>
+						<Box>
+							<R3Toolbar
+								theme={ this.props.theme }
+								r3provider={ this.r3provider }
+								enDock={ this.state.mainTreeEndock }
+								toolbarData={ this.state.toolbarData }
+								onArrawUpward={ this.handleMoveToUpPath }
+								onCreatePath={ this.handleCreatePath }
+								onCheckPath={ this.handleCheckConflictPath }
+								onDeletePath={ this.handleDeletePath }
+								onCreateService={ this.handleCreateService }
+								onCreateServiceTenant={ this.handleCreateServiceTenant }
+								onCheckServiceName={ this.handleCheckConflictServiceName }
+								onDeleteService={ this.handleDeleteService }
+								onCheckUpdating={ this.handleIsContentUpdating }
+							/>
+							<R3MsgBox
+								theme={ this.props.theme }
+								message={ this.state.message }
+							/>
+							{ this.getContent() }
+						</Box>
+					</Box>
+					<R3AboutDialog
+						theme={ this.props.theme }
+						r3provider={ this.r3provider }
+						open={ this.state.aboutDialogOpen }
+						onClose={ this.handAboutDialogClose }
+						licensePackage={ this.state.licensePackage }
+						licenseType={ this.state.licenseType }
+						licenseText={ this.state.licenseText }
+					/>
+					<R3AccountDialog
+						theme={ this.props.theme }
+						r3provider={ this.r3provider }
+						open={ this.state.accountDialogOpen }
+						onClose={ this.handAccountDialogClose }
+						username={ this.state.username }
+						unscopedtoken={ this.state.unscopedtoken }
+					/>
+					<R3SigninDialog
+						theme={ this.props.theme }
+						r3provider={ this.r3provider }
+						open={ this.state.signinDialogOpen }
+						name={ null }
+						passphrase={ null }
+						message={ signinDialogMsg }
+						onClose={ this.handSignInDialogClose }
+					/>
+					<R3Progress
+						theme={ this.props.theme }
+						cbRefRegister={ this.cbRefRegister }
+					/>
+				</React.Fragment>
+			</R3CommonContext.Provider>
 		);
 	}
 }

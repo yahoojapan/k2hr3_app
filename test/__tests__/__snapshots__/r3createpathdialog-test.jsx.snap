@@ -3,7 +3,7 @@
 exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
 <
   aria-label="create path dialog"
-  className="MuiDialog-root R3CreatePathDialog-root-1 css-1h8td7x-MuiDialog-root"
+  className="MuiDialog-root css-1h8td7x-MuiDialog-root"
   closeAfterTransition={true}
   components={
     Object {
@@ -74,62 +74,64 @@ exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
       onMouseDown={[Function]}
     >
       <div
-        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-zfoovh-MuiPaper-root-MuiDialog-paper"
+        aria-labelledby=":r0:"
+        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3q99l0-MuiPaper-root-MuiDialog-paper"
         role="dialog"
       >
         <h2
-          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root R3CreatePathDialog-dialogTitle-2 css-bdhsul-MuiTypography-root-MuiDialogTitle-root"
+          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-5unaky-MuiTypography-root-MuiDialogTitle-root"
+          id=":r0:"
           label="create-path-dialog"
         >
           <span
-            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap R3CreatePathDialog-title-3 css-idtq1y-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-1h4f5vm-MuiTypography-root"
           >
             Create a new path
           </span>
         </h2>
         <div
-          className="MuiDialogContent-root R3CreatePathDialog-dialogContent-4 css-ypiqx9-MuiDialogContent-root"
+          className="MuiDialogContent-root css-ypiqx9-MuiDialogContent-root"
         >
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3CreatePathDialog-keyTitle-5 css-qxncr6-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
           >
             TENANT
           </span>
           <span
-            className="MuiTypography-root MuiTypography-body1 R3CreatePathDialog-value-6 css-nrdprl-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-body1 css-1n7958d-MuiTypography-root"
           >
             GROUP0:TENANT0
           </span>
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3CreatePathDialog-keyTitle-5 css-qxncr6-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
           >
             TYPE
           </span>
           <span
-            className="MuiTypography-root MuiTypography-body1 R3CreatePathDialog-value-6 css-nrdprl-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-body1 css-1n7958d-MuiTypography-root"
           >
             role
           </span>
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3CreatePathDialog-keyTitle-5 css-qxncr6-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
           >
             PARENT PATH
           </span>
           <span
-            className="MuiTypography-root MuiTypography-body1 R3CreatePathDialog-value-6 css-nrdprl-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-body1 css-1n7958d-MuiTypography-root"
           >
             /JEST_ROLE_PARENT_PATH
           </span>
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3CreatePathDialog-keyTitle-5 css-qxncr6-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
           >
             CREATE PATH
           </span>
           <div
-            className="MuiFormControl-root MuiTextField-root R3CreatePathDialog-textField-8 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+            className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3CreatePathDialog-inputTextField-9 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+              className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
@@ -156,7 +158,7 @@ exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
         >
           <button
             aria-label="cancel"
-            className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root R3CreatePathDialog-cancelButton-10 css-sghohy-MuiButtonBase-root-MuiButton-root"
+            className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-rypk7-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -177,7 +179,7 @@ exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
             CANCEL
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3CreatePathDialog-buttonIcon-12 css-i4bv87-MuiSvgIcon-root"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
               data-testid="CancelIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -189,7 +191,7 @@ exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
           </button>
           <button
             aria-label="ok"
-            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled R3CreatePathDialog-okButton-11 css-zcbmsk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
             disabled={true}
             onBlur={[Function]}
             onClick={[Function]}
@@ -210,7 +212,7 @@ exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
             OK
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3CreatePathDialog-buttonIcon-12 css-i4bv87-MuiSvgIcon-root"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
               data-testid="CheckCircleIcon"
               focusable="false"
               viewBox="0 0 24 24"

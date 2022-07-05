@@ -2,21 +2,21 @@
 
 exports[`R3Policy test snapshot for R3Policy 1`] = `
 <div
-  className="R3Policy-root-1"
+  className="MuiBox-root css-7wh13m"
 >
   <h6
-    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3Policy-subTitleTop-2 css-qxncr6-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-193s101-MuiTypography-root"
   >
     EFFECT
   </h6>
   <div
-    className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary R3Policy-effectSelect-4 css-4u4t8f-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+    className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary  css-cps3t7-MuiInputBase-root-MuiInput-root-MuiSelect-root"
     onClick={[Function]}
   >
     <div
       aria-expanded="false"
       aria-haspopup="listbox"
-      className="MuiSelect-select MuiSelect-standard MuiInput-input MuiInputBase-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+      className="MuiSelect-select MuiSelect-standard MuiInput-input MuiInputBase-input css-o1v3ls-MuiSelect-select-MuiInputBase-input-MuiInput-input"
       onBlur={[Function]}
       onFocus={[Function]}
       onKeyDown={[Function]}
@@ -37,7 +37,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     />
     <svg
       aria-hidden={true}
-      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-oatl8s-MuiSvgIcon-root-MuiSelect-icon"
       data-testid="ArrowDropDownIcon"
       focusable="false"
       viewBox="0 0 24 24"
@@ -48,7 +48,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     </svg>
   </div>
   <h6
-    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3Policy-subTitle-3 css-qxncr6-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1lxji1e-MuiTypography-root"
   >
     ACTION
   </h6>
@@ -56,10 +56,10 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     className="MuiFormGroup-root MuiFormGroup-row css-qfz70r-MuiFormGroup-root"
   >
     <label
-      className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd R3Policy-actionLeftLabel-6 css-j204z7-MuiFormControlLabel-root"
+      className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1trtd5n-MuiFormControlLabel-root"
     >
       <span
-        className="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked R3Policy-actionCheckbox-5 css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
+        className="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked css-rvqo66-MuiButtonBase-root-MuiCheckbox-root"
         onBlur={[Function]}
         onContextMenu={[Function]}
         onDragLeave={[Function]}
@@ -85,7 +85,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
         />
         <svg
           aria-hidden={true}
-          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
           data-testid="CheckBoxIcon"
           focusable="false"
           viewBox="0 0 24 24"
@@ -99,16 +99,16 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
         />
       </span>
       <p
-        className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap css-zq04ye-MuiTypography-root"
+        className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap css-dh0ypm-MuiTypography-root"
       >
         READ
       </p>
     </label>
     <label
-      className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd R3Policy-actionEndLabel-8 css-j204z7-MuiFormControlLabel-root"
+      className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1gwktea-MuiFormControlLabel-root"
     >
       <span
-        className="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root R3Policy-actionCheckbox-5 css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root"
+        className="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root css-rvqo66-MuiButtonBase-root-MuiCheckbox-root"
         onBlur={[Function]}
         onContextMenu={[Function]}
         onDragLeave={[Function]}
@@ -134,7 +134,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
         />
         <svg
           aria-hidden={true}
-          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
           data-testid="CheckBoxOutlineBlankIcon"
           focusable="false"
           viewBox="0 0 24 24"
@@ -148,25 +148,25 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
         />
       </span>
       <p
-        className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap css-zq04ye-MuiTypography-root"
+        className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap css-dh0ypm-MuiTypography-root"
       >
         WRITE
       </p>
     </label>
   </div>
   <h6
-    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3Policy-subTitle-3 css-qxncr6-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1lxji1e-MuiTypography-root"
   >
     RESOURCE(YRN)
   </h6>
   <div
-    className="R3Policy-enclosureElement-20"
+    className="MuiBox-root css-1wchkkw"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Policy-resourceTextField-9 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-5g4ojo-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3Policy-inputTextField-19 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -174,7 +174,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id="mui-1"
+          id=":r0:"
           name="policyResource_0"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -190,7 +190,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     <button
       aria-label="delete resource"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge R3Policy-deleteResourceButton-11 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-y1883s-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="delete-resource"
@@ -214,7 +214,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="ClearRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -229,13 +229,13 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     </button>
   </div>
   <div
-    className="R3Policy-enclosureElement-20"
+    className="MuiBox-root css-1wchkkw"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Policy-resourceTextField-9 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-5g4ojo-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3Policy-inputTextField-19 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -243,7 +243,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id="mui-3"
+          id=":r2:"
           name="resourceNew"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -259,7 +259,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     <button
       aria-label="add resource"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge R3Policy-addResourceButton-10 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-y1883s-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="add-resource"
@@ -283,7 +283,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="AddRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -298,18 +298,18 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     </button>
   </div>
   <h6
-    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap R3Policy-subTitle-3 css-qxncr6-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1lxji1e-MuiTypography-root"
   >
     ALIASES
   </h6>
   <div
-    className="R3Policy-enclosureElement-20"
+    className="MuiBox-root css-1wchkkw"
   >
     <div
-      className="MuiFormControl-root MuiTextField-root R3Policy-aliasTextField-13 css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      className="MuiFormControl-root MuiTextField-root css-gemud3-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl R3Policy-inputTextField-19 css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+        className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -317,7 +317,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           autoFocus={false}
           className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id="mui-5"
+          id=":r4:"
           name="aliasNew"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -333,7 +333,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     <button
       aria-label="add alias"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge R3Policy-addAliasButton-16 css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-huweep-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="add-alias"
@@ -357,7 +357,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
         data-testid="AddRoundedIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -372,11 +372,11 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     </button>
   </div>
   <div
-    className="R3FormButtons-root-21"
+    className="MuiBox-root css-1uc44nh"
   >
     <button
       aria-label="cancel"
-      className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled R3FormButtons-cancelButton-22 css-sghohy-MuiButtonBase-root-MuiButton-root"
+      className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-jkkg7s-MuiButtonBase-root-MuiButton-root"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -397,7 +397,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       CANCEL
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3FormButtons-buttonIcon-24 css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
         data-testid="CancelIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -409,7 +409,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     </button>
     <button
       aria-label="save"
-      className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled R3FormButtons-saveButton-23 css-zcbmsk-MuiButtonBase-root-MuiButton-root"
+      className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-ibc20f-MuiButtonBase-root-MuiButton-root"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -430,7 +430,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       SAVE
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium R3FormButtons-buttonIcon-24 css-i4bv87-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
         data-testid="CheckCircleIcon"
         focusable="false"
         viewBox="0 0 24 24"

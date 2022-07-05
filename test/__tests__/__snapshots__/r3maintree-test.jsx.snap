@@ -2,39 +2,41 @@
 
 exports[`R3MainTree test snapshot for R3MainTree 1`] = `
 <div
-  className="R3MainTree-dockedList-12"
+  className="MuiBox-root css-1odwksc"
 >
-  <div>
+  <div
+    className="MuiBox-root css-0"
+  >
     <header
-      className="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionStatic R3MainTree-subheaderAppbar-5 css-120r8wl-MuiPaper-root-MuiAppBar-root"
+      className="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionStatic css-16hd142-MuiPaper-root-MuiAppBar-root"
     >
       <div
-        className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-dense R3MainTree-subheaderToolbar-6 css-10ltm04-MuiToolbar-root"
+        className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-dense css-1uihimd-MuiToolbar-root"
       >
         <div
-          className="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-filledPrimary R3MainTree-chip-9 css-17tfht9-MuiChip-root"
+          className="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-filledPrimary css-z39qkz-MuiChip-root"
           onKeyDown={[Function]}
           onKeyUp={[Function]}
         >
           <span
-            className="MuiChip-label MuiChip-labelMedium css-6od3lo-MuiChip-label"
+            className="MuiChip-label MuiChip-labelMedium css-1dybbl5-MuiChip-label"
           >
             <span
-              className="MuiTypography-root MuiTypography-subtitle2 R3MainTree-chipText-10 css-1sr7afs-MuiTypography-root"
+              className="MuiTypography-root MuiTypography-subtitle2 css-1e1rx5x-MuiTypography-root"
             >
               TENANT
             </span>
           </span>
         </div>
         <span
-          className="MuiTypography-root MuiTypography-subtitle2 R3MainTree-tenantListText-2 css-1oowxap-MuiTypography-root"
+          className="MuiTypography-root MuiTypography-subtitle2 css-sfh5ez-MuiTypography-root"
         >
           GROUP0:TENANT0
         </span>
         <button
           aria-label="select tenant"
           aria-labelledby={null}
-          className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+          className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-1bn0rhl-MuiButtonBase-root-MuiIconButton-root"
           data-mui-internal-clone-element={true}
           disabled={false}
           label="select-tenant"
@@ -58,7 +60,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         >
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
             data-testid="MoreVertIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -78,9 +80,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
     className="MuiList-root css-1mk9mw3-MuiList-root"
     id="mainTree-top-list"
   >
-    <div>
+    <div
+      className="MuiBox-root css-0"
+    >
       <div
-        className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+        className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
         onBlur={[Function]}
         onClick={[Function]}
         onContextMenu={[Function]}
@@ -102,7 +106,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         >
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
             data-testid="LabelIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -113,20 +117,20 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           </svg>
         </div>
         <div
-          className="MuiListItemText-root R3MainTree-listItemText-17 css-tlelie-MuiListItemText-root"
+          className="MuiListItemText-root css-a3pi0z-MuiListItemText-root"
         >
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-1491uh5-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-vdp8n9-MuiTypography-root"
           >
             SERVICE
           </span>
         </div>
         <div
-          className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13 css-cveggr-MuiListItemIcon-root"
+          className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
         >
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
             data-testid="ExpandMoreIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -157,9 +161,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
             <div
               className="MuiList-root css-1mk9mw3-MuiList-root"
             >
-              <div>
+              <div
+                className="MuiBox-root css-0"
+              >
                 <div
-                  className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+                  className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onContextMenu={[Function]}
@@ -177,20 +183,20 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   tabIndex={0}
                 >
                   <div
-                    className="MuiListItemText-root R3MainTree-childListItemText-16 css-tlelie-MuiListItemText-root"
+                    className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                   >
                     <span
-                      className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-2siatx-MuiTypography-root"
+                      className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                     >
                       child_service
                     </span>
                   </div>
                   <div
-                    className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13 css-cveggr-MuiListItemIcon-root"
+                    className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
                   >
                     <svg
                       aria-hidden={true}
-                      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
                       data-testid="ExpandMoreIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
@@ -205,7 +211,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   />
                 </div>
                 <div
-                  className="MuiCollapse-root MuiCollapse-vertical R3MainTree-collapse-14 MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
+                  className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1ms8ro0-MuiCollapse-root"
                   style={
                     Object {
                       "minHeight": "0px",
@@ -221,9 +227,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                       <div
                         className="MuiList-root css-1mk9mw3-MuiList-root"
                       >
-                        <div>
+                        <div
+                          className="MuiBox-root css-0"
+                        >
                           <div
-                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
                             onBlur={[Function]}
                             onClick={[Function]}
                             onContextMenu={[Function]}
@@ -241,20 +249,20 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             tabIndex={0}
                           >
                             <div
-                              className="MuiListItemText-root R3MainTree-childListItemText-16 css-tlelie-MuiListItemText-root"
+                              className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                             >
                               <span
-                                className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-2siatx-MuiTypography-root"
+                                className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                               >
                                 ROLE
                               </span>
                             </div>
                             <div
-                              className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13 css-cveggr-MuiListItemIcon-root"
+                              className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
                             >
                               <svg
                                 aria-hidden={true}
-                                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
                                 data-testid="ExpandMoreIcon"
                                 focusable="false"
                                 viewBox="0 0 24 24"
@@ -269,7 +277,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             />
                           </div>
                           <div
-                            className="MuiCollapse-root MuiCollapse-vertical R3MainTree-collapse-14 MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
+                            className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1ms8ro0-MuiCollapse-root"
                             style={
                               Object {
                                 "minHeight": "0px",
@@ -285,9 +293,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                 <div
                                   className="MuiList-root css-1mk9mw3-MuiList-root"
                                 >
-                                  <div>
+                                  <div
+                                    className="MuiBox-root css-0"
+                                  >
                                     <div
-                                      className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+                                      className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
                                       onBlur={[Function]}
                                       onClick={[Function]}
                                       onContextMenu={[Function]}
@@ -305,10 +315,10 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                       tabIndex={0}
                                     >
                                       <div
-                                        className="MuiListItemText-root R3MainTree-childListItemText-16 css-tlelie-MuiListItemText-root"
+                                        className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                                       >
                                         <span
-                                          className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-2siatx-MuiTypography-root"
+                                          className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                                         >
                                           dummyservicerole
                                         </span>
@@ -323,9 +333,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             </div>
                           </div>
                         </div>
-                        <div>
+                        <div
+                          className="MuiBox-root css-0"
+                        >
                           <div
-                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
                             onBlur={[Function]}
                             onClick={[Function]}
                             onContextMenu={[Function]}
@@ -343,20 +355,20 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             tabIndex={0}
                           >
                             <div
-                              className="MuiListItemText-root R3MainTree-childListItemText-16 css-tlelie-MuiListItemText-root"
+                              className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                             >
                               <span
-                                className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-2siatx-MuiTypography-root"
+                                className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                               >
                                 RESOURCE
                               </span>
                             </div>
                             <div
-                              className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13 css-cveggr-MuiListItemIcon-root"
+                              className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
                             >
                               <svg
                                 aria-hidden={true}
-                                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
                                 data-testid="ExpandMoreIcon"
                                 focusable="false"
                                 viewBox="0 0 24 24"
@@ -371,7 +383,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             />
                           </div>
                           <div
-                            className="MuiCollapse-root MuiCollapse-vertical R3MainTree-collapse-14 MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
+                            className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1ms8ro0-MuiCollapse-root"
                             style={
                               Object {
                                 "minHeight": "0px",
@@ -387,9 +399,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                 <div
                                   className="MuiList-root css-1mk9mw3-MuiList-root"
                                 >
-                                  <div>
+                                  <div
+                                    className="MuiBox-root css-0"
+                                  >
                                     <div
-                                      className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+                                      className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
                                       onBlur={[Function]}
                                       onClick={[Function]}
                                       onContextMenu={[Function]}
@@ -407,10 +421,10 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                       tabIndex={0}
                                     >
                                       <div
-                                        className="MuiListItemText-root R3MainTree-childListItemText-16 css-tlelie-MuiListItemText-root"
+                                        className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                                       >
                                         <span
-                                          className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-2siatx-MuiTypography-root"
+                                          className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                                         >
                                           dummyserviceresource
                                         </span>
@@ -425,9 +439,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             </div>
                           </div>
                         </div>
-                        <div>
+                        <div
+                          className="MuiBox-root css-0"
+                        >
                           <div
-                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
                             onBlur={[Function]}
                             onClick={[Function]}
                             onContextMenu={[Function]}
@@ -445,20 +461,20 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             tabIndex={0}
                           >
                             <div
-                              className="MuiListItemText-root R3MainTree-childListItemText-16 css-tlelie-MuiListItemText-root"
+                              className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                             >
                               <span
-                                className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-2siatx-MuiTypography-root"
+                                className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                               >
                                 POLICY
                               </span>
                             </div>
                             <div
-                              className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13 css-cveggr-MuiListItemIcon-root"
+                              className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
                             >
                               <svg
                                 aria-hidden={true}
-                                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
                                 data-testid="ExpandMoreIcon"
                                 focusable="false"
                                 viewBox="0 0 24 24"
@@ -473,7 +489,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             />
                           </div>
                           <div
-                            className="MuiCollapse-root MuiCollapse-vertical R3MainTree-collapse-14 MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
+                            className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1ms8ro0-MuiCollapse-root"
                             style={
                               Object {
                                 "minHeight": "0px",
@@ -489,9 +505,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                 <div
                                   className="MuiList-root css-1mk9mw3-MuiList-root"
                                 >
-                                  <div>
+                                  <div
+                                    className="MuiBox-root css-0"
+                                  >
                                     <div
-                                      className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+                                      className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
                                       onBlur={[Function]}
                                       onClick={[Function]}
                                       onContextMenu={[Function]}
@@ -509,10 +527,10 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                       tabIndex={0}
                                     >
                                       <div
-                                        className="MuiListItemText-root R3MainTree-childListItemText-16 css-tlelie-MuiListItemText-root"
+                                        className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                                       >
                                         <span
-                                          className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-2siatx-MuiTypography-root"
+                                          className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                                         >
                                           dummyservicepolicy
                                         </span>
@@ -537,9 +555,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         </div>
       </div>
     </div>
-    <div>
+    <div
+      className="MuiBox-root css-0"
+    >
       <div
-        className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+        className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
         onBlur={[Function]}
         onClick={[Function]}
         onContextMenu={[Function]}
@@ -561,7 +581,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         >
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
             data-testid="LabelIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -572,20 +592,20 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           </svg>
         </div>
         <div
-          className="MuiListItemText-root R3MainTree-listItemText-17 css-tlelie-MuiListItemText-root"
+          className="MuiListItemText-root css-a3pi0z-MuiListItemText-root"
         >
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-1491uh5-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-vdp8n9-MuiTypography-root"
           >
             ROLE
           </span>
         </div>
         <div
-          className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13 css-cveggr-MuiListItemIcon-root"
+          className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
         >
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
             data-testid="ExpandMoreIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -616,9 +636,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
             <div
               className="MuiList-root css-1mk9mw3-MuiList-root"
             >
-              <div>
+              <div
+                className="MuiBox-root css-0"
+              >
                 <div
-                  className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+                  className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onContextMenu={[Function]}
@@ -636,20 +658,20 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   tabIndex={0}
                 >
                   <div
-                    className="MuiListItemText-root R3MainTree-childListItemText-16 css-tlelie-MuiListItemText-root"
+                    className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                   >
                     <span
-                      className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-2siatx-MuiTypography-root"
+                      className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                     >
                       dummyrole
                     </span>
                   </div>
                   <div
-                    className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13 css-cveggr-MuiListItemIcon-root"
+                    className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
                   >
                     <svg
                       aria-hidden={true}
-                      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
                       data-testid="ExpandMoreIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
@@ -664,7 +686,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   />
                 </div>
                 <div
-                  className="MuiCollapse-root MuiCollapse-vertical R3MainTree-collapse-14 MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
+                  className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1ms8ro0-MuiCollapse-root"
                   style={
                     Object {
                       "minHeight": "0px",
@@ -680,9 +702,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                       <div
                         className="MuiList-root css-1mk9mw3-MuiList-root"
                       >
-                        <div>
+                        <div
+                          className="MuiBox-root css-0"
+                        >
                           <div
-                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
                             onBlur={[Function]}
                             onClick={[Function]}
                             onContextMenu={[Function]}
@@ -700,10 +724,10 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             tabIndex={0}
                           >
                             <div
-                              className="MuiListItemText-root R3MainTree-childListItemText-16 css-tlelie-MuiListItemText-root"
+                              className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                             >
                               <span
-                                className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-2siatx-MuiTypography-root"
+                                className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                               >
                                 dummysubrole
                               </span>
@@ -723,9 +747,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         </div>
       </div>
     </div>
-    <div>
+    <div
+      className="MuiBox-root css-0"
+    >
       <div
-        className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+        className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
         onBlur={[Function]}
         onClick={[Function]}
         onContextMenu={[Function]}
@@ -747,7 +773,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         >
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
             data-testid="LabelIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -758,20 +784,20 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           </svg>
         </div>
         <div
-          className="MuiListItemText-root R3MainTree-listItemText-17 css-tlelie-MuiListItemText-root"
+          className="MuiListItemText-root css-a3pi0z-MuiListItemText-root"
         >
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-1491uh5-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-vdp8n9-MuiTypography-root"
           >
             RESOURCE
           </span>
         </div>
         <div
-          className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13 css-cveggr-MuiListItemIcon-root"
+          className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
         >
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
             data-testid="ExpandMoreIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -802,9 +828,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
             <div
               className="MuiList-root css-1mk9mw3-MuiList-root"
             >
-              <div>
+              <div
+                className="MuiBox-root css-0"
+              >
                 <div
-                  className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+                  className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onContextMenu={[Function]}
@@ -822,20 +850,20 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   tabIndex={0}
                 >
                   <div
-                    className="MuiListItemText-root R3MainTree-childListItemText-16 css-tlelie-MuiListItemText-root"
+                    className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                   >
                     <span
-                      className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-2siatx-MuiTypography-root"
+                      className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                     >
                       dummyresource
                     </span>
                   </div>
                   <div
-                    className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13 css-cveggr-MuiListItemIcon-root"
+                    className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
                   >
                     <svg
                       aria-hidden={true}
-                      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
                       data-testid="ExpandMoreIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
@@ -850,7 +878,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   />
                 </div>
                 <div
-                  className="MuiCollapse-root MuiCollapse-vertical R3MainTree-collapse-14 MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
+                  className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1ms8ro0-MuiCollapse-root"
                   style={
                     Object {
                       "minHeight": "0px",
@@ -866,9 +894,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                       <div
                         className="MuiList-root css-1mk9mw3-MuiList-root"
                       >
-                        <div>
+                        <div
+                          className="MuiBox-root css-0"
+                        >
                           <div
-                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
                             onBlur={[Function]}
                             onClick={[Function]}
                             onContextMenu={[Function]}
@@ -886,10 +916,10 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             tabIndex={0}
                           >
                             <div
-                              className="MuiListItemText-root R3MainTree-childListItemText-16 css-tlelie-MuiListItemText-root"
+                              className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                             >
                               <span
-                                className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-2siatx-MuiTypography-root"
+                                className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                               >
                                 dummysubresource
                               </span>
@@ -909,9 +939,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         </div>
       </div>
     </div>
-    <div>
+    <div
+      className="MuiBox-root css-0"
+    >
       <div
-        className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+        className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
         onBlur={[Function]}
         onClick={[Function]}
         onContextMenu={[Function]}
@@ -933,7 +965,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         >
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
             data-testid="LabelIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -944,20 +976,20 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           </svg>
         </div>
         <div
-          className="MuiListItemText-root R3MainTree-listItemText-17 css-tlelie-MuiListItemText-root"
+          className="MuiListItemText-root css-a3pi0z-MuiListItemText-root"
         >
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-1491uh5-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-vdp8n9-MuiTypography-root"
           >
             POLICY
           </span>
         </div>
         <div
-          className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13 css-cveggr-MuiListItemIcon-root"
+          className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
         >
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
             data-testid="ExpandMoreIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -988,9 +1020,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
             <div
               className="MuiList-root css-1mk9mw3-MuiList-root"
             >
-              <div>
+              <div
+                className="MuiBox-root css-0"
+              >
                 <div
-                  className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+                  className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onContextMenu={[Function]}
@@ -1008,20 +1042,20 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   tabIndex={0}
                 >
                   <div
-                    className="MuiListItemText-root R3MainTree-childListItemText-16 css-tlelie-MuiListItemText-root"
+                    className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                   >
                     <span
-                      className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-2siatx-MuiTypography-root"
+                      className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                     >
                       dummypolicy
                     </span>
                   </div>
                   <div
-                    className="MuiListItemIcon-root R3MainTree-expandListItemIcon-13 css-cveggr-MuiListItemIcon-root"
+                    className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
                   >
                     <svg
                       aria-hidden={true}
-                      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
                       data-testid="ExpandMoreIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
@@ -1036,7 +1070,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   />
                 </div>
                 <div
-                  className="MuiCollapse-root MuiCollapse-vertical R3MainTree-collapse-14 MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
+                  className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1ms8ro0-MuiCollapse-root"
                   style={
                     Object {
                       "minHeight": "0px",
@@ -1052,9 +1086,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                       <div
                         className="MuiList-root css-1mk9mw3-MuiList-root"
                       >
-                        <div>
+                        <div
+                          className="MuiBox-root css-0"
+                        >
                           <div
-                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-bshv44-MuiButtonBase-root-MuiListItem-root"
+                            className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-button css-vkky5v-MuiButtonBase-root-MuiListItem-root"
                             onBlur={[Function]}
                             onClick={[Function]}
                             onContextMenu={[Function]}
@@ -1072,10 +1108,10 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             tabIndex={0}
                           >
                             <div
-                              className="MuiListItemText-root R3MainTree-childListItemText-16 css-tlelie-MuiListItemText-root"
+                              className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                             >
                               <span
-                                className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-2siatx-MuiTypography-root"
+                                className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                               >
                                 dummysubpolicy
                               </span>

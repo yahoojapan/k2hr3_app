@@ -23,12 +23,11 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import TextField					from '@mui/material/TextField';
 import Typography					from '@mui/material/Typography';
 import IconButton					from '@mui/material/IconButton';
 import Tooltip						from '@mui/material/Tooltip';
+import Box							from '@mui/material/Box';
 import DeleteIcon					from '@mui/icons-material/ClearRounded';
 import AddIcon						from '@mui/icons-material/AddRounded';
 import UpIcon						from '@mui/icons-material/ArrowUpwardRounded';
@@ -76,14 +75,8 @@ const roleComponentValues = {
 //
 // Role Contents Class
 //
-@withTheme
-@withStyles(r3Role)
 export default class R3Role extends React.Component
 {
-	static contextTypes = {
-		r3Context:	PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		r3provider:	PropTypes.object.isRequired,
 		role:		PropTypes.object.isRequired,
@@ -116,6 +109,9 @@ export default class R3Role extends React.Component
 		this.handleAddPoliciesChange	= this.handleAddPoliciesChange.bind(this);
 		this.handleAliasesChange		= this.handleAliasesChange.bind(this);
 		this.handleAddAliasesChange		= this.handleAddAliasesChange.bind(this);
+
+		// styles
+		this.sxClasses					= r3Role(props.theme);
 	}
 
 	componentDidMount()
@@ -1155,7 +1151,7 @@ export default class R3Role extends React.Component
 
 	getHostnameContents()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(r3IsEmptyEntity(this.state.localHostnames) || !(this.state.localHostnames instanceof Array)){
 			return;
@@ -1174,7 +1170,7 @@ export default class R3Role extends React.Component
 					<IconButton
 						disabled={ true }
 						{ ...theme.r3Role.deleteHostnameButton }
-						className={ classes.deleteInvisibleHostnameButton }
+						sx={ this.sxClasses.deleteInvisibleHostnameButton }
 						size="large"
 					>
 						<DeleteIcon />
@@ -1191,7 +1187,7 @@ export default class R3Role extends React.Component
 							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deleteHostnameTooltip, pos) }
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deleteHostnameTooltip, -1) }
 							{ ...theme.r3Role.deleteHostnameButton }
-							className={ classes.deleteHostnameButton }
+							sx={ this.sxClasses.deleteHostnameButton }
 							size="large"
 						>
 							<DeleteIcon />
@@ -1205,14 +1201,14 @@ export default class R3Role extends React.Component
 				inputProps = {};
 			}else{
 				inputProps = {
-					className: classes.inputTextField
+					sx: this.sxClasses.inputTextField
 				};
 			}
 
 			elementArray.push(
-				<div
+				<Box
 					key={ pos }
-					className={ classes.enclosureElement }
+					sx={ this.sxClasses.enclosureElement }
 				>
 					<TextField
 						name={ roleComponentValues.hostnameTextFieldNamePrefix + String(pos) }
@@ -1222,7 +1218,7 @@ export default class R3Role extends React.Component
 						onChange={ (event) => this.handleHostsChange(event, actionTypeHostName, pos) }
 						InputProps={ inputProps }
 						{ ...theme.r3Role.hostnameTextField }
-						className={ classes.hostnameTextField }
+						sx={ this.sxClasses.hostnameTextField }
 					/>
 					<TextField
 						name={ roleComponentValues.hostnameAUXTextFieldNamePrefix + String(pos) }
@@ -1232,10 +1228,10 @@ export default class R3Role extends React.Component
 						onChange={ (event) => this.handleHostsChange(event, actionTypeHostAuxiliary, pos) }
 						InputProps={ inputProps }
 						{ ...theme.r3Role.hostnameAUXTextField }
-						className={ classes.hostnameAUXTextField }
+						sx={ this.sxClasses.hostnameAUXTextField }
 					/>
 					{ deleteButton }
-				</div>
+				</Box>
 			);
 		});
 
@@ -1248,33 +1244,33 @@ export default class R3Role extends React.Component
 
 	getAddHostnameContents()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(this.props.isReadMode){
 			return;
 		}
 
 		return (
-			<div
-				className={ classes.enclosureElement }
+			<Box
+				sx={ this.sxClasses.enclosureElement }
 			>
 				<TextField
 					name={ roleComponentValues.hostnameNewTextFieldName }
 					value={ this.state.addHostName }
 					placeholder={ r3provider.getR3TextRes().tResRoleHostnameHint }
 					onChange={ (event) => this.handleAddHostsChange(event, actionTypeHostName) }
-					InputProps={{ className: classes.inputTextField }}
+					InputProps={{ sx: this.sxClasses.inputTextField }}
 					{ ...theme.r3Role.hostnameTextField }
-					className={ classes.hostnameTextField }
+					sx={ this.sxClasses.hostnameTextField }
 				/>
 				<TextField
 					name={ roleComponentValues.hostnameAUXNewTextFieldName }
 					value={ this.state.addAuxiliary }
 					placeholder={ r3provider.getR3TextRes().tResRoleHostnameAUXHint }
 					onChange={ (event) => this.handleAddHostsChange(event, actionTypeHostAuxiliary) }
-					InputProps={{ className: classes.inputTextField }}
+					InputProps={{ sx: this.sxClasses.inputTextField }}
 					{ ...theme.r3Role.hostnameAUXTextField }
-					className={ classes.hostnameAUXTextField }
+					sx={ this.sxClasses.hostnameAUXTextField }
 				/>
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResRoleHostnameAddTT }
@@ -1285,19 +1281,19 @@ export default class R3Role extends React.Component
 						onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.addHostnameTooltip, true) }
 						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addHostnameTooltip, false) }
 						{ ...theme.r3Role.addHostnameButton }
-						className={ classes.addHostnameButton }
+						sx={ this.sxClasses.addHostnameButton }
 						size="large"
 					>
 						<AddIcon />
 					</IconButton>
 				</Tooltip>
-			</div>
+			</Box>
 		);
 	}
 
 	getIpAddressContents()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(r3IsEmptyEntity(this.state.localIps) || !(this.state.localIps instanceof Array)){
 			return;
@@ -1316,7 +1312,7 @@ export default class R3Role extends React.Component
 					<IconButton
 						disabled={ true }
 						{ ...theme.r3Role.deleteIpButton }
-						className={ classes.deleteInvisibleIpButton }
+						sx={ this.sxClasses.deleteInvisibleIpButton }
 						size="large"
 					>
 						<DeleteIcon />
@@ -1333,7 +1329,7 @@ export default class R3Role extends React.Component
 							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deleteIpTooltip, pos) }
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deleteIpTooltip, -1) }
 							{ ...theme.r3Role.deleteIpButton }
-							className={ classes.deleteIpButton }
+							sx={ this.sxClasses.deleteIpButton }
 							size="large"
 						>
 							<DeleteIcon />
@@ -1346,26 +1342,26 @@ export default class R3Role extends React.Component
 			// IP address is always disable
 			//
 			elementArray.push(
-				<div
+				<Box
 					key={ pos }
-					className={ classes.enclosureElement }
+					sx={ this.sxClasses.enclosureElement }
 				>
 					<TextField
 						name={ roleComponentValues.ipTextFieldNamePrefix + String(pos) }
 						value={ ip }
 						disabled={ true }
 						{ ...theme.r3Role.ipTextField }
-						className={ classes.ipTextField }
+						sx={ this.sxClasses.ipTextField }
 					/>
 					<TextField
 						name={ roleComponentValues.ipAUXTextFieldNamePrefix + String(pos) }
 						value={ axiliary }
 						disabled={ true }
 						{ ...theme.r3Role.ipAUXTextField }
-						className={ classes.ipAUXTextField }
+						sx={ this.sxClasses.ipAUXTextField }
 					/>
 					{ deleteButton }
-				</div>
+				</Box>
 			);
 		});
 
@@ -1378,7 +1374,7 @@ export default class R3Role extends React.Component
 
 	getPolicyContents(items)
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(!r3IsSafeTypedEntity(items, 'array')){
 			return;
@@ -1393,7 +1389,7 @@ export default class R3Role extends React.Component
 					<IconButton
 						disabled={ true }
 						{ ...theme.r3Role.deletePolicyButton }
-						className={ classes.deleteInvisiblePolicyButton }
+						sx={ this.sxClasses.deleteInvisiblePolicyButton }
 						size="large"
 					>
 						<DeleteIcon />
@@ -1410,7 +1406,7 @@ export default class R3Role extends React.Component
 							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deletePolicyTooltip, pos) }
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deletePolicyTooltip, -1) }
 							{ ...theme.r3Role.deletePolicyButton }
-							className={ classes.deletePolicyButton }
+							sx={ this.sxClasses.deletePolicyButton }
 							size="large"
 						>
 							<DeleteIcon />
@@ -1424,14 +1420,14 @@ export default class R3Role extends React.Component
 				inputProps = {};
 			}else{
 				inputProps = {
-					className: classes.inputTextField
+					sx: this.sxClasses.inputTextField
 				};
 			}
 
 			return (
-				<div
+				<Box
 					key={ pos }
-					className={ classes.enclosureElement }
+					sx={ this.sxClasses.enclosureElement }
 				>
 					<TextField
 						name={ roleComponentValues.policyTextFieldNamePrefix + String(pos) }
@@ -1441,34 +1437,34 @@ export default class R3Role extends React.Component
 						onChange={ (event) => this.handlePoliciesChange(event, actionTypeValue, pos) }
 						InputProps={ inputProps }
 						{ ...theme.r3Role.policyTextField }
-						className={ classes.policyTextField }
+						sx={ this.sxClasses.policyTextField }
 					/>
 					{ deleteButton }
-				</div>
+				</Box>
 			);
 		});
 	}
 
 	getAddPolicyContents()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(this.props.isReadMode){
 			return;
 		}
 
 		return (
-			<div
-				className={ classes.enclosureElement }
+			<Box
+				sx={ this.sxClasses.enclosureElement }
 			>
 				<TextField
 					name={ roleComponentValues.policyNewTextFieldName }
 					value={ this.state.addPolicies }
 					placeholder={ r3provider.getR3TextRes().tResRolePolicyHint }
 					onChange={ (event) => this.handleAddPoliciesChange(event) }
-					InputProps={{ className: classes.inputTextField }}
+					InputProps={{ sx: this.sxClasses.inputTextField }}
 					{ ...theme.r3Role.policyTextField }
-					className={ classes.policyTextField }
+					sx={ this.sxClasses.policyTextField }
 				/>
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResRolePolicyAddTT }
@@ -1479,19 +1475,19 @@ export default class R3Role extends React.Component
 						onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.addPolicyTooltip, true) }
 						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addPolicyTooltip, false) }
 						{ ...theme.r3Role.addPolicyButton }
-						className={ classes.addPolicyButton }
+						sx={ this.sxClasses.addPolicyButton }
 						size="large"
 					>
 						<AddIcon />
 					</IconButton>
 				</Tooltip>
-			</div>
+			</Box>
 		);
 	}
 
 	getAliasContents(items)
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(!r3IsSafeTypedEntity(items, 'array')){
 			return;
@@ -1506,7 +1502,7 @@ export default class R3Role extends React.Component
 					<IconButton
 						disabled={ true }
 						{ ...theme.r3Role.downAliasButton }
-						className={ classes.arrowInvisibleAliasButton }
+						sx={ this.sxClasses.arrowInvisibleAliasButton }
 						size="large"
 					>
 						<DownIcon />
@@ -1523,7 +1519,7 @@ export default class R3Role extends React.Component
 							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.downAliasTooltip, pos) }
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.downAliasTooltip, -1) }
 							{ ...theme.r3Role.downAliasButton }
-							className={ classes.arrowAliasButton }
+							sx={ this.sxClasses.arrowAliasButton }
 							size="large"
 						>
 							<DownIcon />
@@ -1538,7 +1534,7 @@ export default class R3Role extends React.Component
 					<IconButton
 						disabled={ true }
 						{ ...theme.r3Role.upAliasButton }
-						className={ classes.arrowInvisibleAliasButton }
+						sx={ this.sxClasses.arrowInvisibleAliasButton }
 						size="large"
 					>
 						<UpIcon />
@@ -1555,7 +1551,7 @@ export default class R3Role extends React.Component
 							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.upAliasTooltip, pos) }
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.upAliasTooltip, -1) }
 							{ ...theme.r3Role.upAliasButton }
-							className={ classes.arrowAliasButton }
+							sx={ this.sxClasses.arrowAliasButton }
 							size="large"
 						>
 							<UpIcon />
@@ -1570,7 +1566,7 @@ export default class R3Role extends React.Component
 					<IconButton
 						disabled={ true }
 						{ ...theme.r3Role.deleteAliasButton }
-						className={ classes.deleteInvisibleAliasButton }
+						sx={ this.sxClasses.deleteInvisibleAliasButton }
 						size="large"
 					>
 						<DeleteIcon />
@@ -1587,7 +1583,7 @@ export default class R3Role extends React.Component
 							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deleteAliasTooltip, pos) }
 							onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deleteAliasTooltip, -1) }
 							{ ...theme.r3Role.deleteAliasButton }
-							className={ classes.deleteAliasButton }
+							sx={ this.sxClasses.deleteAliasButton }
 							size="large"
 						>
 							<DeleteIcon />
@@ -1601,14 +1597,14 @@ export default class R3Role extends React.Component
 				inputProps = {};
 			}else{
 				inputProps = {
-					className: classes.inputTextField
+					sx: this.sxClasses.inputTextField
 				};
 			}
 
 			return (
-				<div
+				<Box
 					key={ pos }
-					className={ classes.enclosureElement }
+					sx={ this.sxClasses.enclosureElement }
 				>
 					<TextField
 						name={ roleComponentValues.aliasTextFieldNamePrefix + String(pos) }
@@ -1618,36 +1614,36 @@ export default class R3Role extends React.Component
 						onChange={ (event) => this.handleAliasesChange(event, actionTypeValue, pos) }
 						InputProps={ inputProps }
 						{ ...theme.r3Role.aliasTextField }
-						className={ classes.aliasTextField }
+						sx={ this.sxClasses.aliasTextField }
 					/>
 					{ downButton }
 					{ upButton }
 					{ deleteButton }
-				</div>
+				</Box>
 			);
 		});
 	}
 
 	getAddAliasContents()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(this.props.isReadMode){
 			return;
 		}
 
 		return (
-			<div
-				className={ classes.enclosureElement }
+			<Box
+				sx={ this.sxClasses.enclosureElement }
 			>
 				<TextField
 					name={ roleComponentValues.aliasNewTextFieldName }
 					value={ this.state.addAliases }
 					placeholder={ r3provider.getR3TextRes().tResAliasHint }
 					onChange={ (event) => this.handleAddAliasesChange(event) }
-					InputProps={{ className: classes.inputTextField }}
+					InputProps={{ sx: this.sxClasses.inputTextField }}
 					{ ...theme.r3Role.aliasTextField }
-					className={ classes.aliasTextField }
+					sx={ this.sxClasses.aliasTextField }
 				/>
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResAliasAddTT }
@@ -1658,13 +1654,13 @@ export default class R3Role extends React.Component
 						onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.addAliasTooltip, true) }
 						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.addAliasTooltip, false) }
 						{ ...theme.r3Role.addAliasButton }
-						className={ classes.addAliasButton }
+						sx={ this.sxClasses.addAliasButton }
 						size="large"
 					>
 						<AddIcon />
 					</IconButton>
 				</Tooltip>
-			</div>
+			</Box>
 		);
 	}
 
@@ -1672,27 +1668,27 @@ export default class R3Role extends React.Component
 	{
 		console.info('CALL : role:render()');
 
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		return (
-			<div
-				className={ classes.root }
+			<Box
+				sx={ this.sxClasses.root }
 			>
 				<Typography
 					{ ...theme.r3Role.subTitle }
-					className={ classes.subTitleTop }
+					sx={ this.sxClasses.subTitleTop }
 				>
 					{ r3provider.getR3TextRes().tResRoleHostnamesSubTitle }
 				</Typography>
 				<Typography
 					{ ...theme.r3Role.hostnameSubTitle }
-					className={ classes.hostnameSubTitle }
+					sx={ this.sxClasses.hostnameSubTitle }
 				>
 					{ r3provider.getR3TextRes().tResRoleHostnameLabel }
 				</Typography>
 				<Typography
 					{ ...theme.r3Role.hostnameAUXSubTitle }
-					className={ classes.hostnameAUXSubTitle }
+					sx={ this.sxClasses.hostnameAUXSubTitle }
 				>
 					{ r3provider.getR3TextRes().tResRoleAUXLabel }
 				</Typography>
@@ -1701,19 +1697,19 @@ export default class R3Role extends React.Component
 
 				<Typography
 					{ ...theme.r3Role.subTitle }
-					className={ classes.subTitle }
+					sx={ this.sxClasses.subTitle }
 				>
 					{ r3provider.getR3TextRes().tResRoleIpsSubTitle }
 				</Typography>
 				<Typography
 					{ ...theme.r3Role.ipSubTitle }
-					className={ classes.ipSubTitle }
+					sx={ this.sxClasses.ipSubTitle }
 				>
 					{ r3provider.getR3TextRes().tResRoleIpLabel }
 				</Typography>
 				<Typography
 					{ ...theme.r3Role.ipAUXSubTitle }
-					className={ classes.ipAUXSubTitle }
+					sx={ this.sxClasses.ipAUXSubTitle }
 				>
 					{ r3provider.getR3TextRes().tResRoleAUXLabel }
 				</Typography>
@@ -1721,7 +1717,7 @@ export default class R3Role extends React.Component
 
 				<Typography
 					{ ...theme.r3Role.subTitle }
-					className={ classes.subTitle }
+					sx={ this.sxClasses.subTitle }
 				>
 					{ r3provider.getR3TextRes().tResRolePoliciesSubTitle }
 				</Typography>
@@ -1730,7 +1726,7 @@ export default class R3Role extends React.Component
 
 				<Typography
 					{ ...theme.r3Role.subTitle }
-					className={ classes.subTitle }
+					sx={ this.sxClasses.subTitle }
 				>
 					{ r3provider.getR3TextRes().tResAliasSubTitle }
 				</Typography>
@@ -1738,6 +1734,7 @@ export default class R3Role extends React.Component
 				{ this.getAddAliasContents() }
 
 				<R3FormButtons
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					status={ this.state.changed }
 					onSave={ this.handleSave }
@@ -1745,6 +1742,7 @@ export default class R3Role extends React.Component
 				/>
 
 				<R3PopupMsgDialog
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					title={ this.props.r3provider.getR3TextRes().cUpdatingTitle }
 					r3Message={ this.state.confirmMessageObject }
@@ -1752,11 +1750,12 @@ export default class R3Role extends React.Component
 					onClose={ this.handleConfirmDialogClose }
 				/>
 				<R3PopupMsgDialog
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					r3Message={ this.state.messageDialogObject }
 					onClose={ this.handleMessageDialogClose }
 				/>
-			</div>
+			</Box>
 		);
 	}
 }

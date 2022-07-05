@@ -23,8 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import Button						from '@mui/material/Button';
 import Dialog						from '@mui/material/Dialog';
 import DialogTitle					from '@mui/material/DialogTitle';
@@ -43,14 +41,8 @@ import { r3PopupMsgDialog }			from './r3styles';
 //
 // Popup Message Dialog Class
 //
-@withTheme
-@withStyles(r3PopupMsgDialog)
 export default class R3PopupMsgDialog extends React.Component
 {
-	static contextTypes = {
-		r3Context:		PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		r3provider:		PropTypes.object.isRequired,
 		title:			PropTypes.string,
@@ -71,32 +63,35 @@ export default class R3PopupMsgDialog extends React.Component
 	constructor(props)
 	{
 		super(props);
+
+		// styles
+		this.sxClasses = r3PopupMsgDialog(props.theme);
 	}
 
 	getIcon()
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		let	icon;
 		if(null !== this.props.r3Message && this.props.r3Message.isErrorType()){
 			icon = (
 				<ErrorIcon
 					{ ...theme.r3PopupMsgDialog.errorIcon }
-					className={ classes.errorIcon }
+					sx={ this.sxClasses.errorIcon }
 				/>
 			);
 		}else if(null !== this.props.r3Message && this.props.r3Message.isWarningType()){
 			icon = (
 				<WarningIcon
 					{ ...theme.r3PopupMsgDialog.warningIcon }
-					className={ classes.warningIcon }
+					sx={ this.sxClasses.warningIcon }
 				/>
 			);
 		}else{	// this.props.r3Message.isInfoType()
 			icon = (
 				<InformationIcon
 					{ ...theme.r3PopupMsgDialog.informationIcon }
-					className={ classes.informationIcon }
+					sx={ this.sxClasses.informationIcon }
 				/>
 			);
 		}
@@ -105,7 +100,7 @@ export default class R3PopupMsgDialog extends React.Component
 
 	getContentText()
 	{
-		const { theme, classes } = this.props;
+		const { theme } = this.props;
 
 		let	text		= (null === this.props.r3Message ? '' : this.props.r3Message.getMessage());
 		let	contentText;
@@ -113,7 +108,7 @@ export default class R3PopupMsgDialog extends React.Component
 			contentText = (
 				<DialogContentText
 					{ ...theme.r3PopupMsgDialog.dialogErrorContentText }
-					className={ classes.dialogErrorContentText }
+					sx={ this.sxClasses.dialogErrorContentText }
 				>
 					{ text }
 				</DialogContentText>
@@ -122,7 +117,7 @@ export default class R3PopupMsgDialog extends React.Component
 			contentText = (
 				<DialogContentText
 					{ ...theme.r3PopupMsgDialog.dialogWarningContentText }
-					className={ classes.dialogWarningContentText }
+					sx={ this.sxClasses.dialogWarningContentText }
 				>
 					{ text }
 				</DialogContentText>
@@ -131,7 +126,7 @@ export default class R3PopupMsgDialog extends React.Component
 			contentText = (
 				<DialogContentText
 					{ ...theme.r3PopupMsgDialog.dialogInformationContentText }
-					className={ classes.dialogInformationContentText }
+					sx={ this.sxClasses.dialogInformationContentText }
 				>
 					{ text }
 				</DialogContentText>
@@ -143,17 +138,17 @@ export default class R3PopupMsgDialog extends React.Component
 	getCancelButtons()
 	{
 		if(this.props.twoButton){
-			const { theme, classes, r3provider } = this.props;
+			const { theme, r3provider } = this.props;
 
 			return (
 				<Button
 					onClick={ (event) => { if(null !== this.props.onClose){ this.props.onClose(event, null, false); } } }
 					{ ...theme.r3PopupMsgDialog.cancelButton }
-					className={ classes.cancelButton }
+					sx={ this.sxClasses.cancelButton }
 				>
 					{ r3provider.getR3TextRes().tResButtonCancel }
 					<CancelIcon
-						className={ classes.buttonIcon }
+						sx={ this.sxClasses.buttonIcon }
 					/>
 				</Button>
 			);
@@ -162,7 +157,7 @@ export default class R3PopupMsgDialog extends React.Component
 
 	getPrimaryButtons()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	buttonLabel;
 		if(this.props.twoButton){
@@ -175,11 +170,11 @@ export default class R3PopupMsgDialog extends React.Component
 			<Button
 				onClick={ (event) => { if(null !== this.props.onClose){ this.props.onClose(event, null, true); } } }
 				{ ...theme.r3PopupMsgDialog.primaryButton }
-				className={ classes.primaryButton }
+				sx={ this.sxClasses.primaryButton }
 			>
 				{ buttonLabel }
 				<CheckCircleIcon
-					className={ classes.buttonIcon }
+					sx={ this.sxClasses.buttonIcon }
 				/>
 			</Button>
 		);
@@ -187,7 +182,7 @@ export default class R3PopupMsgDialog extends React.Component
 
 	render()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	titleText;
 		if(null !== this.props.title){
@@ -203,22 +198,22 @@ export default class R3PopupMsgDialog extends React.Component
 				open={ (null !== this.props.r3Message) }
 				onClose={ (event, reason) => { if(null !== this.props.onClose){ this.props.onClose(event, reason, true); } } }
 				{ ...theme.r3PopupMsgDialog.root }
-				className={ classes.root }
+				sx={ this.sxClasses.root }
 			>
 				<DialogTitle
 					{ ...theme.r3PopupMsgDialog.dialogTitle }
-					className={ classes.dialogTitle }
+					sx={ this.sxClasses.dialogTitle }
 				>
 					<Typography
 						{ ...theme.r3PopupMsgDialog.title }
-						className={ classes.title }
+						sx={ this.sxClasses.title }
 					>
 						{ titleText }
 					</Typography>
 				</DialogTitle>
 
 				<DialogContent
-					className={ classes.dialogContent }
+					sx={ this.sxClasses.dialogContent }
 				>
 					{ this.getIcon() }
 					{ this.getContentText() }

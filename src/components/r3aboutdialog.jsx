@@ -23,8 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import Button						from '@mui/material/Button';
 import Dialog						from '@mui/material/Dialog';
 import DialogTitle					from '@mui/material/DialogTitle';
@@ -52,14 +50,8 @@ const k2hr3License		=	'Copyright(C) 2017 Yahoo Japan Corporation.';
 //
 // User Data(with role token) Information Class
 //
-@withTheme
-@withStyles(r3AboutDialogStyles)
 export default class R3AboutDialog extends React.Component
 {
-	static contextTypes = {
-		r3Context:		PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		r3provider:		PropTypes.object.isRequired,
 		open:			PropTypes.bool.isRequired,
@@ -82,6 +74,9 @@ export default class R3AboutDialog extends React.Component
 
 		// Binding(do not define handlers as arrow functions for performance)
 		this.handleClose	= this.handleClose.bind(this);
+
+		// styles
+		this.sxClasses		= r3AboutDialogStyles(props.theme);
 	}
 
 	handleClose(event, reason)
@@ -140,7 +135,7 @@ export default class R3AboutDialog extends React.Component
 
 	render()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	licenseType	= this.getLicenseType();
 		let	contentText	= this.getContentText();
@@ -150,41 +145,41 @@ export default class R3AboutDialog extends React.Component
 				open={ this.props.open }
 				onClose={ (event, reason) => this.handleClose(event, reason) }
 				{ ...theme.r3AboutDialog.root }
-				className={ classes.root }
+				sx={ this.sxClasses.root }
 			>
 				<DialogTitle
 					{ ...theme.r3AboutDialog.dialogTitle }
-					className={ classes.dialogTitle }
+					sx={ this.sxClasses.dialogTitle }
 				>
 					<Typography
 						{ ...theme.r3AboutDialog.title }
-						className={ classes.title }
+						sx={ this.sxClasses.title }
 					>
 						About { (r3IsEmptyString(this.props.licensePackage) ? k2hr3Title : this.props.licensePackage) }
 					</Typography>
 				</DialogTitle>
 				<DialogContent 
-					className={ classes.dialogContent }
+					sx={ this.sxClasses.dialogContent }
 				>
 					<DialogContentText
 						{ ...theme.r3AboutDialog.dialogContentText }
-						className={ classes.dialogContentText }
+						sx={ this.sxClasses.dialogContentText }
 					>
 						{ licenseType }
 						{ contentText }
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions
-					className={ classes.dialogAction }
+					sx={ this.sxClasses.dialogAction }
 				>
 					<Button
 						onClick={ (event) => this.handleClose(event, null) }
 						{ ...theme.r3AboutDialog.button }
-						className={ classes.button }
+						sx={ this.sxClasses.button }
 					>
 						{ r3provider.getR3TextRes().tResButtonClose }
 						<CancelIcon
-							className={ classes.buttonIcon }
+							sx={ this.sxClasses.buttonIcon }
 						/>
 					</Button>
 				</DialogActions>

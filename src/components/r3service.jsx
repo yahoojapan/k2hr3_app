@@ -23,8 +23,6 @@ import React						from 'react';
 import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
 import PropTypes					from 'prop-types';
 
-import withTheme					from '@mui/styles/withTheme';
-import withStyles					from '@mui/styles/withStyles';
 import TextField					from '@mui/material/TextField';
 import Typography					from '@mui/material/Typography';
 import IconButton					from '@mui/material/IconButton';
@@ -79,14 +77,8 @@ const serviceComponentValues = {
 //
 // Service Contents Class
 //
-@withTheme
-@withStyles(r3Service)
 export default class R3Service extends React.Component
 {
-	static contextTypes = {
-		r3Context:		PropTypes.object.isRequired
-	};
-
 	static propTypes = {
 		r3provider:		PropTypes.object.isRequired,
 		tenant:			PropTypes.string.isRequired,
@@ -131,6 +123,9 @@ export default class R3Service extends React.Component
 		this.handleEditStaticResourceObj		= this.handleEditStaticResourceObj.bind(this);
 		this.handleCloseStaticResourceDialog	= this.handleCloseStaticResourceDialog.bind(this);
 		this.handleCheckStaticResourceName		= this.handleCheckStaticResourceName.bind(this);
+
+		// styles
+		this.sxClasses							= r3Service(props.theme);
 	}
 
 	componentDidMount()
@@ -506,7 +501,7 @@ export default class R3Service extends React.Component
 
 	getTenantsContents(items)
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(!r3IsSafeTypedEntity(items, 'array')){
 			return;
@@ -531,7 +526,7 @@ export default class R3Service extends React.Component
 						onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.deleteTenantTooltip, pos) }
 						onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.deleteTenantTooltip, -1) }
 						{ ...theme.r3Service.deleteTenantButton }
-						className={ classes.deleteTenantButton }
+						sx={ this.sxClasses.deleteTenantButton }
 						size="large"
 					>
 						<DeleteIcon />
@@ -540,41 +535,41 @@ export default class R3Service extends React.Component
 			);
 
 			return (
-				<div
+				<Box
 					key={ pos }
-					className={ classes.enclosureElement }
+					sx={ this.sxClasses.enclosureElement }
 				>
 					<TextField
 						name={ serviceComponentValues.tenantTextFieldNamePrefix + String(pos) }
 						value={ item }
 						placeholder={ r3provider.getR3TextRes().tResServiceTenantHint }
 						onChange={ (event) => this.handleTenantsChange(event, actionTypeValue, pos) }
-						InputProps={{ className: classes.inputTextField }}
+						InputProps={{ sx: this.sxClasses.inputTextField }}
 						{ ...theme.r3Service.tenantTextField }
-						className={ classes.tenantTextField }
+						sx={ this.sxClasses.tenantTextField }
 					/>
 					{ deleteButton }
-				</div>
+				</Box>
 			);
 		});
 	}
 
 	getAddTenantsContents()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		return (
-			<div
-				className={ classes.enclosureElement }
+			<Box
+				sx={ this.sxClasses.enclosureElement }
 			>
 				<TextField
 					name={ serviceComponentValues.tenantNewTextFieldName }
 					value={ this.state.addTenant }
 					placeholder={ r3provider.getR3TextRes().tResServiceTenantHint }
 					onChange={ (event) => this.handleAddTenantsChange(event) }
-					InputProps={{ className: classes.inputTextField }}
+					InputProps={{ sx: this.sxClasses.inputTextField }}
 					{ ...theme.r3Service.tenantTextField }
-					className={ classes.tenantTextField }
+					sx={ this.sxClasses.tenantTextField }
 				/>
 
 				<Tooltip
@@ -586,13 +581,13 @@ export default class R3Service extends React.Component
 						onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.addTenantTooltip, true) }
 						onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.addTenantTooltip, false) }
 						{ ...theme.r3Service.addTenantButton }
-						className={ classes.addTenantButton }
+						sx={ this.sxClasses.addTenantButton }
 						size="large"
 					>
 						<AddIcon />
 					</IconButton>
 				</Tooltip>
-			</div>
+			</Box>
 		);
 	}
 
@@ -791,7 +786,7 @@ export default class R3Service extends React.Component
 	//
 	renderServiceResourceVerifyUrl()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		return (
 			<TextField
@@ -799,9 +794,9 @@ export default class R3Service extends React.Component
 				value={ this.state.serviceResVerifyUrl }
 				placeholder={ r3provider.getR3TextRes().tResServiceUrlResHint }
 				onChange={ (event) => this.handleVerifyChange(event) }
-				InputProps={{ className: classes.inputTextField }}
+				InputProps={{ sx: this.sxClasses.inputTextField }}
 				{ ...theme.r3Service.resourceTextField }
-				className={ classes.resourceTextField }
+				sx={ this.sxClasses.resourceTextField }
 			/>
 		);
 	}
@@ -811,35 +806,35 @@ export default class R3Service extends React.Component
 	//
 	getResStaticObjTableHead()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		return (
 			<TableHead
-				className={ classes.tableHead }
+				sx={ this.sxClasses.tableHead }
 			>
 				<TableRow>
 					<TableCell
-						className={ classes.tableCell }
+						sx={ this.sxClasses.tableCell }
 					>
 						<Typography
 							{ ...theme.r3Service.textTableHead }
-							className={ classes.textTableHead }
+							sx={ this.sxClasses.textTableHead }
 						>
 							{ r3provider.getR3TextRes().tResServiceNameTableHead }
 						</Typography>
 					</TableCell>
 					<TableCell
-						className={ classes.tableCell }
+						sx={ this.sxClasses.tableCell }
 					>
 						<Typography
 							{ ...theme.r3Service.textTableHead }
-							className={ classes.textTableHead }
+							sx={ this.sxClasses.textTableHead }
 						>
 							{ r3provider.getR3TextRes().tResServiceJsonTableHead }
 						</Typography>
 					</TableCell>
 					<TableCell
-						className={ classes.tableCell }
+						sx={ this.sxClasses.tableCell }
 					>
 						<Tooltip
 							title={ r3provider.getR3TextRes().tResServiceAddStaticResTT }
@@ -850,7 +845,7 @@ export default class R3Service extends React.Component
 								onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.addResStaticObjTooltip, true) }
 								onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.addResStaticObjTooltip, false) }
 								{ ...theme.r3Service.addResStaticObjButton }
-								className={ classes.addResStaticObjButton }
+								sx={ this.sxClasses.addResStaticObjButton }
 								size="large"
 							>
 								<AddIcon />
@@ -864,7 +859,7 @@ export default class R3Service extends React.Component
 
 	getResStaticObjTableBody()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(!r3IsSafeTypedEntity(this.state.serviceResStaticObject, 'array')){
 			return;
@@ -896,7 +891,7 @@ export default class R3Service extends React.Component
 							selected={ false }
 						>
 							<TableCell
-								className={ classes.tableCell }
+								sx={ this.sxClasses.tableCell }
 							>
 								<Tooltip
 									title={ orgName }
@@ -906,7 +901,7 @@ export default class R3Service extends React.Component
 										onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, pos) }
 										onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, -1) }
 										{ ...theme.r3Service.textTableContent }
-										className={ classes.textTableContent }
+										sx={ this.sxClasses.textTableContent }
 									>
 										{ stripName }
 									</Typography>
@@ -914,7 +909,7 @@ export default class R3Service extends React.Component
 							</TableCell>
 
 							<TableCell
-								className={ classes.tableCell }
+								sx={ this.sxClasses.tableCell }
 							>
 								<Tooltip
 									title={ orgJson }
@@ -924,14 +919,14 @@ export default class R3Service extends React.Component
 										onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, pos) }
 										onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, -1) }
 										{ ...theme.r3Service.textTableContent }
-										className={ classes.textTableContent }
+										sx={ this.sxClasses.textTableContent }
 									>
 										{ stripJson }
 									</Typography>
 								</Tooltip>
 							</TableCell>
 							<TableCell
-								className={ classes.tableCell }
+								sx={ this.sxClasses.tableCell }
 							>
 								<Tooltip
 									title={ r3provider.getR3TextRes().tResServiceDelStaticResTT }
@@ -942,7 +937,7 @@ export default class R3Service extends React.Component
 										onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.delResStaticObjTooltip, pos) }
 										onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.delResStaticObjTooltip, -1) }
 										{ ...theme.r3Service.delResStaticObjButton }
-										className={ classes.delResStaticObjButton }
+										sx={ this.sxClasses.delResStaticObjButton }
 										size="large"
 									>
 										<DeleteIcon />
@@ -957,7 +952,7 @@ export default class R3Service extends React.Component
 										onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.editResStaticObjTooltip, pos) }
 										onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.editResStaticObjTooltip, -1) }
 										{ ...theme.r3Service.editResStaticObjButton }
-										className={ classes.editResStaticObjButton }
+										sx={ this.sxClasses.editResStaticObjButton }
 										size="large"
 									>
 										<EditIcon />
@@ -973,7 +968,7 @@ export default class R3Service extends React.Component
 
 	renderServiceResourceStaticObj()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		if(!r3IsSafeTypedEntity(this.state.serviceResStaticObject, 'array')){
 			return;
@@ -985,11 +980,11 @@ export default class R3Service extends React.Component
 
 		return (
 			<Box
-				className={ classes.tableBox }
+				sx={ this.sxClasses.tableBox }
 			>
 				<Table
 					{ ...theme.r3Service.table }
-					className={ classes.table }
+					sx={ this.sxClasses.table }
 				>
 					{ tablehead }
 					{ tablebody }
@@ -1007,9 +1002,9 @@ export default class R3Service extends React.Component
 					value={ textValue }
 					disabled={ true }
 					placeholder={ r3provider.getR3TextRes().tResServiceStaticObjHint }
-					InputProps={{ className: classes.inputTextField }}
+					InputProps={{ sx: this.sxClasses.inputTextField }}
 					{ ...theme.r3Service.resourceTextField }
-					className={ classes.staticResourceTextField }
+					sx={ this.sxClasses.staticResourceTextField }
 				/>
 			</Box>
 		);
@@ -1020,13 +1015,13 @@ export default class R3Service extends React.Component
 	//
 	renderServiceResourceUnknown()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		return (
 			<React.Fragment>
 				<Typography
 					{ ...theme.r3Service.unknownMessage }
-					className={ classes.unknownMessage }
+					sx={ this.sxClasses.unknownMessage }
 				>
 					{ r3provider.getR3TextRes().tResServiceUnknownType }
 				</Typography>
@@ -1034,9 +1029,9 @@ export default class R3Service extends React.Component
 					name={ serviceComponentValues.resUnknownTextFieldName }
 					value={ this.state.serviceResUnknown }
 					disabled={ true }
-					InputProps={{ className: classes.inputTextField }}
+					InputProps={{ sx: this.sxClasses.inputTextField }}
 					{ ...theme.r3Service.resourceTextField }
-					className={ classes.resourceTextField }
+					sx={ this.sxClasses.resourceTextField }
 				/>
 			</React.Fragment>
 		);
@@ -1047,7 +1042,7 @@ export default class R3Service extends React.Component
 	//
 	renderServiceResourceGroup()
 	{
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	leftTypeSelectLabel = (
 			<Typography
@@ -1084,7 +1079,7 @@ export default class R3Service extends React.Component
 					value={ radioValue }
 					onChange={ (event) => this.handleResourceTypeChange(event) }
 					{ ...theme.r3Service.valueRadioGroup }
-					className={ classes.valueRadioGroup }
+					sx={ this.sxClasses.valueRadioGroup }
 				>
 					<FormControlLabel
 						value={ serviceResTypeUrl }
@@ -1092,7 +1087,7 @@ export default class R3Service extends React.Component
 						disabled={ false }
 						control={ <Radio /> }
 						{ ...theme.r3Service.valueLeftFormControlLabel }
-						className={ classes.valueLeftFormControlLabel }
+						sx={ this.sxClasses.valueLeftFormControlLabel }
 					/>
 					<FormControlLabel
 						value={ serviceResTypeObject }
@@ -1100,7 +1095,7 @@ export default class R3Service extends React.Component
 						disabled={ false }
 						control={ <Radio /> }
 						{ ...theme.r3Service.valueRightFormControlLabel }
-						className={ classes.valueRightFormControlLabel }
+						sx={ this.sxClasses.valueRightFormControlLabel }
 					/>
 				</RadioGroup>
 				{ serviceResource }
@@ -1115,17 +1110,17 @@ export default class R3Service extends React.Component
 	{
 		console.log('CALL: service::render()');
 
-		const { theme, classes, r3provider } = this.props;
+		const { theme, r3provider } = this.props;
 
 		let	serviceResourceGroup = this.renderServiceResourceGroup();
 
 		return (
-			<div
-				className={ classes.root }
+			<Box
+				sx={ this.sxClasses.root }
 			>
 				<Typography
 					{ ...theme.r3Service.subTitle }
-					className={ classes.subTitleTop }
+					sx={ this.sxClasses.subTitleTop }
 				>
 					{ r3provider.getR3TextRes().tResServiceUrlResSubTitle }
 				</Typography>
@@ -1133,7 +1128,7 @@ export default class R3Service extends React.Component
 
 				<Typography
 					{ ...theme.r3Service.subTitle }
-					className={ classes.subTitle }
+					sx={ this.sxClasses.subTitle }
 				>
 					{ r3provider.getR3TextRes().tResServiceTenantsSubTitle }
 				</Typography>
@@ -1141,6 +1136,7 @@ export default class R3Service extends React.Component
 				{ this.getAddTenantsContents() }
 
 				<R3FormButtons
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					status={ this.state.changed }
 					onSave={ (event) => this.handleSave(event) }
@@ -1148,6 +1144,7 @@ export default class R3Service extends React.Component
 				/>
 
 				<R3CreateServiceDialog
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					open={ this.state.staticResourceDialog }
 					createMode={ false }
@@ -1156,6 +1153,7 @@ export default class R3Service extends React.Component
 					onClose={ this.handleCloseStaticResourceDialog }
 				/>
 				<R3PopupMsgDialog
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					title={ this.props.r3provider.getR3TextRes().cUpdatingTitle }
 					r3Message={ this.state.confirmMessageObject }
@@ -1163,11 +1161,12 @@ export default class R3Service extends React.Component
 					onClose={ this.handleConfirmDialogClose }
 				/>
 				<R3PopupMsgDialog
+					theme={ theme }
 					r3provider={ this.props.r3provider }
 					r3Message={ this.state.messageDialogObject }
 					onClose={ this.handleMessageDialogClose }
 				/>
-			</div>
+			</Box>
 		);
 	}
 }
