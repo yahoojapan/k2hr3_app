@@ -1,3 +1,10 @@
+k2hr3-app (1.0.7) unstable; urgency=low
+
+  * Updated React from 17.x.x to 18.x.x - #47
+  * Updated to MUI(material-ui) v5 and React 17 - #46
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Tue, 05 Jul 2022 13:44:50 +0900
+
 k2hr3-app (1.0.6) unstable; urgency=low
 
   * Fixed jose require path for updating jose version - #44
