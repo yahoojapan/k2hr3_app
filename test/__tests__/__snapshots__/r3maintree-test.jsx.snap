@@ -119,11 +119,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         <div
           className="MuiListItemText-root css-a3pi0z-MuiListItemText-root"
         >
-          <span
+          <h6
             className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-vdp8n9-MuiTypography-root"
           >
             SERVICE
-          </span>
+          </h6>
         </div>
         <div
           className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
@@ -147,7 +147,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
       <div
         className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
         style={
-          Object {
+          {
             "minHeight": "0px",
           }
         }
@@ -185,11 +185,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   <div
                     className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                   >
-                    <span
+                    <h6
                       className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                     >
                       child_service
-                    </span>
+                    </h6>
                   </div>
                   <div
                     className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
@@ -213,7 +213,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                 <div
                   className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1ms8ro0-MuiCollapse-root"
                   style={
-                    Object {
+                    {
                       "minHeight": "0px",
                     }
                   }
@@ -251,11 +251,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             <div
                               className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                             >
-                              <span
+                              <h6
                                 className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                               >
                                 ROLE
-                              </span>
+                              </h6>
                             </div>
                             <div
                               className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
@@ -279,7 +279,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                           <div
                             className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1ms8ro0-MuiCollapse-root"
                             style={
-                              Object {
+                              {
                                 "minHeight": "0px",
                               }
                             }
@@ -317,11 +317,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                       <div
                                         className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                                       >
-                                        <span
+                                        <h6
                                           className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                                         >
                                           dummyservicerole
-                                        </span>
+                                        </h6>
                                       </div>
                                       <span
                                         className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
@@ -357,11 +357,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             <div
                               className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                             >
-                              <span
+                              <h6
                                 className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                               >
                                 RESOURCE
-                              </span>
+                              </h6>
                             </div>
                             <div
                               className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
@@ -385,7 +385,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                           <div
                             className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1ms8ro0-MuiCollapse-root"
                             style={
-                              Object {
+                              {
                                 "minHeight": "0px",
                               }
                             }
@@ -423,11 +423,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                       <div
                                         className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                                       >
-                                        <span
+                                        <h6
                                           className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                                         >
                                           dummyserviceresource
-                                        </span>
+                                        </h6>
                                       </div>
                                       <span
                                         className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
@@ -463,11 +463,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             <div
                               className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                             >
-                              <span
+                              <h6
                                 className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                               >
                                 POLICY
-                              </span>
+                              </h6>
                             </div>
                             <div
                               className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
@@ -491,7 +491,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                           <div
                             className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1ms8ro0-MuiCollapse-root"
                             style={
-                              Object {
+                              {
                                 "minHeight": "0px",
                               }
                             }
@@ -529,11 +529,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                                       <div
                                         className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                                       >
-                                        <span
+                                        <h6
                                           className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                                         >
                                           dummyservicepolicy
-                                        </span>
+                                        </h6>
                                       </div>
                                       <span
                                         className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
@@ -594,11 +594,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         <div
           className="MuiListItemText-root css-a3pi0z-MuiListItemText-root"
         >
-          <span
+          <h6
             className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-vdp8n9-MuiTypography-root"
           >
             ROLE
-          </span>
+          </h6>
         </div>
         <div
           className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
@@ -622,7 +622,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
       <div
         className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
         style={
-          Object {
+          {
             "minHeight": "0px",
           }
         }
@@ -660,11 +660,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   <div
                     className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                   >
-                    <span
+                    <h6
                       className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                     >
                       dummyrole
-                    </span>
+                    </h6>
                   </div>
                   <div
                     className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
@@ -688,7 +688,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                 <div
                   className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1ms8ro0-MuiCollapse-root"
                   style={
-                    Object {
+                    {
                       "minHeight": "0px",
                     }
                   }
@@ -726,11 +726,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             <div
                               className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                             >
-                              <span
+                              <h6
                                 className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                               >
                                 dummysubrole
-                              </span>
+                              </h6>
                             </div>
                             <span
                               className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
@@ -786,11 +786,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         <div
           className="MuiListItemText-root css-a3pi0z-MuiListItemText-root"
         >
-          <span
+          <h6
             className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-vdp8n9-MuiTypography-root"
           >
             RESOURCE
-          </span>
+          </h6>
         </div>
         <div
           className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
@@ -814,7 +814,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
       <div
         className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
         style={
-          Object {
+          {
             "minHeight": "0px",
           }
         }
@@ -852,11 +852,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   <div
                     className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                   >
-                    <span
+                    <h6
                       className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                     >
                       dummyresource
-                    </span>
+                    </h6>
                   </div>
                   <div
                     className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
@@ -880,7 +880,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                 <div
                   className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1ms8ro0-MuiCollapse-root"
                   style={
-                    Object {
+                    {
                       "minHeight": "0px",
                     }
                   }
@@ -918,11 +918,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             <div
                               className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                             >
-                              <span
+                              <h6
                                 className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                               >
                                 dummysubresource
-                              </span>
+                              </h6>
                             </div>
                             <span
                               className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
@@ -978,11 +978,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         <div
           className="MuiListItemText-root css-a3pi0z-MuiListItemText-root"
         >
-          <span
+          <h6
             className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-vdp8n9-MuiTypography-root"
           >
             POLICY
-          </span>
+          </h6>
         </div>
         <div
           className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
@@ -1006,7 +1006,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
       <div
         className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
         style={
-          Object {
+          {
             "minHeight": "0px",
           }
         }
@@ -1044,11 +1044,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                   <div
                     className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                   >
-                    <span
+                    <h6
                       className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                     >
                       dummypolicy
-                    </span>
+                    </h6>
                   </div>
                   <div
                     className="MuiListItemIcon-root css-17p5t4d-MuiListItemIcon-root"
@@ -1072,7 +1072,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                 <div
                   className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1ms8ro0-MuiCollapse-root"
                   style={
-                    Object {
+                    {
                       "minHeight": "0px",
                     }
                   }
@@ -1110,11 +1110,11 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
                             <div
                               className="MuiListItemText-root css-94h5ax-MuiListItemText-root"
                             >
-                              <span
+                              <h6
                                 className="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-141j9d7-MuiTypography-root"
                               >
                                 dummysubpolicy
-                              </span>
+                              </h6>
                             </div>
                             <span
                               className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"

@@ -6,12 +6,12 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
   className="MuiDialog-root css-1h8td7x-MuiDialog-root"
   closeAfterTransition={true}
   components={
-    Object {
-      "Backdrop": Object {
+    {
+      "Backdrop": {
         "$$typeof": Symbol(react.forward_ref),
-        "__emotion_base": Object {
+        "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
-          "propTypes": Object {
+          "propTypes": {
             "children": [Function],
             "className": [Function],
             "classes": [Function],
@@ -27,9 +27,9 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
         },
         "__emotion_forwardProp": [Function],
         "__emotion_real": [Circular],
-        "__emotion_styles": Array [
+        "__emotion_styles": [
           "label:MuiDialog-backdrop;",
-          Object {
+          {
             "zIndex": -1,
           },
           [Function],
@@ -41,10 +41,10 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
     }
   }
   componentsProps={
-    Object {
-      "backdrop": Object {
+    {
+      "backdrop": {
         "as": undefined,
-        "transitionDuration": Object {
+        "transitionDuration": {
           "enter": 225,
           "exit": 195,
         },
@@ -63,7 +63,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
     in={true}
     role="presentation"
     timeout={
-      Object {
+      {
         "enter": 225,
         "exit": 195,
       }
@@ -111,13 +111,13 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
             className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1b1270g-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
                 aria-invalid={false}
                 autoFocus={false}
-                className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
                 disabled={false}
                 id="new-service-textfield-id"
                 onAnimationStart={[Function]}
@@ -146,7 +146,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
               className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1pmxc0w-MuiFormControlLabel-root"
             >
               <span
-                className="MuiRadio-root MuiRadio-colorPrimary MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root Mui-checked css-17kolh4-MuiButtonBase-root-MuiRadio-root"
+                className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary Mui-checked css-17kolh4-MuiButtonBase-root-MuiRadio-root"
                 onBlur={[Function]}
                 onContextMenu={[Function]}
                 onDragLeave={[Function]}
@@ -207,7 +207,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
               className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1gdxqa1-MuiFormControlLabel-root"
             >
               <span
-                className="MuiRadio-root MuiRadio-colorPrimary MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root css-17kolh4-MuiButtonBase-root-MuiRadio-root"
+                className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary css-17kolh4-MuiButtonBase-root-MuiRadio-root"
                 onBlur={[Function]}
                 onContextMenu={[Function]}
                 onDragLeave={[Function]}
@@ -269,13 +269,13 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
             className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1b1270g-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
                 aria-invalid={false}
                 autoFocus={false}
-                className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
                 disabled={false}
                 id="new-verify-textfield-id"
                 onAnimationStart={[Function]}
@@ -295,7 +295,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
         >
           <button
             aria-label="cancel"
-            className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-rypk7-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-rypk7-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -328,7 +328,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
           </button>
           <button
             aria-label="ok"
-            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
             disabled={true}
             onBlur={[Function]}
             onClick={[Function]}
