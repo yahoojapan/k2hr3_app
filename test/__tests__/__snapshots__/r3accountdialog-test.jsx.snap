@@ -6,12 +6,12 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
   className="MuiDialog-root css-1h8td7x-MuiDialog-root"
   closeAfterTransition={true}
   components={
-    Object {
-      "Backdrop": Object {
+    {
+      "Backdrop": {
         "$$typeof": Symbol(react.forward_ref),
-        "__emotion_base": Object {
+        "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
-          "propTypes": Object {
+          "propTypes": {
             "children": [Function],
             "className": [Function],
             "classes": [Function],
@@ -27,9 +27,9 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
         },
         "__emotion_forwardProp": [Function],
         "__emotion_real": [Circular],
-        "__emotion_styles": Array [
+        "__emotion_styles": [
           "label:MuiDialog-backdrop;",
-          Object {
+          {
             "zIndex": -1,
           },
           [Function],
@@ -41,10 +41,10 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
     }
   }
   componentsProps={
-    Object {
-      "backdrop": Object {
+    {
+      "backdrop": {
         "as": undefined,
-        "transitionDuration": Object {
+        "transitionDuration": {
           "enter": 225,
           "exit": 195,
         },
@@ -63,7 +63,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
     in={true}
     role="presentation"
     timeout={
-      Object {
+      {
         "enter": 225,
         "exit": 195,
       }
@@ -111,13 +111,13 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
             className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1olotkq-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1efi729-MuiInputBase-root-MuiOutlinedInput-root"
+              className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-abyw11-MuiInputBase-root-MuiOutlinedInput-root"
               onClick={[Function]}
             >
               <input
                 aria-invalid={false}
                 autoFocus={false}
-                className="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
                 disabled={false}
                 id=":r1:"
                 name="unscopedtoken-textfield"
@@ -127,7 +127,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
                 onFocus={[Function]}
                 required={false}
                 style={
-                  Object {
+                  {
                     "padding": 0,
                   }
                 }
@@ -153,7 +153,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
           <button
             aria-label="Copy to clipboard"
             aria-labelledby={null}
-            className="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root  css-akrki0-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-akrki0-MuiButtonBase-root-MuiButton-root"
             data-mui-internal-clone-element={true}
             disabled={false}
             onBlur={[Function]}
@@ -196,7 +196,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
         >
           <button
             aria-label="ok"
-            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}

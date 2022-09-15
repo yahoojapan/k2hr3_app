@@ -6,12 +6,12 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
   className="MuiDialog-root css-1h8td7x-MuiDialog-root"
   closeAfterTransition={true}
   components={
-    Object {
-      "Backdrop": Object {
+    {
+      "Backdrop": {
         "$$typeof": Symbol(react.forward_ref),
-        "__emotion_base": Object {
+        "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
-          "propTypes": Object {
+          "propTypes": {
             "children": [Function],
             "className": [Function],
             "classes": [Function],
@@ -27,9 +27,9 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
         },
         "__emotion_forwardProp": [Function],
         "__emotion_real": [Circular],
-        "__emotion_styles": Array [
+        "__emotion_styles": [
           "label:MuiDialog-backdrop;",
-          Object {
+          {
             "zIndex": -1,
           },
           [Function],
@@ -41,10 +41,10 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
     }
   }
   componentsProps={
-    Object {
-      "backdrop": Object {
+    {
+      "backdrop": {
         "as": undefined,
-        "transitionDuration": Object {
+        "transitionDuration": {
           "enter": 225,
           "exit": 195,
         },
@@ -63,7 +63,7 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
     in={true}
     role="presentation"
     timeout={
-      Object {
+      {
         "enter": 225,
         "exit": 195,
       }
@@ -104,7 +104,7 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
             />
           </svg>
           <span
-            className="MuiDialogContentText-root MuiTypography-root MuiTypography-body1 css-1h2b8rm-MuiTypography-root-MuiDialogContentText-root"
+            className="MuiTypography-root MuiDialogContentText-root MuiTypography-body1 css-1h2b8rm-MuiTypography-root-MuiDialogContentText-root"
           >
             Dummy error message
           </span>
@@ -114,7 +114,7 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
         >
           <button
             aria-label="cancel"
-            className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-rypk7-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-rypk7-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -147,7 +147,7 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
           </button>
           <button
             aria-label="confirm contents and close dialog"
-            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}

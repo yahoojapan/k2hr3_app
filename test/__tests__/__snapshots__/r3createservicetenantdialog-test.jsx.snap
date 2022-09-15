@@ -6,12 +6,12 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
   className="MuiDialog-root css-1aoa01i-MuiDialog-root"
   closeAfterTransition={true}
   components={
-    Object {
-      "Backdrop": Object {
+    {
+      "Backdrop": {
         "$$typeof": Symbol(react.forward_ref),
-        "__emotion_base": Object {
+        "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
-          "propTypes": Object {
+          "propTypes": {
             "children": [Function],
             "className": [Function],
             "classes": [Function],
@@ -27,9 +27,9 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
         },
         "__emotion_forwardProp": [Function],
         "__emotion_real": [Circular],
-        "__emotion_styles": Array [
+        "__emotion_styles": [
           "label:MuiDialog-backdrop;",
-          Object {
+          {
             "zIndex": -1,
           },
           [Function],
@@ -41,10 +41,10 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
     }
   }
   componentsProps={
-    Object {
-      "backdrop": Object {
+    {
+      "backdrop": {
         "as": undefined,
-        "transitionDuration": Object {
+        "transitionDuration": {
           "enter": 225,
           "exit": 195,
         },
@@ -62,7 +62,7 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
     in={true}
     role="presentation"
     timeout={
-      Object {
+      {
         "enter": 225,
         "exit": 195,
       }
@@ -130,14 +130,14 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
             className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-16o2gxe-MuiInputBase-root-MuiInput-root"
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1b1270g-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
                 aria-invalid={false}
                 aria-label="input create path"
                 autoFocus={false}
-                className="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
                 disabled={false}
                 id="service-tenant-textfield-id"
                 onAnimationStart={[Function]}
@@ -157,7 +157,7 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
         >
           <button
             aria-label="cancel"
-            className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-rypk7-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-rypk7-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -190,7 +190,7 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
           </button>
           <button
             aria-label="ok"
-            className="MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}

@@ -167,7 +167,6 @@ src/util/r3licenses.js
 #
 # for deploy
 #
-travis_id_rsa
 id_rsa
 
 #
