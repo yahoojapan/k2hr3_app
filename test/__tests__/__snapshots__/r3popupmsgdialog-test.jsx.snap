@@ -104,7 +104,7 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
             />
           </svg>
           <span
-            className="MuiTypography-root MuiDialogContentText-root MuiTypography-body1 css-1h2b8rm-MuiTypography-root-MuiDialogContentText-root"
+            className="MuiTypography-root MuiDialogContentText-root MuiTypography-body1 MuiDialogContentText-root css-1h2b8rm-MuiTypography-root-MuiDialogContentText-root"
           >
             Dummy error message
           </span>
@@ -114,7 +114,7 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
         >
           <button
             aria-label="cancel"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-rypk7-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-rypk7-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -147,7 +147,7 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
           </button>
           <button
             aria-label="confirm contents and close dialog"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
