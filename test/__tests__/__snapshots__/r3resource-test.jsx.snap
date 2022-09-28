@@ -21,7 +21,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
         className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1pmxc0w-MuiFormControlLabel-root"
       >
         <span
-          className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary css-17kolh4-MuiButtonBase-root-MuiRadio-root"
+          className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary MuiRadio-root MuiRadio-colorPrimary css-17kolh4-MuiButtonBase-root-MuiRadio-root"
           onBlur={[Function]}
           onContextMenu={[Function]}
           onDragLeave={[Function]}
@@ -85,7 +85,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
         className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1gdxqa1-MuiFormControlLabel-root"
       >
         <span
-          className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary Mui-checked css-17kolh4-MuiButtonBase-root-MuiRadio-root"
+          className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary Mui-checked MuiRadio-root MuiRadio-colorPrimary css-17kolh4-MuiButtonBase-root-MuiRadio-root"
           onBlur={[Function]}
           onContextMenu={[Function]}
           onDragLeave={[Function]}
@@ -775,7 +775,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
   >
     <button
       aria-label="cancel"
-      className="MuiButtonBase-root Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-jkkg7s-MuiButtonBase-root-MuiButton-root"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-jkkg7s-MuiButtonBase-root-MuiButton-root"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -808,7 +808,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     </button>
     <button
       aria-label="save"
-      className="MuiButtonBase-root Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-ibc20f-MuiButtonBase-root-MuiButton-root"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-ibc20f-MuiButtonBase-root-MuiButton-root"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}

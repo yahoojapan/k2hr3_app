@@ -94,7 +94,7 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
           className="MuiDialogContent-root css-1eb5co6-MuiDialogContent-root"
         >
           <span
-            className="MuiTypography-root MuiDialogContentText-root MuiTypography-body1 css-8d6sz0-MuiTypography-root-MuiDialogContentText-root"
+            className="MuiTypography-root MuiDialogContentText-root MuiTypography-body1 MuiDialogContentText-root css-8d6sz0-MuiTypography-root-MuiDialogContentText-root"
           >
             <span
               className="MuiTypography-root MuiTypography-h6 css-1noxuy3-MuiTypography-root"
@@ -118,7 +118,7 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
         >
           <button
             aria-label="close about dialog"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-1rcb7ll-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-1rcb7ll-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
