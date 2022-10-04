@@ -66,7 +66,7 @@ const service = {
 	name:		'JEST_SERVICE_NAME',
 	owner:		'9999',
 	tenant:		[ 'yrn:yahoo:::28862', 'yrn:yahoo:::37146' ],
-	verify:		'http://localhost:3000/v1/test/verify'
+	verify:		'http://localhost:3000/v1/tests/verify'
 };
 
 //
