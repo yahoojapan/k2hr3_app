@@ -87,7 +87,7 @@
     "build:license": "echo '' && echo 'Extract license of dependent libraries' && echo '' && bin/build_all_licenses && echo ''",
     "test": "npm run test:all",
     "test:all": "echo 'All Test - ESLint and JEST' && npm run test:lint && npm run test:jest",
-    "test:lint": "echo 'Run ESlint(NOTE: maybe install eslint in global)' && eslint app.js webpack.config.js bin/www routes/*.js routes/*/*.js src/*/*.js src/*.jsx src/*/*.jsx test/*/*.js test/*/*.jsx && echo 'ESlint - Success' && echo ''",
+    "test:lint": "echo 'Run ESlint(NOTE: maybe install eslint in global)' && eslint app.js webpack.config.js bin/www routes/*.js routes/*/*.js src/*/*.js src/*.jsx src/*/*.jsx tests/*/*.js tests/*/*.jsx && echo 'ESlint - Success' && echo ''",
     "test:jest": "echo 'Run JEST' && jest --env=jsdom && echo 'JEST - Success' && echo ''",
     "test:update": "echo 'Update JEST snapshot' && jest --env=jsdom --updateSnapshot && echo 'Update JEST snapshot - Success' && echo ''",
     "test:watch": "echo 'Start JEST watch' && jest --env=jsdom --watch && echo 'Start JEST watch - Success' && echo ''",
@@ -122,8 +122,8 @@
   ],
   "jest": {
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
-      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/tests/__mocks__/styleMock.js"
     },
     "globals": {
       "k2hr3global": {
