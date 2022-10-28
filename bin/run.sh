@@ -71,18 +71,20 @@ stop_old_process()
 #   1 on failure
 #
 setup_os_env() {
-	if [ -f "/etc/os-release" ]; then
-		. /etc/os-release
-		OS_NAME=$ID
-		OS_VERSION=$VERSION_ID
-	elif [ -f "/etc/centos-release" ]; then
-		# falls back to centos-6(or prior to centos-6)
-		OS_NAME="centos"
-		OS_VERSION=6
-	else
-		echo "[ERROR] Unknown OS(should be Ubuntu or CentOS)."
+	if [ ! -f "/etc/os-release" ]; then
+		echo "[ERROR] Unknown OS."
 		return 1
 	fi
+
+	# shellcheck disable=SC1090
+	. /etc/os-release
+
+	if [ -z "${ID}" ]; then
+		echo "[ERROR] Unknown OS."
+		return 1
+	fi
+	OS_NAME="${ID}"
+	OS_VERSION="${VERSION_ID}"
 
 	return 0
 }
@@ -191,7 +193,10 @@ echo ""
 NODE_PATH=${MY_NODE_PATH} NODE_ENV=${NODE_ENV_VALUE} NODE_DEBUG=${DEBUG_ENV_CUSTOM} node ${DEBUG_OPTION} bin/www
 
 #
-# VIM modelines
-#
-# vim:set ts=4 fenc=utf-8:
+# Local variables:
+# tab-width: 4
+# c-basic-offset: 4
+# End:
+# vim600: noexpandtab sw=4 ts=4 fdm=marker
+# vim<600: noexpandtab sw=4 ts=4
 #
