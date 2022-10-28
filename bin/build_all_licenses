@@ -129,7 +129,7 @@ function getLicenseCheckerPath()
 	var	path	= null;
 	var	result;
 	try{
-		result	= execSync('which ' + bin_name);
+		result	= execSync('command -v ' + bin_name);
 		path	= String(result).replace(/\r?\n/g, '');
 	}catch(error){
 		try{
@@ -559,8 +559,11 @@ if(args.help){
 process.exit(result ? 0 : 1);
 
 /*
- * VIM modelines
- *
- * vim:set ts=4 fenc=utf-8:
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noexpandtab sw=4 ts=4 fdm=marker
+ * vim<600: noexpandtab sw=4 ts=4
  *
  */
