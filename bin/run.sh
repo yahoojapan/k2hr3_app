@@ -18,179 +18,261 @@
 # REVISION:
 #
 
-#
-# Common
-#
-CMDLINE_PROCESS_NAME=$0
-CMDLINE_ALL_PARAM=$@
-PROGRAM_NAME=`basename ${CMDLINE_PROCESS_NAME}`
-MYSCRIPTDIR=`dirname ${CMDLINE_PROCESS_NAME}`
-MYSCRIPTDIR=`cd ${MYSCRIPTDIR}; pwd`
-SRCTOP=`cd ${MYSCRIPTDIR}/..; pwd`
-HOST=`hostname`
-
-MYPROCIDFILE=""
-MYPID_BASEDIR="/var/run/antpickax"
-MYPID_TMPDIR="/tmp"
-MYPROCIDFILENAME="${PROGRAM_NAME}.pid"
+#==========================================================
+# Common Variables
+#==========================================================
+PRGNAME=$(basename "$0")
+SCRIPTDIR=$(dirname "$0")
+SCRIPTDIR=$(cd "${SCRIPTDIR}" || exit 1; pwd)
+SRCTOP=$(cd "${SCRIPTDIR}/.." || exit 1; pwd)
 
 #
-# utility
+# Variables
+#
+CMDLINE_COMMAND="$0"
+CMDLINE_PARAMETERS="$*"
+
+LOCAL_HOSTNAME="$(hostname | tr -d '\n')"
+PID_FILE_BASEDIR="/var/run/antpickax"
+PID_FILE_TMPDIR="/tmp"
+
+PROC_PID_BASENAME="${PRGNAME}.pid"
+PROC_PID_FILE=""
+
+#==============================================================
+# Utility functions
+#==============================================================
+#
+# Usage
+#
+PrintUsage()
+{
+	echo ""
+	echo "Usage: $1 [--production(-prod) | --development(-dev)] [--stop(-s)] [--background(-bg)] [--foreground(-fg)] [--debug(-d) | --debug-nobrk(-dnobrk)] [--debuglevel(-dl) <custom debug level>]"
+	echo ""
+	echo "Option:"
+	echo "         --production(-prod)      : [default] Set 'production' to NODE_ENV environment (this is default and exclusive with the '--development' option)"
+	echo "         --development(-dev)      : Set 'development' to NODE_ENV environment (exclusive with the '--production' option)"
+	echo "         --stop(-s)               : Stop www or watcher nodejs process"
+	echo "         --background(-bg)        : Run process background"
+	echo "         --foreground(-fg)        : Run process foreground (this takes precedence over --background(-bg) option)"
+	echo "         --debug(-d)              : Run with nodejs inspector option"
+	echo "         --debug-nobrk(-dnobrk)   : Run with nodejs inspector option (no break at start)"
+	echo "         --debuglevel(-dl)        : Specify NODE_DEBUG environment value"
+	echo ""
+}
+
+#
+# Stop processes
 #
 stop_old_process()
 {
-	if [ -f ${MYPROCIDFILE} ]; then
-		ps ax | grep `cat ${MYPROCIDFILE}` | grep -v grep | grep ${PROGRAM_NAME} > /dev/null 2>&1
-		if [ $? -eq 0 ]; then
-			OLDPROCID=`cat ${MYPROCIDFILE}`
-			OLD_CIHLD_PIDS=`pgrep -P ${OLDPROCID}`
-			kill -HUP ${OLDPROCID} ${OLD_CIHLD_PIDS} > /dev/null 2>&1
-			if [ $? -ne 0 ]; then
-				echo "[WARNING] could not stop old process."
-				kill -KILL ${OLDPROCID} ${OLD_CIHLD_PIDS} > /dev/null 2>&1
+	if [ -z "${PROC_PID_FILE}" ]; then
+		#
+		# Not initialize yet
+		#
+		return 0
+	fi
 
-				ps ax | grep `cat ${MYPROCIDFILE}` | grep -v grep | grep ${PROGRAM_NAME} > /dev/null 2>&1
-				if [ $? -eq 0 ]; then
-					echo "[ERROR] could not stop old process."
-					return 1
-				fi
-			fi
-			echo "[INFO] old process pid file exists, then try to stop it."
+	if [ ! -f "${PROC_PID_FILE}" ]; then
+		return 0
+	fi
+
+	OLD_PID="$(tr -d '\n' < "${PROC_PID_FILE}")"
+
+	if pgrep -f "${PRGNAME}" | grep -q "${OLD_PID}"; then
+		#
+		# Try to stop(HUP) process and child processes
+		#
+		OLD_CIHLD_PIDS="$(pgrep -P "${OLDPROCID}" | tr '\n' ' ')"
+		if ! /bin/sh -c "kill -HUP ${OLD_PID} ${OLD_CIHLD_PIDS}" >/dev/null 2>&1; then
+			echo "[WARNING] Failed to stop some old processes."
 		fi
+		sleep 1
+
+		#
+		# Check process is running yet
+		#
+		if pgrep -f "${PRGNAME}" | grep -q "${OLD_PID}"; then
+			#
+			# Try to stop(KILL) process and child processes
+			#
+			if ! /bin/sh -c "kill -KILL ${OLD_PID} ${OLD_CIHLD_PIDS}" >/dev/null 2>&1; then
+				echo "[WARNING] Failed to retry stop some old processes."
+			fi
+			sleep 1
+
+			#
+			# Re-check process is running yet
+			#
+			if pgrep -f "${PRGNAME}" | grep -q "${OLD_PID}"; then
+				echo "[ERROR] Could not stop old processes."
+				return 1
+			fi
+		fi
+		echo "[INFO] Stop old processes."
 	fi
+	rm -f "${PROC_PID_FILE}"
+
 	return 0
 }
 
-# Determines the current OS
-#
-# Params::
-#   no params
-#
-# Returns::
-#   0 on success
-#   1 on failure
-#
-setup_os_env() {
-	if [ ! -f "/etc/os-release" ]; then
-		echo "[ERROR] Unknown OS."
-		return 1
-	fi
-
-	# shellcheck disable=SC1090
-	. /etc/os-release
-
-	if [ -z "${ID}" ]; then
-		echo "[ERROR] Unknown OS."
-		return 1
-	fi
-	OS_NAME="${ID}"
-	OS_VERSION="${VERSION_ID}"
-
-	return 0
-}
-
-#
-# node path
-#
-setup_os_env
-
-#
-# Parse arguments
-#
-DEBUG_MODE="no"
-DEBUG_ENV_CUSTOM=""
+#==========================================================
+# Parse options and check environments
+#==========================================================
+NODE_ENV_VALUE=""
 FOREGROUND=0
 BACKGROUND=0
-IS_STOP=0
-NODE_ENV_VALUE="production"
+STOP_OLD_PROCESS=0
+INSPECTOR_OPT=""
+DEBUG_ENV_CUSTOM=""
 
-OPTCOUNT=$#
-while [ ${OPTCOUNT} -ne 0 ]; do
-	if [ "X$1" = "X" ]; then
+while [ $# -ne 0 ]; do
+	if [ -z "$1" ]; then
 		break
 
-	elif [ "X$1" = "X--help" -o "X$1" = "X--HELP" -o "X$1" = "X-h" -o "X$1" = "X-H" ]; then
-		echo "${PROGRAM_NAME} [--production(default) | --development] [--debug(-d) | --debug-nobrk(-dnobrk)] [custom debug level(NODE_DEBUG environment)]"
+	elif [ "$1" = "-h" ] || [ "$1" = "-H" ] || [ "$1" = "--help" ] || [ "$1" = "--HELP" ]; then
+		PrintUsage "${PRGNAME}"
 		exit 0
 
-	elif [ "X$1" = "X--background" -o "X$1" = "X--BACKGROUND" -o "X$1" = "X-bg" -o "X$1" = "X-BG" ]; then
-		BACKGROUND=1
-
-	elif [ "X$1" = "X--foreground" -o "X$1" = "X--FOREGROUND" -o "X$1" = "X-fg" -o "X$1" = "X-FG" ]; then
-		FOREGROUND=1
-
-	elif [ "X$1" = "X-stop" -o "X$1" = "X-STOP" ]; then
-		IS_STOP=1
-
-	elif [ "X$1" = "X--production" -o "X$1" = "X--PRODUCTION" ]; then
+	elif [ "$1" = "prod" ] || [ "$1" = "-PROD" ] || [ "$1" = "--production" ] || [ "$1" = "--PRODUCTION" ]; then
+		if [ -n "${NODE_ENV_VALUE}" ]; then
+			echo "[ERROR] already specified --production(-prod) or --development(-dev) option"
+			exit 1
+		fi
 		NODE_ENV_VALUE="production"
 
-	elif [ "X$1" = "X--development" -o "X$1" = "X--DEVELOPMENT" ]; then
+	elif [ "$1" = "-dev" ] || [ "$1" = "-DEV" ] || [ "$1" = "--development" ] || [ "$1" = "--DEVELOPMENT" ]; then
+		if [ -n "${NODE_ENV_VALUE}" ]; then
+			echo "[ERROR] already specified --production(-prod) or --development(-dev) option"
+			exit 1
+		fi
 		NODE_ENV_VALUE="development"
 
-	elif [ "X$1" = "X--debug" -o "X$1" = "X--DEBUG" -o "X$1" = "X-d" -o "X$1" = "X-D" ]; then
-		DEBUG_MODE="yes"
-		DEBUG_OPTION="--inspect-brk=${HOST}:9229"
+	elif [ "$1" = "-bg" ] || [ "$1" = "-BG" ] || [ "$1" = "--background" ] || [ "$1" = "--BACKGROUND" ]; then
+		#
+		# Not check multi same option...
+		#
+		BACKGROUND=1
 
-	elif [ "X$1" = "X--debug-nobrk" -o "X$1" = "X--DEBUG-NOBRK" -o "X$1" = "X-dnobrk" -o "X$1" = "X-DNOBRK" ]; then
-		DEBUG_MODE="yes"
-		DEBUG_OPTION="--inspect=${HOST}:9229"
+	elif [ "$1" = "--foreground" ] || [ "$1" = "--FOREGROUND" ] || [ "$1" = "-fg" ] || [ "$1" = "-FG" ]; then
+		#
+		# Not check multi same option...
+		#
+		FOREGROUND=1
 
-	else
-		if [ "X${DEBUG_ENV_CUSTOM}" != "X" ]; then
+	elif [ "$1" = "-s" ] || [ "$1" = "-S" ] || [ "$1" = "--stop" ] || [ "$1" = "--STOP" ]; then
+		if [ "${STOP_OLD_PROCESS}" -ne 0 ]; then
+			echo "[ERROR] already specified --stop(-s) option"
+			exit 1
+		fi
+		STOP_OLD_PROCESS=1
+
+	elif [ "$1" = "-d" ] || [ "$1" = "-D" ] || [ "$1" = "--debug" ] || [ "$1" = "--DEBUG" ]; then
+		if [ -n "${INSPECTOR_OPT}" ]; then
+			echo "[ERROR] already specified --debug(-d) or --debug-nobrk(-dnobrk) option"
+			exit 1
+		fi
+		INSPECTOR_OPT="--inspect-brk=${LOCAL_HOSTNAME}:9229"
+
+	elif [ "$1" = "-dnobrk" ] || [ "$1" = "-DNOBRK" ] || [ "$1" = "--debug-nobrk" ] || [ "$1" = "--DEBUG-NOBRK" ]; then
+		if [ -n "${INSPECTOR_OPT}" ]; then
+			echo "[ERROR] already specified --debug(-d) or --debug-nobrk(-dnobrk) option"
+			exit 1
+		fi
+		INSPECTOR_OPT="--inspect=${LOCAL_HOSTNAME}:9229"
+
+	elif [ "$1" = "-dl" ] || [ "$1" = "-DL" ] || [ "$1" = "--debuglevel" ] || [ "$1" = "--DEBUGLEVEL" ]; then
+		shift
+		if [ $# -eq 0 ]; then
+			echo "[ERROR] --debuglevel(-dl) option needs parameter(custom debug level)"
+			exit 1
+		fi
+
+		# [NOTE]
+		# This option can be specified multiple times and the values are separated by commas.
+		#
+		if [ -n "${DEBUG_ENV_CUSTOM}" ]; then
 			DEBUG_ENV_CUSTOM="${DEBUG_ENV_CUSTOM},"
 		fi
 		DEBUG_ENV_CUSTOM="${DEBUG_ENV_CUSTOM}$1"
-	fi
 
-	OPTCOUNT=`expr ${OPTCOUNT} - 1`
+	else
+		echo "[WARNING] Unknown option $1 is specified, it is ignored."
+	fi
 	shift
 done
 
 #
-# Check PID directory
+# Check NODE_ENV_VALUE
 #
-if [ -d ${MYPID_BASEDIR} ]; then
-	MYPROCIDFILE="${MYPID_BASEDIR}/${MYPROCIDFILENAME}"
-else
-	MYPROCIDFILE="${MYPID_TMPDIR}/${MYPROCIDFILENAME}"
+if [ -z "${NODE_ENV_VALUE}" ]; then
+	NODE_ENV_VALUE="production"
 fi
 
+#----------------------------------------------------------
+# Set pid file varibales
+#----------------------------------------------------------
+#
+# Check PID directory
+#
+if [ -d "${PID_FILE_BASEDIR}" ]; then
+	PROC_PID_FILE="${PID_FILE_BASEDIR}/${PROC_PID_BASENAME}"
+else
+	PROC_PID_FILE="${PID_FILE_TMPDIR}/${PROC_PID_BASENAME}"
+fi
+
+#==========================================================
+# Do work
+#==========================================================
 #
 # Check run background
 #
-if [ ${BACKGROUND} -eq 1 -a ${FOREGROUND} -eq 0 ]; then
+if [ "${BACKGROUND}" -eq 1 ] && [ "${FOREGROUND}" -eq 0 ]; then
 	#
 	# Run another process as child
 	#
-	${CMDLINE_PROCESS_NAME} ${CMDLINE_ALL_PARAM} -fg > /dev/null 2>&1 &
+	"${CMDLINE_COMMAND}" "${CMDLINE_PARAMETERS}" -fg > /dev/null 2>&1 &
 	exit 0
 fi
 
 #
 # Stop old process if exists
 #
-stop_old_process
-if [ $? -ne 0 ]; then
-	exit $?
+if ! stop_old_process; then
+	exit 1
 fi
-if [ ${IS_STOP} -eq 1 ]; then
+if [ "${STOP_OLD_PROCESS}" -eq 1 ]; then
+	#
+	# Only sto pole processes
+	#
 	exit 0
 fi
 
 #
-# Push my process id
+# Push this process id to PID file
 #
-echo $$ > ${MYPROCIDFILE}
+if ! echo "$$" > "${PROC_PID_FILE}"; then
+	echo "[ERROR] Could create PID file(${PROC_PID_FILE}) and push this process PID."
+	exit 1
+fi
 
 #
-# Executing
+# Run
 #
-cd ${SRCTOP}
+cd "${SRCTOP}" || exit 1
+
 echo "***** RUN *****"
-	echo "NODE_PATH=${MY_NODE_PATH} NODE_ENV=${NODE_ENV_VALUE} NODE_DEBUG=${DEBUG_ENV_CUSTOM} node ${DEBUG_OPTION} bin/www"
+echo "NODE_PATH=${MY_NODE_PATH} NODE_ENV=${NODE_ENV_VALUE} NODE_DEBUG=${DEBUG_ENV_CUSTOM} node ${INSPECTOR_OPT} bin/www"
 echo ""
-NODE_PATH=${MY_NODE_PATH} NODE_ENV=${NODE_ENV_VALUE} NODE_DEBUG=${DEBUG_ENV_CUSTOM} node ${DEBUG_OPTION} bin/www
+
+EXIT_CODE=0
+if ! NODE_PATH="${MY_NODE_PATH}" NODE_ENV="${NODE_ENV_VALUE}" NODE_DEBUG="${DEBUG_ENV_CUSTOM}" node "${INSPECTOR_OPT}" bin/www; then
+	EXIT_CODE="$?"
+	echo "[INFO] Process exited with exit code: $?"
+fi
+
+exit "${EXIT_CODE}"
 
 #
 # Local variables:

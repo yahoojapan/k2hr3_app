@@ -58,7 +58,7 @@ RUN set -x && \
     npm run test && \
     rm -rf .eslintrc.js .git .github .gitignore .npmignore .publishrc .auditignore webpack.config.js demo test templ/Dockerfile.templ config/k2hr3-k8s-secret.yaml.sample config/k2hr3-k8s-sidecar.yaml.sample && \
     cd / && \
-    tar cvfz %%DOCKER_IMAGE_NAME%%.tgz %%DOCKER_GIT_REPOSITORY%%
+    tar cvfz %%DOCKER_IMAGE_NAME%%.tgz %%DOCKER_GIT_REPOSITORY%% >/dev/null
 
 #
 # Image for main
@@ -80,7 +80,7 @@ RUN set -x && \
 COPY --from=%%DOCKER_IMAGE_NAME%%-builder /%%DOCKER_IMAGE_NAME%%.tgz /%%DOCKER_IMAGE_NAME%%.tgz
 
 RUN cd /usr/lib/node_modules && \
-	tar xvzf /%%DOCKER_IMAGE_NAME%%.tgz && \
+	tar xvzf /%%DOCKER_IMAGE_NAME%%.tgz >/dev/null && \
 	rm /%%DOCKER_IMAGE_NAME%%.tgz && \
 	%%UPDATE_LIBPATH%%
 

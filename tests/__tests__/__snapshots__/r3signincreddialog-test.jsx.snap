@@ -20,6 +20,8 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
             "componentsProps": [Function],
             "invisible": [Function],
             "open": [Function],
+            "slotProps": [Function],
+            "slots": [Function],
             "sx": [Function],
             "transitionDuration": [Function],
           },

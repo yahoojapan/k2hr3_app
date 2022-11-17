@@ -18,30 +18,31 @@
 # REVISION:
 #
 
-#---------------------------------------------------------------------
-# Symbols / Macros / Variables
-#---------------------------------------------------------------------
-#
-# Common
-#
-CMDLINE_PROCESS_NAME=$0
-CMDLINE_ALL_PARAM=$@
-PROGRAM_NAME=`basename ${CMDLINE_PROCESS_NAME}`
-MYSCRIPTDIR=`dirname ${CMDLINE_PROCESS_NAME}`
-MYSCRIPTDIR=`cd ${MYSCRIPTDIR}; pwd`
-SRCTOP=`cd ${MYSCRIPTDIR}/..; pwd`
+#==========================================================
+# Common Variables
+#==========================================================
+PRGNAME=$(basename "$0")
+SCRIPTDIR=$(dirname "$0")
+SCRIPTDIR=$(cd "${SCRIPTDIR}" || exit 1; pwd)
+SRCTOP=$(cd "${SCRIPTDIR}/.." || exit 1; pwd)
 
 #
-# Directories
+# Variables
 #
-DEMO_DIR="${SRCTOP}/demo"
-BACKUP_DIR="${SRCTOP}/backup"
-MASTER_SRC_DIR="${SRCTOP}/src"
-MASTER_SRC_UTIL_DIR="${MASTER_SRC_DIR}/util"
-MASTER_PUBLIC_DIR="${SRCTOP}/public"
+BRANCH_GHPAGES="gh-pages"
+
+DEMO_DIR=$(cd "${SRCTOP}/demo" || exit 1; pwd)
+BACKUP_DIR=$(cd "${SRCTOP}/backup" || exit 1; pwd)
+MASTER_SRC_DIR=$(cd "${SRCTOP}/src" || exit 1; pwd)
+MASTER_SRC_UTIL_DIR=$(cd "${MASTER_SRC_DIR}/util" || exit 1; pwd)
+MASTER_PUBLIC_DIR=$(cd "${SRCTOP}/public" || exit 1; pwd)
+
 DIST_DIR_NAME="dist"
-DIST_DIR="${SRCTOP}/${DIST_DIR_NAME}"
-DIST_PUBLIC_DIR="${DIST_DIR}/public"
+DIST_DIR=$(cd "${SRCTOP}/${DIST_DIR_NAME}" || exit 1; pwd)
+DIST_PUBLIC_DIR=$(cd "${DIST_DIR}/public" || exit 1; pwd)
+
+DIST_CONFIG_USERNAME="AntPickax CI"
+DIST_CONFIG_EMAIL="antpickax-support@mail.yahoo.co.jp"
 
 #
 # Files
@@ -51,188 +52,403 @@ R3PROVIDER_JS="r3provider.js"
 DEMO_INDEX_HTML="index.html"
 DEMO_INDEXJA_HTML="indexja.html"
 DEMO_SSH_KEY="actions_id_rsa"
+SSH_AGENT_TMPFILE="/tmp/.${PRGNAME}.$$.tmp"
 
+#==============================================================
+# Utility functions and variables for messaging
+#==============================================================
 #
-# Symbols and Commands
+# Utilities for message
 #
-REPO_GHPAGES="gh-pages"
-CURRENT_YEAR=`date +%Y`
-RELEASE_SHA1=`git rev-parse --short HEAD`
+if [ -t 1 ] || { [ -n "${CI}" ] && [ "${CI}" = "true" ]; }; then
+	CBLD=$(printf '\033[1m')
+	CREV=$(printf '\033[7m')
+	CRED=$(printf '\033[31m')
+	CYEL=$(printf '\033[33m')
+	CGRN=$(printf '\033[32m')
+	CDEF=$(printf '\033[0m')
+else
+	CBLD=""
+	CREV=""
+	CRED=""
+	CYEL=""
+	CGRN=""
+	CDEF=""
+fi
+if [ -n "${CI}" ] && [ "${CI}" = "true" ]; then
+	GHAGRP_START="::group::"
+	GHAGRP_END="::endgroup::"
+else
+	GHAGRP_START=""
+	GHAGRP_END=""
+fi
 
-#---------------------------------------------------------------------
-# Utility
-#---------------------------------------------------------------------
-run_cmd()
+PRNGROUPEND()
 {
-	echo "$ $@"
-	$@
-	if [ $? -ne 0 ]; then
-		echo "[ERROR] ${PRGNAME} : \"$@\"" 1>&2
-		exit 1
+	if [ -n "${IN_GHAGROUP_AREA}" ] && [ "${IN_GHAGROUP_AREA}" -eq 1 ]; then
+		if [ -n "${GHAGRP_END}" ]; then
+			echo "${GHAGRP_END}"
+		fi
 	fi
+	IN_GHAGROUP_AREA=0
+}
+PRNTITLE()
+{
+	PRNGROUPEND
+	echo "${GHAGRP_START}${CBLD}${CGRN}${CREV}[TITLE]${CDEF} ${CGRN}$*${CDEF}"
+	IN_GHAGROUP_AREA=1
+}
+PRNINFO()
+{
+	echo "${CBLD}${CREV}[INFO]${CDEF} $*"
+}
+PRNWARN()
+{
+	echo "${CBLD}${CYEL}${CREV}[WARNING]${CDEF} ${CYEL}$*${CDEF}"
+}
+PRNERR()
+{
+	echo "${CBLD}${CRED}${CREV}[ERROR]${CDEF} ${CRED}$*${CDEF}"
+	PRNGROUPEND
+}
+PRNSUCCESS()
+{
+	echo "${CBLD}${CGRN}${CREV}[SUCCEED]${CDEF} ${CGRN}$*${CDEF}"
+	PRNGROUPEND
+}
+PRNFAILURE()
+{
+	echo "${CBLD}${CRED}${CREV}[FAILURE]${CDEF} ${CRED}$*${CDEF}"
+	PRNGROUPEND
+}
+RUNCMD()
+{
+	PRNINFO "Run \"$*\""
+	if ! /bin/sh -c "$*"; then
+		PRNERR "Failed to run \"$*\""
+		return 1
+	fi
+	return 0
 }
 
-check_error()
-{
-	if [ $? -ne 0 ]; then
-		echo "[ERROR] ${PRGNAME} : $@" 1>&2
-		exit 1
-	fi
-}
-
-#---------------------------------------------------------------------
-# Build
-#---------------------------------------------------------------------
-echo "[INFO] ${PRGNAME} ${BACKUP_DIR} Start to build."
+#==============================================================
+# Set dynamic variables
+#==============================================================
+PRNTITLE "Set dynamic variables"
 
 #
 # Current
 #
-cd ${SRCTOP}
-echo ""
+cd "${SRCTOP}" || exit 1
 
 #
-# backup
+# Date
 #
-echo "[INFO] ${PRGNAME} ${BACKUP_DIR} Make backup files."
-if [ -d ${BACKUP_DIR} -o -f ${BACKUP_DIR} ]; then
-	echo "[WARNING] ${PRGNAME} ${BACKUP_DIR} file or directory is existed, then it remove now."
-	run_cmd rm -rf ${BACKUP_DIR}
+PRNINFO "Get current year"
+if ! CURRENT_YEAR=$(date '+%Y'); then
+	PRNERR "Failed to get current YEAR."
+	exit 1
 fi
-run_cmd mkdir -p ${BACKUP_DIR}
-run_cmd cp -p ${MASTER_SRC_DIR}/${R3APP_JSX} ${BACKUP_DIR}/${R3APP_JSX}
-run_cmd cp -p ${MASTER_SRC_UTIL_DIR}/${R3PROVIDER_JS} ${BACKUP_DIR}/${R3PROVIDER_JS}
 
 #
-# Change application title in r3app.jsx and Replace src/util/r3provider.js
+# Make variables from git information
 #
-echo "[INFO] ${PRGNAME} ${BACKUP_DIR} Modifiy r3app.jsx for title and Switch r3provider.js for demo site."
-run_cmd cp -p ${DEMO_DIR}/${R3PROVIDER_JS} ${MASTER_SRC_UTIL_DIR}/${R3PROVIDER_JS}
-sed -i -e "s/title='K2HR3'/title='K2HR3 DEMO'/g" ${MASTER_SRC_DIR}/${R3APP_JSX}
-check_error "failed changing ${MASTER_SRC_DIR}/${R3APP_JSX}"
+# [NOTE]
+# Create the following variables here:
+#	REPO_RELEASE_SHA1
+#	REPO_BASE_URL
+#	REPO_GIT_URL
+#	REPO_HTTPS_URL
+#	REPO_GIT_USER_HOST
+#	REPO_GIT_HOST
+#
+PRNINFO "Make variables from git information"
+
+if [ ! -d "${SRCTOP}/.git" ]; then
+	PRNERR "Not found .git directory."
+	exit 1
+fi
+if ! REPO_RELEASE_SHA1=$(git rev-parse --short HEAD | tr -d '\n'); then
+	PRNERR "Could not get short sha1 for HEAD."
+	exit 1
+fi
+if ! REPO_BASE_URL=$(git config remote.origin.url); then
+	PRNERR "Could not get remote git url."
+	exit 1
+fi
+
+REPO_GIT_URL=$(echo       "${REPO_BASE_URL}"      | sed -e "s#https://#git@#g" -e "s#[:|/]# #g" -e "s# #:#" -e "s# #/#g")
+REPO_HTTPS_URL=$(echo     "${REPO_BASE_URL}"      | sed -e "s#https://#git@#g" -e "s#:#/#g" -e "s#git@#https://#g")
+REPO_GIT_USER_HOST=$(echo "${REPO_GIT_URL}"       | sed -e "s#:# #g" | awk '{print $1}')
+REPO_GIT_HOST=$(echo      "${REPO_GIT_USER_HOST}" | sed -e "s#git@##g")
+
+if [ -z "${REPO_RELEASE_SHA1}" ] || [ -z "${REPO_BASE_URL}" ] || [ -z "${REPO_GIT_URL}" ] || [ -z "${REPO_HTTPS_URL}" ] || [ -z "${REPO_GIT_USER_HOST}" ] || [ -z "${REPO_GIT_HOST}" ]; then
+	PRNERR "Failed to create variable about git from .git information."
+	exit 1
+fi
+
+PRNSUCCESS "Set dynamic variables"
+
+#==============================================================
+# Convert files for demo site and make backup files
+#==============================================================
+PRNTITLE "Convert files for demo site and make backup files"
 
 #
-# build bundle.js
+# Check backup directory
 #
-echo "[INFO] ${PRGNAME} ${BACKUP_DIR} Build bundle.js for demo site."
-if [ "X${GHPAGES_WITHOUT_LICENSE}" != "X" ]; then
-	run_cmd npm run build:webpack
+PRNINFO "Check and create ${BACKUP_DIR} directory"
+
+if [ -d "${BACKUP_DIR}" ] || [ -f "${BACKUP_DIR}" ]; then
+	PRNWARN "${BACKUP_DIR} file or directory is existed, then it will be remove for creation"
+	RUNCMD rm -rf "${BACKUP_DIR}"
+fi
+if ! RUNCMD mkdir -p "${BACKUP_DIR}"; then
+	PRNERR "Failed to create ${BACKUP_DIR} directory"
+	exit 1
+fi
+
+#
+# Copy files to backup directory
+#
+PRNINFO "Copy files to backup ${BACKUP_DIR} directory"
+
+if ! RUNCMD cp -p "${MASTER_SRC_DIR}/${R3APP_JSX}" "${BACKUP_DIR}/${R3APP_JSX}"; then
+	PRNERR "Failed to copy backup file(${R3APP_JSX})"
+	exit 1
+fi
+if ! RUNCMD cp -p "${MASTER_SRC_UTIL_DIR}/${R3PROVIDER_JS}" "${BACKUP_DIR}/${R3PROVIDER_JS}"; then
+	PRNERR "Failed to copy backup file(${R3PROVIDER_JS})"
+	exit 1
+fi
+
+#
+# Change application title in r3app.jsx and Switch r3provider.js for demo
+#
+PRNINFO "Change application title(${R3APP_JSX}) and Switch ${R3PROVIDER_JS} for demo"
+
+if ! RUNCMD sed -i -e "s/title='K2HR3'/title='K2HR3 DEMO'/g" "${MASTER_SRC_DIR}/${R3APP_JSX}"; then
+	PRNERR "Failed to modify ${MASTER_SRC_DIR}/${R3APP_JSX} for demo title"
+	exit 1
+fi
+if ! RUNCMD cp -p "${DEMO_DIR}/${R3PROVIDER_JS}" "${MASTER_SRC_UTIL_DIR}/${R3PROVIDER_JS}"; then
+	PRNERR "Failed to copy ${DEMO_DIR}/${R3PROVIDER_JS} to ${MASTER_SRC_UTIL_DIR}/${R3PROVIDER_JS}"
+	exit 1
+fi
+
+PRNSUCCESS "Convert files for demo site and make backup files"
+
+#==============================================================
+# Build bundle.js for demo site
+#==============================================================
+PRNTITLE "Build bundle.js for demo site"
+
+# [NOTE]
+# To bypass building the license file by setting the 
+# "GHPAGES_WITHOUT_LICENSE" environment variable.
+#
+if [ -n "${GHPAGES_WITHOUT_LICENSE}" ] && [ "${GHPAGES_WITHOUT_LICENSE}" -eq 1 ]; then
+	#
+	# without bulding License file
+	#
+	if ! RUNCMD npm run build:webpack; then
+		PRNERR "Failed to create bundle.js without building License file."
+		exit 1
+	fi
 else
-	run_cmd npm run build:all
+	#
+	# with bulding License file
+	#
+	if ! RUNCMD npm run build:all; then
+		PRNERR "Failed to create bundle.js with building License file."
+		exit 1
+	fi
 fi
 
-#---------------------------------------------------------------------
-# Setup SSH
-#---------------------------------------------------------------------
-echo "[INFO] ${PRGNAME} ${BACKUP_DIR} Setup SSH for pushing"
+PRNSUCCESS "Build bundle.js for demo site"
+
+#==============================================================
+# Setup SSH before pushing
+#==============================================================
+PRNTITLE "Setup SSH before pushing"
 
 #
-# Variables for pushing
+# Check directory and file about SSH setting
 #
-REPO_BASE_URL=`git config remote.origin.url`
-REPO_GIT_URL=`echo ${REPO_BASE_URL} | sed "s#https://#git@#g" | sed "s#[:|/]# #g" | sed "s# #:#" | sed "s# #/#g"`
-REPO_HTTPS_URL=`echo ${REPO_BASE_URL} | sed "s#https://#git@#g" | sed "s#:#/#g" | sed "s#git@#https://#g"`
-REPO_GIT_USER_HOST=`echo ${REPO_GIT_URL} | sed "s#:# #g" | awk '{print $1}'`
-REPO_GIT_HOST=`echo ${REPO_GIT_USER_HOST} | sed "s#git@##g"`
+PRNINFO "Check directory and file about SSH setting"
 
-#
-# ssh and ssh-agent
-#
-echo "[INFO] ${PRGNAME} ${BACKUP_DIR} Check .ssh directory"
-if [ ! -d ~/.ssh ]; then
-	echo "[ERROR] ${PRGNAME} ${BACKUP_DIR} Not found ~/.ssh directory"
+if [ ! -d "${HOME}/.ssh" ]; then
+	PRNERR "Not found ${HOME}/.ssh directory"
 	exit 1
 fi
-if [ ! -f ~/.ssh/${DEMO_SSH_KEY} ]; then
-	echo "[ERROR] ${PRGNAME} ${BACKUP_DIR} Not found ~/.ssh/${DEMO_SSH_KEY} file"
+if [ ! -f "${HOME}/.ssh/${DEMO_SSH_KEY}" ]; then
+	PRNERR "Not found ${HOME}/.ssh/${DEMO_SSH_KEY} file"
 	exit 1
 fi
-run_cmd chmod 700 ~/.ssh
-run_cmd chmod 600 ~/.ssh/${DEMO_SSH_KEY}
 
-eval `ssh-agent -s`
-ssh-add ~/.ssh/${DEMO_SSH_KEY}
-check_error "failed adding ssh-key to agent"
-
-ssh -oStrictHostKeyChecking=no -T ${REPO_GIT_USER_HOST}
-
-#---------------------------------------------------------------------
-# Prepare the file to upload
-#---------------------------------------------------------------------
-echo "[INFO] ${PRGNAME} ${BACKUP_DIR} Prepare the file to upload"
-
-#
-# make dist directory cloning repo
-#
-echo "[INFO] ${PRGNAME} ${BACKUP_DIR} Clone ${REPO_GHPAGES} to dist directory"
-if [ -d ${DIST_DIR} -o -f ${DIST_DIR} ]; then
-	echo "[WARNING] ${PRGNAME} ${DIST_DIR} file or directory is existed, then it remove now."
-	run_cmd rm -rf ${DIST_DIR}
+if ! RUNCMD chmod 700 "${HOME}/.ssh"; then
+	PRNERR "Could not change stat to ${HOME}/.ssh directory"
+	exit 1
 fi
-run_cmd git clone ${REPO_GIT_URL} ${DIST_DIR_NAME}
-run_cmd cd ${DIST_DIR}
-run_cmd git config user.name "AntPickax CI"
-run_cmd git config user.email "antpickax-support@mail.yahoo.co.jp"
-run_cmd git checkout ${REPO_GHPAGES}
+if ! RUNCMD chmod 600 "${HOME}/.ssh/${DEMO_SSH_KEY}"; then
+	PRNERR "Could not change stat to ${HOME}/.ssh/${DEMO_SSH_KEY} file"
+	exit 1
+fi
 
 #
-# Copy index(ja).html under dist directory
+# Run ssh-agent
 #
-echo "[INFO] ${PRGNAME} ${BACKUP_DIR} Copying public directory and index(ja).html"
-run_cmd rm -rf ${DIST_PUBLIC_DIR}
-run_cmd cp -rp ${MASTER_PUBLIC_DIR} ${DIST_DIR}
+PRNINFO "Run ssh-agent"
+if ! RUNCMD ssh-agent -s > "${SSH_AGENT_TMPFILE}"; then
+	PRNERR "Failed to run ssh-agent"
+	exit 1
+fi
+if [ ! -f "${SSH_AGENT_TMPFILE}" ]; then
+	PRNERR "Not found ${SSH_AGENT_TMPFILE} file"
+	exit 1
+fi
+if ! RUNCMD sed -i -e 's|echo|#echo|g' "${SSH_AGENT_TMPFILE}"; then
+	PRNERR "Failed to convert ${SSH_AGENT_TMPFILE} file"
+	exit 1
+fi
+. "${SSH_AGENT_TMPFILE}"
 
-cat ${DEMO_DIR}/${DEMO_INDEX_HTML} | sed "s/__K2HR3_DEMO_INDEX_HTML_LANG__/en/g" | sed "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" > ${DIST_DIR}/${DEMO_INDEX_HTML}
-check_error "failed copying from ${DEMO_DIR}/${DEMO_INDEX_HTML} to ${DIST_DIR}/${DEMO_INDEX_HTML}"
+if ! RUNCMD ssh-add ~/.ssh/"${DEMO_SSH_KEY}"; then
+	PRNERR "Failed to run ssh-add"
+	exit 1
+fi
+if ! RUNCMD ssh -oStrictHostKeyChecking=no -T "${REPO_GIT_USER_HOST}"; then
+	PRNERR "Failed to run ssh -oStrictHostKeyChecking=no"
+	exit 1
+fi
 
-cat ${DEMO_DIR}/${DEMO_INDEX_HTML} | sed "s/__K2HR3_DEMO_INDEX_HTML_LANG__/ja/g" | sed "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" > ${DIST_DIR}/${DEMO_INDEXJA_HTML}
-check_error "failed copying from ${DEMO_DIR}/${DEMO_INDEX_HTML} to ${DIST_DIR}/${DEMO_INDEXJA_HTML}"
+PRNSUCCESS "Setup SSH before pushing"
 
-#---------------------------------------------------------------------
-# Push files
-#---------------------------------------------------------------------
-echo "[INFO] ${PRGNAME} ${BACKUP_DIR} Push and updated gh-pages"
+#==============================================================
+# Setup gh-pages branch and prepare files to commit
+#==============================================================
+PRNTITLE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
+
+#
+# Make dist directory cloning repo
+#
+PRNINFO "Clone ${BRANCH_GHPAGES} to dist directory"
+
+if [ -d "${DIST_DIR}" ] || [ -f "${DIST_DIR}" ]; then
+	PRNWARN "${DIST_DIR} file or directory is existed, then it will be remove for creation"
+	RUNCMD rm -rf "${DIST_DIR}"
+fi
+if ! RUNCMD git clone "${REPO_GIT_URL}" "${DIST_DIR_NAME}"; then
+	PRNERR "Failed to clone ${REPO_GIT_URL} to ${DIST_DIR_NAME}"
+	exit 1
+fi
+if ! RUNCMD cd "${DIST_DIR}"; then
+	PRNERR "Failed to change current directory."
+	exit 1
+fi
+if ! RUNCMD git config user.name "${DIST_CONFIG_USERNAME}"; then
+	PRNERR "Failed to set git user name(${DIST_CONFIG_USERNAME})"
+	exit 1
+fi
+if ! RUNCMD git config user.email "${DIST_CONFIG_EMAIL}"; then
+	PRNERR "Failed to set git user mail address(${DIST_CONFIG_EMAIL})"
+	exit 1
+fi
+if ! RUNCMD git checkout "${BRANCH_GHPAGES}"; then
+	PRNERR "Failed to checkout ${BRANCH_GHPAGES} branch"
+	exit 1
+fi
+
+#
+# Copy public directory and index(ja).html files to dist directory
+#
+PRNINFO "Copying public directory and index(ja).html"
+
+rm -rf "${DIST_PUBLIC_DIR}"
+if ! RUNCMD cp -rp "${MASTER_PUBLIC_DIR}" "${DIST_DIR}"; then
+	PRNERR "Failed to copy ${MASTER_PUBLIC_DIR} directory to ${DIST_DIR}"
+	exit 1
+fi
+if ! RUNCMD sed -e "s/__K2HR3_DEMO_INDEX_HTML_LANG__/en/g" -e "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" "${DEMO_DIR}/${DEMO_INDEX_HTML}" > "${DIST_DIR}/${DEMO_INDEX_HTML}"; then
+	PRNERR "Failed to convert and create ${DEMO_INDEX_HTML} in ${DIST_DIR}"
+	exit 1
+fi
+if ! RUNCMD sed -e "s/__K2HR3_DEMO_INDEX_HTML_LANG__/ja/g" -e "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" "${DEMO_DIR}/${DEMO_INDEX_HTML}" > "${DIST_DIR}/${DEMO_INDEXJA_HTML}"; then
+	PRNERR "Failed to convert and create ${DEMO_INDEXJA_HTML} in ${DIST_DIR}"
+	exit 1
+fi
+
+PRNSUCCESS "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
+
+#==============================================================
+# Push files to gh-pages
+#==============================================================
+PRNTITLE "Push files to ${BRANCH_GHPAGES}"
 
 #
 # Push
 #
-echo "[INFO] ${PRGNAME} ${BACKUP_DIR} Push ${REPO_GHPAGES}"
-if [ "X${PUBLISH_TAG_NAME}" = "X" ]; then
-	echo "[WARNING] ${PRGNAME} PUBLISH_TAG_NAME environment is not existed."
+# [NOTE]
+# The "PUBLISH_TAG_NAME" environment variable is set by the caller
+# of this script(ex. nodetypevars.sh).
+# If not set, set the default value here.
+#
+PRNINFO "Push ${BRANCH_GHPAGES}"
+
+if [ -z "${PUBLISH_TAG_NAME}" ]; then
+	PRNWARN "PUBLISH_TAG_NAME environment is not existed."
 	PUBLISH_TAG_NAME="unknown version tag"
 fi
 
-run_cmd git add -A .
-git commit -m "Updates GitHub Pages: ${PUBLISH_TAG_NAME} (${RELEASE_SHA1})"
-if [ $? -eq 0 ]; then
-	run_cmd git push origin ${REPO_GHPAGES}
-
-	echo "[INFO] ${PRGNAME} Succeed to push ${REPO_GHPAGES}"
+if ! RUNCMD git add -A .; then
+	PRNERR "Failed to git add updated files"
+	exit 1
+fi
+if ! RUNCMD git commit -m "Updates GitHub Pages: ${PUBLISH_TAG_NAME} (${REPO_RELEASE_SHA1})"; then
+	#
+	# No updated files, so nothing to push any files.
+	#
+	PRNWARN "Succeed nothing to update files, skip push."
 else
-	echo "[WARNING] ${PRGNAME} Succeed nothing to update files, skip push."
+	if ! RUNCMD git push origin "${BRANCH_GHPAGES}"; then
+		PRNERR "Failed to git push to ${BRANCH_GHPAGES}"
+		exit 1
+	fi
 fi
 
-#
-# restore
-#
-echo "[INFO] ${PRGNAME} ${BACKUP_DIR} Restore backup"
-if [ -d ${BACKUP_DIR} ]; then
-	run_cmd cp -p ${BACKUP_DIR}/${R3APP_JSX} ${MASTER_SRC_DIR}/${R3APP_JSX}
-	run_cmd cp -p ${BACKUP_DIR}/${R3PROVIDER_JS} ${MASTER_SRC_UTIL_DIR}/${R3PROVIDER_JS}
+PRNSUCCESS "Push files to ${BRANCH_GHPAGES}"
 
-	echo "[INFO] ${PRGNAME} ${BACKUP_DIR} Succeed to restore backup"
+#==============================================================
+# Restore
+#==============================================================
+PRNTITLE "Restore"
+
+#
+# Restore files from backup
+#
+PRNINFO "Restore files from backup"
+if [ -d "${BACKUP_DIR}" ]; then
+	if ! RUNCMD cp -p "${BACKUP_DIR}/${R3APP_JSX}" "${MASTER_SRC_DIR}/${R3APP_JSX}"; then
+		PRNERR "Failed to restore ${R3APP_JSX} from ${BACKUP_DIR}"
+		exit 1
+	fi
+	if ! RUNCMD cp -p "${BACKUP_DIR}/${R3PROVIDER_JS}" "${MASTER_SRC_UTIL_DIR}/${R3PROVIDER_JS}"; then
+		PRNERR "Failed to restore ${R3PROVIDER_JS} from ${BACKUP_DIR}"
+		exit 1
+	fi
 else
-	echo "[WARNING] ${PRGNAME} Not found ${BACKUP_DIR}, then skip restoring."
+	PRNWARN "Not found ${BACKUP_DIR}, then skip restoring."
 fi
 
-#
-# Finish
-#
-echo "[INFO] ${PRGNAME} ${BACKUP_DIR} Finish building all for demo files on github pages."
+PRNSUCCESS "Restore"
+
 exit 0
 
 #
-# VIM modelines
-#
-# vim:set ts=4 fenc=utf-8:
+# Local variables:
+# tab-width: 4
+# c-basic-offset: 4
+# End:
+# vim600: noexpandtab sw=4 ts=4 fdm=marker
+# vim<600: noexpandtab sw=4 ts=4
 #
