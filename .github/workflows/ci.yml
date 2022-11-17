@@ -81,7 +81,6 @@ jobs:
       #    USE_PACKAGECLOUD_REPO      : true means using pacakgecloud.io repo, false is not using
       #    PACKAGECLOUD_OWNER         : owner name as a pat of path to packagcloud.io for downloading
       #    PACKAGECLOUD_DOWNLOAD_REPO : repo name as a pat of path to packagcloud.io for downloading
-      #  * GHPAGES_DEPLOY_KEY         : ssh-key for publishing demo page on gh-pages
       #
       # "NPM_TOKEN" is required variable to publish the package.
       # "GHPAGES_DEPLOY_KEY" is a special value defined only in
@@ -95,13 +94,20 @@ jobs:
           echo "ENV_USE_PACKAGECLOUD_REPO=${{ secrets.USE_PACKAGECLOUD_REPO }}"           >> "${GITHUB_ENV}"
           echo "ENV_PACKAGECLOUD_OWNER=${{ secrets.PACKAGECLOUD_OWNER }}"                 >> "${GITHUB_ENV}"
           echo "ENV_PACKAGECLOUD_DOWNLOAD_REPO=${{ secrets.PACKAGECLOUD_DOWNLOAD_REPO }}" >> "${GITHUB_ENV}"
-          echo "ENV_GHPAGES_DEPLOY_KEY=${{ secrets.GHPAGES_DEPLOY_KEY }}"                 >> "${GITHUB_ENV}"
 
       #
       # Run building and packaging helper
       #
+      # [NOTE] Special Secrets
+      # The "Secret" below is output directly to a file, not to an
+      # environment variable.
+      #
+      #    GHPAGES_DEPLOY_KEY         : ssh-key for publishing demo page on gh-pages
+      #
       - name: Run building and packaging
         run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GHPAGES_DEPLOY_KEY }}" > ~/.ssh/actions_id_rsa
           /bin/sh -c "$GITHUB_WORKSPACE/.github/workflows/nodejs_helper.sh -node ${{ matrix.node-version }}"
 
   dockerimage:
