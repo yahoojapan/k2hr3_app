@@ -177,18 +177,8 @@ run_post_publish()
 	#
 	# For publish demo page
 	#
-    if [ -z "${ENV_GHPAGES_DEPLOY_KEY}" ]; then
-		PRNERR "Failed to run \"npm run deploy\", because ENV_GHPAGES_DEPLOY_KEY environment is not set."
-		return 1
-    fi
-	if [ ! -d "${HOME}"/.ssh ]; then
-		if ! mkdir -p "${HOME}"/.ssh; then
-			PRNERR "Failed to run \"npm run deploy\", because could not create ${HOME}/.ssh directory."
-			return 1
-		fi
-	fi
-	if ! echo "${ENV_GHPAGES_DEPLOY_KEY}" | tr -d '\n' > "${HOME}"/.ssh/actions_id_rsa; then
-		PRNERR "Failed to run \"npm run deploy\", because could not set ENV_GHPAGES_DEPLOY_KEY value to ${HOME}/.ssh/actions_id_rsa."
+	if [ ! -f "${HOME}"/.ssh/actions_id_rsa ]; then
+		PRNERR "Not found ${HOME}/.ssh/actions_id_rsa file needed to publish demo page, it must be set in ci.yaml"
 		return 1
 	fi
 
