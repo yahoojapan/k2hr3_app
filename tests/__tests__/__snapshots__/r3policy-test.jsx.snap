@@ -10,7 +10,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     EFFECT
   </h6>
   <div
-    className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary  css-cps3t7-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+    className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary  css-155hbyx-MuiInputBase-root-MuiInput-root-MuiSelect-root"
     onClick={[Function]}
   >
     <div
@@ -166,7 +166,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       className="MuiFormControl-root MuiTextField-root css-5g4ojo-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1b1270g-MuiInputBase-root-MuiInput-root"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1dldo5d-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -235,7 +235,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       className="MuiFormControl-root MuiTextField-root css-5g4ojo-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1b1270g-MuiInputBase-root-MuiInput-root"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1dldo5d-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -309,7 +309,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       className="MuiFormControl-root MuiTextField-root css-gemud3-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1b1270g-MuiInputBase-root-MuiInput-root"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1dldo5d-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input

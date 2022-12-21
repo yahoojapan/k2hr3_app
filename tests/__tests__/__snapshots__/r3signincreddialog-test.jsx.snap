@@ -109,7 +109,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
               USER NAME(ID etc)
             </label>
             <div
-              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-yvxd14-MuiInputBase-root-MuiInput-root"
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-te96pa-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
@@ -141,7 +141,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
               PASS PHRASE
             </label>
             <div
-              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd css-yvxd14-MuiInputBase-root-MuiInput-root"
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd css-te96pa-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
