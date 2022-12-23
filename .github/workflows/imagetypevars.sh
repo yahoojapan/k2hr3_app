@@ -1,7 +1,7 @@
 #
 # K2HR3 Web Application
 #
-# Copyright 2021 Yahoo! Japan Corporation.
+# Copyright 2021 Yahoo Japan Corporation.
 #
 # K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers
 # common management information for the cloud.
