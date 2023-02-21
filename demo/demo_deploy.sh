@@ -230,7 +230,8 @@ fi
 #
 PRNINFO "Change application title(${R3APP_JSX}) and Switch ${R3PROVIDER_JS} for demo"
 
-if ! RUNCMD sed -i -e "s/title='K2HR3'/title='K2HR3 DEMO'/g" "${MASTER_SRC_DIR}/${R3APP_JSX}"; then
+PRNINFO "Run \"sed -i -e \"s/title='K2HR3'/title='K2HR3 DEMO'/g\" ${MASTER_SRC_DIR}/${R3APP_JSX}\""
+if ! sed -i -e "s/title='K2HR3'/title='K2HR3 DEMO'/g" "${MASTER_SRC_DIR}/${R3APP_JSX}"; then
 	PRNERR "Failed to modify ${MASTER_SRC_DIR}/${R3APP_JSX} for demo title"
 	PRNFAILURE "Convert files for demo site and make backup files"
 	exit 1
@@ -310,7 +311,9 @@ fi
 # Run ssh-agent
 #
 PRNINFO "Run ssh-agent"
-if ! RUNCMD ssh-agent -s > "${SSH_AGENT_TMPFILE}"; then
+
+PRNINFO "Run \"ssh-agent -s > ${SSH_AGENT_TMPFILE}\""
+if ! ssh-agent -s > "${SSH_AGENT_TMPFILE}"; then
 	PRNERR "Failed to run ssh-agent"
 	PRNFAILURE "Setup SSH before pushing"
 	exit 1
@@ -320,11 +323,14 @@ if [ ! -f "${SSH_AGENT_TMPFILE}" ]; then
 	PRNFAILURE "Setup SSH before pushing"
 	exit 1
 fi
-if ! RUNCMD sed -i -e 's|echo|#echo|g' "${SSH_AGENT_TMPFILE}"; then
+
+PRNINFO "Run \"sed -i -e 's|echo|#echo|g' ${SSH_AGENT_TMPFILE}\""
+if ! sed -i -e 's|echo|#echo|g' "${SSH_AGENT_TMPFILE}"; then
 	PRNERR "Failed to convert ${SSH_AGENT_TMPFILE} file"
 	PRNFAILURE "Setup SSH before pushing"
 	exit 1
 fi
+
 . "${SSH_AGENT_TMPFILE}"
 
 if ! RUNCMD ssh-add ~/.ssh/"${DEMO_SSH_KEY}"; then
@@ -332,11 +338,9 @@ if ! RUNCMD ssh-add ~/.ssh/"${DEMO_SSH_KEY}"; then
 	PRNFAILURE "Setup SSH before pushing"
 	exit 1
 fi
-if ! RUNCMD ssh -oStrictHostKeyChecking=no -T "${REPO_GIT_USER_HOST}"; then
-	PRNERR "Failed to run ssh -oStrictHostKeyChecking=no"
-	PRNFAILURE "Setup SSH before pushing"
-	exit 1
-fi
+
+PRNINFO "Run \"ssh -oStrictHostKeyChecking=no -T ${REPO_GIT_USER_HOST}\" --> maybe puts some messages, but continue..."
+ssh -oStrictHostKeyChecking=no -T "${REPO_GIT_USER_HOST}"
 
 PRNSUCCESS "Setup SSH before pushing"
 
@@ -359,8 +363,15 @@ if ! RUNCMD git clone "${REPO_GIT_URL}" "${DIST_DIR_NAME}"; then
 	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 	exit 1
 fi
-if ! RUNCMD cd "${DIST_DIR}"; then
+
+PRNINFO "Run \"cd ${DIST_DIR}\""
+if ! cd "${DIST_DIR}"; then
 	PRNERR "Failed to change current directory."
+	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
+	exit 1
+fi
+if ! RUNCMD git fetch; then
+	PRNERR "Failed to fetch"
 	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 	exit 1
 fi
@@ -391,11 +402,15 @@ if ! RUNCMD cp -rp "${MASTER_PUBLIC_DIR}" "${DIST_DIR}"; then
 	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 	exit 1
 fi
-if ! RUNCMD sed -e "s/__K2HR3_DEMO_INDEX_HTML_LANG__/en/g" -e "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" "${DEMO_DIR}/${DEMO_INDEX_HTML}" > "${DIST_DIR}/${DEMO_INDEX_HTML}"; then
+
+PRNINFO "Run \"sed -e \"s/__K2HR3_DEMO_INDEX_HTML_LANG__/en/g\" -e \"s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g\" ${DEMO_DIR}/${DEMO_INDEX_HTML} > ${DIST_DIR}/${DEMO_INDEX_HTML}\""
+if ! sed -e "s/__K2HR3_DEMO_INDEX_HTML_LANG__/en/g" -e "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" "${DEMO_DIR}/${DEMO_INDEX_HTML}" > "${DIST_DIR}/${DEMO_INDEX_HTML}"; then
 	PRNERR "Failed to convert and create ${DEMO_INDEX_HTML} in ${DIST_DIR}"
 	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 	exit 1
 fi
+
+PRNINFO "Run \"sed -e \"s/__K2HR3_DEMO_INDEX_HTML_LANG__/ja/g\" -e \"s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g\" ${DEMO_DIR}/${DEMO_INDEX_HTML} > ${DIST_DIR}/${DEMO_INDEXJA_HTML}\""
 if ! RUNCMD sed -e "s/__K2HR3_DEMO_INDEX_HTML_LANG__/ja/g" -e "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" "${DEMO_DIR}/${DEMO_INDEX_HTML}" > "${DIST_DIR}/${DEMO_INDEXJA_HTML}"; then
 	PRNERR "Failed to convert and create ${DEMO_INDEXJA_HTML} in ${DIST_DIR}"
 	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
@@ -429,7 +444,9 @@ if ! RUNCMD git add -A .; then
 	PRNFAILURE "Push files to ${BRANCH_GHPAGES}"
 	exit 1
 fi
-if ! RUNCMD git commit -m "Updates GitHub Pages: ${PUBLISH_TAG_NAME} (${REPO_RELEASE_SHA1})"; then
+
+PRNINFO "Run \"git commit -m \"Updates GitHub Pages: ${PUBLISH_TAG_NAME} (${REPO_RELEASE_SHA1})\"\""
+if ! git commit -m "Updates GitHub Pages: ${PUBLISH_TAG_NAME} (${REPO_RELEASE_SHA1})"; then
 	#
 	# No updated files, so nothing to push any files.
 	#
