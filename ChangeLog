@@ -1,3 +1,26 @@
+k2hr3-app (1.0.8) unstable; urgency=low
+
+  * Changed flows for packaging and bulding docker image - #67
+  * Updated header and footer in comment lines - #66
+  * Updated package dependencies and the snapshot for jest - #64
+  * Updated issue/pullrequest templates - #63
+  * Reviewed ShellCheck processing again - #62
+  * Updated scripts for review of ShellCheck processing - #61
+  * Reviewed ShellCheck processing and fixed bugs - #60
+  * Eliminated unnecessary copies in nodejs_helper.sh - #59
+  * Updated docker/login-action from v1 to v2 - #58
+  * Fixed a bug in docker_helper.sh - #57
+  * Fixed docker_helper.sh and imagetypevars.sh - #56
+  * Shared Docker image build logic with other products - #55
+  * Fixed github actions logic about ENV_GHPAGES_DEPLOY_KEY - #54
+  * Updated github actions and nodejs version, and fixed bugs - #53
+  * Unified OS judgment to /etc/os-release and replaced which command - #52
+  * Renamed the test directory to tests - #51
+  * Updated dependencies and snapshots etc - #50
+  * Cleaned up package.json and updated related package versions - #49
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Tue, 21 Feb 2023 10:55:57 +0900
+
 k2hr3-app (1.0.7) unstable; urgency=low
 
   * Updated React from 17.x.x to 18.x.x - #47
