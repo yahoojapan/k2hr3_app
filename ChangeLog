@@ -1,3 +1,9 @@
+k2hr3-app (1.0.9) unstable; urgency=low
+
+  * Fixed bugs in demo/demo_deploy.sh - #69
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Tue, 21 Feb 2023 13:04:48 +0900
+
 k2hr3-app (1.0.8) unstable; urgency=low
 
   * Changed flows for packaging and bulding docker image - #67
