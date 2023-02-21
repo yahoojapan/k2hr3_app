@@ -12,6 +12,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
         "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
           "propTypes": {
+            "TransitionComponent": [Function],
             "children": [Function],
             "className": [Function],
             "classes": [Function],
@@ -113,7 +114,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
             className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1dldo5d-MuiInputBase-root-MuiInput-root"
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
@@ -169,6 +170,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
                   disabled={false}
                   name=":r2:"
                   onChange={[Function]}
+                  required={false}
                   type="radio"
                   value="verifyUrl"
                 />
@@ -230,6 +232,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
                   disabled={false}
                   name=":r2:"
                   onChange={[Function]}
+                  required={false}
                   type="radio"
                   value="staticResourceObject"
                 />
@@ -271,7 +274,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
             className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1dldo5d-MuiInputBase-root-MuiInput-root"
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
