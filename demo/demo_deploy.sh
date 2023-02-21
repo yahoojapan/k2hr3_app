@@ -205,6 +205,7 @@ if [ -d "${BACKUP_DIR}" ] || [ -f "${BACKUP_DIR}" ]; then
 fi
 if ! RUNCMD mkdir -p "${BACKUP_DIR}"; then
 	PRNERR "Failed to create ${BACKUP_DIR} directory"
+	PRNFAILURE "Convert files for demo site and make backup files"
 	exit 1
 fi
 
@@ -215,10 +216,12 @@ PRNINFO "Copy files to backup ${BACKUP_DIR} directory"
 
 if ! RUNCMD cp -p "${MASTER_SRC_DIR}/${R3APP_JSX}" "${BACKUP_DIR}/${R3APP_JSX}"; then
 	PRNERR "Failed to copy backup file(${R3APP_JSX})"
+	PRNFAILURE "Convert files for demo site and make backup files"
 	exit 1
 fi
 if ! RUNCMD cp -p "${MASTER_SRC_UTIL_DIR}/${R3PROVIDER_JS}" "${BACKUP_DIR}/${R3PROVIDER_JS}"; then
 	PRNERR "Failed to copy backup file(${R3PROVIDER_JS})"
+	PRNFAILURE "Convert files for demo site and make backup files"
 	exit 1
 fi
 
@@ -229,10 +232,12 @@ PRNINFO "Change application title(${R3APP_JSX}) and Switch ${R3PROVIDER_JS} for 
 
 if ! RUNCMD sed -i -e "s/title='K2HR3'/title='K2HR3 DEMO'/g" "${MASTER_SRC_DIR}/${R3APP_JSX}"; then
 	PRNERR "Failed to modify ${MASTER_SRC_DIR}/${R3APP_JSX} for demo title"
+	PRNFAILURE "Convert files for demo site and make backup files"
 	exit 1
 fi
 if ! RUNCMD cp -p "${DEMO_DIR}/${R3PROVIDER_JS}" "${MASTER_SRC_UTIL_DIR}/${R3PROVIDER_JS}"; then
 	PRNERR "Failed to copy ${DEMO_DIR}/${R3PROVIDER_JS} to ${MASTER_SRC_UTIL_DIR}/${R3PROVIDER_JS}"
+	PRNFAILURE "Convert files for demo site and make backup files"
 	exit 1
 fi
 
@@ -253,6 +258,7 @@ if [ -n "${GHPAGES_WITHOUT_LICENSE}" ] && [ "${GHPAGES_WITHOUT_LICENSE}" -eq 1 ]
 	#
 	if ! RUNCMD npm run build:webpack; then
 		PRNERR "Failed to create bundle.js without building License file."
+		PRNFAILURE "Build bundle.js for demo site"
 		exit 1
 	fi
 else
@@ -261,6 +267,7 @@ else
 	#
 	if ! RUNCMD npm run build:all; then
 		PRNERR "Failed to create bundle.js with building License file."
+		PRNFAILURE "Build bundle.js for demo site"
 		exit 1
 	fi
 fi
@@ -279,19 +286,23 @@ PRNINFO "Check directory and file about SSH setting"
 
 if [ ! -d "${HOME}/.ssh" ]; then
 	PRNERR "Not found ${HOME}/.ssh directory"
+	PRNFAILURE "Setup SSH before pushing"
 	exit 1
 fi
 if [ ! -f "${HOME}/.ssh/${DEMO_SSH_KEY}" ]; then
 	PRNERR "Not found ${HOME}/.ssh/${DEMO_SSH_KEY} file"
+	PRNFAILURE "Setup SSH before pushing"
 	exit 1
 fi
 
 if ! RUNCMD chmod 700 "${HOME}/.ssh"; then
 	PRNERR "Could not change stat to ${HOME}/.ssh directory"
+	PRNFAILURE "Setup SSH before pushing"
 	exit 1
 fi
 if ! RUNCMD chmod 600 "${HOME}/.ssh/${DEMO_SSH_KEY}"; then
 	PRNERR "Could not change stat to ${HOME}/.ssh/${DEMO_SSH_KEY} file"
+	PRNFAILURE "Setup SSH before pushing"
 	exit 1
 fi
 
@@ -301,24 +312,29 @@ fi
 PRNINFO "Run ssh-agent"
 if ! RUNCMD ssh-agent -s > "${SSH_AGENT_TMPFILE}"; then
 	PRNERR "Failed to run ssh-agent"
+	PRNFAILURE "Setup SSH before pushing"
 	exit 1
 fi
 if [ ! -f "${SSH_AGENT_TMPFILE}" ]; then
 	PRNERR "Not found ${SSH_AGENT_TMPFILE} file"
+	PRNFAILURE "Setup SSH before pushing"
 	exit 1
 fi
 if ! RUNCMD sed -i -e 's|echo|#echo|g' "${SSH_AGENT_TMPFILE}"; then
 	PRNERR "Failed to convert ${SSH_AGENT_TMPFILE} file"
+	PRNFAILURE "Setup SSH before pushing"
 	exit 1
 fi
 . "${SSH_AGENT_TMPFILE}"
 
 if ! RUNCMD ssh-add ~/.ssh/"${DEMO_SSH_KEY}"; then
 	PRNERR "Failed to run ssh-add"
+	PRNFAILURE "Setup SSH before pushing"
 	exit 1
 fi
 if ! RUNCMD ssh -oStrictHostKeyChecking=no -T "${REPO_GIT_USER_HOST}"; then
 	PRNERR "Failed to run ssh -oStrictHostKeyChecking=no"
+	PRNFAILURE "Setup SSH before pushing"
 	exit 1
 fi
 
@@ -340,22 +356,27 @@ if [ -d "${DIST_DIR}" ] || [ -f "${DIST_DIR}" ]; then
 fi
 if ! RUNCMD git clone "${REPO_GIT_URL}" "${DIST_DIR_NAME}"; then
 	PRNERR "Failed to clone ${REPO_GIT_URL} to ${DIST_DIR_NAME}"
+	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 	exit 1
 fi
 if ! RUNCMD cd "${DIST_DIR}"; then
 	PRNERR "Failed to change current directory."
+	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 	exit 1
 fi
 if ! RUNCMD git config user.name "${DIST_CONFIG_USERNAME}"; then
 	PRNERR "Failed to set git user name(${DIST_CONFIG_USERNAME})"
+	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 	exit 1
 fi
 if ! RUNCMD git config user.email "${DIST_CONFIG_EMAIL}"; then
 	PRNERR "Failed to set git user mail address(${DIST_CONFIG_EMAIL})"
+	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 	exit 1
 fi
 if ! RUNCMD git checkout "${BRANCH_GHPAGES}"; then
 	PRNERR "Failed to checkout ${BRANCH_GHPAGES} branch"
+	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 	exit 1
 fi
 
@@ -367,14 +388,17 @@ PRNINFO "Copying public directory and index(ja).html"
 rm -rf "${DIST_PUBLIC_DIR}"
 if ! RUNCMD cp -rp "${MASTER_PUBLIC_DIR}" "${DIST_DIR}"; then
 	PRNERR "Failed to copy ${MASTER_PUBLIC_DIR} directory to ${DIST_DIR}"
+	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 	exit 1
 fi
 if ! RUNCMD sed -e "s/__K2HR3_DEMO_INDEX_HTML_LANG__/en/g" -e "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" "${DEMO_DIR}/${DEMO_INDEX_HTML}" > "${DIST_DIR}/${DEMO_INDEX_HTML}"; then
 	PRNERR "Failed to convert and create ${DEMO_INDEX_HTML} in ${DIST_DIR}"
+	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 	exit 1
 fi
 if ! RUNCMD sed -e "s/__K2HR3_DEMO_INDEX_HTML_LANG__/ja/g" -e "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" "${DEMO_DIR}/${DEMO_INDEX_HTML}" > "${DIST_DIR}/${DEMO_INDEXJA_HTML}"; then
 	PRNERR "Failed to convert and create ${DEMO_INDEXJA_HTML} in ${DIST_DIR}"
+	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 	exit 1
 fi
 
@@ -402,6 +426,7 @@ fi
 
 if ! RUNCMD git add -A .; then
 	PRNERR "Failed to git add updated files"
+	PRNFAILURE "Push files to ${BRANCH_GHPAGES}"
 	exit 1
 fi
 if ! RUNCMD git commit -m "Updates GitHub Pages: ${PUBLISH_TAG_NAME} (${REPO_RELEASE_SHA1})"; then
@@ -412,6 +437,7 @@ if ! RUNCMD git commit -m "Updates GitHub Pages: ${PUBLISH_TAG_NAME} (${REPO_REL
 else
 	if ! RUNCMD git push origin "${BRANCH_GHPAGES}"; then
 		PRNERR "Failed to git push to ${BRANCH_GHPAGES}"
+		PRNFAILURE "Push files to ${BRANCH_GHPAGES}"
 		exit 1
 	fi
 fi
@@ -430,10 +456,12 @@ PRNINFO "Restore files from backup"
 if [ -d "${BACKUP_DIR}" ]; then
 	if ! RUNCMD cp -p "${BACKUP_DIR}/${R3APP_JSX}" "${MASTER_SRC_DIR}/${R3APP_JSX}"; then
 		PRNERR "Failed to restore ${R3APP_JSX} from ${BACKUP_DIR}"
+		PRNFAILURE "Restore"
 		exit 1
 	fi
 	if ! RUNCMD cp -p "${BACKUP_DIR}/${R3PROVIDER_JS}" "${MASTER_SRC_UTIL_DIR}/${R3PROVIDER_JS}"; then
 		PRNERR "Failed to restore ${R3PROVIDER_JS} from ${BACKUP_DIR}"
+		PRNFAILURE "Restore"
 		exit 1
 	fi
 else

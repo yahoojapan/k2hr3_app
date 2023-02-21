@@ -12,6 +12,7 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
         "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
           "propTypes": {
+            "TransitionComponent": [Function],
             "children": [Function],
             "className": [Function],
             "classes": [Function],
