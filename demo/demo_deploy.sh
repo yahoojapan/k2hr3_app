@@ -31,15 +31,15 @@ SRCTOP=$(cd "${SCRIPTDIR}/.." || exit 1; pwd)
 #
 BRANCH_GHPAGES="gh-pages"
 
-DEMO_DIR=$(cd "${SRCTOP}/demo" || exit 1; pwd)
-BACKUP_DIR=$(cd "${SRCTOP}/backup" || exit 1; pwd)
-MASTER_SRC_DIR=$(cd "${SRCTOP}/src" || exit 1; pwd)
-MASTER_SRC_UTIL_DIR=$(cd "${MASTER_SRC_DIR}/util" || exit 1; pwd)
-MASTER_PUBLIC_DIR=$(cd "${SRCTOP}/public" || exit 1; pwd)
+DEMO_DIR="${SRCTOP}/demo"
+BACKUP_DIR="${SRCTOP}/backup"
+MASTER_SRC_DIR="${SRCTOP}/src"
+MASTER_SRC_UTIL_DIR="${MASTER_SRC_DIR}/util"
+MASTER_PUBLIC_DIR="${SRCTOP}/public"
 
 DIST_DIR_NAME="dist"
-DIST_DIR=$(cd "${SRCTOP}/${DIST_DIR_NAME}" || exit 1; pwd)
-DIST_PUBLIC_DIR=$(cd "${DIST_DIR}/public" || exit 1; pwd)
+DIST_DIR="${SRCTOP}/${DIST_DIR_NAME}"
+DIST_PUBLIC_DIR="${DIST_DIR}/public"
 
 DIST_CONFIG_USERNAME="AntPickax CI"
 DIST_CONFIG_EMAIL="antpickax-support@mail.yahoo.co.jp"
