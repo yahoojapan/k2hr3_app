@@ -1,3 +1,9 @@
+k2hr3-app (1.0.11) unstable; urgency=low
+
+  * Updated building/packaging scripts - #73
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Mon, 06 Mar 2023 22:56:09 +0900
+
 k2hr3-app (1.0.10) unstable; urgency=low
 
   * Re-fixed bugs in demo/demo_deploy.sh - #71
