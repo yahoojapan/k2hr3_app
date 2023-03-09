@@ -278,71 +278,80 @@ PRNSUCCESS "Build bundle.js for demo site"
 #==============================================================
 # Setup SSH before pushing
 #==============================================================
+# [NOTE]
+# Setting SSH keys works when SETUP_SSH_DISABLE is not set.
+# If you do not need to set the SSH key, set "SETUP_SSH_DISABLE=1"
+# as an environment variable.
+#
 PRNTITLE "Setup SSH before pushing"
 
-#
-# Check directory and file about SSH setting
-#
-PRNINFO "Check directory and file about SSH setting"
+if [ -z "${SETUP_SSH_DISABLE}" ] || [ "${SETUP_SSH_DISABLE}" != "1" ]; then
+	#
+	# Check directory and file about SSH setting
+	#
+	PRNINFO "Check directory and file about SSH setting"
 
-if [ ! -d "${HOME}/.ssh" ]; then
-	PRNERR "Not found ${HOME}/.ssh directory"
-	PRNFAILURE "Setup SSH before pushing"
-	exit 1
+	if [ ! -d "${HOME}/.ssh" ]; then
+		PRNERR "Not found ${HOME}/.ssh directory"
+		PRNFAILURE "Setup SSH before pushing"
+		exit 1
+	fi
+	if [ ! -f "${HOME}/.ssh/${DEMO_SSH_KEY}" ]; then
+		PRNERR "Not found ${HOME}/.ssh/${DEMO_SSH_KEY} file"
+		PRNFAILURE "Setup SSH before pushing"
+		exit 1
+	fi
+
+	if ! RUNCMD chmod 700 "${HOME}/.ssh"; then
+		PRNERR "Could not change stat to ${HOME}/.ssh directory"
+		PRNFAILURE "Setup SSH before pushing"
+		exit 1
+	fi
+	if ! RUNCMD chmod 600 "${HOME}/.ssh/${DEMO_SSH_KEY}"; then
+		PRNERR "Could not change stat to ${HOME}/.ssh/${DEMO_SSH_KEY} file"
+		PRNFAILURE "Setup SSH before pushing"
+		exit 1
+	fi
+
+	#
+	# Run ssh-agent
+	#
+	PRNINFO "Run ssh-agent"
+
+	PRNINFO "Run \"ssh-agent -s > ${SSH_AGENT_TMPFILE}\""
+	if ! ssh-agent -s > "${SSH_AGENT_TMPFILE}"; then
+		PRNERR "Failed to run ssh-agent"
+		PRNFAILURE "Setup SSH before pushing"
+		exit 1
+	fi
+	if [ ! -f "${SSH_AGENT_TMPFILE}" ]; then
+		PRNERR "Not found ${SSH_AGENT_TMPFILE} file"
+		PRNFAILURE "Setup SSH before pushing"
+		exit 1
+	fi
+
+	PRNINFO "Run \"sed -i -e 's|echo|#echo|g' ${SSH_AGENT_TMPFILE}\""
+	if ! sed -i -e 's|echo|#echo|g' "${SSH_AGENT_TMPFILE}"; then
+		PRNERR "Failed to convert ${SSH_AGENT_TMPFILE} file"
+		PRNFAILURE "Setup SSH before pushing"
+		exit 1
+	fi
+
+	. "${SSH_AGENT_TMPFILE}"
+
+	if ! RUNCMD ssh-add ~/.ssh/"${DEMO_SSH_KEY}"; then
+		PRNERR "Failed to run ssh-add"
+		PRNFAILURE "Setup SSH before pushing"
+		exit 1
+	fi
+
+	PRNINFO "Run \"ssh -oStrictHostKeyChecking=no -T ${REPO_GIT_USER_HOST}\" --> maybe puts some messages, but continue..."
+	ssh -oStrictHostKeyChecking=no -T "${REPO_GIT_USER_HOST}"
+
+	PRNSUCCESS "Setup SSH before pushing"
+else
+	PRNSUCCESS "Skip setup SSH before pushing"
 fi
-if [ ! -f "${HOME}/.ssh/${DEMO_SSH_KEY}" ]; then
-	PRNERR "Not found ${HOME}/.ssh/${DEMO_SSH_KEY} file"
-	PRNFAILURE "Setup SSH before pushing"
-	exit 1
-fi
-
-if ! RUNCMD chmod 700 "${HOME}/.ssh"; then
-	PRNERR "Could not change stat to ${HOME}/.ssh directory"
-	PRNFAILURE "Setup SSH before pushing"
-	exit 1
-fi
-if ! RUNCMD chmod 600 "${HOME}/.ssh/${DEMO_SSH_KEY}"; then
-	PRNERR "Could not change stat to ${HOME}/.ssh/${DEMO_SSH_KEY} file"
-	PRNFAILURE "Setup SSH before pushing"
-	exit 1
-fi
-
-#
-# Run ssh-agent
-#
-PRNINFO "Run ssh-agent"
-
-PRNINFO "Run \"ssh-agent -s > ${SSH_AGENT_TMPFILE}\""
-if ! ssh-agent -s > "${SSH_AGENT_TMPFILE}"; then
-	PRNERR "Failed to run ssh-agent"
-	PRNFAILURE "Setup SSH before pushing"
-	exit 1
-fi
-if [ ! -f "${SSH_AGENT_TMPFILE}" ]; then
-	PRNERR "Not found ${SSH_AGENT_TMPFILE} file"
-	PRNFAILURE "Setup SSH before pushing"
-	exit 1
-fi
-
-PRNINFO "Run \"sed -i -e 's|echo|#echo|g' ${SSH_AGENT_TMPFILE}\""
-if ! sed -i -e 's|echo|#echo|g' "${SSH_AGENT_TMPFILE}"; then
-	PRNERR "Failed to convert ${SSH_AGENT_TMPFILE} file"
-	PRNFAILURE "Setup SSH before pushing"
-	exit 1
-fi
-
-. "${SSH_AGENT_TMPFILE}"
-
-if ! RUNCMD ssh-add ~/.ssh/"${DEMO_SSH_KEY}"; then
-	PRNERR "Failed to run ssh-add"
-	PRNFAILURE "Setup SSH before pushing"
-	exit 1
-fi
-
-PRNINFO "Run \"ssh -oStrictHostKeyChecking=no -T ${REPO_GIT_USER_HOST}\" --> maybe puts some messages, but continue..."
-ssh -oStrictHostKeyChecking=no -T "${REPO_GIT_USER_HOST}"
-
-PRNSUCCESS "Setup SSH before pushing"
 
 #==============================================================
 # Setup gh-pages branch and prepare files to commit
