@@ -1,6 +1,6 @@
 {
   "name": "k2hr3-app",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
