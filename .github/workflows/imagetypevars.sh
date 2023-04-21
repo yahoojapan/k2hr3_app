@@ -84,7 +84,7 @@ elif [ "${CI_DOCKER_IMAGE_OSTYPE}" = "alpine" ]; then
 	PKG_INSTALL_BASE="nodejs npm"
 	PKG_REPO_SETUP_NODEJS=""
 	NPM_INSTALL_BASE=""
-	POST_PROCESS="mkdir -p /var/run/antpickax && chmod 0777 /var/run/antpickax"
+	POST_PROCESS="mkdir -p /var/run/antpickax \\&\\& chmod 0777 /var/run/antpickax"
 
 elif [ "${CI_DOCKER_IMAGE_OSTYPE}" = "ubuntu" ]; then
 	PKGMGR_NAME="apt-get"
@@ -95,7 +95,7 @@ elif [ "${CI_DOCKER_IMAGE_OSTYPE}" = "ubuntu" ]; then
 	PKG_INSTALL_BASE="nodejs"
 	PKG_REPO_SETUP_NODEJS="curl -sL https://deb.nodesource.com/setup_18.x | bash"
 	NPM_INSTALL_BASE=""
-	POST_PROCESS="mkdir -p /var/run/antpickax && chmod 0777 /var/run/antpickax"
+	POST_PROCESS="mkdir -p /var/run/antpickax \\&\\& chmod 0777 /var/run/antpickax"
 
 	#
 	# For installing tzdata with another package(ex. git)
