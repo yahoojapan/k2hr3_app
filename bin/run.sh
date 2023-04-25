@@ -48,17 +48,21 @@ PROC_PID_FILE=""
 PrintUsage()
 {
 	echo ""
-	echo "Usage: $1 [--production(-prod) | --development(-dev)] [--stop(-s)] [--background(-bg)] [--foreground(-fg)] [--debug(-d) | --debug-nobrk(-dnobrk)] [--debuglevel(-dl) <custom debug level>]"
+	echo "Usage:   $1 [--production(-prod) | --development(-dev)]"
+	echo "            [--stop(-s)]"
+	echo "            [--background(-bg) | --foreground(-fg)]"
+	echo "            [--debug(-d) | --debug-nobrk(-dnobrk)]"
+	echo "            [--debuglevel(-dl) <custom debug level>]"
 	echo ""
 	echo "Option:"
-	echo "         --production(-prod)      : [default] Set 'production' to NODE_ENV environment (this is default and exclusive with the '--development' option)"
-	echo "         --development(-dev)      : Set 'development' to NODE_ENV environment (exclusive with the '--production' option)"
-	echo "         --stop(-s)               : Stop www or watcher nodejs process"
-	echo "         --background(-bg)        : Run process background"
-	echo "         --foreground(-fg)        : Run process foreground (this takes precedence over --background(-bg) option)"
-	echo "         --debug(-d)              : Run with nodejs inspector option"
-	echo "         --debug-nobrk(-dnobrk)   : Run with nodejs inspector option (no break at start)"
-	echo "         --debuglevel(-dl)        : Specify NODE_DEBUG environment value"
+	echo "         --production(-prod)    : [default] Set 'production' to NODE_ENV environment (this is default and exclusive with the '--development' option)"
+	echo "         --development(-dev)    : Set 'development' to NODE_ENV environment (exclusive with the '--production' option)"
+	echo "         --stop(-s)             : Stop www or watcher nodejs process"
+	echo "         --background(-bg)      : Run process background"
+	echo "         --foreground(-fg)      : Run process foreground (this takes precedence over --background(-bg) option)"
+	echo "         --debug(-d)            : Run with nodejs inspector option"
+	echo "         --debug-nobrk(-dnobrk) : Run with nodejs inspector option (no break at start)"
+	echo "         --debuglevel(-dl)      : Specify NODE_DEBUG environment value"
 	echo ""
 }
 
@@ -226,7 +230,7 @@ fi
 # Do work
 #==========================================================
 #
-# Check run background
+# Check background
 #
 if [ "${BACKGROUND}" -eq 1 ] && [ "${FOREGROUND}" -eq 0 ]; then
 	#
@@ -267,9 +271,9 @@ echo "NODE_PATH=${MY_NODE_PATH} NODE_ENV=${NODE_ENV_VALUE} NODE_DEBUG=${DEBUG_EN
 echo ""
 
 EXIT_CODE=0
-if ! NODE_PATH="${MY_NODE_PATH}" NODE_ENV="${NODE_ENV_VALUE}" NODE_DEBUG="${DEBUG_ENV_CUSTOM}" node "${INSPECTOR_OPT}" bin/www; then
+if ! /bin/sh -c "NODE_PATH=${MY_NODE_PATH} NODE_ENV=${NODE_ENV_VALUE} NODE_DEBUG=${DEBUG_ENV_CUSTOM} node ${INSPECTOR_OPT} bin/www"; then
 	EXIT_CODE="$?"
-	echo "[INFO] Process exited with exit code: $?"
+	echo "[INFO] Process exited with exit code: ${EXIT_CODE}"
 fi
 
 exit "${EXIT_CODE}"
