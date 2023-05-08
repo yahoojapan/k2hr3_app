@@ -1,3 +1,9 @@
+k2hr3-app (1.0.15) unstable; urgency=low
+
+  * Updated imagetypevars.sh for specifying npm pkg version - #82
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Mon, 08 May 2023 17:06:38 +0900
+
 k2hr3-app (1.0.14) unstable; urgency=low
 
   * Fixed run.sh and Updated dependency version, etc - #80
