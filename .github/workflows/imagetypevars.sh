@@ -151,6 +151,19 @@ set_custom_variables()
 	fi
 
 	#
+	# Check package version
+	#
+	if [ -n "${GITHUB_REF_TYPE}" ] && [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+		if ! PACKAGEJSON_VERSION="$(grep '"version":' "${PACKAGEJSON_FILEPATH}" | head -1 | sed -e 's/"//g' -e 's/,//g' -e 's/version://g' -e 's/ //g' | tr -d '\n')"; then
+			PRNERR "Failed to get version number from ${PACKAGEJSON_FILEPATH} file"
+			return 1
+		fi
+		PACKAGE_VERSION_SUFFIX="@${PACKAGEJSON_VERSION}"
+	else
+		PACKAGE_VERSION_SUFFIX=""
+	fi
+
+	#
 	# NodeJS repository setup
 	#
 	if [ -n "${PKG_REPO_SETUP_NODEJS}" ]; then
@@ -171,7 +184,7 @@ set_custom_variables()
 		#
 		# Set default package
 		#
-		NPM_INSTALL_BASE_COMMAND="npm install -g ${PACKAGE_NAME}"
+		NPM_INSTALL_BASE_COMMAND="npm install -g ${PACKAGE_NAME}${PACKAGE_VERSION_SUFFIX}"
 	fi
 	return 0
 }
