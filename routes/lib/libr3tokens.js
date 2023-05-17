@@ -23,6 +23,7 @@
 
 var	r3util		= require('./libr3util');
 var	appConfig	= require('./libr3appconfig').r3AppConfig;
+var	fs			= require('fs');
 
 //---------------------------------------------------------
 // User Token Class
@@ -148,6 +149,12 @@ var R3UserToken = (function()
 						};
 		if(secure){
 			options.agent	= agent;
+
+			// Set CA cert file
+			var ca = this.appConfig.getCA();
+			if(r3util.isSafeString(ca)){
+				options.ca = [ fs.readFileSync(ca, {encoding: 'utf-8'}) ];
+			}
 		}
 		/* eslint-enable indent, no-mixed-spaces-and-tabs */
 
