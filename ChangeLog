@@ -1,3 +1,9 @@
+k2hr3-app (1.0.16) unstable; urgency=low
+
+  * Fixed a bug about setting CA certification - #84
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Thu, 18 May 2023 08:56:19 +0900
+
 k2hr3-app (1.0.15) unstable; urgency=low
 
   * Updated imagetypevars.sh for specifying npm pkg version - #82
