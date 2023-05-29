@@ -315,7 +315,6 @@ var sessionize = async function(Request, Response, Next)
 		var error = 'Please check your configuarion(json) because it is invalid.';
 		console.error('Failed to sessionize init, ' + error);
 		Response.status(500);									// 500: Internal Server Error
-		Response.send(error);
 		return;
 	}
 
@@ -331,7 +330,6 @@ var sessionize = async function(Request, Response, Next)
 			var error = 'Failed to parse payload from oidc token.';
 			console.error(error);
 			Response.status(401);									// 401: Unauthorized
-			Response.send(error);
 			return;
 		}
 		var raw_payload	= new TextDecoder().decode(decode(parts[1]));
@@ -339,7 +337,6 @@ var sessionize = async function(Request, Response, Next)
 			error = 'Failed to decode json payload from oidc token.';
 			console.error(error);
 			Response.status(401);									// 401: Unauthorized
-			Response.send(error);
 			return;
 		}
 		var	payload = JSON.parse(raw_payload);
@@ -365,7 +362,6 @@ var sessionize = async function(Request, Response, Next)
 				error = 'Not find or empty user name in oidc token.';
 				console.error(error);
 				Response.status(401);									// 401: Unauthorized
-				Response.send(error);
 				return;
 			}
 		}
@@ -390,14 +386,13 @@ var sessionize = async function(Request, Response, Next)
 		}).catch(function(err){
 			console.error('Failed to verify oidc token by ' + err.message);
 			Response.status(401);									// 401: Unauthorized
-			Response.send(error);
+			return;
 		});
 
 	}).catch(function(err){
 		error = 'Failed to get oidc token in request.' + err.message;
 		console.error(error);
 		Response.status(401);										// 401: Unauthorized
-		Response.send(error);
 		return;
 	});
 };
