@@ -123,6 +123,9 @@ export const r3MainTree = (theme) => ({
 	},
 	inServiceChildListItemText: {
 		marginLeft:				theme.spacing(3)				// 2 + 1
+	},
+	localTenantMenu: {
+		fontWeight:				'bold'
 	}
 });
 
@@ -1167,6 +1170,127 @@ export const r3CreateServiceTenantDialog = (theme) => ({
 	},
 	inputTextField: {
 		color:					theme.palette.text.secondary
+	},
+	cancelButton: {
+		marginTop:				theme.spacing(2)
+	},
+	okButton: {
+		marginTop:				theme.spacing(2)
+	},
+	buttonIcon: {
+		marginLeft:				theme.spacing(1)
+	}
+});
+
+//
+// Styles for Local Tenant Dialog
+//
+export const r3LocalTenantDialog = (theme) => ({
+	root: {
+	},
+	dialogTitle: {
+	},
+	title: {
+	},
+	dialogContent: {
+	},
+	keyTitle: {
+		marginTop:				theme.spacing(2)
+	},
+	value: {
+		paddingLeft:			theme.spacing(4)
+	},
+	localTenantMessage: {
+		paddingLeft:			theme.spacing(4),
+		paddingRight:			theme.spacing(4)
+	},
+	textField: {
+		width:					'100%',
+		paddingLeft:			theme.spacing(4),
+		paddingRight:			theme.spacing(4)
+	},
+	inputTextField: {
+		color:					theme.palette.text.secondary
+	},
+	usersValue: {
+		display:				'inline-block',
+		paddingLeft:			theme.spacing(4),
+		width:					`calc(100% - 96px)`				// eslint-disable-line quotes
+	},
+	usersButtonsBox: {
+		float:					'right',
+		display:				'flex',
+		alignItems:				'flex-start'
+	},
+	usersEditButton: {
+		padding:				0,
+		margin:					theme.spacing(0),
+		clear:					'both'
+	},
+	usersAddButton: {
+		padding:				0,
+		marginLeft:				theme.spacing(0),
+		marginTop:				theme.spacing(0),
+		marginBottom:			theme.spacing(0),
+		marginRight:			theme.spacing(4),
+		minWidth:				theme.spacing(4),
+		clear:					'both'
+	},
+	popoverMessage: {
+		clear:					'both',
+		paddingLeft:			theme.spacing(4),
+		paddingRight:			theme.spacing(4),
+		color:					theme.palette.warning.dark
+	},
+	popoverTenantUserAdd: {
+	},
+	popoverTenantUserAddTitle: {
+		marginLeft:				theme.spacing(2),
+		marginTop:				theme.spacing(1),
+		marginBottom:			theme.spacing(1),
+		marginRight:			theme.spacing(2)
+	},
+	popoverTenantUserAddButton: {
+		float:					'right',
+		display:				'flex',
+		margin:					theme.spacing(2)
+	},
+	popoverTenantUsersEdit: {
+	},
+	popoverTenantUsersEditTitle: {
+		marginLeft:				theme.spacing(2),
+		marginTop:				theme.spacing(1),
+		marginBottom:			theme.spacing(1),
+		marginRight:			theme.spacing(2)
+	},
+	popoverTenantUsersEditButton: {
+		float:					'right',
+		display:				'flex',
+		margin:					theme.spacing(2)
+	},
+	popoverTenantUserDeleteButton: {
+		float:					'right',
+		display:				'flex'
+	},
+	popoverTenantUserItemBox: {
+		display:				'flex'
+	},
+	popoverTenantUserName: {
+		width:					'100%',
+		display:				'flex',
+		marginLeft:				theme.spacing(3),
+		marginTop:				theme.spacing(1),
+		marginBottom:			theme.spacing(1),
+		marginRight:			theme.spacing(1)
+	},
+	popoverTenantUserOwnName: {
+		width:					'100%',
+		display:				'flex',
+		fontWeight:				'bold',
+		marginLeft:				theme.spacing(3),
+		marginTop:				theme.spacing(1),
+		marginBottom:			theme.spacing(1),
+		marginRight:			theme.spacing(1)
 	},
 	cancelButton: {
 		marginTop:				theme.spacing(2)

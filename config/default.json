@@ -44,6 +44,8 @@
 //	privatekey						: Private key file for HTTPS
 //	cert							: Certification file for HTTPS
 //	validator						: user validator object type
+//	uselocaltenant					: use Local Tenant
+//	lang							: Language
 //	apischeme						: API server scheme(http or https) for accessing React
 //	apihost							: API server hostname for accessing React
 //	apiport							: API server port for accessing React
@@ -61,6 +63,7 @@
 	'cert':				'',
 	'ca':				'',
 	'validator':		'userValidateCredential',
+	'uselocaltenant':	true,
 	'lang':				'en',
 
 	'logdir':			'log',

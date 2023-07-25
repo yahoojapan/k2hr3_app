@@ -74,6 +74,12 @@ export const regYrnAnyTenantPath	= '^yrn:yahoo:::(.*)';
 export const regYrnAnyRolePath		= '^yrn:yahoo:(.*)::(.*):role:(.*)';
 export const regYrnAnyPolicyPath	= '^yrn:yahoo:(.*)::(.*):policy:(.*)';
 export const regYrnAnyResourcePath	= '^yrn:yahoo:(.*)::(.*):resource:(.*)';
+export const regTenantUserName		= '^[a-zA-Z0-9!-/:-@[-`{-~]*$';
+
+//
+// Const strings
+//
+export const localTenantPrefix		= 'local@';
 
 /*
  * Local variables:

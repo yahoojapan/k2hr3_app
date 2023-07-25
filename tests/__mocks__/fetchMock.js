@@ -89,14 +89,28 @@ global.fetch = jest.fn().mockImplementation((url, option) =>	// eslint-disable-l
 				scoped:		false,
 				user:		'test',
 				tenants:	[
-					{name: '10000', display: 'GROUP0:TENANT0'},
-					{name: '20000', display: 'GROUP1:TENANT1'}
+					{name: '10000', id: '1000-000', display: 'GROUP0:TENANT0', description: 'GROUP0:DESC TENANT0'},
+					{name: '20000', id: '2000-000', display: 'GROUP1:TENANT1', description: 'GROUP0:DESC TENANT1'},
+					{name: 'local@3000', id: '3000-000', display: 'GROUP1:LOCAL1', description: 'GROUP0:DESC LOCAL1'}
 				]
 			});
 		}else{
 			return fetchError('Unknown Token(' + option.headers['x-auth-token'] + ')');
 		}
 
+	}else if(r3CompareString(path, '/v1/tenant?expand=true')){
+		//
+		// Get Tenant List
+		//
+		return fetchSuccess({
+			result:		true,
+			message:	null,
+			tenants:	[
+				{name: '10000', id: '1000-000', display: 'GROUP0:TENANT0', description: 'GROUP0:DESC TENANT0', users: [ 'test' ]},
+				{name: '20000', id: '2000-000', display: 'GROUP1:TENANT1', description: 'GROUP0:DESC TENANT1', users: [ 'test' ]},
+				{name: 'local@3000', id: '3000-000', display: 'GROUP1:LOCAL1', description: 'GROUP0:DESC LOCAL1', users: [ 'test' ]}
+			]
+		});
 	}else{
 		console.info('UNKOWN Request => url: ' + JSON.stringify(url) + ', parsedUrl: ' + JSON.stringify(parsedUrl) + ', path : ' + JSON.stringify(path) + ', option: ' + JSON.stringify(option));
 		return fetchError('Unknown path(' + path + ')');

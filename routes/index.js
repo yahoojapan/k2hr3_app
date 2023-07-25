@@ -62,28 +62,29 @@ router.get('/', function(req, res, next)							// eslint-disable-line no-unused-
 			//_next(error);
 			//return;
 		}
-		var	dateobj		= new Date();
-		var	copyyear	= dateobj.getFullYear();
-		var	username	= tokensObj.getUserName();
-		var	apischeme	= _appConf.getApiScheme();
-		var	apihost		= _appConf.getApiHost();
-		var	apiport		= _appConf.getApiPort();
-		var	appmenu		= _appConf.getAppMenu();					// this is object(array)
-		var	userdata	= _appConf.getUserData();					// this is string for User Date Script
-		var	secretyaml	= _appConf.getSecretYaml();					// this is string for Secret Yaml
-		var	sidecaryaml	= _appConf.getSidecarYaml();				// this is string for Sidecar Yaml
-		var	crcobj		= _appConf.getCRCObject();					// Custom Registration Codes(CRC) object
-		var	signintype	= tokensObj.getSignInType();
-		var	signinurl	= tokensObj.getSignInUrl();
-		var	signouturl	= tokensObj.getSignOutUrl();
-		var	lang		= _appConf.getLang();
-		var	dbgheader	= '';
-		var	dbgvalue	= '';
-		var	dbgresheader= '';
+		var	dateobj			= new Date();
+		var	copyyear		= dateobj.getFullYear();
+		var	username		= tokensObj.getUserName();
+		var	apischeme		= _appConf.getApiScheme();
+		var	apihost			= _appConf.getApiHost();
+		var	apiport			= _appConf.getApiPort();
+		var	appmenu			= _appConf.getAppMenu();					// this is object(array)
+		var	userdata		= _appConf.getUserData();					// this is string for User Date Script
+		var	secretyaml		= _appConf.getSecretYaml();					// this is string for Secret Yaml
+		var	sidecaryaml		= _appConf.getSidecarYaml();				// this is string for Sidecar Yaml
+		var	crcobj			= _appConf.getCRCObject();					// Custom Registration Codes(CRC) object
+		var	signintype		= tokensObj.getSignInType();
+		var	signinurl		= tokensObj.getSignInUrl();
+		var	signouturl		= tokensObj.getSignOutUrl();
+		var	uselocaltenant	= _appConf.useLocalTenant();
+		var	lang			= _appConf.getLang();
+		var	dbgheader		= '';
+		var	dbgvalue		= '';
+		var	dbgresheader	= '';
 		if('development' === req.app.get('env')){
-			dbgheader	= 'x-k2hr3-debug';
-			dbgvalue	= 'debug';
-			dbgresheader= 'x-k2hr3-error';
+			dbgheader		= 'x-k2hr3-debug';
+			dbgvalue		= 'debug';
+			dbgresheader	= 'x-k2hr3-error';
 		}
 
 		_res.render(
@@ -103,6 +104,7 @@ router.get('/', function(req, res, next)							// eslint-disable-line no-unused-
 				signintype:		signintype,
 				signinurl:		signinurl,
 				signouturl:		signouturl,
+				uselocaltenant:	uselocaltenant,
 				lang:			lang,
 				dbgheader:		dbgheader,
 				dbgvalue:		dbgvalue,

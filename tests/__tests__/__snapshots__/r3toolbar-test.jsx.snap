@@ -13,7 +13,7 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
       <div
         aria-label="current display item and its path"
         aria-labelledby={null}
-        className="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-clickable MuiChip-clickableColorPrimary MuiChip-filledPrimary css-1r0ifls-MuiButtonBase-root-MuiChip-root"
+        className="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-clickable MuiChip-clickableColorPrimary MuiChip-filledPrimary css-33sket-MuiButtonBase-root-MuiChip-root"
         data-mui-internal-clone-element={true}
         onBlur={[Function]}
         onClick={[Function]}

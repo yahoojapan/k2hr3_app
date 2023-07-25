@@ -1,0 +1,172 @@
+/*
+ *
+ * K2HR3 Web Application
+ *
+ * Copyright 2023 Yahoo Japan Corporation.
+ *
+ * K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers
+ * common management information for the cloud.
+ * K2HR3 can dynamically manage information as "who", "what", "operate".
+ * These are stored as roles, resources, policies in K2hdkc, and the
+ * client system can dynamically read and modify these information.
+ *
+ * For the full copyright and license information, please view
+ * the license file that was distributed with this source code.
+ *
+ * AUTHOR:   Takeshi Nakatani
+ * CREATE:   Tue Jul 25 2023
+ * REVISION:
+ *
+ */
+
+import React					from 'react';										// eslint-disable-line no-unused-vars
+import renderer					from 'react-test-renderer';
+import getElementWithContext	from 'react-test-context-provider';					// for context provider
+import { ThemeProvider }		from '@mui/material/styles';
+import { StyledEngineProvider, CssBaseline}	from '@mui/material';					// for jss and reset.css
+
+import r3Theme					from '../../src/components/r3theme';				// custom theme
+import R3LocalTenantDialog		from '../../src/components/r3localtenantdialog';
+import R3Provider				from '../../src/util/r3provider';
+
+import mock_fetch				from '../__mocks__/fetchMock';						// eslint-disable-line no-unused-vars
+import { createNodeMock }		from '../__mocks__/materialUiMock';					// for material-ui
+
+// [NOTE]
+// There is a problem with the Dialog class JEST snapshot.
+// At the moment, we have mocked the Fade class and have not taken a
+// snapshot of the following elements.
+// Please refer to the following FIXME for details. We hope for future
+// corrections.
+//
+
+// [NOTE][FIXME]
+// ReactDOM has Portal, but not react-test-renderer. (React 16.x)
+// When testing with react-test-renderer, an error occurs because DOM can
+// not have multiple tails.
+// "An invalid container has been provided. This may indicate that another
+//	renderer is being used in addition to the test renderer. (For example,
+//	ReactDOM.createPortal inside of a ReactTestRenderer tree.) This is not
+//	supported."
+// To avoid this, define createPortal as mock.
+// Along with this, an error will occur in Modal/Fade.(described later)
+//
+import ReactDOM					from 'react-dom';									// For mock of createPortal
+
+const mockCreatePortal = jest.fn((element, node) => {								// eslint-disable-line no-undef, no-unused-vars
+	return element;
+});
+
+// [NOTE][FIXME]
+// Modal generates an error because it accesses without the scrollTop
+// property.
+// -> https://github.com/mui-org/material-ui/blob/474e56bd90b4edc5c6431ecfcffbb525b1f58806/packages/material-ui/src/Modal/Modal.js#L108
+// This error can be avoided by setting the disablePortal property of
+// the Dialog class to true.
+//
+r3Theme.r3LocalTenantDialog.root['disablePortal'] = true;
+
+// [NOTE]
+// The Transition class used in this dialog is Fade.
+// As mentioned earlier, DOM Portal mocking causes the following error
+// in the Fade and Modal classes:
+//	'The above error occurred in the <ForwardRef (Modal)> component'
+//
+// Avoid this error by replacing the Fade and Modal classes with mock.
+// Unlike before, by changing the mock content, you can fully check
+// the snapshots in the Dialog.
+//
+jest.mock('@mui/material/Fade', () => {												// eslint-disable-line no-undef
+	return '';
+});
+jest.mock('@mui/material/Modal', () => {											// eslint-disable-line no-undef
+	return '';
+});
+
+//
+// Mock functions
+//
+// [NOTE]
+// If you need to customize return value, you can call methods
+// for return value by each mock function.
+// see: https://jestjs.io/docs/ja/mock-functions
+//
+// ex)	mockfunc
+//			.mockReturnValueOnce(10)
+//			.mockReturnValueOnce('x')
+//			.mockReturnValue(true);
+//
+const close	= jest.fn();															// eslint-disable-line no-undef
+
+//
+// Dummy datas
+//
+const allTenantNames = [
+	'10000',
+	'20000',
+	'local@3000'
+];
+
+const tenantName		= 'local@3000';
+const tenantId			= '3000-000';
+const tenantDisplay		= 'GROUP1:LOCAL1';
+const tenantDescription	= 'GROUP0:DESC LOCAL1';
+const tenantUsers		= [ 'test' ];
+
+
+//
+// Main test
+//
+describe('R3LocalTenantDialog', () => {												// eslint-disable-line no-undef
+	beforeAll(() => {																// eslint-disable-line no-undef
+		ReactDOM.createPortal = mockCreatePortal;
+	});
+
+	afterEach(() => {																// eslint-disable-line no-undef
+		ReactDOM.createPortal.mockClear();
+	});
+
+	it('test snapshot for R3LocalTenantDialog', () => {								// eslint-disable-line no-undef
+		const r3provider	= new R3Provider(null);
+
+		const element		= getElementWithContext(
+			{
+				r3Context:	r3provider.getR3Context()
+			},
+			<StyledEngineProvider injectFirst>
+				<ThemeProvider theme={ r3Theme } >
+					<CssBaseline />
+					<R3LocalTenantDialog
+						theme={ r3Theme }
+						r3provider={ r3provider }
+						open={ true }
+
+						userName={ 'test' }
+						createMode={ true }
+
+						allTenantNames={	allTenantNames		}
+						tenantName={		tenantName			}
+						tenantId={			tenantId			}
+						tenantDisplay={		tenantDisplay		}
+						tenantDescription={	tenantDescription	}
+						tenantUsers={		tenantUsers			}
+						onClose={ close }
+					/>
+				</ThemeProvider>
+			</StyledEngineProvider>
+		);
+
+		const component = renderer.create(element, { createNodeMock });
+		let tree		= component.toJSON();
+		expect(tree).toMatchSnapshot();												// eslint-disable-line no-undef
+	});
+});
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noexpandtab sw=4 ts=4 fdm=marker
+ * vim<600: noexpandtab sw=4 ts=4
+ */

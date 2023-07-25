@@ -22,7 +22,7 @@
 import crypto			from 'crypto';
 
 import R3Context		from '../util/r3context';
-import { r3GetTextRes }	from '../util/r3define';
+import { r3GetTextRes, localTenantPrefix }					from '../util/r3define';
 import { resourceType, roleType, policyType, serviceType }	from '../util/r3types';
 import { checkServiceResourceValue }						from '../util/r3verifyutil';
 import { r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity, r3IsEmptyString, r3CompareCaseString, r3DeepClone } from '../util/r3util';
@@ -325,9 +325,93 @@ const DemoInitialInternalData = {
 					alias:		[]
 				}
 			]
+		}
+	],
+	// Local Tenant
+	'local@tenant': [
+		{
+			name:		'SERVICE',
+			path:		'service',
+			children:	[]
+		},
+		{
+			name:		'ROLE',
+			path:		'role',
+			children:	[]
+		},
+		{
+			name:		'RESOURCE',
+			path:		'resource',
+			children:	[]
+		},
+		{
+			name:		'POLICY',
+			path:		'policy',
+			children:	[]
 		},
 	]
 };
+
+//
+// New local tenant initial data
+//
+const DemoInitialLocalTenantData = [
+	{
+		name:		'SERVICE',
+		path:		'service',
+		children:	[]
+	},
+	{
+		name:		'ROLE',
+		path:		'role',
+		children:	[]
+	},
+	{
+		name:		'RESOURCE',
+		path:		'resource',
+		children:	[]
+	},
+	{
+		name:		'POLICY',
+		path:		'policy',
+		children:	[]
+	}
+];
+
+//
+// Internal demo tenant data
+//
+const DemoInitialTenantData = [
+	{
+		// Tenant = No service
+		'name':			'foo-tenant',
+		'id':			'foo-tenant-id',
+		'display':		'foo-tenant',
+		'description':	'foo-tenant tenant for demo'
+	},
+	{
+		// Tenant = Service owner
+		'name':			'service-owner',
+		'id':			'service-owner-id',
+		'display':		'service-owner',
+		'description':	'service-owner tenant for demo'
+	},
+	{
+		// Tenant = Service user
+		'name':			'service-user',
+		'id':			'service-user-id',
+		'display':		'service-user',
+		'description':	'service-user tenant for demo'
+	},
+	{
+		// Local Tenant
+		'name':			'local@tenant',
+		'id':			'local@tenant-id',
+		'display':		'local@tenant',
+		'description':	'local@tenant tenant for demo',
+		'users':		[ 'demo' ]
+	}
+];
 
 const DemoInitialRoleTokens = {
 	// Tenant = No service
@@ -489,7 +573,7 @@ export default class R3Provider
 	//
 	// Get tenant list
 	//
-	getTenantList(callback)
+	getTenantList(force, callback)
 	{
 		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
@@ -497,32 +581,221 @@ export default class R3Provider
 		}
 		let	_callback	= callback;
 
-		if(0 < this.tenantList.length){
-			// using cache
-			_callback(null, this.tenantList);
-			return;
-		}
-
 		if(!this.r3Context.isLogin()){
 			console.info('Not logged in yet.');
 			// return empty cache
-			_callback(null, this.tenantList);
+			_callback(null, []);
 			return;
 		}
 
 		this.startProgress();																// start progressing
 
-		this.tenantList = [];
-		Object.keys(this.demoData).forEach((key) => {
-			let	tmp = {
-				name:		key,
-				display:	key
-			};
-			this.tenantList.push(tmp);
-		});
+		if(0 === this.tenantList.length){
+			// first time to initializing
+			this.tenantList = r3DeepClone(DemoInitialTenantData);
+		}
+
 		this.stopProgress();																// stop progressing
 
-		callback(null, this.tenantList);
+		_callback(null, this.tenantList);
+	}
+
+	//--------------------------------------------------
+	// Local Tenant
+	//--------------------------------------------------
+	//
+	// Create Local Tenant
+	//
+	// name			: local tenant name
+	// display		: display name for new local tenant(allowed null/emptyv1/tenant)
+	// description	: description for new local tenant(allowed null/emptyv1/tenant)
+	// users		: initial user name array for new local tenant
+	//
+	createLocalTenant(name, display, description, users, callback)
+	{
+		if(!r3IsSafeTypedEntity(callback, 'function')){
+			console.error('callback parameter is wrong.');
+			return;
+		}
+
+		let	_callback	= callback;
+		let	_error;
+		if(r3IsEmptyString(name, true) || !r3IsSafeTypedEntity(users, 'array') || 0 === users.length){
+			_error = new Error('name(' + JSON.stringify(name) + ') or display(' + JSON.stringify(display) + ') or description(' + JSON.stringify(description) + ') or users(' + JSON.stringify(users) + ') parameters are wrong.');
+			console.error(_error.message);
+			_callback(_error);
+			return;
+		}
+
+		let	_name		= name.trim();
+		if(0 !== _name.indexOf(localTenantPrefix)){
+			_name = localTenantPrefix + _name;
+		}
+
+		this.startProgress();																// start progressing
+
+		//
+		// Check same tenant name
+		//
+		let	_found = false;
+		this.tenantList.map( (item) => {
+			if(!r3IsEmptyString(item.name) && item.name == _name){
+				// found
+				_found = true;
+			}
+		});
+		if(_found){
+			this.stopProgress();															// stop progressing
+			_error = new Error('tenant name(' + _name + ') already eixsts.');
+			console.error(_error.message);
+			_callback(_error);
+			return;
+		}
+
+
+		//
+		// Add local tenant
+		//
+		let	_display	= (r3IsEmptyString(display, true)		? null : r3IsEmptyString(display.trim(), true)		? null : display.trim());
+		let	_description= (r3IsEmptyString(description, true)	? null : r3IsEmptyString(description.trim(), true)	? null : description.trim());
+		let	_users		= r3DeepClone(users);
+
+		this.tenantList.push({
+			'name':			_name,
+			'id':			(_name + '_id'),
+			'display':		_display,
+			'description':	_description,
+			'users':		_users
+		});
+		this.demoData[_name] = r3DeepClone(DemoInitialLocalTenantData);
+
+		this.stopProgress();																// stop progressing
+
+		_callback(null);
+	}
+
+	//
+	// Update Local Tenant
+	//
+	// name			: local tenant name
+	// id			: local tenant id
+	// display		: display name for local tenant(allowed null/emptyv1/tenant)
+	// description	: description for local tenant(allowed null/emptyv1/tenant)
+	// users		: user name array for local tenant
+	//
+	updateLocalTenant(name, id, display, description, users, callback)
+	{
+		if(!r3IsSafeTypedEntity(callback, 'function')){
+			console.error('callback parameter is wrong.');
+			return;
+		}
+
+		let	_callback	= callback;
+		let	_error;
+		if(r3IsEmptyString(name, true) || r3IsEmptyString(id, true) || !r3IsSafeTypedEntity(users, 'array') || 0 === users.length){
+			_error = new Error('name(' + JSON.stringify(name) + ') or id(' + JSON.stringify(id) + ') or display(' + JSON.stringify(display) + ') or description(' + JSON.stringify(description) + ') or users(' + JSON.stringify(users) + ') parameters are wrong.');
+			console.error(_error.message);
+			_callback(_error);
+			return;
+		}
+
+		let	_name		= name.trim();
+		if(0 !== _name.indexOf(localTenantPrefix)){
+			_name = localTenantPrefix + _name;
+		}
+
+		this.startProgress();																// start progressing
+
+		//
+		// Check same tenant name and set values
+		//
+		let	_pos = -1;
+		this.tenantList.map( (item, pos) => {
+			if(!r3IsEmptyString(item.name) && item.name == _name){
+				// found
+				_pos = pos;
+			}
+		});
+		if(-1 == _pos){
+			this.stopProgress();															// stop progressing
+
+			_error = new Error('tenant name(' + _name + ') not found.');
+			console.error(_error.message);
+			_callback(_error);
+			return;
+		}
+
+		//
+		// Update local tenant
+		//
+		this.tenantList[_pos].display		= (r3IsEmptyString(display, true)		? null : r3IsEmptyString(display.trim(), true)		? null : display.trim());
+		this.tenantList[_pos].description	= (r3IsEmptyString(description, true)	? null : r3IsEmptyString(description.trim(), true)	? null : description.trim());
+		this.tenantList[_pos].users			= r3DeepClone(users);
+
+		this.stopProgress();																// stop progressing
+
+		_callback(null);
+	}
+
+	//
+	// Delete Local Tenant
+	//
+	// name			: local tenant name
+	// id			: local tenant id
+	//
+	deleteLocalTenant(name, id, callback)
+	{
+		if(!r3IsSafeTypedEntity(callback, 'function')){
+			console.error('callback parameter is wrong.');
+			return;
+		}
+
+		let	_callback	= callback;
+		let	_error;
+		if(r3IsEmptyString(name, true) || r3IsEmptyString(id, true)){
+			_error = new Error('name(' + JSON.stringify(name) + ') or id(' + JSON.stringify(id) + ') parameters are wrong.');
+			console.error(_error.message);
+			_callback(_error);
+			return;
+		}
+
+		let	_name		= name.trim();
+		if(0 !== _name.indexOf(localTenantPrefix)){
+			_name = localTenantPrefix + _name;
+		}
+
+		this.startProgress();																// start progressing
+
+		//
+		// Check same tenant name
+		//
+		let	_pos = -1;
+		this.tenantList.map( (item, pos) => {
+			if(!r3IsEmptyString(item.name) && item.name == _name){
+				// found
+				_pos = pos;
+			}
+		});
+		if(-1 == _pos){
+			this.stopProgress();															// stop progressing
+			_error = new Error('tenant name(' + _name + ') not found.');
+			console.error(_error.message);
+			_callback(_error);
+			return;
+		}
+
+		//
+		// Delete local tenant
+		//
+		this.tenantList.splice(_pos, 1);
+
+		if(!r3IsEmptyEntityObject(this.demoData, _name)){
+			delete this.demoData[_name];
+		}
+
+		this.stopProgress();																// stop progressing
+
+		_callback(null);
 	}
 
 	//--------------------------------------------------
