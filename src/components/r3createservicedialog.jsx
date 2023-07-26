@@ -730,7 +730,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	handleDelStaticResKey(event, item)										// eslint-disable-line no-unused-vars
 	{
-		if(!r3IsSafeTypedEntity(this.state.editingStaticRes, 'object') || !r3IsSafeTypedEntity(this.state.editingStaticRes.keys, 'object') || r3IsEmptyEntityObject(this.state.editingStaticRes.keys, item)){
+		if(!r3IsSafeTypedEntity(this.state.editingStaticRes, 'object') || !r3IsSafeTypedEntity(this.state.editingStaticRes.keys, 'object')){
 			return;
 		}
 
@@ -769,7 +769,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	handleEditStaticResKey(event, item)
 	{
-		if(!r3IsSafeTypedEntity(this.state.editingStaticRes, 'object') || !r3IsSafeTypedEntity(this.state.editingStaticRes.keys, 'object') || r3IsEmptyEntityObject(this.state.editingStaticRes.keys, item)){
+		if(!r3IsSafeTypedEntity(this.state.editingStaticRes, 'object') || !r3IsSafeTypedEntity(this.state.editingStaticRes.keys, 'object')){
 			return;
 		}
 
