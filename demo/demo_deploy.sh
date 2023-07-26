@@ -412,14 +412,20 @@ if ! RUNCMD cp -rp "${MASTER_PUBLIC_DIR}" "${DIST_DIR}"; then
 	exit 1
 fi
 
-PRNINFO "Run \"sed -e \"s/__K2HR3_DEMO_INDEX_HTML_LANG__/en/g\" -e \"s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g\" ${DEMO_DIR}/${DEMO_INDEX_HTML} > ${DIST_DIR}/${DEMO_INDEX_HTML}\""
+# [FIXME]
+# Due to some side effect, the following PRNINFO statement is output to the INDEX (JA) file, so it is commented out.
+#
+#PRNINFO "Run \"sed -e \"s/__K2HR3_DEMO_INDEX_HTML_LANG__/en/g\" -e \"s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g\" ${DEMO_DIR}/${DEMO_INDEX_HTML} > ${DIST_DIR}/${DEMO_INDEX_HTML}\""
 if ! sed -e "s/__K2HR3_DEMO_INDEX_HTML_LANG__/en/g" -e "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" "${DEMO_DIR}/${DEMO_INDEX_HTML}" > "${DIST_DIR}/${DEMO_INDEX_HTML}"; then
 	PRNERR "Failed to convert and create ${DEMO_INDEX_HTML} in ${DIST_DIR}"
 	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 	exit 1
 fi
 
-PRNINFO "Run \"sed -e \"s/__K2HR3_DEMO_INDEX_HTML_LANG__/ja/g\" -e \"s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g\" ${DEMO_DIR}/${DEMO_INDEX_HTML} > ${DIST_DIR}/${DEMO_INDEXJA_HTML}\""
+# [FIXME]
+# Due to some side effect, the following PRNINFO statement is output to the INDEX (JA) file, so it is commented out.
+#
+#PRNINFO "Run \"sed -e \"s/__K2HR3_DEMO_INDEX_HTML_LANG__/ja/g\" -e \"s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g\" ${DEMO_DIR}/${DEMO_INDEX_HTML} > ${DIST_DIR}/${DEMO_INDEXJA_HTML}\""
 if ! RUNCMD sed -e "s/__K2HR3_DEMO_INDEX_HTML_LANG__/ja/g" -e "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" "${DEMO_DIR}/${DEMO_INDEX_HTML}" > "${DIST_DIR}/${DEMO_INDEXJA_HTML}"; then
 	PRNERR "Failed to convert and create ${DEMO_INDEXJA_HTML} in ${DIST_DIR}"
 	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
