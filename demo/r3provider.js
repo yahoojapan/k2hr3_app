@@ -656,8 +656,8 @@ export default class R3Provider
 		//
 		// Add local tenant
 		//
-		let	_display	= (r3IsEmptyString(display, true)		? null : r3IsEmptyString(display.trim(), true)		? null : display.trim());
-		let	_description= (r3IsEmptyString(description, true)	? null : r3IsEmptyString(description.trim(), true)	? null : description.trim());
+		let	_display	= (r3IsEmptyString(display, true)		? _name						: r3IsEmptyString(display.trim(), true)		? _name						: display.trim());
+		let	_description= (r3IsEmptyString(description, true)	? ('Local Tenant ' + _name)	: r3IsEmptyString(description.trim(), true)	? ('Local Tenant ' + _name)	: description.trim());
 		let	_users		= r3DeepClone(users);
 
 		this.tenantList.push({
@@ -728,8 +728,8 @@ export default class R3Provider
 		//
 		// Update local tenant
 		//
-		this.tenantList[_pos].display		= (r3IsEmptyString(display, true)		? null : r3IsEmptyString(display.trim(), true)		? null : display.trim());
-		this.tenantList[_pos].description	= (r3IsEmptyString(description, true)	? null : r3IsEmptyString(description.trim(), true)	? null : description.trim());
+		this.tenantList[_pos].display		= (r3IsEmptyString(display, true)		? _name						: r3IsEmptyString(display.trim(), true)		? _name						: display.trim());
+		this.tenantList[_pos].description	= (r3IsEmptyString(description, true)	? ('Local Tenant ' + _name)	: r3IsEmptyString(description.trim(), true)	? ('Local Tenant ' + _name)	: description.trim());
 		this.tenantList[_pos].users			= r3DeepClone(users);
 
 		this.stopProgress();																// stop progressing
