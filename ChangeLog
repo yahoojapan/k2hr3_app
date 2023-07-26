@@ -1,3 +1,9 @@
+k2hr3-app (1.0.21) unstable; urgency=low
+
+  * Added support for Local Tenants - #94
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Wed, 26 Jul 2023 09:14:31 +0900
+
 k2hr3-app (1.0.20) unstable; urgency=low
 
   * Added one babel/plugin and updated dependencies - #92
