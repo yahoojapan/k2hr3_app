@@ -29,6 +29,7 @@ import Drawer						from '@mui/material/Drawer';
 import Chip							from '@mui/material/Chip';
 import Menu							from '@mui/material/Menu';
 import MenuItem						from '@mui/material/MenuItem';
+import Divider						from '@mui/material/Divider';
 import IconButton					from '@mui/material/IconButton';
 import Tooltip						from '@mui/material/Tooltip';
 import Typography					from '@mui/material/Typography';
@@ -46,12 +47,15 @@ import ArrowRightIcon				from '@mui/icons-material/ArrowRight';
 import LabelIcon					from '@mui/icons-material/Label';
 import OwnerIcon					from '@mui/icons-material/Person';
 import MoreVertIcon					from '@mui/icons-material/MoreVert';
+import EditIcon						from '@mui/icons-material/Edit';
 
 import { r3MainTree }				from './r3styles';
+import R3LocalTenantDialog			from './r3localtenantdialog';
 import R3PopupMsgDialog				from './r3popupmsgdialog';
 import R3Message					from '../util/r3message';
 import { serviceType, errorType }	from '../util/r3types';
-import { r3DeepCompare, r3IsEmptyEntity, r3IsEmptyStringObject, r3IsEmptyString, r3CompareCaseString, r3IsEmptyEntityObject, r3IsSafeTypedEntity }	from '../util/r3util';
+import { localTenantPrefix }		from '../util/r3define';
+import { r3DeepCompare, r3IsEmptyEntity, r3IsEmptyStringObject, r3IsEmptyString, r3CompareCaseString, r3IsEmptyEntityObject, r3IsSafeTypedEntity, r3DeepClone }	from '../util/r3util';
 
 // For context
 import { R3CommonContext }			from './r3commoncontext';
@@ -65,7 +69,8 @@ const menuValues = {
 	license:			'LICENSES_TOP',
 	noLicense:			'NOLICENSE',
 	sign:				'SIGNINOUT',
-	userName:			'USERNAME'
+	userName:			'USERNAME',
+	localTenant:		'LOCALTENANT'
 };
 
 const componentKeyIds = {
@@ -81,6 +86,7 @@ const componentKeyIds = {
 
 const tooltipValues = {
 	mainMenu:			'mainMenu',
+	tenantEdit:			'tenantEdit',
 	tenantMenu:			'tenantMenu'
 };
 
@@ -100,6 +106,8 @@ export default class R3MainTree extends React.Component
 		isDocking:					PropTypes.bool,
 		licensesObj:				PropTypes.object,
 
+		editableLocalTenant:		PropTypes.bool,
+		userName:					PropTypes.string,
 		tenants:					PropTypes.array.isRequired,
 		treeList:					PropTypes.array,
 
@@ -109,6 +117,9 @@ export default class R3MainTree extends React.Component
 		selectedPath:				PropTypes.string,
 
 		onTenantChange:				PropTypes.func.isRequired,
+		onLocalTenantCreate:		PropTypes.func.isRequired,
+		onLocalTenantChange:		PropTypes.func.isRequired,
+		onLocalTenantDelete:		PropTypes.func.isRequired,
 		onTypeItemChange:			PropTypes.func.isRequired,
 		onListItemChange:			PropTypes.func.isRequired,
 		onNameItemInServiceChange:	PropTypes.func.isRequired,
@@ -126,6 +137,8 @@ export default class R3MainTree extends React.Component
 		isDocking:					true,
 		licensesObj:				null,
 
+		editableLocalTenant:		true,
+		userName:					null,
 		treeList:					null,
 
 		selectedTenant:				null,
@@ -141,10 +154,13 @@ export default class R3MainTree extends React.Component
 		dummyBarMenuAnchorEl:		null,
 		dummyLicenseMenuAnchorEl:	null,
 		tenantMenuAnchorEl:			null,
+		localTenantDialogOpen:		false,
+		localTenantCreateMode:		false,
 
 		tooltips: {
 			mainMenuTooltip:		false,
-			tenantMenuTooltip:		false,
+			tenantEditTooltip:		false,
+			tenantMenuTooltip:		false
 		},
 		collapseExpands:			{}
 	};
@@ -154,6 +170,9 @@ export default class R3MainTree extends React.Component
 		super(props);
 
 		// Binding(do not define handlers as arrow functions for performance)
+		this.handleTenantEditButton			= this.handleTenantEditButton.bind(this);
+		this.handLocalTenantDialogClose		= this.handLocalTenantDialogClose.bind(this);
+
 		this.handleTenantMenuButton			= this.handleTenantMenuButton.bind(this);
 		this.handleTenantMenuClose			= this.handleTenantMenuClose.bind(this);
 		this.handleTypeItemChange			= this.handleTypeItemChange.bind(this);
@@ -170,6 +189,64 @@ export default class R3MainTree extends React.Component
 
 		// styles
 		this.sxClasses						= r3MainTree(props.theme);
+	}
+
+	handleTenantEditButton(event)									// eslint-disable-line no-unused-vars
+	{
+		if(!this.checkContentUpdating()){
+			return;
+		}
+
+		this.setState({
+			localTenantDialogOpen:	true,
+			localTenantCreateMode:	false,
+			tooltips: {
+				tenantEditTooltip:	false
+			}
+		});
+	}
+
+	handLocalTenantDialogClose(event, reason, result, newTenantName, tenantId, newTenantDisplay, newTenantDescription, newTenantUsers)	// eslint-disable-line no-unused-vars
+	{
+		if(!result){
+			this.setState({
+				localTenantDialogOpen:	false,
+				localTenantCreateMode:	false,
+				r3Message:				null,
+				tooltips: {
+					tenantEditTooltip:	false
+				}
+			});
+			return;
+		}
+		// [NOTE]
+		// Value checking is completed in R3LocalTenantDialog.
+		// No checks are required here.
+		//
+
+		//
+		// Call parent handler for update/create tenant
+		//
+		if(this.state.localTenantCreateMode){
+			// create
+			this.props.onLocalTenantCreate(newTenantName, newTenantDisplay, newTenantDescription, newTenantUsers);
+		}else if(!r3IsSafeTypedEntity(newTenantUsers, 'array') || 0 === newTenantUsers.length){
+			// delete
+			this.props.onLocalTenantDelete(newTenantName, tenantId);
+		}else{
+			// update
+			this.props.onLocalTenantChange(newTenantName, tenantId, newTenantDisplay, newTenantDescription, newTenantUsers);
+		}
+
+		// close tenant dialog
+		this.setState({
+			localTenantDialogOpen:	false,
+			localTenantCreateMode:	false,
+			r3Message:				null,
+			tooltips: {
+				tenantEditTooltip:	false
+			}
+		});
 	}
 
 	handleTenantMenuButton(event)									// eslint-disable-line no-unused-vars
@@ -196,12 +273,14 @@ export default class R3MainTree extends React.Component
 				if(value === pos){
 					// if selected tenant is changed, we need to clear collapseExpands{}.
 					//
-					if(	!r3IsEmptyEntityObject(this.props.selectedTenant, 'name')	&&
-						!r3IsEmptyEntityObject(this.props.selectedTenant, 'display')&&
-						!r3IsEmptyEntityObject(item, 'name')						&&
-						!r3IsEmptyEntityObject(item, 'display')						&&
-						item.name !== this.props.selectedTenant.name				&&
-						item.display !== this.props.selectedTenant.display			)
+					if(	!r3IsEmptyEntityObject(this.props.selectedTenant, 'name')		&&
+						!r3IsEmptyEntityObject(this.props.selectedTenant, 'display')	&&
+						!r3IsEmptyEntityObject(this.props.selectedTenant, 'id')			&&
+						!r3IsEmptyEntityObject(this.props.selectedTenant, 'description')&&
+						!r3IsEmptyEntityObject(item, 'name')							&&
+						!r3IsEmptyEntityObject(item, 'display')							&&
+						item.name !== this.props.selectedTenant.name					&&
+						item.display !== this.props.selectedTenant.display				)
 					{
 						this.setState({
 							collapseExpands:	{}
@@ -211,6 +290,23 @@ export default class R3MainTree extends React.Component
 				}
 			});
 		}
+		// closing menu
+		this.setState({
+			tenantMenuAnchorEl:	null
+		});
+	};
+
+	handleCreateLocalTenant = (event) =>							// eslint-disable-line no-unused-vars
+	{
+		if(this.checkContentUpdating()){
+			// open dialog and closing menu
+			this.setState({
+				localTenantDialogOpen:	true,
+				localTenantCreateMode:	true,
+				tenantMenuAnchorEl:		null
+			});
+		}
+
 		// closing menu
 		this.setState({
 			tenantMenuAnchorEl:	null
@@ -384,6 +480,12 @@ export default class R3MainTree extends React.Component
 					mainMenuTooltip:	isOpen
 				}
 			});
+		}else if(tooltipValues.tenantEdit === type){
+			this.setState({
+				tooltips: {
+					tenantEditTooltip:	isOpen
+				}
+			});
 		}else if(tooltipValues.tenantMenu === type){
 			this.setState({
 				tooltips: {
@@ -404,6 +506,18 @@ export default class R3MainTree extends React.Component
 			return false;
 		}
 		return true;
+	}
+
+	getAllTenantNames()
+	{
+		let	tenantNames = [];
+		for(let cnt = 0; cnt < this.props.tenants.length; ++cnt){
+			if(!r3IsEmptyEntityObject(this.props.tenants[cnt], 'name') && !r3IsEmptyString(this.props.tenants[cnt].name)){
+				tenantNames.push(this.props.tenants[cnt].name);
+			}
+		}
+		tenantNames.sort();
+		return tenantNames;
 	}
 
 	getLicensesMenuItems()
@@ -516,7 +630,7 @@ export default class R3MainTree extends React.Component
 			return (
 				<MenuItem
 					key={ componentKeyIds.noTenantList }
-					disabled={ true }
+					disabled={ (r3IsEmptyString(this.props.userName) || !this.props.editableLocalTenant) }
 				>
 					{ r3provider.getR3TextRes().tResNoTenantLabel }
 				</MenuItem>
@@ -535,6 +649,37 @@ export default class R3MainTree extends React.Component
 				})
 			);
 		}
+	}
+
+	getLocalTenantMenuItem()
+	{
+		const { r3provider } = this.props;
+
+		if(r3IsEmptyString(this.props.userName) || !this.props.editableLocalTenant){
+			return;
+		}
+		return (
+			<MenuItem
+				key={ menuValues.localTenant }
+				onClick={ event => this.handleCreateLocalTenant(event) }
+			>
+				<Typography
+					sx={ this.sxClasses.localTenantMenu }
+				>
+					{ r3provider.getR3TextRes().tResAddLocalTenantMenu }
+				</Typography>
+			</MenuItem>
+		);
+	}
+
+	getLocalTenantMenuDivider()
+	{
+		if(r3IsEmptyString(this.props.userName) || !this.props.editableLocalTenant){
+			return;
+		}
+		return (
+			<Divider />
+		);
 	}
 
 	getDummyBarSubHeader()
@@ -593,15 +738,46 @@ export default class R3MainTree extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		let	menuItem	= this.getTenantListMenuItems();
-		let	titleName	= ((this.props.tenants instanceof Array && 0 < this.props.tenants.length) ? r3provider.getR3TextRes().tResUnselectedTenantLabel : r3provider.getR3TextRes().tResNoTenantLabel);
-		let	themeToolbar= (this.props.enDock ? theme.r3MainTree.subheaderToolbar : theme.r3MainTree.smallSubheaderToolbar);
+		let	menuItem				= this.getTenantListMenuItems();
+		let	menuLocalTenantItem		= this.getLocalTenantMenuItem();
+		let	menuLocalTenantDivider	= this.getLocalTenantMenuDivider();
+		let	titleName				= ((this.props.tenants instanceof Array && 0 < this.props.tenants.length) ? r3provider.getR3TextRes().tResUnselectedTenantLabel : r3provider.getR3TextRes().tResNoTenantLabel);
+		let	themeToolbar			= (this.props.enDock ? theme.r3MainTree.subheaderToolbar : theme.r3MainTree.smallSubheaderToolbar);
 
 		this.props.tenants.map( (tenant, pos) => {			// eslint-disable-line no-unused-vars
 			if(r3DeepCompare(tenant, this.props.selectedTenant)){
 				titleName	= tenant.display;
 			}
 		});
+
+		// 
+		// Local tenant edit button
+		//
+		let	tenantEditBtn;
+		if(	!r3IsEmptyString(this.props.userName)							&&
+			this.props.editableLocalTenant									&&
+			!r3IsEmptyEntityObject(this.props.selectedTenant, 'name')		&&
+			0 === this.props.selectedTenant.name.indexOf(localTenantPrefix)	&&
+			r3IsSafeTypedEntity(this.props.selectedTenant.users, 'array')	)
+		{
+			tenantEditBtn = (
+				<Tooltip
+					title={ r3provider.getR3TextRes().tResTenantEditTT }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.tenantEditTooltip, 'boolean')) ? false : this.state.tooltips.tenantEditTooltip) }
+				>
+					<IconButton
+						onClick={ this.handleTenantEditButton }
+						onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.tenantEdit, true) }
+						onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.tenantEdit, false) }
+						{ ...theme.r3MainTree.tenantEditButton }
+						size="large"
+					>
+						<EditIcon />
+					</IconButton>
+				</Tooltip>
+			);
+		}
+
 		let	textLabel	= (
 			<Typography
 				{ ...theme.r3MainTree.chipText }
@@ -633,11 +809,14 @@ export default class R3MainTree extends React.Component
 						{ titleName }
 					</Typography>
 
+					{ tenantEditBtn }
+
 					<Tooltip
 						title={ r3provider.getR3TextRes().tResSelectTenantTT }
 						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.tenantMenuTooltip, 'boolean')) ? false : this.state.tooltips.tenantMenuTooltip) }
 					>
 						<IconButton
+							disabled={ r3IsEmptyString(this.props.userName) }
 							aria-owns={ this.state.tenantMenuAnchorEl ? componentKeyIds.tenantMenuId : undefined }
 							onClick={ this.handleTenantMenuButton }
 							onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.tenantMenu, true) }
@@ -648,7 +827,6 @@ export default class R3MainTree extends React.Component
 							<MoreVertIcon />
 						</IconButton>
 					</Tooltip>
-
 					<Menu
 						id={ componentKeyIds.tenantMenuId }
 						anchorEl={ this.state.tenantMenuAnchorEl }
@@ -657,6 +835,8 @@ export default class R3MainTree extends React.Component
 						{ ...theme.r3MainTree.tenantListMenu }
 					>
 						{ menuItem }
+						{ menuLocalTenantDivider }
+						{ menuLocalTenantItem }
 					</Menu>
 				</Toolbar>
 			</AppBar>
@@ -1188,24 +1368,42 @@ export default class R3MainTree extends React.Component
 		const { theme } = this.props;
 
 		return (
-			<Box
-				sx={ (this.props.isDocking ? this.sxClasses.dockedList : {}) }
-			>
-				{ this.getSubHeaders() }
-				<List
-					id={ componentKeyIds.topListId }
-					key={ componentKeyIds.topList }
-					{ ...theme.r3MainTree.list }
+			<React.Fragment>
+				<Box
+					sx={ (this.props.isDocking ? this.sxClasses.dockedList : {}) }
 				>
-					{ this.getMainListItems(this.props.treeList) }
-				</List>
-				{ this.getPopupMessageDialog() }
-			</Box>
+					{ this.getSubHeaders() }
+					<List
+						id={ componentKeyIds.topListId }
+						key={ componentKeyIds.topList }
+						{ ...theme.r3MainTree.list }
+					>
+						{ this.getMainListItems(this.props.treeList) }
+					</List>
+					{ this.getPopupMessageDialog() }
+				</Box>
+				<R3LocalTenantDialog
+					theme={ theme }
+					r3provider={ this.props.r3provider }
+					open={ this.state.localTenantDialogOpen }
+					userName={ this.props.userName }
+					createMode={ this.state.localTenantCreateMode }
+					allTenantNames={ this.getAllTenantNames() }
+					tenantName={		(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'name'))		? '' : this.props.selectedTenant.name }
+					tenantId={			(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'id'))			? '' : this.props.selectedTenant.id }
+					tenantDisplay={		(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'display'))		? '' : this.props.selectedTenant.display }
+					tenantDescription={	(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'description'))	? '' : this.props.selectedTenant.description }
+					tenantUsers={		(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'users') || !r3IsSafeTypedEntity(this.props.selectedTenant.users, 'array')) ? [ this.props.userName ] : r3DeepClone(this.props.selectedTenant.users).sort() }
+					onClose={ this.handLocalTenantDialogClose }
+				/>
+			</React.Fragment>
 		);
 	}
 
 	render()
 	{
+		const { theme } = this.props;
+
 		if(this.props.isDocking){
 			return this.getMainTreeLists();
 		}else{
@@ -1227,6 +1425,20 @@ export default class R3MainTree extends React.Component
 							{ this.getMainTreeLists() }
 						</Box>
 					</Drawer>
+					<R3LocalTenantDialog
+						theme={ theme }
+						r3provider={ this.props.r3provider }
+						open={ this.state.localTenantDialogOpen }
+						userName={ this.props.userName }
+						createMode={ this.state.localTenantCreateMode }
+						allTenantNames={ this.getAllTenantNames() }
+						tenantName={		(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'name'))		? '' : this.props.selectedTenant.name }
+						tenantId={			(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'id'))			? '' : this.props.selectedTenant.id }
+						tenantDisplay={		(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'display'))		? '' : this.props.selectedTenant.display }
+						tenantDescription={	(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'description'))	? '' : this.props.selectedTenant.description }
+						tenantUsers={		(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'users') || !r3IsSafeTypedEntity(this.props.selectedTenant.users, 'array')) ? [ this.props.userName ] : r3DeepClone(this.props.selectedTenant.users).sort() }
+						onClose={ this.handLocalTenantDialogClose }
+					/>
 				</React.Fragment>
 			);
 		}

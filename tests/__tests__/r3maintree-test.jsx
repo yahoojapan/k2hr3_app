@@ -46,6 +46,9 @@ import { createNodeMock }		from '../__mocks__/materialUiMock';					// for materi
 //			.mockReturnValue(true);
 //
 const TenantChange				= jest.fn();							// eslint-disable-line no-undef
+const localTenantCreate			= jest.fn();							// eslint-disable-line no-undef
+const localTenantChange			= jest.fn();							// eslint-disable-line no-undef
+const localTenantDelete			= jest.fn();							// eslint-disable-line no-undef
 const TypeItemChange			= jest.fn();							// eslint-disable-line no-undef
 const ListItemChange			= jest.fn();							// eslint-disable-line no-undef
 const NameItemInServiceChange	= jest.fn();							// eslint-disable-line no-undef
@@ -61,8 +64,9 @@ const About						= jest.fn();							// eslint-disable-line no-undef
 // Dummy datas
 //
 const tenants = [
-	{name: '10000', display: 'GROUP0:TENANT0'},
-	{name: '20000', display: 'GROUP1:TENANT1'}
+	{name: '10000', id: '1000-000', display: 'GROUP0:TENANT0', description: 'GROUP0:DESC TENANT0'},
+	{name: '20000', id: '2000-000', display: 'GROUP1:TENANT1', description: 'GROUP0:DESC TENANT1'},
+	{name: 'local@3000', id: '3000-000', display: 'GROUP1:LOCAL1', description: 'GROUP0:DESC LOCAL1', users: [ 'test' ]}
 ];
 
 const treelist = [
@@ -193,6 +197,8 @@ describe('R3MainTree', () => {											// eslint-disable-line no-undef
 						enDock={ false }
 						isDocking={ true }
 						open={ true }
+						editableLocalTenant={ true }
+						userName={ 'test' }
 						tenants={ tenants }
 						treeList={ treelist }
 						selectedTenant={ tenants[0] }
@@ -200,6 +206,9 @@ describe('R3MainTree', () => {											// eslint-disable-line no-undef
 						selectedService={ selectedservice }
 						selectedPath={ selectedpath }
 						onTenantChange={ TenantChange }
+						onLocalTenantCreate={ localTenantCreate }
+						onLocalTenantChange={ localTenantChange }
+						onLocalTenantDelete={ localTenantDelete }
 						onTypeItemChange={ TypeItemChange }
 						onListItemChange={ ListItemChange }
 						onNameItemInServiceChange={ NameItemInServiceChange }

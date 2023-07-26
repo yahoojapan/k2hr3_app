@@ -51,10 +51,11 @@ import { R3CommonContext }			from './r3commoncontext';
 // Utilities
 import R3Provider					from '../util/r3provider';
 import R3Message					from '../util/r3message';
+import { localTenantPrefix }		from '../util/r3define';
 import { clientTypes }				from '../util/r3device';
 import { r3LicensesJsonString }		from '../util/r3licenses';
 import { resourceType, roleType, policyType, serviceType, errorType, warningType, infoType, signinUnknownType, signinUnscopedToken, signinCredential } from '../util/r3types';		// eslint-disable-line no-unused-vars
-import { r3DeepCompare, r3IsEmptyStringObject, r3CompareString, r3CompareCaseString, r3IsEmptyString, r3IsEmptyEntity, r3IsEmptyEntityObject, r3ConvertFromJSON, r3IsSafeTypedEntity } from '../util/r3util';
+import { r3DeepCompare, r3IsEmptyStringObject, r3CompareString, r3CompareCaseString, r3IsEmptyString, r3IsEmptyEntity, r3IsEmptyEntityObject, r3ConvertFromJSON, r3IsSafeTypedEntity, r3DeepClone } from '../util/r3util';
 
 //
 // Container Class
@@ -132,6 +133,7 @@ export default class R3Container extends React.Component
 		accountDialogOpen:		false,
 		username:				this.r3provider.getR3Context().getSafeUserName(),
 		unscopedtoken:			this.r3provider.getR3Context().getSafeUnscopedToken(),
+		useLocalTenant:			this.r3provider.getR3Context().useLocalTenant(),
 		signinDialogOpen:		false
 	};
 
@@ -143,6 +145,9 @@ export default class R3Container extends React.Component
 		this.handleIsContentUpdating		= this.handleIsContentUpdating.bind(this);
 
 		this.handleTenantChange				= this.handleTenantChange.bind(this);
+		this.handleLocalTenantCreate		= this.handleLocalTenantCreate.bind(this);
+		this.handleLocalTenantChange		= this.handleLocalTenantChange.bind(this);
+		this.handleLocalTenantDelete		= this.handleLocalTenantDelete.bind(this);
 		this.handleTypeChange				= this.handleTypeChange.bind(this);
 		this.handleListItemChange			= this.handleListItemChange.bind(this);
 		this.handleNameItemInServiceChange	= this.handleNameItemInServiceChange.bind(this);
@@ -183,7 +188,7 @@ export default class R3Container extends React.Component
 	componentDidMount()
 	{
 		// Initialize tenant
-		this.r3provider.getTenantList((error, resobj) => this.cbTenantList(error, resobj));
+		this.r3provider.getTenantList(false, (error, resobj) => this.cbTenantList(error, resobj));
 	}
 
 	//
@@ -224,7 +229,7 @@ export default class R3Container extends React.Component
 
 		if(isSignIn){
 			// Re-Initialize tenant list
-			this.r3provider.getTenantList((error, resobj) => this.cbTenantList(error, resobj));
+			this.r3provider.getTenantList(true, (error, resobj) => this.cbTenantList(error, resobj));
 
 			// All parts updates
 			this.updateStateAllParts(this.state.selected.tenant, this.state.selected.service, this.state.selected.type, this.state.selected.path, false, (isSignIn ? (this.r3provider.getR3TextRes().iSignined + this.r3provider.getR3TextRes().iNotSignin) : (this.r3provider.getR3TextRes().iSignouted + this.r3provider.getR3TextRes().iNotSignin)));
@@ -269,7 +274,7 @@ export default class R3Container extends React.Component
 	}
 
 	//
-	// Callbacks for provider
+	// Callback for provider
 	//
 	cbTenantList(error, tenants)
 	{
@@ -573,6 +578,148 @@ export default class R3Container extends React.Component
 		let	path	= (r3DeepCompare(tenant, this.state.selected.tenant) ? this.state.selected.path		: null);
 
 		this.updateStateAllParts(tenant, service, type, path, false, this.r3provider.getR3TextRes().iSucceedChangeTenant);
+	}
+
+	//
+	// Update Tenant List Callback for provider
+	//
+	// [NOTE]
+	// This CallBack is for creating/updating a Local Tenant.
+	//
+	cbUpdateChangeTenant(error, tenants, tenantname)
+	{
+		if(null !== error){
+			this.updateState(null, this.r3provider.getR3TextRes().eCommunication + error.message, errorType);
+		}else{
+			// update tenant list
+			this.updateState({
+				tenants:	r3DeepClone(tenants)
+			}, ((!r3IsSafeTypedEntity(tenants, 'array') || 0 === tenants.length) ? this.r3provider.getR3TextRes().iNotHaveAnyTenant : null));
+
+			// change selected tenant
+			let	_selectedTenant = null;
+			if(!r3IsEmptyString(tenantname)){
+				let	_tenantName;
+				if(0 === tenantname.indexOf(localTenantPrefix)){
+					_tenantName = tenantname;
+				}else{
+					_tenantName = localTenantPrefix + tenantname;
+				}
+				tenants.map( (item) => {
+					if(!r3IsEmptyString(item.name) && item.name == _tenantName){
+						// found
+						_selectedTenant = r3DeepClone(item);
+					}
+				});
+			}
+			this.updateStateAllParts(_selectedTenant, null, null, null, false, this.r3provider.getR3TextRes().iSucceedChangeTenant);
+		}
+	}
+
+	//
+	// Handle Create Local Tenant in MainTree
+	//
+	//	name			: Local Tenant name(prefix with local@) to create
+	//	display			: Display name allowed empty
+	//	description		: Description name allowed empty
+	//	users			: User name list included self name
+	//
+	handleLocalTenantCreate(name, display, description, users)
+	{
+		console.info('CALL : handleLocalTenantCreate');
+
+		let	_name		= name;
+		let	_display	= display;
+		let	_description= description;
+		let	_users		= r3DeepClone(users);
+
+		this.cbProgressControl(true);										// collectively display progress
+
+		this.r3provider.createLocalTenant(_name, _display, _description, _users, (error) =>
+		{
+			if(null !== error){
+				this.cbProgressControl(false);								// collectively undisplay progress
+				this.updateState(null, this.r3provider.getR3TextRes().eLocalTenantCreate + error.message, errorType);
+				return;
+			}
+
+			//
+			// update tenant list and change to new local tenant
+			//
+			this.r3provider.getTenantList(true, (error, resobj) => this.cbUpdateChangeTenant(error, resobj, _name));
+
+			this.cbProgressControl(false);									// collectively undisplay progress
+		});
+	}
+
+	//
+	// Handle Change Local Tenant in MainTree
+	//
+	//	name			: Local Tenant name(prefix with local@) to change
+	//	id				: Local Tenant ID
+	//	display			: Display name allowed empty
+	//	description		: Description name allowed empty
+	//	users			: User name list
+	//
+	handleLocalTenantChange(name, id, display, description, users)
+	{
+		console.info('CALL : handleLocalTenantChange');
+
+		let	_name		= name;
+		let	_id			= id;
+		let	_display	= display;
+		let	_description= description;
+		let	_users		= r3DeepClone(users);
+
+		this.cbProgressControl(true);										// collectively display progress
+
+		this.r3provider.updateLocalTenant(_name, _id, _display, _description, _users, (error) =>
+		{
+			if(null !== error){
+				this.cbProgressControl(false);								// collectively undisplay progress
+				this.updateState(null, this.r3provider.getR3TextRes().eLocalTenantUpdate + error.message, errorType);
+				return;
+			}
+
+			//
+			// update tenant list and change to new local tenant
+			//
+			this.r3provider.getTenantList(true, (error, resobj) => this.cbUpdateChangeTenant(error, resobj, _name));
+
+			this.cbProgressControl(false);									// collectively undisplay progress
+		});
+	}
+
+	//
+	// Handle Delete Local Tenant in MainTree
+	//
+	//	name			: Local Tenant name(prefix with local@) to delete
+	//	id				: Local Tenant id
+	//
+	handleLocalTenantDelete(name, id)
+	{
+		console.info('CALL : handleLocalTenantDelete');
+
+		let	_name		= name;
+		let	_id			= id;
+
+		this.cbProgressControl(true);										// collectively display progress
+
+		this.r3provider.deleteLocalTenant(_name, _id, (error) =>
+		{
+			if(null !== error){
+				this.cbProgressControl(false);								// collectively undisplay progress
+				this.updateState(null, this.r3provider.getR3TextRes().eLocalTenantDelete + error.message, errorType);
+				return;
+			}
+
+			//
+			// update tenant list and change to new local tenant
+			//
+			this.r3provider.getTenantList(true, (error, resobj) => this.cbUpdateChangeTenant(error, resobj, null));
+
+			this.cbProgressControl(false);									// collectively undisplay progress
+		});
 	}
 
 	//
@@ -1271,6 +1418,8 @@ export default class R3Container extends React.Component
 							isDocking={ this.state.mainTreeDocked }
 							licensesObj={ this.licensesObj }
 							open={ this.state.mainTreeOpen }
+							editableLocalTenant={ this.state.useLocalTenant }
+							userName={ this.state.username }
 							tenants={ this.state.tenants }
 							treeList={ this.state.mainTree }
 							selectedTenant={ this.state.selected.tenant }
@@ -1278,6 +1427,9 @@ export default class R3Container extends React.Component
 							selectedService={ this.state.selected.service }
 							selectedPath={ this.state.selected.path }
 							onTenantChange={ this.handleTenantChange }
+							onLocalTenantCreate={ this.handleLocalTenantCreate }
+							onLocalTenantChange={ this.handleLocalTenantChange }
+							onLocalTenantDelete={ this.handleLocalTenantDelete }
 							onTypeItemChange={ this.handleTypeChange }
 							onListItemChange={ this.handleListItemChange }
 							onNameItemInServiceChange={ this.handleNameItemInServiceChange }

@@ -290,6 +290,10 @@ const r3Theme = createTheme({
 			variant:				'subtitle2',
 			component:				'span'
 		},
+		tenantEditButton: {
+			label:					'edit-tenant',
+			'aria-label':			'edit tenant'
+		},
 		tenantListButton: {
 			label:					'select-tenant',
 			'aria-label':			'select tenant'
@@ -1289,6 +1293,124 @@ const r3Theme = createTheme({
 		},
 		textField: {
 			disabled:				false
+		},
+		cancelButton: {
+			variant:				'contained',
+			color:					'primary',
+			'aria-label':			'cancel'
+		},
+		okButton: {
+			variant:				'contained',
+			color:					'secondary',
+			'aria-label':			'ok'
+		}
+	},
+
+	//
+	// R3 Local Tenant Dialog
+	//
+	r3LocalTenantDialog: {
+		root: {
+			scroll:					'body',
+			fullWidth:				true,
+			label:					'create-path-dialog',
+			'aria-label':			'create path dialog'
+		},
+		dialogTitle: {
+			label:					'create-path-dialog'
+		},
+		title: {
+			variant:				'h5',
+			component:				'span',
+			color:					'primary',
+			noWrap:					true
+		},
+		keyTitle: {
+			variant:				'subtitle2',
+			color:					'primary',
+			component:				'span',
+			noWrap:					true
+		},
+		value: {
+			variant:				'body1',
+			component:				'span',
+			color:					'textSecondary'
+		},
+		localTenantMessage: {
+			variant:				'body1',
+			component:				'span',
+			color:					'error'
+		},
+		textField: {
+			disabled:				false,
+			inputProps: {
+				'aria-label':		'input tenant inforamtion',
+			}
+		},
+		usersEditButton: {
+			color:					'primary',
+			label:					'edit-users',
+			'aria-label':			'edit users'
+		},
+		usersAddButton: {
+			color:					'primary',
+			label:					'add-user',
+			'aria-label':			'add user'
+		},
+		popoverMessage: {
+			variant:				'body1',
+			noWrap:					true
+		},
+		popoverTenantUserAdd: {
+			anchorOrigin: {
+				vertical:			'bottom',
+				horizontal:			'right'
+			},
+			transformOrigin: {
+				vertical:			'bottom',
+				horizontal:			'right'
+			}
+		},
+		popoverTenantUserAddTitle: {
+			variant:				'subtitle2',
+			component:				'span',
+			color:					'primary',
+			noWrap:					true
+		},
+		popoverTenantUserAddButton: {
+			variant:				'contained',
+			color:					'secondary',
+			'aria-label':			'close dialog'
+		},
+		popoverTenantUsersEdit: {
+			anchorOrigin: {
+				vertical:			'bottom',
+				horizontal:			'right'
+			},
+			transformOrigin: {
+				vertical:			'bottom',
+				horizontal:			'right'
+			}
+		},
+		popoverTenantUsersEditTitle: {
+			variant:				'subtitle2',
+			component:				'span',
+			color:					'primary',
+			noWrap:					true
+		},
+		popoverTenantUsersEditButton: {
+			variant:				'contained',
+			color:					'secondary',
+			'aria-label':			'close dialog'
+		},
+		popoverTenantUserDeleteButton: {
+			label:					'delete-user',
+			'aria-label':			'delete user'
+		},
+		popoverTenantUserName: {
+			variant:				'body1',
+			component:				'span',
+			color:					'textSecondary'
 		},
 		cancelButton: {
 			variant:				'contained',

@@ -1,0 +1,602 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
+<
+  aria-label="create path dialog"
+  className="MuiDialog-root css-1h8td7x-MuiDialog-root"
+  closeAfterTransition={true}
+  components={
+    {
+      "Backdrop": {
+        "$$typeof": Symbol(react.forward_ref),
+        "__emotion_base": {
+          "$$typeof": Symbol(react.forward_ref),
+          "propTypes": {
+            "TransitionComponent": [Function],
+            "children": [Function],
+            "className": [Function],
+            "classes": [Function],
+            "component": [Function],
+            "components": [Function],
+            "componentsProps": [Function],
+            "invisible": [Function],
+            "open": [Function],
+            "slotProps": [Function],
+            "slots": [Function],
+            "sx": [Function],
+            "transitionDuration": [Function],
+          },
+          "render": [Function],
+        },
+        "__emotion_forwardProp": [Function],
+        "__emotion_real": [Circular],
+        "__emotion_styles": [
+          "label:MuiDialog-backdrop;",
+          {
+            "zIndex": -1,
+          },
+          [Function],
+        ],
+        "defaultProps": undefined,
+        "render": [Function],
+        "withComponent": [Function],
+      },
+    }
+  }
+  componentsProps={
+    {
+      "backdrop": {
+        "as": undefined,
+        "transitionDuration": {
+          "enter": 225,
+          "exit": 195,
+        },
+      },
+    }
+  }
+  disableEscapeKeyDown={false}
+  disablePortal={true}
+  label="create-path-dialog"
+  onClick={[Function]}
+  onClose={[Function]}
+  open={true}
+>
+  <
+    appear={true}
+    in={true}
+    role="presentation"
+    timeout={
+      {
+        "enter": 225,
+        "exit": 195,
+      }
+    }
+  >
+    <div
+      className="MuiDialog-container MuiDialog-scrollBody css-iz3z40-MuiDialog-container"
+      onMouseDown={[Function]}
+    >
+      <div
+        aria-labelledby=":r0:"
+        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3q99l0-MuiPaper-root-MuiDialog-paper"
+        role="dialog"
+      >
+        <h2
+          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-5unaky-MuiTypography-root-MuiDialogTitle-root"
+          id=":r0:"
+          label="create-path-dialog"
+        >
+          <span
+            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-1h4f5vm-MuiTypography-root"
+          >
+            Create a Local TENANT
+          </span>
+        </h2>
+        <div
+          className="MuiDialogContent-root css-ypiqx9-MuiDialogContent-root"
+        >
+          <span
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
+          >
+            TENANT name
+          </span>
+          <div
+            className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
+          >
+            <div
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
+              onClick={[Function]}
+            >
+              <input
+                aria-invalid={false}
+                aria-label="input tenant inforamtion"
+                autoFocus={false}
+                className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                disabled={false}
+                id="tenant-new-name-textfield-id"
+                onAnimationStart={[Function]}
+                onBlur={[Function]}
+                onChange={[Function]}
+                onFocus={[Function]}
+                placeholder="Input Local TENANT name"
+                required={false}
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <span
+            className="MuiTypography-root MuiTypography-body1 css-1n7958d-MuiTypography-root"
+          >
+            (If not "local@" prefix, it is automatically given.)
+          </span>
+          <span
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
+          >
+            Display name
+          </span>
+          <div
+            className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
+          >
+            <div
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
+              onClick={[Function]}
+            >
+              <input
+                aria-invalid={false}
+                aria-label="input tenant inforamtion"
+                autoFocus={false}
+                className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                disabled={false}
+                id="tenant-display-name-textfield-id"
+                onAnimationStart={[Function]}
+                onBlur={[Function]}
+                onChange={[Function]}
+                onFocus={[Function]}
+                placeholder="Input Display name for Local TENANT"
+                required={false}
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <span
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
+          >
+            Description
+          </span>
+          <div
+            className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
+          >
+            <div
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
+              onClick={[Function]}
+            >
+              <input
+                aria-invalid={false}
+                aria-label="input tenant inforamtion"
+                autoFocus={false}
+                className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                disabled={false}
+                id="tenant-description-textfield-id"
+                onAnimationStart={[Function]}
+                onBlur={[Function]}
+                onChange={[Function]}
+                onFocus={[Function]}
+                placeholder="K2HR3 Cluster Local tenant"
+                required={false}
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <span
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
+          >
+            TENANT User
+          </span>
+          <span
+            className="MuiTypography-root MuiTypography-body1 css-u4kix5-MuiTypography-root"
+          />
+          <
+            className="MuiPopover-root css-dpq74k-MuiPopover-root"
+            onClose={[Function]}
+            open={false}
+            slotProps={
+              {
+                "backdrop": {
+                  "invisible": true,
+                },
+              }
+            }
+          >
+            <div
+              className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-1iwa7cr-MuiPaper-root-MuiPopover-paper"
+              style={
+                {
+                  "opacity": 0,
+                  "transform": "scale(0.75, 0.5625)",
+                  "visibility": "hidden",
+                }
+              }
+            >
+              <span
+                className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-lwaw7-MuiTypography-root"
+              >
+                MANAGE TENANT USER
+              </span>
+              <div
+                className="MuiBox-root css-0"
+              />
+              <div
+                className="MuiTablePagination-root css-doc006-MuiTablePagination-root"
+              >
+                <div
+                  className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar"
+                >
+                  <div
+                    className="MuiTablePagination-spacer css-1psng7p-MuiTablePagination-spacer"
+                  />
+                  <p
+                    className="MuiTablePagination-displayedRows css-11ceysh-MuiTablePagination-displayedRows"
+                  >
+                    0–0 of 0
+                  </p>
+                  <div
+                    className="MuiTablePagination-actions"
+                  >
+                    <button
+                      aria-label="Go to previous page"
+                      className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorInherit MuiIconButton-sizeMedium css-1o9uo9i-MuiButtonBase-root-MuiIconButton-root"
+                      disabled={true}
+                      onBlur={[Function]}
+                      onClick={[Function]}
+                      onContextMenu={[Function]}
+                      onDragLeave={[Function]}
+                      onFocus={[Function]}
+                      onKeyDown={[Function]}
+                      onKeyUp={[Function]}
+                      onMouseDown={[Function]}
+                      onMouseLeave={[Function]}
+                      onMouseUp={[Function]}
+                      onTouchEnd={[Function]}
+                      onTouchMove={[Function]}
+                      onTouchStart={[Function]}
+                      tabIndex={-1}
+                      title="Go to previous page"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden={true}
+                        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
+                        data-testid="KeyboardArrowLeftIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-label="Go to next page"
+                      className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorInherit MuiIconButton-sizeMedium css-1o9uo9i-MuiButtonBase-root-MuiIconButton-root"
+                      disabled={true}
+                      onBlur={[Function]}
+                      onClick={[Function]}
+                      onContextMenu={[Function]}
+                      onDragLeave={[Function]}
+                      onFocus={[Function]}
+                      onKeyDown={[Function]}
+                      onKeyUp={[Function]}
+                      onMouseDown={[Function]}
+                      onMouseLeave={[Function]}
+                      onMouseUp={[Function]}
+                      onTouchEnd={[Function]}
+                      onTouchMove={[Function]}
+                      onTouchStart={[Function]}
+                      tabIndex={-1}
+                      title="Go to next page"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden={true}
+                        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
+                        data-testid="KeyboardArrowRightIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <button
+                aria-label="close dialog"
+                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-bxvl8j-MuiButtonBase-root-MuiButton-root"
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onContextMenu={[Function]}
+                onDragLeave={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onKeyUp={[Function]}
+                onMouseDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseUp={[Function]}
+                onTouchEnd={[Function]}
+                onTouchMove={[Function]}
+                onTouchStart={[Function]}
+                tabIndex={-1}
+                type="button"
+              >
+                UPDATE
+                <svg
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
+                  data-testid="CheckCircleIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </>
+          <
+            className="MuiPopover-root css-dpq74k-MuiPopover-root"
+            onClose={[Function]}
+            open={false}
+            slotProps={
+              {
+                "backdrop": {
+                  "invisible": true,
+                },
+              }
+            }
+          >
+            <div
+              className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-1iwa7cr-MuiPaper-root-MuiPopover-paper"
+              style={
+                {
+                  "opacity": 0,
+                  "transform": "scale(0.75, 0.5625)",
+                  "visibility": "hidden",
+                }
+              }
+            >
+              <span
+                className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-lwaw7-MuiTypography-root"
+              >
+                ADD TENANT USER
+              </span>
+              <div
+                className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
+              >
+                <div
+                  className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
+                  onClick={[Function]}
+                >
+                  <input
+                    aria-invalid={false}
+                    aria-label="input tenant inforamtion"
+                    autoFocus={false}
+                    className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                    disabled={false}
+                    id="tenant-user-add-textfield-id"
+                    onAnimationStart={[Function]}
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    placeholder="Input user name"
+                    required={false}
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <button
+                aria-label="close dialog"
+                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-bxvl8j-MuiButtonBase-root-MuiButton-root"
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onContextMenu={[Function]}
+                onDragLeave={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onKeyUp={[Function]}
+                onMouseDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseUp={[Function]}
+                onTouchEnd={[Function]}
+                onTouchMove={[Function]}
+                onTouchStart={[Function]}
+                tabIndex={-1}
+                type="button"
+              >
+                ADD
+                <svg
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
+                  data-testid="CheckCircleIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </>
+          <div
+            className="MuiBox-root css-1sf6uxi"
+          >
+            <button
+              aria-label="edit users"
+              aria-labelledby={null}
+              className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorPrimary MuiIconButton-sizeLarge css-s0k6db-MuiButtonBase-root-MuiIconButton-root"
+              data-mui-internal-clone-element={true}
+              disabled={true}
+              label="edit-users"
+              onBlur={[Function]}
+              onClick={[Function]}
+              onContextMenu={[Function]}
+              onDragLeave={[Function]}
+              onFocus={[Function]}
+              onKeyDown={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+              onMouseOver={[Function]}
+              onMouseUp={[Function]}
+              onTouchEnd={[Function]}
+              onTouchMove={[Function]}
+              onTouchStart={[Function]}
+              tabIndex={-1}
+              type="button"
+            >
+              <svg
+                aria-hidden={true}
+                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
+                data-testid="EditIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                />
+              </svg>
+            </button>
+            <button
+              aria-label="add User to this Local Tenant"
+              aria-labelledby={null}
+              className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-rswm6d-MuiButtonBase-root-MuiButton-root"
+              data-mui-internal-clone-element={true}
+              disabled={false}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onContextMenu={[Function]}
+              onDragLeave={[Function]}
+              onFocus={[Function]}
+              onKeyDown={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+              onMouseOver={[Function]}
+              onMouseUp={[Function]}
+              onTouchEnd={[Function]}
+              onTouchMove={[Function]}
+              onTouchStart={[Function]}
+              tabIndex={0}
+              type="button"
+            >
+              <svg
+                aria-hidden={true}
+                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
+                data-testid="AddRoundedIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M18 13h-5v5c0 .55-.45 1-1 1s-1-.45-1-1v-5H6c-.55 0-1-.45-1-1s.45-1 1-1h5V6c0-.55.45-1 1-1s1 .45 1 1v5h5c.55 0 1 .45 1 1s-.45 1-1 1z"
+                />
+              </svg>
+              <span
+                className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+          <span
+            className="MuiTypography-root MuiTypography-body1 css-1u4qfi7-MuiTypography-root"
+          >
+            Specify users including yourself at creating a new tenant.
+          </span>
+        </div>
+        <div
+          className="MuiDialogActions-root MuiDialogActions-spacing css-hlj6pa-MuiDialogActions-root"
+        >
+          <button
+            aria-label="cancel"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-rypk7-MuiButtonBase-root-MuiButton-root"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={0}
+            type="button"
+          >
+            CANCEL
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
+              data-testid="CancelIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"
+              />
+            </svg>
+            <span
+              className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+          <button
+            aria-label="ok"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
+            disabled={true}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={-1}
+            type="button"
+          >
+            OK
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
+              data-testid="CheckCircleIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </>
+</>
+`;

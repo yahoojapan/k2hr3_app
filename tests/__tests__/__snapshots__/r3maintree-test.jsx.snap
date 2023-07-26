@@ -14,7 +14,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
         className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-dense css-1uihimd-MuiToolbar-root"
       >
         <div
-          className="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-filledPrimary css-1vci0vm-MuiChip-root"
+          className="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-filledPrimary css-lgprvh-MuiChip-root"
           onKeyDown={[Function]}
           onKeyUp={[Function]}
         >

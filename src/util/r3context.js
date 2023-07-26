@@ -139,6 +139,7 @@ const r3GlobalObject = (function()
 		signintype:		(r3CompareCaseString(r3globaltmp.signintype, signinUnscopedToken) ? signinUnscopedToken : r3CompareCaseString(r3globaltmp.signintype, signinCredential) ? signinCredential : signinUnknownType),
 		signinurl:		(r3IsEmptyString(r3globaltmp.signinurl)		? null	: r3globaltmp.signinurl),
 		signouturl:		(r3IsEmptyString(r3globaltmp.signouturl)	? null	: r3globaltmp.signouturl),
+		uselocaltenant:	(r3IsEmptyEntity(r3globaltmp.uselocaltenant) ? true : r3globaltmp.uselocaltenant),
 		lang:			(r3IsEmptyString(r3globaltmp.lang)			? 'en'	: r3globaltmp.lang),
 		dbgheader:		(r3IsEmptyString(r3globaltmp.dbgheader)		? ''	: r3globaltmp.dbgheader),
 		dbgvalue:		(r3IsEmptyString(r3globaltmp.dbgvalue)		? ''	: r3globaltmp.dbgvalue),
@@ -179,6 +180,7 @@ export default class R3Context
 		this.signintype			= r3GlobalObject.signintype;	// SignIn Type
 		this.signinurl			= r3GlobalObject.signinurl;		// SignIn URL
 		this.signouturl			= r3GlobalObject.signouturl;	// SignOut URL
+		this.uselocaltenant		= r3GlobalObject.uselocaltenant;// Use Local Tenant
 		this.lang				= r3GlobalObject.lang;			// Text resource language
 		this.dbgHeaderName		= r3GlobalObject.dbgheader;		// Debug header name(= 'x-k2hr3-debug')
 		this.dbgHeaderValue		= r3GlobalObject.dbgvalue;		// Debug header value
@@ -447,6 +449,11 @@ export default class R3Context
 	getSafeSignOutUrl()
 	{
 		return (r3IsEmptyString(this.signouturl) ? '' : r3UnescapeHTML(this.signouturl));
+	}
+
+	useLocalTenant()
+	{
+		return this.uselocaltenant;
 	}
 
 	getSafeLang()

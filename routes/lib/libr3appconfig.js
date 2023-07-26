@@ -75,6 +75,7 @@ var	loadedConfig = (function()
 		validator:			'userValidateCredential',	// Validator object module
 		validobj:			null,						// Generated(required) validator object module
 		rejectUnauthorized:	true,						// reject mode
+		uselocaltenant:		true,						// Use Local Tenant
 		lang:				'en',						// Language for javascript application
 		extrouter:			{							// Configuration of Router module to be expanded
 			/*
@@ -206,6 +207,11 @@ var	loadedConfig = (function()
 		// Reject mode at unauth
 		if((r3util.isSafeBoolean(config.rejectunauth) && !config.rejectunauth) || (process.env.NODE_ENV !== 'production')){
 			data.rejectUnauthorized	= false;
+		}
+
+		// Use Local Tenant
+		if(r3util.isSafeBoolean(config.uselocaltenant)){
+			data.uselocaltenant = config.uselocaltenant;
 		}
 
 		// Lang
@@ -465,6 +471,11 @@ var R3AppConfig = (function()
 	proto.getRejectUnauthorized = function()
 	{
 		return this.loadedConfig.rejectUnauthorized;
+	};
+
+	proto.useLocalTenant = function()
+	{
+		return this.loadedConfig.uselocaltenant;
 	};
 
 	proto.getLang = function()

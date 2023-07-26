@@ -23,7 +23,7 @@ import R3Context			from '../util/r3context';
 import { r3GetTextRes }		from '../util/r3define';
 import { resourceType, roleType, policyType, serviceType }	from '../util/r3types';
 import { checkServiceResourceValue }						from '../util/r3verifyutil';
-import { r3ObjMerge, parseCombineHostObject, r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity, r3IsEmptyString, r3CompareCaseString } from '../util/r3util';
+import { r3DeepClone, r3ObjMerge, parseCombineHostObject, r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity, r3IsEmptyString, r3CompareCaseString } from '../util/r3util';
 
 //
 // K2HR3 Data Provider Class
@@ -426,13 +426,17 @@ export default class R3Provider
 	//
 	// Get tenant list
 	//
-	getTenantList(callback)
+	getTenantList(force, callback)
 	{
 		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
 			return;
 		}
 		let	_callback	= callback;
+
+		if(force){
+			this.tenantList = [];
+		}
 
 		if(0 < this.tenantList.length){
 			// using cache
@@ -470,6 +474,7 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
+
 			if(!r3IsSafeTypedEntity(resobj.tenants, 'array')){
 				this.tenantList = [];
 			}else{
@@ -487,7 +492,237 @@ export default class R3Provider
 					return 0;
 				});
 			}
-			_callback(null, this.tenantList);
+
+			//
+			// Get All local Tenant Infomration
+			//
+			this.startProgress();															// start progressing
+
+			this._get('/v1/tenant', 'expand=true', null, this.tokenHeaderType.unscopedUserToken, (error, resobj) =>
+			{
+				this.stopProgress();														// stop progressing
+
+				if(null !== error){
+					if(undefined !== error.status && 404 == error.status){
+						console.error('Could not get tenat list with response status is 404, thus return empty tenant list : ' + error.message);
+						this.tenantList = [];
+						_callback(null, this.tenantList);
+					}else{
+						console.error(error.message);
+						_callback(error, null);
+					}
+					return;
+				}
+				if(true !== resobj.result){
+					error = new Error('Could not get local tenant list : ' + resobj.message);
+					console.error(error.message);
+					_callback(error, null);
+					return;
+				}
+
+				//
+				// Add users data to local tenant information
+				//
+				if(r3IsSafeTypedEntity(resobj.tenants, 'array')){
+					for(let cnt = 0; cnt < resobj.tenants.length; ++cnt){
+						if(r3IsEmptyString(resobj.tenants[cnt].name)){
+							console.warn('The local tenant name in respose is empty, so skip this.');
+							continue;
+						}
+
+						let	foundTenant = false;
+						for(let cnt2 = 0; cnt2 < this.tenantList.length; ++cnt2){
+							if(!r3IsEmptyString(this.tenantList[cnt2].name) && this.tenantList[cnt2].name == resobj.tenants[cnt].name){
+								//
+								// Add users
+								//
+								this.tenantList[cnt2].users	= r3DeepClone(resobj.tenants[cnt].users);
+								foundTenant					= true;
+								break;
+							}
+						}
+						if(!foundTenant){
+							console.warn('Not found ' + resobj.tenants[cnt].name +  ' local tenant in current tenant list, so skip this.');
+						}
+					}
+				}else{
+					console.warn('Respose for getting local tenant list is something wrong, but continue...');
+				}
+
+				_callback(null, this.tenantList);
+			});
+		});
+	}
+
+	//--------------------------------------------------
+	// Local Tenant
+	//--------------------------------------------------
+	//
+	// Create Local Tenant
+	//
+	// name			: local tenant name
+	// display		: display name for new local tenant(allowed null/emptyv1/tenant)
+	// description	: description for new local tenant(allowed null/emptyv1/tenant)
+	// users		: initial user name array for new local tenant
+	//
+	createLocalTenant(name, display, description, users, callback)
+	{
+		if(!r3IsSafeTypedEntity(callback, 'function')){
+			console.error('callback parameter is wrong.');
+			return;
+		}
+
+		let	_callback	= callback;
+		let	_error;
+		if(r3IsEmptyString(name, true) || !r3IsSafeTypedEntity(users, 'array') || 0 === users.length){
+			_error = new Error('name(' + JSON.stringify(name) + ') or display(' + JSON.stringify(display) + ') or description(' + JSON.stringify(description) + ') or users(' + JSON.stringify(users) + ') parameters are wrong.');
+			console.error(_error.message);
+			_callback(_error);
+			return;
+		}
+
+		let	_name		= name.trim();
+		let	_display	= (r3IsEmptyString(display, true)		? null : r3IsEmptyString(display.trim(), true)		? null : display.trim());
+		let	_description= (r3IsEmptyString(description, true)	? null : r3IsEmptyString(description.trim(), true)	? null : description.trim());
+		let	_users		= r3DeepClone(users);
+		let _body		= {
+			'tenant': {
+				'name':		_name,
+				'display':	_display,
+				'desc':		_description,
+				'users':	_users
+			}
+		};
+
+		this.startProgress();																// start progressing
+
+		this._post('/v1/tenant', null, this.tokenHeaderType.unscopedUserToken, _body, true, (error, resobj) =>
+		{
+			this.stopProgress();															// stop progressing
+
+			if(null !== error){
+				console.error(error.message);
+				_callback(error);
+				return;
+			}
+			if(true !== resobj.result){
+				error = new Error(resobj.message);
+				console.error(error.message);
+				_callback(error);
+				return;
+			}
+			_callback(null);
+		});
+	}
+
+	//
+	// Update Local Tenant
+	//
+	// name			: local tenant name
+	// id			: local tenant id
+	// display		: display name for local tenant(allowed null/emptyv1/tenant)
+	// description	: description for local tenant(allowed null/emptyv1/tenant)
+	// users		: user name array for local tenant
+	//
+	updateLocalTenant(name, id, display, description, users, callback)
+	{
+		if(!r3IsSafeTypedEntity(callback, 'function')){
+			console.error('callback parameter is wrong.');
+			return;
+		}
+
+		let	_callback	= callback;
+		let	_error;
+		if(r3IsEmptyString(name, true) || r3IsEmptyString(id, true) || !r3IsSafeTypedEntity(users, 'array') || 0 === users.length){
+			_error = new Error('name(' + JSON.stringify(name) + ') or id(' + JSON.stringify(id) + ') or display(' + JSON.stringify(display) + ') or description(' + JSON.stringify(description) + ') or users(' + JSON.stringify(users) + ') parameters are wrong.');
+			console.error(_error.message);
+			_callback(_error);
+			return;
+		}
+
+		let	_name		= name.trim();
+		let	_id			= id.trim();
+		let	_display	= (r3IsEmptyString(display, true)		? null : r3IsEmptyString(display.trim(), true)		? null : display.trim());
+		let	_description= (r3IsEmptyString(description, true)	? null : r3IsEmptyString(description.trim(), true)	? null : description.trim());
+		let	_users		= r3DeepClone(users);
+
+		let	_url		= '/v1/tenant/' + _name;
+		let _body		= {
+			'tenant': {
+				'id':		_id,
+				'display':	_display,
+				'desc':		_description,
+				'users':	_users
+			}
+		};
+
+		this.startProgress();																// start progressing
+
+		this._post(_url, null, this.tokenHeaderType.unscopedUserToken, _body, true, (error, resobj) =>
+		{
+			this.stopProgress();															// stop progressing
+
+			if(null !== error){
+				console.error(error.message);
+				_callback(error);
+				return;
+			}
+			if(true !== resobj.result){
+				error = new Error(resobj.message);
+				console.error(error.message);
+				_callback(error);
+				return;
+			}
+			_callback(null);
+		});
+	}
+
+	//
+	// Delete Local Tenant
+	//
+	// name			: local tenant name
+	// id			: local tenant id
+	//
+	deleteLocalTenant(name, id, callback)
+	{
+		if(!r3IsSafeTypedEntity(callback, 'function')){
+			console.error('callback parameter is wrong.');
+			return;
+		}
+
+		let	_callback	= callback;
+		let	_error;
+		if(r3IsEmptyString(name, true) || r3IsEmptyString(id, true)){
+			_error = new Error('name(' + JSON.stringify(name) + ') or id(' + JSON.stringify(id) + ') parameters are wrong.');
+			console.error(_error.message);
+			_callback(_error);
+			return;
+		}
+
+		let	_name		= name.trim();
+		let	_id			= id.trim();
+
+		let	_url		= '/v1/tenant/' + _name;
+		let	_urlargs	= 'id=' + _id;
+
+		this.startProgress();																// start progressing
+
+		this._delete(_url, _urlargs, null, this.tokenHeaderType.unscopedUserToken, (error, resobj) =>
+		{
+			this.stopProgress();															// stop progressing
+
+			if(null !== error){
+				console.error(error.message);
+				_callback(error);
+				return;
+			}
+			if(true !== resobj.result){
+				error = new Error(resobj.message);
+				console.error(error.message);
+				_callback(error);
+				return;
+			}
+			_callback(null);
 		});
 	}
 
