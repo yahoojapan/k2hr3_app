@@ -426,7 +426,7 @@ export default class R3Provider
 	//
 	// Get tenant list
 	//
-	getTenantList(force, callback)
+	getTenantList(force, useLocalTenant, callback)
 	{
 		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');
@@ -493,6 +493,14 @@ export default class R3Provider
 				});
 			}
 
+			if(!useLocalTenant){
+				//
+				// local tenant is invalid, so stop here
+				//
+				_callback(null, this.tenantList);
+				return;
+			}
+
 			//
 			// Get All local Tenant Infomration
 			//
@@ -504,8 +512,7 @@ export default class R3Provider
 
 				if(null !== error){
 					if(undefined !== error.status && 404 == error.status){
-						console.error('Could not get tenat list with response status is 404, thus return empty tenant list : ' + error.message);
-						this.tenantList = [];
+						console.error('Could not get tenat list with response status is 404, thus return existed(normal) tenant list : ' + error.message);
 						_callback(null, this.tenantList);
 					}else{
 						console.error(error.message);

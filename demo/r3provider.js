@@ -573,7 +573,7 @@ export default class R3Provider
 	//
 	// Get tenant list
 	//
-	getTenantList(force, callback)
+	getTenantList(force, useLocalTenant, callback)
 	{
 		if(!r3IsSafeTypedEntity(callback, 'function')){
 			console.error('callback parameter is wrong.');

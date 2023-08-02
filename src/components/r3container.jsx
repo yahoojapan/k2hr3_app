@@ -188,7 +188,7 @@ export default class R3Container extends React.Component
 	componentDidMount()
 	{
 		// Initialize tenant
-		this.r3provider.getTenantList(false, (error, resobj) => this.cbTenantList(error, resobj));
+		this.r3provider.getTenantList(false, this.state.useLocalTenant, (error, resobj) => this.cbTenantList(error, resobj));
 	}
 
 	//
@@ -229,7 +229,7 @@ export default class R3Container extends React.Component
 
 		if(isSignIn){
 			// Re-Initialize tenant list
-			this.r3provider.getTenantList(true, (error, resobj) => this.cbTenantList(error, resobj));
+			this.r3provider.getTenantList(true, this.state.useLocalTenant, (error, resobj) => this.cbTenantList(error, resobj));
 
 			// All parts updates
 			this.updateStateAllParts(this.state.selected.tenant, this.state.selected.service, this.state.selected.type, this.state.selected.path, false, (isSignIn ? (this.r3provider.getR3TextRes().iSignined + this.r3provider.getR3TextRes().iNotSignin) : (this.r3provider.getR3TextRes().iSignouted + this.r3provider.getR3TextRes().iNotSignin)));
@@ -646,7 +646,7 @@ export default class R3Container extends React.Component
 			//
 			// update tenant list and change to new local tenant
 			//
-			this.r3provider.getTenantList(true, (error, resobj) => this.cbUpdateChangeTenant(error, resobj, _name));
+			this.r3provider.getTenantList(true, this.state.useLocalTenant, (error, resobj) => this.cbUpdateChangeTenant(error, resobj, _name));
 
 			this.cbProgressControl(false);									// collectively undisplay progress
 		});
@@ -684,7 +684,7 @@ export default class R3Container extends React.Component
 			//
 			// update tenant list and change to new local tenant
 			//
-			this.r3provider.getTenantList(true, (error, resobj) => this.cbUpdateChangeTenant(error, resobj, _name));
+			this.r3provider.getTenantList(true, this.state.useLocalTenant, (error, resobj) => this.cbUpdateChangeTenant(error, resobj, _name));
 
 			this.cbProgressControl(false);									// collectively undisplay progress
 		});
@@ -716,7 +716,7 @@ export default class R3Container extends React.Component
 			//
 			// update tenant list and change to new local tenant
 			//
-			this.r3provider.getTenantList(true, (error, resobj) => this.cbUpdateChangeTenant(error, resobj, null));
+			this.r3provider.getTenantList(true, this.state.useLocalTenant, (error, resobj) => this.cbUpdateChangeTenant(error, resobj, null));
 
 			this.cbProgressControl(false);									// collectively undisplay progress
 		});
