@@ -1,3 +1,9 @@
+k2hr3-app (1.0.24) unstable; urgency=low
+
+  * Supported for multiple OIDC authentication - #103
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Tue, 15 Aug 2023 11:56:11 +0900
+
 k2hr3-app (1.0.23) unstable; urgency=low
 
   * Fixed a bug about local tenant is disabled - #101
