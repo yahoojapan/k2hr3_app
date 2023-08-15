@@ -60,7 +60,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1trtd5n-MuiFormControlLabel-root"
     >
       <span
-        className="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary css-rvqo66-MuiButtonBase-root-MuiCheckbox-root"
+        className="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium css-rvqo66-MuiButtonBase-root-MuiCheckbox-root"
         onBlur={[Function]}
         onContextMenu={[Function]}
         onDragLeave={[Function]}
@@ -110,7 +110,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1gwktea-MuiFormControlLabel-root"
     >
       <span
-        className="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-root MuiCheckbox-colorPrimary css-rvqo66-MuiButtonBase-root-MuiCheckbox-root"
+        className="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium css-rvqo66-MuiButtonBase-root-MuiCheckbox-root"
         onBlur={[Function]}
         onContextMenu={[Function]}
         onDragLeave={[Function]}
@@ -167,6 +167,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
   >
     <div
       className="MuiFormControl-root MuiTextField-root css-5g4ojo-MuiFormControl-root-MuiTextField-root"
+      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -236,6 +237,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
   >
     <div
       className="MuiFormControl-root MuiTextField-root css-5g4ojo-MuiFormControl-root-MuiTextField-root"
+      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -310,6 +312,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
   >
     <div
       className="MuiFormControl-root MuiTextField-root css-gemud3-MuiFormControl-root-MuiTextField-root"
+      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"

@@ -77,20 +77,28 @@ app.use('/status.html',		express.static(__dirname + '/public/status.html'));
 // Setup extension router
 //
 var	cfgExtRouter= appConf.getExtRouter();
+
 if(r3util.isSafeEntity(cfgExtRouter)){
+	var routerObject = {};
 	Object.keys(cfgExtRouter).forEach(function(routername){
 		// check name/path
 		if(r3util.isSafeString(cfgExtRouter[routername].name) && r3util.isSafeString(cfgExtRouter[routername].path)){
-			var entry	= require('./routes/' + cfgExtRouter[routername].name);
+			var	routerTypeName = cfgExtRouter[routername].name;
+
+			if(!r3util.isSafeEntity(routerObject[routerTypeName])){
+				routerObject[routerTypeName] = require('./routes/' + cfgExtRouter[routername].name);
+			}
+
 			// check setConfig function
-			if(r3util.isSafeEntity(entry.setConfig) && 'function' == typeof entry.setConfig){
+			if(r3util.isSafeEntity(routerObject[routerTypeName].setConfig) && 'function' == typeof routerObject[routerTypeName].setConfig){
 				var	routerConfig = r3util.isSafeEntity(cfgExtRouter[routername].config) ? cfgExtRouter[routername].config : null;
-				if(!entry.setConfig(routerConfig)){
+				if(!routerObject[routerTypeName].setConfig(routerConfig, routername)){
 					console.error('failed to set configuration for extension router(name=' + JSON.stringify(cfgExtRouter[routername].name) + ', path=' + JSON.stringify(cfgExtRouter[routername].path) + ').');
 				}
 			}
+
 			// set router
-			app.use(cfgExtRouter[routername].path, entry.router);
+			app.use(cfgExtRouter[routername].path, routerObject[routerTypeName].router);
 			console.log('success set extension router(name=' + JSON.stringify(cfgExtRouter[routername].name) + ', path=' + JSON.stringify(cfgExtRouter[routername].path) + ').');
 		}else{
 			console.error('something wrong extrouter configration(name=' + JSON.stringify(cfgExtRouter[routername].name) + ', path=' + JSON.stringify(cfgExtRouter[routername].path) + ').');

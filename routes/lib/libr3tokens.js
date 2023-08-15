@@ -53,13 +53,13 @@ var R3UserToken = (function()
 		}else{
 			this.sinintype	= null;
 		}
-		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getSginInUri)){
-			this.signinUrl	= this.appConfig.getUserValidatorObj().getSginInUri(req);
+		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getSignInUri)){
+			this.signinUrl	= this.appConfig.getUserValidatorObj().getSignInUri(req);
 		}else{
 			this.signinUrl	= null;
 		}
-		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getSginOutUri)){
-			this.signoutUrl	= this.appConfig.getUserValidatorObj().getSginOutUri(req);
+		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getSignOutUri)){
+			this.signoutUrl	= this.appConfig.getUserValidatorObj().getSignOutUri(req);
 		}else{
 			this.signoutUrl	= null;
 		}
@@ -67,6 +67,11 @@ var R3UserToken = (function()
 			this.otherToken	= this.appConfig.getUserValidatorObj().getOtherToken(req);
 		}else{
 			this.otherToken	= null;
+		}
+		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getConfigName)){
+			this.configName	= this.appConfig.getUserValidatorObj().getConfigName(req);
+		}else{
+			this.configName	= null;
 		}
 	};
 
@@ -226,10 +231,15 @@ var R3UserToken = (function()
 		return (null !== this.rawExtractUserToken(req));
 	};
 
+	proto.getConfigName = function()
+	{
+		return this.configName;
+	};
+
 	proto.getUnscopedUserToken = function(callback)
 	{
 		if(!r3util.isSafeString(this.username)){
-			var	errobj = new Error('User name is not specified(not found backyard cookie)');
+			var	errobj = new Error('User name is not specified(not found authentication cookie)');
 			console.error(errobj.message);
 			callback(errobj, null);
 			return;

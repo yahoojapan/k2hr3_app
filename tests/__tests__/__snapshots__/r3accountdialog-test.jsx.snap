@@ -36,6 +36,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
             "zIndex": -1,
           },
           [Function],
+          [Function],
         ],
         "defaultProps": undefined,
         "render": [Function],
@@ -112,6 +113,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
           </span>
           <div
             className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1olotkq-MuiFormControl-root-MuiTextField-root"
+            onClick={[Function]}
           >
             <div
               className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-abyw11-MuiInputBase-root-MuiOutlinedInput-root"

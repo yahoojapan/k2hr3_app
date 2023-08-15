@@ -219,6 +219,16 @@ const r3Theme = createTheme({
 			'aria-label':			'signout menu',
 			'aria-haspopup':		'true'
 		},
+		signinSubMenu: {
+			anchorOrigin: {
+				vertical:			'bottom',
+				horizontal:			'left'
+			},
+			transformOrigin: {
+				vertical:			'top',
+				horizontal:			'right'
+			}
+		},
 		accountMenu: {
 			anchorOrigin: {
 				vertical:			'bottom',

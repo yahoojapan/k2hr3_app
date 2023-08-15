@@ -1143,7 +1143,7 @@ export default class R3Container extends React.Component
 	//
 	// Handle Singin/Signout
 	//
-	handleSign()
+	handleSign(configName)
 	{
 		let	type = this.r3provider.getR3Context().getSignInType();
 
@@ -1152,10 +1152,32 @@ export default class R3Container extends React.Component
 			// Unscoped Token Login Type
 			//
 			let	signurl = '';
+
 			if(this.r3provider.getR3Context().isLogin()){
-				signurl = this.r3provider.getR3Context().getSafeSignOutUrl();
+				if(!r3IsEmptyString(configName)){
+					console.info('Signout does not require config name, but ' + configName + ' is specified, it is ignored.');
+				}
+				configName	= this.r3provider.getR3Context().getSafeConfigName();
+				signurl		= this.r3provider.getR3Context().getSafeSignOutUrl(configName);		// value is 'URL'
+
 			}else{
-				signurl = this.r3provider.getR3Context().getSafeSignInUrl();
+				if(!r3IsEmptyString(configName)){
+					signurl = this.r3provider.getR3Context().getSafeSignInUrl(configName).url;	// value is 'URL'
+
+				}else if(1 <= this.r3provider.getR3Context().getSafeConfigCount(true)){
+					let	signinObj = this.r3provider.getR3Context().getSafeSignInUrl();
+
+					Object.keys(signinObj).forEach(function(_configName){
+						// Get first config name
+						if(r3IsEmptyString(configName)){
+							configName = _configName;
+						}
+					});
+					signurl = this.r3provider.getR3Context().getSafeSignInUrl(configName).url;	// value is 'URL'
+
+				}else{
+					console.info('Signin URL does not find.');
+				}
 			}
 			window.location.href = signurl;
 

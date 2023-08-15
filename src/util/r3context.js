@@ -20,7 +20,7 @@
  */
 
 import { kwApiHostForUD, kwIncludePathForUD, kwRoleTokenForSecret, kwRawRoleToken, kwRoleTokenForRoleYrn, signinUnknownType, signinUnscopedToken, signinCredential }	from '../util/r3types';
-import { r3ConvertFromJSON, r3UnescapeHTML, r3CompareCaseString, r3IsEmptyString, r3IsEmptyEntity, r3IsSafeTypedEntity, r3DeepClone }	from '../util/r3util';
+import { r3ConvertFromJSON, r3UnescapeHTML, r3CompareCaseString, r3IsEmptyString, r3IsEmptyEntity, r3IsSafeTypedEntity, r3IsEmptyEntityObject, r3DeepClone }			from '../util/r3util';
 
 //
 // Load Global object for K2HR3 Context
@@ -123,6 +123,48 @@ const r3GlobalObject = (function()
 		console.info('There is no crcobj.');
 	}
 
+	// signinurl
+	let	_signinurl = null;
+	if(!r3IsEmptyEntity(r3globaltmp.signinurl)){
+		let	_signinurljson	= unescape(r3globaltmp.signinurl);		// decode
+		let	_signinurlobj	= r3ConvertFromJSON(_signinurljson);	// parse
+		if(!r3IsEmptyEntity(_signinurlobj)){
+			_signinurl = r3DeepClone(_signinurlobj);
+		}else{
+			console.info('signinurl object is not safe object.');
+		}
+	}else{
+		console.info('There is no signinurl object.');
+	}
+
+	// signouturl
+	let	_signouturl = null;
+	if(!r3IsEmptyEntity(r3globaltmp.signouturl)){
+		let	_signouturljson	= unescape(r3globaltmp.signouturl);		// decode
+		let	_signouturlobj	= r3ConvertFromJSON(_signouturljson);	// parse
+		if(!r3IsEmptyEntity(_signouturlobj)){
+			_signouturl = r3DeepClone(_signouturlobj);
+		}else{
+			console.info('signouturl object is not safe object.');
+		}
+	}else{
+		console.info('There is no signouturl object.');
+	}
+
+	// configname
+	let	_configname = null;
+	if(!r3IsEmptyEntity(r3globaltmp.configname)){
+		let	_confignamejson	= unescape(r3globaltmp.configname);		// decode
+		let	_confignamestr	= r3ConvertFromJSON(_confignamejson);	// parse
+		if(!r3IsEmptyString(_confignamestr)){
+			_configname = _confignamestr;
+		}else{
+			console.info('configname is not safe string.');
+		}
+	}else{
+		console.info('There is no configname string.');
+	}
+
 	// default object values
 	let	r3globalobj	= {
 		apischeme:		(r3IsEmptyString(r3globaltmp.r3apischeme)	? '' : r3globaltmp.r3apischeme),
@@ -137,8 +179,9 @@ const r3GlobalObject = (function()
 		username:		'',
 		unscopedtoken:	'',
 		signintype:		(r3CompareCaseString(r3globaltmp.signintype, signinUnscopedToken) ? signinUnscopedToken : r3CompareCaseString(r3globaltmp.signintype, signinCredential) ? signinCredential : signinUnknownType),
-		signinurl:		(r3IsEmptyString(r3globaltmp.signinurl)		? null	: r3globaltmp.signinurl),
-		signouturl:		(r3IsEmptyString(r3globaltmp.signouturl)	? null	: r3globaltmp.signouturl),
+		signinurl:		_signinurl,
+		signouturl:		_signouturl,
+		configname:		_configname,
 		uselocaltenant:	(r3IsEmptyEntity(r3globaltmp.uselocaltenant) ? true : r3globaltmp.uselocaltenant),
 		lang:			(r3IsEmptyString(r3globaltmp.lang)			? 'en'	: r3globaltmp.lang),
 		dbgheader:		(r3IsEmptyString(r3globaltmp.dbgheader)		? ''	: r3globaltmp.dbgheader),
@@ -180,6 +223,7 @@ export default class R3Context
 		this.signintype			= r3GlobalObject.signintype;	// SignIn Type
 		this.signinurl			= r3GlobalObject.signinurl;		// SignIn URL
 		this.signouturl			= r3GlobalObject.signouturl;	// SignOut URL
+		this.configname			= r3GlobalObject.configname;	// Config Name(If using ExtRouter(ex. OIDC) and has a token, the config name that created the token is set.)
 		this.uselocaltenant		= r3GlobalObject.uselocaltenant;// Use Local Tenant
 		this.lang				= r3GlobalObject.lang;			// Text resource language
 		this.dbgHeaderName		= r3GlobalObject.dbgheader;		// Debug header name(= 'x-k2hr3-debug')
@@ -441,14 +485,62 @@ export default class R3Context
 		return this.signintype;
 	}
 
-	getSafeSignInUrl()
+	getSafeSignInUrl(configName)
 	{
-		return (r3IsEmptyString(this.signinurl) ? '' : r3UnescapeHTML(this.signinurl));
+		if(r3IsEmptyString(configName)){
+			//
+			// Return all object
+			//
+			return (r3IsEmptyEntity(this.signinurl) ? {} : r3DeepClone(this.signinurl));
+
+		}else if(!r3IsEmptyEntityObject(this.signinurl, configName)){
+			//
+			// Return single object
+			//
+			return this.signinurl[configName];
+		}else{
+			return null;
+		}
 	}
 
-	getSafeSignOutUrl()
+	getSafeSignOutUrl(configName)
 	{
-		return (r3IsEmptyString(this.signouturl) ? '' : r3UnescapeHTML(this.signouturl));
+		if(r3IsEmptyString(configName)){
+			//
+			// Return all object
+			//
+			return (r3IsEmptyEntity(this.signouturl) ? {} : r3DeepClone(this.signouturl));
+
+		}else if(!r3IsEmptyEntityObject(this.signouturl, configName)){
+			//
+			// Return single string
+			//
+			return this.signouturl[configName];
+		}else{
+			return null;
+		}
+	}
+
+	getSafeConfigName()
+	{
+		return (r3IsEmptyEntity(this.configname) ? '' : r3UnescapeHTML(this.configname));
+	}
+
+	getSafeConfigCount(isSignin)
+	{
+		if(isSignin){
+			if(r3IsEmptyEntity(this.signinurl)){
+				return 0;
+			}else{
+				return Object.keys(this.signinurl).length;
+			}
+		}else{
+			if(r3IsEmptyEntity(this.signouturl)){
+				return 0;
+			}else{
+				return Object.keys(this.signouturl).length;
+			}
+		}
 	}
 
 	useLocalTenant()

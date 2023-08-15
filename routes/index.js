@@ -76,6 +76,7 @@ router.get('/', function(req, res, next)							// eslint-disable-line no-unused-
 		var	signintype		= tokensObj.getSignInType();
 		var	signinurl		= tokensObj.getSignInUrl();
 		var	signouturl		= tokensObj.getSignOutUrl();
+		var	configname		= tokensObj.getConfigName();				// If using ExtRouter(ex. OIDC) and has a token, the config name that created the token is set.
 		var	uselocaltenant	= _appConf.useLocalTenant();
 		var	lang			= _appConf.getLang();
 		var	dbgheader		= '';
@@ -102,8 +103,9 @@ router.get('/', function(req, res, next)							// eslint-disable-line no-unused-
 				username:		username,
 				unscopedtoken:	token,
 				signintype:		signintype,
-				signinurl:		signinurl,
-				signouturl:		signouturl,
+				signinurl:		escape(JSON.stringify(signinurl)),
+				signouturl:		escape(JSON.stringify(signouturl)),
+				configname:		escape(JSON.stringify(configname)),
 				uselocaltenant:	uselocaltenant,
 				lang:			lang,
 				dbgheader:		dbgheader,
