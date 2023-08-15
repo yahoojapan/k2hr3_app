@@ -54,6 +54,7 @@ const menuValues = {
 	license:		'LICENSES_TOP',
 	noLicense:		'NOLICENSE',
 	sign:			'SIGNINOUT',
+	signSub:		'SIGNINOUT_SUB',
 	userName:		'USERNAME',
 	account:		'ACCOUNT'
 };
@@ -63,9 +64,11 @@ const tooltipValues = {
 	mainMenu:		'mainMenu'
 };
 
-const mainMenuId		= 'appbar-main-menu';
-const licenseMenuId		= 'appbar-license-menu';
-const accountMenuId		= 'appbar-sign-menu';
+const mainMenuId			= 'appbar-main-menu';
+const licenseMenuId			= 'appbar-license-menu';
+const accountMenuId			= 'appbar-sign-menu';
+const signinSubMenuId		= 'appbar-sign-sub-menu';
+const signinSubMenuPrefix	= 'appbar-signin-sub-menu-';
 
 //
 // AppBar Class
@@ -102,6 +105,7 @@ export default class R3AppBar extends React.Component
 		r3Message:				null,
 		mainMenuAnchorEl:		null,
 		signMenuAnchorEl:		null,
+		signSubMenuAnchorEl:	null,
 		licenseMenuAnchorEl:	null,
 
 		tooltips: {
@@ -131,12 +135,15 @@ export default class R3AppBar extends React.Component
 		if(this.checkContentUpdating()){
 			if('SIGNINOUT' === value){
 				this.props.onSign();
+			}else if(0 == value.indexOf(signinSubMenuPrefix)){
+				this.props.onSign(value.replace(signinSubMenuPrefix, ''));
 			}
 		}
 
 		// closing menu
 		this.setState({
-			signMenuAnchorEl:		null
+			signMenuAnchorEl:		null,
+			signSubMenuAnchorEl:	null
 		});
 	};
 
@@ -144,6 +151,7 @@ export default class R3AppBar extends React.Component
 	{
 		this.setState({
 			signMenuAnchorEl:		event.currentTarget,
+			signSubMenuAnchorEl:	null,
 			tooltips: {
 				accountMenuTooltip:	false
 			}
@@ -153,7 +161,8 @@ export default class R3AppBar extends React.Component
 	handleSignMenuClose(event)									// eslint-disable-line no-unused-vars
 	{
 		this.setState({
-			signMenuAnchorEl:	null
+			signMenuAnchorEl:		null,
+			signSubMenuAnchorEl:	null
 		});
 	}
 
@@ -196,6 +205,16 @@ export default class R3AppBar extends React.Component
 					}
 				}
 
+			}else if(menuValues.signSub === value){
+				if(this.checkContentUpdating()){
+					if(!this.state.signSubMenuAnchorEl){
+						this.setState({
+							signSubMenuAnchorEl:	event.currentTarget
+						});
+						return;
+					}
+				}
+
 			}else if(!isNaN(value)){
 				let	_appmenu= this.context.r3Context.getSafeAppMenu();
 				let	_pos	= parseInt(value);
@@ -211,6 +230,7 @@ export default class R3AppBar extends React.Component
 		this.setState({
 			mainMenuAnchorEl:		null,
 			licenseMenuAnchorEl:	null,
+			signSubMenuAnchorEl:	null,
 			tooltips: {
 				mainMenuTooltip:	false
 			}
@@ -284,18 +304,45 @@ export default class R3AppBar extends React.Component
 		return true;
 	}
 
+	getSigninSubMenuItems()
+	{
+		let	signInObj	= this.context.r3Context.getSafeSignInUrl();
+		let	_menuitems	= [];
+		let	_this		= this;
+
+		Object.keys(signInObj).forEach(function(configName)
+		{
+			let	_menuName = signinSubMenuPrefix + configName;
+			_menuitems.push(
+				<MenuItem
+					key={ _menuName }
+					onClick={ event => _this.handleSignMenuChange(event, _menuName) }
+				>
+					{ r3IsEmptyString(signInObj[configName].display) ? configName : signInObj[configName].display }
+				</MenuItem>
+			);
+		});
+		return _menuitems;
+	}
+
 	getAccountButton()
 	{
 		const { theme, r3provider } = this.props;
 
-		let accountButton		= (this.context.r3Context.isLogin() ? theme.r3AppBar.signinButton : theme.r3AppBar.signoutButton);
-		let accountButtonIcon	= (this.context.r3Context.isLogin() ? this.sxClasses.signinButton : this.sxClasses.signoutButton);
-		let	btnText				= (this.context.r3Context.isLogin() ? r3provider.getR3TextRes().tResSignoutMenu : r3provider.getR3TextRes().tResSigninMenu);
+		let	isLogined			= this.context.r3Context.isLogin();
+		let accountButton		= (isLogined ? theme.r3AppBar.signinButton : theme.r3AppBar.signoutButton);
+		let accountButtonIcon	= (isLogined ? this.sxClasses.signinButton : this.sxClasses.signoutButton);
 
 		let	userMenuItem;
 		let	menuDivider;
 		let	menuAccountItem;
-		if(this.context.r3Context.isLogin()){
+		let	menuSignInItem;
+		let	menuSignOutItem;
+
+		if(isLogined){
+			//
+			// Current signin
+			//
 			userMenuItem = (
 				<MenuItem
 					key={ menuValues.userName }
@@ -308,9 +355,11 @@ export default class R3AppBar extends React.Component
 					</Typography>
 				</MenuItem>
 			);
+
 			menuDivider = (
 				<Divider />
 			);
+
 			menuAccountItem = (
 				<MenuItem
 					key={ menuValues.account }
@@ -319,6 +368,60 @@ export default class R3AppBar extends React.Component
 					{ r3provider.getR3TextRes().tResAccountMenu }
 				</MenuItem>
 			);
+
+			menuSignOutItem = (
+				<MenuItem
+					key={ menuValues.sign }
+					onClick={ event => this.handleSignMenuChange(event, menuValues.sign) }
+				>
+					{ r3provider.getR3TextRes().tResSignoutMenu }
+				</MenuItem>
+			);
+
+		}else{
+			//
+			// Current signout
+			//
+			if(1 < this.context.r3Context.getSafeConfigCount(true)){
+				//
+				// Has many singin logic
+				//
+				menuSignInItem = (
+					<MenuItem
+						key={ menuValues.signSub }
+						onClick={ event => this.handleMenuChange(event, menuValues.signSub) }
+					>
+						{ r3provider.getR3TextRes().tResSigninMenu }
+						<ListItemIcon>
+							<ArrowRightIcon
+								sx={ this.sxClasses.menuRightIcon }
+							/>
+						</ListItemIcon>
+						<Menu
+							id={ signinSubMenuId }
+							anchorEl={ this.state.signSubMenuAnchorEl }
+							open={ Boolean(this.state.signSubMenuAnchorEl) }
+							onClose={ this.handleSignMenuClose }
+							{ ...theme.r3AppBar.signinSubMenu }
+						>
+							{ this.getSigninSubMenuItems() }
+						</Menu>
+					</MenuItem>
+				);
+
+			}else{
+				//
+				// Has only one singin logic
+				//
+				menuSignInItem = (
+					<MenuItem
+						key={ menuValues.sign }
+						onClick={ event => this.handleSignMenuChange(event, menuValues.sign) }
+					>
+						{ r3provider.getR3TextRes().tResSigninMenu }
+					</MenuItem>
+				);
+			}
 		}
 
 		return (
@@ -349,12 +452,8 @@ export default class R3AppBar extends React.Component
 					{ userMenuItem }
 					{ menuDivider }
 					{ menuAccountItem }
-					<MenuItem
-						key={ menuValues.sign }
-						onClick={ event => this.handleSignMenuChange(event, menuValues.sign) }
-					>
-						{ btnText }
-					</MenuItem>
+					{ menuSignInItem }
+					{ menuSignOutItem }
 				</Menu>
 			</React.Fragment>
 		);

@@ -32,12 +32,12 @@ exports.getUserName = function(req)			// eslint-disable-line no-unused-vars
 	return null;
 };
 
-exports.getSginInUri = function(req)		// eslint-disable-line no-unused-vars
+exports.getSignInUri = function(req)		// eslint-disable-line no-unused-vars
 {
 	return null;
 };
 
-exports.getSginOutUri = function(req)		// eslint-disable-line no-unused-vars
+exports.getSignOutUri = function(req)		// eslint-disable-line no-unused-vars
 {
 	return null;
 };

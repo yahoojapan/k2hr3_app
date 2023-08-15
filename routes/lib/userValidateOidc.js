@@ -30,23 +30,27 @@ var { decode }	= require('jose').base64url;
 //
 var rawGetOtherToken = function(req)
 {
-	var config = oidc.getConfig();
-	if( !r3util.isSafeEntity(config)					||
-		!r3util.isSafeEntity(config.params)				||
-		!r3util.isSafeEntity(config.params.cookiename)	)
+	var	configName	= rawGetOidcConfigName(req);
+	var config		= oidc.getConfig();
+
+	if( !r3util.isSafeString(configName)							||
+		!r3util.isSafeEntity(config)								||
+		!r3util.isSafeEntity(config[configName])					||
+		!r3util.isSafeEntity(config[configName].params)				||
+		!r3util.isSafeEntity(config[configName].params.cookiename)	)
 	{
 		console.error('Not find cookie name in configuration.');
 		return null;
 	}
+	var	cookieName = config[configName].params.cookiename;
 
-	if(	!r3util.isSafeEntity(req)			||
-		!r3util.isSafeEntity(req.cookies) 	||
-		!r3util.isSafeEntity(req.cookies[config.params.cookiename]))
+	if(	!r3util.isSafeEntity(req)						||
+		!r3util.isSafeEntity(req.cookies) 				||
+		!r3util.isSafeEntity(req.cookies[cookieName])	)
 	{
 		return null;
 	}
-
-	return req.cookies[config.params.cookiename];
+	return req.cookies[cookieName];
 };
 
 //
@@ -54,15 +58,18 @@ var rawGetOtherToken = function(req)
 //
 var rawGetOidcUsername = function(req)
 {
-	var config = oidc.getConfig();
-	if( !r3util.isSafeEntity(config)					||
-		!r3util.isSafeEntity(config.params)				||
-		!r3util.isSafeEntity(config.params.cookiename)	||
-		!r3util.isSafeEntity(config.params.usernamekey)	)
+	var	configName	= rawGetOidcConfigName(req);
+	var config		= oidc.getConfig();
+	if( !r3util.isSafeString(configName)							||
+		!r3util.isSafeEntity(config)								||
+		!r3util.isSafeEntity(config[configName])					||
+		!r3util.isSafeEntity(config[configName].params)				||
+		!r3util.isSafeEntity(config[configName].params.usernamekey)	)
 	{
-		console.error('Not find cookie/user name key in configuration.');
+		console.error('Not find user name key in configuration.');
 		return null;
 	}
+	var	userNameKey = config[configName].params.usernamekey;
 
 	var oidc_token	= rawGetOtherToken(req);
 	if(!r3util.isSafeString(oidc_token)){
@@ -83,13 +90,38 @@ var rawGetOidcUsername = function(req)
 	}
 
 	var	payload		= JSON.parse(raw_payload);
-	if(!r3util.isSafeEntity(payload) || !r3util.isSafeEntity(payload[config.params.usernamekey])){
-		console.error('payload does not have user name key(' + config.params.usernamekey + ')');
+	if(!r3util.isSafeEntity(payload) || !r3util.isSafeEntity(payload[userNameKey])){
+		console.error('payload does not have user name key(' + userNameKey + ')');
 		return null;
 	}
-	return payload[config.params.usernamekey];
+	return payload[userNameKey];
 };
 
+//
+// rawGetOidcConfigName
+//
+var rawGetOidcConfigName = function(req)
+{
+	if(	!r3util.isSafeEntity(req)									||
+		!r3util.isSafeEntity(req.cookies) 							||
+		!r3util.isSafeEntity(req.cookies[oidc.oidcConfigCookieName]))
+	{
+		return null;
+	}
+	return req.cookies[oidc.oidcConfigCookieName];
+};
+
+//
+// Return object or null:
+//	{
+//		'<oidc name>': {
+//			'display':	'<display name>',
+//			'url':		'<signin URL>'
+//		},
+//		...
+//		...
+//	}
+//
 var rawGetSignInUrl = function(req)
 {
 	if(	!r3util.isSafeEntity(req)				||
@@ -101,16 +133,49 @@ var rawGetSignInUrl = function(req)
 	}
 
 	var config = oidc.getConfig();
-	if( r3util.isSafeEntity(config)						&&
-		r3util.isSafeEntity(config.params)				&&
-		r3util.isSafeEntity(config.params.redirectUrl)	)
-	{
-		return config.params.redirectUrl;
+
+	if(!r3util.isSafeEntity(config)){
+		console.error('no valid SignInUrl');
+		return null;
 	}
-	console.error('no valid SignInUrl');
-	return null;
+
+	var	allSignUrls	= {};
+	var	isSet		= false;
+
+	Object.keys(config).forEach(function(oidcName)
+	{
+		if(r3util.isSafeEntity(config[oidcName].params) && r3util.isSafeEntity(config[oidcName].params.redirectUrl)){
+			var	oneOidc = {};
+			oneOidc.url = config[oidcName].params.redirectUrl;
+
+			if(r3util.isSafeString(config[oidcName].displayName)){
+				oneOidc.display = config[oidcName].displayName;
+			}else{
+				oneOidc.display = oidcName;
+			}
+			allSignUrls[oidcName]	= oneOidc;
+			isSet					= true;
+		}else{
+			console.error('no valid SignInUrl for ' + oidcName + ' in config, so skip this');
+		}
+	});
+
+	if(!isSet){
+		console.error('no valid SignInUrl');
+		return null;
+	}
+
+	return allSignUrls;
 };
 
+//
+// Return object or null:
+//	{
+//		'<oidc name>': '<signout URL>',
+//		...
+//		...
+//	}
+//
 var rawGetSignOutUrl = function(req)
 {
 	if(	!r3util.isSafeEntity(req)				||
@@ -122,13 +187,30 @@ var rawGetSignOutUrl = function(req)
 	}
 
 	var config = oidc.getConfig();
-	if(	r3util.isSafeEntity(config)				&&
-		r3util.isSafeEntity(config.logoutUrl)	)
-	{
-		return config.logoutUrl;
+
+	if(!r3util.isSafeEntity(config)){
+		console.error('no valid SignOutUrl');
+		return null;
 	}
-	console.error('no valid SignOutUrl');
-	return null;
+
+	var	allSignUrls	= {};
+	var	isSet		= false;
+
+	Object.keys(config).forEach(function(oidcName)
+	{
+		if(r3util.isSafeString(config[oidcName].logoutUrl)){
+			allSignUrls[oidcName]	= config[oidcName].logoutUrl;
+			isSet					= true;
+		}else{
+			console.error('no valid SignOutUrl for ' + oidcName + ' in config, so skip this');
+		}
+	});
+
+	if(!isSet){
+		console.error('no valid SignInUrl');
+		return null;
+	}
+	return allSignUrls;
 };
 
 //---------------------------------------------------------
@@ -144,12 +226,17 @@ exports.getUserName = function(req)
 	return rawGetOidcUsername(req);
 };
 
-exports.getSginInUri = function(req)
+exports.getConfigName = function(req)
+{
+	return rawGetOidcConfigName(req);
+};
+
+exports.getSignInUri = function(req)
 {
 	return rawGetSignInUrl(req);
 }; 
 
-exports.getSginOutUri = function(req)
+exports.getSignOutUri = function(req)
 {
 	return rawGetSignOutUrl(req);
 };

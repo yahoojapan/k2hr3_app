@@ -36,6 +36,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
             "zIndex": -1,
           },
           [Function],
+          [Function],
         ],
         "defaultProps": undefined,
         "render": [Function],
@@ -100,6 +101,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
           />
           <div
             className="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-10laqpe-MuiFormControl-root-MuiTextField-root"
+            onClick={[Function]}
           >
             <label
               className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard css-1vo5tcm-MuiFormLabel-root-MuiInputLabel-root"
@@ -132,6 +134,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
           </div>
           <div
             className="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-10laqpe-MuiFormControl-root-MuiTextField-root"
+            onClick={[Function]}
           >
             <label
               className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard css-1vo5tcm-MuiFormLabel-root-MuiInputLabel-root"

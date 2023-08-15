@@ -26,69 +26,153 @@
 // K2HR3 APP configuration file(ex, production.json/local.json/etc).
 //
 // To enable this OIDC, register this module as an 'extrouter'.
-// Then set the keys and values shown in the example below.
+// Then set the keys and values shown in the example below:
 // 
 //	'extrouter': {
-//		'oidc': {
+//		'oidc': {													<---- default name
 //			'name':						'oidc',
 //			'path':						'/oidc',
 //			'config': {
+//				'displayName':			'Default OpenID Connect'
 //				'debug':				true,
-//				'logoutUrl':			'<URL for logout processing>',
+//				'logoutUrl':			'<URL for logout processing>/oidc/logout',
 //				'mainUrl':				'<URL of K2HR3 APP top>',
 //				'oidcDiscoveryUrl':		'<OpenId Connect Issuer URL>',
 //				'params': {
 //					'client_secret':	'<OpenId Connect Client Secret>',
 //					'client_id':		'<OpenId Connect Client id>',
-//					'redirectUrl':		'<URL for receiving redirect from oidc process>',
+//					'redirectUrl':		'<URL for receiving redirect from oidc process>/oidc/login/cb',
 //					'usernamekey':		'<username key name in oidc token>',
 //					'cookiename':		'<cookie name for saving oidc token>',
 //					'cookieexpire':		'<expire time for oidc token cookie>'
 //				},
 //				'scope':				'<scope>'
 //			}
+//		},
+//		'oidc@other': {
+//			'name':						'oidc',
+//			'path':						'/oidc@other',
+//			'config': {
+//				'displayName':			'OpenID Connect to Other'
+//				'debug':				true,
+//				'logoutUrl':			'<URL for logout processing>/oidc@other/logout',
+//				'mainUrl':				'<URL of K2HR3 APP top>',
+//				'oidcDiscoveryUrl':		'<OpenId Connect Issuer URL>',
+//				'params': {
+//					'client_secret':	'<OpenId Connect Client Secret>',
+//					'client_id':		'<OpenId Connect Client id>',
+//					'redirectUrl':		'<URL for receiving redirect from oidc process>/oidc@other/login/cb',
+//					'usernamekey':		'<username key name in oidc token>',
+//					'cookiename':		'<cookie name for saving oidc token>',
+//					'cookieexpire':		'<expire time for oidc token cookie>'
+//				},
+//				'scope':				'<scope>'
+//			}
+//		},
+//		...
+//		...
+//	},
+//
+// [NOTE]
+// The 'oidc' object is required and used as the default OIDC authorization.
+// If you have "other" objects, you can use them for its OIDC authentication
+// logic.
+// The 'name' field must be 'oidc' to recognize it as 'oidc'. The 'redirectUrl'
+// and 'logoutUrl' should be '<extrouter name>/login/cb' and '<extrouter name>/logout'
+// (<extrouter name> is such as 'oidc' or 'oidc@other').
+// The 'URL PATH' must always match one of 'extrouter name'.
+//
+// Each OIDC setting item has the following format:
+//
+//	'<oidc name>': {
+//		'name':						'oidc',
+//		'path':						'/<oidc name>',
+//		'config': {
+//			'displayName':			'<display name for K2HR3 APP Menu>'
+//			'debug':				<true or false>,
+//			'logoutUrl':			'<K2HR3 APP Server Host name and port>/<oidc name>/logout',
+//			'mainUrl':				'<K2HR3 APP Server Host name and port>',
+//			'oidcDiscoveryUrl':		'<OpenId Connect Issuer URL>',
+//			'params': {
+//				'client_secret':	'<OpenId Connect Client Secret>',
+//				'client_id':		'<OpenId Connect Client id>',
+//				'redirectUrl':		'<K2HR3 APP Server Host name and port>/<oidc name>/login/cb',
+//				'usernamekey':		'<username key name in oidc token>',
+//				'cookiename':		'<cookie name for saving oidc token>',
+//				'cookieexpire':		'<expire time for oidc token cookie>'
+//			},
+//			'scope':				'<scope>'
 //		}
 //	},
 //
-// This 'oidc' object should contain the following keys(objects). The
-// contents of each setting are explained.
+// A description of each item is shown below:
+//
+//	[oidc name]
+//		A unique name for each OIDC. (Do not include space characters
+//		whenever possible)
+//		Note that other values should also match this name string in places.
 //
 //	[name]
-//		Set 'oidc' as the value.
+//		For this OIDC authentication, specify 'oidc'.
+//
 //	[path]
-//		Specifies the filename path(relative to the '/route' directory)
-//		without the suffix of this module. If the file name has not been
-//		changed, it will be '/oidc'.
+//		This path will be the entry point on server for OIDC authentication.
+//		Be sure to specify '/<oidc name>'.
+//		For example, if 'oidc name' is 'oidc', it should be set '/oidc'.
+//
 //	[config]
-//		An object of configuration for this module.
+//		An object of configuration for this <oidc name> module.
+//
+//	[displayName]
+//		If there are multiple OIDC authentication settings, they should
+//		be distinguished in the 'Sign in' menu of the K2HR3 APP.
+//		Then the 'Sign in' menu will have a submenu and this 'displayName'
+//		will be the submenu name.
+//		This item can be omitted, and if omitted, '<oidc name>' will be used.
+//		If there is only one OIDC authentication setting, then even if this
+//		value is set, it will not be used for display.
+//
 //	[debug]
 //		Set true to display the contents of communication with the OpenId
 //		Connect server.
+//
 //	[logoutUrl]
-//		Specify the entry point for logout processing.
-//		For example, if the URL of K2HR3 APP is 'https://k2hr3-app/', set
-//		'https://k2hr3-app/oidc/logout'.(The URL path is arbitrary.)
+//		Specifies the entry point for logout processing.
+//		Please specify K2HR3 APP server name including schema, path
+//		including port number.
+//		The path must always include '<oidc name>/logout'.
+//		For example, 'https://k2hr3-app:3000/<oidc name>/logout'.
+//
 //	[mainUrl]
 //		Specify the URL of the K2HR3 APP top page.
-//		For example, 'https://k2hr3-app/'.
+//		For example, 'https://k2hr3-app:3000/'.
+//
 //	[oidcDiscoveryUrl]
 //		Specify the Issuer URL for OpenId Connect.
+//
 //	[params]
 //		An object of some parameters for this module.
+//
 //	[client_secret]
 //		Specify the client Secret for OpenId Connect.
+//
 //	[client_id]
 //		Specify the Client Id for OpenId Connect.
+//
 //	[redirectUrl]
-//		Specify the URL on the K2HR3 APP called from OpenId Connect.
-//		For example, if the URL of K2HR3 APP is 'https://k2hr3-app/', set
-//		'https://k2hr3-app/oidc/login/cb'.(The URL path is arbitrary.)
+//		Specifies the entry point for login callback processing.
+//		Please specify K2HR3 APP server name including schema, path
+//		including port number.
+//		The path must always include '<oidc name>'.
+//		For example, 'https://k2hr3-app:3000/<oidc name>/login/cb'.
+//
 //	[usernamekey]
 //		If there is a key indicating the user name in the Payload of the
 //		Token returned by OpenId Connect, specify that key name.
 //		If there is no key, it can be omitted(not specified).
 //		If omitted, the value of the 'sub' key in Payload will be used as
 //		the user name.
+//
 //	[cookiename]
 //		Specifies the cookie name for temporarily storing the token
 //		returned by OpenId Connect. This authentication process using
@@ -96,9 +180,11 @@
 //		redirect destination.
 //		Please specify the name of this cookie. If omitted, 'id_token'
 //		will be used.
+//
 //	[cookieexpire]
 //		Specify the cookie validity time in seconds on this page.
 //		If omitted, set to 60 seconds.
+//
 //	[scope]
 //		Specify 'openid profile email' value for this key.
 //
@@ -120,7 +206,8 @@ var	{ jwtVerify }				= require('jose');
 //
 // Configration for OIDC
 //
-var	oidcConfig = null;
+var	oidcConfig			= {};
+var	oidcConfigCookieName= 'oidc_config_name';
 
 //
 // Setup session
@@ -144,6 +231,42 @@ router.use(passport.initialize());
 router.use(passport.session());
 
 //--------------------------------------------------------------
+// Utility
+//--------------------------------------------------------------
+function rawGetExtRouterName(req)
+{
+	if(!r3util.isSafeEntity(req) || !r3util.isSafeString(req.baseUrl)){
+		console.error('Request base URL is somthing wrong, but returns default extrouter name(oidc).');
+		return 'oidc';				// default
+	}
+
+	var	urlparts = decodeURI(req.baseUrl).split('/');
+	if(!r3util.isArray(urlparts)){
+		console.error('Request base URL is somthing wrong, but returns default extrouter name(oidc).');
+		return 'oidc';				// default
+	}
+
+	//
+	// Try to find '.../<extrouter name>/login/...' or '.../<extrouter name>/logout/...'
+	//
+	var	extRounterName = null;
+	for(var cnt = 0; cnt < urlparts.length; ++cnt){
+		if(!r3util.isSafeString(urlparts[cnt])){
+			continue;
+		}
+		if(r3util.compareCaseString(urlparts[cnt], 'login') || r3util.compareCaseString(urlparts[cnt], 'logout')){
+			break;
+		}
+		extRounterName = urlparts[cnt];
+	}
+	if(!r3util.isSafeString(extRounterName)){
+		console.error('Failed to extract extRouter name from base URL(' + req.baseUrl + '), so returns default extrouter name(oidc).');
+		return 'oidc';				// default
+	}
+	return extRounterName;
+}
+
+//--------------------------------------------------------------
 // Mountpath		: /<config path>/login
 //--------------------------------------------------------------
 //
@@ -153,9 +276,11 @@ router.use(passport.session());
 //
 // Login async function
 //
-async function oidcLogin()
+async function oidcLogin(Request)
 {
-	if(!r3util.isSafeEntity(oidcConfig)){
+	var	extRouterName = rawGetExtRouterName(Request);
+
+	if(!r3util.isSafeEntity(oidcConfig[extRouterName])){
 		var error = new Error('Please check your configuarion(json) because it is invalid.');
 		console.error(error.message);
 		throw error;
@@ -167,7 +292,7 @@ async function oidcLogin()
 	// Issuer.discovery returns Promise
 	// https://github.com/panva/node-openid-client/blob/main/lib/issuer.js#L210
 	//
-	var oidcDiscovery = Issuer.discover(oidcConfig.oidcDiscoveryUrl);
+	var oidcDiscovery = Issuer.discover(oidcConfig[extRouterName].oidcDiscoveryUrl);
 
 	//
 	// Try to login
@@ -176,7 +301,7 @@ async function oidcLogin()
 		//
 		// put debug message
 		//
-		if(r3util.isSafeBoolean(oidcConfig.debug) && oidcConfig.debug){
+		if(r3util.isSafeBoolean(oidcConfig[extRouterName].debug) && oidcConfig[extRouterName].debug){
 			// debug message
 			console.log('[OIDC debug] Discovered issuer %s %O', oidcIssuer.issuer, oidcIssuer.metadata);
 
@@ -211,9 +336,9 @@ async function oidcLogin()
 		// Create a client handler
 		//
 		var clientParams = {
-			client_id:		oidcConfig.params.client_id,
-			client_secret:	oidcConfig.params.client_secret,
-			redirect_uris:	[ oidcConfig.params.redirectUrl ]
+			client_id:		oidcConfig[extRouterName].params.client_id,
+			client_secret:	oidcConfig[extRouterName].params.client_secret,
+			redirect_uris:	[ oidcConfig[extRouterName].params.redirectUrl ]
 		};
 		var client = new oidcIssuer.Client(clientParams);
 		client[custom.clock_tolerance] = 5;							// to allow a second 5 skew
@@ -241,6 +366,8 @@ async function oidcLogin()
 //
 var authenticate = async function(Request, Response, Next)
 {
+	var	extRouterName = rawGetExtRouterName(Request);
+
 	//
 	// Login by invoking passport middleware to get an token
 	//
@@ -253,7 +380,7 @@ var authenticate = async function(Request, Response, Next)
 		passport.authenticate(
 			'oidc',
 			{
-				scope:	oidcConfig.scope
+				scope:	oidcConfig[extRouterName].scope
 			},
 			function(error, token){
 				if(error){
@@ -291,13 +418,13 @@ async function oidcAuthenticate(Request, Response, Next)
 //
 // Utility function for token
 //
-async function oidcVerifyToken(token)
+async function oidcVerifyToken(token, extRouterName)
 {
 	var	jwtParam	= {
-		issuer:		oidcConfig.oidcDiscoveryUrl,
-		audience:	oidcConfig.params.client_id
+		issuer:		oidcConfig[extRouterName].oidcDiscoveryUrl,
+		audience:	oidcConfig[extRouterName].params.client_id
 	};
-	var	strurl		= oidcConfig.oidcDiscoveryUrl + '/keys';
+	var	strurl		= oidcConfig[extRouterName].oidcDiscoveryUrl + '/keys';
 	var	JWKS		= createRemoteJWKSet(new URL(strurl));
 
 	await jwtVerify(token, JWKS, jwtParam).catch(function(error){
@@ -311,17 +438,20 @@ async function oidcVerifyToken(token)
 //
 var sessionize = async function(Request, Response, Next)
 {
-	if(!r3util.isSafeEntity(oidcConfig)){
+	var	extRouterName = rawGetExtRouterName(Request);
+
+	if(!r3util.isSafeEntity(oidcConfig) || !r3util.isSafeEntity(oidcConfig[extRouterName])){
 		var error = 'Please check your configuarion(json) because it is invalid.';
 		console.error('Failed to sessionize init, ' + error);
-		Response.status(500);									// 500: Internal Server Error
+		Response.status(500);											// 500: Internal Server Error
 		return;
 	}
 
 	//
 	// Get oidc token in request
 	//
-	await oidcAuthenticate(Request, Response, Next).then(async function(oidc_token){
+	await oidcAuthenticate(Request, Response, Next).then(async function(oidc_token)
+	{
 		//
 		// get payload in oidc token
 		//
@@ -329,14 +459,14 @@ var sessionize = async function(Request, Response, Next)
 		if(2 > parts.length){
 			var error = 'Failed to parse payload from oidc token.';
 			console.error(error);
-			Response.status(401);									// 401: Unauthorized
+			Response.status(401);										// 401: Unauthorized
 			return;
 		}
 		var raw_payload	= new TextDecoder().decode(decode(parts[1]));
 		if(!r3util.isSafeJSON(raw_payload)){
 			error = 'Failed to decode json payload from oidc token.';
 			console.error(error);
-			Response.status(401);									// 401: Unauthorized
+			Response.status(401);										// 401: Unauthorized
 			return;
 		}
 		var	payload = JSON.parse(raw_payload);
@@ -344,21 +474,21 @@ var sessionize = async function(Request, Response, Next)
 		//
 		// put debug message
 		//
-		if(r3util.isSafeBoolean(oidcConfig.debug) && oidcConfig.debug){
+		if(r3util.isSafeBoolean(oidcConfig[extRouterName].debug) && oidcConfig[extRouterName].debug){
 			console.log('[OIDC debug] payload = ' + JSON.stringify(payload));
 		}
 
 		//
 		// check user name key
 		//
-		if(r3util.isSafeString(oidcConfig.params.usernamekey)){
+		if(r3util.isSafeString(oidcConfig[extRouterName].params.usernamekey)){
 			var	found_key = false;
 			Object.keys(payload).forEach(function(onekey){
-				if(onekey == oidcConfig.params.usernamekey){
+				if(onekey == oidcConfig[extRouterName].params.usernamekey){
 					found_key = true;
 				}
 			});
-			if(!found_key || !r3util.isSafeString(payload[oidcConfig.params.usernamekey])){
+			if(!found_key || !r3util.isSafeString(payload[oidcConfig[extRouterName].params.usernamekey])){
 				error = 'Not find or empty user name in oidc token.';
 				console.error(error);
 				Response.status(401);									// 401: Unauthorized
@@ -369,36 +499,50 @@ var sessionize = async function(Request, Response, Next)
 		//
 		// Verify token
 		//
-		await oidcVerifyToken(oidc_token).then(function(){
+		await oidcVerifyToken(oidc_token, extRouterName).then(function()
+		{
 			//
 			// oidc token verified
 			//
 
 			// sessionize
-			Response.session = null;								// session removed
-			Response.cookie(oidcConfig.params.cookiename, oidc_token, {
+			Response.session = null;									// session removed
+
+			// token cookie
+			Response.cookie(oidcConfig[extRouterName].params.cookiename, oidc_token, {
 				httpOnly:	true,
 				secure:		Request.protocol === 'https',
-				maxAge:		oidcConfig.params.cookieexpire * 1000,	// set expire
+				maxAge:		oidcConfig[extRouterName].params.cookieexpire * 1000,	// set expire
 			});
+
+			// oidc name cookie
+			Response.cookie(oidcConfigCookieName, extRouterName, {
+				httpOnly:	true,
+				secure:		Request.protocol === 'https',
+				maxAge:		oidcConfig[extRouterName].params.cookieexpire * 1000,	// set expire
+			});
+
 			Response.redirect('/');
 
 		}).catch(function(err){
 			console.error('Failed to verify oidc token by ' + err.message);
-			Response.status(401);									// 401: Unauthorized
+			Response.status(401);										// 401: Unauthorized
 			return;
 		});
 
 	}).catch(function(err){
 		error = 'Failed to get oidc token in request.' + err.message;
 		console.error(error);
-		Response.status(401);										// 401: Unauthorized
+		Response.status(401);											// 401: Unauthorized
 		return;
 	});
 };
 
 //
 // GET '/<config path>/login/cb'	: Login callback url
+//
+// URL Arguments
+//		extrouter					: <extrouter name>
 //
 router.get('/login/cb', sessionize);
 
@@ -408,9 +552,14 @@ router.get('/login/cb', sessionize);
 //
 // GET '/<config path>/logout'	: logout for OIDC
 //
+// URL Arguments
+//		extrouter				: <extrouter name>
+//
 router.get('/logout', function(Request, Response, Next)			// eslint-disable-line no-unused-vars
 {
-	if(!r3util.isSafeEntity(oidcConfig)){
+	var	extRouterName = rawGetExtRouterName(Request);
+
+	if(!r3util.isSafeEntity(oidcConfig[extRouterName])){
 		var error = 'Please check your configuarion(json) because it is invalid.';
 		console.error('Failed logout processing, ' + error);
 		Response.status(500);									// 500: Internal Server Error
@@ -421,9 +570,10 @@ router.get('/logout', function(Request, Response, Next)			// eslint-disable-line
 	//
 	// Cleanup : clear the cookie if exist
 	//
-	Response.clearCookie(oidcConfig.params.cookiename);			// cookie name(id_token as deafult)
+	Response.clearCookie(oidcConfig[extRouterName].params.cookiename);	// cookie name(id_token as deafult)
+	Response.clearCookie(oidcConfigCookieName);							// cookie name(oidc config name)
 
-	Response.redirect(oidcConfig.mainUrl);
+	Response.redirect(oidcConfig[extRouterName].mainUrl);
 
 	return;
 });
@@ -435,7 +585,7 @@ router.get('/logout', function(Request, Response, Next)			// eslint-disable-line
 // setConfig is called in app.js to set configurations that are
 // defined in configuration file(json)
 //
-var setConfig = function(config)
+var setConfig = function(config, extRouterName)
 {
 	// check required member in config
 	if(	!r3util.isSafeEntity(config)						||
@@ -450,18 +600,27 @@ var setConfig = function(config)
 		console.error('Please check your configuarion(json) because it is invalid : config = ' + JSON.stringify(config));
 		return false;
 	}
-	oidcConfig = config;
+	if(!r3util.isSafeString(extRouterName)){
+		console.error('Please check your configuarion(json) because it does not have ' + JSON.stringify(extRouterName) + ' entity or it is empty.');
+		return false;
+	}
+	if(r3util.isSafeEntity(oidcConfig[extRouterName])){
+		console.error('Please check your configuarion(json) because it has multi ' + JSON.stringify(extRouterName) + ' entities.');
+		return false;
+	}
 
-	if(!r3util.isSafeEntity(oidcConfig.params.usernamekey)){
+	oidcConfig[extRouterName] = config;
+
+	if(!r3util.isSafeEntity(oidcConfig[extRouterName].params.usernamekey)){
 		console.warn('The key name in configuration(usernamekey) is empty, then it check will no longer be performed.');
 	}
-	if(!r3util.isSafeEntity(oidcConfig.params.cookiename)){
+	if(!r3util.isSafeEntity(oidcConfig[extRouterName].params.cookiename)){
 		console.warn('The cookie name in configuration(cookiename) is empty, so id_token is used as default.');
-		oidcConfig.params.cookiename = 'id_token';
+		oidcConfig[extRouterName].params.cookiename = 'id_token';
 	}
-	if(!r3util.isSafeEntity(oidcConfig.params.cookieexpire) || 'number' != typeof oidcConfig.params.cookieexpire){
+	if(!r3util.isSafeEntity(oidcConfig[extRouterName].params.cookieexpire) || 'number' != typeof oidcConfig[extRouterName].params.cookieexpire){
 		console.warn('The cookie expire(sec) in configuration(cookieexpire) is empty, so id_token is used as default.');
-		oidcConfig.params.cookieexpire = 60;			// 60 sec as default
+		oidcConfig[extRouterName].params.cookieexpire = 60;			// 60 sec as default
 	}
 	return true;
 };
@@ -486,9 +645,10 @@ var getConfig = function()
 // Exports
 //---------------------------------------------------------
 module.exports = {
-	router:		router,
-	setConfig:	setConfig,
-	getConfig:	getConfig
+	router:					router,
+	setConfig:				setConfig,
+	getConfig:				getConfig,
+	oidcConfigCookieName:	oidcConfigCookieName
 };
 
 /*

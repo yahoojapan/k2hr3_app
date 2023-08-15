@@ -36,6 +36,7 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
             "zIndex": -1,
           },
           [Function],
+          [Function],
         ],
         "defaultProps": undefined,
         "render": [Function],
