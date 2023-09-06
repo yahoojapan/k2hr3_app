@@ -103,7 +103,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
           </span>
           <div
             className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
-            onClick={[Function]}
           >
             <div
               className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -139,7 +138,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
           </span>
           <div
             className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
-            onClick={[Function]}
           >
             <div
               className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -170,7 +168,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
           </span>
           <div
             className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
-            onClick={[Function]}
           >
             <div
               className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -204,6 +201,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
           />
           <
             className="MuiPopover-root css-dpq74k-MuiPopover-root"
+            disableScrollLock={false}
             onClose={[Function]}
             open={false}
             slotProps={
@@ -355,6 +353,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
           </>
           <
             className="MuiPopover-root css-dpq74k-MuiPopover-root"
+            disableScrollLock={false}
             onClose={[Function]}
             open={false}
             slotProps={
@@ -382,7 +381,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
               </span>
               <div
                 className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
-                onClick={[Function]}
               >
                 <div
                   className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"

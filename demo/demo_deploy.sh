@@ -230,7 +230,6 @@ fi
 #
 PRNINFO "Change application title(${R3APP_JSX}) and Switch ${R3PROVIDER_JS} for demo"
 
-PRNINFO "Run \"sed -i -e \"s/title='K2HR3'/title='K2HR3 DEMO'/g\" ${MASTER_SRC_DIR}/${R3APP_JSX}\""
 if ! sed -i -e "s/title='K2HR3'/title='K2HR3 DEMO'/g" "${MASTER_SRC_DIR}/${R3APP_JSX}"; then
 	PRNERR "Failed to modify ${MASTER_SRC_DIR}/${R3APP_JSX} for demo title"
 	PRNFAILURE "Convert files for demo site and make backup files"
