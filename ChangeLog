@@ -1,3 +1,9 @@
+k2hr3-app (1.0.25) unstable; urgency=low
+
+  * Updated support NodeJS version and packages - #106
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Wed, 06 Sep 2023 20:10:09 +0900
+
 k2hr3-app (1.0.24) unstable; urgency=low
 
   * Supported for multiple OIDC authentication - #103
