@@ -167,7 +167,6 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
   >
     <div
       className="MuiFormControl-root MuiTextField-root css-5g4ojo-MuiFormControl-root-MuiTextField-root"
-      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -237,7 +236,6 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
   >
     <div
       className="MuiFormControl-root MuiTextField-root css-5g4ojo-MuiFormControl-root-MuiTextField-root"
-      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -312,7 +310,6 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
   >
     <div
       className="MuiFormControl-root MuiTextField-root css-gemud3-MuiFormControl-root-MuiTextField-root"
-      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"

@@ -81,7 +81,7 @@ elif [ "${CI_DOCKER_IMAGE_OSTYPE}" = "alpine" ]; then
 	PKGMGR_INSTALL_OPT="add -q --no-progress --no-cache"
 	PKGMGR_UNINSTALL_OPT="del -q --purge --no-progress --no-cache"
 	PKG_INSTALL_CURL="curl"
-	PKG_INSTALL_BASE="nodejs npm"
+	PKG_INSTALL_BASE="nodejs npm bind-tools"
 	PKG_REPO_SETUP_NODEJS=""
 	NPM_INSTALL_BASE=""
 	POST_PROCESS="mkdir -p /var/run/antpickax \\&\\& chmod 0777 /var/run/antpickax"
@@ -92,8 +92,17 @@ elif [ "${CI_DOCKER_IMAGE_OSTYPE}" = "ubuntu" ]; then
 	PKGMGR_INSTALL_OPT="install -qq -y"
 	PKGMGR_UNINSTALL_OPT="purge --auto-remove -q -y"
 	PKG_INSTALL_CURL="curl"
-	PKG_INSTALL_BASE="nodejs"
-	PKG_REPO_SETUP_NODEJS="curl -sL https://deb.nodesource.com/setup_18.x | bash"
+	PKG_INSTALL_BASE="nodejs dnsutils"
+	NODE_MAJOR=18
+
+	PKG_REPO_SETUP_NODEJS="
+		${PKGMGR_NAME} install -y ca-certificates gnupg
+		mkdir -p /etc/apt/keyrings
+		curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+		echo 'deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main' > /etc/apt/sources.list.d/nodesource.list
+		${PKGMGR_NAME} update -qq -y
+	"
+
 	NPM_INSTALL_BASE=""
 	POST_PROCESS="mkdir -p /var/run/antpickax \\&\\& chmod 0777 /var/run/antpickax"
 
@@ -167,7 +176,7 @@ set_custom_variables()
 	# NodeJS repository setup
 	#
 	if [ -n "${PKG_REPO_SETUP_NODEJS}" ]; then
-		PKG_REPO_SETUP_NODEJS_COMMAND="${PKG_REPO_SETUP_NODEJS}"
+		PKG_REPO_SETUP_NODEJS_COMMAND=$(echo "${PKG_REPO_SETUP_NODEJS}" | sed -e '/^$/d' -e 's/^[[:space:]]*//g' -e 's/[[:space:]]*$//g' -e 's/$/ \\\&\\\& /g' | tr -d '\n' | sed -e 's/ \\\&\\\& $//g' -e 's/ \\\&\\\& $//g' -e 's/ \\\&\\\& $//g')
 	else
 		#
 		# Set no-operation command

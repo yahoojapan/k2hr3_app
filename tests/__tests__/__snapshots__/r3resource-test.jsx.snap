@@ -151,7 +151,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
   </div>
   <div
     className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1vaay6c-MuiFormControl-root-MuiTextField-root"
-    onClick={[Function]}
   >
     <div
       className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1r8umb3-MuiInputBase-root-MuiInput-root"
@@ -195,7 +194,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
   >
     <div
       className="MuiFormControl-root MuiTextField-root css-m1r7zy-MuiFormControl-root-MuiTextField-root"
-      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -221,7 +219,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     </div>
     <div
       className="MuiFormControl-root MuiTextField-root css-1jul6sg-MuiFormControl-root-MuiTextField-root"
-      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -291,7 +288,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
   >
     <div
       className="MuiFormControl-root MuiTextField-root css-m1r7zy-MuiFormControl-root-MuiTextField-root"
-      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -317,7 +313,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     </div>
     <div
       className="MuiFormControl-root MuiTextField-root css-1jul6sg-MuiFormControl-root-MuiTextField-root"
-      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -387,7 +382,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
   >
     <div
       className="MuiFormControl-root MuiTextField-root css-m1r7zy-MuiFormControl-root-MuiTextField-root"
-      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -413,7 +407,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     </div>
     <div
       className="MuiFormControl-root MuiTextField-root css-1jul6sg-MuiFormControl-root-MuiTextField-root"
-      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -483,7 +476,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
   >
     <div
       className="MuiFormControl-root MuiTextField-root css-m1r7zy-MuiFormControl-root-MuiTextField-root"
-      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -509,7 +501,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     </div>
     <div
       className="MuiFormControl-root MuiTextField-root css-1jul6sg-MuiFormControl-root-MuiTextField-root"
-      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -584,7 +575,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
   >
     <div
       className="MuiFormControl-root MuiTextField-root css-gemud3-MuiFormControl-root-MuiTextField-root"
-      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
@@ -718,7 +708,6 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
   >
     <div
       className="MuiFormControl-root MuiTextField-root css-gemud3-MuiFormControl-root-MuiTextField-root"
-      onClick={[Function]}
     >
       <div
         className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
