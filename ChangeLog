@@ -1,3 +1,9 @@
+k2hr3-app (1.0.26) unstable; urgency=low
+
+  * Bumpup version
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Wed, 06 Sep 2023 21:40:23 +0900
+
 k2hr3-app (1.0.25) unstable; urgency=low
 
   * Updated support NodeJS version and packages - #106
