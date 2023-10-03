@@ -113,7 +113,7 @@ exports[`R3Container test snapshot for R3Container 1`] = `
             className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-140fvy8-MuiToolbar-root"
           >
             <div
-              className="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-filledPrimary css-lgprvh-MuiChip-root"
+              className="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-filledPrimary css-1i54xdy-MuiChip-root"
               onKeyDown={[Function]}
               onKeyUp={[Function]}
             >
@@ -396,7 +396,7 @@ exports[`R3Container test snapshot for R3Container 1`] = `
             <div
               aria-label="current display item and its path"
               aria-labelledby={null}
-              className="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-clickable MuiChip-clickableColorPrimary MuiChip-filledPrimary css-33sket-MuiButtonBase-root-MuiChip-root"
+              className="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-clickable MuiChip-clickableColorPrimary MuiChip-filledPrimary css-5r0tbp-MuiButtonBase-root-MuiChip-root"
               data-mui-internal-clone-element={true}
               onBlur={[Function]}
               onClick={[Function]}
