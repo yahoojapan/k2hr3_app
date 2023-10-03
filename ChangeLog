@@ -1,3 +1,9 @@
+k2hr3-app (1.0.28) unstable; urgency=low
+
+  * Fixed a bug in demo_deploy.sh - #111
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Tue, 03 Oct 2023 18:37:41 +0900
+
 k2hr3-app (1.0.27) unstable; urgency=low
 
   * Updated versions of dependent packages - #109
