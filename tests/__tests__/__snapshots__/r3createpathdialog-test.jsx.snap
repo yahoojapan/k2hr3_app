@@ -158,7 +158,7 @@ exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
           </div>
         </div>
         <div
-          className="MuiDialogActions-root MuiDialogActions-spacing css-hlj6pa-MuiDialogActions-root"
+          className="MuiDialogActions-root MuiDialogActions-spacing css-knqc4i-MuiDialogActions-root"
         >
           <button
             aria-label="cancel"

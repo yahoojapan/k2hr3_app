@@ -196,7 +196,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
           </button>
         </div>
         <div
-          className="MuiDialogActions-root MuiDialogActions-spacing css-hlj6pa-MuiDialogActions-root"
+          className="MuiDialogActions-root MuiDialogActions-spacing css-knqc4i-MuiDialogActions-root"
         >
           <button
             aria-label="ok"

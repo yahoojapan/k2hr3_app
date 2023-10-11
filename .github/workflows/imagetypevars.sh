@@ -81,7 +81,7 @@ elif [ "${CI_DOCKER_IMAGE_OSTYPE}" = "alpine" ]; then
 	PKGMGR_INSTALL_OPT="add -q --no-progress --no-cache"
 	PKGMGR_UNINSTALL_OPT="del -q --purge --no-progress --no-cache"
 	PKG_INSTALL_CURL="curl"
-	PKG_INSTALL_BASE="nodejs npm bind-tools"
+	PKG_INSTALL_BASE="nodejs npm bind-tools procps"
 	PKG_REPO_SETUP_NODEJS=""
 	NPM_INSTALL_BASE=""
 	POST_PROCESS="mkdir -p /var/run/antpickax \\&\\& chmod 0777 /var/run/antpickax"
@@ -92,7 +92,7 @@ elif [ "${CI_DOCKER_IMAGE_OSTYPE}" = "ubuntu" ]; then
 	PKGMGR_INSTALL_OPT="install -qq -y"
 	PKGMGR_UNINSTALL_OPT="purge --auto-remove -q -y"
 	PKG_INSTALL_CURL="curl"
-	PKG_INSTALL_BASE="nodejs dnsutils"
+	PKG_INSTALL_BASE="nodejs dnsutils procps"
 	NODE_MAJOR=18
 
 	PKG_REPO_SETUP_NODEJS="

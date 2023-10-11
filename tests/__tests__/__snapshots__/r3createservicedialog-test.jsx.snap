@@ -297,7 +297,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
           </div>
         </div>
         <div
-          className="MuiDialogActions-root MuiDialogActions-spacing css-hlj6pa-MuiDialogActions-root"
+          className="MuiDialogActions-root MuiDialogActions-spacing css-knqc4i-MuiDialogActions-root"
         >
           <button
             aria-label="cancel"
