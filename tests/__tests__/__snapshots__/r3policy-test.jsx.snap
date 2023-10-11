@@ -14,6 +14,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     onClick={[Function]}
   >
     <div
+      aria-controls=":r0:"
       aria-expanded="false"
       aria-haspopup="listbox"
       className="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-o1v3ls-MuiSelect-select-MuiInputBase-input-MuiInput-input"
@@ -21,7 +22,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       onFocus={[Function]}
       onKeyDown={[Function]}
       onMouseDown={[Function]}
-      role="button"
+      role="combobox"
       tabIndex={0}
     >
       ALLOW
@@ -177,7 +178,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r0:"
+          id=":r1:"
           name="policyResource_0"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -246,7 +247,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r2:"
+          id=":r3:"
           name="resourceNew"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -320,7 +321,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r4:"
+          id=":r5:"
           name="aliasNew"
           onAnimationStart={[Function]}
           onBlur={[Function]}

@@ -526,7 +526,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
           </span>
         </div>
         <div
-          className="MuiDialogActions-root MuiDialogActions-spacing css-hlj6pa-MuiDialogActions-root"
+          className="MuiDialogActions-root MuiDialogActions-spacing css-knqc4i-MuiDialogActions-root"
         >
           <button
             aria-label="cancel"
