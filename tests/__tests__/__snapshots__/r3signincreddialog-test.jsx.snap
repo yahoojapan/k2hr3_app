@@ -103,7 +103,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
             className="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-10laqpe-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard css-1vo5tcm-MuiFormLabel-root-MuiInputLabel-root"
+              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard css-1kvl46d-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink={false}
               htmlFor="username-textfield-id"
               id="username-textfield-id-label"
@@ -135,7 +135,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
             className="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-10laqpe-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard css-1vo5tcm-MuiFormLabel-root-MuiInputLabel-root"
+              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard css-1kvl46d-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink={false}
               htmlFor="passphrase-textfield-id"
               id="passphrase-textfield-id-label"
