@@ -74,7 +74,7 @@ exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
     }
   >
     <div
-      className="MuiDialog-container MuiDialog-scrollBody css-iz3z40-MuiDialog-container"
+      className="MuiDialog-container MuiDialog-scrollBody css-1hsk4vd-MuiDialog-container"
       onMouseDown={[Function]}
     >
       <div
@@ -135,7 +135,7 @@ exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
             className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-14zm6wl-MuiInputBase-root-MuiInput-root"
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1vc1r8g-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
@@ -189,7 +189,7 @@ exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
               viewBox="0 0 24 24"
             >
               <path
-                d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"
+                d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2m5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12z"
               />
             </svg>
           </button>
@@ -222,7 +222,7 @@ exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
               viewBox="0 0 24 24"
             >
               <path
-                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"
               />
             </svg>
           </button>

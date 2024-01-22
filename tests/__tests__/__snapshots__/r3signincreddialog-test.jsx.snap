@@ -74,7 +74,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
     }
   >
     <div
-      className="MuiDialog-container MuiDialog-scrollBody css-iz3z40-MuiDialog-container"
+      className="MuiDialog-container MuiDialog-scrollBody css-1hsk4vd-MuiDialog-container"
       onMouseDown={[Function]}
     >
       <div
@@ -103,7 +103,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
             className="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-10laqpe-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard css-1kvl46d-MuiFormLabel-root-MuiInputLabel-root"
+              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard css-1vo5tcm-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink={false}
               htmlFor="username-textfield-id"
               id="username-textfield-id-label"
@@ -111,7 +111,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
               USER NAME(ID etc)
             </label>
             <div
-              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1r8umb3-MuiInputBase-root-MuiInput-root"
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-fd15y6-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
@@ -135,7 +135,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
             className="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-10laqpe-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard css-1kvl46d-MuiFormLabel-root-MuiInputLabel-root"
+              className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-standard css-1vo5tcm-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink={false}
               htmlFor="passphrase-textfield-id"
               id="passphrase-textfield-id-label"
@@ -143,7 +143,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
               PASS PHRASE
             </label>
             <div
-              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd css-1r8umb3-MuiInputBase-root-MuiInput-root"
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd css-fd15y6-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
@@ -192,7 +192,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
                     viewBox="0 0 24 24"
                   >
                     <path
-                      d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+                      d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5M12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5m0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"
                     />
                   </svg>
                 </button>
@@ -232,7 +232,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
               viewBox="0 0 24 24"
             >
               <path
-                d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"
+                d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2m5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12z"
               />
             </svg>
           </button>
@@ -265,7 +265,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
               viewBox="0 0 24 24"
             >
               <path
-                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"
               />
             </svg>
           </button>
