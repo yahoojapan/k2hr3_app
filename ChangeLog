@@ -1,3 +1,9 @@
+k2hr3-app (1.0.33) unstable; urgency=low
+
+  * Updated dependent npm package versions - #121
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Mon, 22 Jan 2024 10:36:17 +0900
+
 k2hr3-app (1.0.32) unstable; urgency=low
 
   * Updated dependent package version and snapshots - #119
