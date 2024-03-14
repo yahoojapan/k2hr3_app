@@ -32,9 +32,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
         "__emotion_real": [Circular],
         "__emotion_styles": [
           "label:MuiDialog-backdrop;",
-          {
-            "zIndex": -1,
-          },
+          [Function],
           [Function],
           [Function],
         ],
@@ -318,7 +316,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
               </div>
               <button
                 aria-label="close dialog"
-                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-bxvl8j-MuiButtonBase-root-MuiButton-root"
+                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-bxvl8j-MuiButtonBase-root-MuiButton-root"
                 disabled={true}
                 onBlur={[Function]}
                 onClick={[Function]}
@@ -406,7 +404,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
               </div>
               <button
                 aria-label="close dialog"
-                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-bxvl8j-MuiButtonBase-root-MuiButton-root"
+                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-bxvl8j-MuiButtonBase-root-MuiButton-root"
                 disabled={true}
                 onBlur={[Function]}
                 onClick={[Function]}
@@ -482,7 +480,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
             <button
               aria-label="add User to this Local Tenant"
               aria-labelledby={null}
-              className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-rswm6d-MuiButtonBase-root-MuiButton-root"
+              className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-rswm6d-MuiButtonBase-root-MuiButton-root"
               data-mui-internal-clone-element={true}
               disabled={false}
               onBlur={[Function]}
@@ -530,7 +528,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
         >
           <button
             aria-label="cancel"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-rypk7-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-rypk7-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -566,7 +564,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
           </button>
           <button
             aria-label="ok"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
             disabled={true}
             onBlur={[Function]}
             onClick={[Function]}

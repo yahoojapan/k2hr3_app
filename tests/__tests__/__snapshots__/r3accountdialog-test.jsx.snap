@@ -32,9 +32,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
         "__emotion_real": [Circular],
         "__emotion_styles": [
           "label:MuiDialog-backdrop;",
-          {
-            "zIndex": -1,
-          },
+          [Function],
           [Function],
           [Function],
         ],
@@ -157,7 +155,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
           <button
             aria-label="Copy to clipboard"
             aria-labelledby={null}
-            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-akrki0-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-akrki0-MuiButtonBase-root-MuiButton-root"
             data-mui-internal-clone-element={true}
             disabled={false}
             onBlur={[Function]}
@@ -200,7 +198,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
         >
           <button
             aria-label="ok"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}

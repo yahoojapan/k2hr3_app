@@ -417,7 +417,7 @@ exports[`R3Container test snapshot for R3Container 1`] = `
               tabIndex={0}
             >
               <div
-                className="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault MuiChip-avatar MuiChip-avatarMedium MuiChip-avatarColorPrimary css-1fc1ggy-MuiAvatar-root"
+                className="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault MuiChip-avatar MuiChip-avatarMedium MuiChip-avatarColorPrimary css-1ruwoef-MuiAvatar-root"
               >
                 <svg
                   aria-hidden={true}
