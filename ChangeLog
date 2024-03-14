@@ -1,3 +1,10 @@
+k2hr3-app (1.0.34) unstable; urgency=low
+
+  * Updated github actions tools - #124
+  * Updated versions of dependent packages - #123
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Thu, 14 Mar 2024 13:19:42 +0900
+
 k2hr3-app (1.0.33) unstable; urgency=low
 
   * Updated dependent npm package versions - #121
