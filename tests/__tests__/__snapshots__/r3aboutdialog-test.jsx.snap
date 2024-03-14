@@ -32,9 +32,7 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
         "__emotion_real": [Circular],
         "__emotion_styles": [
           "label:MuiDialog-backdrop;",
-          {
-            "zIndex": -1,
-          },
+          [Function],
           [Function],
           [Function],
         ],
@@ -122,7 +120,7 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
         >
           <button
             aria-label="close about dialog"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium css-1rcb7ll-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1rcb7ll-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
