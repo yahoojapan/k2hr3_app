@@ -140,7 +140,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
           </span>
           <div
             aria-label="select type verify url or static resource"
-            className="MuiFormGroup-root css-18timm1-MuiFormGroup-root"
+            className="MuiFormGroup-root MuiRadioGroup-root css-18timm1-MuiFormGroup-root"
             id="new-service-radiogroup-id"
             role="radiogroup"
           >

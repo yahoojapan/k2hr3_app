@@ -14,7 +14,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
   >
     <div
       aria-label="select resource value type"
-      className="MuiFormGroup-root css-18nkkfo-MuiFormGroup-root"
+      className="MuiFormGroup-root MuiRadioGroup-root css-18nkkfo-MuiFormGroup-root"
       role="radiogroup"
     >
       <label
