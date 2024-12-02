@@ -3,7 +3,7 @@
 exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
 <
   aria-label="message dialog"
-  className="MuiDialog-root css-1h8td7x-MuiDialog-root"
+  className="MuiDialog-root css-1pivxxs-MuiDialog-root"
   closeAfterTransition={true}
   components={
     {
@@ -33,6 +33,11 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
         "__emotion_styles": [
           "label:MuiDialog-backdrop;",
           [Function],
+          {
+            "name": "1mbdz04",
+            "next": undefined,
+            "styles": "z-index:-1;",
+          },
           [Function],
           [Function],
         ],
@@ -72,31 +77,39 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
     }
   >
     <div
-      className="MuiDialog-container MuiDialog-scrollBody css-1hsk4vd-MuiDialog-container"
+      className="MuiDialog-container MuiDialog-scrollBody css-xmd51d-MuiDialog-container"
       onMouseDown={[Function]}
     >
       <div
         aria-labelledby=":r0:"
-        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3q99l0-MuiPaper-root-MuiDialog-paper"
+        aria-modal={true}
+        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-155t3jt-MuiPaper-root-MuiDialog-paper"
         role="dialog"
+        style={
+          {
+            "--Paper-shadow": "0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)",
+          }
+        }
       >
         <h2
-          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-5unaky-MuiTypography-root-MuiDialogTitle-root"
+          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1cw1x2b-MuiTypography-root-MuiDialogTitle-root"
           id=":r0:"
           label="message-dialog"
+          style={{}}
         >
           <span
-            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-1h4f5vm-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-paidjd-MuiTypography-root"
+            style={{}}
           >
             MESSAGE FROM JEST TEST
           </span>
         </h2>
         <div
-          className="MuiDialogContent-root css-ypiqx9-MuiDialogContent-root"
+          className="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
         >
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-colorError MuiSvgIcon-fontSizeMedium css-1rk4eil-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-colorError MuiSvgIcon-fontSizeMedium css-1tb0t2q-MuiSvgIcon-root"
             data-testid="ErrorRoundedIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -106,17 +119,18 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
             />
           </svg>
           <span
-            className="MuiTypography-root MuiDialogContentText-root MuiTypography-body1 MuiDialogContentText-root css-1h2b8rm-MuiTypography-root-MuiDialogContentText-root"
+            className="MuiTypography-root MuiDialogContentText-root MuiTypography-body1 MuiDialogContentText-root css-ywk8of-MuiTypography-root-MuiDialogContentText-root"
+            style={{}}
           >
             Dummy error message
           </span>
         </div>
         <div
-          className="MuiDialogActions-root MuiDialogActions-spacing css-knqc4i-MuiDialogActions-root"
+          className="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
         >
           <button
             aria-label="cancel"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-rypk7-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-mz09wl-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -137,7 +151,7 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
             CANCEL
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-2zpagu-MuiSvgIcon-root"
               data-testid="CancelIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -149,7 +163,7 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
           </button>
           <button
             aria-label="confirm contents and close dialog"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1t7wvu-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -170,7 +184,7 @@ exports[`R3PopupMsgDialog test snapshot for R3PopupMsgDialog 1`] = `
             OK
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-2zpagu-MuiSvgIcon-root"
               data-testid="CheckCircleIcon"
               focusable="false"
               viewBox="0 0 24 24"

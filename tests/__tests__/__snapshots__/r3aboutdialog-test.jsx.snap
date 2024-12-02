@@ -3,7 +3,7 @@
 exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
 <
   aria-label="about dialog"
-  className="MuiDialog-root css-1h8td7x-MuiDialog-root"
+  className="MuiDialog-root css-1pivxxs-MuiDialog-root"
   closeAfterTransition={true}
   components={
     {
@@ -33,6 +33,11 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
         "__emotion_styles": [
           "label:MuiDialog-backdrop;",
           [Function],
+          {
+            "name": "1mbdz04",
+            "next": undefined,
+            "styles": "z-index:-1;",
+          },
           [Function],
           [Function],
         ],
@@ -72,41 +77,52 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
     }
   >
     <div
-      className="MuiDialog-container MuiDialog-scrollBody css-1hsk4vd-MuiDialog-container"
+      className="MuiDialog-container MuiDialog-scrollBody css-xmd51d-MuiDialog-container"
       onMouseDown={[Function]}
     >
       <div
         aria-labelledby=":r0:"
-        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3q99l0-MuiPaper-root-MuiDialog-paper"
+        aria-modal={true}
+        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-155t3jt-MuiPaper-root-MuiDialog-paper"
         role="dialog"
+        style={
+          {
+            "--Paper-shadow": "0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)",
+          }
+        }
       >
         <h2
-          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-5unaky-MuiTypography-root-MuiDialogTitle-root"
+          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1cw1x2b-MuiTypography-root-MuiDialogTitle-root"
           id=":r0:"
           label="about-dialog"
+          style={{}}
         >
           <span
-            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-1h4f5vm-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-paidjd-MuiTypography-root"
+            style={{}}
           >
             About 
             K2HR3
           </span>
         </h2>
         <div
-          className="MuiDialogContent-root css-1eb5co6-MuiDialogContent-root"
+          className="MuiDialogContent-root css-1ozqmnk-MuiDialogContent-root"
         >
           <span
-            className="MuiTypography-root MuiDialogContentText-root MuiTypography-body1 MuiDialogContentText-root css-8d6sz0-MuiTypography-root-MuiDialogContentText-root"
+            className="MuiTypography-root MuiDialogContentText-root MuiTypography-body1 MuiDialogContentText-root css-asjdh5-MuiTypography-root-MuiDialogContentText-root"
+            style={{}}
           >
             <span
-              className="MuiTypography-root MuiTypography-h6 css-1noxuy3-MuiTypography-root"
+              className="MuiTypography-root MuiTypography-h6 css-md3at6-MuiTypography-root"
+              style={{}}
             >
               License: 
               MIT
               <br />
             </span>
             <span
-              className="MuiTypography-root MuiTypography-body2 css-wa45k7-MuiTypography-root"
+              className="MuiTypography-root MuiTypography-body2 css-1a8qmnc-MuiTypography-root"
+              style={{}}
             >
               K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers commonmanagement information for the cloud.K2HR3 can dynamically manage information as "who", "what", "operate".These are stored as roles, resources, policies in K2hdkc, and the clientsystem can dynamically read and modify these information.
               <br />
@@ -116,11 +132,11 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
           </span>
         </div>
         <div
-          className="MuiDialogActions-root MuiDialogActions-spacing css-knqc4i-MuiDialogActions-root"
+          className="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
         >
           <button
             aria-label="close about dialog"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1rcb7ll-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-2olak9-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -141,7 +157,7 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
             CLOSE
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-2zpagu-MuiSvgIcon-root"
               data-testid="CancelIcon"
               focusable="false"
               viewBox="0 0 24 24"
