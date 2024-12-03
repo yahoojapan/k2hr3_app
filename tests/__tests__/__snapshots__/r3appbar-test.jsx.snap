@@ -2,16 +2,21 @@
 
 exports[`R3AppBar test snapshot for R3AppBar 1`] = `
 <header
-  className="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionStatic css-ki0gnq-MuiPaper-root-MuiAppBar-root"
+  className="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionStatic css-5k0x2i-MuiPaper-root-MuiAppBar-root"
+  style={
+    {
+      "--Paper-shadow": "0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)",
+    }
+  }
 >
   <div
-    className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-dense css-10ltm04-MuiToolbar-root"
+    className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-dense css-s3ewxw-MuiToolbar-root"
   >
     <button
       aria-haspopup="true"
       aria-label="main menu"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-1fn7xgs-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-mnh26k-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="main-menu"
@@ -35,7 +40,7 @@ exports[`R3AppBar test snapshot for R3AppBar 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
         data-testid="MenuIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -44,12 +49,10 @@ exports[`R3AppBar test snapshot for R3AppBar 1`] = `
           d="M3 18h18v-2H3zm0-5h18v-2H3zm0-7v2h18V6z"
         />
       </svg>
-      <span
-        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </button>
     <h6
-      className="MuiTypography-root MuiTypography-h6 MuiTypography-noWrap css-az3k0-MuiTypography-root"
+      className="MuiTypography-root MuiTypography-h6 MuiTypography-noWrap css-3vpxrl-MuiTypography-root"
+      style={{}}
     >
       K2HR3
     </h6>
@@ -57,7 +60,7 @@ exports[`R3AppBar test snapshot for R3AppBar 1`] = `
       aria-haspopup="true"
       aria-label="signin menu"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-1fn7xgs-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-mnh26k-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
       label="signin-menu"
@@ -81,7 +84,7 @@ exports[`R3AppBar test snapshot for R3AppBar 1`] = `
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
         data-testid="AccountCircleIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -90,9 +93,6 @@ exports[`R3AppBar test snapshot for R3AppBar 1`] = `
           d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6m0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20"
         />
       </svg>
-      <span
-        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </button>
   </div>
 </header>

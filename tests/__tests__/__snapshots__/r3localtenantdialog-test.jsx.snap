@@ -3,7 +3,7 @@
 exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
 <
   aria-label="create path dialog"
-  className="MuiDialog-root css-1h8td7x-MuiDialog-root"
+  className="MuiDialog-root css-1pivxxs-MuiDialog-root"
   closeAfterTransition={true}
   components={
     {
@@ -33,6 +33,11 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
         "__emotion_styles": [
           "label:MuiDialog-backdrop;",
           [Function],
+          {
+            "name": "1mbdz04",
+            "next": undefined,
+            "styles": "z-index:-1;",
+          },
           [Function],
           [Function],
         ],
@@ -72,45 +77,54 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
     }
   >
     <div
-      className="MuiDialog-container MuiDialog-scrollBody css-1hsk4vd-MuiDialog-container"
+      className="MuiDialog-container MuiDialog-scrollBody css-xmd51d-MuiDialog-container"
       onMouseDown={[Function]}
     >
       <div
         aria-labelledby=":r0:"
-        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3q99l0-MuiPaper-root-MuiDialog-paper"
+        aria-modal={true}
+        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-155t3jt-MuiPaper-root-MuiDialog-paper"
         role="dialog"
+        style={
+          {
+            "--Paper-shadow": "0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)",
+          }
+        }
       >
         <h2
-          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-5unaky-MuiTypography-root-MuiDialogTitle-root"
+          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1cw1x2b-MuiTypography-root-MuiDialogTitle-root"
           id=":r0:"
           label="create-path-dialog"
+          style={{}}
         >
           <span
-            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-1h4f5vm-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-paidjd-MuiTypography-root"
+            style={{}}
           >
             Create a Local TENANT
           </span>
         </h2>
         <div
-          className="MuiDialogContent-root css-ypiqx9-MuiDialogContent-root"
+          className="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
         >
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-m4hrld-MuiTypography-root"
+            style={{}}
           >
             TENANT name
           </span>
           <div
-            className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
+            className="MuiFormControl-root MuiTextField-root css-1l0136s-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1vc1r8g-MuiInputBase-root-MuiInput-root"
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
                 aria-invalid={false}
                 aria-label="input tenant inforamtion"
                 autoFocus={false}
-                className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
                 disabled={false}
                 id="tenant-new-name-textfield-id"
                 onAnimationStart={[Function]}
@@ -125,27 +139,29 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
             </div>
           </div>
           <span
-            className="MuiTypography-root MuiTypography-body1 css-1n7958d-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-body1 css-iraw28-MuiTypography-root"
+            style={{}}
           >
             (If not "local@" prefix, it is automatically given.)
           </span>
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-m4hrld-MuiTypography-root"
+            style={{}}
           >
             Display name
           </span>
           <div
-            className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
+            className="MuiFormControl-root MuiTextField-root css-1l0136s-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1vc1r8g-MuiInputBase-root-MuiInput-root"
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
                 aria-invalid={false}
                 aria-label="input tenant inforamtion"
                 autoFocus={false}
-                className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
                 disabled={false}
                 id="tenant-display-name-textfield-id"
                 onAnimationStart={[Function]}
@@ -160,22 +176,23 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
             </div>
           </div>
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-m4hrld-MuiTypography-root"
+            style={{}}
           >
             Description
           </span>
           <div
-            className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
+            className="MuiFormControl-root MuiTextField-root css-1l0136s-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1vc1r8g-MuiInputBase-root-MuiInput-root"
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
                 aria-invalid={false}
                 aria-label="input tenant inforamtion"
                 autoFocus={false}
-                className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
                 disabled={false}
                 id="tenant-description-textfield-id"
                 onAnimationStart={[Function]}
@@ -190,15 +207,17 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
             </div>
           </div>
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-zg2ecv-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-m4hrld-MuiTypography-root"
+            style={{}}
           >
             TENANT User
           </span>
           <span
-            className="MuiTypography-root MuiTypography-body1 css-u4kix5-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-body1 css-tntsmj-MuiTypography-root"
+            style={{}}
           />
           <
-            className="MuiPopover-root css-dpq74k-MuiPopover-root"
+            className="MuiPopover-root css-17ubrvk-MuiPopover-root"
             disableScrollLock={false}
             onClose={[Function]}
             open={false}
@@ -211,9 +230,10 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
             }
           >
             <div
-              className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-1iwa7cr-MuiPaper-root-MuiPopover-paper"
+              className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-1ixo0aa-MuiPaper-root-MuiPopover-paper"
               style={
                 {
+                  "--Paper-shadow": "0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12)",
                   "opacity": 0,
                   "transform": "scale(0.75, 0.5625)",
                   "visibility": "hidden",
@@ -221,7 +241,8 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
               }
             >
               <span
-                className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-lwaw7-MuiTypography-root"
+                className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-e2h3bf-MuiTypography-root"
+                style={{}}
               >
                 MANAGE TENANT USER
               </span>
@@ -229,16 +250,16 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                 className="MuiBox-root css-0"
               />
               <div
-                className="MuiTablePagination-root css-doc006-MuiTablePagination-root"
+                className="MuiTablePagination-root css-1hjhadg-MuiTablePagination-root"
               >
                 <div
-                  className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar"
+                  className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-1gak8h1-MuiToolbar-root-MuiTablePagination-toolbar"
                 >
                   <div
-                    className="MuiTablePagination-spacer css-1psng7p-MuiTablePagination-spacer"
+                    className="MuiTablePagination-spacer css-1wtxofq-MuiTablePagination-spacer"
                   />
                   <p
-                    className="MuiTablePagination-displayedRows css-11ceysh-MuiTablePagination-displayedRows"
+                    className="MuiTablePagination-displayedRows css-1iasykk-MuiTablePagination-displayedRows"
                   >
                     0–0 of 0
                   </p>
@@ -247,7 +268,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                   >
                     <button
                       aria-label="Go to previous page"
-                      className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorInherit MuiIconButton-sizeMedium css-1o9uo9i-MuiButtonBase-root-MuiIconButton-root"
+                      className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorInherit MuiIconButton-sizeMedium css-kzs6dv-MuiButtonBase-root-MuiIconButton-root"
                       disabled={true}
                       onBlur={[Function]}
                       onClick={[Function]}
@@ -268,7 +289,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                     >
                       <svg
                         aria-hidden={true}
-                        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
+                        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
                         data-testid="KeyboardArrowLeftIcon"
                         focusable="false"
                         viewBox="0 0 24 24"
@@ -280,7 +301,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                     </button>
                     <button
                       aria-label="Go to next page"
-                      className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorInherit MuiIconButton-sizeMedium css-1o9uo9i-MuiButtonBase-root-MuiIconButton-root"
+                      className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorInherit MuiIconButton-sizeMedium css-kzs6dv-MuiButtonBase-root-MuiIconButton-root"
                       disabled={true}
                       onBlur={[Function]}
                       onClick={[Function]}
@@ -301,7 +322,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                     >
                       <svg
                         aria-hidden={true}
-                        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
+                        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
                         data-testid="KeyboardArrowRightIcon"
                         focusable="false"
                         viewBox="0 0 24 24"
@@ -316,7 +337,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
               </div>
               <button
                 aria-label="close dialog"
-                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-bxvl8j-MuiButtonBase-root-MuiButton-root"
+                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-zbqks1-MuiButtonBase-root-MuiButton-root"
                 disabled={true}
                 onBlur={[Function]}
                 onClick={[Function]}
@@ -337,7 +358,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                 UPDATE
                 <svg
                   aria-hidden={true}
-                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
+                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-2zpagu-MuiSvgIcon-root"
                   data-testid="CheckCircleIcon"
                   focusable="false"
                   viewBox="0 0 24 24"
@@ -350,7 +371,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
             </div>
           </>
           <
-            className="MuiPopover-root css-dpq74k-MuiPopover-root"
+            className="MuiPopover-root css-17ubrvk-MuiPopover-root"
             disableScrollLock={false}
             onClose={[Function]}
             open={false}
@@ -363,9 +384,10 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
             }
           >
             <div
-              className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-1iwa7cr-MuiPaper-root-MuiPopover-paper"
+              className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-1ixo0aa-MuiPaper-root-MuiPopover-paper"
               style={
                 {
+                  "--Paper-shadow": "0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12)",
                   "opacity": 0,
                   "transform": "scale(0.75, 0.5625)",
                   "visibility": "hidden",
@@ -373,22 +395,23 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
               }
             >
               <span
-                className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-lwaw7-MuiTypography-root"
+                className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-e2h3bf-MuiTypography-root"
+                style={{}}
               >
                 ADD TENANT USER
               </span>
               <div
-                className="MuiFormControl-root MuiTextField-root css-1dpo3gu-MuiFormControl-root-MuiTextField-root"
+                className="MuiFormControl-root MuiTextField-root css-1l0136s-MuiFormControl-root-MuiTextField-root"
               >
                 <div
-                  className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1vc1r8g-MuiInputBase-root-MuiInput-root"
+                  className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
                   onClick={[Function]}
                 >
                   <input
                     aria-invalid={false}
                     aria-label="input tenant inforamtion"
                     autoFocus={false}
-                    className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                    className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
                     disabled={false}
                     id="tenant-user-add-textfield-id"
                     onAnimationStart={[Function]}
@@ -404,7 +427,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
               </div>
               <button
                 aria-label="close dialog"
-                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-bxvl8j-MuiButtonBase-root-MuiButton-root"
+                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-zbqks1-MuiButtonBase-root-MuiButton-root"
                 disabled={true}
                 onBlur={[Function]}
                 onClick={[Function]}
@@ -425,7 +448,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                 ADD
                 <svg
                   aria-hidden={true}
-                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
+                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-2zpagu-MuiSvgIcon-root"
                   data-testid="CheckCircleIcon"
                   focusable="false"
                   viewBox="0 0 24 24"
@@ -443,7 +466,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
             <button
               aria-label="edit users"
               aria-labelledby={null}
-              className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorPrimary MuiIconButton-sizeLarge css-s0k6db-MuiButtonBase-root-MuiIconButton-root"
+              className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorPrimary MuiIconButton-sizeLarge css-1w9ixl6-MuiButtonBase-root-MuiIconButton-root"
               data-mui-internal-clone-element={true}
               disabled={true}
               label="edit-users"
@@ -467,20 +490,20 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
             >
               <svg
                 aria-hidden={true}
-                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
+                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
                 data-testid="EditIcon"
                 focusable="false"
                 viewBox="0 0 24 24"
               >
                 <path
-                  d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75z"
+                  d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75z"
                 />
               </svg>
             </button>
             <button
               aria-label="add User to this Local Tenant"
               aria-labelledby={null}
-              className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-rswm6d-MuiButtonBase-root-MuiButton-root"
+              className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1nhcpyu-MuiButtonBase-root-MuiButton-root"
               data-mui-internal-clone-element={true}
               disabled={false}
               onBlur={[Function]}
@@ -503,7 +526,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
             >
               <svg
                 aria-hidden={true}
-                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-havevq-MuiSvgIcon-root"
+                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
                 data-testid="AddRoundedIcon"
                 focusable="false"
                 viewBox="0 0 24 24"
@@ -512,23 +535,21 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                   d="M18 13h-5v5c0 .55-.45 1-1 1s-1-.45-1-1v-5H6c-.55 0-1-.45-1-1s.45-1 1-1h5V6c0-.55.45-1 1-1s1 .45 1 1v5h5c.55 0 1 .45 1 1s-.45 1-1 1"
                 />
               </svg>
-              <span
-                className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-              />
             </button>
           </div>
           <span
-            className="MuiTypography-root MuiTypography-body1 css-1u4qfi7-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-body1 css-estwyo-MuiTypography-root"
+            style={{}}
           >
             Specify users including yourself at creating a new tenant.
           </span>
         </div>
         <div
-          className="MuiDialogActions-root MuiDialogActions-spacing css-knqc4i-MuiDialogActions-root"
+          className="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
         >
           <button
             aria-label="cancel"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-rypk7-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-mz09wl-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onClick={[Function]}
@@ -549,7 +570,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
             CANCEL
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-2zpagu-MuiSvgIcon-root"
               data-testid="CancelIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -558,13 +579,10 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                 d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2m5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12z"
               />
             </svg>
-            <span
-              className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-            />
           </button>
           <button
             aria-label="ok"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1k2n3uk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1t7wvu-MuiButtonBase-root-MuiButton-root"
             disabled={true}
             onBlur={[Function]}
             onClick={[Function]}
@@ -585,7 +603,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
             OK
             <svg
               aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1kpp06s-MuiSvgIcon-root"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-2zpagu-MuiSvgIcon-root"
               data-testid="CheckCircleIcon"
               focusable="false"
               viewBox="0 0 24 24"

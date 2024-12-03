@@ -2,11 +2,16 @@
 
 exports[`R3MsgBox test snapshot for R3MsgBox 1`] = `
 <div
-  className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation2 css-7jdv8j-MuiPaper-root"
+  className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation2 css-lfqywp-MuiPaper-root"
+  style={
+    {
+      "--Paper-shadow": "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
+    }
+  }
 >
   <svg
     aria-hidden={true}
-    className="MuiSvgIcon-root MuiSvgIcon-colorError MuiSvgIcon-fontSizeMedium css-1rk4eil-MuiSvgIcon-root"
+    className="MuiSvgIcon-root MuiSvgIcon-colorError MuiSvgIcon-fontSizeMedium css-1tb0t2q-MuiSvgIcon-root"
     data-testid="ErrorRoundedIcon"
     focusable="false"
     viewBox="0 0 24 24"
@@ -16,7 +21,8 @@ exports[`R3MsgBox test snapshot for R3MsgBox 1`] = `
     />
   </svg>
   <span
-    className="MuiTypography-root MuiTypography-body1 css-1lthsya-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-body1 css-lrpfd-MuiTypography-root"
+    style={{}}
   >
     Dummy error message
     <br />
