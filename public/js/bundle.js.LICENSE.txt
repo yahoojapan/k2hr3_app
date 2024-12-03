@@ -16,7 +16,7 @@ object-assign
 
 /**
  * @license React
- * react-jsx-runtime.development.js
+ * scheduler.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
@@ -25,11 +25,9 @@ object-assign
  */
 
 /**
- * @license React
- * scheduler.development.js
+ * @mui/styled-engine v6.1.9
  *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
+ * @license MIT
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
