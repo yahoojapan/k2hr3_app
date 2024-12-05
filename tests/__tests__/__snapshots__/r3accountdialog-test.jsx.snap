@@ -160,6 +160,7 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
                   className="css-w4cd9x"
                 >
                   <span
+                    aria-hidden={true}
                     className="notranslate"
                   >
                     ​
