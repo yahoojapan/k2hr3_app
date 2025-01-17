@@ -1,3 +1,9 @@
+k2hr3-app (1.0.38) unstable; urgency=low
+
+  * Updated snapshot files for test - #133
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Fri, 17 Jan 2025 14:59:20 +0900
+
 k2hr3-app (1.0.37) unstable; urgency=low
 
   * Downgraded openid-client and updated dependencies packages - #131
