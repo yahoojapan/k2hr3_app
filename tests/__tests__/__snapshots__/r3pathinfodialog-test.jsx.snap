@@ -149,8 +149,9 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
         >
           <button
             aria-label="close dialog"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1t7wvu-MuiButtonBase-root-MuiButton-root"
-            disabled={false}
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-clumik-MuiButtonBase-root-MuiButton-root"
+            disabled={null}
+            id=":r1:"
             onBlur={[Function]}
             onClick={[Function]}
             onContextMenu={[Function]}

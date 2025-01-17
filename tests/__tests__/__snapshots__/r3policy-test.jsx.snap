@@ -11,11 +11,10 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     EFFECT
   </h6>
   <div
-    className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary css-wz7fcm-MuiInputBase-root-MuiInput-root-MuiSelect-root"
+    className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiSelect-root css-wz7fcm-MuiInputBase-root-MuiInput-root-MuiSelect-root"
     onClick={[Function]}
   >
     <div
-      aria-controls=":r0:"
       aria-expanded="false"
       aria-haspopup="listbox"
       className="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-1k8703s-MuiSelect-select-MuiInputBase-input-MuiInput-input"
@@ -193,9 +192,10 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     <button
       aria-label="delete resource"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-6ur4e2-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-7qc3iu-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
+      id=":r3:"
       label="delete-resource"
       onBlur={[Function]}
       onClick={[Function]}
@@ -215,6 +215,9 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       tabIndex={0}
       type="button"
     >
+      <span
+        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+      />
       <svg
         aria-hidden={true}
         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -243,7 +246,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r3:"
+          id=":r4:"
           name="resourceNew"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -259,9 +262,10 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     <button
       aria-label="add resource"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-6ur4e2-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-7qc3iu-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
+      id=":r6:"
       label="add-resource"
       onBlur={[Function]}
       onClick={[Function]}
@@ -281,6 +285,9 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       tabIndex={0}
       type="button"
     >
+      <span
+        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+      />
       <svg
         aria-hidden={true}
         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -315,7 +322,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r5:"
+          id=":r7:"
           name="aliasNew"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -331,9 +338,10 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     <button
       aria-label="add alias"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-1axqgkz-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-1h92k04-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
+      id=":r9:"
       label="add-alias"
       onBlur={[Function]}
       onClick={[Function]}
@@ -353,6 +361,9 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       tabIndex={0}
       type="button"
     >
+      <span
+        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+      />
       <svg
         aria-hidden={true}
         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -371,8 +382,9 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
   >
     <button
       aria-label="cancel"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-3rdmas-MuiButtonBase-root-MuiButton-root"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-10lri9-MuiButtonBase-root-MuiButton-root"
       disabled={true}
+      id=":ra:"
       onBlur={[Function]}
       onClick={[Function]}
       onContextMenu={[Function]}
@@ -404,8 +416,9 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     </button>
     <button
       aria-label="save"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1fpszpb-MuiButtonBase-root-MuiButton-root"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-12kqt8r-MuiButtonBase-root-MuiButton-root"
       disabled={true}
+      id=":rb:"
       onBlur={[Function]}
       onClick={[Function]}
       onContextMenu={[Function]}

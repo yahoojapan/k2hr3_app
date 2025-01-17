@@ -73,9 +73,10 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
       <button
         aria-label="Move to upper path"
         aria-labelledby={null}
-        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-1iuw8tp-MuiButtonBase-root-MuiIconButton-root"
+        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-skim0e-MuiButtonBase-root-MuiIconButton-root"
         data-mui-internal-clone-element={true}
         disabled={false}
+        id=":r2:"
         onBlur={[Function]}
         onClick={[Function]}
         onContextMenu={[Function]}
@@ -94,6 +95,9 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
         tabIndex={0}
         type="button"
       >
+        <span
+          className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+        />
         <svg
           aria-hidden={true}
           className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -112,9 +116,10 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
       <button
         aria-label="Create SERVICE under TENANT"
         aria-labelledby={null}
-        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-1iuw8tp-MuiButtonBase-root-MuiIconButton-root"
+        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-skim0e-MuiButtonBase-root-MuiIconButton-root"
         data-mui-internal-clone-element={true}
         disabled={false}
+        id=":r4:"
         onBlur={[Function]}
         onClick={[Function]}
         onContextMenu={[Function]}
@@ -133,6 +138,9 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
         tabIndex={0}
         type="button"
       >
+        <span
+          className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+        />
         <svg
           aria-hidden={true}
           className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -148,9 +156,10 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
       <button
         aria-label="Delete SERVICE under TENANT"
         aria-labelledby={null}
-        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-1iuw8tp-MuiButtonBase-root-MuiIconButton-root"
+        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-skim0e-MuiButtonBase-root-MuiIconButton-root"
         data-mui-internal-clone-element={true}
         disabled={false}
+        id=":r6:"
         onBlur={[Function]}
         onClick={[Function]}
         onContextMenu={[Function]}
@@ -169,6 +178,9 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
         tabIndex={0}
         type="button"
       >
+        <span
+          className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+        />
         <svg
           aria-hidden={true}
           className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"

@@ -180,8 +180,9 @@ exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
         >
           <button
             aria-label="cancel"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-mz09wl-MuiButtonBase-root-MuiButton-root"
-            disabled={false}
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-8am8uk-MuiButtonBase-root-MuiButton-root"
+            disabled={null}
+            id=":r2:"
             onBlur={[Function]}
             onClick={[Function]}
             onContextMenu={[Function]}
@@ -213,8 +214,9 @@ exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
           </button>
           <button
             aria-label="ok"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1t7wvu-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-clumik-MuiButtonBase-root-MuiButton-root"
             disabled={true}
+            id=":r3:"
             onBlur={[Function]}
             onClick={[Function]}
             onContextMenu={[Function]}

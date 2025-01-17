@@ -17,9 +17,10 @@ exports[`R3Container test snapshot for R3Container 1`] = `
         aria-haspopup="true"
         aria-label="main menu"
         aria-labelledby={null}
-        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-mnh26k-MuiButtonBase-root-MuiIconButton-root"
+        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-nxvj6i-MuiButtonBase-root-MuiIconButton-root"
         data-mui-internal-clone-element={true}
         disabled={false}
+        id=":r1:"
         label="main-menu"
         onBlur={[Function]}
         onClick={[Function]}
@@ -39,6 +40,9 @@ exports[`R3Container test snapshot for R3Container 1`] = `
         tabIndex={0}
         type="button"
       >
+        <span
+          className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+        />
         <svg
           aria-hidden={true}
           className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -61,9 +65,10 @@ exports[`R3Container test snapshot for R3Container 1`] = `
         aria-haspopup="true"
         aria-label="signin menu"
         aria-labelledby={null}
-        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-mnh26k-MuiButtonBase-root-MuiIconButton-root"
+        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-nxvj6i-MuiButtonBase-root-MuiIconButton-root"
         data-mui-internal-clone-element={true}
         disabled={false}
+        id=":r3:"
         label="signin-menu"
         onBlur={[Function]}
         onClick={[Function]}
@@ -83,6 +88,9 @@ exports[`R3Container test snapshot for R3Container 1`] = `
         tabIndex={0}
         type="button"
       >
+        <span
+          className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+        />
         <svg
           aria-hidden={true}
           className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -142,9 +150,10 @@ exports[`R3Container test snapshot for R3Container 1`] = `
             <button
               aria-label="select tenant"
               aria-labelledby={null}
-              className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-1iuw8tp-MuiButtonBase-root-MuiIconButton-root"
+              className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-skim0e-MuiButtonBase-root-MuiIconButton-root"
               data-mui-internal-clone-element={true}
               disabled={false}
+              id=":r6:"
               label="select-tenant"
               onBlur={[Function]}
               onClick={[Function]}
@@ -164,6 +173,9 @@ exports[`R3Container test snapshot for R3Container 1`] = `
               tabIndex={0}
               type="button"
             >
+              <span
+                className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+              />
               <svg
                 aria-hidden={true}
                 className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
