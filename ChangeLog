@@ -1,3 +1,9 @@
+k2hr3-app (1.0.39) unstable; urgency=low
+
+  * Updated nodejs_helper for forked repositories - #135
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Fri, 17 Jan 2025 20:01:08 +0900
+
 k2hr3-app (1.0.38) unstable; urgency=low
 
   * Updated snapshot files for test - #133
