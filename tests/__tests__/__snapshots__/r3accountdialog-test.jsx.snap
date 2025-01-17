@@ -172,9 +172,10 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
           <button
             aria-label="Copy to clipboard"
             aria-labelledby={null}
-            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-7m1qby-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-h0an8d-MuiButtonBase-root-MuiButton-root"
             data-mui-internal-clone-element={true}
-            disabled={false}
+            disabled={null}
+            id=":r3:"
             onBlur={[Function]}
             onClick={[Function]}
             onContextMenu={[Function]}
@@ -212,8 +213,9 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
         >
           <button
             aria-label="ok"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1t7wvu-MuiButtonBase-root-MuiButton-root"
-            disabled={false}
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-clumik-MuiButtonBase-root-MuiButton-root"
+            disabled={null}
+            id=":r4:"
             onBlur={[Function]}
             onClick={[Function]}
             onContextMenu={[Function]}

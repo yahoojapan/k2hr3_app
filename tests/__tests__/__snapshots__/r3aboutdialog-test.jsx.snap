@@ -136,8 +136,9 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
         >
           <button
             aria-label="close about dialog"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-2olak9-MuiButtonBase-root-MuiButton-root"
-            disabled={false}
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-18fwhhj-MuiButtonBase-root-MuiButton-root"
+            disabled={null}
+            id=":r1:"
             onBlur={[Function]}
             onClick={[Function]}
             onContextMenu={[Function]}

@@ -178,8 +178,9 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
               >
                 <button
                   aria-label="toggle passphrase visibility"
-                  className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorSecondary MuiIconButton-sizeLarge css-1jxi1hi-MuiButtonBase-root-MuiIconButton-root"
+                  className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorSecondary MuiIconButton-sizeLarge css-oxm8gk-MuiButtonBase-root-MuiIconButton-root"
                   disabled={false}
+                  id=":r3:"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onContextMenu={[Function]}
@@ -196,6 +197,9 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
                   tabIndex={0}
                   type="button"
                 >
+                  <span
+                    className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+                  />
                   <svg
                     aria-hidden={true}
                     className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -217,8 +221,9 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
         >
           <button
             aria-label="cancel"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-mz09wl-MuiButtonBase-root-MuiButton-root"
-            disabled={false}
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-8am8uk-MuiButtonBase-root-MuiButton-root"
+            disabled={null}
+            id=":r4:"
             onBlur={[Function]}
             onClick={[Function]}
             onContextMenu={[Function]}
@@ -250,8 +255,9 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
           </button>
           <button
             aria-label="sign in"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1t7wvu-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-clumik-MuiButtonBase-root-MuiButton-root"
             disabled={true}
+            id=":r5:"
             onBlur={[Function]}
             onClick={[Function]}
             onContextMenu={[Function]}

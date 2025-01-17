@@ -245,9 +245,10 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     <button
       aria-label="delete key and value"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-6ur4e2-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-7qc3iu-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
+      id=":r5:"
       label="delete-keys"
       onBlur={[Function]}
       onClick={[Function]}
@@ -267,6 +268,9 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       tabIndex={0}
       type="button"
     >
+      <span
+        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+      />
       <svg
         aria-hidden={true}
         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -295,7 +299,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r5:"
+          id=":r6:"
           name="resourceKeysKey_2"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -320,7 +324,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r6:"
+          id=":r7:"
           name="resourceKeysValue_2"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -336,9 +340,10 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     <button
       aria-label="delete key and value"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-6ur4e2-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-7qc3iu-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
+      id=":r9:"
       label="delete-keys"
       onBlur={[Function]}
       onClick={[Function]}
@@ -358,6 +363,9 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       tabIndex={0}
       type="button"
     >
+      <span
+        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+      />
       <svg
         aria-hidden={true}
         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -386,7 +394,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r8:"
+          id=":ra:"
           name="resourceKeysKey_3"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -411,7 +419,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r9:"
+          id=":rb:"
           name="resourceKeysValue_3"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -427,9 +435,10 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     <button
       aria-label="delete key and value"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-6ur4e2-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-7qc3iu-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
+      id=":rd:"
       label="delete-keys"
       onBlur={[Function]}
       onClick={[Function]}
@@ -449,6 +458,9 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       tabIndex={0}
       type="button"
     >
+      <span
+        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+      />
       <svg
         aria-hidden={true}
         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -477,7 +489,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":rb:"
+          id=":re:"
           name="resourceKeysNewKey"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -502,7 +514,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":rc:"
+          id=":rf:"
           name="resourceKeysNewValue"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -518,9 +530,10 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     <button
       aria-label="add key and value"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-6ur4e2-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-7qc3iu-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
+      id=":rh:"
       label="add-keys"
       onBlur={[Function]}
       onClick={[Function]}
@@ -540,6 +553,9 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       tabIndex={0}
       type="button"
     >
+      <span
+        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+      />
       <svg
         aria-hidden={true}
         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -574,7 +590,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":re:"
+          id=":ri:"
           name="aliasValue_0"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -589,8 +605,9 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     </div>
     <button
       aria-label="move to down position in list"
-      className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-sizeLarge css-1omrjqf-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-sizeLarge css-nr804o-MuiButtonBase-root-MuiIconButton-root"
       disabled={true}
+      id=":rj:"
       label="move-down-alias"
       onBlur={[Function]}
       onContextMenu={[Function]}
@@ -607,6 +624,9 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       tabIndex={-1}
       type="button"
     >
+      <span
+        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+      />
       <svg
         aria-hidden={true}
         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -621,8 +641,9 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     </button>
     <button
       aria-label="move to up position in list"
-      className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-sizeLarge css-1omrjqf-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-sizeLarge css-nr804o-MuiButtonBase-root-MuiIconButton-root"
       disabled={true}
+      id=":rk:"
       label="move-up-alias"
       onBlur={[Function]}
       onContextMenu={[Function]}
@@ -639,6 +660,9 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       tabIndex={-1}
       type="button"
     >
+      <span
+        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+      />
       <svg
         aria-hidden={true}
         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -654,9 +678,10 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     <button
       aria-label="delete alias"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-6ur4e2-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-7qc3iu-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
+      id=":rm:"
       label="delete-alias"
       onBlur={[Function]}
       onClick={[Function]}
@@ -676,6 +701,9 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       tabIndex={0}
       type="button"
     >
+      <span
+        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+      />
       <svg
         aria-hidden={true}
         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -704,7 +732,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":rg:"
+          id=":rn:"
           name="aliasNew"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -720,9 +748,10 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     <button
       aria-label="add alias"
       aria-labelledby={null}
-      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-1axqgkz-MuiButtonBase-root-MuiIconButton-root"
+      className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-1h92k04-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
       disabled={false}
+      id=":rp:"
       label="add-alias"
       onBlur={[Function]}
       onClick={[Function]}
@@ -742,6 +771,9 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       tabIndex={0}
       type="button"
     >
+      <span
+        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
+      />
       <svg
         aria-hidden={true}
         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -760,8 +792,9 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
   >
     <button
       aria-label="cancel"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-3rdmas-MuiButtonBase-root-MuiButton-root"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-10lri9-MuiButtonBase-root-MuiButton-root"
       disabled={true}
+      id=":rq:"
       onBlur={[Function]}
       onClick={[Function]}
       onContextMenu={[Function]}
@@ -793,8 +826,9 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     </button>
     <button
       aria-label="save"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-1fpszpb-MuiButtonBase-root-MuiButton-root"
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-12kqt8r-MuiButtonBase-root-MuiButton-root"
       disabled={true}
+      id=":rr:"
       onBlur={[Function]}
       onClick={[Function]}
       onContextMenu={[Function]}
