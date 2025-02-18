@@ -1262,7 +1262,7 @@ export default class R3Container extends React.Component
 	//
 	// Handle Close Direct SignIn Dialog
 	//
-	handSignInDialogClose(event, reason, doSignIn, username, passphrase)	// eslint-disable-line no-unused-vars
+	handSignInDialogClose(event, reason, doSignIn, username, passphrase)
 	{
 		if(doSignIn){
 			// [NOTE]

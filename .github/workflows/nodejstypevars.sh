@@ -73,13 +73,13 @@ elif [ "${CI_NODEJS_MAJOR_VERSION}" = "20" ]; then
 	INSTALL_PKG_LIST="git"
 	INSTALLER_BIN="apt-get"
 	INSTALL_QUIET_ARG="-qq"
-	IS_PUBLISHER=1
+	IS_PUBLISHER=0
 
 elif [ "${CI_NODEJS_MAJOR_VERSION}" = "22" ]; then
 	INSTALL_PKG_LIST="git"
 	INSTALLER_BIN="apt-get"
 	INSTALL_QUIET_ARG="-qq"
-	IS_PUBLISHER=0
+	IS_PUBLISHER=1
 fi
 
 #---------------------------------------------------------------
@@ -172,19 +172,6 @@ SHELLCHECK_EXCEPT_PATHS="/node_modules/"
 #	run_publish			: publishing package				yes
 #	run_post_publish	: after publishing package			no
 #
-run_audit()
-{
-	# [NOTE]
-	# Added a temporary workaround(added --audit-level=high option)
-	# for https://github.com/advisories/GHSA-f9xv-q969-pqx4.
-	#
-	if ! /bin/sh -c "npm audit --audit-level=high"; then
-		PRNERR "Failed to run \"npm audit\"."
-		return 1
-	fi
-	return 0
-}
-
 run_post_publish()
 {
 	#

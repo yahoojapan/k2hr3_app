@@ -5,9 +5,217 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
   aria-label="create service dialog"
   className="MuiDialog-root css-1xls86a-MuiDialog-root"
   closeAfterTransition={true}
-  components={
+  disableEscapeKeyDown={false}
+  label="create-service-dialog"
+  onClick={[Function]}
+  onClose={[Function]}
+  open={true}
+  slotProps={
     {
-      "Backdrop": {
+      "backdrop": {
+        "as": undefined,
+        "ownerState": {
+          "aria-label": "create service dialog",
+          "children": [
+            <ForwardRef(DialogTitle)
+              label="create-service-dialog"
+              sx={{}}
+            >
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={{}}
+                variant="h5"
+              >
+                Created TENANT cooperation SERVICE
+              </ForwardRef(Typography)>
+            </ForwardRef(DialogTitle)>,
+            <ForwardRef(DialogContent)
+              sx={{}}
+            >
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                TENANT
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="textSecondary"
+                component="span"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                  }
+                }
+                variant="body1"
+              >
+                GROUP0:TENANT0
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                SERVICE
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="textSecondary"
+                component="span"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                  }
+                }
+                variant="body1"
+              >
+                JEST_OWNER_SERVICE_NAME
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                PATH
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="textSecondary"
+                component="span"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                  }
+                }
+                variant="body1"
+              >
+                yrn:yahoo:JEST_OWNER_SERVICE_NAME::10000
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                Cooperation ROLE (Specify ROLE: Allowed empty)
+              </ForwardRef(Typography)>
+              <ForwardRef(TextField)
+                InputProps={
+                  {
+                    "sx": {
+                      "color": "rgba(0, 0, 0, 0.6)",
+                    },
+                  }
+                }
+                disabled={false}
+                id="service-tenant-textfield-id"
+                inputProps={
+                  {
+                    "aria-label": "input create path",
+                  }
+                }
+                onChange={[Function]}
+                placeholder="Role path under tenant(yrn:yahoo:::<tenant>)"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                    "paddingRight": "32px",
+                    "width": "100%",
+                  }
+                }
+                value=""
+              />
+            </ForwardRef(DialogContent)>,
+            <ForwardRef(DialogActions)>
+              <ForwardRef(Button)
+                aria-label="cancel"
+                color="primary"
+                onClick={[Function]}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="contained"
+              >
+                CANCEL
+                <Memo
+                  sx={
+                    {
+                      "marginLeft": "8px",
+                    }
+                  }
+                />
+              </ForwardRef(Button)>
+              <ForwardRef(Button)
+                aria-label="ok"
+                color="secondary"
+                onClick={[Function]}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="contained"
+              >
+                OK
+                <Memo
+                  sx={
+                    {
+                      "marginLeft": "8px",
+                    }
+                  }
+                />
+              </ForwardRef(Button)>
+            </ForwardRef(DialogActions)>,
+          ],
+          "disableEscapeKeyDown": false,
+          "fullScreen": false,
+          "fullWidth": true,
+          "label": "create-service-dialog",
+          "maxWidth": "sm",
+          "onClose": [Function],
+          "open": true,
+          "scroll": "body",
+          "sx": {
+            "height": "1000px",
+            "scrollTop": 0,
+          },
+        },
+        "ref": null,
+        "transitionDuration": {
+          "enter": 225,
+          "exit": 195,
+        },
+      },
+    }
+  }
+  slots={
+    {
+      "backdrop": {
         "$$typeof": Symbol(react.forward_ref),
         "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
@@ -47,22 +255,6 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
       },
     }
   }
-  componentsProps={
-    {
-      "backdrop": {
-        "as": undefined,
-        "transitionDuration": {
-          "enter": 225,
-          "exit": 195,
-        },
-      },
-    }
-  }
-  disableEscapeKeyDown={false}
-  label="create-service-dialog"
-  onClick={[Function]}
-  onClose={[Function]}
-  open={true}
 >
   <
     appear={true}

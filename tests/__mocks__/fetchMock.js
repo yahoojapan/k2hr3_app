@@ -26,7 +26,7 @@ import { r3ParseUrl, r3ArrayHasValue, r3CompareString, r3IsEmptyString, r3IsEmpt
 //
 const fetchError = (message) =>
 {
-	return new Promise((resolve, reject) =>						// eslint-disable-line no-unused-vars
+	return new Promise((resolve, reject) =>
 	{
 		reject(new Error('Error occurred in fetch mock function : ' + message));
 	});

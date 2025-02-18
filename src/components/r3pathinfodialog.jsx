@@ -367,7 +367,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleDispCode(event, pos)												// eslint-disable-line no-unused-vars
+	handleDispCode(event, pos)
 	{
 		if(!r3IsSafeTypedEntity(this.state.roleTokenList, 'array') || pos < 0 || this.state.roleTokenList.length <= pos || r3IsEmptyEntity(this.state.roleTokenList[pos])){
 			return;
@@ -390,7 +390,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleManageRoleTokenPageChange(event, page)							// eslint-disable-line no-unused-vars
+	handleManageRoleTokenPageChange(event, page)
 	{
 		this.setState({
 			message:				null,
@@ -485,7 +485,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleDeleteRoleToken(event, pos)										// eslint-disable-line no-unused-vars
+	handleDeleteRoleToken(event, pos)
 	{
 		const { r3provider } = this.props;
 
@@ -532,7 +532,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleManageRoleTokenButtonTooltipChange = (event, isOpen) =>			// eslint-disable-line no-unused-vars
+	handleManageRoleTokenButtonTooltipChange = (event, isOpen) =>
 	{
 		this.setState({
 			tooltips: {
@@ -541,7 +541,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	};
 
-	handleDispCodeNewRoleTokenButtonTooltipChange = (event, isOpen) =>		// eslint-disable-line no-unused-vars
+	handleDispCodeNewRoleTokenButtonTooltipChange = (event, isOpen) =>
 	{
 		this.setState({
 			tooltips: {
@@ -550,7 +550,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	};
 
-	handleNewRoleTokenButtonTooltipChange = (event, isOpen) =>				// eslint-disable-line no-unused-vars
+	handleNewRoleTokenButtonTooltipChange = (event, isOpen) =>
 	{
 		this.setState({
 			tooltips: {
@@ -559,7 +559,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	};
 
-	handleInTableTooltipChange = (event, type, extData) =>					// eslint-disable-line no-unused-vars
+	handleInTableTooltipChange = (event, type, extData) =>
 	{
 		if(tooltipInTableValues.deleteRoleTokenButtonTooltip === type){
 			this.setState({
@@ -594,7 +594,7 @@ export default class R3PathInfoDialog extends React.Component
 		}
 	};
 
-	handleRoleTokenClipboardButtonTooltipChange = (event, isOpen) =>		// eslint-disable-line no-unused-vars
+	handleRoleTokenClipboardButtonTooltipChange = (event, isOpen) =>
 	{
 		this.setState({
 			tooltips: {
@@ -620,7 +620,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleCopyClipboardButtonTooltipChange = (event, isOpen) =>				// eslint-disable-line no-unused-vars
+	handleCopyClipboardButtonTooltipChange = (event, isOpen) =>
 	{
 		this.setState({
 			tooltips: {

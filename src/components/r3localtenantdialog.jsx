@@ -213,7 +213,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Handle Popup Message Close ( OK / Cancel )
 	//
-	handConfirmMessageClose(event, reason, result)							// eslint-disable-line no-unused-vars
+	handConfirmMessageClose(event, reason, result)
 	{
 		if(result){
 			// continue
@@ -229,7 +229,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Handle Dialog Close ( OK / Cancel )
 	//
-	handleDialogCloseButton(event)											// eslint-disable-line no-unused-vars
+	handleDialogCloseButton(event)
 	{
 		const { r3provider } = this.props;
 
@@ -301,7 +301,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Handle Tooltip Change
 	//
-	handTooltipChange = (event, type, extData) =>							// eslint-disable-line no-unused-vars
+	handTooltipChange = (event, type, extData) =>
 	{
 		if(tooltipValues.usersEditButtonTooltip === type){
 			this.setState({
@@ -384,7 +384,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Edit Tenant User : Delete
 	//
-	handleChangeRowTenantUsersEdit(event, page)								// eslint-disable-line no-unused-vars
+	handleChangeRowTenantUsersEdit(event, page)
 	{
 		this.setState({
 			popoverTenantUsersPageNum:	page,

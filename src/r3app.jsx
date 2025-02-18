@@ -21,7 +21,7 @@
 
 import style				from '../public/css/style.css';						// eslint-disable-line no-unused-vars
 
-import React				from 'react';										// eslint-disable-line no-unused-vars
+import React				from 'react';
 import { createRoot }		from 'react-dom/client';
 import { ThemeProvider }	from '@mui/material/styles';
 import { StyledEngineProvider, CssBaseline}	from '@mui/material';				// for jss and reset.css

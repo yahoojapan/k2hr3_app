@@ -32,32 +32,28 @@ export const clientTypes = (() => {
 		userAgent = '';
 	}
 
-	/* eslint-disable indent, no-mixed-spaces-and-tabs */
 	let	mobileType = {
 		all: (
-					(-1 != userAgent.indexOf('windows')	&& -1 != userAgent.indexOf('phone'))	||
-					(-1 != userAgent.indexOf('android')	&& -1 != userAgent.indexOf('mobile'))	||
-					(-1 != userAgent.indexOf('firefox')	&& -1 != userAgent.indexOf('mobile'))	||
-					(-1 != userAgent.indexOf('iphone'))											||
-					(-1 != userAgent.indexOf('ipod'))											||
-					(-1 != userAgent.indexOf('blackberry'))
+			(-1 != userAgent.indexOf('windows')	&& -1 != userAgent.indexOf('phone'))	||
+			(-1 != userAgent.indexOf('android')	&& -1 != userAgent.indexOf('mobile'))	||
+			(-1 != userAgent.indexOf('firefox')	&& -1 != userAgent.indexOf('mobile'))	||
+			(-1 != userAgent.indexOf('iphone'))											||
+			(-1 != userAgent.indexOf('ipod'))											||
+			(-1 != userAgent.indexOf('blackberry'))
 		),
 		iPhone:		(-1 != userAgent.indexOf('iphone')),
 		Android:	(-1 != userAgent.indexOf('android')	&& -1 != userAgent.indexOf('mobile'))
 	};
-	/* eslint-enable indent, no-mixed-spaces-and-tabs */
 
-	/* eslint-disable indent, no-mixed-spaces-and-tabs */
 	let	tabletType = (
-					(-1 != userAgent.indexOf('windows')	&& -1 != userAgent.indexOf('touch'))	||
-					(-1 != userAgent.indexOf('android')	&& -1 == userAgent.indexOf('mobile'))	||
-					(-1 != userAgent.indexOf('firefox')	&& -1 != userAgent.indexOf('tablet'))	||
-					(-1 != userAgent.indexOf('ipad'))											||
-					(-1 != userAgent.indexOf('kindle'))											||
-					(-1 != userAgent.indexOf('silk'))											||
-					(-1 != userAgent.indexOf('playbook'))
-				);
-	/* eslint-enable indent, no-mixed-spaces-and-tabs */
+		(-1 != userAgent.indexOf('windows')	&& -1 != userAgent.indexOf('touch'))	||
+		(-1 != userAgent.indexOf('android')	&& -1 == userAgent.indexOf('mobile'))	||
+		(-1 != userAgent.indexOf('firefox')	&& -1 != userAgent.indexOf('tablet'))	||
+		(-1 != userAgent.indexOf('ipad'))											||
+		(-1 != userAgent.indexOf('kindle'))											||
+		(-1 != userAgent.indexOf('silk'))											||
+		(-1 != userAgent.indexOf('playbook'))
+	);
 
 	let	pcType =	(!mobileType.all && !tabletType);
 

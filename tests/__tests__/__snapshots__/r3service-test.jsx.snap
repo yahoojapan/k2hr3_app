@@ -206,7 +206,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       aria-labelledby={null}
       className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-7qc3iu-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
-      disabled={false}
+      disabled={null}
       id=":r4:"
       label="delete-tenant"
       onBlur={[Function]}
@@ -227,9 +227,6 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       tabIndex={0}
       type="button"
     >
-      <span
-        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
-      />
       <svg
         aria-hidden={true}
         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -276,7 +273,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       aria-labelledby={null}
       className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-7qc3iu-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
-      disabled={false}
+      disabled={null}
       id=":r7:"
       label="delete-tenant"
       onBlur={[Function]}
@@ -297,9 +294,6 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       tabIndex={0}
       type="button"
     >
-      <span
-        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
-      />
       <svg
         aria-hidden={true}
         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -346,7 +340,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       aria-labelledby={null}
       className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-u05efr-MuiButtonBase-root-MuiIconButton-root"
       data-mui-internal-clone-element={true}
-      disabled={false}
+      disabled={null}
       id=":ra:"
       label="add-tenant"
       onBlur={[Function]}
@@ -367,9 +361,6 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       tabIndex={0}
       type="button"
     >
-      <span
-        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
-      />
       <svg
         aria-hidden={true}
         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"

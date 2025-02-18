@@ -5,9 +5,483 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
   aria-label="create path dialog"
   className="MuiDialog-root css-1pivxxs-MuiDialog-root"
   closeAfterTransition={true}
-  components={
+  disableEscapeKeyDown={false}
+  disablePortal={true}
+  label="create-path-dialog"
+  onClick={[Function]}
+  onClose={[Function]}
+  open={true}
+  slotProps={
     {
-      "Backdrop": {
+      "backdrop": {
+        "as": undefined,
+        "ownerState": {
+          "aria-label": "create path dialog",
+          "children": [
+            <ForwardRef(DialogTitle)
+              label="create-path-dialog"
+              sx={{}}
+            >
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={{}}
+                variant="h5"
+              >
+                Create a Local TENANT
+              </ForwardRef(Typography)>
+            </ForwardRef(DialogTitle)>,
+            <ForwardRef(DialogContent)
+              sx={{}}
+            >
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                TENANT name
+              </ForwardRef(Typography)>
+              <React.Fragment>
+                <ForwardRef(TextField)
+                  InputProps={
+                    {
+                      "sx": {
+                        "color": "rgba(0, 0, 0, 0.6)",
+                      },
+                    }
+                  }
+                  disabled={false}
+                  id="tenant-new-name-textfield-id"
+                  inputProps={
+                    {
+                      "aria-label": "input tenant inforamtion",
+                    }
+                  }
+                  onChange={[Function]}
+                  placeholder="Input Local TENANT name"
+                  sx={
+                    {
+                      "paddingLeft": "32px",
+                      "paddingRight": "32px",
+                      "width": "100%",
+                    }
+                  }
+                  value=""
+                />
+                <ForwardRef(Typography)
+                  color="textSecondary"
+                  component="span"
+                  sx={
+                    {
+                      "paddingLeft": "32px",
+                    }
+                  }
+                  variant="body1"
+                >
+                  (If not "local@" prefix, it is automatically given.)
+                </ForwardRef(Typography)>
+              </React.Fragment>
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                Display name
+              </ForwardRef(Typography)>
+              <ForwardRef(TextField)
+                InputProps={
+                  {
+                    "sx": {
+                      "color": "rgba(0, 0, 0, 0.6)",
+                    },
+                  }
+                }
+                disabled={false}
+                id="tenant-display-name-textfield-id"
+                inputProps={
+                  {
+                    "aria-label": "input tenant inforamtion",
+                  }
+                }
+                onChange={[Function]}
+                placeholder="Input Display name for Local TENANT"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                    "paddingRight": "32px",
+                    "width": "100%",
+                  }
+                }
+                value=""
+              />
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                Description
+              </ForwardRef(Typography)>
+              <ForwardRef(TextField)
+                InputProps={
+                  {
+                    "sx": {
+                      "color": "rgba(0, 0, 0, 0.6)",
+                    },
+                  }
+                }
+                disabled={false}
+                id="tenant-description-textfield-id"
+                inputProps={
+                  {
+                    "aria-label": "input tenant inforamtion",
+                  }
+                }
+                onChange={[Function]}
+                placeholder="K2HR3 Cluster Local tenant"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                    "paddingRight": "32px",
+                    "width": "100%",
+                  }
+                }
+                value=""
+              />
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                TENANT User
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="textSecondary"
+                component="span"
+                sx={
+                  {
+                    "display": "inline-block",
+                    "paddingLeft": "32px",
+                    "width": "calc(100% - 96px)",
+                  }
+                }
+                variant="body1"
+              >
+                
+              </ForwardRef(Typography)>
+              <ForwardRef(Popover)
+                anchorEl={null}
+                anchorOrigin={
+                  {
+                    "horizontal": "right",
+                    "vertical": "bottom",
+                  }
+                }
+                onClose={[Function]}
+                open={false}
+                sx={{}}
+                transformOrigin={
+                  {
+                    "horizontal": "right",
+                    "vertical": "bottom",
+                  }
+                }
+              >
+                <ForwardRef(Typography)
+                  color="primary"
+                  component="span"
+                  noWrap={true}
+                  sx={
+                    {
+                      "marginBottom": "8px",
+                      "marginLeft": "16px",
+                      "marginRight": "16px",
+                      "marginTop": "8px",
+                    }
+                  }
+                  variant="subtitle2"
+                >
+                  MANAGE TENANT USER
+                </ForwardRef(Typography)>
+                <ForwardRef(Box) />
+                <ForwardRef(TablePagination)
+                  component="div"
+                  count={0}
+                  onPageChange={[Function]}
+                  page={0}
+                  rowsPerPage={5}
+                  rowsPerPageOptions={[]}
+                />
+                <ForwardRef(Button)
+                  aria-label="close dialog"
+                  color="secondary"
+                  disabled={true}
+                  onClick={[Function]}
+                  sx={
+                    {
+                      "display": "flex",
+                      "float": "right",
+                      "margin": "16px",
+                    }
+                  }
+                  variant="contained"
+                >
+                  UPDATE
+                  <Memo
+                    sx={
+                      {
+                        "marginLeft": "8px",
+                      }
+                    }
+                  />
+                </ForwardRef(Button)>
+              </ForwardRef(Popover)>
+              <ForwardRef(Popover)
+                anchorEl={null}
+                anchorOrigin={
+                  {
+                    "horizontal": "right",
+                    "vertical": "bottom",
+                  }
+                }
+                onClose={[Function]}
+                open={false}
+                sx={{}}
+                transformOrigin={
+                  {
+                    "horizontal": "right",
+                    "vertical": "bottom",
+                  }
+                }
+              >
+                <ForwardRef(Typography)
+                  color="primary"
+                  component="span"
+                  noWrap={true}
+                  sx={
+                    {
+                      "marginBottom": "8px",
+                      "marginLeft": "16px",
+                      "marginRight": "16px",
+                      "marginTop": "8px",
+                    }
+                  }
+                  variant="subtitle2"
+                >
+                  ADD TENANT USER
+                </ForwardRef(Typography)>
+                <ForwardRef(TextField)
+                  InputProps={
+                    {
+                      "sx": {
+                        "color": "rgba(0, 0, 0, 0.6)",
+                      },
+                    }
+                  }
+                  disabled={false}
+                  id="tenant-user-add-textfield-id"
+                  inputProps={
+                    {
+                      "aria-label": "input tenant inforamtion",
+                    }
+                  }
+                  onChange={[Function]}
+                  placeholder="Input user name"
+                  sx={
+                    {
+                      "paddingLeft": "32px",
+                      "paddingRight": "32px",
+                      "width": "100%",
+                    }
+                  }
+                  value=""
+                />
+                <ForwardRef(Button)
+                  aria-label="close dialog"
+                  color="secondary"
+                  disabled={true}
+                  onClick={[Function]}
+                  sx={
+                    {
+                      "display": "flex",
+                      "float": "right",
+                      "margin": "16px",
+                    }
+                  }
+                  variant="contained"
+                >
+                  ADD
+                  <Memo
+                    sx={
+                      {
+                        "marginLeft": "8px",
+                      }
+                    }
+                  />
+                </ForwardRef(Button)>
+              </ForwardRef(Popover)>
+              <ForwardRef(Box)
+                sx={
+                  {
+                    "alignItems": "flex-start",
+                    "display": "flex",
+                    "float": "right",
+                  }
+                }
+              >
+                <ForwardRef(Tooltip)
+                  open={false}
+                  title="edit Users for this Local Tenant"
+                >
+                  <ForwardRef(IconButton)
+                    aria-label="edit users"
+                    color="primary"
+                    disabled={true}
+                    label="edit-users"
+                    onClick={[Function]}
+                    onMouseEnter={[Function]}
+                    onMouseLeave={[Function]}
+                    size="large"
+                    sx={
+                      {
+                        "clear": "both",
+                        "margin": "0px",
+                        "padding": 0,
+                      }
+                    }
+                  >
+                    <Memo />
+                  </ForwardRef(IconButton)>
+                </ForwardRef(Tooltip)>
+                <ForwardRef(Tooltip)
+                  open={false}
+                  title="add User to this Local Tenant"
+                >
+                  <ForwardRef(Button)
+                    onClick={[Function]}
+                    onMouseEnter={[Function]}
+                    onMouseLeave={[Function]}
+                    sx={
+                      {
+                        "clear": "both",
+                        "marginBottom": "0px",
+                        "marginLeft": "0px",
+                        "marginRight": "32px",
+                        "marginTop": "0px",
+                        "minWidth": "32px",
+                        "padding": 0,
+                      }
+                    }
+                  >
+                    <Memo />
+                  </ForwardRef(Button)>
+                </ForwardRef(Tooltip)>
+              </ForwardRef(Box)>
+              <ForwardRef(Typography)
+                color="error"
+                component="span"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                    "paddingRight": "32px",
+                  }
+                }
+                variant="body1"
+              >
+                Specify users including yourself at creating a new tenant.
+              </ForwardRef(Typography)>
+            </ForwardRef(DialogContent)>,
+            <ForwardRef(DialogActions)>
+              <ForwardRef(Button)
+                aria-label="cancel"
+                color="primary"
+                onClick={[Function]}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="contained"
+              >
+                CANCEL
+                <Memo
+                  sx={
+                    {
+                      "marginLeft": "8px",
+                    }
+                  }
+                />
+              </ForwardRef(Button)>
+              <ForwardRef(Button)
+                aria-label="ok"
+                color="secondary"
+                disabled={true}
+                onClick={[Function]}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="contained"
+              >
+                OK
+                <Memo
+                  sx={
+                    {
+                      "marginLeft": "8px",
+                    }
+                  }
+                />
+              </ForwardRef(Button)>
+            </ForwardRef(DialogActions)>,
+            undefined,
+          ],
+          "disableEscapeKeyDown": false,
+          "disablePortal": true,
+          "fullScreen": false,
+          "fullWidth": true,
+          "label": "create-path-dialog",
+          "maxWidth": "sm",
+          "onClose": [Function],
+          "open": true,
+          "scroll": "body",
+          "sx": {},
+        },
+        "ref": null,
+        "transitionDuration": {
+          "enter": 225,
+          "exit": 195,
+        },
+      },
+    }
+  }
+  slots={
+    {
+      "backdrop": {
         "$$typeof": Symbol(react.forward_ref),
         "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
@@ -47,23 +521,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
       },
     }
   }
-  componentsProps={
-    {
-      "backdrop": {
-        "as": undefined,
-        "transitionDuration": {
-          "enter": 225,
-          "exit": 195,
-        },
-      },
-    }
-  }
-  disableEscapeKeyDown={false}
-  disablePortal={true}
-  label="create-path-dialog"
-  onClick={[Function]}
-  onClose={[Function]}
-  open={true}
 >
   <
     appear={true}
@@ -288,9 +745,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                       title="Go to previous page"
                       type="button"
                     >
-                      <span
-                        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
-                      />
                       <svg
                         aria-hidden={true}
                         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -325,9 +779,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                       title="Go to next page"
                       type="button"
                     >
-                      <span
-                        className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
-                      />
                       <svg
                         aria-hidden={true}
                         className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
@@ -499,9 +950,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
               tabIndex={-1}
               type="button"
             >
-              <span
-                className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
-              />
               <svg
                 aria-hidden={true}
                 className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"

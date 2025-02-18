@@ -58,7 +58,7 @@ router.get('/', function(req, res, next)					// eslint-disable-line no-unused-va
 
 	var	tokensObj	= new libTokens(req);
 	var	_res		= res;
-	var	_req		= req;									// eslint-disable-line no-unused-vars
+	var	_req		= req;
 
 	if(!r3util.isSafeString(req.query.tenantname)){
 		tokensObj.getUnscopedUserToken(function(error, token)

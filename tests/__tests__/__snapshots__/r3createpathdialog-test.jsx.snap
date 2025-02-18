@@ -5,9 +5,217 @@ exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
   aria-label="create path dialog"
   className="MuiDialog-root css-1pivxxs-MuiDialog-root"
   closeAfterTransition={true}
-  components={
+  disableEscapeKeyDown={false}
+  disablePortal={true}
+  label="create-path-dialog"
+  onClick={[Function]}
+  onClose={[Function]}
+  open={true}
+  slotProps={
     {
-      "Backdrop": {
+      "backdrop": {
+        "as": undefined,
+        "ownerState": {
+          "aria-label": "create path dialog",
+          "children": [
+            <ForwardRef(DialogTitle)
+              label="create-path-dialog"
+              sx={{}}
+            >
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={{}}
+                variant="h5"
+              >
+                Create a new path
+              </ForwardRef(Typography)>
+            </ForwardRef(DialogTitle)>,
+            <ForwardRef(DialogContent)
+              sx={{}}
+            >
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                TENANT
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="textSecondary"
+                component="span"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                  }
+                }
+                variant="body1"
+              >
+                GROUP0:TENANT0
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                TYPE
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="textSecondary"
+                component="span"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                  }
+                }
+                variant="body1"
+              >
+                role
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                PARENT PATH
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="textSecondary"
+                component="span"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                  }
+                }
+                variant="body1"
+              >
+                /JEST_ROLE_PARENT_PATH
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                CREATE PATH
+              </ForwardRef(Typography)>
+              <ForwardRef(TextField)
+                InputProps={
+                  {
+                    "sx": {
+                      "color": "rgba(0, 0, 0, 0.6)",
+                    },
+                  }
+                }
+                disabled={false}
+                id="new-path-textfield-id"
+                inputProps={
+                  {
+                    "aria-label": "input create path",
+                  }
+                }
+                onChange={[Function]}
+                placeholder="Input create path"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                    "paddingRight": "32px",
+                    "width": "100%",
+                  }
+                }
+                value=""
+              />
+            </ForwardRef(DialogContent)>,
+            <ForwardRef(DialogActions)>
+              <ForwardRef(Button)
+                aria-label="cancel"
+                color="primary"
+                onClick={[Function]}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="contained"
+              >
+                CANCEL
+                <Memo
+                  sx={
+                    {
+                      "marginLeft": "8px",
+                    }
+                  }
+                />
+              </ForwardRef(Button)>
+              <ForwardRef(Button)
+                aria-label="ok"
+                color="secondary"
+                disabled={true}
+                onClick={[Function]}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="contained"
+              >
+                OK
+                <Memo
+                  sx={
+                    {
+                      "marginLeft": "8px",
+                    }
+                  }
+                />
+              </ForwardRef(Button)>
+            </ForwardRef(DialogActions)>,
+          ],
+          "disableEscapeKeyDown": false,
+          "disablePortal": true,
+          "fullScreen": false,
+          "fullWidth": true,
+          "label": "create-path-dialog",
+          "maxWidth": "sm",
+          "onClose": [Function],
+          "open": true,
+          "scroll": "body",
+          "sx": {},
+        },
+        "ref": null,
+        "transitionDuration": {
+          "enter": 225,
+          "exit": 195,
+        },
+      },
+    }
+  }
+  slots={
+    {
+      "backdrop": {
         "$$typeof": Symbol(react.forward_ref),
         "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
@@ -47,23 +255,6 @@ exports[`R3CreatePathDialog test snapshot for R3CreatePathDialog 1`] = `
       },
     }
   }
-  componentsProps={
-    {
-      "backdrop": {
-        "as": undefined,
-        "transitionDuration": {
-          "enter": 225,
-          "exit": 195,
-        },
-      },
-    }
-  }
-  disableEscapeKeyDown={false}
-  disablePortal={true}
-  label="create-path-dialog"
-  onClick={[Function]}
-  onClose={[Function]}
-  open={true}
 >
   <
     appear={true}

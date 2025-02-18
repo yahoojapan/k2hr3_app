@@ -22,7 +22,6 @@
 import * as Colors		from '@mui/material/colors';
 import { createTheme }	from '@mui/material/styles';
 
-/* eslint-disable indent */
 // [NOTE]
 // Default theme from material-ui
 // https://material-ui.com/customization/default-theme/
@@ -1434,7 +1433,6 @@ const r3Theme = createTheme({
 		}
 	}
 });
-/* eslint-enable indent */
 
 export default r3Theme;
 

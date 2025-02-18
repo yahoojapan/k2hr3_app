@@ -364,9 +364,7 @@ function putLicensesFile(file, licenses_obj)
 	}
 
 	// build contents which includes JSON from licenses object.
-	var	output_contents = '/* eslint-disable no-useless-escape */\n';
-	output_contents		+= 'export const r3LicensesJsonString = \'' + JSON.stringify(licenses_obj).replace(/\'/g, '\\\'').replace(/\\r/g, '').replace(/\\n/g, '\\\\n').replace(/\\\"/g, '\\\\\"') + '\';\n';
-	output_contents		+= '/* eslint-enable no-useless-escape */\n';
+	var output_contents	= 'export const r3LicensesJsonString = \'' + JSON.stringify(licenses_obj).replace(/\'/g, '\\\'').replace(/\\r/g, '').replace(/\\n/g, '\\\\n').replace(/\\\"/g, '\\\\\"') + '\';\n';
 
 	try{
 		fs.writeFileSync(file, output_contents);

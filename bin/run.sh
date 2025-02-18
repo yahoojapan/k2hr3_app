@@ -140,7 +140,8 @@ stop_old_process()
 		# If processes are running yet, try to kill it.
 		#
 		for _ONE_PID in ${ALL_CHILD_PIDS}; do
-			if ps -p "${_ONE_PID}" >/dev/null 2>&1; then
+			# shellcheck disable=SC2009
+			if ( ps -o pid,stat ax 2>/dev/null | grep -v 'PID' | awk '$2~/^[^Z]/ { print $1 }' | grep -q "^${_ONE_PID}$" || exit 1 && exit 0 ); then
 				kill -KILL "${_ONE_PID}" >/dev/null 2>&1
 			fi
 		done
@@ -150,7 +151,8 @@ stop_old_process()
 		# Result
 		#
 		for _ONE_PID in ${ALL_CHILD_PIDS}; do
-			if ps -p "${_ONE_PID}" >/dev/null 2>&1; then
+			# shellcheck disable=SC2009
+			if ( ps -o pid,stat ax 2>/dev/null | grep -v 'PID' | awk '$2~/^[^Z]/ { print $1 }' | grep -q "^${_ONE_PID}$" || exit 1 && exit 0 ); then
 				echo "[ERROR] Could not stop old processes."
 				return 1
 			fi
@@ -177,58 +179,58 @@ while [ $# -ne 0 ]; do
 	if [ -z "$1" ]; then
 		break
 
-	elif [ "$1" = "-h" ] || [ "$1" = "-H" ] || [ "$1" = "--help" ] || [ "$1" = "--HELP" ]; then
+	elif echo "$1" | grep -q -i -e "^-h$" -e "^--help$"; then
 		PrintUsage "${PRGNAME}"
 		exit 0
 
-	elif [ "$1" = "prod" ] || [ "$1" = "-PROD" ] || [ "$1" = "--production" ] || [ "$1" = "--PRODUCTION" ]; then
+	elif echo "$1" | grep -q -i -e "^-prod$" -e "^--production$"; then
 		if [ -n "${NODE_ENV_VALUE}" ]; then
 			echo "[ERROR] already specified --production(-prod) or --development(-dev) option"
 			exit 1
 		fi
 		NODE_ENV_VALUE="production"
 
-	elif [ "$1" = "-dev" ] || [ "$1" = "-DEV" ] || [ "$1" = "--development" ] || [ "$1" = "--DEVELOPMENT" ]; then
+	elif echo "$1" | grep -q -i -e "^-dev$" -e "^--development$"; then
 		if [ -n "${NODE_ENV_VALUE}" ]; then
 			echo "[ERROR] already specified --production(-prod) or --development(-dev) option"
 			exit 1
 		fi
 		NODE_ENV_VALUE="development"
 
-	elif [ "$1" = "-bg" ] || [ "$1" = "-BG" ] || [ "$1" = "--background" ] || [ "$1" = "--BACKGROUND" ]; then
+	elif echo "$1" | grep -q -i -e "^-bg$" -e "^--background$"; then
 		#
 		# Not check multi same option...
 		#
 		BACKGROUND=1
 
-	elif [ "$1" = "--foreground" ] || [ "$1" = "--FOREGROUND" ] || [ "$1" = "-fg" ] || [ "$1" = "-FG" ]; then
+	elif echo "$1" | grep -q -i -e "^-fg$" -e "^--foreground$"; then
 		#
 		# Not check multi same option...
 		#
 		FOREGROUND=1
 
-	elif [ "$1" = "-s" ] || [ "$1" = "-S" ] || [ "$1" = "--stop" ] || [ "$1" = "--STOP" ]; then
+	elif echo "$1" | grep -q -i -e "^-s$" -e "^--stop$"; then
 		if [ "${STOP_OLD_PROCESS}" -ne 0 ]; then
 			echo "[ERROR] already specified --stop(-s) option"
 			exit 1
 		fi
 		STOP_OLD_PROCESS=1
 
-	elif [ "$1" = "-d" ] || [ "$1" = "-D" ] || [ "$1" = "--debug" ] || [ "$1" = "--DEBUG" ]; then
+	elif echo "$1" | grep -q -i -e "^-d$" -e "^--debug$"; then
 		if [ -n "${INSPECTOR_OPT}" ]; then
 			echo "[ERROR] already specified --debug(-d) or --debug-nobrk(-dnobrk) option"
 			exit 1
 		fi
 		INSPECTOR_OPT="--inspect-brk=${LOCAL_HOSTNAME}:9229"
 
-	elif [ "$1" = "-dnobrk" ] || [ "$1" = "-DNOBRK" ] || [ "$1" = "--debug-nobrk" ] || [ "$1" = "--DEBUG-NOBRK" ]; then
+	elif echo "$1" | grep -q -i -e "^-dnobrk$" -e "^--debug-nobrk$"; then
 		if [ -n "${INSPECTOR_OPT}" ]; then
 			echo "[ERROR] already specified --debug(-d) or --debug-nobrk(-dnobrk) option"
 			exit 1
 		fi
 		INSPECTOR_OPT="--inspect=${LOCAL_HOSTNAME}:9229"
 
-	elif [ "$1" = "-dl" ] || [ "$1" = "-DL" ] || [ "$1" = "--debuglevel" ] || [ "$1" = "--DEBUGLEVEL" ]; then
+	elif echo "$1" | grep -q -i -e "^-dl$" -e "^--debuglevel$"; then
 		shift
 		if [ $# -eq 0 ]; then
 			echo "[ERROR] --debuglevel(-dl) option needs parameter(custom debug level)"

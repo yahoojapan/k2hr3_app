@@ -225,7 +225,7 @@ var	loadedConfig = (function()
 			try{
 				var	tmpstr		= JSON.stringify(config.extrouter);
 				data.extrouter	= JSON.parse(tmpstr);
-			}catch(err){
+			}catch(err){											// eslint-disable-line no-unused-vars
 				console.error('something wrong extrouter value in configration. then skip this value to load.');
 			}
 		}

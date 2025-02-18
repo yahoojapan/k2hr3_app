@@ -323,7 +323,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Confirm Dialog : Close( OK / Cancel )
 	//
-	handleConfirmDialogClose(event, reason, result)							// eslint-disable-line no-unused-vars
+	handleConfirmDialogClose(event, reason, result)
 	{
 		if(result){
 			// case for 'cancel updating' to do
@@ -452,7 +452,7 @@ export default class R3Service extends React.Component
 		});
 	}
 
-	handTooltipChange = (event, type, extData) =>							// eslint-disable-line no-unused-vars
+	handTooltipChange = (event, type, extData) =>
 	{
 		if(tooltipValues.deleteTenantTooltip === type){
 			this.setState({
@@ -594,7 +594,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Service resource type : Change
 	//
-	handleResourceTypeChange(event, type)									// eslint-disable-line no-unused-vars
+	handleResourceTypeChange(event, type)
 	{
 		if(this.state.serviceResType === type){
 			console.warn('changed value type(' + JSON.stringify(type) + ') is something wrong.');
@@ -637,7 +637,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Delete static resource
 	//
-	handleDelStaticResourceObj(event, pos)									// eslint-disable-line no-unused-vars
+	handleDelStaticResourceObj(event, pos)
 	{
 		if(!r3IsSafeTypedEntity(this.state.serviceResStaticObject, 'array')){
 			return;
@@ -663,7 +663,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Edit static resource
 	//
-	handleEditStaticResourceObj(event, pos)									// eslint-disable-line no-unused-vars
+	handleEditStaticResourceObj(event, pos)
 	{
 		if(!r3IsSafeTypedEntity(this.state.serviceResStaticObject, 'array')){
 			return;
@@ -721,7 +721,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Close static resource dialog
 	//
-	handleCloseStaticResourceDialog(event, reason, isAgree, newOneStaticRes)	// eslint-disable-line no-unused-vars
+	handleCloseStaticResourceDialog(event, reason, isAgree, newOneStaticRes)
 	{
 		if(!isAgree){
 			this.setState({
@@ -774,7 +774,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Static resource object page : Change
 	//
-	handleResStaticObjPageChange(event, page)								// eslint-disable-line no-unused-vars
+	handleResStaticObjPageChange(event, page)
 	{
 		this.setState({
 			serviceResStaticObjPageNum:	page

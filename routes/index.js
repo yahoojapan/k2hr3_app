@@ -32,7 +32,7 @@ var	appConfig	= require('./lib/libr3appconfig').r3AppConfig;
 //
 // GET '/'					: get main page
 //
-router.get('/', function(req, res, next)							// eslint-disable-line no-unused-vars
+router.get('/', function(req, res, next)
 {
 	var	_req	= req;												// eslint-disable-line no-unused-vars
 	var	_res	= res;

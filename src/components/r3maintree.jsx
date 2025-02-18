@@ -206,7 +206,7 @@ export default class R3MainTree extends React.Component
 		});
 	}
 
-	handLocalTenantDialogClose(event, reason, result, newTenantName, tenantId, newTenantDisplay, newTenantDescription, newTenantUsers)	// eslint-disable-line no-unused-vars
+	handLocalTenantDialogClose(event, reason, result, newTenantName, tenantId, newTenantDisplay, newTenantDescription, newTenantUsers)
 	{
 		if(!result){
 			this.setState({
@@ -249,7 +249,7 @@ export default class R3MainTree extends React.Component
 		});
 	}
 
-	handleTenantMenuButton(event)									// eslint-disable-line no-unused-vars
+	handleTenantMenuButton(event)
 	{
 		this.setState({
 			tenantMenuAnchorEl:		event.currentTarget,
@@ -266,7 +266,7 @@ export default class R3MainTree extends React.Component
 		});
 	}
 
-	handleTenantChange = (event, value) =>							// eslint-disable-line no-unused-vars
+	handleTenantChange = (event, value) =>
 	{
 		if(this.checkContentUpdating()){
 			this.props.tenants.map( (item, pos) => {
@@ -340,7 +340,7 @@ export default class R3MainTree extends React.Component
 		});
 	}
 
-	handleTypeItemChange(event, type, prevSelected, collapseKey)								// eslint-disable-line no-unused-vars
+	handleTypeItemChange(event, type, prevSelected, collapseKey)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -350,7 +350,7 @@ export default class R3MainTree extends React.Component
 		this.props.onTypeItemChange(type);
 	}
 
-	handleListItemChange(event, type, path, prevSelected, collapseKey)							// eslint-disable-line no-unused-vars
+	handleListItemChange(event, type, path, prevSelected, collapseKey)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -360,7 +360,7 @@ export default class R3MainTree extends React.Component
 		this.props.onListItemChange(type, path);
 	}
 
-	handleNameItemInServiceChange(event, servicename, prevSelected, collapseKey)				// eslint-disable-line no-unused-vars
+	handleNameItemInServiceChange(event, servicename, prevSelected, collapseKey)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -370,7 +370,7 @@ export default class R3MainTree extends React.Component
 		this.props.onNameItemInServiceChange(servicename);
 	}
 
-	handleTypeInServiceChange(event, servicename, type_in_service, prevSelected, collapseKey)	// eslint-disable-line no-unused-vars
+	handleTypeInServiceChange(event, servicename, type_in_service, prevSelected, collapseKey)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -380,7 +380,7 @@ export default class R3MainTree extends React.Component
 		this.props.onTypeInServiceChange(servicename, type_in_service);
 	}
 
-	handleListItemInServiceChange(event, servicename, type_in_service, path, prevSelected, collapseKey)	// eslint-disable-line no-unused-vars
+	handleListItemInServiceChange(event, servicename, type_in_service, path, prevSelected, collapseKey)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -396,7 +396,7 @@ export default class R3MainTree extends React.Component
 		this.props.onPopupClose();
 	}
 
-	handleDummyBarButton(event)										// eslint-disable-line no-unused-vars
+	handleDummyBarButton(event)
 	{
 		this.setState({
 			dummyBarMenuAnchorEl:		event.currentTarget,
@@ -472,7 +472,7 @@ export default class R3MainTree extends React.Component
 		});
 	}
 
-	handTooltipChange = (event, type, isOpen) =>				// eslint-disable-line no-unused-vars
+	handTooltipChange = (event, type, isOpen) =>
 	{
 		if(tooltipValues.mainMenu === type){
 			this.setState({

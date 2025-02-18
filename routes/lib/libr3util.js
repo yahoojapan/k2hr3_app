@@ -70,7 +70,7 @@ function rawIsSafeJSON(str)
 	}
 	try{
 		var tmpstr = JSON.parse(str);					// eslint-disable-line no-unused-vars
-	}catch(exception){
+	}catch(exception){									// eslint-disable-line no-unused-vars
 		return false;
 	}
 	return true;
@@ -235,7 +235,7 @@ function rawCheckMakeDir(path)
 	}
 	try{
 		fs.mkdirSync(path);
-	}catch(err){
+	}catch(err){					// eslint-disable-line no-unused-vars
 		return false;
 	}
 	return true;

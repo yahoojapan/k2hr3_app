@@ -5,9 +5,251 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
   aria-label="create service dialog"
   className="MuiDialog-root css-1pivxxs-MuiDialog-root"
   closeAfterTransition={true}
-  components={
+  disableEscapeKeyDown={false}
+  disablePortal={true}
+  label="create-service-dialog"
+  onClick={[Function]}
+  onClose={[Function]}
+  open={true}
+  slotProps={
     {
-      "Backdrop": {
+      "backdrop": {
+        "as": undefined,
+        "ownerState": {
+          "aria-label": "create service dialog",
+          "children": <React.Fragment>
+            <ForwardRef(DialogTitle)
+              label="create-service-dialog"
+              sx={{}}
+            >
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={{}}
+                variant="h5"
+              >
+                Create a new SERVICE
+              </ForwardRef(Typography)>
+            </ForwardRef(DialogTitle)>
+            <ForwardRef(DialogContent)
+              sx={{}}
+            >
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                TENANT for SERVICE owner
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="textSecondary"
+                component="span"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                  }
+                }
+                variant="body1"
+              >
+                GROUP0:TENANT0
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                CREATE SERVICE
+              </ForwardRef(Typography)>
+              <ForwardRef(TextField)
+                InputProps={
+                  {
+                    "sx": {
+                      "color": "rgba(0, 0, 0, 0.6)",
+                    },
+                  }
+                }
+                disabled={false}
+                id="new-service-textfield-id"
+                minRows={1}
+                multiline={false}
+                onChange={[Function]}
+                placeholder="Input create service name"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                    "paddingRight": "32px",
+                    "width": "100%",
+                  }
+                }
+                value=""
+              />
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                SERVICE RESOURCES
+              </ForwardRef(Typography)>
+              <ForwardRef(RadioGroup)
+                aria-label="select type verify url or static resource"
+                id="new-service-radiogroup-id"
+                onChange={[Function]}
+                sx={
+                  {
+                    "display": "block",
+                    "paddingLeft": "32px",
+                  }
+                }
+                value="verifyUrl"
+              >
+                <ForwardRef(FormControlLabel)
+                  control={<ForwardRef(Radio) />}
+                  disabled={false}
+                  label={
+                    <ForwardRef(Typography)
+                      color="textSecondary"
+                      noWrap={true}
+                      variant="body1"
+                    >
+                      VERIFY URL
+                    </ForwardRef(Typography)>
+                  }
+                  sx={
+                    {
+                      "float": "left",
+                    }
+                  }
+                  value="verifyUrl"
+                />
+                <ForwardRef(FormControlLabel)
+                  control={<ForwardRef(Radio) />}
+                  disabled={false}
+                  label={
+                    <ForwardRef(Typography)
+                      color="textSecondary"
+                      noWrap={true}
+                      variant="body1"
+                    >
+                      STATIC RESOURCE OBJECT
+                    </ForwardRef(Typography)>
+                  }
+                  sx={
+                    {
+                      "marginLeft": "16px",
+                    }
+                  }
+                  value="staticResourceObject"
+                />
+              </ForwardRef(RadioGroup)>
+              <ForwardRef(TextField)
+                InputProps={
+                  {
+                    "sx": {
+                      "color": "rgba(0, 0, 0, 0.6)",
+                    },
+                  }
+                }
+                disabled={false}
+                id="new-verify-textfield-id"
+                minRows={1}
+                multiline={false}
+                onChange={[Function]}
+                placeholder="Input verify URL"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                    "paddingRight": "32px",
+                    "width": "100%",
+                  }
+                }
+                value=""
+              />
+            </ForwardRef(DialogContent)>
+            <ForwardRef(DialogActions)>
+              <ForwardRef(Button)
+                aria-label="cancel"
+                color="primary"
+                onClick={[Function]}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="contained"
+              >
+                CANCEL
+                <Memo
+                  sx={
+                    {
+                      "marginLeft": "8px",
+                    }
+                  }
+                />
+              </ForwardRef(Button)>
+              <ForwardRef(Button)
+                aria-label="ok"
+                color="secondary"
+                disabled={true}
+                onClick={[Function]}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="contained"
+              >
+                OK
+                <Memo
+                  sx={
+                    {
+                      "marginLeft": "8px",
+                    }
+                  }
+                />
+              </ForwardRef(Button)>
+            </ForwardRef(DialogActions)>
+          </React.Fragment>,
+          "disableEscapeKeyDown": false,
+          "disablePortal": true,
+          "fullScreen": false,
+          "fullWidth": true,
+          "label": "create-service-dialog",
+          "maxWidth": "sm",
+          "onClose": [Function],
+          "open": true,
+          "scroll": "body",
+          "sx": {},
+        },
+        "ref": null,
+        "transitionDuration": {
+          "enter": 225,
+          "exit": 195,
+        },
+      },
+    }
+  }
+  slots={
+    {
+      "backdrop": {
         "$$typeof": Symbol(react.forward_ref),
         "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
@@ -47,23 +289,6 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
       },
     }
   }
-  componentsProps={
-    {
-      "backdrop": {
-        "as": undefined,
-        "transitionDuration": {
-          "enter": 225,
-          "exit": 195,
-        },
-      },
-    }
-  }
-  disableEscapeKeyDown={false}
-  disablePortal={true}
-  label="create-service-dialog"
-  onClick={[Function]}
-  onClose={[Function]}
-  open={true}
 >
   <
     appear={true}

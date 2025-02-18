@@ -117,14 +117,12 @@ var R3UserToken = (function()
 			secure		= true;
 			httpobj		= require('https');
 
-			/* eslint-disable indent, no-mixed-spaces-and-tabs */
 			var agentOptions = {
-								host:				this.appConfig.getApiHost(),
-								port:				this.appConfig.getApiPort(),
-								path:				'/',
-								rejectUnauthorized:	this.appConfig.getRejectUnauthorized()
-							};
-			/* eslint-enable indent, no-mixed-spaces-and-tabs */
+				host:				this.appConfig.getApiHost(),
+				port:				this.appConfig.getApiPort(),
+				path:				'/',
+				rejectUnauthorized:	this.appConfig.getRejectUnauthorized()
+			};
 			agent		= new httpobj.Agent(agentOptions);
 
 		}else{
@@ -134,26 +132,26 @@ var R3UserToken = (function()
 		var	isscoped	= r3util.isSafeString(tenant) && r3util.isSafeString(token);
 
 		// arguments for the request to API server
-		/* eslint-disable indent, no-mixed-spaces-and-tabs */
-		var urlarg		=  r3util.isSafeString(username) ? ('?username=' + this.username + (isscoped ? ('&tenantname=' + tenant) : '')) : '';
-		var	headers		= {
-							'Content-Type':		'application/json',
-							'Content-Length':	0
-						   };
+		var urlarg	=  r3util.isSafeString(username) ? ('?username=' + this.username + (isscoped ? ('&tenantname=' + tenant) : '')) : '';
+		var	headers	= {
+			'Content-Type':		'application/json',
+			'Content-Length':	0
+		};
 		if(isscoped){
 			headers['x-auth-token'] = 'U=' + token;
 		}else if(r3util.isSafeString(token)){
 			// token is other token
 			headers['x-auth-token'] = token;
 		}
-		var	options		= {	'host':				this.appConfig.getApiHost(),
-							'port':				this.appConfig.getApiPort(),
-							'method':			'PUT',
-							'headers':			headers,
-							'path':				('/v1/user/tokens' + encodeURI(urlarg))
-						};
+		var	options	= {
+			'host':		this.appConfig.getApiHost(),
+			'port':		this.appConfig.getApiPort(),
+			'method':	'PUT',
+			'headers':	headers,
+			'path':		('/v1/user/tokens' + encodeURI(urlarg))
+		};
 		if(secure){
-			options.agent	= agent;
+			options.agent = agent;
 
 			// Set CA cert file
 			var ca = this.appConfig.getCA();
@@ -161,7 +159,6 @@ var R3UserToken = (function()
 				options.ca = [ fs.readFileSync(ca, {encoding: 'utf-8'}) ];
 			}
 		}
-		/* eslint-enable indent, no-mixed-spaces-and-tabs */
 
 		console.info('api host = ' + this.appConfig.getApiHost());
 		console.info('api port = ' + this.appConfig.getApiPort());

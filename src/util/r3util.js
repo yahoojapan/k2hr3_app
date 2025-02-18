@@ -282,7 +282,7 @@ export const r3IsJSON = (str) =>
 	}
 	try{
 		var tmpstr = JSON.parse(str);					// eslint-disable-line no-unused-vars
-	}catch(exception){
+	}catch(exception){									// eslint-disable-line no-unused-vars
 		return false;
 	}
 	return true;
@@ -294,8 +294,8 @@ export const r3ConvertFromJSON = (obj) =>
 		return null;
 	}
 	try{
-		return JSON.parse(obj);							// eslint-disable-line no-unused-vars
-	}catch(exception){
+		return JSON.parse(obj);
+	}catch(exception){									// eslint-disable-line no-unused-vars
 		return null;
 	}
 };
@@ -549,7 +549,7 @@ export const parseCombineHostObject = (combineHostObject) =>
 //
 // utility methods for hostname + port + cuk
 //
-export const getCombineHostObject = (hostname, port, cuk, extra, tag, inboundip, outboundip) =>				// eslint-disable-line no-unused-vars
+export const getCombineHostObject = (hostname, port, cuk, extra, tag, inboundip, outboundip) =>
 {
 	let	result = '';
 	if(	r3IsEmptyString(hostname, true)																	&&
