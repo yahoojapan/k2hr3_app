@@ -119,7 +119,7 @@ if(cluster.isMaster && appConf.isMultiProc()){
 			try {
 				process.setuid(user);
 				console.log('Succeeded to setuid');
-			} catch (err) {
+			} catch (err) {								// eslint-disable-line no-unused-vars
 				console.log('Failed to setuid');
 				process.exit(1);
 			}

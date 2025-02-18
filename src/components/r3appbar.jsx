@@ -130,7 +130,7 @@ export default class R3AppBar extends React.Component
 		this.sxClasses					= r3AppBar(props.theme);
 	}
 
-	handleSignMenuChange = (event, value) =>					// eslint-disable-line no-unused-vars
+	handleSignMenuChange = (event, value) =>
 	{
 		if(this.checkContentUpdating()){
 			if('SIGNINOUT' === value){
@@ -147,7 +147,7 @@ export default class R3AppBar extends React.Component
 		});
 	};
 
-	handleSignButton(event)										// eslint-disable-line no-unused-vars
+	handleSignButton(event)
 	{
 		this.setState({
 			signMenuAnchorEl:		event.currentTarget,
@@ -253,7 +253,7 @@ export default class R3AppBar extends React.Component
 		});
 	}
 
-	handleMainButton(event)										// eslint-disable-line no-unused-vars
+	handleMainButton(event)
 	{
 		this.setState({
 			mainMenuAnchorEl:		event.currentTarget,
@@ -276,7 +276,7 @@ export default class R3AppBar extends React.Component
 		});
 	}
 
-	handTooltipChange = (event, type, isOpen) =>				// eslint-disable-line no-unused-vars
+	handTooltipChange = (event, type, isOpen) =>
 	{
 		if(tooltipValues.accountMenu === type){
 			this.setState({

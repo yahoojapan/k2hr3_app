@@ -99,7 +99,7 @@ export default class R3AccountDialog extends React.Component
 		return null;														// Return null to indicate no change to state.
 	}
 
-	handleCopyClipboardButtonTooltipChange = (event, isOpen) =>				// eslint-disable-line no-unused-vars
+	handleCopyClipboardButtonTooltipChange = (event, isOpen) =>
 	{
 		this.setState({
 			tooltips: {

@@ -5,9 +5,1942 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
   aria-label="path information dialog"
   className="MuiDialog-root css-1pivxxs-MuiDialog-root"
   closeAfterTransition={true}
-  components={
+  disableEscapeKeyDown={false}
+  disablePortal={true}
+  label="path-information-dialog"
+  onClick={[Function]}
+  onClose={[Function]}
+  open={true}
+  slotProps={
     {
-      "Backdrop": {
+      "backdrop": {
+        "as": undefined,
+        "ownerState": {
+          "aria-label": "path information dialog",
+          "children": [
+            <ForwardRef(DialogTitle)
+              label="path-information-dialog"
+              sx={{}}
+            >
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={{}}
+                variant="h5"
+              >
+                Selected Path Information
+              </ForwardRef(Typography)>
+            </ForwardRef(DialogTitle)>,
+            <ForwardRef(DialogContent)
+              sx={{}}
+            >
+              <R3MsgBox
+                message={null}
+                theme={
+                  {
+                    "applyStyles": [Function],
+                    "breakpoints": {
+                      "between": [Function],
+                      "down": [Function],
+                      "keys": [
+                        "xs",
+                        "sm",
+                        "md",
+                        "lg",
+                        "xl",
+                      ],
+                      "not": [Function],
+                      "only": [Function],
+                      "unit": "px",
+                      "up": [Function],
+                      "values": {
+                        "lg": 1200,
+                        "md": 900,
+                        "sm": 600,
+                        "xl": 1536,
+                        "xs": 0,
+                      },
+                    },
+                    "components": {
+                      "MuiChip": {
+                        "styleOverrides": {
+                          "root": {
+                            "& .MuiChip-avatarColorPrimary": {
+                              "backgroundColor": "#fff",
+                            },
+                          },
+                        },
+                      },
+                      "MuiIconButton": {
+                        "styleOverrides": {
+                          "root": {
+                            "padding": "8px",
+                          },
+                        },
+                      },
+                      "MuiSelect": {
+                        "defaultProps": {
+                          "variant": "standard",
+                        },
+                      },
+                      "MuiTextField": {
+                        "defaultProps": {
+                          "variant": "standard",
+                        },
+                      },
+                      "MuiTypography": {
+                        "defaultProps": {
+                          "display": "block",
+                        },
+                      },
+                    },
+                    "containerQueries": [Function],
+                    "direction": "ltr",
+                    "mixins": {
+                      "toolbar": {
+                        "@media (min-width:0px)": {
+                          "@media (orientation: landscape)": {
+                            "minHeight": 48,
+                          },
+                        },
+                        "@media (min-width:600px)": {
+                          "minHeight": 64,
+                        },
+                        "minHeight": 56,
+                      },
+                    },
+                    "palette": {
+                      "action": {
+                        "activatedOpacity": 0.12,
+                        "active": "rgba(0, 0, 0, 0.54)",
+                        "disabled": "rgba(0, 0, 0, 0.26)",
+                        "disabledBackground": "rgba(0, 0, 0, 0.12)",
+                        "disabledOpacity": 0.38,
+                        "focus": "rgba(0, 0, 0, 0.12)",
+                        "focusOpacity": 0.12,
+                        "hover": "rgba(0, 0, 0, 0.04)",
+                        "hoverOpacity": 0.04,
+                        "selected": "rgba(0, 0, 0, 0.08)",
+                        "selectedOpacity": 0.08,
+                      },
+                      "augmentColor": [Function],
+                      "background": {
+                        "default": "#fff",
+                        "paper": "#ede7f6",
+                      },
+                      "common": {
+                        "black": "#000",
+                        "white": "#fff",
+                      },
+                      "contrastThreshold": 3,
+                      "divider": "rgba(0, 0, 0, 0.12)",
+                      "error": {
+                        "contrastText": "#fff",
+                        "dark": "#b71c1c",
+                        "light": "#ffcdd2",
+                        "main": "#f44336",
+                      },
+                      "getContrastText": [Function],
+                      "grey": {
+                        "100": "#f5f5f5",
+                        "200": "#eeeeee",
+                        "300": "#e0e0e0",
+                        "400": "#bdbdbd",
+                        "50": "#fafafa",
+                        "500": "#9e9e9e",
+                        "600": "#757575",
+                        "700": "#616161",
+                        "800": "#424242",
+                        "900": "#212121",
+                        "A100": "#f5f5f5",
+                        "A200": "#eeeeee",
+                        "A400": "#bdbdbd",
+                        "A700": "#616161",
+                      },
+                      "info": {
+                        "contrastText": "#fff",
+                        "dark": "#01579b",
+                        "light": "#03a9f4",
+                        "main": "#0288d1",
+                      },
+                      "information": {
+                        "contrastText": "#fff",
+                        "dark": "rgba(0, 0, 0, 0.38)",
+                        "light": "rgba(0, 0, 0, 0.87)",
+                        "main": "rgba(0, 0, 0, 0.54)",
+                      },
+                      "mode": "light",
+                      "primary": {
+                        "contrastText": "#fff",
+                        "dark": "#311b92",
+                        "light": "#d1c4e9",
+                        "main": "#673ab7",
+                        "mainGradient": "linear-gradient(#673ab7, #311b92)",
+                      },
+                      "secondary": {
+                        "contrastText": "#fff",
+                        "dark": "#bf360c",
+                        "light": "#ffccbc",
+                        "main": "#ff5722",
+                      },
+                      "success": {
+                        "contrastText": "#fff",
+                        "dark": "#1b5e20",
+                        "light": "#4caf50",
+                        "main": "#2e7d32",
+                      },
+                      "text": {
+                        "disabled": "rgba(0, 0, 0, 0.38)",
+                        "primary": "rgba(0, 0, 0, 0.87)",
+                        "secondary": "rgba(0, 0, 0, 0.6)",
+                      },
+                      "tonalOffset": 0.2,
+                      "warning": {
+                        "contrastText": "#fff",
+                        "dark": "#f57f17",
+                        "light": "#fdd835",
+                        "main": "#f9a825",
+                      },
+                    },
+                    "r3AboutDialog": {
+                      "button": {
+                        "aria-label": "close about dialog",
+                        "color": "secondary",
+                        "variant": "contained",
+                      },
+                      "content": {
+                        "component": "span",
+                        "variant": "body2",
+                      },
+                      "dialogContentText": {
+                        "component": "span",
+                      },
+                      "dialogTitle": {
+                        "label": "about-dialog",
+                      },
+                      "licenseType": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "variant": "h6",
+                      },
+                      "root": {
+                        "aria-label": "about dialog",
+                        "fullWidth": true,
+                        "label": "about-dialog",
+                        "scroll": "body",
+                      },
+                      "title": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "h5",
+                      },
+                    },
+                    "r3AccountDialog": {
+                      "dialogTitle": {
+                        "label": "account-dialog",
+                      },
+                      "okButton": {
+                        "aria-label": "ok",
+                        "color": "secondary",
+                        "variant": "contained",
+                      },
+                      "root": {
+                        "aria-label": "account dialog",
+                        "fullWidth": true,
+                        "label": "account-dialog",
+                        "scroll": "body",
+                      },
+                      "subTitle": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "title": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "h5",
+                      },
+                      "unscopedtokenTextField": {
+                        "disabled": false,
+                        "fullWidth": true,
+                        "maxRows": 1,
+                        "minRows": 1,
+                        "multiline": false,
+                        "variant": "outlined",
+                      },
+                      "value": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "variant": "body1",
+                      },
+                    },
+                    "r3AppBar": {
+                      "accountMenu": {
+                        "anchorOrigin": {
+                          "horizontal": "right",
+                          "vertical": "bottom",
+                        },
+                        "transformOrigin": {
+                          "horizontal": "right",
+                          "vertical": "top",
+                        },
+                      },
+                      "licenseMenu": {
+                        "anchorOrigin": {
+                          "horizontal": "right",
+                          "vertical": "top",
+                        },
+                        "transformOrigin": {
+                          "horizontal": "left",
+                          "vertical": "top",
+                        },
+                      },
+                      "mainMenu": {
+                        "anchorOrigin": {
+                          "horizontal": "left",
+                          "vertical": "bottom",
+                        },
+                        "transformOrigin": {
+                          "horizontal": "left",
+                          "vertical": "top",
+                        },
+                      },
+                      "mainMenuButton": {
+                        "aria-haspopup": "true",
+                        "aria-label": "main menu",
+                        "color": "inherit",
+                        "label": "main-menu",
+                      },
+                      "root": {
+                        "position": "static",
+                      },
+                      "signinButton": {
+                        "aria-haspopup": "true",
+                        "aria-label": "signin menu",
+                        "color": "inherit",
+                        "label": "signin-menu",
+                      },
+                      "signinSubMenu": {
+                        "anchorOrigin": {
+                          "horizontal": "left",
+                          "vertical": "bottom",
+                        },
+                        "transformOrigin": {
+                          "horizontal": "right",
+                          "vertical": "top",
+                        },
+                      },
+                      "signinedMenu": {},
+                      "signoutButton": {
+                        "aria-haspopup": "true",
+                        "aria-label": "signout menu",
+                        "label": "signout-menu",
+                      },
+                      "smallToolbar": {
+                        "variant": "dense",
+                      },
+                      "title": {
+                        "color": "inherit",
+                        "noWrap": true,
+                        "variant": "h6",
+                      },
+                      "toolbar": {},
+                    },
+                    "r3Container": {
+                      "root": {},
+                    },
+                    "r3CreatePathDialog": {
+                      "cancelButton": {
+                        "aria-label": "cancel",
+                        "color": "primary",
+                        "variant": "contained",
+                      },
+                      "dialogTitle": {
+                        "label": "create-path-dialog",
+                      },
+                      "keyTitle": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "okButton": {
+                        "aria-label": "ok",
+                        "color": "secondary",
+                        "variant": "contained",
+                      },
+                      "root": {
+                        "aria-label": "create path dialog",
+                        "fullWidth": true,
+                        "label": "create-path-dialog",
+                        "scroll": "body",
+                      },
+                      "textField": {
+                        "disabled": false,
+                        "inputProps": {
+                          "aria-label": "input create path",
+                        },
+                      },
+                      "title": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "h5",
+                      },
+                      "value": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "variant": "body1",
+                      },
+                    },
+                    "r3CreateServiceDialog": {
+                      "addResStaticObjButton": {
+                        "aria-label": "add static resource",
+                        "color": "primary",
+                        "label": "add-static-resource",
+                      },
+                      "cancelButton": {
+                        "aria-label": "cancel",
+                        "color": "primary",
+                        "variant": "contained",
+                      },
+                      "delResStaticObjButton": {
+                        "aria-label": "delete static resource",
+                        "color": "primary",
+                        "label": "del-static-resource",
+                      },
+                      "dialogTitle": {
+                        "label": "create-service-dialog",
+                      },
+                      "editResStaticObjButton": {
+                        "aria-label": "edit static resource",
+                        "color": "primary",
+                        "label": "edit-static-resource",
+                      },
+                      "keyTitle": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "okButton": {
+                        "aria-label": "ok",
+                        "color": "secondary",
+                        "variant": "contained",
+                      },
+                      "root": {
+                        "aria-label": "create service dialog",
+                        "fullWidth": true,
+                        "label": "create-service-dialog",
+                        "scroll": "body",
+                      },
+                      "staticResKeyPopover": {
+                        "anchorOrigin": {
+                          "horizontal": "left",
+                          "vertical": "bottom",
+                        },
+                        "transformOrigin": {
+                          "horizontal": "left",
+                          "vertical": "top",
+                        },
+                      },
+                      "staticResKeyPopoverButton": {
+                        "aria-label": "close dialog",
+                        "color": "secondary",
+                        "variant": "contained",
+                      },
+                      "staticResKeyPopoverSubtitle": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "body1",
+                      },
+                      "staticResKeyPopoverTitle": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "staticResMessage": {
+                        "noWrap": true,
+                        "variant": "body1",
+                      },
+                      "table": {},
+                      "textField": {
+                        "disabled": false,
+                        "minRows": 1,
+                        "multiline": false,
+                      },
+                      "textTableContent": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "variant": "body1",
+                      },
+                      "textTableHead": {
+                        "color": "primary",
+                        "component": "span",
+                        "variant": "subtitle2",
+                      },
+                      "title": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "h5",
+                      },
+                      "value": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "variant": "body1",
+                      },
+                      "valueFormControlLabel": {
+                        "color": "textSecondary",
+                        "noWrap": true,
+                        "variant": "body1",
+                      },
+                      "valueLeftFormControlLabel": {},
+                      "valueRadioGroup": {
+                        "aria-label": "select type verify url or static resource",
+                      },
+                      "valueRightFormControlLabel": {},
+                    },
+                    "r3CreateServiceTenantDialog": {
+                      "cancelButton": {
+                        "aria-label": "cancel",
+                        "color": "primary",
+                        "variant": "contained",
+                      },
+                      "dialogTitle": {
+                        "label": "create-service-tenant-dialog",
+                      },
+                      "keyTitle": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "okButton": {
+                        "aria-label": "ok",
+                        "color": "secondary",
+                        "variant": "contained",
+                      },
+                      "root": {
+                        "aria-label": "create service attached tenant dialog",
+                        "fullWidth": true,
+                        "label": "create-service-tenant-dialog",
+                        "scroll": "body",
+                      },
+                      "textField": {
+                        "disabled": false,
+                      },
+                      "title": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "h5",
+                      },
+                      "value": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "variant": "body1",
+                      },
+                    },
+                    "r3FormButtons": {
+                      "cancelButton": {
+                        "aria-label": "cancel",
+                        "color": "primary",
+                        "variant": "contained",
+                      },
+                      "root": {},
+                      "saveButton": {
+                        "aria-label": "save",
+                        "color": "secondary",
+                        "variant": "contained",
+                      },
+                    },
+                    "r3LocalTenantDialog": {
+                      "cancelButton": {
+                        "aria-label": "cancel",
+                        "color": "primary",
+                        "variant": "contained",
+                      },
+                      "dialogTitle": {
+                        "label": "create-path-dialog",
+                      },
+                      "keyTitle": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "localTenantMessage": {
+                        "color": "error",
+                        "component": "span",
+                        "variant": "body1",
+                      },
+                      "okButton": {
+                        "aria-label": "ok",
+                        "color": "secondary",
+                        "variant": "contained",
+                      },
+                      "popoverMessage": {
+                        "noWrap": true,
+                        "variant": "body1",
+                      },
+                      "popoverTenantUserAdd": {
+                        "anchorOrigin": {
+                          "horizontal": "right",
+                          "vertical": "bottom",
+                        },
+                        "transformOrigin": {
+                          "horizontal": "right",
+                          "vertical": "bottom",
+                        },
+                      },
+                      "popoverTenantUserAddButton": {
+                        "aria-label": "close dialog",
+                        "color": "secondary",
+                        "variant": "contained",
+                      },
+                      "popoverTenantUserAddTitle": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "popoverTenantUserDeleteButton": {
+                        "aria-label": "delete user",
+                        "label": "delete-user",
+                      },
+                      "popoverTenantUserName": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "variant": "body1",
+                      },
+                      "popoverTenantUsersEdit": {
+                        "anchorOrigin": {
+                          "horizontal": "right",
+                          "vertical": "bottom",
+                        },
+                        "transformOrigin": {
+                          "horizontal": "right",
+                          "vertical": "bottom",
+                        },
+                      },
+                      "popoverTenantUsersEditButton": {
+                        "aria-label": "close dialog",
+                        "color": "secondary",
+                        "variant": "contained",
+                      },
+                      "popoverTenantUsersEditTitle": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "root": {
+                        "aria-label": "create path dialog",
+                        "fullWidth": true,
+                        "label": "create-path-dialog",
+                        "scroll": "body",
+                      },
+                      "textField": {
+                        "disabled": false,
+                        "inputProps": {
+                          "aria-label": "input tenant inforamtion",
+                        },
+                      },
+                      "title": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "h5",
+                      },
+                      "usersAddButton": {
+                        "aria-label": "add user",
+                        "color": "primary",
+                        "label": "add-user",
+                      },
+                      "usersEditButton": {
+                        "aria-label": "edit users",
+                        "color": "primary",
+                        "label": "edit-users",
+                      },
+                      "value": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "variant": "body1",
+                      },
+                    },
+                    "r3MainTree": {
+                      "childItemText": {
+                        "primaryTypographyProps": {
+                          "color": "textSecondary",
+                          "variant": "subtitle1",
+                        },
+                      },
+                      "childSelectedItemText": {
+                        "primaryTypographyProps": {
+                          "color": "secondary",
+                          "variant": "subtitle1",
+                        },
+                      },
+                      "chip": {
+                        "clickable": false,
+                        "color": "primary",
+                      },
+                      "chipText": {
+                        "component": "span",
+                        "variant": "subtitle2",
+                      },
+                      "collapse": {
+                        "timeout": "auto",
+                      },
+                      "dummyBarAppbar": {
+                        "position": "static",
+                      },
+                      "dummyBarMainMenu": {
+                        "anchorOrigin": {
+                          "horizontal": "left",
+                          "vertical": "bottom",
+                        },
+                        "transformOrigin": {
+                          "horizontal": "left",
+                          "vertical": "top",
+                        },
+                      },
+                      "dummyBarMainMenuButton": {
+                        "aria-haspopup": "true",
+                        "aria-label": "main menu",
+                        "color": "inherit",
+                        "label": "main-menu",
+                      },
+                      "dummyBarToolbar": {},
+                      "editIcon": {
+                        "color": "secondary",
+                      },
+                      "licenseMenu": {
+                        "anchorOrigin": {
+                          "horizontal": "right",
+                          "vertical": "top",
+                        },
+                        "transformOrigin": {
+                          "horizontal": "left",
+                          "vertical": "top",
+                        },
+                      },
+                      "list": {
+                        "component": "div",
+                        "disablePadding": true,
+                      },
+                      "listItem": {
+                        "button": true,
+                      },
+                      "root": {},
+                      "smallDummyBarToolbar": {
+                        "variant": "dense",
+                      },
+                      "smallSubheaderToolbar": {
+                        "variant": "dense",
+                      },
+                      "subheaderAppbar": {
+                        "elevation": 0,
+                        "position": "static",
+                      },
+                      "subheaderToolbar": {},
+                      "tenantEditButton": {
+                        "aria-label": "edit tenant",
+                        "label": "edit-tenant",
+                      },
+                      "tenantListButton": {
+                        "aria-label": "select tenant",
+                        "label": "select-tenant",
+                      },
+                      "tenantListMenu": {
+                        "anchorOrigin": {
+                          "horizontal": "left",
+                          "vertical": "bottom",
+                        },
+                        "transformOrigin": {
+                          "horizontal": "left",
+                          "vertical": "top",
+                        },
+                      },
+                      "tenantListText": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "variant": "subtitle2",
+                      },
+                      "title": {
+                        "color": "inherit",
+                        "noWrap": true,
+                        "variant": "h6",
+                      },
+                      "topItemText": {
+                        "primaryTypographyProps": {
+                          "color": "textSecondary",
+                          "variant": "subtitle2",
+                        },
+                      },
+                      "topSelectedItemText": {
+                        "primaryTypographyProps": {
+                          "color": "secondary",
+                          "variant": "subtitle2",
+                        },
+                      },
+                    },
+                    "r3MsgBox": {
+                      "dialogErrorContentText": {
+                        "color": "error",
+                        "component": "span",
+                      },
+                      "dialogInformationContentText": {
+                        "component": "span",
+                      },
+                      "dialogWarningContentText": {
+                        "component": "span",
+                      },
+                      "errorIcon": {
+                        "color": "error",
+                      },
+                      "informationIcon": {},
+                      "root": {
+                        "elevation": 2,
+                      },
+                      "warningIcon": {},
+                    },
+                    "r3PathInfoDialog": {
+                      "button": {
+                        "aria-label": "close dialog",
+                        "color": "secondary",
+                        "variant": "contained",
+                      },
+                      "codeTextField": {
+                        "disabled": false,
+                        "fullWidth": true,
+                        "maxRows": 4,
+                        "minRows": 1,
+                        "multiline": true,
+                        "variant": "outlined",
+                      },
+                      "codeTypeSelect": {
+                        "autoWidth": true,
+                        "disabled": false,
+                      },
+                      "copyClipboardButton": {
+                        "aria-label": "copy to clipboard",
+                        "label": "copy-clipboard-button",
+                      },
+                      "createRoleTokenButton": {
+                        "aria-label": "close dialog",
+                        "color": "secondary",
+                        "variant": "contained",
+                      },
+                      "dialogTitle": {
+                        "label": "path-information-dialog",
+                      },
+                      "dispCodeNewRoleTokenButton": {
+                        "aria-label": "create a new role token and display the registration code",
+                      },
+                      "keyTitle": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "manageAddButton": {
+                        "aria-label": "generate new role token",
+                        "color": "primary",
+                      },
+                      "manageDeleteButton": {
+                        "aria-label": "delete role token",
+                        "color": "primary",
+                      },
+                      "manageDispCodeButton": {
+                        "aria-label": "display the registration code with this role token",
+                        "color": "primary",
+                      },
+                      "manageRoleTokenButton": {
+                        "aria-label": "manage role tokens",
+                      },
+                      "newRoleTokenExpireLabel": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "variant": "body1",
+                      },
+                      "newRoleTokenPopover": {
+                        "anchorOrigin": {
+                          "horizontal": "left",
+                          "vertical": "bottom",
+                        },
+                        "transformOrigin": {
+                          "horizontal": "left",
+                          "vertical": "top",
+                        },
+                      },
+                      "newRoleTokenPopoverTitle": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "previousButton": {
+                        "aria-label": "back to previous page",
+                        "color": "primary",
+                        "variant": "contained",
+                      },
+                      "roletokenClipboardButton": {
+                        "aria-label": "copy roletoken to clipboard",
+                        "label": "roletoken-clipboard-button",
+                      },
+                      "roletokenTextField": {
+                        "disabled": false,
+                        "fullWidth": true,
+                        "maxRows": 1,
+                        "minRows": 1,
+                        "multiline": false,
+                        "variant": "outlined",
+                      },
+                      "root": {
+                        "aria-label": "path information dialog",
+                        "disablePortal": true,
+                        "fullWidth": true,
+                        "label": "path-information-dialog",
+                        "scroll": "body",
+                      },
+                      "table": {},
+                      "textNewTableContent": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "variant": "body1",
+                      },
+                      "textTableContent": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "variant": "body1",
+                      },
+                      "textTableHead": {
+                        "color": "primary",
+                        "component": "span",
+                        "variant": "subtitle2",
+                      },
+                      "title": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "h5",
+                      },
+                      "value": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "variant": "body1",
+                      },
+                    },
+                    "r3Policy": {
+                      "actionCheckbox": {},
+                      "actionFormControlLabel": {
+                        "color": "textSecondary",
+                        "noWrap": true,
+                        "variant": "body2",
+                      },
+                      "actionLabel": {},
+                      "addAliasButton": {
+                        "aria-label": "add alias",
+                        "label": "add-alias",
+                      },
+                      "addResourceButton": {
+                        "aria-label": "add resource",
+                        "label": "add-resource",
+                      },
+                      "aliasTextField": {
+                        "minRows": 1,
+                        "multiline": false,
+                      },
+                      "deleteAliasButton": {
+                        "aria-label": "delete alias",
+                        "label": "delete-alias",
+                      },
+                      "deleteResourceButton": {
+                        "aria-label": "delete resource",
+                        "label": "delete-resource",
+                      },
+                      "downAliasButton": {
+                        "aria-label": "move to down position in list",
+                        "label": "move-down-alias",
+                      },
+                      "effectSelect": {},
+                      "resourceTextField": {
+                        "minRows": 1,
+                        "multiline": false,
+                      },
+                      "root": {},
+                      "subTitle": {
+                        "color": "primary",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "upAliasButton": {
+                        "aria-label": "move to up position in list",
+                        "label": "move-up-alias",
+                      },
+                    },
+                    "r3PopupMsgDialog": {
+                      "cancelButton": {
+                        "aria-label": "cancel",
+                        "color": "primary",
+                        "variant": "contained",
+                      },
+                      "dialogErrorContentText": {
+                        "color": "error",
+                        "component": "span",
+                      },
+                      "dialogInformationContentText": {
+                        "component": "span",
+                      },
+                      "dialogTitle": {
+                        "label": "message-dialog",
+                      },
+                      "dialogWarningContentText": {
+                        "component": "span",
+                      },
+                      "errorIcon": {
+                        "color": "error",
+                      },
+                      "informationIcon": {},
+                      "primaryButton": {
+                        "aria-label": "confirm contents and close dialog",
+                        "color": "secondary",
+                        "variant": "contained",
+                      },
+                      "root": {
+                        "aria-label": "message dialog",
+                        "fullWidth": true,
+                        "label": "message-dialog",
+                        "scroll": "body",
+                      },
+                      "title": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "h5",
+                      },
+                      "warningIcon": {},
+                    },
+                    "r3Resource": {
+                      "addAliasButton": {
+                        "aria-label": "add alias",
+                        "label": "add-alias",
+                      },
+                      "addKeysButton": {
+                        "aria-label": "add key and value",
+                        "label": "add-keys",
+                      },
+                      "aliasTextField": {
+                        "minRows": 1,
+                        "multiline": false,
+                      },
+                      "deleteAliasButton": {
+                        "aria-label": "delete alias",
+                        "label": "delete-alias",
+                      },
+                      "deleteKeysButton": {
+                        "aria-label": "delete key and value",
+                        "label": "delete-keys",
+                      },
+                      "downAliasButton": {
+                        "aria-label": "move to down position in list",
+                        "label": "move-down-alias",
+                      },
+                      "keysKeySubTitle": {
+                        "color": "textSecondary",
+                        "noWrap": true,
+                        "variant": "body2",
+                      },
+                      "keysKeyTextField": {
+                        "minRows": 1,
+                        "multiline": false,
+                      },
+                      "keysValueSubTitle": {
+                        "color": "textSecondary",
+                        "noWrap": true,
+                        "variant": "body2",
+                      },
+                      "keysValueTextField": {
+                        "minRows": 1,
+                        "multiline": false,
+                      },
+                      "root": {},
+                      "subTitle": {
+                        "color": "primary",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "upAliasButton": {
+                        "aria-label": "move to up position in list",
+                        "label": "move-up-alias",
+                      },
+                      "valueFormControl": {},
+                      "valueFormControlLabel": {
+                        "color": "textSecondary",
+                        "noWrap": true,
+                        "variant": "body1",
+                      },
+                      "valueLeftFormControlLabel": {},
+                      "valueObjectTextField": {
+                        "fullWidth": true,
+                        "multiline": false,
+                      },
+                      "valueRadioGroup": {
+                        "aria-label": "select resource value type",
+                      },
+                      "valueRightFormControlLabel": {},
+                      "valueStringTextField": {
+                        "fullWidth": true,
+                        "maxRows": 10,
+                        "minRows": 1,
+                        "multiline": true,
+                      },
+                    },
+                    "r3Role": {
+                      "addAliasButton": {
+                        "aria-label": "add alias",
+                        "label": "add-alias",
+                      },
+                      "addHostnameButton": {
+                        "aria-label": "add hostname and AUX",
+                        "label": "add-hostname",
+                      },
+                      "addIpButton": {
+                        "aria-label": "add ip and AUX",
+                        "label": "add-ip",
+                      },
+                      "addPolicyButton": {
+                        "aria-label": "add policy",
+                        "label": "add-policy",
+                      },
+                      "aliasTextField": {
+                        "minRows": 1,
+                        "multiline": false,
+                      },
+                      "deleteAliasButton": {
+                        "aria-label": "delete alias",
+                        "label": "delete-alias",
+                      },
+                      "deleteHostnameButton": {
+                        "aria-label": "delete hostname information",
+                        "label": "delete-hostname",
+                      },
+                      "deleteIpButton": {
+                        "aria-label": "delete ip information",
+                        "label": "delete-ip",
+                      },
+                      "deletePolicyButton": {
+                        "aria-label": "delete policy",
+                        "label": "delete-policy",
+                      },
+                      "downAliasButton": {
+                        "aria-label": "move to down position in list",
+                        "label": "move-down-alias",
+                      },
+                      "hostnameAUXSubTitle": {
+                        "color": "textSecondary",
+                        "noWrap": true,
+                        "variant": "body2",
+                      },
+                      "hostnameAUXTextField": {
+                        "minRows": 1,
+                        "multiline": false,
+                      },
+                      "hostnameSubTitle": {
+                        "color": "textSecondary",
+                        "noWrap": true,
+                        "variant": "body2",
+                      },
+                      "hostnameTextField": {
+                        "minRows": 1,
+                        "multiline": false,
+                      },
+                      "ipAUXSubTitle": {
+                        "color": "textSecondary",
+                        "noWrap": true,
+                        "variant": "body2",
+                      },
+                      "ipAUXTextField": {
+                        "minRows": 1,
+                        "multiline": false,
+                      },
+                      "ipSubTitle": {
+                        "color": "textSecondary",
+                        "noWrap": true,
+                        "variant": "body2",
+                      },
+                      "ipTextField": {
+                        "minRows": 1,
+                        "multiline": false,
+                      },
+                      "policyTextField": {
+                        "minRows": 1,
+                        "multiline": false,
+                      },
+                      "root": {},
+                      "subTitle": {
+                        "color": "primary",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "upAliasButton": {
+                        "aria-label": "move to up position in list",
+                        "label": "move-up-alias",
+                      },
+                    },
+                    "r3Service": {
+                      "addResStaticObjButton": {
+                        "aria-label": "add static resource",
+                        "label": "add-static-resource",
+                      },
+                      "addTenantButton": {
+                        "aria-label": "add tenant",
+                        "label": "add-tenant",
+                      },
+                      "delResStaticObjButton": {
+                        "aria-label": "delete static resource",
+                        "label": "del-static-resource",
+                      },
+                      "deleteTenantButton": {
+                        "aria-label": "delete tenant",
+                        "label": "delete-tenant",
+                      },
+                      "editResStaticObjButton": {
+                        "aria-label": "edit static resource",
+                        "label": "edit-static-resource",
+                      },
+                      "resourceTextField": {
+                        "minRows": 1,
+                        "multiline": false,
+                      },
+                      "root": {},
+                      "subTitle": {
+                        "color": "primary",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "table": {},
+                      "tenantTextField": {
+                        "minRows": 1,
+                        "multiline": false,
+                      },
+                      "textTableContent": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "variant": "body1",
+                      },
+                      "textTableHead": {
+                        "color": "primary",
+                        "component": "span",
+                        "variant": "subtitle2",
+                      },
+                      "unknownMessage": {
+                        "noWrap": true,
+                        "variant": "body1",
+                      },
+                      "valueFormControlLabel": {
+                        "color": "textSecondary",
+                        "noWrap": true,
+                        "variant": "body1",
+                      },
+                      "valueLeftFormControlLabel": {},
+                      "valueRadioGroup": {
+                        "aria-label": "select type verify url or static resource",
+                      },
+                      "valueRightFormControlLabel": {},
+                    },
+                    "r3SigninCredDialog": {
+                      "cancelButton": {
+                        "aria-label": "cancel",
+                        "color": "primary",
+                        "variant": "contained",
+                      },
+                      "dialogContentText": {
+                        "component": "span",
+                      },
+                      "dialogTitle": {
+                        "label": "signin-dialog",
+                      },
+                      "inputAdornment": {
+                        "position": "end",
+                      },
+                      "message": {
+                        "color": "error",
+                        "variant": "body1",
+                      },
+                      "messageIcon": {
+                        "color": "error",
+                      },
+                      "messagePaper": {
+                        "elevation": 1,
+                        "square": false,
+                      },
+                      "passphraseIconButton": {
+                        "aria-label": "toggle passphrase visibility",
+                        "color": "secondary",
+                      },
+                      "root": {
+                        "aria-label": "signin credential dialog",
+                        "fullWidth": true,
+                        "label": "signin-dialog",
+                        "scroll": "body",
+                      },
+                      "signinButton": {
+                        "aria-label": "sign in",
+                        "color": "secondary",
+                        "variant": "contained",
+                      },
+                      "textField": {
+                        "fullWidth": true,
+                        "margin": "normal",
+                      },
+                      "title": {
+                        "color": "primary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "h5",
+                      },
+                    },
+                    "r3Toolbar": {
+                      "chip": {
+                        "aria-label": "current display item and its path",
+                        "clickable": true,
+                        "color": "primary",
+                      },
+                      "chipText": {
+                        "component": "span",
+                        "variant": "subtitle2",
+                      },
+                      "createPathButton": {
+                        "aria-label": "create path or service",
+                        "color": "inherit",
+                        "label": "create-path",
+                      },
+                      "deletePathButton": {
+                        "aria-label": "delete path or service",
+                        "color": "inherit",
+                        "label": "delete-path",
+                      },
+                      "ownerText": {
+                        "color": "secondary",
+                        "component": "span",
+                        "variant": "subtitle2",
+                      },
+                      "root": {
+                        "elevation": 0,
+                        "position": "static",
+                      },
+                      "smallToolbar": {
+                        "variant": "dense",
+                      },
+                      "title": {
+                        "color": "textSecondary",
+                        "component": "span",
+                        "noWrap": true,
+                        "variant": "subtitle2",
+                      },
+                      "toUpperPathButton": {
+                        "aria-label": "move to upper path",
+                        "color": "inherit",
+                        "label": "move-to-upper-path",
+                      },
+                      "toolbar": {},
+                    },
+                    "r3progress": {
+                      "circularProgress": {
+                        "color": "secondary",
+                        "thickness": 7,
+                      },
+                      "root": {
+                        "elevation": 0,
+                      },
+                    },
+                    "shadows": [
+                      "none",
+                      "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
+                      "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
+                      "0px 3px 3px -2px rgba(0,0,0,0.2),0px 3px 4px 0px rgba(0,0,0,0.14),0px 1px 8px 0px rgba(0,0,0,0.12)",
+                      "0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)",
+                      "0px 3px 5px -1px rgba(0,0,0,0.2),0px 5px 8px 0px rgba(0,0,0,0.14),0px 1px 14px 0px rgba(0,0,0,0.12)",
+                      "0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)",
+                      "0px 4px 5px -2px rgba(0,0,0,0.2),0px 7px 10px 1px rgba(0,0,0,0.14),0px 2px 16px 1px rgba(0,0,0,0.12)",
+                      "0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12)",
+                      "0px 5px 6px -3px rgba(0,0,0,0.2),0px 9px 12px 1px rgba(0,0,0,0.14),0px 3px 16px 2px rgba(0,0,0,0.12)",
+                      "0px 6px 6px -3px rgba(0,0,0,0.2),0px 10px 14px 1px rgba(0,0,0,0.14),0px 4px 18px 3px rgba(0,0,0,0.12)",
+                      "0px 6px 7px -4px rgba(0,0,0,0.2),0px 11px 15px 1px rgba(0,0,0,0.14),0px 4px 20px 3px rgba(0,0,0,0.12)",
+                      "0px 7px 8px -4px rgba(0,0,0,0.2),0px 12px 17px 2px rgba(0,0,0,0.14),0px 5px 22px 4px rgba(0,0,0,0.12)",
+                      "0px 7px 8px -4px rgba(0,0,0,0.2),0px 13px 19px 2px rgba(0,0,0,0.14),0px 5px 24px 4px rgba(0,0,0,0.12)",
+                      "0px 7px 9px -4px rgba(0,0,0,0.2),0px 14px 21px 2px rgba(0,0,0,0.14),0px 5px 26px 4px rgba(0,0,0,0.12)",
+                      "0px 8px 9px -5px rgba(0,0,0,0.2),0px 15px 22px 2px rgba(0,0,0,0.14),0px 6px 28px 5px rgba(0,0,0,0.12)",
+                      "0px 8px 10px -5px rgba(0,0,0,0.2),0px 16px 24px 2px rgba(0,0,0,0.14),0px 6px 30px 5px rgba(0,0,0,0.12)",
+                      "0px 8px 11px -5px rgba(0,0,0,0.2),0px 17px 26px 2px rgba(0,0,0,0.14),0px 6px 32px 5px rgba(0,0,0,0.12)",
+                      "0px 9px 11px -5px rgba(0,0,0,0.2),0px 18px 28px 2px rgba(0,0,0,0.14),0px 7px 34px 6px rgba(0,0,0,0.12)",
+                      "0px 9px 12px -6px rgba(0,0,0,0.2),0px 19px 29px 2px rgba(0,0,0,0.14),0px 7px 36px 6px rgba(0,0,0,0.12)",
+                      "0px 10px 13px -6px rgba(0,0,0,0.2),0px 20px 31px 3px rgba(0,0,0,0.14),0px 8px 38px 7px rgba(0,0,0,0.12)",
+                      "0px 10px 13px -6px rgba(0,0,0,0.2),0px 21px 33px 3px rgba(0,0,0,0.14),0px 8px 40px 7px rgba(0,0,0,0.12)",
+                      "0px 10px 14px -6px rgba(0,0,0,0.2),0px 22px 35px 3px rgba(0,0,0,0.14),0px 8px 42px 7px rgba(0,0,0,0.12)",
+                      "0px 11px 14px -7px rgba(0,0,0,0.2),0px 23px 36px 3px rgba(0,0,0,0.14),0px 9px 44px 8px rgba(0,0,0,0.12)",
+                      "0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)",
+                    ],
+                    "shape": {
+                      "borderRadius": 4,
+                    },
+                    "spacing": [Function],
+                    "toRuntimeSource": [Function],
+                    "transitions": {
+                      "create": [Function],
+                      "duration": {
+                        "complex": 375,
+                        "enteringScreen": 225,
+                        "leavingScreen": 195,
+                        "short": 250,
+                        "shorter": 200,
+                        "shortest": 150,
+                        "standard": 300,
+                      },
+                      "easing": {
+                        "easeIn": "cubic-bezier(0.4, 0, 1, 1)",
+                        "easeInOut": "cubic-bezier(0.4, 0, 0.2, 1)",
+                        "easeOut": "cubic-bezier(0.0, 0, 0.2, 1)",
+                        "sharp": "cubic-bezier(0.4, 0, 0.6, 1)",
+                      },
+                      "getAutoHeightDuration": [Function],
+                    },
+                    "typography": {
+                      "body1": {
+                        "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
+                        "fontSize": "0.8571428571428571rem",
+                        "fontWeight": 400,
+                        "letterSpacing": "0.00938em",
+                        "lineHeight": 1.5,
+                      },
+                      "body2": {
+                        "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
+                        "fontSize": "0.75rem",
+                        "fontWeight": 400,
+                        "letterSpacing": "0.01071em",
+                        "lineHeight": 1.43,
+                      },
+                      "button": {
+                        "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
+                        "fontSize": "0.75rem",
+                        "fontWeight": 500,
+                        "letterSpacing": "0.02857em",
+                        "lineHeight": 1.75,
+                        "textTransform": "uppercase",
+                      },
+                      "caption": {
+                        "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
+                        "fontSize": "0.6428571428571428rem",
+                        "fontWeight": 400,
+                        "letterSpacing": "0.03333em",
+                        "lineHeight": 1.66,
+                      },
+                      "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
+                      "fontSize": 12,
+                      "fontWeightBold": 700,
+                      "fontWeightLight": 300,
+                      "fontWeightMedium": 500,
+                      "fontWeightRegular": 400,
+                      "h1": {
+                        "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
+                        "fontSize": "5.142857142857142rem",
+                        "fontWeight": 300,
+                        "letterSpacing": "-0.01562em",
+                        "lineHeight": 1.167,
+                      },
+                      "h2": {
+                        "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
+                        "fontSize": "3.214285714285714rem",
+                        "fontWeight": 300,
+                        "letterSpacing": "-0.00833em",
+                        "lineHeight": 1.2,
+                      },
+                      "h3": {
+                        "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
+                        "fontSize": "2.571428571428571rem",
+                        "fontWeight": 400,
+                        "letterSpacing": "0em",
+                        "lineHeight": 1.167,
+                      },
+                      "h4": {
+                        "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
+                        "fontSize": "1.8214285714285714rem",
+                        "fontWeight": 400,
+                        "letterSpacing": "0.00735em",
+                        "lineHeight": 1.235,
+                      },
+                      "h5": {
+                        "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
+                        "fontSize": "1.2857142857142856rem",
+                        "fontWeight": 400,
+                        "letterSpacing": "0em",
+                        "lineHeight": 1.334,
+                      },
+                      "h6": {
+                        "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
+                        "fontSize": "1.0714285714285714rem",
+                        "fontWeight": 500,
+                        "letterSpacing": "0.0075em",
+                        "lineHeight": 1.6,
+                      },
+                      "htmlFontSize": 16,
+                      "inherit": {
+                        "fontFamily": "inherit",
+                        "fontSize": "inherit",
+                        "fontWeight": "inherit",
+                        "letterSpacing": "inherit",
+                        "lineHeight": "inherit",
+                      },
+                      "overline": {
+                        "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
+                        "fontSize": "0.6428571428571428rem",
+                        "fontWeight": 400,
+                        "letterSpacing": "0.08333em",
+                        "lineHeight": 2.66,
+                        "textTransform": "uppercase",
+                      },
+                      "pxToRem": [Function],
+                      "subtitle1": {
+                        "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
+                        "fontSize": "0.8571428571428571rem",
+                        "fontWeight": 400,
+                        "letterSpacing": "0.00938em",
+                        "lineHeight": 1.75,
+                      },
+                      "subtitle2": {
+                        "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
+                        "fontSize": "1rem",
+                        "fontWeight": 500,
+                        "letterSpacing": "0.00938em",
+                        "lineHeight": 1.75,
+                      },
+                    },
+                    "unstable_sx": [Function],
+                    "unstable_sxConfig": {
+                      "alignContent": {},
+                      "alignItems": {},
+                      "alignSelf": {},
+                      "backgroundColor": {
+                        "themeKey": "palette",
+                        "transform": [Function],
+                      },
+                      "bgcolor": {
+                        "cssProperty": "backgroundColor",
+                        "themeKey": "palette",
+                        "transform": [Function],
+                      },
+                      "border": {
+                        "themeKey": "borders",
+                        "transform": [Function],
+                      },
+                      "borderBottom": {
+                        "themeKey": "borders",
+                        "transform": [Function],
+                      },
+                      "borderBottomColor": {
+                        "themeKey": "palette",
+                      },
+                      "borderColor": {
+                        "themeKey": "palette",
+                      },
+                      "borderLeft": {
+                        "themeKey": "borders",
+                        "transform": [Function],
+                      },
+                      "borderLeftColor": {
+                        "themeKey": "palette",
+                      },
+                      "borderRadius": {
+                        "style": [Function],
+                        "themeKey": "shape.borderRadius",
+                      },
+                      "borderRight": {
+                        "themeKey": "borders",
+                        "transform": [Function],
+                      },
+                      "borderRightColor": {
+                        "themeKey": "palette",
+                      },
+                      "borderTop": {
+                        "themeKey": "borders",
+                        "transform": [Function],
+                      },
+                      "borderTopColor": {
+                        "themeKey": "palette",
+                      },
+                      "bottom": {},
+                      "boxShadow": {
+                        "themeKey": "shadows",
+                      },
+                      "boxSizing": {},
+                      "color": {
+                        "themeKey": "palette",
+                        "transform": [Function],
+                      },
+                      "columnGap": {
+                        "style": [Function],
+                      },
+                      "display": {},
+                      "displayPrint": {
+                        "cssProperty": false,
+                        "transform": [Function],
+                      },
+                      "flex": {},
+                      "flexBasis": {},
+                      "flexDirection": {},
+                      "flexGrow": {},
+                      "flexShrink": {},
+                      "flexWrap": {},
+                      "font": {
+                        "themeKey": "font",
+                      },
+                      "fontFamily": {
+                        "themeKey": "typography",
+                      },
+                      "fontSize": {
+                        "themeKey": "typography",
+                      },
+                      "fontStyle": {
+                        "themeKey": "typography",
+                      },
+                      "fontWeight": {
+                        "themeKey": "typography",
+                      },
+                      "gap": {
+                        "style": [Function],
+                      },
+                      "gridArea": {},
+                      "gridAutoColumns": {},
+                      "gridAutoFlow": {},
+                      "gridAutoRows": {},
+                      "gridColumn": {},
+                      "gridRow": {},
+                      "gridTemplateAreas": {},
+                      "gridTemplateColumns": {},
+                      "gridTemplateRows": {},
+                      "height": {
+                        "transform": [Function],
+                      },
+                      "justifyContent": {},
+                      "justifyItems": {},
+                      "justifySelf": {},
+                      "left": {},
+                      "letterSpacing": {},
+                      "lineHeight": {},
+                      "m": {
+                        "style": [Function],
+                      },
+                      "margin": {
+                        "style": [Function],
+                      },
+                      "marginBlock": {
+                        "style": [Function],
+                      },
+                      "marginBlockEnd": {
+                        "style": [Function],
+                      },
+                      "marginBlockStart": {
+                        "style": [Function],
+                      },
+                      "marginBottom": {
+                        "style": [Function],
+                      },
+                      "marginInline": {
+                        "style": [Function],
+                      },
+                      "marginInlineEnd": {
+                        "style": [Function],
+                      },
+                      "marginInlineStart": {
+                        "style": [Function],
+                      },
+                      "marginLeft": {
+                        "style": [Function],
+                      },
+                      "marginRight": {
+                        "style": [Function],
+                      },
+                      "marginTop": {
+                        "style": [Function],
+                      },
+                      "marginX": {
+                        "style": [Function],
+                      },
+                      "marginY": {
+                        "style": [Function],
+                      },
+                      "maxHeight": {
+                        "transform": [Function],
+                      },
+                      "maxWidth": {
+                        "style": [Function],
+                      },
+                      "mb": {
+                        "style": [Function],
+                      },
+                      "minHeight": {
+                        "transform": [Function],
+                      },
+                      "minWidth": {
+                        "transform": [Function],
+                      },
+                      "ml": {
+                        "style": [Function],
+                      },
+                      "mr": {
+                        "style": [Function],
+                      },
+                      "mt": {
+                        "style": [Function],
+                      },
+                      "mx": {
+                        "style": [Function],
+                      },
+                      "my": {
+                        "style": [Function],
+                      },
+                      "order": {},
+                      "outline": {
+                        "themeKey": "borders",
+                        "transform": [Function],
+                      },
+                      "outlineColor": {
+                        "themeKey": "palette",
+                      },
+                      "overflow": {},
+                      "p": {
+                        "style": [Function],
+                      },
+                      "padding": {
+                        "style": [Function],
+                      },
+                      "paddingBlock": {
+                        "style": [Function],
+                      },
+                      "paddingBlockEnd": {
+                        "style": [Function],
+                      },
+                      "paddingBlockStart": {
+                        "style": [Function],
+                      },
+                      "paddingBottom": {
+                        "style": [Function],
+                      },
+                      "paddingInline": {
+                        "style": [Function],
+                      },
+                      "paddingInlineEnd": {
+                        "style": [Function],
+                      },
+                      "paddingInlineStart": {
+                        "style": [Function],
+                      },
+                      "paddingLeft": {
+                        "style": [Function],
+                      },
+                      "paddingRight": {
+                        "style": [Function],
+                      },
+                      "paddingTop": {
+                        "style": [Function],
+                      },
+                      "paddingX": {
+                        "style": [Function],
+                      },
+                      "paddingY": {
+                        "style": [Function],
+                      },
+                      "pb": {
+                        "style": [Function],
+                      },
+                      "pl": {
+                        "style": [Function],
+                      },
+                      "position": {},
+                      "pr": {
+                        "style": [Function],
+                      },
+                      "pt": {
+                        "style": [Function],
+                      },
+                      "px": {
+                        "style": [Function],
+                      },
+                      "py": {
+                        "style": [Function],
+                      },
+                      "right": {},
+                      "rowGap": {
+                        "style": [Function],
+                      },
+                      "textAlign": {},
+                      "textOverflow": {},
+                      "textTransform": {},
+                      "top": {},
+                      "typography": {
+                        "cssProperty": false,
+                        "themeKey": "typography",
+                      },
+                      "visibility": {},
+                      "whiteSpace": {},
+                      "width": {
+                        "transform": [Function],
+                      },
+                      "zIndex": {
+                        "themeKey": "zIndex",
+                      },
+                    },
+                    "zIndex": {
+                      "appBar": 1100,
+                      "drawer": 1200,
+                      "fab": 1050,
+                      "mobileStepper": 1000,
+                      "modal": 1300,
+                      "snackbar": 1400,
+                      "speedDial": 1050,
+                      "tooltip": 1500,
+                    },
+                  }
+                }
+              />
+              <React.Fragment>
+                <React.Fragment>
+                  <ForwardRef(Typography)
+                    color="primary"
+                    component="span"
+                    noWrap={true}
+                    sx={
+                      {
+                        "marginTop": "16px",
+                      }
+                    }
+                    variant="subtitle2"
+                  >
+                    TENANT
+                  </ForwardRef(Typography)>
+                  <ForwardRef(Typography)
+                    color="textSecondary"
+                    component="span"
+                    sx={
+                      {
+                        "paddingLeft": "32px",
+                      }
+                    }
+                    variant="body1"
+                  >
+                    GROUP0:TENANT0
+                  </ForwardRef(Typography)>
+                </React.Fragment>
+                <React.Fragment>
+                  <ForwardRef(Typography)
+                    color="primary"
+                    component="span"
+                    noWrap={true}
+                    sx={
+                      {
+                        "marginTop": "16px",
+                      }
+                    }
+                    variant="subtitle2"
+                  >
+                    TYPE
+                  </ForwardRef(Typography)>
+                  <ForwardRef(Typography)
+                    color="textSecondary"
+                    component="span"
+                    sx={
+                      {
+                        "paddingLeft": "32px",
+                      }
+                    }
+                    variant="body1"
+                  >
+                    role
+                  </ForwardRef(Typography)>
+                </React.Fragment>
+                <React.Fragment>
+                  <ForwardRef(Typography)
+                    color="primary"
+                    component="span"
+                    noWrap={true}
+                    sx={
+                      {
+                        "marginTop": "16px",
+                      }
+                    }
+                    variant="subtitle2"
+                  >
+                    PATH
+                  </ForwardRef(Typography)>
+                  <ForwardRef(Typography)
+                    color="textSecondary"
+                    component="span"
+                    sx={
+                      {
+                        "paddingLeft": "32px",
+                      }
+                    }
+                    variant="body1"
+                  >
+                    yrn:yahoo:::37146:role:JEST_OWNER_SERVICE
+                  </ForwardRef(Typography)>
+                </React.Fragment>
+              </React.Fragment>
+            </ForwardRef(DialogContent)>,
+            <ForwardRef(DialogActions)>
+              <ForwardRef(Button)
+                aria-label="close dialog"
+                color="secondary"
+                onClick={[Function]}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="contained"
+              >
+                CLOSE
+                <Memo
+                  sx={
+                    {
+                      "marginLeft": "8px",
+                    }
+                  }
+                />
+              </ForwardRef(Button)>
+            </ForwardRef(DialogActions)>,
+          ],
+          "disableEscapeKeyDown": false,
+          "disablePortal": true,
+          "fullScreen": false,
+          "fullWidth": true,
+          "label": "path-information-dialog",
+          "maxWidth": "sm",
+          "onClose": [Function],
+          "open": true,
+          "scroll": "body",
+          "sx": {},
+        },
+        "ref": null,
+        "transitionDuration": {
+          "enter": 225,
+          "exit": 195,
+        },
+      },
+    }
+  }
+  slots={
+    {
+      "backdrop": {
         "$$typeof": Symbol(react.forward_ref),
         "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
@@ -47,23 +1980,6 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
       },
     }
   }
-  componentsProps={
-    {
-      "backdrop": {
-        "as": undefined,
-        "transitionDuration": {
-          "enter": 225,
-          "exit": 195,
-        },
-      },
-    }
-  }
-  disableEscapeKeyDown={false}
-  disablePortal={true}
-  label="path-information-dialog"
-  onClick={[Function]}
-  onClose={[Function]}
-  open={true}
 >
   <
     appear={true}

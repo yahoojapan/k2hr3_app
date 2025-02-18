@@ -5,9 +5,108 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
   aria-label="about dialog"
   className="MuiDialog-root css-1pivxxs-MuiDialog-root"
   closeAfterTransition={true}
-  components={
+  disableEscapeKeyDown={false}
+  disablePortal={true}
+  label="about-dialog"
+  onClick={[Function]}
+  onClose={[Function]}
+  open={true}
+  slotProps={
     {
-      "Backdrop": {
+      "backdrop": {
+        "as": undefined,
+        "ownerState": {
+          "aria-label": "about dialog",
+          "children": [
+            <ForwardRef(DialogTitle)
+              label="about-dialog"
+              sx={{}}
+            >
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={{}}
+                variant="h5"
+              >
+                About 
+                K2HR3
+              </ForwardRef(Typography)>
+            </ForwardRef(DialogTitle)>,
+            <ForwardRef(DialogContent)
+              sx={
+                {
+                  "marginRight": "8px",
+                }
+              }
+            >
+              <ForwardRef(DialogContentText)
+                component="span"
+                sx={{}}
+              >
+                <ForwardRef(Typography)
+                  color="textSecondary"
+                  component="span"
+                  variant="h6"
+                >
+                  License: 
+                  MIT
+                  <br />
+                </ForwardRef(Typography)>
+                <ForwardRef(Typography)
+                  component="span"
+                  variant="body2"
+                >
+                  K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers commonmanagement information for the cloud.K2HR3 can dynamically manage information as "who", "what", "operate".These are stored as roles, resources, policies in K2hdkc, and the clientsystem can dynamically read and modify these information.
+                  <br />
+                  <br />
+                  Copyright(C) 2017 Yahoo Japan Corporation.
+                </ForwardRef(Typography)>
+              </ForwardRef(DialogContentText)>
+            </ForwardRef(DialogContent)>,
+            <ForwardRef(DialogActions)
+              sx={{}}
+            >
+              <ForwardRef(Button)
+                aria-label="close about dialog"
+                color="secondary"
+                onClick={[Function]}
+                sx={{}}
+                variant="contained"
+              >
+                CLOSE
+                <Memo
+                  sx={
+                    {
+                      "marginLeft": "8px",
+                    }
+                  }
+                />
+              </ForwardRef(Button)>
+            </ForwardRef(DialogActions)>,
+          ],
+          "disableEscapeKeyDown": false,
+          "disablePortal": true,
+          "fullScreen": false,
+          "fullWidth": true,
+          "label": "about-dialog",
+          "maxWidth": "sm",
+          "onClose": [Function],
+          "open": true,
+          "scroll": "body",
+          "sx": {},
+        },
+        "ref": null,
+        "transitionDuration": {
+          "enter": 225,
+          "exit": 195,
+        },
+      },
+    }
+  }
+  slots={
+    {
+      "backdrop": {
         "$$typeof": Symbol(react.forward_ref),
         "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
@@ -47,23 +146,6 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
       },
     }
   }
-  componentsProps={
-    {
-      "backdrop": {
-        "as": undefined,
-        "transitionDuration": {
-          "enter": 225,
-          "exit": 195,
-        },
-      },
-    }
-  }
-  disableEscapeKeyDown={false}
-  disablePortal={true}
-  label="about-dialog"
-  onClick={[Function]}
-  onClose={[Function]}
-  open={true}
 >
   <
     appear={true}

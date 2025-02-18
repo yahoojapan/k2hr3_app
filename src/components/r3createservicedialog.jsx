@@ -254,7 +254,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle Tooltip Change
 	//
-	handTooltipChange = (event, type, extData) =>							// eslint-disable-line no-unused-vars
+	handTooltipChange = (event, type, extData) =>
 	{
 		if(tooltipValues.addResStaticObjTooltip === type){
 			this.setState({
@@ -342,7 +342,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Main page) Static resource object page : Change
 	//
-	handleResStaticObjPageChange(event, page)								// eslint-disable-line no-unused-vars
+	handleResStaticObjPageChange(event, page)
 	{
 		this.setState({
 			staticResPageNum:	page
@@ -352,7 +352,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Main page) Service resource type : Change
 	//
-	handleResourceTypeChange(event, type)									// eslint-disable-line no-unused-vars
+	handleResourceTypeChange(event, type)
 	{
 		if(this.state.newServiceResType === type){
 			console.warn('changed value type(' + JSON.stringify(type) + ') is something wrong.');
@@ -390,7 +390,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) Edit static resource
 	//
-	handleEditStaticResourceObj(event, pos)									// eslint-disable-line no-unused-vars
+	handleEditStaticResourceObj(event, pos)
 	{
 		if(!r3IsSafeTypedEntity(this.state.newStaticRes, 'array')){
 			return;
@@ -450,7 +450,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) Delete static resource
 	//
-	handleDelStaticResourceObj(event, pos)									// eslint-disable-line no-unused-vars
+	handleDelStaticResourceObj(event, pos)
 	{
 		if(!r3IsSafeTypedEntity(this.state.newStaticRes, 'array')){
 			return;
@@ -512,7 +512,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) edit one static resource data type
 	//
-	handleStaticResTypeChange(event, type)									// eslint-disable-line no-unused-vars
+	handleStaticResTypeChange(event, type)
 	{
 		if(!r3IsSafeTypedEntity(this.state.editingStaticRes, 'object')){
 			return;
@@ -569,7 +569,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) Static resource page close
 	//
-	handleStaticResPageClose(event, isCancel)								// eslint-disable-line no-unused-vars
+	handleStaticResPageClose(event, isCancel)
 	{
 		// cancel
 		if(isCancel){
@@ -718,7 +718,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) Static resource object keys page : Change
 	//
-	handleStaticResKeysPageChange(event, page)								// eslint-disable-line no-unused-vars
+	handleStaticResKeysPageChange(event, page)
 	{
 		this.setState({
 			staticResKeysPageNum:	page
@@ -728,7 +728,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) Delete key in static resource
 	//
-	handleDelStaticResKey(event, item)										// eslint-disable-line no-unused-vars
+	handleDelStaticResKey(event, item)
 	{
 		if(!r3IsSafeTypedEntity(this.state.editingStaticRes, 'object') || !r3IsSafeTypedEntity(this.state.editingStaticRes.keys, 'object')){
 			return;

@@ -102,15 +102,12 @@ export default class R3Provider
 			_length = _strBody.length;
 		}
 
-		/* eslint-disable indent, no-mixed-spaces-and-tabs */
 		let	_headers	= r3IsEmptyEntity(headers) ? {} : headers;
-		_headers		= r3ObjMerge(_headers,
-		{
+		_headers		= r3ObjMerge(_headers, {
 			'Content-Type':		'application/json',
 			'Content-Length':	_length,
 		});
 		this.r3Context.getDbgHeader(_headers);												// Add debug header if development environment
-		/* eslint-enable indent, no-mixed-spaces-and-tabs */
 
 		// get token
 		this.getUserTokenByType(tokenType, (error, token) =>

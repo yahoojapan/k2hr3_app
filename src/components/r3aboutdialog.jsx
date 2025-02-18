@@ -92,7 +92,7 @@ export default class R3AboutDialog extends React.Component
 		let	lines = this.props.licenseText.split('\n');
 
 		return (
-			lines.map( (item, pos) => {						// eslint-disable-line no-unused-vars
+			lines.map( (item, pos) => {
 				return (
 					<Typography key={ pos }>
 						{ item }

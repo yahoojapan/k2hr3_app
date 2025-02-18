@@ -350,7 +350,7 @@ export default class R3Context
 				console.error('failed to encoding by base64.');
 				return '';
 			}
-		}catch(exception){
+		}catch(exception){									// eslint-disable-line no-unused-vars
 			console.error('failed to encoding by base64.');
 			return '';
 		}
@@ -412,7 +412,7 @@ export default class R3Context
 								}else{
 									console.error('failed to encoding by base64.');
 								}
-							}catch(exception){
+							}catch(exception){									// eslint-disable-line no-unused-vars
 								console.error('failed to encoding by base64.');
 							}
 						}

@@ -45,7 +45,7 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           aria-labelledby={null}
           className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-skim0e-MuiButtonBase-root-MuiIconButton-root"
           data-mui-internal-clone-element={true}
-          disabled={false}
+          disabled={null}
           id=":r1:"
           label="select-tenant"
           onBlur={[Function]}
@@ -66,9 +66,6 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           tabIndex={0}
           type="button"
         >
-          <span
-            className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
-          />
           <svg
             aria-hidden={true}
             className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"

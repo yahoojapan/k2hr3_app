@@ -760,7 +760,7 @@ export default class R3Role extends React.Component
 	//
 	// Handle Confirm Dialog : Close( OK / Cancel )
 	//
-	handleConfirmDialogClose(event, reason, result)							// eslint-disable-line no-unused-vars
+	handleConfirmDialogClose(event, reason, result)
 	{
 		if(result){
 			// case for 'cancel updating' to do
@@ -914,7 +914,7 @@ export default class R3Role extends React.Component
 	//
 	// Handle IP Addresses Value : Change
 	//
-	handleIpsChange(event, pos)														// eslint-disable-line no-unused-vars
+	handleIpsChange(event, pos)
 	{
 		let	newIps = {};
 		if(!r3IsEmptyEntity(this.state.localIps) && this.state.localIps instanceof Array){
@@ -1084,7 +1084,7 @@ export default class R3Role extends React.Component
 		});
 	}
 
-	handTooltipChange = (event, type, extData) =>									// eslint-disable-line no-unused-vars
+	handTooltipChange = (event, type, extData) =>
 	{
 		if(tooltipValues.deleteHostnameTooltip === type){
 			this.setState({

@@ -5,9 +5,180 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
   aria-label="account dialog"
   className="MuiDialog-root css-1pivxxs-MuiDialog-root"
   closeAfterTransition={true}
-  components={
+  disableEscapeKeyDown={false}
+  disablePortal={true}
+  label="account-dialog"
+  onClick={[Function]}
+  onClose={[Function]}
+  open={true}
+  slotProps={
     {
-      "Backdrop": {
+      "backdrop": {
+        "as": undefined,
+        "ownerState": {
+          "aria-label": "account dialog",
+          "children": [
+            <ForwardRef(DialogTitle)
+              label="account-dialog"
+              sx={{}}
+            >
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={{}}
+                variant="h5"
+              >
+                Account Information
+              </ForwardRef(Typography)>
+            </ForwardRef(DialogTitle)>,
+            <ForwardRef(DialogContent)
+              sx={{}}
+            >
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                User name
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="textSecondary"
+                component="span"
+                sx={
+                  {
+                    "paddingLeft": "32px",
+                  }
+                }
+                variant="body1"
+              >
+                JEST_TEST_USERNAME
+              </ForwardRef(Typography)>
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="subtitle2"
+              >
+                Unscoped Token
+              </ForwardRef(Typography)>
+              <ForwardRef(TextField)
+                InputProps={
+                  {
+                    "sx": {
+                      "backgroundColor": "#fff",
+                      "color": "rgba(0, 0, 0, 0.6)",
+                      "padding": "8px",
+                    },
+                  }
+                }
+                disabled={false}
+                fullWidth={true}
+                inputProps={
+                  {
+                    "style": {
+                      "padding": 0,
+                    },
+                  }
+                }
+                inputRef={[Function]}
+                maxRows={1}
+                minRows={1}
+                multiline={false}
+                name="unscopedtoken-textfield"
+                sx={
+                  {
+                    "marginBottom": "8px",
+                    "paddingLeft": "32px",
+                  }
+                }
+                value="JEST_TEST_UNSCOPED_TOKEN"
+                variant="outlined"
+              />
+              <ForwardRef(Tooltip)
+                open={false}
+                title="Copy to clipboard"
+              >
+                <ForwardRef(Button)
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                  onMouseLeave={[Function]}
+                  sx={
+                    {
+                      "color": "#673ab7",
+                      "float": "right",
+                      "textTransform": "none",
+                    }
+                  }
+                >
+                  <Memo
+                    sx={
+                      {
+                        "marginRight": "8px",
+                      }
+                    }
+                  />
+                  Copy to clipboard
+                </ForwardRef(Button)>
+              </ForwardRef(Tooltip)>
+            </ForwardRef(DialogContent)>,
+            <ForwardRef(DialogActions)>
+              <ForwardRef(Button)
+                aria-label="ok"
+                color="secondary"
+                disabled={false}
+                onClick={[Function]}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="contained"
+              >
+                OK
+                <Memo
+                  sx={
+                    {
+                      "marginLeft": "8px",
+                    }
+                  }
+                />
+              </ForwardRef(Button)>
+            </ForwardRef(DialogActions)>,
+          ],
+          "disableEscapeKeyDown": false,
+          "disablePortal": true,
+          "fullScreen": false,
+          "fullWidth": true,
+          "label": "account-dialog",
+          "maxWidth": "sm",
+          "onClose": [Function],
+          "open": true,
+          "scroll": "body",
+          "sx": {},
+        },
+        "ref": null,
+        "transitionDuration": {
+          "enter": 225,
+          "exit": 195,
+        },
+      },
+    }
+  }
+  slots={
+    {
+      "backdrop": {
         "$$typeof": Symbol(react.forward_ref),
         "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
@@ -47,23 +218,6 @@ exports[`R3AccountDialog test snapshot for R3AccountDialog 1`] = `
       },
     }
   }
-  componentsProps={
-    {
-      "backdrop": {
-        "as": undefined,
-        "transitionDuration": {
-          "enter": 225,
-          "exit": 195,
-        },
-      },
-    }
-  }
-  disableEscapeKeyDown={false}
-  disablePortal={true}
-  label="account-dialog"
-  onClick={[Function]}
-  onClose={[Function]}
-  open={true}
 >
   <
     appear={true}

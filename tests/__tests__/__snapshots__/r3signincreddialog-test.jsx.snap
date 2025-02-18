@@ -5,9 +5,164 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
   aria-label="signin credential dialog"
   className="MuiDialog-root css-1pivxxs-MuiDialog-root"
   closeAfterTransition={true}
-  components={
+  disableEscapeKeyDown={false}
+  disablePortal={true}
+  label="signin-dialog"
+  onClick={[Function]}
+  onClose={[Function]}
+  open={true}
+  slotProps={
     {
-      "Backdrop": {
+      "backdrop": {
+        "as": undefined,
+        "ownerState": {
+          "aria-label": "signin credential dialog",
+          "children": [
+            <ForwardRef(DialogTitle)
+              label="signin-dialog"
+              sx={{}}
+            >
+              <ForwardRef(Typography)
+                color="primary"
+                component="span"
+                noWrap={true}
+                sx={{}}
+                variant="h5"
+              >
+                Signin
+              </ForwardRef(Typography)>
+            </ForwardRef(DialogTitle)>,
+            <ForwardRef(DialogContent)
+              sx={{}}
+            >
+              <ForwardRef(DialogContentText)
+                component="span"
+                sx={{}}
+              />
+              <ForwardRef(TextField)
+                InputProps={
+                  {
+                    "sx": {
+                      "color": "rgba(0, 0, 0, 0.6)",
+                    },
+                  }
+                }
+                fullWidth={true}
+                id="username-textfield-id"
+                label="USER NAME(ID etc)"
+                margin="normal"
+                onChange={[Function]}
+                placeholder="input username(id) to sign in"
+                sx={
+                  {
+                    "clear": "both",
+                    "margin": "8px",
+                  }
+                }
+                value=""
+              />
+              <ForwardRef(TextField)
+                InputProps={
+                  {
+                    "endAdornment": <ForwardRef(InputAdornment)
+                      position="end"
+                    >
+                      <ForwardRef(IconButton)
+                        aria-label="toggle passphrase visibility"
+                        color="secondary"
+                        onClick={[Function]}
+                        size="large"
+                      >
+                        <Memo />
+                      </ForwardRef(IconButton)>
+                    </ForwardRef(InputAdornment)>,
+                    "sx": {
+                      "color": "rgba(0, 0, 0, 0.6)",
+                    },
+                  }
+                }
+                fullWidth={true}
+                id="passphrase-textfield-id"
+                label="PASS PHRASE"
+                margin="normal"
+                onChange={[Function]}
+                placeholder="input passphrase(allow empty)"
+                sx={
+                  {
+                    "clear": "both",
+                    "margin": "8px",
+                  }
+                }
+                type="password"
+                value=""
+              />
+            </ForwardRef(DialogContent)>,
+            <ForwardRef(DialogActions)>
+              <ForwardRef(Button)
+                aria-label="cancel"
+                color="primary"
+                onClick={[Function]}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="contained"
+              >
+                CANCEL
+                <Memo
+                  sx={
+                    {
+                      "marginLeft": "8px",
+                    }
+                  }
+                />
+              </ForwardRef(Button)>
+              <ForwardRef(Button)
+                aria-label="sign in"
+                color="secondary"
+                disabled={true}
+                onClick={[Function]}
+                sx={
+                  {
+                    "marginTop": "16px",
+                  }
+                }
+                variant="contained"
+              >
+                SGIN IN
+                <Memo
+                  sx={
+                    {
+                      "marginLeft": "8px",
+                    }
+                  }
+                />
+              </ForwardRef(Button)>
+            </ForwardRef(DialogActions)>,
+          ],
+          "disableEscapeKeyDown": false,
+          "disablePortal": true,
+          "fullScreen": false,
+          "fullWidth": true,
+          "label": "signin-dialog",
+          "maxWidth": "sm",
+          "onClose": [Function],
+          "open": true,
+          "scroll": "body",
+          "sx": {},
+        },
+        "ref": null,
+        "transitionDuration": {
+          "enter": 225,
+          "exit": 195,
+        },
+      },
+    }
+  }
+  slots={
+    {
+      "backdrop": {
         "$$typeof": Symbol(react.forward_ref),
         "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
@@ -47,23 +202,6 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
       },
     }
   }
-  componentsProps={
-    {
-      "backdrop": {
-        "as": undefined,
-        "transitionDuration": {
-          "enter": 225,
-          "exit": 195,
-        },
-      },
-    }
-  }
-  disableEscapeKeyDown={false}
-  disablePortal={true}
-  label="signin-dialog"
-  onClick={[Function]}
-  onClose={[Function]}
-  open={true}
 >
   <
     appear={true}
@@ -179,7 +317,7 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
                 <button
                   aria-label="toggle passphrase visibility"
                   className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorSecondary MuiIconButton-sizeLarge css-oxm8gk-MuiButtonBase-root-MuiIconButton-root"
-                  disabled={false}
+                  disabled={null}
                   id=":r3:"
                   onBlur={[Function]}
                   onClick={[Function]}
@@ -197,9 +335,6 @@ exports[`R3CreateServiceDialog test snapshot for R3SigninCredDialog 1`] = `
                   tabIndex={0}
                   type="button"
                 >
-                  <span
-                    className="MuiIconButton-loadingIndicator css-165vu30-MuiIconButton-loadingIndicator"
-                  />
                   <svg
                     aria-hidden={true}
                     className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
