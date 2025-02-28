@@ -36,7 +36,8 @@ LOCAL_HOSTNAME="$(hostname | tr -d '\n')"
 PID_FILE_BASEDIR="/var/run/antpickax"
 PID_FILE_TMPDIR="/tmp"
 
-PROC_PID_BASENAME="${PRGNAME}.pid"
+PRGNAME_PREFIX=$(echo "${PRGNAME}" | sed -e 's#\.sh.*$##g')
+PROC_PID_BASENAME="k2hr3pp-${PRGNAME_PREFIX}.pid"
 PROC_PID_FILE=""
 
 #==============================================================
