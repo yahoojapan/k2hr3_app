@@ -46,7 +46,6 @@ exports[`R3MainTree test snapshot for R3MainTree 1`] = `
           className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-skim0e-MuiButtonBase-root-MuiIconButton-root"
           data-mui-internal-clone-element={true}
           disabled={null}
-          id=":r1:"
           label="select-tenant"
           onBlur={[Function]}
           onClick={[Function]}

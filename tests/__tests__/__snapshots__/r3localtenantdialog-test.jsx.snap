@@ -685,6 +685,11 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                 },
               }
             }
+            slots={
+              {
+                "backdrop": undefined,
+              }
+            }
           >
             <div
               className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-1ixo0aa-MuiPaper-root-MuiPopover-paper"
@@ -727,7 +732,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                       aria-label="Go to previous page"
                       className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorInherit MuiIconButton-sizeMedium css-12m9zuw-MuiButtonBase-root-MuiIconButton-root"
                       disabled={true}
-                      id=":r6:"
                       onBlur={[Function]}
                       onClick={[Function]}
                       onContextMenu={[Function]}
@@ -761,7 +765,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                       aria-label="Go to next page"
                       className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorInherit MuiIconButton-sizeMedium css-12m9zuw-MuiButtonBase-root-MuiIconButton-root"
                       disabled={true}
-                      id=":r7:"
                       onBlur={[Function]}
                       onClick={[Function]}
                       onContextMenu={[Function]}
@@ -798,7 +801,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                 aria-label="close dialog"
                 className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-177ucpi-MuiButtonBase-root-MuiButton-root"
                 disabled={true}
-                id=":r8:"
                 onBlur={[Function]}
                 onClick={[Function]}
                 onContextMenu={[Function]}
@@ -840,6 +842,11 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                 "backdrop": {
                   "invisible": true,
                 },
+              }
+            }
+            slots={
+              {
+                "backdrop": undefined,
               }
             }
           >
@@ -889,7 +896,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                 aria-label="close dialog"
                 className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-177ucpi-MuiButtonBase-root-MuiButton-root"
                 disabled={true}
-                id=":ra:"
                 onBlur={[Function]}
                 onClick={[Function]}
                 onContextMenu={[Function]}
@@ -930,7 +936,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
               className="MuiButtonBase-root Mui-disabled MuiIconButton-root Mui-disabled MuiIconButton-colorPrimary MuiIconButton-sizeLarge css-37bcp-MuiButtonBase-root-MuiIconButton-root"
               data-mui-internal-clone-element={true}
               disabled={true}
-              id=":rc:"
               label="edit-users"
               onBlur={[Function]}
               onClick={[Function]}
@@ -968,7 +973,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
               className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-yzhflk-MuiButtonBase-root-MuiButton-root"
               data-mui-internal-clone-element={true}
               disabled={null}
-              id=":re:"
               onBlur={[Function]}
               onClick={[Function]}
               onContextMenu={[Function]}
@@ -1014,7 +1018,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
             aria-label="cancel"
             className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-8am8uk-MuiButtonBase-root-MuiButton-root"
             disabled={null}
-            id=":rf:"
             onBlur={[Function]}
             onClick={[Function]}
             onContextMenu={[Function]}
@@ -1048,7 +1051,6 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
             aria-label="ok"
             className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-clumik-MuiButtonBase-root-MuiButton-root"
             disabled={true}
-            id=":rg:"
             onBlur={[Function]}
             onClick={[Function]}
             onContextMenu={[Function]}
