@@ -59,13 +59,15 @@ export default class R3AboutDialog extends React.Component
 
 		licensePackage:	PropTypes.string,
 		licenseType:	PropTypes.string,
-		licenseText:	PropTypes.string
+		licenseText:	PropTypes.string,
+		r3VersionText:	PropTypes.string
 	};
 
 	static defaultProps = {
 		licensePackage:	null,
 		licenseType:	null,
-		licenseText:	null
+		licenseText:	null,
+		r3VersionText:	null
 	};
 
 	constructor(props)
@@ -86,7 +88,6 @@ export default class R3AboutDialog extends React.Component
 
 	getHtmlLicenseText()
 	{
-
 		// Output by <p> tag per line
 		//
 		let	lines = this.props.licenseText.split('\n');
@@ -103,6 +104,14 @@ export default class R3AboutDialog extends React.Component
 		);
 	}
 
+	getr3VersionText()
+	{
+		if(r3IsEmptyString(this.props.r3VersionText)){
+			return '(unknown)';
+		}
+		return this.props.r3VersionText;
+	}
+
 	getLicenseType()
 	{
 		return (
@@ -116,12 +125,16 @@ export default class R3AboutDialog extends React.Component
 	getContentText()
 	{
 		if(r3IsEmptyString(this.props.licensePackage)){
+			let	version_str	= 'Version: ' + this.getr3VersionText();
 			return (
 				<Typography { ...this.props.theme.r3AboutDialog.content }>
 					{ k2hr3Content }
 					<br />
 					<br />
 					{ k2hr3License }
+					<br />
+					<br />
+					{ version_str }
 				</Typography>
 			);
 		}else{

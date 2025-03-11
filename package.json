@@ -69,7 +69,7 @@
     "crypto": false
   },
   "scripts": {
-    "help": "echo 'command list:\n    npm run start\n    npm run start:prod\n    npm run start:production\n    npm run start:prod:dbg\n    npm run start:prod:debug\n    npm run start:prod:debug:break\n    npm run start:prod:debug:nobreak\n    npm run start:dev\n    npm run start:develop\n    npm run start:dev:dbg\n    npm run start:dev:debug\n    npm run start:dev:debug:break\n    npm run start:dev:debug:nobreak\n    npm run stop\n    npm run build\n    npm run build:dbg\n    npm run build:all\n    npm run build:all:dbg\n    npm run build:webpack\n    npm run build:webpack:dbg\n    npm run build:license\n    npm run test\n    npm run test:all\n    npm run test:lint\n    npm run test:jest\n    npm run test:update\n    npm run test:watch\n    npm run deploy\n'",
+    "help": "echo 'command list:\n    npm run start\n    npm run start:prod\n    npm run start:production\n    npm run start:prod:dbg\n    npm run start:prod:debug\n    npm run start:prod:debug:break\n    npm run start:prod:debug:nobreak\n    npm run start:dev\n    npm run start:develop\n    npm run start:dev:dbg\n    npm run start:dev:debug\n    npm run start:dev:debug:break\n    npm run start:dev:debug:nobreak\n    npm run stop\n    npm run build\n    npm run build:dbg\n    npm run build:all\n    npm run build:all:dbg\n    npm run build:webpack\n    npm run build:webpack:dbg\n    npm run build:license\n    npm run build:versionfile\n    npm run test\n    npm run test:all\n    npm run test:lint\n    npm run test:jest\n    npm run test:update\n    npm run test:watch\n    npm run deploy\n'",
     "start": "npm run start:production",
     "start:prod": "npm run start:production",
     "start:production": "bin/run.sh -bg --production && echo '' && echo 'Start on production - Success' && echo ''",
@@ -86,11 +86,12 @@
     "stop": "bin/run.sh --stop && echo '' && echo 'Stop - Success' && echo ''",
     "build": "npm run build:all",
     "build:dbg": "npm run build:all:dbg",
-    "build:all": "npm run build:license && npm run build:webpack",
-    "build:all:dbg": "npm run build:license && npm run build:webpack:dbg",
+    "build:all": "npm run build:license && npm run build:versionfile && npm run build:webpack",
+    "build:all:dbg": "npm run build:license && npm run build:versionfile && npm run build:webpack:dbg",
     "build:webpack": "echo '' && echo 'Start Production Build' && echo '' && webpack --config webpack.config.js --progress --mode production && echo '' && echo 'Production Build - Success' && echo ''",
     "build:webpack:dbg": "echo '' && echo 'Start Development Build' && echo '' && NODE_ENV=development webpack --config webpack.config.js --progress --mode development && echo '' && echo 'Development Build - Success' && echo ''",
     "build:license": "echo '' && echo 'Extract license of dependent libraries' && echo '' && bin/build_all_licenses && echo ''",
+    "build:versionfile": "echo '' && echo 'Extract the version of K2HR3 Web Application' && echo '' && bin/build_version_file.sh && echo ''",
     "test": "npm run test:all",
     "test:all": "echo 'All Test - ESLint and JEST' && npm run test:lint && npm run test:jest",
     "test:lint": "echo 'Run ESlint(NOTE: maybe install eslint in global)' && eslint app.js webpack.config.js bin/www routes/*.js routes/*/*.js src/*/*.js src/*.jsx src/*/*.jsx tests/*/*.js tests/*/*.jsx && echo 'ESlint - Success' && echo ''",

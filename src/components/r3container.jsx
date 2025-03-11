@@ -54,6 +54,7 @@ import R3Message					from '../util/r3message';
 import { localTenantPrefix }		from '../util/r3define';
 import { clientTypes }				from '../util/r3device';
 import { r3LicensesJsonString }		from '../util/r3licenses';
+import { r3VersionString }			from '../util/r3version';
 import { resourceType, roleType, policyType, serviceType, errorType, warningType, infoType, signinUnknownType, signinUnscopedToken, signinCredential } from '../util/r3types';		// eslint-disable-line no-unused-vars
 import { r3DeepCompare, r3IsEmptyStringObject, r3CompareString, r3CompareCaseString, r3IsEmptyString, r3IsEmptyEntity, r3IsEmptyEntityObject, r3ConvertFromJSON, r3IsSafeTypedEntity, r3DeepClone } from '../util/r3util';
 
@@ -130,6 +131,7 @@ export default class R3Container extends React.Component
 		licensePackage:			null,
 		licenseType:			null,
 		licenseText:			null,
+		r3VersionText:			null,
 		accountDialogOpen:		false,
 		username:				this.r3provider.getR3Context().getSafeUserName(),
 		unscopedtoken:			this.r3provider.getR3Context().getSafeUnscopedToken(),
@@ -221,6 +223,7 @@ export default class R3Container extends React.Component
 			licensePackage:			null,
 			licenseType:			null,
 			licenseText:			null,
+			r3VersionText:			null,
 			accountDialogOpen:		false,
 			username:				username,
 			unscopedtoken:			unscopedtoken,
@@ -1212,6 +1215,7 @@ export default class R3Container extends React.Component
 				licensePackage:		package_name,
 				licenseType:		this.licensesObj[package_name].licenseType,
 				licenseText:		this.licensesObj[package_name].licenseText,
+				r3VersionText:		null,
 				mainTreeOpen:		false
 			});
 		}else{
@@ -1221,6 +1225,7 @@ export default class R3Container extends React.Component
 				licensePackage:		null,
 				licenseType:		null,
 				licenseText:		null,
+				r3VersionText:		r3VersionString,
 				mainTreeOpen:		false
 			});
 		}
@@ -1235,7 +1240,8 @@ export default class R3Container extends React.Component
 			aboutDialogOpen:	false,
 			licensePackage:		null,
 			licenseType:		null,
-			licenseText:		null
+			licenseText:		null,
+			r3VersionText:		null
 		});
 	}
 
@@ -1493,6 +1499,7 @@ export default class R3Container extends React.Component
 						licensePackage={ this.state.licensePackage }
 						licenseType={ this.state.licenseType }
 						licenseText={ this.state.licenseText }
+						r3VersionText={ this.state.r3VersionText }
 					/>
 					<R3AccountDialog
 						theme={ this.props.theme }
