@@ -1,3 +1,12 @@
+k2hr3-app (1.0.40) unstable; urgency=low
+
+  * Updated dependent packages version - #140
+  * Added displaying the version number in About dialog - #139
+  * Changed the PID file name to avoid collisions - #138
+  * Changed publish NodeJS versions to v22 and Fixed scripts, etc - #137
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Tue, 11 Mar 2025 14:44:30 +0900
+
 k2hr3-app (1.0.39) unstable; urgency=low
 
   * Updated nodejs_helper for forked repositories - #135
