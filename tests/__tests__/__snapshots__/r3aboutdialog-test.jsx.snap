@@ -61,6 +61,9 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
                   <br />
                   <br />
                   Copyright(C) 2017 Yahoo Japan Corporation.
+                  <br />
+                  <br />
+                  Version: X.Y.Z
                 </ForwardRef(Typography)>
               </ForwardRef(DialogContentText)>
             </ForwardRef(DialogContent)>,
@@ -210,6 +213,9 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
               <br />
               <br />
               Copyright(C) 2017 Yahoo Japan Corporation.
+              <br />
+              <br />
+              Version: X.Y.Z
             </span>
           </span>
         </div>

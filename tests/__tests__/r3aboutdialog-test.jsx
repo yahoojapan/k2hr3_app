@@ -123,6 +123,7 @@ describe('R3AboutDialog', () => {													// eslint-disable-line no-undef
 					<R3AboutDialog
 						theme={ r3Theme }
 						r3provider={ r3provider }
+						r3VersionText={ 'X.Y.Z' }
 						open={ true }
 						onClose={ close }
 					/>

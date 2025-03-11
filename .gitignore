@@ -163,6 +163,7 @@ package-lock.json
 # auto generated file
 #
 src/util/r3licenses.js
+src/util/r3version.js
 
 #
 # for deploy
