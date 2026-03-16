@@ -135,11 +135,7 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
         "__emotion_styles": [
           "label:MuiDialog-backdrop;",
           [Function],
-          {
-            "name": "1mbdz04",
-            "next": undefined,
-            "styles": "z-index:-1;",
-          },
+          [Function],
           [Function],
           [Function],
         ],
@@ -166,7 +162,7 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
       onMouseDown={[Function]}
     >
       <div
-        aria-labelledby=":r0:"
+        aria-labelledby=":r1:"
         aria-modal={true}
         className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-155t3jt-MuiPaper-root-MuiDialog-paper"
         role="dialog"
@@ -178,7 +174,7 @@ exports[`R3AboutDialog test snapshot for R3AboutDialog 1`] = `
       >
         <h2
           className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1cw1x2b-MuiTypography-root-MuiDialogTitle-root"
-          id=":r0:"
+          id=":r1:"
           label="about-dialog"
           style={{}}
         >

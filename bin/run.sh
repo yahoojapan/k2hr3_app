@@ -32,7 +32,7 @@ SRCTOP=$(cd "${SCRIPTDIR}/.." || exit 1; pwd)
 CMDLINE_COMMAND="$0"
 CMDLINE_PARAMETERS="$*"
 
-LOCAL_HOSTNAME="$(hostname | tr -d '\n')"
+LOCAL_HOSTNAME="$(hostname -f | tr -d '\n')"
 PID_FILE_BASEDIR="/var/run/antpickax"
 PID_FILE_TMPDIR="/tmp"
 

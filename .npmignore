@@ -17,27 +17,31 @@
 # REVISION:
 #
 
-### Git
+#
+# Git
+#
 .git/
 .gitignore
 
-### npm generated
+#
+# npm generated
+#
 package-lock.json
 node_modules/
 
-### Files
+#
+# Files
+#
 AUTHORS
-LICENSE
 *.yaml
 *.yml
-.publishrc
-.eslintrc.js
+eslint.config.mjs
 webpack.config.js
-.travis_helper.sh
-travis_id_rsa
 id_rsa
 
-### Directories
+#
+# Directories
+#
 .github/
 package/
 .nyc_output/
@@ -47,7 +51,9 @@ demo/
 dist/
 backup/
 
-### Generated
+#
+# Generated
+#
 artifacts
 *.log
 *.xml

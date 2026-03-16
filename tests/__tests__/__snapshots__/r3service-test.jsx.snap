@@ -19,7 +19,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-ywopic-MuiFormControlLabel-root"
     >
       <span
-        className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary Mui-checked MuiRadio-root MuiRadio-colorPrimary css-dq6dzj-MuiButtonBase-root-MuiRadio-root"
+        className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary Mui-checked MuiRadio-root MuiRadio-colorPrimary css-xc632-MuiButtonBase-root-MuiSwitchBase-root-MuiRadio-root"
         onBlur={[Function]}
         onContextMenu={[Function]}
         onDragLeave={[Function]}
@@ -36,7 +36,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       >
         <input
           checked={true}
-          className="PrivateSwitchBase-input css-j8yymo"
+          className="PrivateSwitchBase-input css-12xagqm-MuiSwitchBase-root"
           disabled={false}
           name="serviceResourceType"
           onChange={[Function]}
@@ -45,11 +45,11 @@ exports[`R3Service test snapshot for R3Service 1`] = `
           value="verifyUrl"
         />
         <span
-          className="css-1qiat4j"
+          className="css-9oxshb-MuiRadioButtonIcon-root"
         >
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1bdfxik-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1bqw3pd-MuiSvgIcon-root-MuiRadioButtonIcon-root"
             data-testid="RadioButtonUncheckedIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -60,7 +60,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
           </svg>
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-urxi7-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1qe68id-MuiSvgIcon-root-MuiRadioButtonIcon-root"
             data-testid="RadioButtonCheckedIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -82,7 +82,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-13j6wxu-MuiFormControlLabel-root"
     >
       <span
-        className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary MuiRadio-root MuiRadio-colorPrimary css-dq6dzj-MuiButtonBase-root-MuiRadio-root"
+        className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary MuiRadio-root MuiRadio-colorPrimary css-xc632-MuiButtonBase-root-MuiSwitchBase-root-MuiRadio-root"
         onBlur={[Function]}
         onContextMenu={[Function]}
         onDragLeave={[Function]}
@@ -99,7 +99,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
       >
         <input
           checked={false}
-          className="PrivateSwitchBase-input css-j8yymo"
+          className="PrivateSwitchBase-input css-12xagqm-MuiSwitchBase-root"
           disabled={false}
           name="serviceResourceType"
           onChange={[Function]}
@@ -108,11 +108,11 @@ exports[`R3Service test snapshot for R3Service 1`] = `
           value="staticResourceObject"
         />
         <span
-          className="css-1qiat4j"
+          className="css-9oxshb-MuiRadioButtonIcon-root"
         >
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1bdfxik-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1bqw3pd-MuiSvgIcon-root-MuiRadioButtonIcon-root"
             data-testid="RadioButtonUncheckedIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -123,7 +123,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
           </svg>
           <svg
             aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1m3mvyz-MuiSvgIcon-root"
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1op2r7d-MuiSvgIcon-root-MuiRadioButtonIcon-root"
             data-testid="RadioButtonCheckedIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -154,7 +154,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
         autoFocus={false}
         className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
         disabled={false}
-        id=":r1:"
+        id=":r2:"
         name="serviceVerifyUrlResource"
         onAnimationStart={[Function]}
         onBlur={[Function]}
@@ -188,7 +188,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r2:"
+          id=":r3:"
           name="tenantValue_0"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -254,7 +254,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r5:"
+          id=":r6:"
           name="tenantValue_1"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -320,7 +320,7 @@ exports[`R3Service test snapshot for R3Service 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r8:"
+          id=":r9:"
           name="tenantNew"
           onAnimationStart={[Function]}
           onBlur={[Function]}
