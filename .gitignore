@@ -31,6 +31,7 @@
 #
 # Logs
 #
+log
 logs
 *.log
 npm-debug.log*
@@ -44,6 +45,12 @@ pids
 *.pid
 *.seed
 *.pid.lock
+
+#
+# dist/backup directory
+#
+dist
+backup
 
 #
 # Dockerfile
@@ -141,18 +148,6 @@ public/js/bundle.js
 public/js/*
 public/img/*
 !.gitkeep
-
-#
-# dist/backup directory
-#
-dist
-backup
-
-#
-# Log directory
-#
-log
-logs
 
 #
 # package-lock.json

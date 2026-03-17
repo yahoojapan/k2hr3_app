@@ -17,7 +17,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     <div
       aria-expanded="false"
       aria-haspopup="listbox"
-      className="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-1k8703s-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+      className="MuiSelect-select MuiSelect-standard MuiInputBase-input MuiInput-input css-tk6vxf-MuiNativeSelect-root-MuiSelect-select-MuiInputBase-input-MuiInput-input"
       onBlur={[Function]}
       onFocus={[Function]}
       onKeyDown={[Function]}
@@ -39,7 +39,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
     />
     <svg
       aria-hidden={true}
-      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-muwtbd-MuiSvgIcon-root-MuiSelect-icon"
+      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-yit0tl-MuiSvgIcon-root-MuiNativeSelect-root-MuiSelect-icon"
       data-testid="ArrowDropDownIcon"
       focusable="false"
       viewBox="0 0 24 24"
@@ -62,7 +62,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-513wx3-MuiFormControlLabel-root"
     >
       <span
-        className="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium css-92br0j-MuiButtonBase-root-MuiCheckbox-root"
+        className="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium Mui-checked MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium css-1u099ou-MuiButtonBase-root-MuiSwitchBase-root-MuiCheckbox-root"
         onBlur={[Function]}
         onContextMenu={[Function]}
         onDragLeave={[Function]}
@@ -79,7 +79,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       >
         <input
           checked={true}
-          className="PrivateSwitchBase-input css-j8yymo"
+          className="PrivateSwitchBase-input css-12xagqm-MuiSwitchBase-root"
           data-indeterminate={false}
           disabled={false}
           onChange={[Function]}
@@ -110,7 +110,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-16iz2xj-MuiFormControlLabel-root"
     >
       <span
-        className="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium css-92br0j-MuiButtonBase-root-MuiCheckbox-root"
+        className="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium MuiCheckbox-root MuiCheckbox-colorPrimary MuiCheckbox-sizeMedium css-1u099ou-MuiButtonBase-root-MuiSwitchBase-root-MuiCheckbox-root"
         onBlur={[Function]}
         onContextMenu={[Function]}
         onDragLeave={[Function]}
@@ -127,7 +127,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
       >
         <input
           checked={false}
-          className="PrivateSwitchBase-input css-j8yymo"
+          className="PrivateSwitchBase-input css-12xagqm-MuiSwitchBase-root"
           data-indeterminate={false}
           disabled={false}
           onChange={[Function]}
@@ -176,7 +176,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r1:"
+          id=":r2:"
           name="policyResource_0"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -242,7 +242,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r4:"
+          id=":r5:"
           name="resourceNew"
           onAnimationStart={[Function]}
           onBlur={[Function]}
@@ -314,7 +314,7 @@ exports[`R3Policy test snapshot for R3Policy 1`] = `
           autoFocus={false}
           className="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
           disabled={false}
-          id=":r7:"
+          id=":r8:"
           name="aliasNew"
           onAnimationStart={[Function]}
           onBlur={[Function]}

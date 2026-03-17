@@ -93,8 +93,8 @@ elif [ "${CI_DOCKER_IMAGE_OSTYPE}" = "ubuntu" ]; then
 	PKGMGR_UNINSTALL_OPT="purge --auto-remove -q -y"
 	PKG_INSTALL_CURL="curl"
 	PKG_INSTALL_BASE="nodejs dnsutils procps"
-	NODE_MAJOR=18
 
+	NODE_MAJOR=24
 	PKG_REPO_SETUP_NODEJS="
 		${PKGMGR_NAME} install -y ca-certificates gnupg
 		mkdir -p /etc/apt/keyrings

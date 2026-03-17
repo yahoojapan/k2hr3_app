@@ -275,11 +275,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
         "__emotion_styles": [
           "label:MuiDialog-backdrop;",
           [Function],
-          {
-            "name": "1mbdz04",
-            "next": undefined,
-            "styles": "z-index:-1;",
-          },
+          [Function],
           [Function],
           [Function],
         ],
@@ -306,7 +302,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
       onMouseDown={[Function]}
     >
       <div
-        aria-labelledby=":r0:"
+        aria-labelledby=":r1:"
         aria-modal={true}
         className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-155t3jt-MuiPaper-root-MuiDialog-paper"
         role="dialog"
@@ -318,7 +314,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
       >
         <h2
           className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1cw1x2b-MuiTypography-root-MuiDialogTitle-root"
-          id=":r0:"
+          id=":r1:"
           label="create-service-dialog"
           style={{}}
         >
@@ -390,7 +386,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
               className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-ywopic-MuiFormControlLabel-root"
             >
               <span
-                className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary Mui-checked MuiRadio-root MuiRadio-colorPrimary css-dq6dzj-MuiButtonBase-root-MuiRadio-root"
+                className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary Mui-checked MuiRadio-root MuiRadio-colorPrimary css-xc632-MuiButtonBase-root-MuiSwitchBase-root-MuiRadio-root"
                 onBlur={[Function]}
                 onContextMenu={[Function]}
                 onDragLeave={[Function]}
@@ -407,20 +403,20 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
               >
                 <input
                   checked={true}
-                  className="PrivateSwitchBase-input css-j8yymo"
+                  className="PrivateSwitchBase-input css-12xagqm-MuiSwitchBase-root"
                   disabled={false}
-                  name=":r2:"
+                  name=":r3:"
                   onChange={[Function]}
                   required={false}
                   type="radio"
                   value="verifyUrl"
                 />
                 <span
-                  className="css-1qiat4j"
+                  className="css-9oxshb-MuiRadioButtonIcon-root"
                 >
                   <svg
                     aria-hidden={true}
-                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1bdfxik-MuiSvgIcon-root"
+                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1bqw3pd-MuiSvgIcon-root-MuiRadioButtonIcon-root"
                     data-testid="RadioButtonUncheckedIcon"
                     focusable="false"
                     viewBox="0 0 24 24"
@@ -431,7 +427,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
                   </svg>
                   <svg
                     aria-hidden={true}
-                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-urxi7-MuiSvgIcon-root"
+                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1qe68id-MuiSvgIcon-root-MuiRadioButtonIcon-root"
                     data-testid="RadioButtonCheckedIcon"
                     focusable="false"
                     viewBox="0 0 24 24"
@@ -453,7 +449,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
               className="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-13j6wxu-MuiFormControlLabel-root"
             >
               <span
-                className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary MuiRadio-root MuiRadio-colorPrimary css-dq6dzj-MuiButtonBase-root-MuiRadio-root"
+                className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary MuiRadio-root MuiRadio-colorPrimary css-xc632-MuiButtonBase-root-MuiSwitchBase-root-MuiRadio-root"
                 onBlur={[Function]}
                 onContextMenu={[Function]}
                 onDragLeave={[Function]}
@@ -470,20 +466,20 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
               >
                 <input
                   checked={false}
-                  className="PrivateSwitchBase-input css-j8yymo"
+                  className="PrivateSwitchBase-input css-12xagqm-MuiSwitchBase-root"
                   disabled={false}
-                  name=":r2:"
+                  name=":r3:"
                   onChange={[Function]}
                   required={false}
                   type="radio"
                   value="staticResourceObject"
                 />
                 <span
-                  className="css-1qiat4j"
+                  className="css-9oxshb-MuiRadioButtonIcon-root"
                 >
                   <svg
                     aria-hidden={true}
-                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1bdfxik-MuiSvgIcon-root"
+                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1bqw3pd-MuiSvgIcon-root-MuiRadioButtonIcon-root"
                     data-testid="RadioButtonUncheckedIcon"
                     focusable="false"
                     viewBox="0 0 24 24"
@@ -494,7 +490,7 @@ exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
                   </svg>
                   <svg
                     aria-hidden={true}
-                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1m3mvyz-MuiSvgIcon-root"
+                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1op2r7d-MuiSvgIcon-root-MuiRadioButtonIcon-root"
                     data-testid="RadioButtonCheckedIcon"
                     focusable="false"
                     viewBox="0 0 24 24"

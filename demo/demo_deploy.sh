@@ -284,7 +284,7 @@ PRNSUCCESS "Build bundle.js for demo site"
 #
 PRNTITLE "Setup SSH before pushing"
 
-if [ -z "${SETUP_SSH_DISABLE}" ] || [ "${SETUP_SSH_DISABLE}" != "1" ]; then
+if [ -n "${PUBLISH_TAG_NAME}" ] && { [ -z "${SETUP_SSH_DISABLE}" ] || [ "${SETUP_SSH_DISABLE}" != "1" ]; }; then
 	#
 	# Check directory and file about SSH setting
 	#
@@ -349,7 +349,7 @@ if [ -z "${SETUP_SSH_DISABLE}" ] || [ "${SETUP_SSH_DISABLE}" != "1" ]; then
 
 	PRNSUCCESS "Setup SSH before pushing"
 else
-	PRNSUCCESS "Skip setup SSH before pushing"
+	PRNSUCCESS "Not publish gh-pages, so skip setup SSH before pushing"
 fi
 
 #==============================================================
@@ -362,70 +362,75 @@ PRNTITLE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 #
 PRNINFO "Clone ${BRANCH_GHPAGES} to dist directory"
 
-if [ -d "${DIST_DIR}" ] || [ -f "${DIST_DIR}" ]; then
-	PRNWARN "${DIST_DIR} file or directory is existed, then it will be remove for creation"
-	RUNCMD rm -rf "${DIST_DIR}"
-fi
-if ! RUNCMD git clone "${REPO_GIT_URL}" "${DIST_DIR_NAME}"; then
-	PRNERR "Failed to clone ${REPO_GIT_URL} to ${DIST_DIR_NAME}"
-	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
-	exit 1
+if [ -n "${PUBLISH_TAG_NAME}" ]; then
+	if [ -d "${DIST_DIR}" ] || [ -f "${DIST_DIR}" ]; then
+		PRNWARN "${DIST_DIR} file or directory is existed, then it will be remove for creation"
+		RUNCMD rm -rf "${DIST_DIR}"
+	fi
+	if ! RUNCMD git clone "${REPO_GIT_URL}" "${DIST_DIR_NAME}"; then
+		PRNERR "Failed to clone ${REPO_GIT_URL} to ${DIST_DIR_NAME}"
+		PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
+		exit 1
+	fi
+
+	PRNINFO "Run \"cd ${DIST_DIR}\""
+	if ! cd "${DIST_DIR}"; then
+		PRNERR "Failed to change current directory."
+		PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
+		exit 1
+	fi
+	if ! RUNCMD git fetch; then
+		PRNERR "Failed to fetch"
+		PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
+		exit 1
+	fi
+	if ! RUNCMD git config user.name "${DIST_CONFIG_USERNAME}"; then
+		PRNERR "Failed to set git user name(${DIST_CONFIG_USERNAME})"
+		PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
+		exit 1
+	fi
+	if ! RUNCMD git config user.email "${DIST_CONFIG_EMAIL}"; then
+		PRNERR "Failed to set git user mail address(${DIST_CONFIG_EMAIL})"
+		PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
+		exit 1
+	fi
+	if ! RUNCMD git checkout "${BRANCH_GHPAGES}"; then
+		PRNERR "Failed to checkout ${BRANCH_GHPAGES} branch"
+		PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
+		exit 1
+	fi
+
+	#
+	# Copy public directory and index(ja).html files to dist directory
+	#
+	PRNINFO "Copying public directory and index(ja).html"
+
+	rm -rf "${DIST_PUBLIC_DIR}"
+	if ! RUNCMD cp -rp "${MASTER_PUBLIC_DIR}" "${DIST_DIR}"; then
+		PRNERR "Failed to copy ${MASTER_PUBLIC_DIR} directory to ${DIST_DIR}"
+		PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
+		exit 1
+	fi
+
+	PRNINFO "Run \"sed -e \"s/__K2HR3_DEMO_INDEX_HTML_LANG__/en/g\" -e \"s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g\" ${DEMO_DIR}/${DEMO_INDEX_HTML} > ${DIST_DIR}/${DEMO_INDEX_HTML}\""
+	if ! sed -e "s/__K2HR3_DEMO_INDEX_HTML_LANG__/en/g" -e "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" "${DEMO_DIR}/${DEMO_INDEX_HTML}" > "${DIST_DIR}/${DEMO_INDEX_HTML}"; then
+		PRNERR "Failed to convert and create ${DEMO_INDEX_HTML} in ${DIST_DIR}"
+		PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
+		exit 1
+	fi
+
+	PRNINFO "Run \"sed -e \"s/__K2HR3_DEMO_INDEX_HTML_LANG__/ja/g\" -e \"s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g\" ${DEMO_DIR}/${DEMO_INDEX_HTML} > ${DIST_DIR}/${DEMO_INDEXJA_HTML}\""
+	if ! sed -e "s/__K2HR3_DEMO_INDEX_HTML_LANG__/ja/g" -e "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" "${DEMO_DIR}/${DEMO_INDEX_HTML}" > "${DIST_DIR}/${DEMO_INDEXJA_HTML}"; then
+		PRNERR "Failed to convert and create ${DEMO_INDEXJA_HTML} in ${DIST_DIR}"
+		PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
+		exit 1
+	fi
+
+	PRNSUCCESS "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
+else
+	PRNSUCCESS "Not publish gh-pages, so skip setup ${BRANCH_GHPAGES} branch and prepare files to commit."
 fi
 
-PRNINFO "Run \"cd ${DIST_DIR}\""
-if ! cd "${DIST_DIR}"; then
-	PRNERR "Failed to change current directory."
-	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
-	exit 1
-fi
-if ! RUNCMD git fetch; then
-	PRNERR "Failed to fetch"
-	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
-	exit 1
-fi
-if ! RUNCMD git config user.name "${DIST_CONFIG_USERNAME}"; then
-	PRNERR "Failed to set git user name(${DIST_CONFIG_USERNAME})"
-	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
-	exit 1
-fi
-if ! RUNCMD git config user.email "${DIST_CONFIG_EMAIL}"; then
-	PRNERR "Failed to set git user mail address(${DIST_CONFIG_EMAIL})"
-	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
-	exit 1
-fi
-if ! RUNCMD git checkout "${BRANCH_GHPAGES}"; then
-	PRNERR "Failed to checkout ${BRANCH_GHPAGES} branch"
-	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
-	exit 1
-fi
-
-#
-# Copy public directory and index(ja).html files to dist directory
-#
-PRNINFO "Copying public directory and index(ja).html"
-
-rm -rf "${DIST_PUBLIC_DIR}"
-if ! RUNCMD cp -rp "${MASTER_PUBLIC_DIR}" "${DIST_DIR}"; then
-	PRNERR "Failed to copy ${MASTER_PUBLIC_DIR} directory to ${DIST_DIR}"
-	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
-	exit 1
-fi
-
-PRNINFO "Run \"sed -e \"s/__K2HR3_DEMO_INDEX_HTML_LANG__/en/g\" -e \"s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g\" ${DEMO_DIR}/${DEMO_INDEX_HTML} > ${DIST_DIR}/${DEMO_INDEX_HTML}\""
-if ! sed -e "s/__K2HR3_DEMO_INDEX_HTML_LANG__/en/g" -e "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" "${DEMO_DIR}/${DEMO_INDEX_HTML}" > "${DIST_DIR}/${DEMO_INDEX_HTML}"; then
-	PRNERR "Failed to convert and create ${DEMO_INDEX_HTML} in ${DIST_DIR}"
-	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
-	exit 1
-fi
-
-PRNINFO "Run \"sed -e \"s/__K2HR3_DEMO_INDEX_HTML_LANG__/ja/g\" -e \"s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g\" ${DEMO_DIR}/${DEMO_INDEX_HTML} > ${DIST_DIR}/${DEMO_INDEXJA_HTML}\""
-if ! sed -e "s/__K2HR3_DEMO_INDEX_HTML_LANG__/ja/g" -e "s/__K2HR3_DEMO_INDEX_HTML_YEAR__/${CURRENT_YEAR}/g" "${DEMO_DIR}/${DEMO_INDEX_HTML}" > "${DIST_DIR}/${DEMO_INDEXJA_HTML}"; then
-	PRNERR "Failed to convert and create ${DEMO_INDEXJA_HTML} in ${DIST_DIR}"
-	PRNFAILURE "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
-	exit 1
-fi
-
-PRNSUCCESS "Setup ${BRANCH_GHPAGES} branch and prepare files to commit"
 
 #==============================================================
 # Push files to gh-pages
@@ -442,32 +447,30 @@ PRNTITLE "Push files to ${BRANCH_GHPAGES}"
 #
 PRNINFO "Push ${BRANCH_GHPAGES}"
 
-if [ -z "${PUBLISH_TAG_NAME}" ]; then
-	PRNWARN "PUBLISH_TAG_NAME environment is not existed."
-	PUBLISH_TAG_NAME="unknown version tag"
-fi
-
-if ! RUNCMD git add -A .; then
-	PRNERR "Failed to git add updated files"
-	PRNFAILURE "Push files to ${BRANCH_GHPAGES}"
-	exit 1
-fi
-
-PRNINFO "Run \"git commit -m \"Updates GitHub Pages: ${PUBLISH_TAG_NAME} (${REPO_RELEASE_SHA1})\"\""
-if ! git commit -m "Updates GitHub Pages: ${PUBLISH_TAG_NAME} (${REPO_RELEASE_SHA1})"; then
-	#
-	# No updated files, so nothing to push any files.
-	#
-	PRNWARN "Succeed nothing to update files, skip push."
-else
-	if ! RUNCMD git push origin "${BRANCH_GHPAGES}"; then
-		PRNERR "Failed to git push to ${BRANCH_GHPAGES}"
+if [ -n "${PUBLISH_TAG_NAME}" ]; then
+	if ! RUNCMD git add -A .; then
+		PRNERR "Failed to git add updated files"
 		PRNFAILURE "Push files to ${BRANCH_GHPAGES}"
 		exit 1
 	fi
-fi
 
-PRNSUCCESS "Push files to ${BRANCH_GHPAGES}"
+	PRNINFO "Run \"git commit -m \"Updates GitHub Pages: ${PUBLISH_TAG_NAME} (${REPO_RELEASE_SHA1})\"\""
+	if ! git commit -m "Updates GitHub Pages: ${PUBLISH_TAG_NAME} (${REPO_RELEASE_SHA1})"; then
+		#
+		# No updated files, so nothing to push any files.
+		#
+		PRNWARN "Succeed nothing to update files, skip push."
+	else
+		if ! RUNCMD git push origin "${BRANCH_GHPAGES}"; then
+			PRNERR "Failed to git push to ${BRANCH_GHPAGES}"
+			PRNFAILURE "Push files to ${BRANCH_GHPAGES}"
+			exit 1
+		fi
+	fi
+	PRNSUCCESS "Push files to ${BRANCH_GHPAGES}"
+else
+	PRNSUCCESS "Not publish gh-pages, so skip push files."
+fi
 
 #==============================================================
 # Restore
