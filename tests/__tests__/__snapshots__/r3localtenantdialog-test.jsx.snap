@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
 <
@@ -190,9 +190,7 @@ exports[`R3LocalTenantDialog test snapshot for R3LocalTenantDialog 1`] = `
                   }
                 }
                 variant="body1"
-              >
-                
-              </ForwardRef(Typography)>
+              />
               <ForwardRef(Popover)
                 anchorEl={null}
                 anchorOrigin={
