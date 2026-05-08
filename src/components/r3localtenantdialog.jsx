@@ -674,7 +674,7 @@ export default class R3LocalTenantDialog extends React.Component
 					value={ r3IsEmptyString(this.state.popoverTenantUserAddValue, true) ? '' : this.state.popoverTenantUserAddValue }
 					placeholder={ r3provider.getR3TextRes().tResTenantUserAddHint }
 					onChange={ (event) => this.handleChangeTenantUserAdd(event) }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3LocalTenantDialog.textField }
 					sx={ this.sxClasses.textField }
 				/>
@@ -741,7 +741,7 @@ export default class R3LocalTenantDialog extends React.Component
 						value={ this.state.tenantName }
 						placeholder={ r3provider.getR3TextRes().tResCreateTenantNameHint }
 						onChange={ (event) => this.handleTenantNameChange(event) }
-						InputProps={{ sx: this.sxClasses.inputTextField }}
+						slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 						{ ...theme.r3LocalTenantDialog.textField }
 						sx={ this.sxClasses.textField }
 					/>
@@ -918,7 +918,7 @@ export default class R3LocalTenantDialog extends React.Component
 						value={ this.state.tenantDisplay }
 						placeholder={ r3provider.getR3TextRes().tResCreateTenantDispHint }
 						onChange={ (event) => this.handleDisplayChange(event) }
-						InputProps={{ sx: this.sxClasses.inputTextField }}
+						slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 						{ ...theme.r3LocalTenantDialog.textField }
 						sx={ this.sxClasses.textField }
 					/>
@@ -934,7 +934,7 @@ export default class R3LocalTenantDialog extends React.Component
 						value={ this.state.tenantDescription }
 						placeholder={ r3provider.getR3TextRes().tResTenantDescriptionlHint }
 						onChange={ (event) => this.handleDescriptionChange(event) }
-						InputProps={{ sx: this.sxClasses.inputTextField }}
+						slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 						{ ...theme.r3LocalTenantDialog.textField }
 						sx={ this.sxClasses.textField }
 					/>

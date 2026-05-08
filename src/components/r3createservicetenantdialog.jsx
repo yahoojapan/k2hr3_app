@@ -209,7 +209,7 @@ export default class R3CreateServiceTenantDialog extends React.Component
 						value={ this.state.aliasRole }
 						placeholder={ r3provider.getR3TextRes().tResAliasRoleHint }
 						onChange={ (event) => this.handleAliasRoleChange(event) }
-						InputProps={{ sx: this.sxClasses.inputTextField }}
+						slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 						{ ...theme.r3CreatePathDialog.textField }
 						sx={ this.sxClasses.textField }
 					/>

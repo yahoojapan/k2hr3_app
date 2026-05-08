@@ -51,7 +51,7 @@ exports[`R3AppBar test snapshot for R3AppBar 1`] = `
       </svg>
     </button>
     <h6
-      className="MuiTypography-root MuiTypography-h6 MuiTypography-noWrap css-3vpxrl-MuiTypography-root"
+      className="MuiTypography-root MuiTypography-h6 MuiTypography-noWrap css-qr0rfk-MuiTypography-root"
       style={{}}
     >
       K2HR3

@@ -1196,12 +1196,14 @@ export default class R3Role extends React.Component
 				);
 			}
 
-			let	inputProps;
+			let	customSlotProps;
 			if(this.props.isReadMode){
-				inputProps = {};
+				customSlotProps = {};
 			}else{
-				inputProps = {
-					sx: this.sxClasses.inputTextField
+				customSlotProps = {
+					input: {
+						sx: this.sxClasses.inputTextField
+					}
 				};
 			}
 
@@ -1216,7 +1218,7 @@ export default class R3Role extends React.Component
 						disabled={ this.props.isReadMode }
 						placeholder={ r3provider.getR3TextRes().tResRoleHostnameHint }
 						onChange={ (event) => this.handleHostsChange(event, actionTypeHostName, pos) }
-						InputProps={ inputProps }
+						slotProps ={ customSlotProps }
 						{ ...theme.r3Role.hostnameTextField }
 						sx={ this.sxClasses.hostnameTextField }
 					/>
@@ -1226,7 +1228,7 @@ export default class R3Role extends React.Component
 						disabled={ this.props.isReadMode }
 						placeholder={ r3provider.getR3TextRes().tResRoleHostnameAUXHint }
 						onChange={ (event) => this.handleHostsChange(event, actionTypeHostAuxiliary, pos) }
-						InputProps={ inputProps }
+						slotProps ={ customSlotProps }
 						{ ...theme.r3Role.hostnameAUXTextField }
 						sx={ this.sxClasses.hostnameAUXTextField }
 					/>
@@ -1259,7 +1261,7 @@ export default class R3Role extends React.Component
 					value={ this.state.addHostName }
 					placeholder={ r3provider.getR3TextRes().tResRoleHostnameHint }
 					onChange={ (event) => this.handleAddHostsChange(event, actionTypeHostName) }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3Role.hostnameTextField }
 					sx={ this.sxClasses.hostnameTextField }
 				/>
@@ -1268,7 +1270,7 @@ export default class R3Role extends React.Component
 					value={ this.state.addAuxiliary }
 					placeholder={ r3provider.getR3TextRes().tResRoleHostnameAUXHint }
 					onChange={ (event) => this.handleAddHostsChange(event, actionTypeHostAuxiliary) }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3Role.hostnameAUXTextField }
 					sx={ this.sxClasses.hostnameAUXTextField }
 				/>
@@ -1415,12 +1417,14 @@ export default class R3Role extends React.Component
 				);
 			}
 
-			let	inputProps;
+			let	customSlotProps;
 			if(this.props.isReadMode){
-				inputProps = {};
+				customSlotProps = {};
 			}else{
-				inputProps = {
-					sx: this.sxClasses.inputTextField
+				customSlotProps = {
+					input: {
+						sx: this.sxClasses.inputTextField
+					}
 				};
 			}
 
@@ -1435,7 +1439,7 @@ export default class R3Role extends React.Component
 						value={ item }
 						placeholder={ r3provider.getR3TextRes().tResRolePolicyHint }
 						onChange={ (event) => this.handlePoliciesChange(event, actionTypeValue, pos) }
-						InputProps={ inputProps }
+						slotProps ={ customSlotProps }
 						{ ...theme.r3Role.policyTextField }
 						sx={ this.sxClasses.policyTextField }
 					/>
@@ -1462,7 +1466,7 @@ export default class R3Role extends React.Component
 					value={ this.state.addPolicies }
 					placeholder={ r3provider.getR3TextRes().tResRolePolicyHint }
 					onChange={ (event) => this.handleAddPoliciesChange(event) }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3Role.policyTextField }
 					sx={ this.sxClasses.policyTextField }
 				/>
@@ -1592,12 +1596,14 @@ export default class R3Role extends React.Component
 				);
 			}
 
-			let	inputProps;
+			let	customSlotProps;
 			if(this.props.isReadMode){
-				inputProps = {};
+				customSlotProps = {};
 			}else{
-				inputProps = {
-					sx: this.sxClasses.inputTextField
+				customSlotProps = {
+					input: {
+						sx: this.sxClasses.inputTextField
+					}
 				};
 			}
 
@@ -1612,7 +1618,7 @@ export default class R3Role extends React.Component
 						value={ item }
 						placeholder={ r3provider.getR3TextRes().tResAliasHint }
 						onChange={ (event) => this.handleAliasesChange(event, actionTypeValue, pos) }
-						InputProps={ inputProps }
+						slotProps ={ customSlotProps }
 						{ ...theme.r3Role.aliasTextField }
 						sx={ this.sxClasses.aliasTextField }
 					/>
@@ -1641,7 +1647,7 @@ export default class R3Role extends React.Component
 					value={ this.state.addAliases }
 					placeholder={ r3provider.getR3TextRes().tResAliasHint }
 					onChange={ (event) => this.handleAddAliasesChange(event) }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3Role.aliasTextField }
 					sx={ this.sxClasses.aliasTextField }
 				/>

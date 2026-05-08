@@ -5,7 +5,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
   className="MuiBox-root css-7wh13m"
 >
   <h6
-    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1mm9j5-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1fkj8ev-MuiTypography-root"
     style={{}}
   >
     VALUE
@@ -24,6 +24,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
         <span
           className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary MuiRadio-root MuiRadio-colorPrimary css-xc632-MuiButtonBase-root-MuiSwitchBase-root-MuiRadio-root"
           onBlur={[Function]}
+          onClick={[Function]}
           onContextMenu={[Function]}
           onDragLeave={[Function]}
           onFocus={[Function]}
@@ -75,7 +76,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           </span>
         </span>
         <p
-          className="MuiTypography-root MuiTypography-body1 MuiTypography-noWrap css-qxl6ce-MuiTypography-root"
+          className="MuiTypography-root MuiTypography-body1 MuiTypography-noWrap css-gajr2i-MuiTypography-root"
           style={{}}
         >
           String Type(text data)
@@ -87,6 +88,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
         <span
           className="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary Mui-checked MuiRadio-root MuiRadio-colorPrimary css-xc632-MuiButtonBase-root-MuiSwitchBase-root-MuiRadio-root"
           onBlur={[Function]}
+          onClick={[Function]}
           onContextMenu={[Function]}
           onDragLeave={[Function]}
           onFocus={[Function]}
@@ -138,7 +140,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
           </span>
         </span>
         <p
-          className="MuiTypography-root MuiTypography-body1 MuiTypography-noWrap css-qxl6ce-MuiTypography-root"
+          className="MuiTypography-root MuiTypography-body1 MuiTypography-noWrap css-gajr2i-MuiTypography-root"
           style={{}}
         >
           Object Type(string formatted by JSON)
@@ -150,7 +152,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     className="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-f50tiz-MuiFormControl-root-MuiTextField-root"
   >
     <div
-      className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1uv3abs-MuiInputBase-root-MuiInput-root"
+      className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-27h2th-MuiInputBase-root-MuiInput-root"
       onClick={[Function]}
     >
       <input
@@ -172,19 +174,19 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     </div>
   </div>
   <h6
-    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1pw5so5-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-wwrykd-MuiTypography-root"
     style={{}}
   >
     KEYS
   </h6>
   <p
-    className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap css-1gz58hz-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap css-1n9q4xq-MuiTypography-root"
     style={{}}
   >
     KEY NAME
   </p>
   <p
-    className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap css-lzn3yv-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-body2 MuiTypography-noWrap css-7xm0ir-MuiTypography-root"
     style={{}}
   >
     VALUE
@@ -196,7 +198,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       className="MuiFormControl-root MuiTextField-root css-m23eeh-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1mohkr8-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -221,7 +223,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       className="MuiFormControl-root MuiTextField-root css-r5iida-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1mohkr8-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -287,7 +289,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       className="MuiFormControl-root MuiTextField-root css-m23eeh-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1mohkr8-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -312,7 +314,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       className="MuiFormControl-root MuiTextField-root css-r5iida-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1mohkr8-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -378,7 +380,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       className="MuiFormControl-root MuiTextField-root css-m23eeh-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1mohkr8-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -403,7 +405,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       className="MuiFormControl-root MuiTextField-root css-r5iida-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1mohkr8-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -469,7 +471,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       className="MuiFormControl-root MuiTextField-root css-m23eeh-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1mohkr8-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -494,7 +496,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       className="MuiFormControl-root MuiTextField-root css-r5iida-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1mohkr8-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -554,7 +556,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     </button>
   </div>
   <h6
-    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1pw5so5-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-wwrykd-MuiTypography-root"
     style={{}}
   >
     ALIASES
@@ -566,7 +568,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       className="MuiFormControl-root MuiTextField-root css-knxkpl-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1mohkr8-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -593,6 +595,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       disabled={true}
       label="move-down-alias"
       onBlur={[Function]}
+      onClick={[Function]}
       onContextMenu={[Function]}
       onDragLeave={[Function]}
       onFocus={[Function]}
@@ -625,6 +628,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       disabled={true}
       label="move-up-alias"
       onBlur={[Function]}
+      onClick={[Function]}
       onContextMenu={[Function]}
       onDragLeave={[Function]}
       onFocus={[Function]}
@@ -696,7 +700,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
       className="MuiFormControl-root MuiTextField-root css-knxkpl-MuiFormControl-root-MuiTextField-root"
     >
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
+        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1mohkr8-MuiInputBase-root-MuiInput-root"
         onClick={[Function]}
       >
         <input
@@ -760,7 +764,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
   >
     <button
       aria-label="cancel"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-10lri9-MuiButtonBase-root-MuiButton-root"
+      className="MuiButtonBase-root Mui-disabled MuiButton-root MuiButton-contained MuiButton-sizeMedium MuiButton-colorPrimary css-10lri9-MuiButtonBase-root-MuiButton-root"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}
@@ -793,7 +797,7 @@ exports[`R3Resource test snapshot for R3Resource 1`] = `
     </button>
     <button
       aria-label="save"
-      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-12kqt8r-MuiButtonBase-root-MuiButton-root"
+      className="MuiButtonBase-root Mui-disabled MuiButton-root MuiButton-contained MuiButton-sizeMedium MuiButton-colorSecondary css-12kqt8r-MuiButtonBase-root-MuiButton-root"
       disabled={true}
       onBlur={[Function]}
       onClick={[Function]}

@@ -790,12 +790,14 @@ export default class R3Resource extends React.Component
 				);
 			}
 
-			let	inputProps;
+			let	customSlotProps;
 			if(this.props.isReadMode){
-				inputProps = {};
+				customSlotProps = {};
 			}else{
-				inputProps = {
-					sx: this.sxClasses.inputTextField
+				customSlotProps = {
+					input: {
+						sx: this.sxClasses.inputTextField
+					}
 				};
 			}
 
@@ -810,7 +812,7 @@ export default class R3Resource extends React.Component
 						disabled={ this.props.isReadMode }
 						placeholder={ r3provider.getR3TextRes().tResResourceKeysKeyHint }
 						onChange={ (event) => this.handleKeysChange(event, actionTypeName, keyname) }
-						InputProps={ inputProps }
+						slotProps ={ customSlotProps }
 						{ ...theme.r3Resource.keysKeyTextField }
 						sx={ this.sxClasses.keysKeyTextField }
 					/>
@@ -820,7 +822,7 @@ export default class R3Resource extends React.Component
 						disabled={ this.props.isReadMode }
 						placeholder={ r3provider.getR3TextRes().tResResourceKeysValueHint }
 						onChange={ (event) => this.handleKeysChange(event, actionTypeValue, keyname) }
-						InputProps={ inputProps }
+						slotProps ={ customSlotProps }
 						{ ...theme.r3Resource.keysValueTextField }
 						sx={ this.sxClasses.keysValueTextField }
 					/>
@@ -853,7 +855,7 @@ export default class R3Resource extends React.Component
 					value={ this.state.addKeyName }
 					placeholder={ r3provider.getR3TextRes().tResResourceKeysKeyHint }
 					onChange={ (event) => this.handleAddKeysChange(event, actionTypeNewKey) }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3Resource.keysKeyTextField }
 					sx={ this.sxClasses.keysKeyTextField }
 				/>
@@ -862,7 +864,7 @@ export default class R3Resource extends React.Component
 					value={ this.state.addKeyValue }
 					placeholder={ r3provider.getR3TextRes().tResResourceKeysValueHint }
 					onChange={ (event) => this.handleAddKeysChange(event, actionTypeNewValue) }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3Resource.keysValueTextField }
 					sx={ this.sxClasses.keysValueTextField }
 				/>
@@ -992,12 +994,14 @@ export default class R3Resource extends React.Component
 				);
 			}
 
-			let	inputProps;
+			let	customSlotProps;
 			if(this.props.isReadMode){
-				inputProps = {};
+				customSlotProps = {};
 			}else{
-				inputProps = {
-					sx: this.sxClasses.inputTextField
+				customSlotProps = {
+					input: {
+						sx: this.sxClasses.inputTextField
+					}
 				};
 			}
 
@@ -1012,7 +1016,7 @@ export default class R3Resource extends React.Component
 						value={ item }
 						placeholder={ r3provider.getR3TextRes().tResAliasHint }
 						onChange={ (event) => this.handleAliasesChange(event, actionTypeValue, pos) }
-						InputProps={ inputProps }
+						slotProps ={ customSlotProps }
 						{ ...theme.r3Resource.aliasTextField }
 						sx={ this.sxClasses.aliasTextField }
 					/>
@@ -1041,7 +1045,7 @@ export default class R3Resource extends React.Component
 					value={ this.state.addAliases }
 					placeholder={ r3provider.getR3TextRes().tResAliasHint }
 					onChange={ (event) => this.handleAddAliasesChange(event) }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3Resource.aliasTextField }
 					sx={ this.sxClasses.aliasTextField }
 				/>
@@ -1086,12 +1090,14 @@ export default class R3Resource extends React.Component
 			</Typography>
 		);
 
-		let	inputProps;
+		let	customSlotProps;
 		if(this.props.isReadMode){
-			inputProps = {};
+			customSlotProps = {};
 		}else{
-			inputProps = {
-				sx: this.sxClasses.inputTextField
+			customSlotProps = {
+				input: {
+					sx: this.sxClasses.inputTextField
+				}
 			};
 		}
 
@@ -1141,7 +1147,7 @@ export default class R3Resource extends React.Component
 					placeholder={ (resourceTypeObject === this.state.resourceType ? r3provider.getR3TextRes().tResResourceValueObjHint : r3provider.getR3TextRes().tResResourceValueTextHint) }
 					disabled={ this.props.isReadMode }
 					onChange={ (event) => this.handleValueChange(event) }
-					InputProps={ inputProps }
+					slotProps ={ customSlotProps }
 					{ ...valueTextFieldTheme }
 					sx={ this.sxClasses.valueTextField }
 				/>

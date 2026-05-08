@@ -936,7 +936,7 @@ export default class R3MainTree extends React.Component
 					>
 						<ListItem
 							onClick={ (event) => this.handleListItemChange(event, _type, item.path, isSelected, listItemKey) }
-							{ ...theme.r3MainTree.listItem }
+							{ ...theme.r3MainTree.listItemButton }
 						>
 							<ListItemText
 								primary={ item.name }
@@ -1038,7 +1038,7 @@ export default class R3MainTree extends React.Component
 					>
 						<ListItem
 							onClick={ (event) => this.handleNameItemInServiceChange(event, item.path, isSelected, listItemKey) }
-							{ ...theme.r3MainTree.listItem }
+							{ ...theme.r3MainTree.listItemButton }
 						>
 							<ListItemText
 								primary={ item.name }
@@ -1134,7 +1134,7 @@ export default class R3MainTree extends React.Component
 					>
 						<ListItem
 							onClick={ (event) => this.handleTypeInServiceChange(event, _service_name, item.path, isSelected, listItemKey) }
-							{ ...theme.r3MainTree.listItem }
+							{ ...theme.r3MainTree.listItemButton }
 						>
 							<ListItemIcon>
 								<LabelIcon />
@@ -1233,7 +1233,7 @@ export default class R3MainTree extends React.Component
 					>
 						<ListItem
 							onClick={ (event) => this.handleListItemInServiceChange(event, _service_name, _type_in_service, item.path, isSelected, listItemKey) }
-							{ ...theme.r3MainTree.listItem }
+							{ ...theme.r3MainTree.listItemButton }
 						>
 							<ListItemText
 								primary={ item.name }
@@ -1332,7 +1332,7 @@ export default class R3MainTree extends React.Component
 					>
 						<ListItem
 							onClick={ (event) => this.handleTypeItemChange(event, item.path, isSelected, listItemKey) }
-							{ ...theme.r3MainTree.listItem }
+							{ ...theme.r3MainTree.listItemButton }
 						>
 							<ListItemIcon>
 								<LabelIcon />

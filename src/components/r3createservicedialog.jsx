@@ -954,7 +954,7 @@ export default class R3CreateServiceDialog extends React.Component
 					value={ keyname }
 					placeholder={ r3provider.getR3TextRes().tResResourceKeysKeyHint }
 					onChange={ (event) => this.handleStaticResKeysKeyChange(event) }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3CreateServiceDialog.textField }
 					sx={ this.sxClasses.textField }
 				/>
@@ -969,7 +969,7 @@ export default class R3CreateServiceDialog extends React.Component
 					value={ value }
 					placeholder={ r3provider.getR3TextRes().tResResourceKeysValueHint }
 					onChange={ (event) => this.handleStaticResKeysValChange(event) }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3CreateServiceDialog.textField }
 					sx={ this.sxClasses.textField }
 				/>
@@ -1357,7 +1357,7 @@ export default class R3CreateServiceDialog extends React.Component
 						value={ staticResName }
 						placeholder={ r3provider.getR3TextRes().tResStaticResNameHint }
 						onChange={ (event) => this.handleStaticResNameChange(event) }
-						InputProps={{ sx: this.sxClasses.inputTextField }}
+						slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 						{ ...theme.r3CreateServiceDialog.textField }
 						sx={ this.sxClasses.textField }
 					/>
@@ -1372,7 +1372,7 @@ export default class R3CreateServiceDialog extends React.Component
 						value={ staticResExpire }
 						placeholder={ r3provider.getR3TextRes().tResStaticResExpHint }
 						onChange={ (event) => this.handleStaticResExpireChange(event) }
-						InputProps={{ sx: this.sxClasses.inputTextField }}
+						slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 						{ ...theme.r3CreateServiceDialog.textField }
 						sx={ this.sxClasses.textField }
 					/>
@@ -1411,7 +1411,7 @@ export default class R3CreateServiceDialog extends React.Component
 						value={ staticResData }
 						placeholder={ staticResDataHint }
 						onChange={ (event) => this.handleStaticResDataChange(event) }
-						InputProps={{ sx: this.sxClasses.inputTextField }}
+						slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 						{ ...theme.r3CreateServiceDialog.textField }
 						sx={ this.sxClasses.textField }
 					/>
@@ -1438,7 +1438,7 @@ export default class R3CreateServiceDialog extends React.Component
 				value={ this.state.newVerify }
 				placeholder={ r3provider.getR3TextRes().tResServiceUrlResHint }
 				onChange={ (event) => this.handleNewVerifyChange(event) }
-				InputProps={{ sx: this.sxClasses.inputTextField }}
+				slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 				{ ...theme.r3CreateServiceDialog.textField }
 				sx={ this.sxClasses.textField }
 			/>
@@ -1640,7 +1640,7 @@ export default class R3CreateServiceDialog extends React.Component
 					value={ textValue }
 					disabled={ true }
 					placeholder={ r3provider.getR3TextRes().tResServiceStaticObjHint }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3CreateServiceDialog.textField }
 					sx={ this.sxClasses.reesourceStaticTextField }
 				/>
@@ -1731,7 +1731,7 @@ export default class R3CreateServiceDialog extends React.Component
 						value={ this.state.newServiceName }
 						placeholder={ r3provider.getR3TextRes().tResCreateServiceHint }
 						onChange={ (event) => this.handleNewServiceNameChange(event) }
-						InputProps={{ sx: this.sxClasses.inputTextField }}
+						slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 						{ ...theme.r3CreateServiceDialog.textField }
 						sx={ this.sxClasses.textField }
 					/>

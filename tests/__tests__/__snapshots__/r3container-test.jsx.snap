@@ -52,7 +52,7 @@ exports[`R3Container test snapshot for R3Container 1`] = `
         </svg>
       </button>
       <h6
-        className="MuiTypography-root MuiTypography-h6 MuiTypography-noWrap css-3vpxrl-MuiTypography-root"
+        className="MuiTypography-root MuiTypography-h6 MuiTypography-noWrap css-qr0rfk-MuiTypography-root"
         style={{}}
       >
         K2HR3
@@ -118,15 +118,16 @@ exports[`R3Container test snapshot for R3Container 1`] = `
             className="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-1buyw6z-MuiToolbar-root"
           >
             <div
-              className="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-filledPrimary css-1eyi10f-MuiChip-root"
+              className="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary css-15nt4jl-MuiChip-root"
+              onClick={[Function]}
               onKeyDown={[Function]}
               onKeyUp={[Function]}
             >
               <span
-                className="MuiChip-label MuiChip-labelMedium css-1glixai-MuiChip-label"
+                className="MuiChip-label css-1dybbl5-MuiChip-label"
               >
                 <span
-                  className="MuiTypography-root MuiTypography-subtitle2 css-udjdov-MuiTypography-root"
+                  className="MuiTypography-root MuiTypography-subtitle2 css-scsbjn-MuiTypography-root"
                   style={{}}
                 >
                   TENANT
@@ -134,7 +135,7 @@ exports[`R3Container test snapshot for R3Container 1`] = `
               </span>
             </div>
             <span
-              className="MuiTypography-root MuiTypography-subtitle2 css-d6hxaw-MuiTypography-root"
+              className="MuiTypography-root MuiTypography-subtitle2 css-1iore4i-MuiTypography-root"
               style={{}}
             >
               No tenant list
@@ -187,12 +188,11 @@ exports[`R3Container test snapshot for R3Container 1`] = `
           className="MuiBox-root css-0"
         >
           <li
-            button={true}
-            className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-z2qibm-MuiListItem-root"
+            className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
             onClick={[Function]}
           >
             <div
-              className="MuiListItemIcon-root css-cokf1l-MuiListItemIcon-root"
+              className="MuiListItemIcon-root css-sqdpnb-MuiListItemIcon-root"
             >
               <svg
                 aria-hidden={true}
@@ -210,7 +210,7 @@ exports[`R3Container test snapshot for R3Container 1`] = `
               className="MuiListItemText-root css-10be8wv-MuiListItemText-root"
             >
               <h6
-                className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-1ar4pcq-MuiTypography-root"
+                className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-lwo0hn-MuiTypography-root"
                 style={{}}
               >
                 SERVICE
@@ -222,12 +222,11 @@ exports[`R3Container test snapshot for R3Container 1`] = `
           className="MuiBox-root css-0"
         >
           <li
-            button={true}
-            className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-z2qibm-MuiListItem-root"
+            className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
             onClick={[Function]}
           >
             <div
-              className="MuiListItemIcon-root css-cokf1l-MuiListItemIcon-root"
+              className="MuiListItemIcon-root css-sqdpnb-MuiListItemIcon-root"
             >
               <svg
                 aria-hidden={true}
@@ -245,7 +244,7 @@ exports[`R3Container test snapshot for R3Container 1`] = `
               className="MuiListItemText-root css-10be8wv-MuiListItemText-root"
             >
               <h6
-                className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-1ar4pcq-MuiTypography-root"
+                className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-lwo0hn-MuiTypography-root"
                 style={{}}
               >
                 ROLE
@@ -257,12 +256,11 @@ exports[`R3Container test snapshot for R3Container 1`] = `
           className="MuiBox-root css-0"
         >
           <li
-            button={true}
-            className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-z2qibm-MuiListItem-root"
+            className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
             onClick={[Function]}
           >
             <div
-              className="MuiListItemIcon-root css-cokf1l-MuiListItemIcon-root"
+              className="MuiListItemIcon-root css-sqdpnb-MuiListItemIcon-root"
             >
               <svg
                 aria-hidden={true}
@@ -280,7 +278,7 @@ exports[`R3Container test snapshot for R3Container 1`] = `
               className="MuiListItemText-root css-10be8wv-MuiListItemText-root"
             >
               <h6
-                className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-1ar4pcq-MuiTypography-root"
+                className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-lwo0hn-MuiTypography-root"
                 style={{}}
               >
                 RESOURCE
@@ -292,12 +290,11 @@ exports[`R3Container test snapshot for R3Container 1`] = `
           className="MuiBox-root css-0"
         >
           <li
-            button={true}
-            className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-z2qibm-MuiListItem-root"
+            className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
             onClick={[Function]}
           >
             <div
-              className="MuiListItemIcon-root css-cokf1l-MuiListItemIcon-root"
+              className="MuiListItemIcon-root css-sqdpnb-MuiListItemIcon-root"
             >
               <svg
                 aria-hidden={true}
@@ -315,7 +312,7 @@ exports[`R3Container test snapshot for R3Container 1`] = `
               className="MuiListItemText-root css-10be8wv-MuiListItemText-root"
             >
               <h6
-                className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-1ar4pcq-MuiTypography-root"
+                className="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-lwo0hn-MuiTypography-root"
                 style={{}}
               >
                 POLICY
@@ -345,7 +342,7 @@ exports[`R3Container test snapshot for R3Container 1`] = `
             <div
               aria-label="current display item and its path"
               aria-labelledby={null}
-              className="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-clickable MuiChip-clickableColorPrimary MuiChip-filledPrimary css-kr0zk4-MuiButtonBase-root-MuiChip-root"
+              className="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-clickable css-t6k2kz-MuiButtonBase-root-MuiChip-root"
               data-mui-internal-clone-element={true}
               onBlur={[Function]}
               onClick={[Function]}
@@ -366,7 +363,7 @@ exports[`R3Container test snapshot for R3Container 1`] = `
               tabIndex={0}
             >
               <div
-                className="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault MuiChip-avatar MuiChip-avatarMedium MuiChip-avatarColorPrimary css-1tu8av5-MuiAvatar-root"
+                className="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault MuiChip-avatar css-z71jv3-MuiAvatar-root"
               >
                 <svg
                   aria-hidden={true}
@@ -381,10 +378,10 @@ exports[`R3Container test snapshot for R3Container 1`] = `
                 </svg>
               </div>
               <span
-                className="MuiChip-label MuiChip-labelMedium css-1glixai-MuiChip-label"
+                className="MuiChip-label css-1dybbl5-MuiChip-label"
               >
                 <span
-                  className="MuiTypography-root MuiTypography-subtitle2 css-udjdov-MuiTypography-root"
+                  className="MuiTypography-root MuiTypography-subtitle2 css-scsbjn-MuiTypography-root"
                   style={{}}
                 >
                   Unselected
@@ -392,7 +389,7 @@ exports[`R3Container test snapshot for R3Container 1`] = `
               </span>
             </div>
             <span
-              className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1yle1s4-MuiTypography-root"
+              className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-qqw42u-MuiTypography-root"
               style={{}}
             />
             <div
@@ -421,7 +418,7 @@ exports[`R3Container test snapshot for R3Container 1`] = `
           />
         </svg>
         <span
-          className="MuiTypography-root MuiTypography-body1 css-1au6qfk-MuiTypography-root"
+          className="MuiTypography-root MuiTypography-body1 css-1f57k5m-MuiTypography-root"
           style={{}}
         >
           First select the tenant, then select ROLE / RESOURCE / POLICY, then browse and edit.

@@ -218,7 +218,7 @@ export default class R3CreatePathDialog extends React.Component
 						value={ this.state.newPath }
 						placeholder={ r3provider.getR3TextRes().tResCreatePathHint }
 						onChange={ (event) => this.handleNewPathChange(event) }
-						InputProps={{ sx: this.sxClasses.inputTextField }}
+						slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 						{ ...theme.r3CreatePathDialog.textField }
 						sx={ this.sxClasses.textField }
 					/>

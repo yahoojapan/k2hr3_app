@@ -2895,8 +2895,7 @@ export default class R3Provider
 		}
 
 		// make new role token
-		let binRoleToken	= crypto.randomBytes(16);
-		let	strRoleToken	= binRoleToken.toString('hex');
+		let	strRoleToken	= (Date.now().toString(16) + Math.random().toString(16).slice(2)).padEnd(32, '0').slice(0, 32);	// simple for demo
 		let	nowMilliTime	= Math.floor(new Date());
 		let	valueRoleToken	= {
 			date:			(new Date(nowMilliTime)).toISOString(),
@@ -2906,7 +2905,7 @@ export default class R3Provider
 			ip:				null,
 			port:			0,
 			cuk:			null,
-			registerpath:	'for-demo-' + binRoleToken.toString('hex')
+			registerpath:	'for-demo-' + strRoleToken
 		};
 
 		// search target role
