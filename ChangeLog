@@ -1,3 +1,11 @@
+k2hr3-app (1.0.43) unstable; urgency=low
+
+  * Updated react to v19 and related packages - #148
+  * Updated @material-ui to v9 and related packages - #147
+  * Changed support NodeJS and Fixed some code - #146
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Fri, 08 May 2026 20:39:13 +0900
+
 k2hr3-app (1.0.42) unstable; urgency=low
 
   * Updated the Jest snapshots and scripts for building - #144
