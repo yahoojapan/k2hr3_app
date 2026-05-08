@@ -795,12 +795,14 @@ export default class R3Policy extends React.Component
 				);
 			}
 
-			let	inputProps;
+			let	customSlotProps;
 			if(this.props.isReadMode){
-				inputProps = {};
+				customSlotProps = {};
 			}else{
-				inputProps = {
-					sx: this.sxClasses.inputTextField
+				customSlotProps = {
+					input: {
+						sx: this.sxClasses.inputTextField
+					}
 				};
 			}
 
@@ -815,7 +817,7 @@ export default class R3Policy extends React.Component
 						value={ item }
 						placeholder={ r3provider.getR3TextRes().tResPolicyResourceHint }
 						onChange={ (event) => this.handleResourceChange(event, actionTypeValue, pos) }
-						InputProps={ inputProps }
+						slotProps ={ customSlotProps }
 						{ ...theme.r3Policy.resourceTextField }
 						sx={ this.sxClasses.resourceTextField }
 					/>
@@ -842,7 +844,7 @@ export default class R3Policy extends React.Component
 					value={ this.state.addResource }
 					placeholder={ r3provider.getR3TextRes().tResPolicyResourceHint }
 					onChange={ (event) => this.handleAddResourceChange(event) }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3Policy.resourceTextField }
 					sx={ this.sxClasses.resourceTextField }
 				/>
@@ -972,15 +974,16 @@ export default class R3Policy extends React.Component
 				);
 			}
 
-			let	inputProps;
+			let	customSlotProps;
 			if(this.props.isReadMode){
-				inputProps = {};
+				customSlotProps = {};
 			}else{
-				inputProps = {
-					sx: this.sxClasses.inputTextField
+				customSlotProps = {
+					input: {
+						sx: this.sxClasses.inputTextField
+					}
 				};
 			}
-
 			return (
 				<Box
 					key={ pos }
@@ -992,7 +995,7 @@ export default class R3Policy extends React.Component
 						value={ item }
 						placeholder={ r3provider.getR3TextRes().tResAliasHint }
 						onChange={ (event) => this.handleAliasesChange(event, actionTypeValue, pos) }
-						InputProps={ inputProps }
+						slotProps ={ customSlotProps }
 						{ ...theme.r3Policy.aliasTextField }
 						sx={ this.sxClasses.aliasTextField }
 					/>
@@ -1011,7 +1014,6 @@ export default class R3Policy extends React.Component
 		if(this.props.isReadMode){
 			return;
 		}
-
 		return (
 			<Box
 				sx={ this.sxClasses.enclosureElement }
@@ -1021,7 +1023,7 @@ export default class R3Policy extends React.Component
 					value={ this.state.addAliases }
 					placeholder={ r3provider.getR3TextRes().tResAliasHint }
 					onChange={ (event) => this.handleAddAliasesChange(event) }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3Policy.aliasTextField }
 					sx={ this.sxClasses.aliasTextField }
 				/>

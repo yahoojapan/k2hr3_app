@@ -21,7 +21,7 @@ exports[`R3MsgBox test snapshot for R3MsgBox 1`] = `
     />
   </svg>
   <span
-    className="MuiTypography-root MuiTypography-body1 css-lrpfd-MuiTypography-root"
+    className="MuiTypography-root MuiTypography-body1 css-rw8k8b-MuiTypography-root"
     style={{}}
   >
     Dummy error message

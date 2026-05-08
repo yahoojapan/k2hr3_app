@@ -135,8 +135,10 @@ const r3Theme = createTheme({
 		// Since K2HR3 is based on 'display: block', it is set in this overrides to maintain the layout.
 		//
 		MuiTypography: {
-			defaultProps: {
-				display:			'block'
+			styleOverrides: {
+				root: {
+					display:		'block'
+				}
 			}
 		},
 
@@ -334,31 +336,38 @@ const r3Theme = createTheme({
 			component:				'div',
 			disablePadding:			true
 		},
-		listItem: {
-			button:					true
+		listItemButton: {
 		},
 		topItemText: {
-			primaryTypographyProps: {
-				variant:			'subtitle2',
-				color:				'textSecondary'
+			slotProps: {
+				primary: {
+					variant:		'subtitle2',
+					color:			'textSecondary'
+				}
 			}
 		},
 		topSelectedItemText: {
-			primaryTypographyProps: {
-				variant:			'subtitle2',
-				color:				'secondary'
+			slotProps: {
+				primary: {
+					variant:		'subtitle2',
+					color:			'secondary'
+				}
 			}
 		},
 		childItemText: {
-			primaryTypographyProps: {
-				variant:			'subtitle1',
-				color:				'textSecondary'
+			slotProps: {
+				primary: {
+					variant:		'subtitle1',
+					color:			'textSecondary'
+				}
 			}
 		},
 		childSelectedItemText: {
-			primaryTypographyProps: {
-				variant:			'subtitle1',
-				color:				'secondary'
+			slotProps: {
+				primary: {
+					variant:		'subtitle1',
+					color:			'secondary'
+				}
 			}
 		},
 		editIcon: {
@@ -1135,8 +1144,10 @@ const r3Theme = createTheme({
 		},
 		textField: {
 			disabled:				false,
-			inputProps: {
-				'aria-label':		'input create path',
+			slotProps: {
+				input: {
+					'aria-label':	'input create path'
+				}
 			}
 		},
 		cancelButton: {
@@ -1352,8 +1363,10 @@ const r3Theme = createTheme({
 		},
 		textField: {
 			disabled:				false,
-			inputProps: {
-				'aria-label':		'input tenant inforamtion',
+			slotProps: {
+				input: {
+					'aria-label':	'input tenant inforamtion'
+				}
 			}
 		},
 		usersEditButton: {

@@ -1225,7 +1225,7 @@ export default class R3PathInfoDialog extends React.Component
 								<Tooltip
 									title={ item.token }
 									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.detailRoleTokenTooltip, 'number') || (this.state.tooltips.detailRoleTokenTooltip != pos)) ? false : true) }
-									PopperProps={{ sx: this.sxClasses.wordBreakTooltip }}
+									slotProps={{ popper: { sx: this.sxClasses.wordBreakTooltip } }}
 								>
 									<Typography
 										onMouseEnter={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.detailRoleTokenTooltip, pos) }
@@ -1295,8 +1295,10 @@ export default class R3PathInfoDialog extends React.Component
 					name={ roletokenTextFieldName }
 					value={ this.state.selectedRoleToken }
 					inputRef = { (element) => { this.roletokenInputElement = element; } } 
-					InputProps={{ sx: this.sxClasses.roletokenInputTextField }}
-					inputProps={{ style: { padding: 0 } }}
+					slotProps ={{
+						input: {		sx: this.sxClasses.roletokenInputTextField	},
+						htmlInput: {	style: { padding: 0 }						}
+					}}
 					{ ...theme.r3PathInfoDialog.roletokenTextField }
 					sx={ this.sxClasses.roletokenTextField }
 				/>
@@ -1405,8 +1407,8 @@ export default class R3PathInfoDialog extends React.Component
 				<TextField
 					name={ codeTextFieldName }
 					value={ codeText }
-					inputRef = { (element) => { this.codeInputElement = element; } } 
-					InputProps={{ sx: this.sxClasses.codeInputTextField }}
+					inputRef = { (element) => { this.codeInputElement = element; } }
+					slotProps ={{ input: { sx: this.sxClasses.codeInputTextField } }}
 					{ ...theme.r3PathInfoDialog.codeTextField }
 					sx={ this.sxClasses.codeTextField }
 				/>

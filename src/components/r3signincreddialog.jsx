@@ -207,7 +207,7 @@ export default class R3SigninCredDialog extends React.Component
 						value={ name }
 						placeholder={ r3provider.getR3TextRes().tResUserNamePlaceHolder }
 						onChange={ (event) => this.handleUserNameChange(event) }
-						InputProps={{ sx: this.sxClasses.inputTextField }}
+						slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 						{ ...theme.r3SigninCredDialog.textField }
 						sx={ this.sxClasses.textField }
 					/>
@@ -219,21 +219,23 @@ export default class R3SigninCredDialog extends React.Component
 						type={ this.state.showPassphrase ? 'text' : 'password' }
 						placeholder={ r3provider.getR3TextRes().tResPassphrasePlaceHolder }
 						onChange={ (event) => this.handlePassPhraseChange(event) }
-						InputProps={{
-							endAdornment: (
-								<InputAdornment
-									{ ...theme.r3SigninCredDialog.inputAdornment }
-								>
-									<IconButton
-										onClick={ this.handleClickShowPassphrase }
-										{ ...theme.r3SigninCredDialog.passphraseIconButton }
-										size="large"
+						slotProps ={{
+							input: {
+								endAdornment: (
+									<InputAdornment
+										{ ...theme.r3SigninCredDialog.inputAdornment }
 									>
-										{ this.state.showPassphrase ? <VisibilityOffIcon /> : <VisibilityIcon />}
-									</IconButton>
-								</InputAdornment>
-							),
-							sx:	this.sxClasses.inputTextField
+										<IconButton
+											onClick={ this.handleClickShowPassphrase }
+											{ ...theme.r3SigninCredDialog.passphraseIconButton }
+											size="large"
+										>
+											{ this.state.showPassphrase ? <VisibilityOffIcon /> : <VisibilityIcon />}
+										</IconButton>
+									</InputAdornment>
+								),
+								sx:	this.sxClasses.inputTextField
+							}
 						}}
 						{ ...theme.r3SigninCredDialog.textField }
 						sx={ this.sxClasses.textField }

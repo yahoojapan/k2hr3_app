@@ -5,7 +5,6 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
   aria-label="create service dialog"
   className="MuiDialog-root css-1xls86a-MuiDialog-root"
   closeAfterTransition={true}
-  disableEscapeKeyDown={false}
   label="create-service-dialog"
   onClick={[Function]}
   onClose={[Function]}
@@ -13,7 +12,7 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
   slotProps={
     {
       "backdrop": {
-        "as": undefined,
+        "className": "MuiDialog-backdrop",
         "ownerState": {
           "aria-label": "create service dialog",
           "children": [
@@ -123,22 +122,17 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
                 Cooperation ROLE (Specify ROLE: Allowed empty)
               </ForwardRef(Typography)>
               <ForwardRef(TextField)
-                InputProps={
+                disabled={false}
+                id="service-tenant-textfield-id"
+                onChange={[Function]}
+                placeholder="Role path under tenant(yrn:yahoo:::<tenant>)"
+                slotProps={
                   {
-                    "sx": {
-                      "color": "rgba(0, 0, 0, 0.6)",
+                    "input": {
+                      "aria-label": "input create path",
                     },
                   }
                 }
-                disabled={false}
-                id="service-tenant-textfield-id"
-                inputProps={
-                  {
-                    "aria-label": "input create path",
-                  }
-                }
-                onChange={[Function]}
-                placeholder="Role path under tenant(yrn:yahoo:::<tenant>)"
                 sx={
                   {
                     "paddingLeft": "32px",
@@ -192,7 +186,6 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
               </ForwardRef(Button)>
             </ForwardRef(DialogActions)>,
           ],
-          "disableEscapeKeyDown": false,
           "fullScreen": false,
           "fullWidth": true,
           "label": "create-service-dialog",
@@ -220,13 +213,10 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
         "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
           "propTypes": {
-            "TransitionComponent": [Function],
             "children": [Function],
             "className": [Function],
             "classes": [Function],
             "component": [Function],
-            "components": [Function],
-            "componentsProps": [Function],
             "invisible": [Function],
             "open": [Function],
             "slotProps": [Function],
@@ -270,22 +260,24 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
       <div
         aria-labelledby=":r1:"
         aria-modal={true}
-        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-155t3jt-MuiPaper-root-MuiDialog-paper"
+        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-1ce12xd-MuiPaper-root-MuiDialog-paper"
+        data-mui-focusable=""
         role="dialog"
         style={
           {
             "--Paper-shadow": "0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)",
           }
         }
+        tabIndex={-1}
       >
         <h2
-          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1cw1x2b-MuiTypography-root-MuiDialogTitle-root"
+          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1e8lmdm-MuiTypography-root-MuiDialogTitle-root"
           id=":r1:"
           label="create-service-dialog"
           style={{}}
         >
           <span
-            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-paidjd-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-5mo4r6-MuiTypography-root"
             style={{}}
           >
             Created TENANT cooperation SERVICE
@@ -295,43 +287,43 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
           className="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
         >
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-m4hrld-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-n5d97y-MuiTypography-root"
             style={{}}
           >
             TENANT
           </span>
           <span
-            className="MuiTypography-root MuiTypography-body1 css-iraw28-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-body1 css-15ino4r-MuiTypography-root"
             style={{}}
           >
             GROUP0:TENANT0
           </span>
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-m4hrld-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-n5d97y-MuiTypography-root"
             style={{}}
           >
             SERVICE
           </span>
           <span
-            className="MuiTypography-root MuiTypography-body1 css-iraw28-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-body1 css-15ino4r-MuiTypography-root"
             style={{}}
           >
             JEST_OWNER_SERVICE_NAME
           </span>
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-m4hrld-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-n5d97y-MuiTypography-root"
             style={{}}
           >
             PATH
           </span>
           <span
-            className="MuiTypography-root MuiTypography-body1 css-iraw28-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-body1 css-15ino4r-MuiTypography-root"
             style={{}}
           >
             yrn:yahoo:JEST_OWNER_SERVICE_NAME::10000
           </span>
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-m4hrld-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-n5d97y-MuiTypography-root"
             style={{}}
           >
             Cooperation ROLE (Specify ROLE: Allowed empty)
@@ -340,7 +332,7 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
             className="MuiFormControl-root MuiTextField-root css-1l0136s-MuiFormControl-root-MuiTextField-root"
           >
             <div
-              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1hhje3o-MuiInputBase-root-MuiInput-root"
+              className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1gw7rmj-MuiInputBase-root-MuiInput-root"
               onClick={[Function]}
             >
               <input
@@ -367,7 +359,7 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
         >
           <button
             aria-label="cancel"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-8am8uk-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-sizeMedium MuiButton-colorPrimary css-8am8uk-MuiButtonBase-root-MuiButton-root"
             disabled={null}
             onBlur={[Function]}
             onClick={[Function]}
@@ -400,7 +392,7 @@ exports[`R3CreateServiceTenantDialog test snapshot for R3CreateServiceTenantDial
           </button>
           <button
             aria-label="ok"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-clumik-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-sizeMedium MuiButton-colorSecondary css-clumik-MuiButtonBase-root-MuiButton-root"
             disabled={null}
             onBlur={[Function]}
             onClick={[Function]}

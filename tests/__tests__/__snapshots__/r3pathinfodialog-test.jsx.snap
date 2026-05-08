@@ -5,7 +5,6 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
   aria-label="path information dialog"
   className="MuiDialog-root css-1pivxxs-MuiDialog-root"
   closeAfterTransition={true}
-  disableEscapeKeyDown={false}
   disablePortal={true}
   label="path-information-dialog"
   onClick={[Function]}
@@ -14,7 +13,7 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
   slotProps={
     {
       "backdrop": {
-        "as": undefined,
+        "className": "MuiDialog-backdrop",
         "ownerState": {
           "aria-label": "path information dialog",
           "children": [
@@ -39,10 +38,18 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
                 message={null}
                 theme={
                   {
+                    "alpha": [Function],
                     "applyStyles": [Function],
                     "breakpoints": {
                       "between": [Function],
                       "down": [Function],
+                      "internal_mediaKeys": [
+                        "@media (min-width:0px)",
+                        "@media (min-width:600px)",
+                        "@media (min-width:900px)",
+                        "@media (min-width:1200px)",
+                        "@media (min-width:1536px)",
+                      ],
                       "keys": [
                         "xs",
                         "sm",
@@ -90,13 +97,18 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
                         },
                       },
                       "MuiTypography": {
-                        "defaultProps": {
-                          "display": "block",
+                        "styleOverrides": {
+                          "root": {
+                            "display": "block",
+                          },
                         },
                       },
                     },
                     "containerQueries": [Function],
+                    "darken": [Function],
                     "direction": "ltr",
+                    "internal_cache": {},
+                    "lighten": [Function],
                     "mixins": {
                       "toolbar": {
                         "@media (min-width:0px)": {
@@ -381,8 +393,10 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
                       },
                       "textField": {
                         "disabled": false,
-                        "inputProps": {
-                          "aria-label": "input create path",
+                        "slotProps": {
+                          "input": {
+                            "aria-label": "input create path",
+                          },
                         },
                       },
                       "title": {
@@ -649,8 +663,10 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
                       },
                       "textField": {
                         "disabled": false,
-                        "inputProps": {
-                          "aria-label": "input tenant inforamtion",
+                        "slotProps": {
+                          "input": {
+                            "aria-label": "input tenant inforamtion",
+                          },
                         },
                       },
                       "title": {
@@ -677,15 +693,19 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
                     },
                     "r3MainTree": {
                       "childItemText": {
-                        "primaryTypographyProps": {
-                          "color": "textSecondary",
-                          "variant": "subtitle1",
+                        "slotProps": {
+                          "primary": {
+                            "color": "textSecondary",
+                            "variant": "subtitle1",
+                          },
                         },
                       },
                       "childSelectedItemText": {
-                        "primaryTypographyProps": {
-                          "color": "secondary",
-                          "variant": "subtitle1",
+                        "slotProps": {
+                          "primary": {
+                            "color": "secondary",
+                            "variant": "subtitle1",
+                          },
                         },
                       },
                       "chip": {
@@ -736,9 +756,7 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
                         "component": "div",
                         "disablePadding": true,
                       },
-                      "listItem": {
-                        "button": true,
-                      },
+                      "listItemButton": {},
                       "root": {},
                       "smallDummyBarToolbar": {
                         "variant": "dense",
@@ -780,15 +798,19 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
                         "variant": "h6",
                       },
                       "topItemText": {
-                        "primaryTypographyProps": {
-                          "color": "textSecondary",
-                          "variant": "subtitle2",
+                        "slotProps": {
+                          "primary": {
+                            "color": "textSecondary",
+                            "variant": "subtitle2",
+                          },
                         },
                       },
                       "topSelectedItemText": {
-                        "primaryTypographyProps": {
-                          "color": "secondary",
-                          "variant": "subtitle2",
+                        "slotProps": {
+                          "primary": {
+                            "color": "secondary",
+                            "variant": "subtitle2",
+                          },
                         },
                       },
                     },
@@ -1919,7 +1941,6 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
               </ForwardRef(Button)>
             </ForwardRef(DialogActions)>,
           ],
-          "disableEscapeKeyDown": false,
           "disablePortal": true,
           "fullScreen": false,
           "fullWidth": true,
@@ -1945,13 +1966,10 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
         "__emotion_base": {
           "$$typeof": Symbol(react.forward_ref),
           "propTypes": {
-            "TransitionComponent": [Function],
             "children": [Function],
             "className": [Function],
             "classes": [Function],
             "component": [Function],
-            "components": [Function],
-            "componentsProps": [Function],
             "invisible": [Function],
             "open": [Function],
             "slotProps": [Function],
@@ -1995,22 +2013,24 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
       <div
         aria-labelledby=":r1:"
         aria-modal={true}
-        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollBody MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-155t3jt-MuiPaper-root-MuiDialog-paper"
+        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-1ce12xd-MuiPaper-root-MuiDialog-paper"
+        data-mui-focusable=""
         role="dialog"
         style={
           {
             "--Paper-shadow": "0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)",
           }
         }
+        tabIndex={-1}
       >
         <h2
-          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1cw1x2b-MuiTypography-root-MuiDialogTitle-root"
+          className="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1e8lmdm-MuiTypography-root-MuiDialogTitle-root"
           id=":r1:"
           label="path-information-dialog"
           style={{}}
         >
           <span
-            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-paidjd-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-5mo4r6-MuiTypography-root"
             style={{}}
           >
             Selected Path Information
@@ -2020,37 +2040,37 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
           className="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
         >
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-m4hrld-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-n5d97y-MuiTypography-root"
             style={{}}
           >
             TENANT
           </span>
           <span
-            className="MuiTypography-root MuiTypography-body1 css-iraw28-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-body1 css-15ino4r-MuiTypography-root"
             style={{}}
           >
             GROUP0:TENANT0
           </span>
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-m4hrld-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-n5d97y-MuiTypography-root"
             style={{}}
           >
             TYPE
           </span>
           <span
-            className="MuiTypography-root MuiTypography-body1 css-iraw28-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-body1 css-15ino4r-MuiTypography-root"
             style={{}}
           >
             role
           </span>
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-m4hrld-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-n5d97y-MuiTypography-root"
             style={{}}
           >
             PATH
           </span>
           <span
-            className="MuiTypography-root MuiTypography-body1 css-iraw28-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-body1 css-15ino4r-MuiTypography-root"
             style={{}}
           >
             yrn:yahoo:::37146:role:JEST_OWNER_SERVICE
@@ -2061,7 +2081,7 @@ exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
         >
           <button
             aria-label="close dialog"
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary MuiButton-root MuiButton-contained MuiButton-containedSecondary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorSecondary css-clumik-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-sizeMedium MuiButton-colorSecondary css-clumik-MuiButtonBase-root-MuiButton-root"
             disabled={null}
             onBlur={[Function]}
             onClick={[Function]}

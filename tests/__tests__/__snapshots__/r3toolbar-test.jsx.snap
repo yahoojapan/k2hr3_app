@@ -18,7 +18,7 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
       <div
         aria-label="current display item and its path"
         aria-labelledby={null}
-        className="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-clickable MuiChip-clickableColorPrimary MuiChip-filledPrimary css-kr0zk4-MuiButtonBase-root-MuiChip-root"
+        className="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary MuiChip-clickable css-t6k2kz-MuiButtonBase-root-MuiChip-root"
         data-mui-internal-clone-element={true}
         onBlur={[Function]}
         onClick={[Function]}
@@ -39,7 +39,7 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
         tabIndex={0}
       >
         <div
-          className="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault MuiChip-avatar MuiChip-avatarMedium MuiChip-avatarColorPrimary css-1tu8av5-MuiAvatar-root"
+          className="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault MuiChip-avatar css-z71jv3-MuiAvatar-root"
         >
           <svg
             aria-hidden={true}
@@ -54,10 +54,10 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
           </svg>
         </div>
         <span
-          className="MuiChip-label MuiChip-labelMedium css-1glixai-MuiChip-label"
+          className="MuiChip-label css-1dybbl5-MuiChip-label"
         >
           <span
-            className="MuiTypography-root MuiTypography-subtitle2 css-udjdov-MuiTypography-root"
+            className="MuiTypography-root MuiTypography-subtitle2 css-scsbjn-MuiTypography-root"
             style={{}}
           >
             SERVICE
@@ -65,7 +65,7 @@ exports[`R3ToolBar test snapshot for R3ToolBar 1`] = `
         </span>
       </div>
       <span
-        className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1yle1s4-MuiTypography-root"
+        className="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-qqw42u-MuiTypography-root"
         style={{}}
       >
         .../dummyresource

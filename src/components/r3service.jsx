@@ -544,7 +544,7 @@ export default class R3Service extends React.Component
 						value={ item }
 						placeholder={ r3provider.getR3TextRes().tResServiceTenantHint }
 						onChange={ (event) => this.handleTenantsChange(event, actionTypeValue, pos) }
-						InputProps={{ sx: this.sxClasses.inputTextField }}
+						slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 						{ ...theme.r3Service.tenantTextField }
 						sx={ this.sxClasses.tenantTextField }
 					/>
@@ -567,7 +567,7 @@ export default class R3Service extends React.Component
 					value={ this.state.addTenant }
 					placeholder={ r3provider.getR3TextRes().tResServiceTenantHint }
 					onChange={ (event) => this.handleAddTenantsChange(event) }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3Service.tenantTextField }
 					sx={ this.sxClasses.tenantTextField }
 				/>
@@ -794,7 +794,7 @@ export default class R3Service extends React.Component
 				value={ this.state.serviceResVerifyUrl }
 				placeholder={ r3provider.getR3TextRes().tResServiceUrlResHint }
 				onChange={ (event) => this.handleVerifyChange(event) }
-				InputProps={{ sx: this.sxClasses.inputTextField }}
+				slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 				{ ...theme.r3Service.resourceTextField }
 				sx={ this.sxClasses.resourceTextField }
 			/>
@@ -1002,7 +1002,7 @@ export default class R3Service extends React.Component
 					value={ textValue }
 					disabled={ true }
 					placeholder={ r3provider.getR3TextRes().tResServiceStaticObjHint }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3Service.resourceTextField }
 					sx={ this.sxClasses.staticResourceTextField }
 				/>
@@ -1029,7 +1029,7 @@ export default class R3Service extends React.Component
 					name={ serviceComponentValues.resUnknownTextFieldName }
 					value={ this.state.serviceResUnknown }
 					disabled={ true }
-					InputProps={{ sx: this.sxClasses.inputTextField }}
+					slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 					{ ...theme.r3Service.resourceTextField }
 					sx={ this.sxClasses.resourceTextField }
 				/>
