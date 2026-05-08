@@ -1091,11 +1091,11 @@ export default class R3PathInfoDialog extends React.Component
 					<TableCell
 						sx={ this.sxClasses.tableCell }
 					>
-						<Tooltip
-							title={ r3provider.getR3TextRes().tResAddRoleTokenTT }
-							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.newRoleTokenButtonTooltip, 'boolean')) ? false : this.state.tooltips.newRoleTokenButtonTooltip) }
-						>
-							<React.Fragment>
+						<React.Fragment>
+							<Tooltip
+								title={ r3provider.getR3TextRes().tResAddRoleTokenTT }
+								open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.newRoleTokenButtonTooltip, 'boolean')) ? false : this.state.tooltips.newRoleTokenButtonTooltip) }
+							>
 								<Button
 									onClick={ this.handleNewRoleToken }
 									onMouseEnter={ event => this.handleNewRoleTokenButtonTooltipChange(event, true) }
@@ -1105,9 +1105,9 @@ export default class R3PathInfoDialog extends React.Component
 								>
 									<CreateRoleTokenIcon />
 								</Button>
-								{ newRoleTokenPopover }
-							</React.Fragment>
-						</Tooltip>
+							</Tooltip>
+							{ newRoleTokenPopover }
+						</React.Fragment>
 						<Typography
 							{ ...theme.r3PathInfoDialog.textTableHead }
 							sx={ this.sxClasses.textActionTableHead }
