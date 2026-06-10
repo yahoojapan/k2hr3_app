@@ -49,8 +49,10 @@ pids
 #
 # dist/backup directory
 #
-dist
 backup
+!dist/
+dist/*
+!dist/.gitkeep
 
 #
 # Dockerfile
