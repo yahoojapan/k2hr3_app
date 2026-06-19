@@ -20,26 +20,30 @@
  */
 
 // Types
-import { errorType, warningType, infoType } from './r3types';
+import { errorType, warningType, infoType, MessageType, isMessageType } from './r3types';
 
 export default class R3Message
 {
-	constructor(message, type = infoType)
+	message: string | null;
+	type: MessageType | null;
+
+	constructor(message?: string, type: MessageType = infoType)
 	{
 		this.message	= null;
 		this.type		= null;
 
 		if(undefined !== message && null !== message && '' !== message){
-			if(undefined === type || null === type || (errorType !== type && warningType !== type && infoType !== type)){
+			if(isMessageType(type)){
+				this.type	= type;
+			}else{
 				console.warn('type parameter is wrong, thus force to set it information type.');
-				type = infoType;
+				this.type	= infoType;
 			}
 			this.message	= message;
-			this.type		= type;
 		}
 	}
 
-	getMessage()
+	getMessage(): string | null
 	{
 		if(this.empty()){
 			return null;
@@ -47,51 +51,52 @@ export default class R3Message
 		return this.message;
 	}
 
-	getMessageArray()
+	getMessageArray(): string[]
 	{
-		if(this.empty()){
+		if(this.empty() || 'string' !== typeof this.message){
 			return [];
 		}
-		return this.message.split('\n');
+		return this.message!.split('\n');
 	}
 
-	setMessage(message, type = infoType)
+	setMessage(message: string, type: MessageType = infoType): boolean
 	{
 		if(undefined === message || null === message || '' === message){
 			return false;
 		}
-		if(undefined === type || null === type || (errorType !== type && warningType !== type && infoType !== type)){
+		if(isMessageType(type)){
+			this.type	= type;
+		}else{
 			console.warn('type parameter is wrong, thus force to set it information type.');
-			type = infoType;
+			this.type	= infoType;
 		}
 		this.message	= message;
-		this.type		= type;
 
 		return true;
 	}
 
-	getType()
+	getType(): MessageType | null
 	{
 		return this.type;
 	}
 
-	getTypeString()
+	getTypeString(): string
 	{
 		if(errorType === this.type){
 			return 'ERROR';
 		}else if(warningType === this.type){
 			return 'WARNING';
-		}else{	// infoType === this.type
+		}else{
 			return 'INFORMATION';
 		}
 	}
 
-	setType(type = infoType)
+	setType(type: MessageType = infoType): boolean
 	{
 		if(undefined === this.message || null === this.message || '' === this.message){
 			return false;
 		}
-		if(undefined === type || null === type || (errorType !== type && warningType !== type && infoType !== type)){
+		if(!isMessageType(type)){
 			return false;
 		}
 		this.type = type;
@@ -99,27 +104,27 @@ export default class R3Message
 		return true;
 	}
 
-	isErrorType()
+	isErrorType(): boolean
 	{
 		return (errorType === this.type);
 	}
 
-	isWarningType()
+	isWarningType(): boolean
 	{
 		return (warningType === this.type);
 	}
 
-	isInfoType()
+	isInfoType(): boolean
 	{
 		return (infoType === this.type);
 	}
 
-	empty()
+	empty(): boolean
 	{
-		return (undefined === this.message || null === this.message || '' === this.message || undefined === this.type || null === this.type || (errorType !== this.type && warningType !== this.type && infoType !== this.type));
+		return (undefined === this.message || null === this.message || '' === this.message || undefined === this.type || null === this.type || !isMessageType(this.type));
 	}
 
-	clear()
+	clear(): void
 	{
 		this.message	= null;
 		this.type		= null;

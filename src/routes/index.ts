@@ -19,34 +19,32 @@
  *
  */
 
-'use strict';
+import express		from 'express';
+import R3UserToken	from './lib/libr3tokens';
+import R3AppConfig	from './lib/libr3appconfig';
 
-var	express		= require('express');
-var	router		= express.Router();
-
-var	libTokens	= require('./lib/libr3tokens').r3UserToken;
-var	appConfig	= require('./lib/libr3appconfig').r3AppConfig;
+let	router		= express.Router();
 
 //
 // Mountpath				: '/' or '/index.html'
 //
 // GET '/'					: get main page
 //
-router.get('/', function(req, res, next)
+router.get('/', (req: express.Request, res: express.Response, next: express.NextFunction) =>
 {
-	var	_req	= req;												// eslint-disable-line no-unused-vars
-	var	_res	= res;
-	var	_next	= next;												// eslint-disable-line no-unused-vars
+	let	_req	= req;
+	let	_res	= res;
+	let	_next	= next;
 
-	var	_appConf= new appConfig();
+	let	_appConf= new R3AppConfig();
 
 	//
 	// Get unscoped token & user name
 	//
-	var	tokensObj	= new libTokens(req);
-	tokensObj.getUnscopedUserToken(function(error, token)
+	let	tokensObj = new R3UserToken(req);
+	tokensObj.getUnscopedUserToken((error: Error | null, token: string | null) =>
 	{
-		var	errormsg	= '';
+		let	errormsg	= '';
 
 		if(null !== error){
 			// [NOTE]
@@ -62,26 +60,26 @@ router.get('/', function(req, res, next)
 			//_next(error);
 			//return;
 		}
-		var	dateobj			= new Date();
-		var	copyyear		= dateobj.getFullYear();
-		var	username		= tokensObj.getUserName();
-		var	apischeme		= _appConf.getApiScheme();
-		var	apihost			= _appConf.getApiHost();
-		var	apiport			= _appConf.getApiPort();
-		var	appmenu			= _appConf.getAppMenu();					// this is object(array)
-		var	userdata		= _appConf.getUserData();					// this is string for User Date Script
-		var	secretyaml		= _appConf.getSecretYaml();					// this is string for Secret Yaml
-		var	sidecaryaml		= _appConf.getSidecarYaml();				// this is string for Sidecar Yaml
-		var	crcobj			= _appConf.getCRCObject();					// Custom Registration Codes(CRC) object
-		var	signintype		= tokensObj.getSignInType();
-		var	signinurl		= tokensObj.getSignInUrl();
-		var	signouturl		= tokensObj.getSignOutUrl();
-		var	configname		= tokensObj.getConfigName();				// If using ExtRouter(ex. OIDC) and has a token, the config name that created the token is set.
-		var	uselocaltenant	= _appConf.useLocalTenant();
-		var	lang			= _appConf.getLang();
-		var	dbgheader		= '';
-		var	dbgvalue		= '';
-		var	dbgresheader	= '';
+		let	dateobj			= new Date();
+		let	copyyear		= dateobj.getFullYear();
+		let	username		= tokensObj.getUserName();
+		let	apischeme		= _appConf.getApiScheme();
+		let	apihost			= _appConf.getApiHost();
+		let	apiport			= _appConf.getApiPort();
+		let	appmenu			= _appConf.getAppMenu();					// this is object(array)
+		let	userdata		= _appConf.getUserData();					// this is string for User Date Script
+		let	secretyaml		= _appConf.getSecretYaml();					// this is string for Secret Yaml
+		let	sidecaryaml		= _appConf.getSidecarYaml();				// this is string for Sidecar Yaml
+		let	crcobj			= _appConf.getCRCObject();					// Custom Registration Codes(CRC) object
+		let	signintype		= tokensObj.getSignInType();
+		let	signinurl		= tokensObj.getSignInUrl();
+		let	signouturl		= tokensObj.getSignOutUrl();
+		let	configname		= tokensObj.getConfigName();				// If using ExtRouter(ex. OIDC) and has a token, the config name that created the token is set.
+		let	uselocaltenant	= _appConf.useLocalTenant();
+		let	lang			= _appConf.getLang();
+		let	dbgheader		= '';
+		let	dbgvalue		= '';
+		let	dbgresheader	= '';
 		if('development' === req.app.get('env')){
 			dbgheader		= 'x-k2hr3-debug';
 			dbgvalue		= 'debug';
@@ -94,7 +92,7 @@ router.get('/', function(req, res, next)
 				title:			'K2HR3',
 				apischeme:		apischeme,
 				apihost:		apihost,
-				apiport:		apiport,
+				apiport:		String(apiport),
 				appmenu:		escape(JSON.stringify(appmenu)),
 				userdata:		escape(JSON.stringify(userdata)),
 				secretyaml:		escape(JSON.stringify(secretyaml)),
@@ -118,7 +116,7 @@ router.get('/', function(req, res, next)
 	});
 });
 
-module.exports = router;
+export default router;
 
 /*
  * Local variables:

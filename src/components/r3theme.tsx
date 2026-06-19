@@ -19,14 +19,15 @@
  *
  */
 
-import * as Colors		from '@mui/material/colors';
-import { createTheme }	from '@mui/material/styles';
+import * as Colors				from '@mui/material/colors';
+import { createTheme, Palette }	from '@mui/material/styles';
+import { createSpacing }		from '@mui/system';
 
 // [NOTE]
 // Default theme from material-ui
 // https://material-ui.com/customization/default-theme/
 //
-const r3Theme = createTheme({
+const rawR3Theme = {
 	//
 	// palette
 	//
@@ -84,7 +85,7 @@ const r3Theme = createTheme({
 		// [NOTE]
 		// Force subtitle1 to be in bold
 		// The value was taken from the default value of subtitle1
-		// 
+		//
 		subtitle2: {
 			fontSize:				'1rem',
 			lineHeight:				1.75,
@@ -95,7 +96,7 @@ const r3Theme = createTheme({
 	//
 	// Common material-ui
 	//
-	spacing:						createTheme.spacing,
+	spacing:						createSpacing(),
 
 	//
 	// override components
@@ -107,7 +108,7 @@ const r3Theme = createTheme({
 		MuiIconButton: {
 			styleOverrides: {
 				root: {
-					padding:			'8px'
+					padding:		'8px'
 				}
 			}
 		},
@@ -137,21 +138,26 @@ const r3Theme = createTheme({
 		MuiTypography: {
 			styleOverrides: {
 				root: {
-					display:		'block'
+					display:		'block',
+					cursor:			'default'
 				}
 			}
 		},
 
 		// [NOTE]
-		// For Avater in Chip, its style using avatarColorPrimary property.
-		// But its backgroundColor is set theme.palette.primary.dark.
-		// We use avatar in chip only in toolbar, and it needs white.
+		// 1) For Avater in Chip, its style using avatarColorPrimary property.
+		//    But its backgroundColor is set theme.palette.primary.dark.
+		//    We use avatar in chip only in toolbar, and it needs white.
+		// 2) For Avator in Chip on toolbar which is as same as palette.primary.light
 		//
 		MuiChip: {
 			styleOverrides: {
 				root: {
 					'& .MuiChip-avatarColorPrimary': {
 						backgroundColor:	Colors.common.white
+					},
+					'& .MuiChip-avatar': {
+						backgroundColor:	Colors.deepPurple[100]
 					}
 				}
 			}
@@ -241,6 +247,21 @@ const r3Theme = createTheme({
 			}
 		},
 		signinedMenu: {
+		},
+		toUpperPathButton: {
+			color:					'inherit',
+			label:					'appbar-move-to-upper-path',
+			'aria-label':			'move to upper path'
+		},
+		createPathButton: {
+			color:					'inherit',
+			label:					'appbar-create-path',
+			'aria-label':			'create path or service'
+		},
+		deletePathButton: {
+			color:					'inherit',
+			label:					'appbar-delete-path',
+			'aria-label':			'delete path or service'
 		}
 	},
 
@@ -794,7 +815,14 @@ const r3Theme = createTheme({
 	r3AboutDialog: {
 		root: {
 			scroll:					'body',
-			fullWidth:				true,
+			fullWidth:				false,
+			slotProps: {
+				paper: {
+					sx: {
+						maxWidth:	'700px'
+					}
+				}
+			},
 			label:					'about-dialog',
 			'aria-label':			'about dialog'
 		},
@@ -868,6 +896,10 @@ const r3Theme = createTheme({
 			variant:				'contained',
 			color:					'secondary',
 			'aria-label':			'ok'
+		},
+		copyClipboardButton: {
+			label:					'account-dialog-copy-clipboard-button',
+			'aria-label':			'copy to clipboard'
 		}
 	},
 
@@ -1269,6 +1301,11 @@ const r3Theme = createTheme({
 			variant:				'body1',
 			noWrap:					true
 		},
+		usersAddButton: {
+			color:					'primary',
+			label:					'create-service-dialog-add-user',
+			'aria-label':			'add user'
+		},
 		cancelButton: {
 			variant:				'contained',
 			color:					'primary',
@@ -1445,9 +1482,45 @@ const r3Theme = createTheme({
 			'aria-label':			'ok'
 		}
 	}
-});
+} as const;
 
+//
+// Type inference using typeof
+//
+type rawR3ThemeType = typeof rawR3Theme;
+
+// [NOTE]
+// Extend MUI Theme interfaces to include K2HR3 custom theme properties.
+// This allows TypeScript to recognize custom styles(like r3AboutDialog)
+// with full type safety.
+//
+declare module '@mui/material/styles' {
+	interface PaletteColor {
+		mainGradient?: string;
+	}
+	interface SimplePaletteColorOptions {
+		mainGradient?: string;
+	}
+	interface Palette {
+		information: PaletteColor;
+	}
+	interface PaletteOptions {
+		information?: SimplePaletteColorOptions;
+	}
+	interface Theme extends rawR3ThemeType {}
+	interface ThemeOptions extends rawR3ThemeType {}
+}
+
+//
+// Theme object and export
+//
+const r3Theme = createTheme(rawR3Theme);
+
+//
+// Exports
+//
 export default r3Theme;
+export type R3Theme = typeof r3Theme;
 
 /*
  * Local variables:

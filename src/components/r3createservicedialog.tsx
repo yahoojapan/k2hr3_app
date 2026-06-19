@@ -20,8 +20,6 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import TextField					from '@mui/material/TextField';
 import Button						from '@mui/material/Button';
@@ -49,9 +47,91 @@ import EditIcon						from '@mui/icons-material/Edit';
 import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
 import CancelIcon					from '@mui/icons-material/Cancel';
 
-import { r3CreateServiceDialog }	from './r3styles';
-import { serviceResTypeUrl, serviceResTypeObject }	from '../util/r3types';
-import { r3DeepClone, r3IsEmptyEntity, r3IsEmptyString, r3IsEmptyStringObject, r3IsEmptyEntityObject, r3IsSafeTypedEntity, r3IsJSON } from '../util/r3util';
+import R3Provider					from '../util/r3provider';
+import type { R3Theme }				from './r3theme';
+import { r3CreateServiceDialogStyle }	from './r3styles';
+import { StaticResourceObject, isStaticResourceObject, serviceResTypeUrl, serviceResTypeObject, ServiceResType, resourceTypeObject, resourceTypeString, ResourceType, isServiceResType, valTypeAllObject }	from '../util/r3types';
+import { r3IsString, r3IsArray, r3IsObject, r3IsFunction, r3IsBoolean, r3IsNumber, r3DeepClone, r3IsEmptyEntity, r3IsEmptyString, r3IsEmptyStringObject, r3IsEmptyEntityObject, r3IsJSON, r3GetDecNumber, r3HasKey } from '../util/r3util';
+
+//
+// Interfaces / Types
+//
+type R3CreateServiceDialogRequiredProps = {
+	theme:						R3Theme;
+	r3provider:					R3Provider;
+	createMode:					boolean;									// Create mode(has main page) or only edit static resource mode(no main page)
+	onClose:					(event: {}, reason: string | null, isAgree: boolean, newServiceName: string | null, newServiceResType: ServiceResType | null, newVerify: string | null, newStaticRes: StaticResourceObject[] | null) => void;
+};
+
+type R3CreateServiceDialogOptionProps = {
+	open?:						boolean;
+	tenant?:					{ display?: string; name?: string } | null;	// Do not care for createMode(false)
+	newServiceName?:			string;
+	newServiceResType?:			ServiceResType;
+	newVerify?:					string;
+	newStaticRes?:				StaticResourceObject[];
+	tableRawCount?:				number;
+	tableKeysRawCount?:			number;
+
+	// [NOTE]
+	// Called to check for duplicate static resource names when
+	// createMode(false) is specified. If it is not set, it will
+	// not be called.
+	//
+	onCheckConflictName?:	((name: string) => boolean) | null;
+};
+
+type R3CreateServiceDialogProps = R3CreateServiceDialogRequiredProps & R3CreateServiceDialogOptionProps;
+
+type TooltipState = {
+	addResStaticObjTooltip?:	boolean;
+	editResStaticObjTooltip?:	number;
+	delResStaticObjTooltip?:	number;
+	nameResStaticObjTooltip?:	number;
+	jsonResStaticObjTooltip?:	number;
+	addStaticResKeyTooltip?:	boolean;
+	editStaticResKeyTooltip?:	number;
+	delStaticResKeyTooltip?:	number;
+	nameStaticResKeyTooltip?:	number;
+	jsonStaticResKeyTooltip?:	number;
+}
+
+type TooltipStateAll		= Required<TooltipState>;
+type TooltipStateStrings	= Record<keyof TooltipState, string>;
+
+type R3CreateServiceDialogState = {
+	open?:						boolean;
+	editingStaticResMode?:		boolean;									// Main page(all service resource) or Sub page(one static resource)
+
+	// main page
+	newServiceName?:			string;
+	newServiceResType?:			ServiceResType;
+	newVerify?:					string;
+	newStaticRes?:				StaticResourceObject[];
+	staticResPageNum?:			number;
+
+	// edit one static resource(sub page)
+	editingStaticResNew?:		boolean;									// Set to true for new creation
+	editingStaticResPos?:		number;
+	editingStaticRes?:			StaticResourceObject | null;
+	staticResMessage?:			string | null;
+	staticResKeysPageNum?:		number;
+	staticResKeyAnchorEl?:		HTMLElement | null;
+	staticResKeyCreateType?:	boolean;
+	staticResKeyBaseKey?:		string | null;
+
+	// edit one key-value in static resource(popover)
+	editingStaticResKey?:		string | null;
+	editingStaticResValue?:		string | null;
+	editingComfirmMessage?:		string | null;
+
+	// tooltips
+	tooltips?:					TooltipState;
+};
+
+type R3CreateServiceDialogStateAll	= Required<R3CreateServiceDialogState>;
+
+type R3CreateServiceDialogStyleType = ReturnType<typeof r3CreateServiceDialogStyle>;
 
 //
 // Local variables
@@ -69,7 +149,7 @@ const dialogComponentsIds = {
 	staticObjValTextFieldId:		'new-staticobjval-textfield-id',
 };
 
-const tooltipValues = {
+const tooltipValues: TooltipStateStrings = {
 	addResStaticObjTooltip:			'addResStaticObjTooltip',
 	editResStaticObjTooltip:		'editResStaticObjTooltip',
 	delResStaticObjTooltip:			'delResStaticObjTooltip',
@@ -82,22 +162,7 @@ const tooltipValues = {
 	jsonStaticResKeyTooltip:		'jsonStaticResKeyTooltip'
 };
 
-const staticResDataType = {
-	staticResStringDataType:		'staticResStringDataType',
-	staticResObjectDataType:		'staticResObjectDataType'
-};
-
-const defaultStaticResourceObj = {
-	name:							'',
-	expire:							null,
-	type:							'string',
-	data:							null,
-	keys:							{},
-	editingStringData:				'',										// Temporary member being edited
-	editingObjectData:				''										// Temporary member being edited
-};
-
-const disableAllToolTip = {
+const disableAllToolTip: TooltipStateAll = {
 	addResStaticObjTooltip:			false,
 	editResStaticObjTooltip:		-1,
 	delResStaticObjTooltip:			-1,
@@ -110,38 +175,29 @@ const disableAllToolTip = {
 	jsonStaticResKeyTooltip:		-1
 };
 
+const staticResDataType = {
+	staticResStringDataType:		'staticResStringDataType',
+	staticResObjectDataType:		'staticResObjectDataType'
+};
+
+const defaultStaticResourceObj: StaticResourceObject = {
+	name:							'',
+	expire:							null,
+	type:							resourceTypeString,
+	data:							null,
+	keys:							{},
+	editingStringData:				'',										// Temporary member being edited
+	editingObjectData:				''										// Temporary member being edited
+};
+
 //
 // Create New Path Dialog Class
 //
-export default class R3CreateServiceDialog extends React.Component
+export default class R3CreateServiceDialog extends React.Component<R3CreateServiceDialogProps, R3CreateServiceDialogState>
 {
-	static propTypes = {
-		r3provider:				PropTypes.object.isRequired,
-		open:					PropTypes.bool,
-		createMode:				PropTypes.bool.isRequired,					// Create mode(has main page) or only edit static resource mode(no main page)
-		tenant:					PropTypes.object,							// Do not care for createMode(false)
-		newServiceName:			PropTypes.string,
-		newServiceResType:		PropTypes.string,
-		newVerify:				PropTypes.string,
-		newStaticRes:			PropTypes.array,							// [NOTE] Pass static resource data as initial data in createMode(false) mode, set it to the 0th position.
-		tableRawCount:			PropTypes.number,
-		tableKeysRawCount:		PropTypes.number,
+	sxClasses: R3CreateServiceDialogStyleType;
 
-		// [NOTE]
-		// Called to check for duplicate static resource names when
-		// createMode(false) is specified. If it is not set, it will
-		// not be called.
-		//
-		onCheckConflictName:	PropTypes.func,
-
-		// [NOTE]
-		// The prototype is different depending on the case of
-		// creating new service resource and creating only static resource.
-		//
-		onClose:				PropTypes.func.isRequired
-	};
-
-	static defaultProps = {
+	static defaultProps: R3CreateServiceDialogOptionProps = {
 		open:					false,
 		tenant:					null,
 		newServiceName:			'',
@@ -153,7 +209,7 @@ export default class R3CreateServiceDialog extends React.Component
 		onCheckConflictName:	null
 	};
 
-	state = {
+	state: R3CreateServiceDialogStateAll = {
 		open:					this.props.open,
 		editingStaticResMode:	(this.props.createMode ? false : true),		// Main page(all service resource) or Sub page(one static resource)
 
@@ -167,7 +223,7 @@ export default class R3CreateServiceDialog extends React.Component
 		// edit one static resource(sub page)
 		editingStaticResNew:	true,										// Set to true for new creation
 		editingStaticResPos:	-1,
-		editingStaticRes:		(this.props.createMode ? {} : (0 < this.props.newStaticRes.length ? r3DeepClone(this.props.newStaticRes[0]) : {})),
+		editingStaticRes:		((!this.props.createMode && 0 < this.props.newStaticRes.length) ? r3DeepClone(this.props.newStaticRes[0]) : r3DeepClone(defaultStaticResourceObj)),
 		staticResMessage:		null,
 		staticResKeysPageNum:	0,
 		staticResKeyAnchorEl:	null,
@@ -183,7 +239,7 @@ export default class R3CreateServiceDialog extends React.Component
 		tooltips: 				disableAllToolTip
 	};
 
-	constructor(props)
+	constructor(props: R3CreateServiceDialogProps)
 	{
 		super(props);
 
@@ -214,17 +270,17 @@ export default class R3CreateServiceDialog extends React.Component
 		this.handleStaticResKeysValChange	= this.handleStaticResKeysValChange.bind(this);
 
 		// styles
-		this.sxClasses						= r3CreateServiceDialog(props.theme);
+		this.sxClasses						= r3CreateServiceDialogStyle(props.theme);
 	}
 
 	// [NOTE]
 	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
 	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
 	//
-	static getDerivedStateFromProps(nextProps, prevState)
+	static getDerivedStateFromProps(nextProps: R3CreateServiceDialogProps, prevState: R3CreateServiceDialogState): R3CreateServiceDialogState | null
 	{
 		if(prevState.open != nextProps.open){
-			return {
+			let	newState: R3CreateServiceDialogState = {
 				editingStaticResMode:	(nextProps.createMode ? false : true),
 
 				newServiceName:			nextProps.newServiceName,
@@ -235,7 +291,7 @@ export default class R3CreateServiceDialog extends React.Component
 
 				editingStaticResNew:	true,
 				editingStaticResPos:	-1,
-				editingStaticRes:		(nextProps.createMode ? {} : (0 < nextProps.newStaticRes.length ? r3DeepClone(nextProps.newStaticRes[0]) : {})),
+				editingStaticRes:		((!nextProps.createMode && 0 < nextProps.newStaticRes.length) ? r3DeepClone(nextProps.newStaticRes[0]) : r3DeepClone(defaultStaticResourceObj)),
 				staticResMessage:		null,
 				staticResKeysPageNum:	0,
 				staticResKeyAnchorEl:	null,
@@ -247,6 +303,7 @@ export default class R3CreateServiceDialog extends React.Component
 
 				open:					nextProps.open
 			};
+			return newState;
 		}
 		return null;														// Return null to indicate no change to state.
 	}
@@ -254,119 +311,125 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle Tooltip Change
 	//
-	handTooltipChange = (event, type, extData) =>
+	handTooltipChange = (event: React.SyntheticEvent, type: string, extData: boolean | number) =>
 	{
 		if(tooltipValues.addResStaticObjTooltip === type){
-			this.setState({
-				tooltips: {
-					addResStaticObjTooltip:		extData
-				}
-			});
+			let	newTooltips: TooltipState = {
+				addResStaticObjTooltip:		(r3IsBoolean(extData) ? extData : false)
+			};
+			this.setState({ tooltips : newTooltips });
+
 		}else if(tooltipValues.editResStaticObjTooltip === type){
-			this.setState({
-				tooltips: {
-					editResStaticObjTooltip:	extData
-				}
-			});
+			let	newTooltips: TooltipState = {
+				editResStaticObjTooltip:	(r3IsNumber(extData) ? extData : -1)
+			};
+			this.setState({ tooltips : newTooltips });
+
 		}else if(tooltipValues.delResStaticObjTooltip === type){
-			this.setState({
-				tooltips: {
-					delResStaticObjTooltip:		extData
-				}
-			});
+			let	newTooltips: TooltipState = {
+				delResStaticObjTooltip:		(r3IsNumber(extData) ? extData : -1)
+			};
+			this.setState({ tooltips : newTooltips });
+
 		}else if(tooltipValues.nameResStaticObjTooltip === type){
-			this.setState({
-				tooltips: {
-					nameResStaticObjTooltip:	extData
-				}
-			});
+			let	newTooltips: TooltipState = {
+				nameResStaticObjTooltip:	(r3IsNumber(extData) ? extData : -1)
+			};
+			this.setState({ tooltips : newTooltips });
+
 		}else if(tooltipValues.jsonResStaticObjTooltip === type){
-			this.setState({
-				tooltips: {
-					jsonResStaticObjTooltip:	extData
-				}
-			});
+			let	newTooltips: TooltipState = {
+				jsonResStaticObjTooltip:	(r3IsNumber(extData) ? extData : -1)
+			};
+			this.setState({ tooltips : newTooltips });
+
 		}else if(tooltipValues.addStaticResKeyTooltip === type){
-			this.setState({
-				tooltips: {
-					addStaticResKeyTooltip:		extData
-				}
-			});
+			let	newTooltips: TooltipState = {
+				addStaticResKeyTooltip:		(r3IsBoolean(extData) ? extData : false)
+			};
+			this.setState({ tooltips : newTooltips });
+
 		}else if(tooltipValues.editStaticResKeyTooltip === type){
-			this.setState({
-				tooltips: {
-					editStaticResKeyTooltip:	extData
-				}
-			});
+			let	newTooltips: TooltipState = {
+				editStaticResKeyTooltip:	(r3IsNumber(extData) ? extData : -1)
+			};
+			this.setState({ tooltips : newTooltips });
+
 		}else if(tooltipValues.delStaticResKeyTooltip === type){
-			this.setState({
-				tooltips: {
-					delStaticResKeyTooltip:		extData
-				}
-			});
+			let	newTooltips: TooltipState = {
+				delStaticResKeyTooltip:		(r3IsNumber(extData) ? extData : -1)
+			};
+			this.setState({ tooltips : newTooltips });
+
 		}else if(tooltipValues.nameStaticResKeyTooltip === type){
-			this.setState({
-				tooltips: {
-					nameStaticResKeyTooltip:	extData
-				}
-			});
+			let	newTooltips: TooltipState = {
+				nameStaticResKeyTooltip:	(r3IsNumber(extData) ? extData : -1)
+			};
+			this.setState({ tooltips : newTooltips });
+
 		}else if(tooltipValues.jsonStaticResKeyTooltip === type){
-			this.setState({
-				tooltips: {
-					jsonStaticResKeyTooltip:	extData
-				}
-			});
+			let	newTooltips: TooltipState = {
+				jsonStaticResKeyTooltip:	(r3IsNumber(extData) ? extData : -1)
+			};
+			this.setState({ tooltips : newTooltips });
 		}
 	};
 
 	//
 	// Handle(Main page) Service Name : Change
 	//
-	handleNewServiceNameChange(event)
+	handleNewServiceNameChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
 	{
-		this.setState({
+		let	newState: R3CreateServiceDialogState = {
 			newServiceName:	event.target.value
-		});
+		};
+		this.setState(newState);
 	}
 
 	//
 	// Handle(Main page) Verify URL : Change
 	//
-	handleNewVerifyChange(event)
+	handleNewVerifyChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
 	{
-		this.setState({
+		let	newState: R3CreateServiceDialogState = {
 			newVerify:	event.target.value
-		});
+		};
+		this.setState(newState);
 	}
 
 	//
 	// Handle(Main page) Static resource object page : Change
 	//
-	handleResStaticObjPageChange(event, page)
+	handleResStaticObjPageChange(event: React.MouseEvent<HTMLElement> | null, page: number): void
 	{
-		this.setState({
+		let	newState: R3CreateServiceDialogState = {
 			staticResPageNum:	page
-		});
+		};
+		this.setState(newState);
 	}
 
 	//
 	// Handle(Main page) Service resource type : Change
 	//
-	handleResourceTypeChange(event, type)
+	handleResourceTypeChange(event: React.ChangeEvent<HTMLInputElement>, type: string): void
 	{
+		if(!isServiceResType(type)){
+			return;
+		}
 		if(this.state.newServiceResType === type){
 			console.warn('changed value type(' + JSON.stringify(type) + ') is something wrong.');
 			return;
 		}
-		this.setState({
+		let	newState: R3CreateServiceDialogState = {
 			newServiceResType:	type
-		});
+		};
+		this.setState(newState);
 	}
 
 	//
 	// Handle(Main page) Add new static resource
 	//
-	handleNewStaticResourceObj(event)										// eslint-disable-line no-unused-vars
+	handleNewStaticResourceObj(event: React.MouseEvent<HTMLElement>): void
 	{
 		this.setState({
 			editingStaticResMode:	true,
@@ -390,12 +453,15 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) Edit static resource
 	//
-	handleEditStaticResourceObj(event, pos)
+	handleEditStaticResourceObj(event: React.MouseEvent<HTMLElement>, pos: number): void
 	{
-		if(!r3IsSafeTypedEntity(this.state.newStaticRes, 'array')){
+		if(!r3IsArray(this.state.newStaticRes)){
 			return;
 		}
 		if(this.state.newStaticRes.length <= pos){
+			return;
+		}
+		if(!Object.values(this.state.newStaticRes).every(val => isStaticResourceObject(val))){
 			return;
 		}
 
@@ -408,10 +474,10 @@ export default class R3CreateServiceDialog extends React.Component
 		let	editingStaticRes				= r3DeepClone(this.state.newStaticRes[pos]);
 		editingStaticRes.editingStringData	= '';
 		editingStaticRes.editingObjectData	= '';
-		if(!r3IsEmptyEntityObject(editingStaticRes, 'type') && 'object' == editingStaticRes.type){
+		if(r3IsString(editingStaticRes.type) && !r3IsEmptyString(editingStaticRes.type) && resourceTypeObject == editingStaticRes.type){
 			// editingStaticRes's resource data type is object
 			if(!r3IsEmptyEntity(editingStaticRes.data)){
-				if(r3IsSafeTypedEntity(editingStaticRes.data, 'string')){
+				if(r3IsString(editingStaticRes.data)){
 					editingStaticRes.editingObjectData = editingStaticRes.data;
 				}else{
 					editingStaticRes.editingObjectData = JSON.stringify(editingStaticRes.data);
@@ -420,7 +486,7 @@ export default class R3CreateServiceDialog extends React.Component
 		}else{
 			// editingStaticRes's resource data type is string
 			if(!r3IsEmptyEntity(editingStaticRes.data)){
-				if(r3IsSafeTypedEntity(editingStaticRes.data, 'string')){
+				if(r3IsString(editingStaticRes.data)){
 					editingStaticRes.editingStringData = editingStaticRes.data;
 				}else{
 					editingStaticRes.editingStringData = JSON.stringify(editingStaticRes.data);
@@ -450,17 +516,20 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) Delete static resource
 	//
-	handleDelStaticResourceObj(event, pos)
+	handleDelStaticResourceObj(event: React.MouseEvent<HTMLElement>, pos: number): void
 	{
-		if(!r3IsSafeTypedEntity(this.state.newStaticRes, 'array')){
+		if(!r3IsArray(this.state.newStaticRes)){
 			return;
 		}
 		if(this.state.newStaticRes.length <= pos){
 			return;
 		}
+		if(!Object.values(this.state.newStaticRes).every(val => isStaticResourceObject(val))){
+			return;
+		}
 
 		// remove resouce
-		let newStaticRes = this.state.newStaticRes.filter( (item, itemPos) => itemPos !== pos);
+		let newStaticRes = this.state.newStaticRes.filter( (_item: StaticResourceObject, itemPos: number) => itemPos !== pos);
 
 		// update state
 		this.setState({
@@ -474,9 +543,9 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) edit one static resource name
 	//
-	handleStaticResNameChange(event)
+	handleStaticResNameChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
 	{
-		if(!r3IsSafeTypedEntity(this.state.editingStaticRes, 'object')){
+		if(!isStaticResourceObject(this.state.editingStaticRes) || !r3IsString(event.target.value)){
 			return;
 		}
 		// set name
@@ -493,14 +562,14 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) edit one static resource expire
 	//
-	handleStaticResExpireChange(event)
+	handleStaticResExpireChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
 	{
-		if(!r3IsSafeTypedEntity(this.state.editingStaticRes, 'object')){
+		if(!isStaticResourceObject(this.state.editingStaticRes)){
 			return;
 		}
 		// set expire(without checking)
 		let	newStaticRes	= r3DeepClone(this.state.editingStaticRes);
-		newStaticRes.expire	= event.target.value;
+		newStaticRes.expire	= r3GetDecNumber(event.target.value);
 
 		// update state
 		this.setState({
@@ -512,18 +581,18 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) edit one static resource data type
 	//
-	handleStaticResTypeChange(event, type)
+	handleStaticResTypeChange(event: React.ChangeEvent<HTMLInputElement>, type: string | null = null): void
 	{
-		if(!r3IsSafeTypedEntity(this.state.editingStaticRes, 'object')){
+		if(!isStaticResourceObject(this.state.editingStaticRes)){
 			return;
 		}
 
 		// check value
-		let	typeString;
+		let	typeString: ResourceType;
 		if(staticResDataType.staticResObjectDataType == type){
-			typeString = 'object';
+			typeString = resourceTypeObject;
 		}else{	// staticResDataType.staticResStringDataType
-			typeString = 'string';
+			typeString = resourceTypeString;
 		}
 		if(!r3IsEmptyEntityObject(this.state.editingStaticRes, 'type')){
 			if(typeString == this.state.editingStaticRes.type){
@@ -546,14 +615,14 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) edit one static resource data
 	//
-	handleStaticResDataChange(event)
+	handleStaticResDataChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
 	{
-		if(!r3IsSafeTypedEntity(this.state.editingStaticRes, 'object')){
+		if(!isStaticResourceObject(this.state.editingStaticRes) || !r3IsString(event.target.value)){
 			return;
 		}
 		// set data
 		let	newStaticRes	= r3DeepClone(this.state.editingStaticRes);
-		if('object' == newStaticRes.type){
+		if(resourceTypeObject == newStaticRes.type){
 			newStaticRes.editingObjectData = event.target.value;
 		}else{
 			newStaticRes.editingStringData = event.target.value;
@@ -569,7 +638,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) Static resource page close
 	//
-	handleStaticResPageClose(event, isCancel)
+	handleStaticResPageClose(event: React.MouseEvent<HTMLElement>, isCancel: boolean): void
 	{
 		// cancel
 		if(isCancel){
@@ -580,7 +649,7 @@ export default class R3CreateServiceDialog extends React.Component
 
 					editingStaticResNew:	true,
 					editingStaticResPos:	-1,
-					editingStaticRes:		{},
+					editingStaticRes:		r3DeepClone(defaultStaticResourceObj),
 					staticResKeysPageNum:	0,
 					staticResKeyAnchorEl:	null,
 					staticResKeyCreateType:	true,
@@ -591,8 +660,12 @@ export default class R3CreateServiceDialog extends React.Component
 				});
 			}else{
 				// close dialog
-				this.props.onClose(event, null, false, null);
+				this.props.onClose(event, null, false, null, null, null, null);
 			}
+			return;
+		}
+
+		if(!isStaticResourceObject(this.state.editingStaticRes)){
 			return;
 		}
 
@@ -618,8 +691,8 @@ export default class R3CreateServiceDialog extends React.Component
 			}
 		}else{
 			// not have all static resource array
-			if(r3IsSafeTypedEntity(this.props.onCheckConflictName, 'function')){
-				if(!this.props.onCheckConflictName(this.state.editingStaticRes.name)){
+			if(r3IsFunction(this.props.onCheckConflictName)){
+				if(!this.props.onCheckConflictName!(this.state.editingStaticRes.name)){
 					this.setState({
 						staticResMessage:	this.props.r3provider.getR3TextRes().eStaticResNameFoundSame
 					});
@@ -629,25 +702,25 @@ export default class R3CreateServiceDialog extends React.Component
 		}
 
 		// check expire
-		let	expire = null;
+		let	expire: number | null = null;
 		if(!r3IsEmptyEntityObject(this.state.editingStaticRes, 'expire')){
-			if(	isNaN(this.state.editingStaticRes.expire)			||
-				(parseInt(this.state.editingStaticRes.expire) < 0)	)
+			if(	isNaN(Number(this.state.editingStaticRes.expire))			||
+				(parseInt(String(this.state.editingStaticRes.expire)) < 0)	)
 			{
 				this.setState({
 					staticResMessage:	this.props.r3provider.getR3TextRes().eStaticResExpireInvalid
 				});
 				return;
 			}
-			expire = parseInt(this.state.editingStaticRes.expire);
+			expire = r3GetDecNumber(this.state.editingStaticRes.expire);
 		}
 
 		// check data & type
-		let	data = null;
-		let	type;
-		if(!r3IsEmptyEntityObject(this.state.editingStaticRes, 'type') && 'object' == this.state.editingStaticRes.type){
+		let	data: string | null = null;
+		let	type: ResourceType;
+		if(!r3IsEmptyEntityObject(this.state.editingStaticRes, 'type') && resourceTypeObject == this.state.editingStaticRes.type){
 			// type is object
-			if(!r3IsEmptyString(this.state.editingStaticRes.editingObjectData)){
+			if(r3IsString(this.state.editingStaticRes.editingObjectData) && !r3IsEmptyString(this.state.editingStaticRes.editingObjectData)){
 				if(!r3IsJSON(this.state.editingStaticRes.editingObjectData)){
 					this.setState({
 						staticResMessage:	this.props.r3provider.getR3TextRes().eStaticResObjDataInvalid
@@ -656,20 +729,20 @@ export default class R3CreateServiceDialog extends React.Component
 				}
 				data = this.state.editingStaticRes.editingObjectData;
 			}
-			type = 'object';
+			type = resourceTypeObject;
 		}else{
 			// type is string
-			if(!r3IsEmptyString(this.state.editingStaticRes.editingStringData)){
+			if(r3IsString(this.state.editingStaticRes.editingStringData) && !r3IsEmptyString(this.state.editingStaticRes.editingStringData)){
 				data = this.state.editingStaticRes.editingStringData;
 			}
-			type = 'string';
+			type = resourceTypeString;
 		}
 
 		// make new static resource
 		let	newOneStaticRes		= r3DeepClone(this.state.editingStaticRes);
 		delete newOneStaticRes.editingObjectData;
 		delete newOneStaticRes.editingStringData;
-		if(null == expire || 0 == expire){
+		if(null === expire || 0 === expire){
 			delete newOneStaticRes.expire;
 		}else{
 			newOneStaticRes.expire	= expire;
@@ -682,7 +755,7 @@ export default class R3CreateServiceDialog extends React.Component
 			// move to main page(previous)
 
 			// set new(edit) static resource to array
-			let	newStaticRes		= r3DeepClone(this.state.newStaticRes);
+			let	newStaticRes	= r3DeepClone(this.state.newStaticRes);
 			if(0 <= this.state.editingStaticResPos && this.state.editingStaticResPos < this.state.newStaticRes.length){
 				// override
 				newStaticRes[this.state.editingStaticResPos] = newOneStaticRes;
@@ -694,12 +767,10 @@ export default class R3CreateServiceDialog extends React.Component
 			// update stats
 			this.setState({
 				editingStaticResMode:	false,
-
 				newStaticRes:			newStaticRes,
-
 				editingStaticResNew:	true,
 				editingStaticResPos:	-1,
-				editingStaticRes:		{},
+				editingStaticRes:		r3DeepClone(defaultStaticResourceObj),
 				staticResMessage:		null,
 				staticResKeysPageNum:	0,
 				staticResKeyAnchorEl:	null,
@@ -711,14 +782,14 @@ export default class R3CreateServiceDialog extends React.Component
 			});
 		}else{
 			// close dialog
-			this.props.onClose(event, null, true, newOneStaticRes);
+			this.props.onClose(event, null, true, null, null, null, [newOneStaticRes]);
 		}
 	}
 
 	//
 	// Handle(Sub page) Static resource object keys page : Change
 	//
-	handleStaticResKeysPageChange(event, page)
+	handleStaticResKeysPageChange(event: React.MouseEvent<HTMLElement> | null, page: number): void
 	{
 		this.setState({
 			staticResKeysPageNum:	page
@@ -728,15 +799,15 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) Delete key in static resource
 	//
-	handleDelStaticResKey(event, item)
+	handleDelStaticResKey(event: React.MouseEvent<HTMLElement>, item: string): void
 	{
-		if(!r3IsSafeTypedEntity(this.state.editingStaticRes, 'object') || !r3IsSafeTypedEntity(this.state.editingStaticRes.keys, 'object')){
+		if(!isStaticResourceObject(this.state.editingStaticRes) || !r3IsObject(this.state.editingStaticRes.keys)){
 			return;
 		}
 
 		// remove key in editing static resouce
 		let	newStaticRes = r3DeepClone(this.state.editingStaticRes);
-		delete newStaticRes.keys[item];
+		delete newStaticRes.keys![item];
 
 		// update state
 		this.setState({
@@ -750,7 +821,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Sub page) new Key in static resource keys - Display Popover(new)
 	//
-	handleNewStaticResKey(event)
+	handleNewStaticResKey(event: React.MouseEvent<HTMLElement>): void
 	{
 		this.setState({
 			staticResKeyAnchorEl:	event.currentTarget,
@@ -767,19 +838,24 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Popover) edit Key in static resource keys - Display Popover(edit)
 	//
-	handleEditStaticResKey(event, item)
+	handleEditStaticResKey(event: React.MouseEvent<HTMLElement>, item: string): void
 	{
-		if(!r3IsSafeTypedEntity(this.state.editingStaticRes, 'object') || !r3IsSafeTypedEntity(this.state.editingStaticRes.keys, 'object')){
+		if(!isStaticResourceObject(this.state.editingStaticRes) || !r3IsObject(this.state.editingStaticRes.keys) || !r3IsString(item) || !r3IsEmptyString(item, true)){
 			return;
 		}
 
-		let	value = this.state.editingStaticRes.keys[item];
-		if(r3IsEmptyEntity(value)){
+		let	value: string;
+		if(!r3HasKey(this.state.editingStaticRes.keys, item)){
 			value = '';
-		}else if(r3IsSafeTypedEntity(value, 'array') || r3IsSafeTypedEntity(value, 'object')){
-			value = JSON.stringify(value);
 		}else{
-			value = String(value);		// probabry string type
+			const rawValue = this.state.editingStaticRes.keys[item];
+			if(r3IsEmptyEntity(rawValue)){
+				value = '';
+			}else if(r3IsArray(rawValue) || r3IsObject(rawValue)){
+				value = JSON.stringify(rawValue);
+			}else{
+				value = String(rawValue);		// probabry string type
+			}
 		}
 
 		this.setState({
@@ -797,7 +873,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Popover) cancel Key in static resource keys - Close Popover(without saving)
 	//
-	handleCancelStaticResKey(event)											// eslint-disable-line no-unused-vars
+	handleCancelStaticResKey(_event?: object, _reason?: string): void
 	{
 		this.setState({
 			staticResKeyAnchorEl:	null,
@@ -812,17 +888,17 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Popover) update Key in static resource keys - Close Popover(with saving)
 	//
-	handleConfirmStaticResKey(event)										// eslint-disable-line no-unused-vars
+	handleConfirmStaticResKey(event: React.MouseEvent<HTMLElement>): void
 	{
 		const { r3provider } = this.props;
 
-		// check 
+		// check
 		let	confirmMessage = null;
 		if(r3IsEmptyString(this.state.editingStaticResKey, true)){
 			confirmMessage = r3provider.getR3TextRes().eStaticResKeyEmpty;
 		}else{
 			// check same key name
-			if(!r3IsEmptyStringObject(this.state.editingStaticRes.keys, this.state.editingStaticResKey)){
+			if(isStaticResourceObject(this.state.editingStaticRes) && !r3IsEmptyStringObject(this.state.editingStaticRes.keys, this.state.editingStaticResKey)){
 				// found same key name
 				if(r3IsEmptyString(this.state.staticResKeyBaseKey, true)){
 					confirmMessage = r3provider.getR3TextRes().eStaticResKeySameKey;
@@ -843,14 +919,16 @@ export default class R3CreateServiceDialog extends React.Component
 		}
 
 		// make new static resource
-		let	newStaticRes		= r3DeepClone(this.state.editingStaticRes);
-		if(!r3IsSafeTypedEntity(newStaticRes, 'object')){
-			newStaticRes		= {};
+		let	newStaticRes: StaticResourceObject;
+		if(isStaticResourceObject(this.state.editingStaticRes)){
+			newStaticRes = r3DeepClone(this.state.editingStaticRes);
+		}else{
+			newStaticRes = r3DeepClone(defaultStaticResourceObj);
 		}
-		if(r3IsEmptyEntityObject(newStaticRes, 'keys') || !r3IsSafeTypedEntity(newStaticRes.keys, 'object')){
-			newStaticRes.keys	= {};
+		if(!r3IsObject(newStaticRes?.keys)){
+			newStaticRes.keys = {};
 		}
-		if(!r3IsEmptyString(this.state.staticResKeyBaseKey, true)){
+		if(r3IsString(this.state.staticResKeyBaseKey) && !r3IsEmptyString(this.state.staticResKeyBaseKey, true) && r3HasKey(newStaticRes.keys, this.state.staticResKeyBaseKey)){
 			delete newStaticRes.keys[this.state.staticResKeyBaseKey];
 		}
 		newStaticRes.keys[this.state.editingStaticResKey] = this.state.editingStaticResValue;
@@ -870,7 +948,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Popover) Key in static resource keys : Change
 	//
-	handleStaticResKeysKeyChange(event)
+	handleStaticResKeysKeyChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
 	{
 		this.setState({
 			editingComfirmMessage:	null,
@@ -881,7 +959,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Handle(Popover) Key-Value in static resource keys : Change
 	//
-	handleStaticResKeysValChange(event)
+	handleStaticResKeysValChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
 	{
 		this.setState({
 			editingComfirmMessage:	null,
@@ -899,8 +977,8 @@ export default class R3CreateServiceDialog extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		let	title;
-		let	buttonName;
+		let	title: string;
+		let	buttonName: string;
 		if(this.state.staticResKeyCreateType){
 			title		= r3provider.getR3TextRes().tResStaticResKeyNewTitle;
 			buttonName	= r3provider.getR3TextRes().tResStaticResKeyCreateBtn;
@@ -916,11 +994,11 @@ export default class R3CreateServiceDialog extends React.Component
 		if(r3IsEmptyString(value, true)){
 			value		= '';
 		}
-		let	message;
+		let	message: React.ReactNode;
 		if(null != this.state.editingComfirmMessage){
 			message		= (
 				<Typography
-					{ ...theme.r3Service.staticResMessage }
+					{ ...theme.r3CreateServiceDialog.staticResMessage }
 					sx={ this.sxClasses.staticResMessage }
 				>
 					{ this.state.editingComfirmMessage }
@@ -1010,7 +1088,7 @@ export default class R3CreateServiceDialog extends React.Component
 						>
 							<Tooltip
 								title={ r3provider.getR3TextRes().tResStaticResAddKeyTT }
-								open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.addStaticResKeyTooltip, 'boolean')) ? false : this.state.tooltips.addStaticResKeyTooltip) }
+								open={ (r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.addStaticResKeyTooltip)) ? false : this.state.tooltips.addStaticResKeyTooltip === true }
 							>
 								<Button
 									onClick={ this.handleNewStaticResKey }
@@ -1048,7 +1126,7 @@ export default class R3CreateServiceDialog extends React.Component
 	//
 	// Render : table body static resource keys
 	//
-	getStaticResKeysTableBody(staticResKeys)
+	getStaticResKeysTableBody(staticResKeys: valTypeAllObject)
 	{
 		const { theme, r3provider } = this.props;
 
@@ -1057,7 +1135,7 @@ export default class R3CreateServiceDialog extends React.Component
 
 		return (
 			<TableBody>
-				{ _sortedKeys.map( (item, pos) => {
+				{ _sortedKeys.map( (item: string, pos: number) => {
 					if(pos < (this.state.staticResKeysPageNum * this.props.tableKeysRawCount) || ((this.state.staticResKeysPageNum + 1) * this.props.tableKeysRawCount) <= pos){
 						return;
 					}
@@ -1067,10 +1145,10 @@ export default class R3CreateServiceDialog extends React.Component
 					if(10 < stripName.length){
 						stripName = stripName.slice(0, 7) + '...';
 					}
-					let	orgJson;
+					let	orgJson: string;
 					if(r3IsEmptyEntity(_staticResKeys[item])){
 						orgJson = '';
-					}else if(r3IsSafeTypedEntity(_staticResKeys[item], 'array') || r3IsSafeTypedEntity(_staticResKeys[item], 'object')){
+					}else if(r3IsArray(_staticResKeys[item]) || r3IsObject(_staticResKeys[item])){
 						orgJson = JSON.stringify(_staticResKeys[item]);
 					}else{
 						orgJson = String(_staticResKeys[item]);		// probabry string type
@@ -1091,7 +1169,7 @@ export default class R3CreateServiceDialog extends React.Component
 							>
 								<Tooltip
 									title={ r3provider.getR3TextRes().tResServiceDelStaticResTT }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.delStaticResKeyTooltip, 'number') || (this.state.tooltips.delStaticResKeyTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.delStaticResKeyTooltip) || (this.state.tooltips.delStaticResKeyTooltip != pos)) ? false : true) }
 								>
 									<Button
 										onClick={ (event) => this.handleDelStaticResKey(event, item) }
@@ -1105,7 +1183,7 @@ export default class R3CreateServiceDialog extends React.Component
 								</Tooltip>
 								<Tooltip
 									title={ r3provider.getR3TextRes().tResStaticResEditKeyTT }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.editStaticResKeyTooltip, 'number') || (this.state.tooltips.editStaticResKeyTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.editStaticResKeyTooltip) || (this.state.tooltips.editStaticResKeyTooltip != pos)) ? false : true) }
 								>
 									<Button
 										onClick={ (event) => this.handleEditStaticResKey(event, item) }
@@ -1119,11 +1197,11 @@ export default class R3CreateServiceDialog extends React.Component
 								</Tooltip>
 								<Tooltip
 									title={ orgName }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.nameStaticResKeyTooltip, 'number') || (this.state.tooltips.nameStaticResKeyTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.nameStaticResKeyTooltip) || (this.state.tooltips.nameStaticResKeyTooltip != pos)) ? false : true) }
 								>
 									<Typography
-										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.nameStaticResKeyTooltip, pos) }
-										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.nameStaticResKeyTooltip, -1) }
+										onMouseEnter={ (event: React.MouseEvent<HTMLSpanElement>) => this.handTooltipChange(event, tooltipValues.nameStaticResKeyTooltip, pos) }
+										onMouseLeave={ (event: React.MouseEvent<HTMLSpanElement>) => this.handTooltipChange(event, tooltipValues.nameStaticResKeyTooltip, -1) }
 										{ ...theme.r3CreateServiceDialog.textTableContent }
 										sx={ this.sxClasses.textTableContent }
 									>
@@ -1136,11 +1214,11 @@ export default class R3CreateServiceDialog extends React.Component
 							>
 								<Tooltip
 									title={ orgJson }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.jsonStaticResKeyTooltip, 'number') || (this.state.tooltips.jsonStaticResKeyTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.jsonStaticResKeyTooltip) || (this.state.tooltips.jsonStaticResKeyTooltip != pos)) ? false : true) }
 								>
 									<Typography
-										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.jsonStaticResKeyTooltip, pos) }
-										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.jsonStaticResKeyTooltip, -1) }
+										onMouseEnter={ (event: React.MouseEvent<HTMLSpanElement>) => this.handTooltipChange(event, tooltipValues.jsonStaticResKeyTooltip, pos) }
+										onMouseLeave={ (event: React.MouseEvent<HTMLSpanElement>) => this.handTooltipChange(event, tooltipValues.jsonStaticResKeyTooltip, -1) }
 										{ ...theme.r3CreateServiceDialog.textTableContent }
 										sx={ this.sxClasses.textTableContent }
 									>
@@ -1162,8 +1240,8 @@ export default class R3CreateServiceDialog extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		let	staticResKeys = this.state.editingStaticRes.keys;
-		if(!r3IsSafeTypedEntity(staticResKeys, 'object')){
+		let	staticResKeys: valTypeAllObject = isStaticResourceObject(this.state.editingStaticRes) ? (this.state.editingStaticRes.keys || {}) : {};
+		if(!r3IsObject(staticResKeys)){
 			staticResKeys = {};
 		}
 		let	keysCount = Object.keys(staticResKeys).length;
@@ -1223,11 +1301,11 @@ export default class R3CreateServiceDialog extends React.Component
 			</Typography>
 		);
 
-		let	message;
+		let	message: React.ReactNode;
 		if(null != this.state.staticResMessage){
 			message = (
 				<Typography
-					{ ...theme.r3Service.staticResMessage }
+					{ ...theme.r3CreateServiceDialog.staticResMessage }
 					sx={ this.sxClasses.staticResMessage }
 				>
 					{ this.state.staticResMessage }
@@ -1236,38 +1314,40 @@ export default class R3CreateServiceDialog extends React.Component
 		}
 
 		let	staticResName = '';
-		if(r3IsSafeTypedEntity(this.state.editingStaticRes, 'object') && !r3IsEmptyEntityObject(this.state.editingStaticRes, 'name')){
+		if(isStaticResourceObject(this.state.editingStaticRes) && r3IsString(this.state.editingStaticRes.name) && !r3IsEmptyString(this.state.editingStaticRes.name)){
 			staticResName = this.state.editingStaticRes.name;
 		}
 		let	staticResExpire = '';
-		if(r3IsSafeTypedEntity(this.state.editingStaticRes, 'object') && !r3IsEmptyEntityObject(this.state.editingStaticRes, 'expire')){
+		if(isStaticResourceObject(this.state.editingStaticRes) && r3IsNumber(this.state.editingStaticRes.expire)){
 			staticResExpire = String(this.state.editingStaticRes.expire);
 		}
 
-		let	staticResType;
-		let	staticResDataHint;
+		let	staticResType: string;
+		let	staticResDataHint: string;
 		let	staticResData		= '';
-		if(r3IsSafeTypedEntity(this.state.editingStaticRes, 'object') && !r3IsEmptyEntityObject(this.state.editingStaticRes, 'type') && 'object' == this.state.editingStaticRes.type){
-			staticResType		= staticResDataType.staticResObjectDataType;
-			staticResDataHint	= r3provider.getR3TextRes().tResResourceValueObjHint;
-			if(!r3IsEmptyString(this.state.editingStaticRes.editingObjectData, true)){
-				staticResData	= this.state.editingStaticRes.editingObjectData;
-			}
-		}else{
-			staticResType		= staticResDataType.staticResStringDataType;
-			staticResDataHint	= r3provider.getR3TextRes().tResResourceValueTextHint;
-			if(!r3IsEmptyString(this.state.editingStaticRes.editingStringData, true)){
-				staticResData	= this.state.editingStaticRes.editingStringData;
+		if(isStaticResourceObject(this.state.editingStaticRes)){
+			if(r3IsString(this.state.editingStaticRes.type) && resourceTypeObject == this.state.editingStaticRes.type){
+				staticResType		= staticResDataType.staticResObjectDataType;
+				staticResDataHint	= r3provider.getR3TextRes().tResResourceValueObjHint;
+				if(!r3IsEmptyString(this.state.editingStaticRes.editingObjectData, true)){
+					staticResData	= this.state.editingStaticRes.editingObjectData;
+				}
+			}else{
+				staticResType		= staticResDataType.staticResStringDataType;
+				staticResDataHint	= r3provider.getR3TextRes().tResResourceValueTextHint;
+				if(!r3IsEmptyString(this.state.editingStaticRes.editingStringData, true)){
+					staticResData	= this.state.editingStaticRes.editingStringData;
+				}
 			}
 		}
 
 		let	staticResKeys = this.renderEditStaticResKeys();
 
 		// confirm button
-		let	actionButton;
+		let	actionButton: React.ReactNode;
 		if(this.props.createMode){
 			// has main page
-			let	saveButtonName;
+			let	saveButtonName: string;
 			if(this.state.editingStaticResNew){
 				saveButtonName = r3provider.getR3TextRes().tResButtonCreate;
 			}else{
@@ -1385,7 +1465,7 @@ export default class R3CreateServiceDialog extends React.Component
 					<RadioGroup
 						id={ dialogComponentsIds.staticObjTypeGroupId }
 						value={ staticResType }
-						onChange={ this.handleStaticResTypeChange }
+						onChange={ (event, value) => this.handleStaticResTypeChange(event, value) }
 						{ ...theme.r3CreateServiceDialog.valueRadioGroup }
 						sx={ this.sxClasses.valueRadioGroup }
 					>
@@ -1462,7 +1542,7 @@ export default class R3CreateServiceDialog extends React.Component
 					>
 						<Tooltip
 							title={ r3provider.getR3TextRes().tResServiceAddStaticResTT }
-							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.addResStaticObjTooltip, 'boolean')) ? false : this.state.tooltips.addResStaticObjTooltip) }
+							open={ (r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.addResStaticObjTooltip)) ? false : this.state.tooltips.addResStaticObjTooltip === true }
 						>
 							<Button
 								onClick={ this.handleNewStaticResourceObj }
@@ -1493,7 +1573,7 @@ export default class R3CreateServiceDialog extends React.Component
 					</TableCell>
 				</TableRow>
 			</TableHead>
-		);
+			);
 	}
 
 	//
@@ -1503,14 +1583,17 @@ export default class R3CreateServiceDialog extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		if(!r3IsSafeTypedEntity(this.state.newStaticRes, 'array')){
+		if(!r3IsArray(this.state.newStaticRes)){
+			return;
+		}
+		if(!Object.values(this.state.newStaticRes).every(val => isStaticResourceObject(val))){
 			return;
 		}
 		let	resources = this.state.newStaticRes;
 
 		return (
 			<TableBody>
-				{resources.map( (item, pos) => {
+				{resources.map( (item: StaticResourceObject, pos: number) => {
 					if(pos < (this.state.staticResPageNum * this.props.tableRawCount) || ((this.state.staticResPageNum + 1) * this.props.tableRawCount) <= pos){
 						return;
 					}
@@ -1537,7 +1620,7 @@ export default class R3CreateServiceDialog extends React.Component
 							>
 								<Tooltip
 									title={ r3provider.getR3TextRes().tResServiceEditStaticResTT }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.editResStaticObjTooltip, 'number') || (this.state.tooltips.editResStaticObjTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.editResStaticObjTooltip) || (this.state.tooltips.editResStaticObjTooltip != pos)) ? false : true) }
 								>
 									<Button
 										onClick={ (event) => this.handleEditStaticResourceObj(event, pos) }
@@ -1551,7 +1634,7 @@ export default class R3CreateServiceDialog extends React.Component
 								</Tooltip>
 								<Tooltip
 									title={ r3provider.getR3TextRes().tResServiceDelStaticResTT }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.delResStaticObjTooltip, 'number') || (this.state.tooltips.delResStaticObjTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.delResStaticObjTooltip) || (this.state.tooltips.delResStaticObjTooltip != pos)) ? false : true) }
 								>
 									<Button
 										onClick={ (event) => this.handleDelStaticResourceObj(event, pos) }
@@ -1565,11 +1648,11 @@ export default class R3CreateServiceDialog extends React.Component
 								</Tooltip>
 								<Tooltip
 									title={ orgName }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.nameResStaticObjTooltip, 'number') || (this.state.tooltips.nameResStaticObjTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.nameResStaticObjTooltip) || (this.state.tooltips.nameResStaticObjTooltip != pos)) ? false : true) }
 								>
 									<Typography
-										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, pos) }
-										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, -1) }
+										onMouseEnter={ (event: React.MouseEvent<HTMLSpanElement>) => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, pos) }
+										onMouseLeave={ (event: React.MouseEvent<HTMLSpanElement>) => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, -1) }
 										{ ...theme.r3CreateServiceDialog.textTableContent }
 										sx={ this.sxClasses.textTableContent }
 									>
@@ -1582,11 +1665,11 @@ export default class R3CreateServiceDialog extends React.Component
 							>
 								<Tooltip
 									title={ orgJson }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.jsonResStaticObjTooltip, 'number') || (this.state.tooltips.jsonResStaticObjTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.jsonResStaticObjTooltip) || (this.state.tooltips.jsonResStaticObjTooltip != pos)) ? false : true) }
 								>
 									<Typography
-										onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, pos) }
-										onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, -1) }
+										onMouseEnter={ (event: React.MouseEvent<HTMLSpanElement>) => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, pos) }
+										onMouseLeave={ (event: React.MouseEvent<HTMLSpanElement>) => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, -1) }
 										{ ...theme.r3CreateServiceDialog.textTableContent }
 										sx={ this.sxClasses.textTableContent }
 									>
@@ -1608,7 +1691,10 @@ export default class R3CreateServiceDialog extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		if(!r3IsSafeTypedEntity(this.state.newStaticRes, 'array')){
+		if(!r3IsArray(this.state.newStaticRes)){
+			return;
+		}
+		if(!Object.values(this.state.newStaticRes).every(val => isStaticResourceObject(val))){
 			return;
 		}
 
@@ -1670,9 +1756,9 @@ export default class R3CreateServiceDialog extends React.Component
 			</Typography>
 		);
 
-		let	tenant;
-		let	tenantClass;
-		if(!r3IsEmptyStringObject(this.props.tenant, 'display')){
+		let	tenant: string | undefined;
+		let	tenantClass: object;
+		if(r3IsString(this.props.tenant?.display) && !r3IsEmptyString(this.props.tenant.display)){
 			tenant		= this.props.tenant.display;
 			tenantClass	= this.sxClasses.value;
 		}else{
@@ -1680,8 +1766,8 @@ export default class R3CreateServiceDialog extends React.Component
 			tenantClass	= this.sxClasses.valueItalic;
 		}
 
-		let	radioValue;
-		let	serviceResource;
+		let	radioValue: ServiceResType;
+		let	serviceResource: React.ReactNode;
 		if(serviceResTypeUrl == this.state.newServiceResType){
 			radioValue		= serviceResTypeUrl;
 			serviceResource	= this.renderResourceVerifyUrl();
@@ -1804,19 +1890,19 @@ export default class R3CreateServiceDialog extends React.Component
 	{
 		const { theme } = this.props;
 
-		let	dialogContext;
+		let	dialogContext: React.ReactNode;
 		if(this.state.editingStaticResMode){
 			dialogContext = this.renderEditStaticResPage();
 		}else{
 			dialogContext = this.renderCreateMainPage();
 		}
-
 		return (
 			<Dialog
 				open={ this.props.open }
-				onClose={ (event, reason) => this.props.onClose(event, reason, false, null) }
+				onClose={ (event, reason) => this.props.onClose(event, reason, false, null, null, null, null) }
 				{ ...theme.r3CreateServiceDialog.root }
 				sx={ this.sxClasses.root }
+				disableRestoreFocus
 			>
 				{ dialogContext }
 			</Dialog>

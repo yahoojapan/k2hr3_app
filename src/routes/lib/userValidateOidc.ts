@@ -19,34 +19,50 @@
  *
  */
 
-'use strict';
+import express			from 'express';
+import { base64url }	from 'jose';
+import { oidcConfigCookieName, getConfig }	from '../oidc';
+import { isOIDCExtRouterConfig, isSafeEntity, isSafeHaskey, isSafeJSON, isSafeObject, isSafeString, OIDCExtRouterConfig, SignMinUrlEntry, SignMinUrls, SignUrlEntry, SignUrls }	from './libr3util';
 
-var r3util		= require('./libr3util');
-var	oidc		= require('../oidc');
-var { decode }	= require('jose').base64url;
+//
+// rawGetOidcConfigName
+//
+const rawGetOidcConfigName = (req: express.Request): string | null =>
+{
+	if(	!isSafeString(oidcConfigCookieName) 			||
+		!isSafeEntity(req)								||
+		!isSafeEntity(req.cookies) 						||
+		!isSafeString(req.cookies[oidcConfigCookieName]))
+	{
+		return null;
+	}
+	return req.cookies[oidcConfigCookieName];
+};
 
 //
 // rawGetOtherToken
 //
-var rawGetOtherToken = function(req)
+const rawGetOtherToken = (req: express.Request): string | null =>
 {
-	var	configName	= rawGetOidcConfigName(req);
-	var config		= oidc.getConfig();
+	let	configName											= rawGetOidcConfigName(req);
+	let config: Record<string, OIDCExtRouterConfig> | null	= getConfig();
 
-	if( !r3util.isSafeString(configName)							||
-		!r3util.isSafeEntity(config)								||
-		!r3util.isSafeEntity(config[configName])					||
-		!r3util.isSafeEntity(config[configName].params)				||
-		!r3util.isSafeEntity(config[configName].params.cookiename)	)
+	if( !isSafeString(configName)								||
+		!isSafeObject(config)									||
+		!isSafeHaskey(config, configName)						||
+		!isOIDCExtRouterConfig(config[configName])				||
+		!isSafeHaskey(config[configName].params, 'cookiename')	||
+		!isSafeString(config[configName].params.cookiename)		)
 	{
 		console.error('Not find cookie name in configuration.');
 		return null;
 	}
-	var	cookieName = config[configName].params.cookiename;
+	const	cookieName = config[configName].params.cookiename;
 
-	if(	!r3util.isSafeEntity(req)						||
-		!r3util.isSafeEntity(req.cookies) 				||
-		!r3util.isSafeEntity(req.cookies[cookieName])	)
+	if(	!isSafeEntity(req)						||
+		!isSafeObject(req.cookies) 				||
+		!isSafeHaskey(req.cookies, cookieName)	||
+		!isSafeString(req.cookies[cookieName])	)
 	{
 		return null;
 	}
@@ -56,59 +72,47 @@ var rawGetOtherToken = function(req)
 //
 // rawGetOidcUsername
 //
-var rawGetOidcUsername = function(req)
+const rawGetOidcUsername = (req: express.Request): string | null =>
 {
-	var	configName	= rawGetOidcConfigName(req);
-	var config		= oidc.getConfig();
-	if( !r3util.isSafeString(configName)							||
-		!r3util.isSafeEntity(config)								||
-		!r3util.isSafeEntity(config[configName])					||
-		!r3util.isSafeEntity(config[configName].params)				||
-		!r3util.isSafeEntity(config[configName].params.usernamekey)	)
+	let	configName											= rawGetOidcConfigName(req);
+	let config: Record<string, OIDCExtRouterConfig> | null	= getConfig();
+
+	if( !isSafeString(configName)								||
+		!isSafeObject(config)									||
+		!isSafeHaskey(config, configName)						||
+		!isOIDCExtRouterConfig(config[configName])				||
+		!isSafeHaskey(config[configName].params, 'usernamekey')	||
+		!isSafeString(config[configName].params.usernamekey)		)
 	{
 		console.error('Not find user name key in configuration.');
 		return null;
 	}
-	var	userNameKey = config[configName].params.usernamekey;
+	const	userNameKey = config[configName].params.usernamekey;
 
-	var oidc_token	= rawGetOtherToken(req);
-	if(!r3util.isSafeString(oidc_token)){
-		console.error('Not find ' + config.params.cookiename + ' key in cookie.');
+	const	oidc_token	= rawGetOtherToken(req);
+	if(!isSafeString(oidc_token)){
+		console.error('Not find ' + config[configName].params.cookiename + ' key in cookie.');
 		return null;
 	}
 
-	var	parts		= oidc_token.split('.', 2);
+	const	parts		= oidc_token.split('.', 2);
 	if(2 > parts.length){
 		console.error('Failed to parse payload from oidc token.');
 		return null;
 	}
 
-	var raw_payload	= new TextDecoder().decode(decode(parts[1]));
-	if(!r3util.isSafeJSON(raw_payload)){
+	const raw_payload	= new TextDecoder().decode(base64url.decode(parts[1]));
+	if(!isSafeJSON(raw_payload)){
 		console.error('Failed to decode json payload from oidc token.');
 		return null;
 	}
 
-	var	payload		= JSON.parse(raw_payload);
-	if(!r3util.isSafeEntity(payload) || !r3util.isSafeEntity(payload[userNameKey])){
+	const	payload		= JSON.parse(raw_payload);
+	if(!isSafeEntity(payload) || !isSafeHaskey(payload, userNameKey) || !isSafeString(payload[userNameKey])){
 		console.error('payload does not have user name key(' + userNameKey + ')');
 		return null;
 	}
 	return payload[userNameKey];
-};
-
-//
-// rawGetOidcConfigName
-//
-var rawGetOidcConfigName = function(req)
-{
-	if(	!r3util.isSafeEntity(req)									||
-		!r3util.isSafeEntity(req.cookies) 							||
-		!r3util.isSafeEntity(req.cookies[oidc.oidcConfigCookieName]))
-	{
-		return null;
-	}
-	return req.cookies[oidc.oidcConfigCookieName];
 };
 
 //
@@ -122,36 +126,38 @@ var rawGetOidcConfigName = function(req)
 //		...
 //	}
 //
-var rawGetSignInUrl = function(req)
+const rawGetSignInUrl = (req: express.Request): SignMinUrls | SignMinUrlEntry | string | null =>
 {
-	if(	!r3util.isSafeEntity(req)				||
-		!r3util.isSafeEntity(req.headers)		||
-		!r3util.isSafeString(req.headers.host)	||
-		!r3util.isSafeString(req.protocol)		)
+	if(	!isSafeEntity(req)				||
+		!isSafeEntity(req.headers)		||
+		!isSafeString(req.headers.host)	||
+		!isSafeString(req.protocol)		)
 	{
 		return null;
 	}
+	const	config: Record<string, OIDCExtRouterConfig> | null = getConfig();
 
-	var config = oidc.getConfig();
-
-	if(!r3util.isSafeEntity(config)){
+	if(!isSafeObject(config)){
 		console.error('no valid SignInUrl');
 		return null;
 	}
 
-	var	allSignUrls	= {};
-	var	isSet		= false;
+	let	allSignUrls: SignUrls	= {};
+	let	isSet: boolean			= false;
 
-	Object.keys(config).forEach(function(oidcName)
+	Object.keys(config).forEach((oidcName) =>
 	{
-		if(r3util.isSafeEntity(config[oidcName].params) && r3util.isSafeEntity(config[oidcName].params.redirectUrl)){
-			var	oneOidc = {};
-			oneOidc.url = config[oidcName].params.redirectUrl;
+		if(isOIDCExtRouterConfig(config[oidcName])){
+			let	oneOidc: SignUrlEntry = {
+				url:		'',
+				display:	''
+			};
+			oneOidc.url	= config[oidcName].params.redirectUrl;
 
-			if(r3util.isSafeString(config[oidcName].displayName)){
-				oneOidc.display = config[oidcName].displayName;
+			if(isSafeString(config[oidcName].displayName)){
+				oneOidc.display	= config[oidcName].displayName;
 			}else{
-				oneOidc.display = oidcName;
+				oneOidc.display	= oidcName;
 			}
 			allSignUrls[oidcName]	= oneOidc;
 			isSet					= true;
@@ -176,30 +182,33 @@ var rawGetSignInUrl = function(req)
 //		...
 //	}
 //
-var rawGetSignOutUrl = function(req)
+const rawGetSignOutUrl = (req: express.Request): SignMinUrls | SignMinUrlEntry | string | null =>
 {
-	if(	!r3util.isSafeEntity(req)				||
-		!r3util.isSafeEntity(req.headers)		||
-		!r3util.isSafeString(req.headers.host)	||
-		!r3util.isSafeString(req.protocol)		)
+	if(	!isSafeEntity(req)				||
+		!isSafeEntity(req.headers)		||
+		!isSafeString(req.headers.host)	||
+		!isSafeString(req.protocol)		)
 	{
 		return null;
 	}
+	const	config: Record<string, OIDCExtRouterConfig> | null = getConfig();
 
-	var config = oidc.getConfig();
-
-	if(!r3util.isSafeEntity(config)){
+	if(!isSafeObject(config)){
 		console.error('no valid SignOutUrl');
 		return null;
 	}
 
-	var	allSignUrls	= {};
-	var	isSet		= false;
+	let	allSignUrls: SignMinUrls	= {};
+	let	isSet: boolean				= false;
 
-	Object.keys(config).forEach(function(oidcName)
+	Object.keys(config).forEach((oidcName) =>
 	{
-		if(r3util.isSafeString(config[oidcName].logoutUrl)){
-			allSignUrls[oidcName]	= config[oidcName].logoutUrl;
+		if(isOIDCExtRouterConfig(config[oidcName])){
+			let	oneOidc: SignMinUrlEntry = {
+				url:	'',
+			};
+			oneOidc.url				= config[oidcName].logoutUrl;
+			allSignUrls[oidcName]	= oneOidc;
 			isSet					= true;
 		}else{
 			console.error('no valid SignOutUrl for ' + oidcName + ' in config, so skip this');
@@ -216,32 +225,32 @@ var rawGetSignOutUrl = function(req)
 //---------------------------------------------------------
 // Exports
 //---------------------------------------------------------
-exports.getOtherToken = function(req)
+export const getOtherToken = (req: express.Request): string | null =>
 {
 	return rawGetOtherToken(req);
 };
 
-exports.getUserName = function(req)
+export const getUserName = (req: express.Request): string | null =>
 {
 	return rawGetOidcUsername(req);
 };
 
-exports.getConfigName = function(req)
+export const getConfigName = (req: express.Request): string | null =>
 {
 	return rawGetOidcConfigName(req);
 };
 
-exports.getSignInUri = function(req)
+export const getSignInUri = (req: express.Request): SignMinUrls | SignMinUrlEntry | string | null =>
 {
 	return rawGetSignInUrl(req);
-}; 
+};
 
-exports.getSignOutUri = function(req)
+export const getSignOutUri = (req: express.Request): SignMinUrls | SignMinUrlEntry | string | null =>
 {
 	return rawGetSignOutUrl(req);
 };
 
-exports.getSignInType = function()
+export const getSignInType = (): string =>
 {
 	return 'unsopedtoken';
 };

@@ -20,8 +20,6 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import TextField					from '@mui/material/TextField';
 import Button						from '@mui/material/Button';
@@ -33,7 +31,10 @@ import Typography					from '@mui/material/Typography';
 import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
 import CancelIcon					from '@mui/icons-material/Cancel';
 
-import { r3CreatePathDialog }		from './r3styles';
+import R3Provider					from '../util/r3provider';
+import type { R3Theme }				from './r3theme';
+import { r3CreatePathDialogStyle }	from './r3styles';
+import { valTypeAllObject }			from '../util/r3types';
 import { r3IsEmptyStringObject, r3IsEmptyString } from '../util/r3util';
 
 //
@@ -42,35 +43,54 @@ import { r3IsEmptyStringObject, r3IsEmptyString } from '../util/r3util';
 const pathTextFieldId = 'new-path-textfield-id';
 
 //
+// Props/State type
+//
+type R3CreatePathDialogRequiredProps = {
+	theme:				R3Theme;
+	r3provider:			R3Provider;
+	onClose:			(event: {}, reason: string | null, confirmed: boolean, newPath: string | null) => void;
+};
+
+type R3CreatePathDialogOptionProps = {
+	open?:				boolean;
+	tenant?:			{ display?: string; name?: string } | null;
+	type?:				string | null;
+	parentPath?:		string | null;
+	newPath?:			string;
+};
+
+type R3CreatePathDialogProps = R3CreatePathDialogRequiredProps & R3CreatePathDialogOptionProps;
+
+type R3CreatePathDialogState = {
+	newPath?:			string;
+	open?:				boolean;
+};
+
+type R3CreatePathDialogStateAll = Required<R3CreatePathDialogState>;
+
+type R3CreatePathDialogStyleType = ReturnType<typeof r3CreatePathDialogStyle>;
+
+//
 // Create New Path Dialog Class
 //
-export default class R3CreatePathDialog extends React.Component
+export default class R3CreatePathDialog extends React.Component<R3CreatePathDialogProps, R3CreatePathDialogState>
 {
-	static propTypes = {
-		r3provider:		PropTypes.object.isRequired,
-		open:			PropTypes.bool,
-		tenant:			PropTypes.object,
-		type:			PropTypes.string,
-		parentPath:		PropTypes.string,
-		newPath:		PropTypes.string,
+	sxClasses: R3CreatePathDialogStyleType;
 
-		onClose:		PropTypes.func.isRequired
+	static defaultProps: R3CreatePathDialogOptionProps = {
+		open:		false,
+		tenant:		null,
+		type:		null,
+		parentPath:	null,
+		newPath:	''
 	};
 
-	static defaultProps = {
-		open:			false,
-		tenant:			null,
-		type:			null,
-		parentPath:		null,
-		newPath:		'',
-	};
-
-	state = {
+	state: R3CreatePathDialogStateAll = {
 		newPath:	this.props.newPath,
 		open:		this.props.open
 	};
 
-	constructor(props)
+	constructor(props: R3CreatePathDialogProps)
 	{
 		super(props);
 
@@ -78,46 +98,50 @@ export default class R3CreatePathDialog extends React.Component
 		this.handleNewPathChange	= this.handleNewPathChange.bind(this);
 
 		// styles
-		this.sxClasses				= r3CreatePathDialog(props.theme);
+		this.sxClasses				= r3CreatePathDialogStyle(props.theme);
 	}
 
 	// [NOTE]
 	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
 	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
 	//
-	static getDerivedStateFromProps(nextProps, prevState)
+	static getDerivedStateFromProps(nextProps: R3CreatePathDialogProps, prevState: R3CreatePathDialogState): R3CreatePathDialogState | null
 	{
 		if(prevState.open != nextProps.open){
 			if(nextProps.open){
 				// Inivisible to Visible
-				return {
+				let	newState: R3CreatePathDialogState = {
 					newPath:	nextProps.newPath,
 					open:		nextProps.open
 				};
+				return newState;
 			}else{
 				// Visible to Inivisible
-				return {
+				let	newState: R3CreatePathDialogState = {
 					newPath:	prevState.newPath,
 					open:		nextProps.open
 				};
+				return newState;
+
 			}
 		}
 		return null;															// Return null to indicate no change to state.
 	}
 
-	handleNewPathChange(event)
+	handleNewPathChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
 	{
-		this.setState({
+		let	newState: R3CreatePathDialogState = {
 			newPath:	event.target.value
-		});
+		};
+		this.setState(newState);
 	}
 
 	render()
 	{
 		const { theme, r3provider } = this.props;
 
-		let	tenant;
-		let	tenantClass;
+		let	tenant: string;
+		let	tenantClass: valTypeAllObject;
 		if(!r3IsEmptyStringObject(this.props.tenant, 'display')){
 			tenant		= this.props.tenant.display;
 			tenantClass	= this.sxClasses.value;
@@ -126,8 +150,8 @@ export default class R3CreatePathDialog extends React.Component
 			tenantClass	= this.sxClasses.valueItalic;
 		}
 
-		let	type;
-		let	typeClass;
+		let	type: string;
+		let	typeClass: valTypeAllObject;
 		if(!r3IsEmptyString(this.props.type)){
 			type		= this.props.type;
 			typeClass	= this.sxClasses.value;
@@ -136,8 +160,8 @@ export default class R3CreatePathDialog extends React.Component
 			typeClass	= this.sxClasses.valueItalic;
 		}
 
-		let	parentPath;
-		let	parentPathClass;
+		let	parentPath: string;
+		let	parentPathClass: valTypeAllObject;
 		if(!r3IsEmptyString(this.props.parentPath)){
 			parentPath		= this.props.parentPath;
 			parentPathClass	= this.sxClasses.value;

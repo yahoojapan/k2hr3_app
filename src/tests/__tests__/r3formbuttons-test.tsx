@@ -19,17 +19,16 @@
  *
  */
 
-import React					from 'react';										// eslint-disable-line no-unused-vars
+import React					from 'react';
 import renderer					from 'react-test-renderer';
-import getElementWithContext	from 'react-test-context-provider';					// for context provider
 import { ThemeProvider }		from '@mui/material/styles';
 import { StyledEngineProvider, CssBaseline}	from '@mui/material';					// for jss and reset.css
 
-import r3Theme					from '../../src/components/r3theme';				// custom theme
-import R3FormButtons			from '../../src/components/r3formbuttons';
-import R3Provider				from '../../src/util/r3provider';
+import r3Theme					from '../../components/r3theme';					// custom theme
+import R3FormButtons			from '../../components/r3formbuttons';
+import R3Provider				from '../../util/r3provider';
 
-import mock_fetch				from '../__mocks__/fetchMock';						// eslint-disable-line no-unused-vars
+import '../__mocks__/fetchMock';
 import { createNodeMock }		from '../__mocks__/materialUiMock';					// for material-ui
 
 //
@@ -45,20 +44,17 @@ import { createNodeMock }		from '../__mocks__/materialUiMock';					// for materi
 //			.mockReturnValueOnce('x')
 //			.mockReturnValue(true);
 //
-const cancel	= jest.fn();											// eslint-disable-line no-undef
-const save		= jest.fn();											// eslint-disable-line no-undef
+const cancel	= jest.fn();
+const save		= jest.fn();
 
 //
 // Main test
 //
-describe('R3FormButtons', () => {										// eslint-disable-line no-undef
-	it('test snapshot for R3FormButtons', () => {						// eslint-disable-line no-undef
+describe('R3FormButtons', () => {
+	it('test snapshot for R3FormButtons', () => {
 		const r3provider	= new R3Provider(null);
 
-		const element		= getElementWithContext(
-			{
-				r3Context:	r3provider.getR3Context()
-			},
+		const element		= (
 			<StyledEngineProvider injectFirst>
 				<ThemeProvider theme={ r3Theme } >
 					<CssBaseline />
@@ -74,8 +70,8 @@ describe('R3FormButtons', () => {										// eslint-disable-line no-undef
 		);
 
 		const component = renderer.create(element, { createNodeMock });
-		let tree		= component.toJSON();
-		expect(tree).toMatchSnapshot();									// eslint-disable-line no-undef
+		const tree		= component.toJSON();
+		expect(tree).toMatchSnapshot();
 	});
 });
 

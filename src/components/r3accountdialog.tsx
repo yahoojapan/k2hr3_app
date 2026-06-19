@@ -20,8 +20,6 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import Button						from '@mui/material/Button';
 import Dialog						from '@mui/material/Dialog';
@@ -34,83 +32,113 @@ import TextField					from '@mui/material/TextField';
 import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
 import CopyClipBoardIcon			from '@mui/icons-material/AssignmentTurnedInRounded';
 
-import { r3AccountDialog }			from './r3styles';
-import { r3IsEmptyString, r3IsEmptyEntityObject, r3IsSafeTypedEntity } from '../util/r3util';
+import R3Provider					from '../util/r3provider';
+import type { R3Theme }				from './r3theme';
+import { r3AccountDialogStyles }	from './r3styles';
+import { valTypeAllObject }			from '../util/r3types';
+import { r3IsEmptyString, r3IsEmptyEntityObject, r3IsBoolean, r3IsFunction } from '../util/r3util';
 
 const unscopedtokenFieldName	= 'unscopedtoken-textfield';
 
 //
+// Props/State type
+//
+type R3AccountDialogRequiredProps = {
+	theme:				R3Theme;
+	r3provider:			R3Provider;
+	onClose:			(event: {}, reason: string | null) => void;
+};
+
+type R3AccountDialogOptionProps = {
+	open?:				boolean;
+	username?:			string | null;
+	unscopedtoken?:		string | null;
+};
+
+type R3AccountDialogProps = R3AccountDialogRequiredProps & R3AccountDialogOptionProps;
+
+type R3AccountDialogTooltips = {
+	copyClipboardButtonTooltip?:	boolean;
+};
+
+type R3AccountDialogState = {
+	open?:				boolean;
+	tooltips?: 			R3AccountDialogTooltips;
+};
+
+type R3AccountDialogStateAll = Required<R3AccountDialogState>;
+
+type R3AccountDialogStylesType = ReturnType<typeof r3AccountDialogStyles>;
+
+//
 // Create New Path Dialog Class
 //
-export default class R3AccountDialog extends React.Component
+export default class R3AccountDialog extends React.Component<R3AccountDialogProps, R3AccountDialogState>
 {
-	static propTypes = {
-		r3provider:		PropTypes.object.isRequired,
-		open:			PropTypes.bool,
-		username:		PropTypes.string,
-		unscopedtoken:	PropTypes.string,
-		onClose:		PropTypes.func.isRequired
-	};
+	sxClasses: R3AccountDialogStylesType;
 
-	static defaultProps = {
+	unscopedtokenInputElement: HTMLInputElement | null = null;						// unscopedtoken textfield for registration code.
+
+	static defaultProps: R3AccountDialogOptionProps = {
 		open:			false,
 		username:		null,
 		unscopedtoken:	null
 	};
 
-	unscopedtokenInputElement = null;												// unscopedtoken textfield for registration code.
-
-	state = {
+	state: R3AccountDialogStateAll = {
 		open:		this.props.open,
 		tooltips: {
 			copyClipboardButtonTooltip:		false
 		}
 	};
 
-	constructor(props)
+	constructor(props: R3AccountDialogProps)
 	{
 		super(props);
 
 		this.handleCopyClipboard = this.handleCopyClipboard.bind(this);
 
 		// styles
-		this.sxClasses = r3AccountDialog(props.theme);
+		this.sxClasses = r3AccountDialogStyles(props.theme);
 	}
 
 	// [NOTE]
 	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
 	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
 	//
-	static getDerivedStateFromProps(nextProps, prevState)
+	static getDerivedStateFromProps(nextProps: R3AccountDialogProps, prevState: R3AccountDialogState): R3AccountDialogState | null
 	{
 		if(prevState.open != nextProps.open){
 			if(nextProps.open){
 				// Inivisible to Visible
-				return {
+				let	newState: R3AccountDialogState = {
 					open:	nextProps.open
 				};
+				return newState;
 			}else{
 				// Visible to Inivisible
-				return {
+				let	newState: R3AccountDialogState = {
 					open:	nextProps.open
 				};
+				return newState;
 			}
 		}
 		return null;														// Return null to indicate no change to state.
 	}
 
-	handleCopyClipboardButtonTooltipChange = (event, isOpen) =>
+	handleCopyClipboardButtonTooltipChange = (_event: React.MouseEvent<HTMLElement>, isOpen: boolean) =>
 	{
-		this.setState({
+		let	newState: R3AccountDialogState = {
 			tooltips: {
 				copyClipboardButtonTooltip:	isOpen
 			}
-		});
+		};
+		this.setState(newState);
 	};
 
-	handleCopyClipboard(event)												// eslint-disable-line no-unused-vars
+	handleCopyClipboard(_event: React.MouseEvent<HTMLElement>): void
 	{
-		if(r3IsEmptyEntityObject(this.unscopedtokenInputElement, 'select') || !r3IsSafeTypedEntity(this.unscopedtokenInputElement.select, 'function')){
+		if(r3IsEmptyEntityObject(this.unscopedtokenInputElement, 'select') || !r3IsFunction(this.unscopedtokenInputElement.select)){
 			return;
 		}
 		this.unscopedtokenInputElement.select();	// select all text in text field
@@ -118,19 +146,20 @@ export default class R3AccountDialog extends React.Component
 		window.getSelection().removeAllRanges();	// unselect text
 		this.unscopedtokenInputElement.blur();		// off furcus
 
-		this.setState({
+		let	newState: R3AccountDialogState = {
 			tooltips: {
 				copyClipboardButtonTooltip:	false
 			}
-		});
+		};
+		this.setState(newState);
 	}
 
 	render()
 	{
 		const { theme, r3provider } = this.props;
 
-		let	username;
-		let	usernameClass;
+		let	username: string;
+		let	usernameClass: valTypeAllObject;
 		if(!r3IsEmptyString(this.props.username)){
 			username		= this.props.username;
 			usernameClass	= this.sxClasses.value;
@@ -139,7 +168,7 @@ export default class R3AccountDialog extends React.Component
 			usernameClass	= this.sxClasses.valueItalic;
 		}
 
-		let	unscopedtoken;
+		let	unscopedtoken: string;
 		if(!r3IsEmptyString(this.props.unscopedtoken)){
 			unscopedtoken	= this.props.unscopedtoken;
 		}else{
@@ -189,7 +218,7 @@ export default class R3AccountDialog extends React.Component
 					<TextField
 						name={ unscopedtokenFieldName }
 						value={ unscopedtoken }
-						inputRef = { (element) => { this.unscopedtokenInputElement = element; } } 
+						inputRef = { (element) => { this.unscopedtokenInputElement = element; } }
 						slotProps ={{
 							input: {		sx: this.sxClasses.unscopedtokenInputTextField	},
 							htmlInput: {	style: { padding: 0 }							}
@@ -199,7 +228,7 @@ export default class R3AccountDialog extends React.Component
 					/>
 					<Tooltip
 						title={ r3provider.getR3TextRes().tResCopyClipboardTT }
-						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.copyClipboardButtonTooltip, 'boolean')) ? false : this.state.tooltips.copyClipboardButtonTooltip) }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.copyClipboardButtonTooltip)) ? false : this.state.tooltips.copyClipboardButtonTooltip) }
 					>
 						<Button
 							onClick={ this.handleCopyClipboard }

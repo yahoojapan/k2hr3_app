@@ -20,8 +20,6 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import TextField					from '@mui/material/TextField';
 import Typography					from '@mui/material/Typography';
@@ -33,13 +31,68 @@ import AddIcon						from '@mui/icons-material/AddRounded';
 import UpIcon						from '@mui/icons-material/ArrowUpwardRounded';
 import DownIcon						from '@mui/icons-material/ArrowDownwardRounded';
 
-import { r3Role }					from './r3styles';
+import type { R3Theme }				from './r3theme';
+import { r3RoleStyle }				from './r3styles';
 import R3FormButtons				from './r3formbuttons';					// Buttons
 import R3Message					from '../util/r3message';
+import R3Provider					from '../util/r3provider';
 import R3PopupMsgDialog				from './r3popupmsgdialog';
 import { regYrnAnyPolicyPath, regYrnAnyRolePath }	from '../util/r3define';
-import { errorType, actionTypeValue, actionTypeDelete, actionTypeAdd, actionTypeUp, actionTypeDown, actionTypeHostName, actionTypeHostAuxiliary } from '../util/r3types';
-import { r3DeepClone, r3DeepCompare, parseCombineHostObject, getCombineHostObject, r3IsEmptyString, r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity, parseKVString } from '../util/r3util';
+import { errorType, actionTypeValue, actionTypeDelete, actionTypeAdd, actionTypeUp, actionTypeDown, actionTypeHostName, actionTypeHostAuxiliary, isRoleHostList, RoleData, RoleHostInfo } from '../util/r3types';
+import { r3IsNumber, r3IsBoolean, r3IsArray, r3DeepClone, r3DeepCompare, parseCombineHostObject, getCombineHostObject, r3IsEmptyString, r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, parseKVString, r3IsString, r3IsStringArray } from '../util/r3util';
+
+//
+// Types
+//
+type LocalHostObject = {
+	host:							string;
+	auxiliary:						string;
+};
+
+type R3RoleTooltips = {
+	deleteHostnameTooltip?:			number;
+	addHostnameTooltip?:			boolean;
+	deleteIpTooltip?:				number;
+	addIpTooltip?:					boolean;
+	deletePolicyTooltip?:			number;
+	addPolicyTooltip?:				boolean;
+	downAliasTooltip?:				number;
+	upAliasTooltip?:				number;
+	deleteAliasTooltip?:			number;
+	addAliasTooltip?:				boolean;
+};
+
+type R3RoleRequiredProps = {
+	theme:							R3Theme;
+	r3provider:						R3Provider;
+	role:							RoleData;
+	dispUnique:						string | number;
+	onSave:							(role: RoleData) => void;
+	onUpdate:						(changed: boolean) => void;
+};
+
+type R3RoleOptionProps = {
+	isReadMode?:					boolean;
+};
+
+type R3RoleProps = R3RoleRequiredProps & R3RoleOptionProps;
+
+type R3RoleState = {
+	dispUnique:						string | number;
+	role:							RoleData;
+	localHostnames:					LocalHostObject[];
+	localIps:						LocalHostObject[];
+	addHostName:					string;
+	addAuxiliary:					string;
+	addPolicies:					string;
+	addAliases:						string;
+	changed:						boolean;
+	confirmMessageObject:			R3Message | null;
+	messageDialogObject:			R3Message | null;
+	tooltips:						R3RoleTooltips;
+};
+
+type R3RoleStyleType = ReturnType<typeof r3RoleStyle>;
 
 //
 // Local variables
@@ -75,24 +128,17 @@ const roleComponentValues = {
 //
 // Role Contents Class
 //
-export default class R3Role extends React.Component
+export default class R3Role extends React.Component<R3RoleProps, R3RoleState>
 {
-	static propTypes = {
-		r3provider:	PropTypes.object.isRequired,
-		role:		PropTypes.object.isRequired,
-		dispUnique:	PropTypes.number.isRequired,
-		isReadMode:	PropTypes.bool,
-		onSave:		PropTypes.func.isRequired,
-		onUpdate:	PropTypes.func.isRequired
-	};
+	sxClasses: R3RoleStyleType;
 
-	static defaultProps = {
+	static defaultProps: R3RoleOptionProps = {
 		isReadMode:	false
 	};
 
 	state = R3Role.createState(this.props.role, this.props.dispUnique);
 
-	constructor(props)
+	constructor(props: R3RoleProps)
 	{
 		super(props);
 
@@ -111,7 +157,7 @@ export default class R3Role extends React.Component
 		this.handleAddAliasesChange		= this.handleAddAliasesChange.bind(this);
 
 		// styles
-		this.sxClasses					= r3Role(props.theme);
+		this.sxClasses					= r3RoleStyle(props.theme);
 	}
 
 	componentDidMount()
@@ -124,7 +170,7 @@ export default class R3Role extends React.Component
 	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
 	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
 	//
-	static getDerivedStateFromProps(nextProps, prevState)
+	static getDerivedStateFromProps(nextProps: R3RoleProps, prevState: R3RoleState): R3RoleState | null
 	{
 		if(nextProps.dispUnique !== prevState.dispUnique){
 			// Switching content
@@ -133,25 +179,24 @@ export default class R3Role extends React.Component
 		return null;															// Return null to indicate no change to state.
 	}
 
-	static createState(role, dispUnique)
+	static createState(role: RoleData, dispUnique: string | number): R3RoleState
 	{
-		let	localHostnames	= [];
-		let	localIps		= [];
-		let	oneHost;
-		let	standards;
-		let	cnt;
+		let	localHostnames: LocalHostObject[]	= [];
+		let	localIps: LocalHostObject[]			= [];
+
 		if(!r3IsEmptyEntityObject(role, 'hosts') && !r3IsEmptyEntityObject(role.hosts, 'hostnames')){
-			standards		= [];
-			for(cnt = 0; cnt < role.hosts.hostnames.length; ++cnt){
-				oneHost		= parseCombineHostObject(role.hosts.hostnames[cnt]);
+			let	standards: RoleHostInfo[] = [];
+			for(let cnt = 0; cnt < role.hosts.hostnames.length; ++cnt){
+				let	oneHost: RoleHostInfo = parseCombineHostObject(role.hosts.hostnames[cnt]);
 				standards.push(oneHost);
 			}
 			localHostnames	= R3Role.convertStandardToLocal(standards);
 		}
+
 		if(!r3IsEmptyEntityObject(role, 'hosts') && !r3IsEmptyEntityObject(role.hosts, 'ips')){
-			standards		= [];
-			for(cnt = 0; cnt < role.hosts.ips.length; ++cnt){
-				oneHost		= parseCombineHostObject(role.hosts.ips[cnt]);
+			let	standards: RoleHostInfo[] = [];
+			for(let cnt = 0; cnt < role.hosts.ips.length; ++cnt){
+				let	oneHost: RoleHostInfo = parseCombineHostObject(role.hosts.ips[cnt]);
 				standards.push(oneHost);
 			}
 			localIps		= R3Role.convertStandardToLocal(standards);
@@ -188,10 +233,10 @@ export default class R3Role extends React.Component
 	//
 	// Utility for hostnames/ips
 	//
-	static convertStandardToLocal(standards)
+	static convertStandardToLocal(standards: RoleHostInfo[]): LocalHostObject[]
 	{
-		let	result = [];
-		if(r3IsEmptyEntity(standards) || !(standards instanceof Array)){
+		let	result: LocalHostObject[] = [];
+		if(!r3IsArray(standards)){
 			return result;
 		}
 		for(let cnt = 0; cnt < standards.length; ++cnt){
@@ -201,75 +246,66 @@ export default class R3Role extends React.Component
 		return result;
 	}
 
-	static convertOneStandardToLocal(standard)
+	static convertOneStandardToLocal(standard: RoleHostInfo): LocalHostObject
 	{
-		let	local = {};
+		let	local: LocalHostObject = { host: '', auxiliary: '' };
 
 		// host
-		if(r3IsEmptyStringObject(standard, 'hostname')){
+		if(r3IsEmptyString(standard.host)){
 			local.host	= '';
 		}else{
-			local.host	= standard.hostname;
+			local.host	= standard.host;
 		}
 
 		// auxiliary
 		local.auxiliary	= '';
 
 		// port in auxiliary
-		if(!r3IsEmptyEntityObject(standard, 'port') && (r3IsSafeTypedEntity(standard.port, 'string') || r3IsSafeTypedEntity(standard.port, 'number'))){
-			if(r3IsSafeTypedEntity(standard.port, 'string')){
-				if(!isNaN(standard.port.trim()) || '*' === standard.port.trim()){
-					local.auxiliary += 'PORT=' + standard.port.trim();
-				}else{
-					// wrong string...
-					local.auxiliary += 'PORT=0';
-				}
+		if(r3IsNumber(standard.port)){
+			if(0 === standard.port){
+				local.auxiliary += 'PORT=*';
 			}else{
-				if(0 === standard.port){
-					local.auxiliary += 'PORT=*';
-				}else{
-					local.auxiliary += 'PORT=' + String(standard.port);
-				}
+				local.auxiliary += 'PORT=' + String(standard.port);
 			}
 		}else{
 			local.auxiliary += 'PORT=*';
 		}
 
 		// cuk in auxiliary
-		if(!r3IsEmptyStringObject(standard, 'cuk') && !r3IsEmptyString(standard.cuk.trim())){
+		if(r3IsString(standard.cuk) && !r3IsEmptyString(standard.cuk, true)){
 			local.auxiliary += ', CUK=' + standard.cuk.trim();
 		}
 
 		// extra in auxiliary
-		if(!r3IsEmptyStringObject(standard, 'extra') && !r3IsEmptyString(standard.extra.trim())){
+		if(r3IsString(standard.extra) && !r3IsEmptyString(standard.extra, true)){
 			local.auxiliary += ', EXT=' + standard.extra.trim();
 		}
 
 		// tag in auxiliary
-		if(!r3IsEmptyStringObject(standard, 'tag') && !r3IsEmptyString(standard.tag.trim())){
+		if(r3IsString(standard.tag) && !r3IsEmptyString(standard.tag, true)){
 			local.auxiliary += ', TAG=' + standard.tag.trim();
 		}
 
 		// inboundip in auxiliary
-		if(!r3IsEmptyStringObject(standard, 'inboundip') && !r3IsEmptyString(standard.inboundip.trim())){
+		if(r3IsString(standard.inboundip) && !r3IsEmptyString(standard.inboundip, true)){
 			local.auxiliary += ', INBOUNDIP=' + standard.inboundip.trim();
 		}
 
 		// outboundip in auxiliary
-		if(!r3IsEmptyStringObject(standard, 'outboundip') && !r3IsEmptyString(standard.outboundip.trim())){
+		if(r3IsString(standard.outboundip) && !r3IsEmptyString(standard.outboundip, true)){
 			local.auxiliary += ', OUTBOUNDIP=' + standard.outboundip.trim();
 		}
 		return local;
 	}
 
-	convertLocalToStandard(locals)
+	convertLocalToStandard(locals: LocalHostObject[]): RoleHostInfo[]
 	{
-		let	result = [];
-		if(r3IsEmptyEntity(locals) || !(locals instanceof Array)){
+		let	result: RoleHostInfo[] = [];
+		if(!r3IsArray(locals)){
 			return result;
 		}
 		for(let cnt = 0; cnt < locals.length; ++cnt){
-			if(r3IsEmptyStringObject(locals[cnt], 'host') && r3IsEmptyStringObject(locals[cnt], 'auxiliary')){
+			if(r3IsEmptyString(locals[cnt].host) && r3IsEmptyString(locals[cnt].auxiliary)){
 				continue;
 			}
 			let	standard = this.convertOneLocalToStandard(locals[cnt]);
@@ -281,19 +317,25 @@ export default class R3Role extends React.Component
 		return result;
 	}
 
-	convertOneLocalToStandard(local)
+	convertOneLocalToStandard(local: LocalHostObject): RoleHostInfo
 	{
-		let	result = {};
+		let	result: RoleHostInfo = {
+			host:		'',
+			port:		-1,
+			cuk:		null,
+			extra:		null,
+			tag:		null
+		};
 
 		// host
-		if(!r3IsEmptyStringObject(local, 'host')){
-			result.hostname = local.host;
+		if(!r3IsEmptyString(local.host)){
+			result.host = local.host;
 		}else{
-			result.hostname = '';
+			result.host = '';
 		}
 
 		// auxiliary
-		if(r3IsEmptyStringObject(local, 'auxiliary')){
+		if(r3IsEmptyString(local.auxiliary)){
 			result.port	= 0;
 			result.cuk	= null;
 			result.extra= null;
@@ -303,23 +345,17 @@ export default class R3Role extends React.Component
 
 			// PORT
 			let	parsed	= parseKVString(tmpstr, 'PORT');
-			if(!r3IsEmptyEntity(parsed.value)){
-				if(!r3IsEmptyString(parsed.value)){
-					if(!isNaN(parsed.value.trim())){
-						result.port	= parseInt(parsed.value.trim());
-					}else if('*' === parsed.value.trim()){
-						result.port	= 0;
-					}else{
-						result.port	= -1;				// wrong string...
-					}
-				}else if(r3IsSafeTypedEntity(parsed.value.port, 'number')){
-					result.port	= parsed.value;
+			if(!r3IsEmptyString(parsed.value, true)){
+				if(!isNaN(Number(parsed.value.trim()))){
+					result.port	= parseInt(parsed.value.trim());
+				}else if('*' === parsed.value.trim()){
+					result.port	= 0;
 				}else{
-					result.port	= -1;					// wrong type...
+					result.port	= -1;				// wrong string...
 				}
 				tmpstr = parsed.reststr;
 			}else{
-				result.port	= -1;
+				result.port	= -1;					// empty string
 			}
 
 			// CUK
@@ -370,78 +406,74 @@ export default class R3Role extends React.Component
 		return result;
 	}
 
-	checkStandardHostObject(standard)
+	checkStandardHostObject(standard: RoleHostInfo): boolean
 	{
-		if(r3IsEmptyStringObject(standard, 'hostname') || r3IsEmptyString(standard.hostname, true)){
+		if(r3IsEmptyString(standard.host, true)){
 			return false;
 		}
-		if(r3IsEmptyEntityObject(standard, 'port') || isNaN(standard.port)){
+		if(!r3IsNumber(standard.port)){
 			return false;
-		}
-		if(!r3IsSafeTypedEntity(standard.port, 'number')){
-			standard.port = Number(standard.port);
 		}
 		if(standard.port < 0 || 65535 < standard.port){
 			return false;
 		}
-		if(!r3IsEmptyStringObject(standard, 'cuk') && -1 !== standard.cuk.indexOf(' ')){
+		if(r3IsString(standard.cuk) && !r3IsEmptyString(standard.cuk) && -1 !== standard.cuk.indexOf(' ')){
 			return false;
 		}
-		if(!r3IsEmptyStringObject(standard, 'extra') && -1 !== standard.extra.indexOf(' ')){
+		if(r3IsString(standard.extra) && !r3IsEmptyString(standard.extra) && -1 !== standard.extra.indexOf(' ')){
 			return false;
 		}
-		if(!r3IsEmptyStringObject(standard, 'tag') && -1 !== standard.tag.indexOf(' ')){
+		if(r3IsString(standard.tag) && !r3IsEmptyString(standard.tag) && -1 !== standard.tag.indexOf(' ')){
 			return false;
 		}
-		if(!r3IsEmptyStringObject(standard, 'inboundip') && -1 !== standard.tag.indexOf(' ')){
+		if(r3IsString(standard.inboundip) && !r3IsEmptyString(standard.inboundip) && -1 !== standard.tag.indexOf(' ')){
 			return false;
 		}
-		if(!r3IsEmptyStringObject(standard, 'outboundip') && -1 !== standard.tag.indexOf(' ')){
+		if(r3IsString(standard.outboundip) && !r3IsEmptyString(standard.outboundip) && -1 !== standard.tag.indexOf(' ')){
 			return false;
 		}
 		return true;
 	}
 
-	compareStandardHostObject(standard1, standard2)
+	compareStandardHostObject(standard1: RoleHostInfo, standard2: RoleHostInfo): boolean
 	{
-		if(	(r3IsEmptyStringObject(standard1, 'hostname')	!== r3IsEmptyStringObject(standard2, 'hostname'))	||
-			(r3IsEmptyString(standard1.hostname, true)		!== r3IsEmptyString(standard2.hostname, true)	)	||
-			(!r3IsEmptyString(standard1.hostname, true)		&& (standard1.hostname !== standard2.hostname)	)	)
+		if(	(r3IsEmptyString(standard1.host, true)			!==	r3IsEmptyString(standard2.host, true))			||
+			(!r3IsEmptyString(standard1.host, true)			&&	(standard1.host !== standard2.host))			)
 		{
 			return false;
 		}
-		if(	(r3IsEmptyEntityObject(standard1, 'port')	!== r3IsEmptyEntityObject(standard2, 'port'))	||
-			String(standard1.port)						!== String(standard2.port)						)
+		if(	(r3IsNumber(standard1.port)						!== r3IsNumber(standard2.port))						||
+			String(standard1.port)							!== String(standard2.port)							)
 		{
 			return false;
 		}
-		if(	(r3IsEmptyStringObject(standard1, 'cuk')	!== r3IsEmptyStringObject(standard2, 'cuk')	)	||
-			(r3IsEmptyString(standard1.cuk, true)		!== r3IsEmptyString(standard2.cuk, true)	)	||
-			(!r3IsEmptyString(standard1.cuk, true)		&& (standard1.cuk !== standard2.cuk)		)	)
+		if(	(r3IsString(standard1.cuk)						!== r3IsString(standard2.cuk))						||
+			(r3IsEmptyString(standard1.cuk, true)			!== r3IsEmptyString(standard2.cuk, true))			||
+			(!r3IsEmptyString(standard1.cuk, true)			&& (standard1.cuk !== standard2.cuk))				)
 		{
 			return false;
 		}
-		if(	(r3IsEmptyStringObject(standard1, 'extra')	!== r3IsEmptyStringObject(standard2, 'extra')	)	||
-			(r3IsEmptyString(standard1.extra, true)		!== r3IsEmptyString(standard2.extra, true)		)	||
-			(!r3IsEmptyString(standard1.extra, true)	&& (standard1.extra !== standard2.extra)		)	)
+		if(	(r3IsString(standard1.extra)					!== r3IsString(standard2.extra))					||
+			(r3IsEmptyString(standard1.extra, true)			!== r3IsEmptyString(standard2.extra, true))			||
+			(!r3IsEmptyString(standard1.extra, true)		&& (standard1.extra !== standard2.extra))			)
 		{
 			return false;
 		}
-		if(	(r3IsEmptyStringObject(standard1, 'tag')	!== r3IsEmptyStringObject(standard2, 'tag')	)	||
-			(r3IsEmptyString(standard1.tag, true)		!== r3IsEmptyString(standard2.tag, true)	)	||
-			(!r3IsEmptyString(standard1.tag, true)		&& (standard1.tag !== standard2.tag)		)	)
+		if(	(r3IsString(standard1.tag)						!== r3IsString(standard2.tag))						||
+			(r3IsEmptyString(standard1.tag, true)			!== r3IsEmptyString(standard2.tag, true))			||
+			(!r3IsEmptyString(standard1.tag, true)			&& (standard1.tag !== standard2.tag))				)
 		{
 			return false;
 		}
-		if(	(r3IsEmptyStringObject(standard1, 'inboundip')	!== r3IsEmptyStringObject(standard2, 'inboundip')	)	||
-			(r3IsEmptyString(standard1.inboundip, true)		!== r3IsEmptyString(standard2.inboundip, true)		)	||
-			(!r3IsEmptyString(standard1.inboundip, true)	&& (standard1.inboundip !== standard2.inboundip)	)	)
+		if(	(r3IsString(standard1.inboundip)				!== r3IsString(standard2.inboundip))				||
+			(r3IsEmptyString(standard1.inboundip, true)		!== r3IsEmptyString(standard2.inboundip, true))		||
+			(!r3IsEmptyString(standard1.inboundip, true)	&& (standard1.inboundip !== standard2.inboundip))	)
 		{
 			return false;
 		}
-		if(	(r3IsEmptyStringObject(standard1, 'outboundip')	!== r3IsEmptyStringObject(standard2, 'outboundip')	)	||
-			(r3IsEmptyString(standard1.outboundip, true)	!== r3IsEmptyString(standard2.outboundip, true)		)	||
-			(!r3IsEmptyString(standard1.outboundip, true)	&& (standard1.outboundip !== standard2.outboundip)	)	)
+		if(	(r3IsString(standard1.outboundip)				!== r3IsString(standard2.outboundip))				||
+			(r3IsEmptyString(standard1.outboundip, true)	!== r3IsEmptyString(standard2.outboundip, true))	||
+			(!r3IsEmptyString(standard1.outboundip, true)	&& (standard1.outboundip !== standard2.outboundip))	)
 		{
 			return false;
 		}
@@ -451,40 +483,38 @@ export default class R3Role extends React.Component
 	//
 	// Check Hosts.hostnames state
 	//
-	isChangedHostsState(nowHosts, isHostname)
+	isChangedHostsState(nowHosts: LocalHostObject[] | null, isHostname: boolean): boolean
 	{
-		let	propsHost = [];
-		let	oneHost;
-		let	local;
-		let	cnt;
+		let	propsHost: RoleHostInfo[] = [];
+
 		if(isHostname){
-			if(!r3IsEmptyEntityObject(this.props.role, 'hosts') && !r3IsEmptyEntityObject(this.props.role.hosts, 'hostnames')){
-				for(cnt = 0; cnt < this.props.role.hosts.hostnames.length; ++cnt){
-					oneHost	= parseCombineHostObject(this.props.role.hosts.hostnames[cnt]);
+			if(isRoleHostList(this.props.role.hosts) && r3IsStringArray(this.props.role.hosts.hostnames)){
+				for(let cnt = 0; cnt < this.props.role.hosts.hostnames.length; ++cnt){
+					let	oneHost: RoleHostInfo = parseCombineHostObject(this.props.role.hosts.hostnames[cnt]);
 					propsHost.push(oneHost);
 				}
 			}
 		}else{
-			if(!r3IsEmptyEntityObject(this.props.role, 'hosts') && !r3IsEmptyEntityObject(this.props.role.hosts, 'ips')){
-				for(cnt = 0; cnt < this.props.role.hosts.ips.length; ++cnt){
-					oneHost	= parseCombineHostObject(this.props.role.hosts.ips[cnt]);
+			if(isRoleHostList(this.props.role.hosts) && r3IsStringArray(this.props.role.hosts.ips)){
+				for(let cnt = 0; cnt < this.props.role.hosts.ips.length; ++cnt){
+					let	oneHost: RoleHostInfo = parseCombineHostObject(this.props.role.hosts.ips[cnt]);
 					propsHost.push(oneHost);
 				}
 			}
 		}
-		if(r3IsEmptyEntity(nowHosts) || !(nowHosts instanceof Array) || nowHosts.length !== propsHost.length){
+		if(!r3IsArray(nowHosts) || nowHosts.length !== propsHost.length){
 			return true;
 		}
 		let	found = false;
 		for(let cnt1 = 0; cnt1 < nowHosts.length; ++cnt1){
 			found	= false;
-			oneHost = this.convertOneLocalToStandard(nowHosts[cnt1]);
-			local	= R3Role.convertOneStandardToLocal(oneHost);
+			let	oneHost: RoleHostInfo	= this.convertOneLocalToStandard(nowHosts[cnt1]);
+			let	local: LocalHostObject	= R3Role.convertOneStandardToLocal(oneHost);
 
-			if(	r3IsEmptyEntityObject(nowHosts[cnt1], 'host')		!== r3IsEmptyEntityObject(local, 'host')			||
-				(!r3IsEmptyEntityObject(nowHosts[cnt1], 'host')		&& (nowHosts[cnt1].host !== local.host))			||
-				r3IsEmptyEntityObject(nowHosts[cnt1], 'auxiliary')	!== r3IsEmptyEntityObject(local, 'auxiliary')		||
-				(!r3IsEmptyEntityObject(nowHosts[cnt1], 'auxiliary') && (nowHosts[cnt1].auxiliary !== local.auxiliary))	)
+			if(	r3IsString(nowHosts[cnt1].host)				!==	r3IsString(local.host)							||
+				(!r3IsEmptyString(nowHosts[cnt1].host)		&&	(nowHosts[cnt1].host		!== local.host))	||
+				r3IsString(nowHosts[cnt1].auxiliary)		!==	r3IsString(local.auxiliary)						||
+				(!r3IsEmptyString(nowHosts[cnt1].auxiliary) &&	(nowHosts[cnt1].auxiliary	!== local.auxiliary)))
 			{
 				return true;
 			}
@@ -505,13 +535,13 @@ export default class R3Role extends React.Component
 	//
 	// Check Polisies state
 	//
-	isChangedPoliciesState(nowPolicies)
+	isChangedPoliciesState(nowPolicies: string[] | null): boolean
 	{
-		if(r3IsEmptyEntity(nowPolicies) || !(nowPolicies instanceof Array)){
+		if(!r3IsArray(nowPolicies)){
 			// set current value
 			nowPolicies = this.state.role.policies;
 		}
-		if((r3IsEmptyEntityObject(this.props.role, 'policies') || !(this.props.role.policies instanceof Array)) !== (r3IsEmptyEntity(nowPolicies) || !(nowPolicies instanceof Array))){
+		if(!r3IsArray(this.props.role.policies) !== !r3IsArray(nowPolicies)){
 			return true;
 		}
 		return !r3DeepCompare(this.props.role.policies, nowPolicies);
@@ -520,16 +550,16 @@ export default class R3Role extends React.Component
 	//
 	// Check only aliases state
 	//
-	isChangedAliasesState(nowAliases)
+	isChangedAliasesState(nowAliases: string[] | null): boolean
 	{
-		if(r3IsEmptyEntity(nowAliases)){
-			nowAliases	= r3IsEmptyEntityObject(this.state.role, 'aliases') ? undefined : this.state.role.aliases;
+		if(!r3IsStringArray(nowAliases) || 0 === nowAliases.length){
+			nowAliases	= (!r3IsStringArray(this.state.role.aliases) || 0 === this.state.role.aliases.length) ? undefined : this.state.role.aliases;
 		}
-		if(r3IsEmptyEntity(nowAliases)){
+		if(!r3IsStringArray(nowAliases) || 0 === nowAliases.length){
 			nowAliases = [];									// empty array
 		}
-		let	propsAliases = r3IsEmptyEntityObject(this.props.role, 'aliases') ? undefined : this.props.role.aliases;
-		if(r3IsEmptyEntity(propsAliases)){
+		let	propsAliases = (!r3IsStringArray(this.props.role.aliases) || 0 === this.props.role.aliases.length) ? undefined : this.props.role.aliases;
+		if(!r3IsStringArray(propsAliases) || 0 === propsAliases.length){
 			propsAliases = [];									// empty object
 		}
 		// check
@@ -539,10 +569,10 @@ export default class R3Role extends React.Component
 	//
 	// Check all state
 	//
-	isChangedState(nowHosts, nowIps, nowPolicies, nowAliases)
+	isChangedState(nowHosts: LocalHostObject[] | null = null, nowIps: LocalHostObject[] | null = null, nowPolicies: string[] | null = null, nowAliases: string[] | null = null): boolean
 	{
 		// check hosts
-		if(r3IsEmptyEntity(nowHosts)){
+		if(!r3IsArray(nowHosts) || 0 === nowHosts.length){
 			if(this.isChangedHostsState(this.state.localHostnames, true)){
 				return true;
 			}
@@ -552,7 +582,7 @@ export default class R3Role extends React.Component
 			}
 		}
 		// check ips
-		if(r3IsEmptyEntity(nowIps)){
+		if(!r3IsArray(nowIps) || 0 === nowIps.length){
 			if(this.isChangedHostsState(this.state.localIps, false)){
 				return true;
 			}
@@ -575,40 +605,39 @@ export default class R3Role extends React.Component
 	//
 	// Handle Form Button : Save
 	//
-	handleSave(event)														// eslint-disable-line no-unused-vars
+	handleSave(event: React.MouseEvent<HTMLElement>)
 	{
 		if(!this.state.changed){
 			return;
 		}
 
 		let	newRole = r3DeepClone(this.state.role);
-		if(r3IsEmptyEntity(newRole.hosts)){
+		if(!isRoleHostList(newRole.hosts)){
 			newRole.hosts = {
 				hostnames:	[],
 				ips:		[]
 			};
 		}
-		if(r3IsEmptyEntity(newRole.hosts.hostnames) || !(newRole.hosts.hostnames instanceof Array)){
+		if(!r3IsStringArray(newRole.hosts.hostnames)){
 			newRole.hosts.hostnames = [];
 		}
-		if(r3IsEmptyEntity(newRole.hosts.ips) || !(newRole.hosts.ips instanceof Array)){
+		if(!r3IsStringArray(newRole.hosts.ips)){
 			newRole.hosts.ips = [];
 		}
 
 		//
 		// Check role
 		//
-		let	cnt;
-		let	cnt2;
-		let	combineObject;
-		let	isHostChange = false;
+		let	cnt: number;
+		let	cnt2: number;
+		let	isHostChange: boolean = false;
 
 		//
 		// check hostnames
 		//
 		if(this.isChangedHostsState(this.state.localHostnames, true)){
-			let	newHostnames		= [];
-			let	newStandardHostnames= [];
+			let	newHostnames: RoleHostInfo[]	= [];
+			let	newStandardHostnames: string[]	= [];
 			for(cnt = 0; cnt < this.state.localHostnames.length; ++cnt){
 				// convert
 				let	oneHost = this.convertOneLocalToStandard(this.state.localHostnames[cnt]);
@@ -629,7 +658,7 @@ export default class R3Role extends React.Component
 				}
 				newHostnames.push(oneHost);
 
-				combineObject = getCombineHostObject(oneHost.hostname, oneHost.port, oneHost.cuk, oneHost.extra, oneHost.tag, oneHost.inboundip, oneHost.outboundip);
+				let	combineObject = getCombineHostObject(oneHost.host, oneHost.port, oneHost.cuk, oneHost.extra, oneHost.tag, oneHost.inboundip, oneHost.outboundip);
 				if(!r3IsEmptyEntity(combineObject)){
 					newStandardHostnames.push(combineObject);
 				}
@@ -642,8 +671,8 @@ export default class R3Role extends React.Component
 		// check ips
 		//
 		if(this.isChangedHostsState(this.state.localIps, false)){
-			let	newIps			= [];
-			let	newStandardIps	= [];
+			let	newIps: RoleHostInfo[]		= [];
+			let	newStandardIps: string[]	= [];
 			for(cnt = 0; cnt < this.state.localIps.length; ++cnt){
 				// convert
 				let	oneIp = this.convertOneLocalToStandard(this.state.localIps[cnt]);
@@ -664,7 +693,7 @@ export default class R3Role extends React.Component
 				}
 				newIps.push(oneIp);
 
-				combineObject = getCombineHostObject(oneIp.hostname, oneIp.port, oneIp.cuk, oneIp.extra, oneIp.tag, oneIp.inboundip, oneIp.outboundip);
+				let	combineObject = getCombineHostObject(oneIp.host, oneIp.port, oneIp.cuk, oneIp.extra, oneIp.tag, oneIp.inboundip, oneIp.outboundip);
 				if(!r3IsEmptyEntity(combineObject)){
 					newStandardIps.push(combineObject);
 				}
@@ -676,7 +705,7 @@ export default class R3Role extends React.Component
 		//
 		// policies
 		//
-		if(r3IsEmptyEntity(newRole.policies) || !(newRole.policies instanceof Array)){
+		if(!r3IsStringArray(newRole.policies)){
 			newRole.policies = [];
 		}
 		// check empty and yrn path by regex
@@ -706,7 +735,7 @@ export default class R3Role extends React.Component
 		//
 		// aliases
 		//
-		if(r3IsEmptyEntity(newRole.aliases) || !(newRole.aliases instanceof Array)){
+		if(!r3IsStringArray(newRole.aliases)){
 			newRole.aliases = [];
 		}
 		// check empty and yrn path by regex
@@ -748,7 +777,7 @@ export default class R3Role extends React.Component
 	//
 	// Handle Form Button : Cancel
 	//
-	handleCancel(event)														// eslint-disable-line no-unused-vars
+	handleCancel(event: React.MouseEvent<HTMLElement>)
 	{
 		if(this.state.changed){
 			this.setState({
@@ -760,7 +789,7 @@ export default class R3Role extends React.Component
 	//
 	// Handle Confirm Dialog : Close( OK / Cancel )
 	//
-	handleConfirmDialogClose(event, reason, result)
+	handleConfirmDialogClose(event: {}, reason: string, result: boolean)
 	{
 		if(result){
 			// case for 'cancel updating' to do
@@ -779,7 +808,7 @@ export default class R3Role extends React.Component
 	//
 	// Handle Message Dialog : Close
 	//
-	handleMessageDialogClose(event, reason, result)							// eslint-disable-line no-unused-vars
+	handleMessageDialogClose(event: {}, reason: string, result: boolean)
 	{
 		this.setState({
 			messageDialogObject:	null
@@ -789,13 +818,16 @@ export default class R3Role extends React.Component
 	//
 	// Handle Hostname and port : Change
 	//
-	handleHostsChange(event, type, pos)
+	handleHostsChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLElement>, type: string, pos: number)
 	{
-		let	changedValue	= r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
-		let	newHosts		= [];
-		let	isClearNewKey	= false;
+		let	changedValue: string | null	= null;
+		if(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement){
+			changedValue = r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
+		}
+		let	newHosts: LocalHostObject[]	= [];
+		let	isClearNewKey: boolean		= false;
 
-		if(!r3IsEmptyEntity(this.state.localHostnames) && this.state.localHostnames instanceof Array){
+		if(r3IsArray(this.state.localHostnames)){
 			newHosts = r3DeepClone(this.state.localHostnames);
 		}
 
@@ -892,9 +924,9 @@ export default class R3Role extends React.Component
 	//
 	// Handle Add Hostname and port etc : Change
 	//
-	handleAddHostsChange(event, type)
+	handleAddHostsChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, type: string)
 	{
-		let	changedValue = r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
+		let	changedValue: string | null = r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
 
 		// update state
 		if(actionTypeHostName === type){
@@ -914,10 +946,10 @@ export default class R3Role extends React.Component
 	//
 	// Handle IP Addresses Value : Change
 	//
-	handleIpsChange(event, pos)
+	handleIpsChange(event: React.MouseEvent<HTMLElement>, pos: number)
 	{
-		let	newIps = {};
-		if(!r3IsEmptyEntity(this.state.localIps) && this.state.localIps instanceof Array){
+		let	newIps: LocalHostObject[] = [];
+		if(r3IsArray(this.state.localIps)){
 			newIps = r3DeepClone(this.state.localIps);
 		}
 
@@ -943,11 +975,14 @@ export default class R3Role extends React.Component
 	//
 	// Handle Policies Value : Change
 	//
-	handlePoliciesChange(event, type, pos)
+	handlePoliciesChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLElement>, type: string, pos: number)
 	{
-		let	changedValue= r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
-		let	newPolicies	= [];
-		if(r3IsSafeTypedEntity(this.state.role.policies, 'array')){
+		let	changedValue: string | null	= null;
+		if(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement){
+			changedValue = r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
+		}
+		let	newPolicies: string[]		= [];
+		if(r3IsArray(this.state.role.policies)){
 			newPolicies = r3DeepClone(this.state.role.policies);
 		}
 
@@ -1000,7 +1035,7 @@ export default class R3Role extends React.Component
 	//
 	// Handle Add New Policies : Change
 	//
-	handleAddPoliciesChange(event)
+	handleAddPoliciesChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
 	{
 		// update state
 		this.setState({
@@ -1011,12 +1046,15 @@ export default class R3Role extends React.Component
 	//
 	// Handle Policy Aliases : Change
 	//
-	handleAliasesChange(event, type, pos)
+	handleAliasesChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLElement>, type: string, pos: number)
 	{
-		let	changedValue	= r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
-		let	isClearNewAlias	= false;
-		let	newAliases		= [];
-		if(r3IsSafeTypedEntity(this.state.role.aliases, 'array')){
+		let	changedValue: string | null	= null;
+		if(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement){
+			changedValue = r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
+		}
+		let	isClearNewAlias: boolean	= false;
+		let	newAliases: string[]		= [];
+		if(r3IsArray(this.state.role.aliases)){
 			newAliases		= r3DeepClone(this.state.role.aliases);
 		}
 
@@ -1076,7 +1114,7 @@ export default class R3Role extends React.Component
 	//
 	// Handle Add Policy Aliases : Change
 	//
-	handleAddAliasesChange(event)
+	handleAddAliasesChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
 	{
 		// update state
 		this.setState({
@@ -1084,63 +1122,63 @@ export default class R3Role extends React.Component
 		});
 	}
 
-	handTooltipChange = (event, type, extData) =>
+	handTooltipChange = (event: React.MouseEvent<HTMLElement>, type: string, extData: number | boolean) =>
 	{
-		if(tooltipValues.deleteHostnameTooltip === type){
+		if(tooltipValues.deleteHostnameTooltip === type && r3IsNumber(extData)){
 			this.setState({
 				tooltips: {
 					deleteHostnameTooltip:	extData
 				}
 			});
-		}else if(tooltipValues.addHostnameTooltip === type){
+		}else if(tooltipValues.addHostnameTooltip === type && r3IsBoolean(extData)){
 			this.setState({
 				tooltips: {
 					addHostnameTooltip:		extData
 				}
 			});
-		}else if(tooltipValues.deleteIpTooltip === type){
+		}else if(tooltipValues.deleteIpTooltip === type && r3IsNumber(extData)){
 			this.setState({
 				tooltips: {
 					deleteIpTooltip:		extData
 				}
 			});
-		}else if(tooltipValues.addIpTooltip === type){
+		}else if(tooltipValues.addIpTooltip === type && r3IsBoolean(extData)){
 			this.setState({
 				tooltips: {
 					addIpTooltip:			extData
 				}
 			});
-		}else if(tooltipValues.deletePolicyTooltip === type){
+		}else if(tooltipValues.deletePolicyTooltip === type && r3IsNumber(extData)){
 			this.setState({
 				tooltips: {
 					deletePolicyTooltip:	extData
 				}
 			});
-		}else if(tooltipValues.addPolicyTooltip === type){
+		}else if(tooltipValues.addPolicyTooltip === type && r3IsBoolean(extData)){
 			this.setState({
 				tooltips: {
 					addPolicyTooltip:		extData
 				}
 			});
-		}else if(tooltipValues.downAliasTooltip === type){
+		}else if(tooltipValues.downAliasTooltip === type && r3IsNumber(extData)){
 			this.setState({
 				tooltips: {
 					downAliasTooltip:		extData
 				}
 			});
-		}else if(tooltipValues.upAliasTooltip === type){
+		}else if(tooltipValues.upAliasTooltip === type && r3IsNumber(extData)){
 			this.setState({
 				tooltips: {
 					upAliasTooltip:			extData
 				}
 			});
-		}else if(tooltipValues.deleteAliasTooltip === type){
+		}else if(tooltipValues.deleteAliasTooltip === type && r3IsNumber(extData)){
 			this.setState({
 				tooltips: {
 					deleteAliasTooltip:		extData
 				}
 			});
-		}else if(tooltipValues.addAliasTooltip === type){
+		}else if(tooltipValues.addAliasTooltip === type && r3IsBoolean(extData)){
 			this.setState({
 				tooltips: {
 					addAliasTooltip:		extData
@@ -1153,12 +1191,12 @@ export default class R3Role extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		if(r3IsEmptyEntity(this.state.localHostnames) || !(this.state.localHostnames instanceof Array)){
+		if(!r3IsArray(this.state.localHostnames)){
 			return;
 		}
 
-		let	elementArray = [];
-		this.state.localHostnames.map( (oneHostObj, pos) =>
+		let	elementArray: React.ReactNode[] = [];
+		this.state.localHostnames.map( (oneHostObj: LocalHostObject, pos: number) =>
 		{
 			// parse hostname and port etc
 			let	dispName = r3IsEmptyStringObject(oneHostObj, 'host') ?		'' : oneHostObj.host;
@@ -1180,7 +1218,7 @@ export default class R3Role extends React.Component
 				deleteButton = (
 					<Tooltip
 						title={ r3provider.getR3TextRes().tResRoleHostnameDelTT }
-						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteHostnameTooltip, 'number') || (this.state.tooltips.deleteHostnameTooltip != pos)) ? false : true) }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.deleteHostnameTooltip) || (this.state.tooltips.deleteHostnameTooltip != pos)) ? false : true) }
 					>
 						<IconButton
 							onClick={ (event) => this.handleHostsChange(event, actionTypeDelete, pos) }
@@ -1238,7 +1276,7 @@ export default class R3Role extends React.Component
 		});
 
 		return (
-			elementArray.map( (item, pos) => {								// eslint-disable-line no-unused-vars
+			elementArray.map( (item: React.ReactNode, pos: number) => {
 				return item;
 			})
 		);
@@ -1276,7 +1314,7 @@ export default class R3Role extends React.Component
 				/>
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResRoleHostnameAddTT }
-					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.addHostnameTooltip, 'boolean')) ? false : this.state.tooltips.addHostnameTooltip) }
+					open={ (r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.addHostnameTooltip)) ? false : this.state.tooltips.addHostnameTooltip === true }
 				>
 					<IconButton
 						onClick={ (event) => this.handleHostsChange(event, actionTypeAdd, 0) }
@@ -1297,12 +1335,12 @@ export default class R3Role extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		if(r3IsEmptyEntity(this.state.localIps) || !(this.state.localIps instanceof Array)){
+		if(!r3IsArray(this.state.localIps)){
 			return;
 		}
 
-		let	elementArray = [];
-		this.state.localIps.map( (oneHostObj, pos) =>
+		let	elementArray: React.ReactNode[] = [];
+		this.state.localIps.map( (oneHostObj: LocalHostObject, pos: number) =>
 		{
 			// parse ip address and port etc
 			let	ip		= r3IsEmptyStringObject(oneHostObj, 'host') ?		'' : oneHostObj.host;
@@ -1324,7 +1362,7 @@ export default class R3Role extends React.Component
 				deleteButton = (
 					<Tooltip
 						title={ r3provider.getR3TextRes().tResRoleIpDelTT }
-						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteIpTooltip, 'number') || (this.state.tooltips.deleteIpTooltip != pos)) ? false : true) }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.deleteIpTooltip) || (this.state.tooltips.deleteIpTooltip != pos)) ? false : true) }
 					>
 						<IconButton
 							onClick={ (event) => this.handleIpsChange(event, pos) }
@@ -1368,22 +1406,22 @@ export default class R3Role extends React.Component
 		});
 
 		return (
-			elementArray.map( (item, pos) => {								// eslint-disable-line no-unused-vars
+			elementArray.map( (item: React.ReactNode, pos: number) => {
 				return item;
 			})
 		);
 	}
 
-	getPolicyContents(items)
+	getPolicyContents(items: string[])
 	{
 		const { theme, r3provider } = this.props;
 
-		if(!r3IsSafeTypedEntity(items, 'array')){
+		if(!r3IsArray(items)){
 			return;
 		}
 		let	_items = items;
 
-		return _items.map( (item, pos) =>
+		return _items.map( (item: string, pos: number) =>
 		{
 			let	deleteButton;
 			if(this.props.isReadMode){
@@ -1401,7 +1439,7 @@ export default class R3Role extends React.Component
 				deleteButton = (
 					<Tooltip
 						title={ r3provider.getR3TextRes().tResRolePolicyDelTT }
-						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deletePolicyTooltip, 'number') || (this.state.tooltips.deletePolicyTooltip != pos)) ? false : true) }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.deletePolicyTooltip) || (this.state.tooltips.deletePolicyTooltip != pos)) ? false : true) }
 					>
 						<IconButton
 							onClick={ (event) => this.handlePoliciesChange(event, actionTypeDelete, pos) }
@@ -1472,7 +1510,7 @@ export default class R3Role extends React.Component
 				/>
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResRolePolicyAddTT }
-					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.addPolicyTooltip, 'boolean')) ? false : this.state.tooltips.addPolicyTooltip) }
+					open={ (r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.addPolicyTooltip)) ? false : this.state.tooltips.addPolicyTooltip === true }
 				>
 					<IconButton
 						onClick={ (event) => this.handlePoliciesChange(event, actionTypeAdd, 0) }
@@ -1489,16 +1527,16 @@ export default class R3Role extends React.Component
 		);
 	}
 
-	getAliasContents(items)
+	getAliasContents(items: string[])
 	{
 		const { theme, r3provider } = this.props;
 
-		if(!r3IsSafeTypedEntity(items, 'array')){
+		if(!r3IsArray(items)){
 			return;
 		}
 		let	_items = items;
 
-		return _items.map( (item, pos) =>
+		return _items.map( (item: string, pos: number) =>
 		{
 			let	downButton;
 			if(this.props.isReadMode || (_items.length <= (pos + 1))){
@@ -1516,7 +1554,7 @@ export default class R3Role extends React.Component
 				downButton = (
 					<Tooltip
 						title={ r3provider.getR3TextRes().tResAliasDownTT }
-						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.downAliasTooltip, 'number') || (this.state.tooltips.downAliasTooltip != pos)) ? false : true) }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.downAliasTooltip) || (this.state.tooltips.downAliasTooltip != pos)) ? false : true) }
 					>
 						<IconButton
 							onClick={ (event) => this.handleAliasesChange(event, actionTypeDown, pos) }
@@ -1548,7 +1586,7 @@ export default class R3Role extends React.Component
 				upButton = (
 					<Tooltip
 						title={ r3provider.getR3TextRes().tResAliasUpTT }
-						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.upAliasTooltip, 'number') || (this.state.tooltips.upAliasTooltip != pos)) ? false : true) }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.upAliasTooltip) || (this.state.tooltips.upAliasTooltip != pos)) ? false : true) }
 					>
 						<IconButton
 							onClick={ (event) => this.handleAliasesChange(event, actionTypeUp, pos) }
@@ -1580,7 +1618,7 @@ export default class R3Role extends React.Component
 				deleteButton = (
 					<Tooltip
 						title={ r3provider.getR3TextRes().tResAliasDelTT }
-						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteAliasTooltip, 'number') || (this.state.tooltips.deleteAliasTooltip != pos)) ? false : true) }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.deleteAliasTooltip) || (this.state.tooltips.deleteAliasTooltip != pos)) ? false : true) }
 					>
 						<IconButton
 							onClick={ (event) => this.handleAliasesChange(event, actionTypeDelete, pos) }
@@ -1653,7 +1691,7 @@ export default class R3Role extends React.Component
 				/>
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResAliasAddTT }
-					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.addAliasTooltip, 'boolean')) ? false : this.state.tooltips.addAliasTooltip) }
+					open={ (r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.addAliasTooltip)) ? false : this.state.tooltips.addAliasTooltip === true }
 				>
 					<IconButton
 						onClick={ (event) => this.handleAliasesChange(event, actionTypeAdd, 0) }

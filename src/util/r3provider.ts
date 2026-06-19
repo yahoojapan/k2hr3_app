@@ -19,20 +19,27 @@
  *
  */
 
-import R3Context			from '../util/r3context';
-import { r3GetTextRes }		from '../util/r3define';
-import { resourceType, roleType, policyType, serviceType }	from '../util/r3types';
-import { checkServiceResourceValue }						from '../util/r3verifyutil';
-import { r3DeepClone, r3ObjMerge, parseCombineHostObject, r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity, r3IsEmptyString, r3CompareCaseString } from '../util/r3util';
+import R3Context						from '../util/r3context';
+import { r3GetTextRes }					from '../util/r3define';
+import { checkServiceResourceValue }	from '../util/r3verifyutil';
+import { resourceType, roleType, policyType, serviceType, ItemType, isItemType, CRCObject, ErrorCallback, DataCallback, FetchCallback, FetchError, PathDetailInfo, PolicyData, ProgressCallback, ResourceData, RoleData, RoleHostInfo, RoleTokenPrimitiveInfo, RoleTokenInfo, ServiceData, StaticResourceObject, ServiceResourceObject, isServiceResourceObjectArray, StringValObj, TenantData, TokenCallback, TreeListItem, actionValueRead, effectValueAllow, isCRCObject, isPolicyActionTypeArray, isPolicyData, isPolicyEffectType, isResBaseResult, isResPolicyData, isResRawListData, isResRawLocalTenantExpandData, isResTenantData, isResResourceData, isResRoleData, isResRoleTokenList, isResRoleTokenPrimitiveInfo, isResServiceData, isResTokenData, isResourceData, isRoleData, isRoleHostList, isRoleTokenPrimitiveInfo, isServiceData, isTenantData, isTreeListItem, rawListData, reqSetRoleHosts, valTypeAll, valTypeAllObject }	from '../util/r3types';
+import { r3DeepClone, r3StringValObjMerge, parseCombineHostObject, r3IsEmptyEntity, r3IsEmptyStringObject, r3IsEmptyString, r3CompareCaseString, r3GetSafeString, r3IsArray, r3IsBoolean, r3IsFunction, r3IsNumber, r3IsObject, r3IsString, r3IsStringArray } from '../util/r3util';
 
 //
 // K2HR3 Data Provider Class
 //
 export default class R3Provider
 {
-	constructor(cbProgressControl, signin, username, unscopedtoken)
+	tokenHeaderType:	{ noUserToken: number; unscopedUserToken: number };
+	r3Context:			R3Context;
+	scopedUserToken:	StringValObj;
+	tenantList:			TenantData[];
+	cbProgressControl:	ProgressCallback | null;
+	r3TextRes:			StringValObj;
+
+	constructor(cbProgressControl: ProgressCallback | null, signin?: boolean, username?: string, unscopedtoken?: string)
 	{
-		this.tokenHeaderType = {
+		this.tokenHeaderType	= {
 			noUserToken:		-1,
 			unscopedUserToken:	-2
 		};
@@ -51,24 +58,24 @@ export default class R3Provider
 		this.r3TextRes			= r3GetTextRes(this.r3Context.getSafeLang());
 	}
 
-	getR3Context()
+	getR3Context(): R3Context
 	{
 		return this.r3Context;
 	}
 
-	getR3TextRes()
+	getR3TextRes(): StringValObj
 	{
 		return this.r3TextRes;
 	}
 
-	startProgress()
+	startProgress(): void
 	{
 		if(null !== this.cbProgressControl){
 			this.cbProgressControl(true);
 		}
 	}
 
-	stopProgress()
+	stopProgress(): void
 	{
 		if(null !== this.cbProgressControl){
 			this.cbProgressControl(false);
@@ -80,21 +87,21 @@ export default class R3Provider
 	//--------------------------------------------------
 	// raw methods
 	//
-	_fetch(path, method, headers, tokenType, body, isCvtBodyJSON, callback)
+	_fetch(path: string, method: string, headers: StringValObj | null, tokenType: number | string, body: valTypeAll, isCvtBodyJSON: boolean, callback: FetchCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_path		= r3IsEmptyString(path) ? '/' : encodeURI(path).replace(/#/g, '%23');// force replace '#'
-		let	_url		= this.r3Context.getApiUrlBase() + _path;
-		let	_method		= r3IsEmptyString(method) ? 'GET' : method;							// default is GET
+		const _callback	= callback;
+		const _path		= r3IsEmptyString(path) ? '/' : encodeURI(path).replace(/#/g, '%23');// force replace '#'
+		const _url		= this.r3Context.getApiUrlBase() + _path;
+		const _method	= r3IsEmptyString(method) ? 'GET' : method;							// default is GET
 
 		let	_length		= 0;
-		let	_strBody;
+		let	_strBody: string | undefined;
 		if(!r3IsEmptyEntity(body)){
-			if(!r3IsSafeTypedEntity(isCvtBodyJSON, 'boolean') || !isCvtBodyJSON){
+			if(r3IsString(body) && (!r3IsBoolean(isCvtBodyJSON) || !isCvtBodyJSON)){
 				_strBody = body;
 			}else{
 				_strBody = JSON.stringify(body);
@@ -102,31 +109,30 @@ export default class R3Provider
 			_length = _strBody.length;
 		}
 
-		let	_headers	= r3IsEmptyEntity(headers) ? {} : headers;
-		_headers		= r3ObjMerge(_headers, {
+		let	_headers: StringValObj = r3StringValObjMerge(headers, {
 			'Content-Type':		'application/json',
-			'Content-Length':	_length,
+			'Content-Length':	String(_length)
 		});
 		this.r3Context.getDbgHeader(_headers);												// Add debug header if development environment
 
 		// get token
-		this.getUserTokenByType(tokenType, (error, token) =>
+		this.getUserTokenByType(tokenType, (error: Error | null, token: string | null) =>
 		{
 			if(null !== error){
 				console.error(error.message);
 				_callback(error, null);
 				return;
 			}
-			if(r3IsSafeTypedEntity(token, 'string')){
+			if(r3IsString(token)){
 				_headers['x-auth-token'] = 'U=' + token;
 			}
 
-			let	_fetchOpt	= {
-				mode:				'cors',
-				method:				_method,
-				headers: 			_headers
+			const _fetchOpt: RequestInit = {
+				mode:		'cors',
+				method:		_method,
+				headers: 	_headers
 			};
-			if(undefined !== _strBody && null !== _strBody){
+			if(r3IsString(_strBody)){
 				_fetchOpt.body = _strBody;
 			}
 
@@ -135,15 +141,12 @@ export default class R3Provider
 			// Send request
 			fetch(_url, _fetchOpt).then(response => {
 				if(!response.ok){
-					let	dbgresheader= this.r3Context.getSafeDbgResHeaderName();
-					let	errorinfo	= '';
+					const	dbgresheader		= this.r3Context.getSafeDbgResHeaderName();
+					let		errorinfo: string	= '';
 					if('' !== dbgresheader && response.headers.has(dbgresheader)){
-						errorinfo = response.headers.get(dbgresheader);
-						if(null === errorinfo){
-							errorinfo = '';
-						}
+						errorinfo = response.headers.get(dbgresheader) || '';
 					}
-					let	_errobj		= new Error('REQUEST = ' + decodeURI(_path) + ', STATUS = ' + response.statusText + '(' + String(response.status) + '), ERROR HEADER = ' + errorinfo);
+					const _errobj: FetchError = new Error('REQUEST = ' + decodeURI(_path) + ', STATUS = ' + response.statusText + ':' + String(response.status) + ', ERROR HEADER = ' + errorinfo);
 					_errobj.status	= response.status;
 
 					// [NOTE]
@@ -153,33 +156,39 @@ export default class R3Provider
 				}
 				if(204 === response.status){
 					// 204 does not have response body, thus make resobj here.
-					return { result: true, message: null };
+					return { result: true };
 				}
 				return response.json();
 
-			}).then(resobj => {
+			}).then((resobj: valTypeAll) => {
 				this.stopProgress();														// stop progressing
 
-				if(r3IsEmptyEntity(resobj) || (r3IsSafeTypedEntity(resobj.result, 'boolean') && true !== resobj.result)){
+				if(	r3IsEmptyEntity(resobj)		||
+					!r3IsObject(resobj)			||
+					!r3IsBoolean(resobj.result)	||
+					!resobj.result				)
+				{
 					throw new Error('REQUEST = ' + decodeURI(_path) + ', ERROR = Response is sonmething wrong or false: ' + JSON.stringify(resobj));
 				}
-				_callback(null, resobj);
+				_callback(null, resobj);													// resobj is valTypeAllObject
 				return;
 
-			}).catch(error => {
+			}).catch((error: FetchError) => {
 				this.stopProgress();														// stop progressing
 
 				if(r3IsEmptyEntity(error)){
-					error			= new Error('K2HR3 API ERROR => Unknown reason.');
-					error.status	= 500;
+					const newErr: FetchError	= new Error('K2HR3 API ERROR => Unknown reason.');
+					newErr.status				= 500;
+					console.error(newErr.message);
+					_callback(newErr, null);
 				}else{
 					error.message	= 'K2HR3 API ERROR => ' + error.message;
 					if(undefined === error.status || null === error.status){
 						error.status= 500;
 					}
+					console.error(error.message);
+					_callback(error, null);
 				}
-				console.error(error.message);
-				_callback(error, null);
 				return;
 			});
 		});
@@ -188,40 +197,43 @@ export default class R3Provider
 	//
 	// GET raw method
 	//
-	_get(path, urlargs, headers, tokenType, callback)
+	_get(path: string, urlargs: string | undefined | null, headers: StringValObj | null, tokenType: number | string, callback: FetchCallback): void
 	{
+		let	fullPath = path;
 		if(!r3IsEmptyString(path) && !r3IsEmptyString(urlargs)){
-			path += '?' + urlargs;
+			fullPath += '?' + urlargs;
 		}
-		return this._fetch(path, 'GET', headers, tokenType, null, false, callback);
+		return this._fetch(fullPath, 'GET', headers, tokenType, null, false, callback);
 	}
 
 	//
 	// HEAD raw method
 	//
-	_head(path, urlargs, headers, tokenType, callback)
+	_head(path: string, urlargs: string | undefined | null, headers: StringValObj | null, tokenType: number | string, callback: FetchCallback): void
 	{
+		let	fullPath = path;
 		if(!r3IsEmptyString(path) && !r3IsEmptyString(urlargs)){
-			path += '?' + urlargs;
+			fullPath += '?' + urlargs;
 		}
-		return this._fetch(path, 'HEAD', headers, tokenType, null, false, callback);
+		return this._fetch(fullPath, 'HEAD', headers, tokenType, null, false, callback);
 	}
 
 	//
 	// PUT raw method
 	//
-	_put(path, urlargs, headers, tokenType, callback)
+	_put(path: string, urlargs: string | undefined | null, headers: StringValObj | null, tokenType: number | string, callback: FetchCallback): void
 	{
+		let	fullPath = path;
 		if(!r3IsEmptyString(path) && !r3IsEmptyString(urlargs)){
-			path += '?' + urlargs;
+			fullPath += '?' + urlargs;
 		}
-		return this._fetch(path, 'PUT', headers, tokenType, null, false, callback);
+		return this._fetch(fullPath, 'PUT', headers, tokenType, null, false, callback);
 	}
 
 	//
 	// POST raw method
 	//
-	_post(path, headers, tokenType, body, isCvtBodyJSON, callback)
+	_post(path: string, headers: StringValObj | null, tokenType: number | string, body: valTypeAll, isCvtBodyJSON: boolean, callback: FetchCallback): void
 	{
 		return this._fetch(path, 'POST', headers, tokenType, body, isCvtBodyJSON, callback);
 	}
@@ -229,12 +241,13 @@ export default class R3Provider
 	//
 	// DELETE raw method
 	//
-	_delete(path, urlargs, headers, tokenType, callback)
+	_delete(path: string, urlargs: string | undefined | null, headers: StringValObj | null, tokenType: number | string, callback: FetchCallback): void
 	{
+		let	fullPath = path;
 		if(!r3IsEmptyString(path) && !r3IsEmptyString(urlargs)){
-			path += '?' + urlargs;
+			fullPath += '?' + urlargs;
 		}
-		return this._fetch(path, 'DELETE', headers, tokenType, null, false, callback);
+		return this._fetch(fullPath, 'DELETE', headers, tokenType, null, false, callback);
 	}
 
 	//--------------------------------------------------
@@ -243,23 +256,22 @@ export default class R3Provider
 	//
 	// raw get Unscoped User token
 	//
-	getUnscopedUserToken(username, passphrase, callback)
+	getUnscopedUserToken(username: string, passphrase: string | null, callback: TokenCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	error;
 		if(r3IsEmptyString(username, true)){
-			error = new Error('username parameter is empty');
+			const error = new Error('username parameter is empty');
 			console.error(error.message);
 			callback(error, null);
 			return;
 		}
-		let	_callback	= callback;
-		let	_username	= username;
-		let	_passphrase	= r3IsEmptyString(passphrase, true) ? null : passphrase.trim();		// allow empty passphrase
-		let _body		= {
+		const _callback		= callback;
+		const _username		= username;
+		const _passphrase	= (!r3IsString(passphrase) || r3IsEmptyString(passphrase, true)) ? null : (passphrase).trim();		// allow empty passphrase
+		const _body = {
 			'auth': {
 				'tenantName': '',
 				'passwordCredentials': {
@@ -271,7 +283,7 @@ export default class R3Provider
 
 		this.startProgress();																// start progressing
 
-		this._post('/v1/user/tokens', null, this.tokenHeaderType.noUserToken, _body, true, (error, resobj) =>
+		this._post('/v1/user/tokens', null, this.tokenHeaderType.noUserToken, _body, true, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -280,16 +292,22 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(!resobj.result){
-				let	error = new Error('No result object.');
-				console.error(error.message);
-				_callback(error, null);
+			if(!isResTokenData(resobj)){
+				const err = new Error('Unknown response object type.');
+				console.error(err.message);
+				_callback(err, null);
 				return;
 			}
-			if(true !== resobj.result || false !== resobj.scoped){
-				error = new Error('Response data is sonmething wrong: ' + JSON.stringify(resobj));
-				console.error(error.message);
-				_callback(error, null);
+			if(!resobj.result){
+				const err = new Error('No result object.');
+				console.error(err.message);
+				_callback(err, null);
+				return;
+			}
+			if(undefined === resobj.scoped || !r3IsBoolean(resobj.scoped) || resobj.scoped || undefined === resobj.token || !r3IsString(resobj.token)){
+				const err = new Error('Response data is sonmething wrong: ' + JSON.stringify(resobj));
+				console.error(err.message);
+				_callback(err, null);
 				return;
 			}
 			_callback(null, resobj.token);
@@ -299,15 +317,14 @@ export default class R3Provider
 	//
 	// raw get Scoped User token
 	//
-	getScopedUserToken(tenantname, callback)
+	getScopedUserToken(tenantname: string, callback: TokenCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	error;
 		if(r3IsEmptyString(tenantname)){
-			error = new Error('tenantname parameter is wrong.');
+			const error = new Error('tenantname parameter is wrong.');
 			console.error(error.message);
 			callback(error, null);
 			return;
@@ -317,9 +334,9 @@ export default class R3Provider
 			callback(null, this.scopedUserToken[tenantname]);
 			return;
 		}
-		let	_callback	= callback;
-		let	_tenantname	= tenantname;
-		let _body		= {
+		const _callback		= callback;
+		const _tenantname	= tenantname;
+		const _body = {
 			'auth': {
 				'tenantName': _tenantname
 			}
@@ -327,7 +344,7 @@ export default class R3Provider
 
 		this.startProgress();																// start progressing
 
-		this._post('/v1/user/tokens', null, this.tokenHeaderType.unscopedUserToken, _body, true, (error, resobj) =>
+		this._post('/v1/user/tokens', null, this.tokenHeaderType.unscopedUserToken, _body, true, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -336,16 +353,22 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(!resobj.result){
-				let	error = new Error('No result object.');
-				console.error(error.message);
-				_callback(error, null);
+			if(!isResTokenData(resobj)){
+				const err = new Error('Unknown response object type.');
+				console.error(err.message);
+				_callback(err, null);
 				return;
 			}
-			if(true !== resobj.result || true !== resobj.scoped){
-				error = new Error('Response data is sonmething wrong: ' + JSON.stringify(resobj));
-				console.error(error.message);
-				_callback(error, null);
+			if(!resobj.result){
+				const err = new Error('No result object.');
+				console.error(err.message);
+				_callback(err, null);
+				return;
+			}
+			if(undefined === resobj.scoped || !r3IsBoolean(resobj.scoped) || !resobj.scoped || undefined === resobj.token || !r3IsString(resobj.token)){
+				const err = new Error('Response data is sonmething wrong: ' + JSON.stringify(resobj));
+				console.error(err.message);
+				_callback(err, null);
 				return;
 			}
 			this.scopedUserToken[_tenantname] = resobj.token;
@@ -366,54 +389,53 @@ export default class R3Provider
 	// If there is no scoped token, this method calls API for getting scoped
 	// token for tenant.
 	//
-	getUserTokenByType(tokenType, callback)
+	getUserTokenByType(tokenType: number | string, callback: TokenCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-
-		let	error;
 		if(r3IsEmptyEntity(tokenType)){
-			error = new Error('tokenType parameter is wrong.');
+			const error = new Error('tokenType parameter is wrong.');
 			console.error(error.message);
 			callback(error, null);
+			return;
+		}
 
-		}else{
-			if(!isNaN(tokenType) && this.tokenHeaderType.noUserToken === tokenType){
-				// no token
-				callback(null, null);
+		if(r3IsNumber(tokenType) && this.tokenHeaderType.noUserToken === tokenType){
+			// no token
+			callback(null, null);
 
-			}else if(!isNaN(tokenType) && this.tokenHeaderType.unscopedUserToken === tokenType){
-				// unscoped token
-				callback(null, this.r3Context.getSafeUnscopedToken());
+		}else if(r3IsNumber(tokenType) && this.tokenHeaderType.unscopedUserToken === tokenType){
+			// unscoped token
+			callback(null, this.r3Context.getSafeUnscopedToken());
 
-			}else if(!isNaN(tokenType) || !r3IsEmptyString(tokenType)){
-				if(!isNaN(tokenType)){
-					// force string
-					tokenType = String(tokenType);
-				}
-				let	_callback = callback;
-
-				this.startProgress();														// start progressing
-
-				// scoped token
-				this.getScopedUserToken(tokenType, (error, token) =>
-				{
-					this.stopProgress();													// stop progressing
-
-					if(null !== error){
-						console.error(error.message);
-						_callback(error, null);
-						return;
-					}
-					_callback(null, token);
-				});
+		}else if(r3IsNumber(tokenType) || (r3IsString(tokenType) && !r3IsEmptyString(tokenType))){
+			let	strTokenType: string;
+			if(r3IsNumber(tokenType)){
+				// force string
+				strTokenType = String(tokenType);
 			}else{
-				error = new Error('tokenType is not number nor string.');
-				console.error(error.message);
-				callback(error, null);
+				strTokenType = tokenType;
 			}
+
+			this.startProgress();														// start progressing
+
+			this.getScopedUserToken(strTokenType, (error, token) =>
+			{
+				this.stopProgress();													// stop progressing
+
+				if(null !== error){
+					console.error(error.message);
+					callback(error, null);
+					return;
+				}
+				callback(null, token);
+			});
+		}else{
+			const error = new Error('tokenType is not number nor string.');
+			console.error(error.message);
+			callback(error, null);
 		}
 	}
 
@@ -423,18 +445,17 @@ export default class R3Provider
 	//
 	// Get tenant list
 	//
-	getTenantList(force, useLocalTenant, callback)
+	getTenantList(force: boolean, useLocalTenant: boolean, callback: DataCallback<TenantData[]>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
+		const _callback = callback;
 
 		if(force){
 			this.tenantList = [];
 		}
-
 		if(0 < this.tenantList.length){
 			// using cache
 			_callback(null, this.tenantList);
@@ -450,7 +471,7 @@ export default class R3Provider
 
 		this.startProgress();																// start progressing
 
-		this._get('/v1/user/tokens', null, null, this.tokenHeaderType.unscopedUserToken, (error, resobj) =>
+		this._get('/v1/user/tokens', null, null, this.tokenHeaderType.unscopedUserToken, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -465,26 +486,50 @@ export default class R3Provider
 				}
 				return;
 			}
-			if(true !== resobj.result || false !== resobj.scoped || this.r3Context.getSafeUserName() !== resobj.user){
-				error = new Error('Response data is sonmething wrong: ' + JSON.stringify(resobj));
-				console.error(error.message);
-				_callback(error, null);
+
+			if(!isResTenantData(resobj)){
+				const err = new Error('Response data is sonmething wrong: ' + JSON.stringify(resobj));
+				console.error(err.message);
+				_callback(err, null);
+				return;
+			}
+			if(!resobj.result || !r3IsBoolean(resobj.scoped) || resobj.scoped || !r3IsString(resobj.user) || this.r3Context.getSafeUserName() !== resobj.user){
+				const err = new Error('Response data is sonmething wrong: ' + JSON.stringify(resobj));
+				console.error(err.message);
+				_callback(err, null);
 				return;
 			}
 
-			if(!r3IsSafeTypedEntity(resobj.tenants, 'array')){
+			if(!r3IsArray(resobj.tenants)){
 				this.tenantList = [];
 			}else{
-				this.tenantList = resobj.tenants;
-				this.tenantList.sort( (tenant1, tenant2) =>
+				// set tenant list from response to this object's tenant list with users[]
+				this.tenantList = resobj.tenants.map(tenant => {
+					const	existUsers = r3IsStringArray(tenant?.users) ? tenant.users : [];
+					return {
+						...tenant,
+						users: [...existUsers, resobj.user]		// add resobj.user to users[]
+					};
+				});
+
+				// sort
+				this.tenantList.sort((tenant1, tenant2) =>
 				{
-					if(!r3IsEmptyString(tenant1.display) && !r3IsEmptyString(tenant2.display)){
+					if(!r3IsString(tenant1.display) && !r3IsString(tenant2.display)){
 						return 0;
-					}
-					if(tenant1.display < tenant2.display){
-						return -1;
-					}else if(tenant1.display > tenant2.display){
+					}else if(!r3IsString(tenant1.display)){
 						return 1;
+					}else if(!r3IsString(tenant2.display)){
+						return -1;
+					}else{
+						if(r3IsEmptyString(tenant1.display) && r3IsEmptyString(tenant2.display)){
+							return 0;
+						}
+						if(tenant1.display < tenant2.display){
+							return -1;
+						}else if(tenant1.display > tenant2.display){
+							return 1;
+						}
 					}
 					return 0;
 				});
@@ -503,12 +548,12 @@ export default class R3Provider
 			//
 			this.startProgress();															// start progressing
 
-			this._get('/v1/tenant', 'expand=true', null, this.tokenHeaderType.unscopedUserToken, (error, resobj) =>
+			this._get('/v1/tenant', 'expand=true', null, this.tokenHeaderType.unscopedUserToken, (error: FetchError | null, resobj: valTypeAllObject) =>
 			{
 				this.stopProgress();														// stop progressing
 
 				if(null !== error){
-					if(undefined !== error.status && 404 == error.status){
+					if(r3IsNumber(error?.status) && 404 == error.status){
 						console.error('Could not get tenat list with response status is 404, thus return existed(normal) tenant list : ' + error.message);
 						_callback(null, this.tenantList);
 					}else{
@@ -517,36 +562,48 @@ export default class R3Provider
 					}
 					return;
 				}
+				if(!isResRawLocalTenantExpandData(resobj)){
+					const err = new Error('Response data is sonmething wrong: ' + JSON.stringify(resobj));
+					console.error(err.message);
+					_callback(err, null);
+					return;
+				}
 				if(true !== resobj.result){
-					error = new Error('Could not get local tenant list : ' + resobj.message);
-					console.error(error.message);
-					_callback(error, null);
+					const err = new Error('Could not get local tenant list : ' + r3GetSafeString(resobj.message, 'unknown'));
+					console.error(err.message);
+					_callback(err, null);
 					return;
 				}
 
 				//
 				// Add users data to local tenant information
 				//
-				if(r3IsSafeTypedEntity(resobj.tenants, 'array')){
-					for(let cnt = 0; cnt < resobj.tenants.length; ++cnt){
-						if(r3IsEmptyString(resobj.tenants[cnt].name)){
+				if(r3IsArray(resobj.tenants)){
+					const	localTenants = resobj.tenants;
+					for(let cnt = 0; cnt < localTenants.length; ++cnt){
+						if(r3IsEmptyString(localTenants[cnt].name)){
 							console.warn('The local tenant name in respose is empty, so skip this.');
 							continue;
 						}
 
 						let	foundTenant = false;
 						for(let cnt2 = 0; cnt2 < this.tenantList.length; ++cnt2){
-							if(!r3IsEmptyString(this.tenantList[cnt2].name) && this.tenantList[cnt2].name == resobj.tenants[cnt].name){
+							if(!r3IsEmptyString(this.tenantList[cnt2].name) && this.tenantList[cnt2].name == localTenants[cnt].name){
 								//
-								// Add users
+								// Add(merge) users
 								//
-								this.tenantList[cnt2].users	= r3DeepClone(resobj.tenants[cnt].users);
-								foundTenant					= true;
+								if(r3IsStringArray(localTenants[cnt].users) && r3IsStringArray(this.tenantList[cnt2].users)){
+									const	mergedUsers: string[]	= [...new Set([...(this.tenantList[cnt2].users), ...(localTenants[cnt].users)])];
+									this.tenantList[cnt2].users		= r3DeepClone(mergedUsers);
+								}else if(r3IsStringArray(localTenants[cnt].users)){
+									this.tenantList[cnt2].users = r3DeepClone(localTenants[cnt].users);
+								}
+								foundTenant = true;
 								break;
 							}
 						}
 						if(!foundTenant){
-							console.warn('Not found ' + resobj.tenants[cnt].name +  ' local tenant in current tenant list, so skip this.');
+							console.warn('Not found ' + localTenants[cnt].name + ' local tenant in current tenant list, so skip this.');
 						}
 					}
 				}else{
@@ -569,27 +626,26 @@ export default class R3Provider
 	// description	: description for new local tenant(allowed null/emptyv1/tenant)
 	// users		: initial user name array for new local tenant
 	//
-	createLocalTenant(name, display, description, users, callback)
+	createLocalTenant(name: string, display: string | null, description: string | null, users: string[], callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
 
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyString(name, true) || !r3IsSafeTypedEntity(users, 'array') || 0 === users.length){
-			_error = new Error('name(' + JSON.stringify(name) + ') or display(' + JSON.stringify(display) + ') or description(' + JSON.stringify(description) + ') or users(' + JSON.stringify(users) + ') parameters are wrong.');
+		const _callback = callback;
+		if(r3IsEmptyString(name, true) || !r3IsStringArray(users) || 0 === users.length){
+			const _error = new Error('name(' + JSON.stringify(name) + ') or users(' + JSON.stringify(users) + ') parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
 
-		let	_name		= name.trim();
-		let	_display	= (r3IsEmptyString(display, true)		? null : r3IsEmptyString(display.trim(), true)		? null : display.trim());
-		let	_description= (r3IsEmptyString(description, true)	? null : r3IsEmptyString(description.trim(), true)	? null : description.trim());
-		let	_users		= r3DeepClone(users);
-		let _body		= {
+		const _name: string					= name.trim();
+		const _display: string | null		= ((!r3IsString(display) || r3IsEmptyString(display, true))			? null : display.trim() === ''		? null : display.trim());
+		const _description: string | null	= ((!r3IsString(description) || r3IsEmptyString(description, true))	? null : description.trim() === ''	? null : description.trim());
+		const _users: string[]				= r3DeepClone(users);
+		const _body = {
 			'tenant': {
 				'name':		_name,
 				'display':	_display,
@@ -600,7 +656,7 @@ export default class R3Provider
 
 		this.startProgress();																// start progressing
 
-		this._post('/v1/tenant', null, this.tokenHeaderType.unscopedUserToken, _body, true, (error, resobj) =>
+		this._post('/v1/tenant', null, this.tokenHeaderType.unscopedUserToken, _body, true, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -609,10 +665,16 @@ export default class R3Provider
 				_callback(error);
 				return;
 			}
+			if(!isResBaseResult(resobj)){
+				const err = new Error('Response data is sonmething wrong: ' + JSON.stringify(resobj));
+				console.error(err.message);
+				_callback(err);
+				return;
+			}
 			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error);
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(err.message);
+				_callback(err);
 				return;
 			}
 			_callback(null);
@@ -628,30 +690,28 @@ export default class R3Provider
 	// description	: description for local tenant(allowed null/emptyv1/tenant)
 	// users		: user name array for local tenant
 	//
-	updateLocalTenant(name, id, display, description, users, callback)
+	updateLocalTenant(name: string, id: string, display: string | null, description: string | null, users: string[], callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
 
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyString(name, true) || r3IsEmptyString(id, true) || !r3IsSafeTypedEntity(users, 'array') || 0 === users.length){
-			_error = new Error('name(' + JSON.stringify(name) + ') or id(' + JSON.stringify(id) + ') or display(' + JSON.stringify(display) + ') or description(' + JSON.stringify(description) + ') or users(' + JSON.stringify(users) + ') parameters are wrong.');
+		const _callback = callback;
+		if(r3IsEmptyString(name, true) || r3IsEmptyString(id, true) || !r3IsStringArray(users) || 0 === users.length){
+			const _error = new Error('name(' + JSON.stringify(name) + ') or id(' + JSON.stringify(id) + ') or users(' + JSON.stringify(users) + ') parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
 
-		let	_name		= name.trim();
-		let	_id			= id.trim();
-		let	_display	= (r3IsEmptyString(display, true)		? null : r3IsEmptyString(display.trim(), true)		? null : display.trim());
-		let	_description= (r3IsEmptyString(description, true)	? null : r3IsEmptyString(description.trim(), true)	? null : description.trim());
-		let	_users		= r3DeepClone(users);
-
-		let	_url		= '/v1/tenant/' + _name;
-		let _body		= {
+		const _name: string					= name.trim();
+		const _id: string					= id.trim();
+		const _display: string | null		= ((!r3IsString(display) || r3IsEmptyString(display, true))			? null : display.trim() === ''		? null : display.trim());
+		const _description: string | null	= ((!r3IsString(description) || r3IsEmptyString(description, true))	? null : description.trim() === ''	? null : description.trim());
+		const _users: string[]				= r3DeepClone(users);
+		const _url: string					= '/v1/tenant/' + _name;
+		const _body = {
 			'tenant': {
 				'id':		_id,
 				'display':	_display,
@@ -662,7 +722,7 @@ export default class R3Provider
 
 		this.startProgress();																// start progressing
 
-		this._post(_url, null, this.tokenHeaderType.unscopedUserToken, _body, true, (error, resobj) =>
+		this._post(_url, null, this.tokenHeaderType.unscopedUserToken, _body, true, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -671,10 +731,16 @@ export default class R3Provider
 				_callback(error);
 				return;
 			}
+			if(!isResBaseResult(resobj)){
+				const err = new Error('Response data is sonmething wrong: ' + JSON.stringify(resobj));
+				console.error(err.message);
+				_callback(err);
+				return;
+			}
 			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error);
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(err.message);
+				_callback(err);
 				return;
 			}
 			_callback(null);
@@ -687,31 +753,29 @@ export default class R3Provider
 	// name			: local tenant name
 	// id			: local tenant id
 	//
-	deleteLocalTenant(name, id, callback)
+	deleteLocalTenant(name: string, id: string, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
 
-		let	_callback	= callback;
-		let	_error;
+		const _callback = callback;
 		if(r3IsEmptyString(name, true) || r3IsEmptyString(id, true)){
-			_error = new Error('name(' + JSON.stringify(name) + ') or id(' + JSON.stringify(id) + ') parameters are wrong.');
+			const _error = new Error('name(' + JSON.stringify(name) + ') or id(' + JSON.stringify(id) + ') parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
 
-		let	_name		= name.trim();
-		let	_id			= id.trim();
-
-		let	_url		= '/v1/tenant/' + _name;
-		let	_urlargs	= 'id=' + _id;
+		const _name		= name.trim();
+		const _id		= id.trim();
+		const _url		= '/v1/tenant/' + _name;
+		const _urlargs	= 'id=' + _id;
 
 		this.startProgress();																// start progressing
 
-		this._delete(_url, _urlargs, null, this.tokenHeaderType.unscopedUserToken, (error, resobj) =>
+		this._delete(_url, _urlargs, null, this.tokenHeaderType.unscopedUserToken, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -720,10 +784,16 @@ export default class R3Provider
 				_callback(error);
 				return;
 			}
+			if(!isResBaseResult(resobj)){
+				const err = new Error('Response data is sonmething wrong: ' + JSON.stringify(resobj));
+				console.error(err.message);
+				_callback(err);
+				return;
+			}
 			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error);
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(err.message);
+				_callback(err);
 				return;
 			}
 			_callback(null);
@@ -734,46 +804,75 @@ export default class R3Provider
 	// TREE LIST( Role / Resource / Policy Tree List )
 	//--------------------------------------------------
 	//
+	// Common raw method : convert tree list for container's data
+	//
+	rawCvtTreeListForContainer(resList: rawListData[], parentPath: string | null): TreeListItem[]
+	{
+		let	treeList: TreeListItem[] = [];
+		if(!r3IsArray(resList)){
+			return treeList;
+		}
+		let	separator = '';
+		if(!r3IsString(parentPath) || r3IsEmptyString(parentPath)){
+			parentPath = '';
+		}else{
+			separator = '/';
+		}
+
+		for(let cnt = 0; cnt < resList.length; ++cnt){
+			treeList[cnt]	= {
+				name:		resList[cnt].name,
+				path:		parentPath + separator + resList[cnt].name,
+				children:	(r3IsArray(resList[cnt].children) ? this.rawCvtTreeListForContainer(resList[cnt].children, parentPath + separator + treeList[cnt].name) : [])		// reentrant
+			};
+		}
+		return treeList;
+	}
+
+	//
 	// Common raw method : Get tree in tenant
 	//
-	rawGetTreeList(tenant, service, type, path, expand, callback)
+	rawGetTreeList(tenant: TenantData, service: string | null, type: ItemType, path: string | null, expand: boolean | null, callback: DataCallback<TreeListItem[]>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	error;
-		if(	r3IsEmptyStringObject(tenant, 'name') ||
-			(resourceType !== type && roleType !== type && policyType !== type && serviceType !== type) )
-		{
-			error = new Error('type(' + JSON.stringify(type) + ') or tenant(' + JSON.stringify(tenant) + ') parameters are wrong.');
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name)){
+			const error = new Error('type(' + JSON.stringify(type) + ') or tenant(' + JSON.stringify(tenant) + ') parameters are wrong.');
 			console.error(error.message);
 			callback(error, null);
 			return;
 		}
-		if(r3IsEmptyString(service)){
-			service		= null;
+		if(!isItemType(type)){
+			const error = new Error('type(' + JSON.stringify(type) + ') or tenant(' + JSON.stringify(tenant) + ') parameters are wrong.');
+			console.error(error.message);
+			callback(error, null);
+			return;
+		}
+		if(r3IsString(service) && r3IsEmptyString(service)){
+			service = null;
 		}
 
-		let	_callback	= callback;
-		let	_tenant		= tenant.name;
-		let	_path		= path;
+		const _callback	= callback;
+		const _tenant	= tenant.name;
+		const _path		= path;
 		let	_url		= '/v1/list/';
-		if(null !== service){
+		if(r3IsString(service)){
 			_url		+= service + '/';
 		}
 		_url			+= type;
-		if(!r3IsEmptyString(path)){
+		if(r3IsString(path) && !r3IsEmptyString(path)){
 			_url		+= '/' + path;
 		}
-		let	_urlargs	= undefined;
-		if(r3IsSafeTypedEntity(expand, 'boolean')){
-			_urlargs	= 'expand=' + (expand ? 'true' : 'false');
+		let	_urlargs: string | undefined = undefined;
+		if(r3IsBoolean(expand)){
+			_urlargs = 'expand=' + (expand ? 'true' : 'false');
 		}
 
 		this.startProgress();																// start progressing
 
-		this._get(_url, _urlargs, null, _tenant, (error, resobj) =>
+		this._get(_url, _urlargs, null, _tenant, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -782,13 +881,20 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error, null);
+			if(!isResRawListData(resobj)){
+				const err = new Error('Response data is sonmething wrong: ' + JSON.stringify(resobj));
+				console.error(err.message);
+				_callback(err, null);
 				return;
 			}
-			if(!r3IsSafeTypedEntity(resobj.children, 'array')){
+			if(true !== resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(err.message);
+				_callback(err, null);
+				return;
+			}
+
+			if(!r3IsArray(resobj.children)){
 				_callback(null, this.rawCvtTreeListForContainer([], _path));
 			}else{
 				_callback(null, this.rawCvtTreeListForContainer(resobj.children, _path));
@@ -797,54 +903,28 @@ export default class R3Provider
 	}
 
 	//
-	// Common raw method : convert tree list for container's data
-	//
-	rawCvtTreeListForContainer(treeList, parentPath)
-	{
-		if(!r3IsSafeTypedEntity(treeList, 'array')){
-			treeList = [];
-		}
-		let	separator = '';
-		if(r3IsEmptyString(parentPath)){
-			parentPath = '';
-		}else{
-			separator = '/';
-		}
-		for(let cnt = 0; cnt < treeList.length; ++cnt){
-			treeList[cnt].path = parentPath + separator + treeList[cnt].name;
-
-			// reentrant
-			if(!r3IsSafeTypedEntity(treeList[cnt].children, 'array')){
-				treeList[cnt].children = [];
-			}
-			treeList[cnt].children = this.rawCvtTreeListForContainer(treeList[cnt].children, treeList[cnt].path);
-		}
-		return treeList;
-	}
-
-	//
 	// Get tree in tenant
 	//
-	getRoleTreeList(tenant, service, path, expand, callback)
+	getRoleTreeList(tenant: TenantData, service: string | null, path: string | null, expand: boolean | null, callback: DataCallback<TreeListItem[]>): void
 	{
 		this.rawGetTreeList(tenant, service, roleType, path, expand, callback);
 	}
 
-	getResourceTreeList(tenant, service, path, expand, callback)
+	getResourceTreeList(tenant: TenantData, service: string | null, path: string | null, expand: boolean | null, callback: DataCallback<TreeListItem[]>): void
 	{
 		this.rawGetTreeList(tenant, service, resourceType, path, expand, callback);
 	}
 
-	getPolicyTreeList(tenant, service, path, expand, callback)
+	getPolicyTreeList(tenant: TenantData, service: string | null, path: string | null, expand: boolean | null, callback: DataCallback<TreeListItem[]>): void
 	{
 		this.rawGetTreeList(tenant, service, policyType, path, expand, callback);
 	}
 
-	getServiceTreeList(tenant, expand, callback)
+	getServiceTreeList(tenant: TenantData, expand: boolean, callback: DataCallback<TreeListItem[]>): void
 	{
-		var	_tenant		= tenant;
-		var	_expand		= expand;
-		var	_callback	= callback;
+		const _tenant	= tenant;
+		const _expand	= expand;
+		const _callback	= callback;
 
 		this.startProgress();																// start progressing
 
@@ -860,7 +940,7 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(!r3IsSafeTypedEntity(serviceChildren, 'array')){
+			if(!r3IsArray(serviceChildren) || !serviceChildren.every((item: unknown) => isTreeListItem(item))){
 				console.info('SERVICE Tree list is something wrong.');
 
 				this.stopProgress();														// stop progressing
@@ -868,38 +948,30 @@ export default class R3Provider
 				return;
 			}
 
-
 			//
 			// Check each service for distributed
 			//
 			if(0 < serviceChildren.length){
-				var	_tenant2		= _tenant;
-				var	_expand2		= _expand;
-				var	_callback2		= _callback;
-				var	_serviceChildren= serviceChildren;
-
-				for(var cnt = 0; cnt < _serviceChildren.length; ++cnt){
-					((pos) =>
+				const _serviceChildren = serviceChildren;
+				for(let cnt = 0; cnt < _serviceChildren.length; ++cnt){
+					((pos: number) =>
 					{
 						if(r3IsEmptyStringObject(_serviceChildren[pos], 'name')){
 							return;
 						}
-						var	_pos				= pos;
-						var	_callback3			= _callback2;
-						var	_serviceChildren2	= _serviceChildren;
-
-						this.rawGetTreeListInServiceTenant(_tenant2, _serviceChildren[pos].name, _expand2, (children, disributed) =>
+						this.rawGetTreeListInServiceTenant(_tenant, _serviceChildren[pos].name, _expand, (children, distributed) =>
 						{
-							_serviceChildren2[_pos].children	= children;
-							_serviceChildren2[_pos].distributed	= disributed;
+							_serviceChildren[pos].children		= children;
+							_serviceChildren[pos].distributed	= distributed;
 
-							if((_pos + 1) == _serviceChildren2.length){
+							if((pos + 1) === _serviceChildren.length){
 								this.stopProgress();										// stop progressing
-								_callback3(null, _serviceChildren2);
+								_callback(null, _serviceChildren);
 							}
 						});
 					})(cnt);
 				}
+				this.stopProgress();														// stop progressing
 			}else{
 				this.stopProgress();														// stop progressing
 				_callback(null, serviceChildren);
@@ -907,16 +979,16 @@ export default class R3Provider
 		});
 	}
 
-	rawGetTreeListInServiceTenant(tenant, servicename, expand, callback)
+	rawGetTreeListInServiceTenant(tenant: TenantData, servicename: string, expand: boolean, callback: (children: TreeListItem[], distributed: boolean) => void): void
 	{
-		var	_tenant		= tenant;
-		var	_servicename= servicename;
-		var	_expand		= expand;
-		var	_children	= [];
-		var	_callback	= callback;
-		var	_distributed= false;
+		const	_tenant						= tenant;
+		const	_servicename				= servicename;
+		const	_expand						= expand;
+		const	_callback					= callback;
+		let		_children: TreeListItem[]	= [];
+		let		_distributed				= false;
 
-		if(r3IsEmptyEntity(_tenant) || r3IsEmptyString(_servicename)){
+		if(!isTenantData(_tenant) || r3IsEmptyString(_tenant.name) || r3IsEmptyString(_servicename)){
 			_callback(_children, _distributed);
 			return;
 		}
@@ -935,7 +1007,7 @@ export default class R3Provider
 			//
 			// Set distributed flag for service
 			//
-			if(null !== error || !r3IsSafeTypedEntity(roleChildren, 'array') || 0 === roleChildren.length){
+			if(null !== error || !r3IsArray(roleChildren) || 0 === roleChildren.length){
 				_distributed = false;
 			}else{
 				// Role under service+tenant is existed(distributed).
@@ -960,8 +1032,8 @@ export default class R3Provider
 			//
 			this.getResourceTreeList(_tenant, _servicename, null, _expand, (error, resourceChildren) =>
 			{
-				if(null !== error || r3IsEmptyEntity(resourceChildren)){
-					console.info('Could not get RESOURCE Tree list in SERVICE+TENANT by ' + (null !== error ? error.message : ''));
+				if(null !== error || !r3IsArray(resourceChildren) || 0 === resourceChildren.length){
+					console.info('Could not get RESOURCE Tree list in SERVICE+TENANT by ' + r3GetSafeString(error?.message));
 				}else{
 					this.rawSetTreeListChildren(_children, resourceType, resourceChildren);
 				}
@@ -971,8 +1043,8 @@ export default class R3Provider
 				//
 				this.getPolicyTreeList(_tenant, _servicename, null, _expand, (error, policyChildren) =>
 				{
-					if(null !== error || r3IsEmptyEntity(policyChildren)){
-						console.info('Could not get POLICY Tree list in SERVICE+TENANT by ' + (null !== error ? error.message : ''));
+					if(null !== error || !r3IsArray(policyChildren) || 0 === policyChildren.length){
+						console.info('Could not get POLICY Tree list in SERVICE+TENANT by ' + r3GetSafeString(error?.message));
 					}else{
 						this.rawSetTreeListChildren(_children, policyType, policyChildren);
 					}
@@ -1048,13 +1120,13 @@ export default class R3Provider
 	// [NOTE]
 	// This method always does not return error.
 	//
-	getAllTreeList(tenant, callback)
+	getAllTreeList(tenant: TenantData, callback: DataCallback<TreeListItem[]>): void
 	{
-		let	_tenant		= tenant;
-		let	_callback	= callback;
-		let	_all		= this.getEmptyTreeList(true);
+		const _tenant	= tenant;
+		const _callback	= callback;
+		const _all		= this.getEmptyTreeList(true);
 
-		if(r3IsEmptyStringObject(tenant, 'name')){
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name)){
 			_callback(null, _all);
 			return;
 		}
@@ -1101,9 +1173,9 @@ export default class R3Provider
 		});
 	}
 
-	rawSetTreeListChildren(allTreeList, path, children)
+	rawSetTreeListChildren(allTreeList: TreeListItem[], path: string, children: TreeListItem[]): boolean
 	{
-		if(!r3IsSafeTypedEntity(allTreeList, 'array')){
+		if(!r3IsArray(allTreeList)){
 			return false;
 		}
 		for(let cnt = 0; cnt < allTreeList.length; ++cnt){
@@ -1115,36 +1187,36 @@ export default class R3Provider
 		return false;
 	}
 
-	getEmptyTreeList(is_service)
+	getEmptyTreeList(is_service: boolean): TreeListItem[]
 	{
-		let	treelist = [];
+		const treeList: TreeListItem[] = [];
 
-		if(r3IsSafeTypedEntity(is_service, 'boolean') && is_service){
-			treelist.push({
+		if(r3IsBoolean(is_service) && is_service){
+			treeList.push({
 				name:		serviceType.toUpperCase(),
 				path:		serviceType,
 				children:	[]
 			});
 		}
 
-		treelist.push({
+		treeList.push({
 			name:		roleType.toUpperCase(),
 			path:		roleType,
 			children:	[]
 		});
 
-		treelist.push({
+		treeList.push({
 			name:		resourceType.toUpperCase(),
 			path:		resourceType,
 			children:	[]
 		});
 
-		treelist.push({
+		treeList.push({
 			name:		policyType.toUpperCase(),
 			path:		policyType,
 			children:	[]
 		});
-		return treelist;
+		return treeList;
 	}
 
 	//
@@ -1157,47 +1229,45 @@ export default class R3Provider
 	// SERVICE				empty			empty		SERVICE top
 	// SERVICE				service name	empty		"SERVICE > service name"
 	//
-	selectTreeList(treeList, service, type, path)
+	selectTreeList(treeList: TreeListItem[], service: string | null, type: ItemType, path: string | null): boolean
 	{
-		if(!r3IsSafeTypedEntity(treeList, 'array') || 0 === treeList.length){
+		if(!r3IsArray(treeList) || 0 === treeList.length){
 			return false;
 		}
-		if(r3IsEmptyString(type, true)){
+		if(!isItemType(type)){
 			return false;
 		}
 
-		let	cnt;
-		let	cnt2;
 		if(r3CompareCaseString(serviceType, type)){
 			//
 			// This case is under SERVICE
 			//
-			if(!r3IsEmptyString(path, true)){
+			if(!r3IsString(path) || !r3IsEmptyString(path, true)){
 				console.error('Wrong parameter: type is SERVICE but specified path(' + path + ')');
 				return false;
 			}
 
 			// search 'SERVICE' top
-			for(cnt = 0; cnt < treeList.length; ++cnt){
-				if(r3IsEmptyStringObject(treeList[cnt], 'path') || !r3CompareCaseString(serviceType, treeList[cnt].path)){
+			for(let cnt = 0; cnt < treeList.length; ++cnt){
+				if(!isTreeListItem(treeList[cnt]) || r3IsEmptyString(treeList[cnt].path) || !r3CompareCaseString(serviceType, treeList[cnt].path)){
 					continue;									// not target tree
 				}
 				// found 'path' == 'service'
 
 				// case : select "SERVICE" top
-				if(r3IsEmptyString(service, true)){
-					treeList[cnt].selected	= true;
+				if(!r3IsString(service) || r3IsEmptyString(service, true)){
+					treeList[cnt].selected = true;
 					return true;								// finish
 				}
 
 				// search 'service name' top in children
-				if(!r3IsSafeTypedEntity(treeList[cnt].children, 'array') || 0 === treeList[cnt].children.length){
+				if(!r3IsArray(treeList[cnt].children) || 0 === treeList[cnt].children.length){
 					continue;									// SERVICE does not have children
 				}
-				for(cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
-					if(!r3IsEmptyStringObject(treeList[cnt].children[cnt2], 'path') && r3CompareCaseString(service, treeList[cnt].children[cnt2].path)){
+				for(let cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
+					if(isTreeListItem(treeList[cnt].children[cnt2]) && !r3IsEmptyString(treeList[cnt].children[cnt2].path) && r3CompareCaseString(service, treeList[cnt].children[cnt2].path)){
 						// found 'path' == 'service name'
-						treeList[cnt].children[cnt2].selected	= true;
+						treeList[cnt].children[cnt2].selected = true;
 						return true;							// finish
 					}
 				}
@@ -1207,28 +1277,28 @@ export default class R3Provider
 			//
 			// Case : selected item under ROLE/POLICY/RESOURCE
 			//
-			let	fullPath = type;								// target path is 'ROLE or POLICY or RESOURCE' or 'ROLE or POLICY or RESOURCE'/path...
-			if(!r3IsEmptyString(path, true)){
+			let	fullPath: string = type;						// target path is 'ROLE or POLICY or RESOURCE' or 'ROLE or POLICY or RESOURCE'/path...
+			if(r3IsString(path) && !r3IsEmptyString(path, true)){
 				fullPath += '/' + path.trim();
 			}
 
-			if(!r3IsEmptyString(service, true)){
+			if(r3IsString(service) && !r3IsEmptyString(service, true)){
 				//
 				// The case is under SERVICE
 				//
 				// search 'SERVICE' top
-				for(cnt = 0; cnt < treeList.length; ++cnt){
-					if(r3IsEmptyStringObject(treeList[cnt], 'path') || !r3CompareCaseString(serviceType, treeList[cnt].path)){
+				for(let cnt = 0; cnt < treeList.length; ++cnt){
+					if(!isTreeListItem(treeList[cnt]) || r3IsEmptyString(treeList[cnt].path) || !r3CompareCaseString(serviceType, treeList[cnt].path)){
 						continue;								// not target tree
 					}
 					// found 'path' == 'service'
 
 					// search 'service name' top in children
-					if(!r3IsSafeTypedEntity(treeList[cnt].children, 'array') || 0 === treeList[cnt].children.length){
+					if(!r3IsArray(treeList[cnt].children) || 0 === treeList[cnt].children.length){
 						continue;								// SERVICE does not have children
 					}
-					for(cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
-						if(!r3IsEmptyStringObject(treeList[cnt].children[cnt2], 'path') && r3CompareCaseString(service, treeList[cnt].children[cnt2].path)){
+					for(let cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
+						if(isTreeListItem(treeList[cnt].children[cnt2]) && r3IsEmptyString(treeList[cnt].children[cnt2].path) && r3CompareCaseString(service, treeList[cnt].children[cnt2].path)){
 							// found 'path' == 'service name'
 							return this.selectSubTreeList(treeList[cnt].children[cnt2].children, fullPath);
 						}
@@ -1246,36 +1316,36 @@ export default class R3Provider
 		return false;											// not found
 	}
 
-	selectSubTreeList(subTreeList, path)
+	selectSubTreeList(subTreeList: TreeListItem[], path: string): boolean
 	{
-		if(!r3IsSafeTypedEntity(subTreeList, 'array') || 0 === subTreeList.length){
+		if(!r3IsArray(subTreeList) || 0 === subTreeList.length){
 			return false;
 		}
 		if(r3IsEmptyString(path, true)){
 			return false;
 		}
 
-		let	pos			= path.indexOf('/');
-		let	curPath		= path;
-		let	childPath	= null;
+		const pos						= path.indexOf('/');
+		let	curPath						= path;
+		let	childPath: string | null	= null;
 		if(0 === pos){
 			return false;
 		}else if(0 < pos){
-			curPath		= path.substr(0, pos);
-			childPath	= path.substr(pos + 1);
+			curPath		= path.substring(0, pos);
+			childPath	= path.substring(pos + 1);
 		}
 
 		// search current path top
 		for(let cnt = 0; cnt < subTreeList.length; ++cnt){
-			if(!r3IsEmptyStringObject(subTreeList[cnt], 'name') && r3CompareCaseString(curPath, subTreeList[cnt].name)){
+			if(isTreeListItem(subTreeList[cnt]) && !r3IsEmptyString(subTreeList[cnt].name) && r3CompareCaseString(curPath, subTreeList[cnt].name)){
 				// found 'name' == current path
-				if(r3IsEmptyString(childPath, true)){
-					subTreeList[cnt].selected	= true;
+				if(!r3IsString(childPath) || r3IsEmptyString(childPath, true)){
+					subTreeList[cnt].selected = true;
 					return true;									// finish
 				}
 
 				// search child path under current path in children
-				if(!r3IsSafeTypedEntity(subTreeList[cnt].children, 'array') || 0 === subTreeList[cnt].children.length){
+				if(!r3IsArray(subTreeList[cnt].children) || 0 === subTreeList[cnt].children.length){
 					continue;										// current path does not have children
 				}
 				// reentrant
@@ -1288,26 +1358,26 @@ export default class R3Provider
 	//
 	// Check service owner
 	//
-	checkServiceOwnerInTreeList(treeList, service)
+	checkServiceOwnerInTreeList(treeList: TreeListItem[], service: string): boolean
 	{
-		if(!r3IsSafeTypedEntity(treeList, 'array') || 0 === treeList.length || r3IsEmptyString(service, true)){
+		if(!r3IsArray(treeList) || 0 === treeList.length || r3IsEmptyString(service, true)){
 			return false;
 		}
-		let	_service = service.trim();
+		const _service = service.trim();
 
 		// search 'SERVICE' top
 		for(let cnt = 0; cnt < treeList.length; ++cnt){
-			if(r3IsEmptyStringObject(treeList[cnt], 'path') || !r3CompareCaseString(serviceType, treeList[cnt].path)){
+			if(!isTreeListItem(treeList[cnt]) || r3IsEmptyString(treeList[cnt].path) || !r3CompareCaseString(serviceType, treeList[cnt].path)){
 				continue;									// not target tree
 			}
 			// search 'service name' top in children
-			if(!r3IsSafeTypedEntity(treeList[cnt].children, 'array') || 0 === treeList[cnt].children.length){
+			if(!r3IsArray(treeList[cnt].children) || 0 === treeList[cnt].children.length){
 				continue;									// SERVICE does not have children
 			}
 			for(let cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
-				if(!r3IsEmptyStringObject(treeList[cnt].children[cnt2], 'path') && r3CompareCaseString(_service, treeList[cnt].children[cnt2].path)){
+				if(isTreeListItem(treeList[cnt].children[cnt2]) && !r3IsEmptyString(treeList[cnt].children[cnt2].path) && r3CompareCaseString(_service, treeList[cnt].children[cnt2].path)){
 					// found 'path' == 'service name'
-					if(r3IsSafeTypedEntity(treeList[cnt].children[cnt2].owner, 'boolean') && true === treeList[cnt].children[cnt2].owner){
+					if(r3IsBoolean(treeList[cnt].children[cnt2].owner) && true === treeList[cnt].children[cnt2].owner){
 						// service owner is tenant
 						return true;
 					}
@@ -1320,26 +1390,26 @@ export default class R3Provider
 	//
 	// Check service tenant type
 	//
-	checkServiceTenantInTreeList(treeList, service)
+	checkServiceTenantInTreeList(treeList: TreeListItem[], service: string): boolean
 	{
-		if(!r3IsSafeTypedEntity(treeList, 'array') || 0 === treeList.length || r3IsEmptyString(service, true)){
+		if(!r3IsArray(treeList) || 0 === treeList.length || r3IsEmptyString(service, true)){
 			return false;
 		}
-		let	_service = service.trim();
+		const _service = service.trim();
 
 		// search 'SERVICE' top
 		for(let cnt = 0; cnt < treeList.length; ++cnt){
-			if(r3IsEmptyStringObject(treeList[cnt], 'path') || !r3CompareCaseString(serviceType, treeList[cnt].path)){
+			if(!isTreeListItem(treeList[cnt]) || r3IsEmptyString(treeList[cnt].path) || !r3CompareCaseString(serviceType, treeList[cnt].path)){
 				continue;									// not target tree
 			}
 			// search 'service name' top in children
-			if(!r3IsSafeTypedEntity(treeList[cnt].children, 'array') || 0 === treeList[cnt].children.length){
+			if(!r3IsArray(treeList[cnt].children) || 0 === treeList[cnt].children.length){
 				continue;									// SERVICE does not have children
 			}
-			for(let cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
-				if(!r3IsEmptyStringObject(treeList[cnt].children[cnt2], 'path') && r3CompareCaseString(_service, treeList[cnt].children[cnt2].path)){
+			for(let cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){					// found 'path' == 'service name'
+				if(isTreeListItem(treeList[cnt].children[cnt2]) && !r3IsEmptyString(treeList[cnt].children[cnt2].path) && r3CompareCaseString(_service, treeList[cnt].children[cnt2].path)){
 					// found 'path' == 'service name'
-					if(r3IsSafeTypedEntity(treeList[cnt].children[cnt2].children, 'array') && 0 < treeList[cnt].children[cnt2].children.length){
+					if(r3IsArray(treeList[cnt].children[cnt2].children) && 0 < treeList[cnt].children[cnt2].children.length){
 						// service has children, thus service is mapped service tenant.
 						return true;
 					}
@@ -1352,51 +1422,50 @@ export default class R3Provider
 	//--------------------------------------------------
 	// Get Detail information for path
 	//--------------------------------------------------
-	getPathDetailInfo(tenant, service, isServiceOwner, hasServiceTenant, type, path)
+	getPathDetailInfo(tenant: TenantData | null, service: string | null, isServiceOwner: boolean, hasServiceTenant: boolean, type: ItemType | null, path: string | null): PathDetailInfo
 	{
-		let	_tenant				= null;
-		let	_service			= null;
-		let	_serviceOwner		= false;
-		let	_hasServiceTenant	= false;
-		let	_type				= null;
-		let	_name				= null;
-		let	_fullpath			= null;
-		let	_currentpath		= null;
-		let	_hasParent			= false;
-		let	_canCreatePath		= false;
-		let	_canCreateService	= false;
+		let	_tenant: TenantData | null	= null;
+		let	_service: string | null		= null;
+		let	_serviceOwner				= false;
+		let	_hasServiceTenant			= false;
+		let	_type: ItemType | null		= null;
+		let	_name: string | null		= null;
+		let	_fullpath: string | null	= null;
+		let	_currentpath: string | null	= null;
+		let	_hasParent					= false;
+		let	_canCreatePath				= false;
+		let	_canCreateService			= false;
 
-		if(!r3IsEmptyStringObject(tenant, 'name')){
-			_tenant		= tenant;
+		if(isTenantData(tenant) && !r3IsEmptyString(tenant.name)){
+			_tenant = tenant;
 
-			if(serviceType === type || !r3IsEmptyString(service)){
+			if((isItemType(type) && serviceType === type) || (r3IsString(service) && !r3IsEmptyString(service))){
 				// [SELECTED TENANT] > SERVICE
-				_type	= type;
+				_type = type;
 
 				// under service
-				if(r3IsEmptyString(service)){
+				if(!r3IsString(service) || r3IsEmptyString(service)){
 					// [SELECTED TENANT] > SERVICE
 					_fullpath			= 'yrn:yahoo::::service';
 					_canCreateService	= true;
 
-				}else if(resourceType === type || roleType === type || policyType === type){
+				}else if(isItemType(type) && (resourceType === type || roleType === type || policyType === type)){
 					// [SELECTED TENANT] > SERVICE > service > ROLE/POLICY/RESOURCE
 					_service			= service;
 					_serviceOwner		= isServiceOwner;
 					_fullpath			= 'yrn:yahoo:' + _service + '::' + _tenant.name + ':' + _type;
 					_currentpath		= '';
 
-					if(!r3IsEmptyString(path)){
+					if(r3IsString(path) && !r3IsEmptyString(path)){
 						// [SELECTED TENANT] > SERVICE > service > ROLE/POLICY/RESOURCE > path
-						let	splitedPath	= path.split('/');
+						const splitedPath = path.split('/');
 						if(1 < splitedPath.length){
 							_hasParent	= true;
 						}
 						_name			= splitedPath[splitedPath.length - 1];
 						_fullpath		+= ':' + path;
-						_currentpath	= path;
+						_currentpath 	= path;
 					}
-
 				}else{
 					// [SELECTED TENANT] > SERVICE > service
 					_service			= service;
@@ -1405,24 +1474,23 @@ export default class R3Provider
 					_fullpath			= 'yrn:yahoo::::service:' + _service;
 				}
 
-			}else if(resourceType === type || roleType === type || policyType === type){
+			}else if(isItemType(type) && (resourceType === type || roleType === type || policyType === type)){
 				// [SELECTED TENANT] > ROLE/POLICY/RESOURCE
 				_type			= type;
 				_fullpath		= 'yrn:yahoo:::' + _tenant.name + ':' + _type;
 				_currentpath	= '';
 
-				if(r3IsEmptyString(path)){
+				if(!r3IsString(path) || r3IsEmptyString(path)){
 					// [SELECTED TENANT] > ROLE/POLICY/RESOURCE
 					_canCreatePath = true;
 				}else{
 					// [SELECTED TENANT] > ROLE/POLICY/RESOURCE > path
-					let	splitedPath = path.split('/');
+					const splitedPath	= path.split('/');
 					if(1 < splitedPath.length){
 						_hasParent	= true;
 					}
 					_name			= splitedPath[splitedPath.length - 1];
-					_fullpath		+= ':';
-					_fullpath		+= path;
+					_fullpath		+= ':' + path;
 					_currentpath	= path;
 
 					if(resourceType === type || roleType === type){
@@ -1431,7 +1499,6 @@ export default class R3Provider
 				}
 			}else{
 				// [SELECTED TENANT]
-				_fullpath		= 'yrn:yahoo:';
 				_fullpath		= 'yrn:yahoo:::' + _tenant.name;
 				_currentpath	= '';
 			}
@@ -1454,49 +1521,62 @@ export default class R3Provider
 	//--------------------------------------------------
 	// Common
 	//--------------------------------------------------
-	createEmptyData(tenant, type, path, callback)
+	createEmptyData(tenant: TenantData, type: ItemType, path: string, callback: ErrorCallback): void
 	{
-		if(roleType === type){
+		if(!isItemType(type)){
+			const error = new Error('create empty data for unknown type(' + JSON.stringify(type) + ')');
+			console.error(error.message);
+			callback(error);
+		}else if(roleType === type){
 			this.createEmptyRoleData(tenant, path, callback);
 		}else if(policyType === type){
 			this.createEmptyPolicyData(tenant, path, callback);
 		}else if(resourceType === type){
 			this.createEmptyResourceData(tenant, path, callback);
 		}else{
-			let	error = new Error('create empty data for unknown type(' + JSON.stringify(type) + ')');
+			const error = new Error('create empty data for unknown type(' + JSON.stringify(type) + ')');
 			console.error(error.message);
 			callback(error);
 		}
 	}
 
-	removeData(tenant, type, path, callback)
+	removeData(tenant: TenantData, type: ItemType, path: string, callback: ErrorCallback): void
 	{
-		if(roleType === type){
+		if(!isItemType(type)){
+			const error = new Error('remove data for unknown type(' + JSON.stringify(type) + ')');
+			console.error(error.message);
+			callback(error);
+		}else if(roleType === type){
 			this.removeRoleData(tenant, path, callback);
 		}else if(policyType === type){
 			this.removePolicyData(tenant, path, callback);
 		}else if(resourceType === type){
 			this.removeResourceData(tenant, path, callback);
 		}else{
-			let	error = new Error('remove data for unknown type(' + JSON.stringify(type) + ')');
+			const error = new Error('remove data for unknown type(' + JSON.stringify(type) + ')');
 			console.error(error.message);
 			callback(error);
 		}
 	}
 
-	updateData(tenant, type, path, data, callback)
+	updateData(tenant: TenantData, type: ItemType, path: string, data: RoleData | PolicyData | ResourceData, callback: ErrorCallback): void
 	{
-		if(roleType === type){
+		if(!isItemType(type)){
+			const error = new Error('update data for unknown type(' + JSON.stringify(type) + ')');
+			console.error(error.message);
+			callback(error);
+
+		}else if(roleType === type && isRoleData(data)){
 			this.updateRoleData(tenant, path, data, true, callback);
 
-		}else if(policyType === type){
+		}else if(policyType === type && isPolicyData(data)){
 			this.updatePolicyData(tenant, path, data, callback);
 
-		}else if(resourceType === type){
+		}else if(resourceType === type && isResourceData(data)){
 			this.updateResourceData(tenant, path, data, callback);
 
 		}else{
-			let	error = new Error('update data for unknown type(' + JSON.stringify(type) + ')');
+			const error = new Error('update data for unknown type(' + JSON.stringify(type) + ')');
 			console.error(error.message);
 			callback(error);
 		}
@@ -1511,27 +1591,26 @@ export default class R3Provider
 	// tenant		: tenant name
 	// servicename	: service name
 	//
-	getServiceData(tenant, servicename, callback)
+	getServiceData(tenant: TenantData, servicename: string, callback: DataCallback<ServiceData>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(servicename, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
+		const _callback = callback;
+		if(!isTenantData(tenant) || !r3IsString(servicename) || r3IsEmptyString(servicename, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
 			console.error(_error.message);
-			_callback(_error);
+			_callback(_error, null);
 			return;
 		}
-		let	_tenant		= tenant.name;
-		let	_service	= servicename.trim();
-		let	_url		= '/v1/service/' + _service;
+		const _tenant	= tenant.name;
+		const _service	= servicename.trim();
+		const _url		= '/v1/service/' + _service;
 
 		this.startProgress();																// start progressing
 
-		this._get(_url, null, null, _tenant, (error, resobj) =>
+		this._get(_url, null, null, _tenant, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -1540,18 +1619,14 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error, null);
+			if(!isResServiceData(resobj) || !r3IsBoolean(resobj.result) || !resobj.result){
+				const err = new Error(r3IsString(resobj.message) ? resobj.message : 'unknown');
+				console.error(err.message);
+				_callback(err, null);
 				return;
 			}
 
-			if(r3IsEmptyEntity(resobj.service)){
-				_callback(null, null);
-			}else{
-				_callback(null, resobj.service);
-			}
+			_callback(null, isServiceData(resobj.service) ? resobj.service : null);
 		});
 	}
 
@@ -1568,73 +1643,63 @@ export default class R3Provider
 	// clear_tenant	: value is true, it means remove tenants without "tenants"
 	// verify		: verify url/object, if undefined/null, verify is not update.
 	//
-	updateServiceData(tenant, servicename, tenants, clear_tenant, verify, callback)
+	updateServiceData(tenant: TenantData, servicename: string, tenants: string[] | string | null | undefined, clear_tenant: boolean, verify: string | ServiceResourceObject[] | null, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_error;
-		let	_callback	= callback;
+		const _callback = callback;
 
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(servicename, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(servicename) || r3IsEmptyString(servicename, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
-		let	_service	= servicename.trim();
-		let	_tenants	= null;
-		let	_is_clear	= false;
-		let	_verify		= null;
+		const	_service					= servicename.trim();
+		let		_tenants: string[] | null	= null;
+		let		_is_clear: boolean			= false;
+		let		_verify: string | null		= null;
 
 		if(undefined !== tenants){
-			if(r3IsSafeTypedEntity(clear_tenant, 'boolean') && true === clear_tenant){
+			if(r3IsBoolean(clear_tenant) && true === clear_tenant){
 				_is_clear = true;
 			}
-			if(r3IsSafeTypedEntity(tenants, 'array') && 0 < tenants.length){
+			if(r3IsStringArray(tenants) && 0 < tenants.length){
 				_tenants = tenants;
-			}else if(!r3IsEmptyString(tenants)){
+			}else if(r3IsString(tenants) && !r3IsEmptyString(tenants)){
 				_tenants = [tenants];
 			}
 		}
-		if(!r3IsEmptyEntity(verify)){
+		if(r3IsString(verify)){
 			_verify = verify;
+		}else if(isServiceResourceObjectArray(verify)){
+			_verify = JSON.stringify(verify);
 		}
 		if(null === _tenants && false === _is_clear && null === _verify){
-			_error = new Error('Nothing to update for service');
+			const _error = new Error('Nothing to update for service');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
 
-		let	_tenant		= tenant.name;
-		let	_url		= '/v1/service/' + _service;
-		let	_urlargs	= undefined;
-		if(r3IsSafeTypedEntity(_tenants, 'array') && 0 < _tenants.length){
-			_urlargs	= 'tenant=' + JSON.stringify(_tenants);
+		const _tenant						= tenant.name;
+		const _url							= '/v1/service/' + _service;
+		let	_urlargs: string | undefined	= undefined;
+		if(r3IsStringArray(_tenants) && 0 < _tenants.length){
+			_urlargs = 'tenant=' + JSON.stringify(_tenants);
 		}
 		if(_is_clear){
-			if(undefined !== _urlargs){
-				_urlargs += '&';
-			}else{
-				_urlargs = '';
-			}
-			_urlargs	+= 'clear_tenant=true';
+			_urlargs = (undefined !== _urlargs ? _urlargs + '&' : '') + 'clear_tenant=true';
 		}
 		if(null !== _verify){
-			if(undefined !== _urlargs){
-				_urlargs += '&';
-			}else{
-				_urlargs = '';
-			}
-			_urlargs	+= 'verify=' + JSON.stringify(_verify);
+			_urlargs = (undefined !== _urlargs ? _urlargs + '&' : '') + 'verify=' + JSON.stringify(_verify);
 		}
 
 		this.startProgress();																// start progressing
 
-		this._put(_url, _urlargs, null, _tenant, (error, resobj) =>
-		{
+		this._put(_url, _urlargs, null, _tenant, (error: FetchError | null, resobj: valTypeAllObject) => {
 			this.stopProgress();															// stop progressing
 
 			if(null !== error){
@@ -1642,10 +1707,16 @@ export default class R3Provider
 				_callback(error);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error);
+			if(!isResBaseResult(resobj)){
+				const err = new Error('Response object is unknown object.');
+				console.error(err.message);
+				_callback(err);
+				return;
+			}
+			if(!resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				_callback(err);
 				return;
 			}
 			_callback(null);
@@ -1659,29 +1730,28 @@ export default class R3Provider
 	// servicename	: service name
 	// verify		: verify url or static resource data object
 	//
-	createInitializedService(tenant, servicename, verify, callback)
+	createInitializedService(tenant: TenantData, servicename: string, verify: string, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(servicename, true) || r3IsEmptyEntity(verify) || (r3IsSafeTypedEntity(verify, 'string') && r3IsEmptyString(verify, true)) ){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ') or verify(' + JSON.stringify(verify) + ') parameters are wrong.');
+		const _callback = callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(servicename) || r3IsEmptyString(servicename, true) || !r3IsString(verify) || r3IsEmptyString(verify)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ') or verify(' + JSON.stringify(verify) + ') parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
-		let	_tenant		= tenant.name;
-		let	_service	= servicename.trim();
-		let	_verify		= verify.trim();
-		let	_url		= '/v1/service';
-		let	_urlargs	= 'name=' + _service + '&verify=' + JSON.stringify(_verify);
+		const _tenant	= tenant.name;
+		const _service	= servicename.trim();
+		const _verify	= verify.trim();
+		const _url		= '/v1/service';
+		const _urlargs	= 'name=' + _service + '&verify=' + JSON.stringify(_verify);
 
 		this.startProgress();																// start progressing
 
-		this._put(_url, _urlargs, null, _tenant, (error, resobj) =>
+		this._put(_url, _urlargs, null, _tenant, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -1690,10 +1760,16 @@ export default class R3Provider
 				_callback(error);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error);
+			if(!isResBaseResult(resobj)){
+				const err = new Error('Response object is unknown object.');
+				console.error(err.message);
+				_callback(err);
+				return;
+			}
+			if(!resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				_callback(err);
 				return;
 			}
 			_callback(null);
@@ -1706,32 +1782,31 @@ export default class R3Provider
 	// tenant		: tenant name
 	// servicename	: service name
 	//
-	removeService(tenant, servicename, isServiceTenant, callback)
+	removeService(tenant: TenantData, servicename: string, isServiceTenant: boolean, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error;
+		const _callback = callback;
 
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(servicename, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(servicename) || r3IsEmptyString(servicename, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
-		let	_tenant		= tenant.name;
-		let	_service	= servicename.trim();
-		let	_url		= '/v1/service/' + _service;
-		let	_urlargs	= undefined;
-		if(r3IsSafeTypedEntity(isServiceTenant, 'boolean') && true === isServiceTenant){
-			_urlargs	= 'tenant=' + tenant.name;
+		const _tenant						= tenant.name;
+		const _service						= servicename.trim();
+		const _url							= '/v1/service/' + _service;
+		let	_urlargs: string | undefined	= undefined;
+		if(r3IsBoolean(isServiceTenant) && true === isServiceTenant){
+			_urlargs = 'tenant=' + tenant.name;
 		}
 
 		this.startProgress();																// start progressing
 
-		this._delete(_url, _urlargs, null, _tenant, (error, resobj) =>
+		this._delete(_url, _urlargs, null, _tenant, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -1740,10 +1815,16 @@ export default class R3Provider
 				_callback(error);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error);
+			if(!isResBaseResult(resobj)){
+				const err = new Error('Response object is unknown object.');
+				console.error(err.message);
+				_callback(err);
+				return;
+			}
+			if(!resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				_callback(err);
 				return;
 			}
 			_callback(null);
@@ -1753,11 +1834,11 @@ export default class R3Provider
 	//
 	// Utility: Get error string which is result of verifying service resource
 	//
-	getErrorServiceResourceVerify(serviceResource)
+	getErrorServiceResourceVerify(serviceResource: StaticResourceObject[] | string): string | null
 	{
-		let	checkResult	= checkServiceResourceValue(serviceResource);
-		let	result		= null;
-		if(null != checkResult.error){
+		const	checkResult				= checkServiceResourceValue(serviceResource);
+		let		result: string | null	= null;
+		if(r3IsString(checkResult.error)){
 			if(r3IsEmptyStringObject(this.r3TextRes, checkResult.error)){
 				result = this.r3TextRes.eUnknownErrorKey;
 			}else{
@@ -1777,47 +1858,51 @@ export default class R3Provider
 	// servicename	: service name
 	// role			: default link alias role name(allowed empty)
 	//
-	createServiceTenant(tenant, servicename, role, callback)
+	createServiceTenant(tenant: TenantData, servicename: string, role: string | null, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_role		= role;
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(servicename, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
+		const _role		= role;
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(servicename) || r3IsEmptyString(servicename, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
-		let	_tenant		= tenant;
-		let	_service	= servicename.trim();
-		let	_url		= '/v1/acr/' + _service;
+		const _tenant	= tenant;
+		const _service	= servicename.trim();
+		const _url		= '/v1/acr/' + _service;
 
 		this.startProgress();																// start progressing
 
-		this._put(_url, null, null, _tenant.name, (error, resobj) =>
+		this._put(_url, null, null, _tenant.name, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			if(null !== error){
 				console.error(error.message);
-
 				this.stopProgress();														// stop progressing
 				_callback(error);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-
+			if(!isResBaseResult(resobj)){
+				const err = new Error('Response object is unknown object.');
+				console.error(err.message);
 				this.stopProgress();														// stop progressing
-				_callback(error);
+				_callback(err);
+				return;
+			}
+			if(!resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				this.stopProgress();														// stop progressing
+				_callback(err);
 				return;
 			}
 
 			// check role name
-			if(r3IsEmptyString(_role, true)){
+			if(!r3IsString(_role) || r3IsEmptyString(_role, true)){
 				this.stopProgress();														// stop progressing
 				_callback(null);
 				return;
@@ -1837,16 +1922,15 @@ export default class R3Provider
 	// servicename	: service name
 	// role			: role name
 	//
-	setServiceTenantRoleAlias(tenant, servicename, role, callback)
+	setServiceTenantRoleAlias(tenant: TenantData, servicename: string, role: string, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(servicename, true) || r3IsEmptyString(role, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ') or role(' + JSON.stringify(role) + ')  parameters are wrong.');
+		const _callback = callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(servicename) || r3IsEmptyString(servicename, true) || !r3IsString(role) || r3IsEmptyString(role, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ') or role(' + JSON.stringify(role) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
@@ -1855,27 +1939,25 @@ export default class R3Provider
 		//
 		// get role data
 		//
-		let	_tenant		= tenant;
-		let	_service	= servicename.trim();
-		let	_role		= role.trim();
+		const _tenant	= tenant;
+		const _service	= servicename.trim();
+		const _role		= role.trim();
 
 		this.startProgress();																// start progressing
 
-		this.getRoleData(_tenant, null, _role, false, (error, roledata) =>
+		this.getRoleData(_tenant, null, _role, false, (error: FetchError | null, roledata: valTypeAllObject) =>
 		{
 			if(null !== error){
 				console.error(error.message);
-
 				this.stopProgress();														// stop progressing
 				_callback(error);
 				return;
 			}
-			if(null === roledata){
-				error = new Error('Could not get role data for tenant(' + _tenant.name + '), path(' + _role + ')');
-				console.error(error.message);
-
+			if(!isRoleData(roledata)){
+				const err = new Error('Could not get role data for tenant(' + _tenant.name + '), path(' + _role + ')');
+				console.error(err.message);
 				this.stopProgress();														// stop progressing
-				_callback(error);
+				_callback(err);
 				return;
 			}
 
@@ -1883,15 +1965,18 @@ export default class R3Provider
 			// SERVICE+TENANT ROLE path
 			// ( yrn:yahoo:<service name>::<tenant name>:role:acr-role )
 			//
-			let	_service_tenant_role = 'yrn:yahoo:' + _service + '::' + _tenant.name + ':role:acr-role';
+			const _service_tenant_role = 'yrn:yahoo:' + _service + '::' + _tenant.name + ':role:acr-role';
 
 			// add alias to service
-			for(let cnt = 0; cnt < roledata.aliases.length; ++cnt){
-				if(r3CompareCaseString(roledata.aliases[cnt], _service_tenant_role)){
-					// already has role in alias
-					this.stopProgress();													// stop progressing
-					_callback(null);
-					return;
+			const aliases: string[] = [];
+			if(r3IsStringArray(roledata.aliases)){
+				for(let cnt = 0; cnt < roledata.aliases.length; ++cnt){
+					if(r3CompareCaseString(roledata.aliases[cnt], _service_tenant_role)){
+						// already has role in alias
+						this.stopProgress();													// stop progressing
+						_callback(null);
+						return;
+					}
 				}
 			}
 			roledata.aliases.push(_service_tenant_role);
@@ -1899,7 +1984,7 @@ export default class R3Provider
 			//
 			// update role for alias
 			//
-			this.updateRoleData(_tenant, _role, roledata, false, (error) =>
+			this.updateRoleData(_tenant, _role, roledata, false, (error: FetchError | null) =>
 			{
 				this.stopProgress();														// stop progressing
 
@@ -1917,38 +2002,36 @@ export default class R3Provider
 	//
 	// Get Role data
 	//
-	getRoleData(tenant, service, path, expand, callback)
+	getRoleData(tenant: TenantData, service: string | null, path: string, expand: boolean, callback: DataCallback<RoleData>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback = callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error, null);
 			return;
 		}
 
-		let	_tenant		= tenant.name;
-		let	_path		= path;
+		const _tenant	= tenant.name;
 		let	_url		= '/v1/role/';
-		if(r3IsEmptyString(service, true)){
-			_url		+= _path;
+		if(!r3IsString(service) || r3IsEmptyString(service, true)){
+			_url		+= path;
 		}else{
 			// path under service, then full yrn path
-			_url		+= 'yrn:yahoo:' + service + '::' + tenant.name + ':role:' + _path;
+			_url		+= 'yrn:yahoo:' + service + '::' + tenant.name + ':role:' + path;
 		}
-		let	_urlargs	= undefined;
-		if(r3IsSafeTypedEntity(expand, 'boolean')){
+		let	_urlargs: string | undefined = undefined;
+		if(r3IsBoolean(expand)){
 			_urlargs	= 'expand=' + (expand ? 'true' : 'false');
 		}
 
 		this.startProgress();																// start progressing
 
-		this._get(_url, _urlargs, null, _tenant, (error, resobj) =>
+		this._get(_url, _urlargs, null, _tenant, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -1957,79 +2040,78 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error, null);
+			if(!isResRoleData(resobj) || !r3IsBoolean(resobj.result) || !resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				_callback(err, null);
 				return;
 			}
-			if(r3IsEmptyEntity(resobj.role)){
-				_callback(null, null);
-			}else{
-				_callback(null, resobj.role);
-			}
+			_callback(null, isRoleData(resobj.role) ? resobj.role : null);
 		});
 	}
 
 	//
 	// Update Role data
 	//
-	updateRoleData(tenant, path, data, isOWHosts, callback)
+	updateRoleData(tenant: TenantData, path: string, data: RoleData | null, isOWHosts: boolean, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-
-		let	_callback	= callback;
-		let	_role		= r3IsEmptyEntity(data) ? null : data;
-		let	_isow		= r3IsSafeTypedEntity(isOWHosts, 'boolean') ? isOWHosts : false;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback					= callback;
+		const _role: RoleData | null	= isRoleData(data) ? data : null;
+		const _isow						= r3IsBoolean(isOWHosts) ? isOWHosts : false;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
 
-		let	_tenant		= tenant.name;
-		let	_path		= path.trim();
-		let	_url		= '/v1/role';
-		let	_urlargs	= 'name=' + _path;
+		const	_tenant	= tenant.name;
+		const	_path	= path.trim();
+		let		_url	= '/v1/role';
+		let		_urlargs= 'name=' + _path;
 
-		if(!r3IsEmptyEntityObject(_role, 'policies') && r3IsSafeTypedEntity(_role.policies, 'array')){
+		if(null !== _role && r3IsStringArray(_role.policies)){
 			_urlargs += '&policies=' + JSON.stringify(_role.policies);
 		}
-		if(!r3IsEmptyEntityObject(_role, 'aliases') && r3IsSafeTypedEntity(_role.aliases, 'array')){
+		if(null !== _role && r3IsStringArray(_role.aliases)){
 			_urlargs += '&alias=' + JSON.stringify(_role.aliases);
 		}
 
 		this.startProgress();																// start progressing
 
-		this._put(_url, _urlargs, null, _tenant, (error, resobj) =>
+		this._put(_url, _urlargs, null, _tenant, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			if(null !== error){
 				console.error(error.message);
-
 				this.stopProgress();														// stop progressing
 				_callback(error);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-
+			if(!isResBaseResult(resobj)){
+				const err = new Error('Response object is unknown object.');
+				console.error(err.message);
 				this.stopProgress();														// stop progressing
-				_callback(error);
+				_callback(err);
+				return;
+			}
+			if(!resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				this.stopProgress();														// stop progressing
+				_callback(err);
 				return;
 			}
 
 			// check hosts.{hostnames, ips}
-			let	hosts = [];
-			if(!r3IsEmptyEntityObject(_role, 'hosts') && !r3IsEmptyEntityObject(_role.hosts, 'hostnames') && r3IsSafeTypedEntity(_role.hosts.hostnames, 'array')){
+			let	hosts: string[] = [];
+			if(null !== _role && isRoleHostList(_role.hosts) && 0 < _role.hosts.hostnames.length){
 				hosts = hosts.concat(_role.hosts.hostnames);
 			}
-			if(!r3IsEmptyEntityObject(_role, 'hosts') && !r3IsEmptyEntityObject(_role.hosts, 'ips') && r3IsSafeTypedEntity(_role.hosts.ips, 'array')){
+			if(null !== _role && isRoleHostList(_role.hosts) && 0 < _role.hosts.ips.length){
 				hosts = hosts.concat(_role.hosts.ips);
 			}
 			if(0 === hosts.length && !_isow){
@@ -2040,17 +2122,19 @@ export default class R3Provider
 			}
 
 			// build post hosts arguments
-			_url		= '/v1/role/' + _path;
-			let	_body	= {
+			_url	= '/v1/role/' + _path;
+
+			const _body: reqSetRoleHosts = {
 				host:			[],
 				clear_hostname:	_isow,
 				clear_ips:		_isow
 			};
+
 			for(let cnt = 0; cnt < hosts.length; ++cnt){
-				let	tmpCombine	= parseCombineHostObject(hosts[cnt]);
-				let	onehost		= {
-					host:		tmpCombine.hostname,
-					port:		parseInt(tmpCombine.port),
+				const tmpCombine	= parseCombineHostObject(hosts[cnt]);
+				const onehost: RoleHostInfo = {
+					host:		tmpCombine.host,
+					port:		parseInt(String(tmpCombine.port)),
 					cuk:		tmpCombine.cuk,
 					extra:		tmpCombine.extra,
 					tag:		tmpCombine.tag
@@ -2065,7 +2149,7 @@ export default class R3Provider
 			}
 
 			// update hosts
-			this._post(_url, null, _tenant, _body, true, (error, resobj) =>
+			this._post(_url, null, _tenant, _body, true, (error: FetchError | null, resobj: valTypeAllObject) =>
 			{
 				this.stopProgress();														// stop progressing
 
@@ -2074,10 +2158,16 @@ export default class R3Provider
 					_callback(error);
 					return;
 				}
-				if(true !== resobj.result){
-					error = new Error(resobj.message);
-					console.error(error.message);
-					_callback(error);
+				if(!isResBaseResult(resobj)){
+					const err = new Error('Response object is unknown object.');
+					console.error(err.message);
+					_callback(err);
+					return;
+				}
+				if(!resobj.result){
+					const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+					console.error(r3GetSafeString(resobj.message, 'unknown'));
+					_callback(err);
 					return;
 				}
 				_callback(null);
@@ -2088,7 +2178,7 @@ export default class R3Provider
 	//
 	// Create Empty Role data
 	//
-	createEmptyRoleData(tenant, path, callback)
+	createEmptyRoleData(tenant: TenantData, path: string, callback: ErrorCallback): void
 	{
 		return this.updateRoleData(tenant, path, null, true, callback);
 	}
@@ -2096,29 +2186,27 @@ export default class R3Provider
 	//
 	// Remove Role data
 	//
-	removeRoleData(tenant, path, callback)
+	removeRoleData(tenant: TenantData, path: string, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback = callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
 
-		let	_tenant		= tenant.name;
-		let	_path		= path.trim();
-		let	_url		= '/v1/role/' + _path;
+		const _tenant	= tenant.name;
+		const _path		= path.trim();
+		const _url		= '/v1/role/' + _path;
 
 		this.startProgress();																// start progressing
 
-		this._delete(_url, null, null, _tenant, (error, resobj) =>
+		this._delete(_url, null, null, _tenant, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -2127,10 +2215,16 @@ export default class R3Provider
 				_callback(error);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error);
+			if(!isResBaseResult(resobj)){
+				const err = new Error('Response object is unknown object.');
+				console.error(err.message);
+				_callback(err);
+				return;
+			}
+			if(!resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				_callback(err);
 				return;
 			}
 			_callback(null);
@@ -2143,26 +2237,24 @@ export default class R3Provider
 	//
 	// Get Policy data
 	//
-	getPolicyData(tenant, service, path, callback)
+	getPolicyData(tenant: TenantData, service: string | null, path: string, callback: DataCallback<PolicyData>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback = callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error, null);
 			return;
 		}
 
-		let	_tenant		= tenant.name;
-		let	_path		= path;
+		const _tenant	= tenant.name;
 		let	_url		= '/v1/policy/';
-		if(r3IsEmptyString(service, true)){
-			_url		+= _path;
+		if(!r3IsString(service) || r3IsEmptyString(service, true)){
+			_url		+= path;
 		}else{
 			// path under service, then full yrn path
 			//
@@ -2171,12 +2263,12 @@ export default class R3Provider
 			// (If you set yrn full path for service name, but API does not use it!)
 			// The API should use/check full yrn path.
 			//
-			_url		+= 'yrn:yahoo:' + service + '::' + tenant.name + ':policy:' + _path;
+			_url		+= 'yrn:yahoo:' + service + '::' + tenant.name + ':policy:' + path;
 		}
 
 		this.startProgress();																// start progressing
 
-		this._get(_url, null, null, _tenant, (error, resobj) =>
+		this._get(_url, null, null, _tenant, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -2185,60 +2277,55 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error, null);
+			if(!isResPolicyData(resobj) || !r3IsBoolean(resobj.result) || !resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				_callback(err, null);
 				return;
 			}
-			if(r3IsEmptyEntity(resobj.policy)){
-				_callback(null, null);
-			}else{
-				_callback(null, resobj.policy);
-			}
+			_callback(null, isPolicyData(resobj.policy) ? resobj.policy : null);
 		});
 	}
 
 	//
 	// Update Policy data
 	//
-	updatePolicyData(tenant, path, data, callback)
+	updatePolicyData(tenant: TenantData, path: string, data: PolicyData, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-
-		let	_callback	= callback;
-		let	_policy		= r3IsEmptyEntity(data) ? null : data;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback						= callback;
+		const _policy: PolicyData | null	= isPolicyData(data) ? data : null;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
 
-		let	_tenant		= tenant.name;
-		let	_path		= path.trim();
-		let	_url		= '/v1/policy';
+		const _tenant	= tenant.name;
+		const _path		= path.trim();
 		let	_urlargs	= 'name=' + _path;
-		if(!r3IsEmptyStringObject(_policy, 'effect')){
-			_urlargs	+= '&effect=' + _policy.effect;
-		}
-		if(!r3IsEmptyEntityObject(_policy, 'action') && r3IsSafeTypedEntity(_policy.action, 'array')){
-			_urlargs	+= '&action=' + JSON.stringify(_policy.action);
-		}
-		if(!r3IsEmptyEntityObject(_policy, 'resource') && r3IsSafeTypedEntity(_policy.resource, 'array')){
-			_urlargs	+= '&resource=' + JSON.stringify(_policy.resource);
-		}
-		if(!r3IsEmptyEntityObject(_policy, 'alias') && r3IsSafeTypedEntity(_policy.alias, 'array')){
-			_urlargs	+= '&alias=' + JSON.stringify(_policy.alias);
+		if(null !== _policy){
+			if(isPolicyEffectType(_policy.effect)){
+				_urlargs	+= '&effect=' + _policy.effect;
+			}
+			if(isPolicyActionTypeArray(_policy.action)){
+				_urlargs	+= '&action=' + JSON.stringify(_policy.action);
+			}
+			if(r3IsStringArray(_policy.resource)){
+				_urlargs	+= '&resource=' + JSON.stringify(_policy.resource);
+			}
+			if(r3IsStringArray(_policy.alias)){
+				_urlargs	+= '&alias=' + JSON.stringify(_policy.alias);
+			}
 		}
 
 		this.startProgress();																// start progressing
 
-		this._put(_url, _urlargs, null, _tenant, (error, resobj) =>
+		this._put('/v1/policy', _urlargs, null, _tenant, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -2247,10 +2334,16 @@ export default class R3Provider
 				_callback(error);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error);
+			if(!isResBaseResult(resobj)){
+				const err = new Error('Response object is unknown object.');
+				console.error(err.message);
+				_callback(err);
+				return;
+			}
+			if(!resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				_callback(err);
 				return;
 			}
 			_callback(null);
@@ -2260,39 +2353,38 @@ export default class R3Provider
 	//
 	// Create Empty Policy data
 	//
-	createEmptyPolicyData(tenant, path, callback)
+	createEmptyPolicyData(tenant: TenantData, path: string, callback: ErrorCallback): void
 	{
 		// default	action is read('yrn:yahoo::::action:read');
 		//			effect is allow
-		return this.updatePolicyData(tenant, path, { action: [ 'yrn:yahoo::::action:read' ], effect: 'allow' }, callback);
+		//
+		// [NOTE]
+		// The name member in PolicyData is not used, but the path parameter is used instead of it.
+		//
+		return this.updatePolicyData(tenant, path, { name: '', action: [actionValueRead], effect: effectValueAllow, resource: [], alias: [] }, callback);
 	}
 
 	//
 	// Remove Policy data
 	//
-	removePolicyData(tenant, path, callback)
+	removePolicyData(tenant: TenantData, path: string, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
 
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
-			console.error(_error.message);
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			_callback(_error);
 			return;
 		}
-
-		let	_tenant		= tenant.name;
-		let	_path		= path.trim();
-		let	_url		= '/v1/policy/' + _path;
+		const _url	= '/v1/policy/' + path.trim();
 
 		this.startProgress();																// start progressing
 
-		this._delete(_url, null, null, _tenant, (error, resobj) =>
+		this._delete(_url, null, null, tenant.name, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -2301,10 +2393,16 @@ export default class R3Provider
 				_callback(error);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error);
+			if(!isResBaseResult(resobj)){
+				const err = new Error('Response object is unknown object.');
+				console.error(err.message);
+				_callback(err);
+				return;
+			}
+			if(!resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				_callback(err);
 				return;
 			}
 			_callback(null);
@@ -2317,26 +2415,24 @@ export default class R3Provider
 	//
 	// Get Resource data
 	//
-	getResourceData(tenant, service, path, expand, callback)
+	getResourceData(tenant: TenantData, service: string | null, path: string, expand: boolean, callback: DataCallback<ResourceData>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error, null);
 			return;
 		}
 
-		let	_tenant		= tenant.name;
-		let	_path		= path;
+		const _tenant	= tenant.name;
 		let	_url		= '/v1/resource/';
-		if(r3IsEmptyString(service, true)){
-			_url		+= _path;
+		if(!r3IsString(service) || r3IsEmptyString(service, true)){
+			_url		+= path;
 		}else{
 			// path under service, then full yrn path
 			//
@@ -2345,16 +2441,16 @@ export default class R3Provider
 			// (If you set yrn full path for service name, but API does not use it!)
 			// The API should use/check full yrn path.
 			//
-			_url		+= 'yrn:yahoo:' + service + '::' + tenant.name + ':resource:' + _path;
+			_url		+= 'yrn:yahoo:' + service + '::' + tenant.name + ':resource:' + path;
 		}
-		let	_urlargs	= undefined;
-		if(r3IsSafeTypedEntity(expand, 'boolean')){
+		let	_urlargs: string | undefined	= undefined;
+		if(r3IsBoolean(expand)){
 			_urlargs	= 'expand=' + (expand ? 'true' : 'false');
 		}
 
 		this.startProgress();																// start progressing
 
-		this._get(_url, _urlargs, null, _tenant, (error, resobj) =>
+		this._get(_url, _urlargs, null, _tenant, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -2363,16 +2459,17 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error, null);
+			if(!isResResourceData(resobj) || !r3IsBoolean(resobj.result) || !resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				_callback(err, null);
 				return;
 			}
-			if(r3IsEmptyEntity(resobj.resource)){
-				_callback(null, null);
-			}else{
+			if(isResourceData(resobj.resource)){
 				_callback(null, resobj.resource);
+			}else{
+				console.error('Could not get resource data(maybe token is not specified.)');
+				_callback(null, null);
 			}
 		});
 	}
@@ -2380,48 +2477,48 @@ export default class R3Provider
 	//
 	// Update Resource data
 	//
-	updateResourceData(tenant, path, data, callback)
+	updateResourceData(tenant: TenantData, path: string, data: ResourceData | null, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-
-		let	_callback	= callback;
-		let	_resource	= r3IsEmptyEntity(data) ? null : data;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
+		const _resource	= isResourceData(data) ? data : null;
+		const _tenant	= tenant.name;
+		const _path		= path.trim();
 
-		let	_tenant		= tenant.name;
-		let	_path		= path.trim();
-		let	_url		= '/v1/resource';
 		let	_urlargs	= 'name=' + _path;
-
-		if(!r3IsEmptyStringObject(_resource, 'string')){
+		if(_resource && r3IsString(_resource.string)){
 			_urlargs	+= '&type=string';
 			_urlargs	+= '&data=' + JSON.stringify(_resource.string);
-		}else if(!r3IsEmptyEntityObject(_resource, 'object')){
+		}else if(_resource && r3IsObject(_resource.object)){
 			_urlargs	+= '&type=object';
 			_urlargs	+= '&data=' + JSON.stringify(_resource.object);
 		}else{
 			_urlargs	+= '&type=string';
 			_urlargs	+= '&data=';
 		}
-		if(!r3IsEmptyEntityObject(_resource, 'keys') && !r3IsEmptyEntity(_resource.keys)){
+		if(_resource && r3IsObject(_resource.keys)){
 			_urlargs	+= '&keys=' + JSON.stringify(_resource.keys);
 		}
-		if(!r3IsEmptyEntityObject(_resource, 'aliases') && r3IsSafeTypedEntity(_resource.aliases, 'array')){
+		if(_resource && r3IsStringArray(_resource.aliases)){
+			// [NOTE]
+			// Note that while the member of ResourceData is "aliases",
+			// it is also "alias" in the PUT parameter.
+			//
 			_urlargs	+= '&alias=' + JSON.stringify(_resource.aliases);
 		}
 
 		this.startProgress();																// start progressing
 
-		this._put(_url, _urlargs, null, _tenant, (error, resobj) =>
+		this._put('/v1/resource', _urlargs, null, _tenant, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -2430,10 +2527,16 @@ export default class R3Provider
 				_callback(error);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error);
+			if(!isResBaseResult(resobj)){
+				const err = new Error('Response object is unknown object.');
+				console.error(err.message);
+				_callback(err);
+				return;
+			}
+			if(!resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				_callback(err);
 				return;
 			}
 			_callback(null);
@@ -2443,7 +2546,7 @@ export default class R3Provider
 	//
 	// Create Empty Resource data
 	//
-	createEmptyResourceData(tenant, path, callback)
+	createEmptyResourceData(tenant: TenantData, path: string, callback: ErrorCallback): void
 	{
 		return this.updateResourceData(tenant, path, null, callback);
 	}
@@ -2451,30 +2554,25 @@ export default class R3Provider
 	//
 	// Remove Resource data
 	//
-	removeResourceData(tenant, path, callback)
+	removeResourceData(tenant: TenantData, path: string, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
 
-		let	_tenant		= tenant.name;
-		let	_path		= path.trim();
-		let	_url		= '/v1/resource/' + _path;
+		const _url	= '/v1/resource/' + path.trim();
 
 		this.startProgress();																// start progressing
 
-		// remove all, not specify type parameter
-		this._delete(_url, null, null, _tenant, (error, resobj) =>
+		this._delete(_url, null, null, tenant.name, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -2483,10 +2581,16 @@ export default class R3Provider
 				_callback(error);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error);
+			if(!isResBaseResult(resobj)){
+				const err = new Error('Response object is unknown object.');
+				console.error(err.message);
+				_callback(err);
+				return;
+			}
+			if(!resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				_callback(err);
 				return;
 			}
 			_callback(null);
@@ -2499,34 +2603,29 @@ export default class R3Provider
 	//
 	// Get New Role Token
 	//
-	getNewRoleToken(tenant, role, expire, callback)
+	getNewRoleToken(tenant: TenantData, role: string, expire: number | null, callback: DataCallback<RoleTokenPrimitiveInfo>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(role, true) || (r3IsSafeTypedEntity(expire, 'number') && expire < 0)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or role path(' + JSON.stringify(role) + ') or expire(' + JSON.stringify(expire) + ') parameters are wrong.');
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || r3IsEmptyString(role, true) || (null !== expire && !r3IsNumber(expire)) || (r3IsNumber(expire) && expire < 0)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or role path(' + JSON.stringify(role) + ') or expire(' + JSON.stringify(expire) + ') parameters are wrong.');
 			console.error(_error.message);
-			_callback(_error);
+			_callback(_error, null);
 			return;
 		}
-		if(!r3IsSafeTypedEntity(expire, 'number')){
-			expire		= null;
-		}
-		let	_tenant		= tenant.name;
-		let	_role		= role;
-		let	_url		= '/v1/role/token/' + _role;
-		let	_urlargs	= undefined;
-		if(r3IsSafeTypedEntity(expire, 'number')){
-			_urlargs	= 'expire=' + String(expire);
+		const _tenant						= tenant.name;
+		const _url							= '/v1/role/token/' + role;
+		let	_urlargs: string | undefined	= undefined;
+		if(r3IsNumber(expire)){
+			_urlargs = 'expire=' + String(expire);
 		}
 
 		this.startProgress();																// start progressing
 
-		this._get(_url, _urlargs, null, _tenant, (error, resobj) =>
+		this._get(_url, _urlargs, null, _tenant, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -2535,28 +2634,21 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error, null);
+			if(!isResRoleTokenPrimitiveInfo(resobj) || !r3IsBoolean(resobj.result) || !resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				_callback(err, null);
 				return;
 			}
-			if(r3IsEmptyString(resobj.token)){
-				error = new Error('Could not get role token.');
-				console.error(error.message);
-				_callback(error, null);
+			if(!isRoleTokenPrimitiveInfo(resobj)){
+				const err = new Error('Could not get role token or register path.');
+				console.error(err.message);
+				_callback(err, null);
 				return;
 			}
-			if(r3IsEmptyString(resobj.registerpath)){
-				error = new Error('Could not get register path.');
-				console.error(error.message);
-				_callback(error, null);
-				return;
-			}
-
 			_callback(null, {
-				roleToken:			resobj.token,
-				registerPath:		resobj.registerpath
+				roleToken:		resobj.token,
+				registerPath:	resobj.registerpath
 			});
 		});
 	}
@@ -2564,31 +2656,26 @@ export default class R3Provider
 	//
 	// Get Role Token List
 	//
-	getRoleTokenList(tenant, role, expand, callback)
+	getRoleTokenList(tenant: TenantData, role: string, callback: DataCallback<RoleTokenInfo[]>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(role, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or role path(' + JSON.stringify(role) + ') parameters are wrong.');
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || r3IsEmptyString(role, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or role path(' + JSON.stringify(role) + ') parameters are wrong.');
 			console.error(_error.message);
-			_callback(_error);
+			_callback(_error, null);
 			return;
 		}
-		if(!r3IsSafeTypedEntity(expand, 'boolean')){
-			expand		= true;
-		}
-		let	_tenant		= tenant.name;
-		let	_role		= role;
-		let	_url		= '/v1/role/token/list/' + _role;
-		let	_urlargs	= 'expand=' + (expand ? 'true' : 'false');
+		const _tenant	= tenant.name;
+		const _url		= '/v1/role/token/list/' + role;
+		const _urlargs	= 'expand=true';													// [NOTE] Always expand=true
 
 		this.startProgress();																// start progressing
 
-		this._get(_url, _urlargs, null, _tenant, (error, resobj) =>
+		this._get(_url, _urlargs, null, _tenant, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -2597,24 +2684,34 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error, null);
+			if(!isResRoleTokenList(resobj) || !r3IsBoolean(resobj.result) || !resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				_callback(err, null);
 				return;
 			}
-			if(r3IsEmptyEntity(resobj.tokens)){
-				error = new Error('Could not get role token list.');
-				console.error(error.message);
-				_callback(error, null);
+			if(!r3IsObject(resobj.tokens)){
+				const err = new Error('Could not get role token list.');
+				console.error(err.message);
+				_callback(err, null);
 				return;
 			}
 
-			// convert object to object array
-			let	tokenArray = [];
-			Object.keys(resobj.tokens).forEach(function(oneToken){
-				resobj.tokens[oneToken].token = oneToken;		// add element { ..., token: 'role token string' }
-				tokenArray.push(resobj.tokens[oneToken]);
+			// convert TokenList(Detail) to TokenList
+			const tokenArray: RoleTokenInfo[] = [];
+			Object.keys(resobj.tokens).forEach((oneToken) => {
+				const	item: RoleTokenInfo = {
+					token:			oneToken,
+					date:			resobj.tokens[oneToken].date,
+					expire:			resobj.tokens[oneToken].expire,
+					user:			resobj.tokens[oneToken].user,
+					hostname:		resobj.tokens[oneToken].hostname,
+					ip:				resobj.tokens[oneToken].ip,
+					port:			resobj.tokens[oneToken].port,
+					cuk:			resobj.tokens[oneToken].cuk,
+					registerpath:	(r3IsString(resobj.tokens[oneToken]?.registerpath) ? resobj.tokens[oneToken].registerpath : undefined)
+				};
+				tokenArray.push(item);
 			});
 
 			_callback(null, tokenArray);
@@ -2624,27 +2721,24 @@ export default class R3Provider
 	//
 	// Remove Role Token
 	//
-	deleteRoleToken(tenant, roletoken, callback)
+	deleteRoleToken(tenant: TenantData, roletoken: string, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(roletoken, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or role token(' + JSON.stringify(roletoken) + ') parameters are wrong.');
+		const _callback = callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || r3IsEmptyString(roletoken, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or role token(not printed) parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
-		let	_tenant		= tenant.name;
-		let	_roletoken	= roletoken;
-		let	_url		= '/v1/role/token/' + _roletoken;
+		const _url	= '/v1/role/token/' + roletoken;
 
 		this.startProgress();																// start progressing
 
-		this._delete(_url, null, null, _tenant, (error, resobj) =>
+		this._delete(_url, null, null, tenant.name, (error: FetchError | null, resobj: valTypeAllObject) =>
 		{
 			this.stopProgress();															// stop progressing
 
@@ -2653,30 +2747,34 @@ export default class R3Provider
 				_callback(error);
 				return;
 			}
-			if(true !== resobj.result){
-				error = new Error(resobj.message);
-				console.error(error.message);
-				_callback(error);
+			if(!isResBaseResult(resobj)){
+				const err = new Error('Response object is unknown object.');
+				console.error(err.message);
+				_callback(err);
 				return;
 			}
-
+			if(!resobj.result){
+				const err = new Error(r3GetSafeString(resobj.message, 'unknown'));
+				console.error(r3GetSafeString(resobj.message, 'unknown'));
+				_callback(err);
+				return;
+			}
 			_callback(null);
 		});
 	}
 
-
 	//
 	// Get User Data Script
 	//
-	getUserDataScript(registerpath)
+	getUserDataScript(registerpath: string): string | null
 	{
 		if(r3IsEmptyString(registerpath, true)){
-			console.error('registerpath(' + JSON.stringify(registerpath) + ') parameter is wrong.');
+			console.error('registerpath(not printed) parameter is wrong.');
 			return null;
 		}
 
 		// get user token script by expanding template
-		let	userDataScript = this.r3Context.getExpandUserData(registerpath);
+		const userDataScript = this.r3Context.getExpandUserData(registerpath);
 		if(r3IsEmptyString(userDataScript, true)){
 			console.error('Failed to generate user data script from template.');
 			return null;
@@ -2688,15 +2786,15 @@ export default class R3Provider
 	//
 	// Get Secret Yaml
 	//
-	getSecretYaml(roletoken)
+	getSecretYaml(roletoken: string): string | null
 	{
 		if(r3IsEmptyString(roletoken, true)){
-			console.error('role token(' + JSON.stringify(roletoken) + ') parameter is wrong.');
+			console.error('role token(not printed) parameter is wrong.');
 			return null;
 		}
 
 		// get secret yaml by expanding template
-		let	secretYaml = this.r3Context.getExpandSecretYaml(roletoken);
+		const secretYaml = this.r3Context.getExpandSecretYaml(roletoken);
 		if(r3IsEmptyString(secretYaml, true)){
 			console.error('Failed to generate secret yaml from template.');
 			return null;
@@ -2708,7 +2806,7 @@ export default class R3Provider
 	//
 	// Get Secret Yaml
 	//
-	getSidecarYaml(roleyrn)
+	getSidecarYaml(roleyrn: string): string | null
 	{
 		if(r3IsEmptyString(roleyrn, true)){
 			console.error('role full yrn path(' + JSON.stringify(roleyrn) + ') parameter is wrong.');
@@ -2716,7 +2814,7 @@ export default class R3Provider
 		}
 
 		// get sidecar yaml by expanding template
-		let	sidecarYaml = this.r3Context.getExpandSidecarYaml(roleyrn);
+		const sidecarYaml = this.r3Context.getExpandSidecarYaml(roleyrn);
 		if(r3IsEmptyString(sidecarYaml, true)){
 			console.error('Failed to generate sidecar yaml from template.');
 			return null;
@@ -2727,7 +2825,7 @@ export default class R3Provider
 	//
 	// Get Custom Registration Codes
 	//
-	getCRCObject(roleToken, roleyrn, registerpath)
+	getCRCObject(roleToken: string, roleyrn: string, registerpath: string): CRCObject | null
 	{
 		if(r3IsEmptyString(roleToken, true) || r3IsEmptyString(roleyrn, true) || r3IsEmptyString(registerpath, true)){
 			console.error('role token(not printed) or full yrn path(' + JSON.stringify(roleyrn) + ') or registerpath(not printed) parameters are wrong.');
@@ -2735,8 +2833,8 @@ export default class R3Provider
 		}
 
 		// get sidecar yaml by expanding template
-		let	crcObject = this.r3Context.getExpandCRCObject(roleToken, roleyrn, registerpath);
-		if(!r3IsSafeTypedEntity(crcObject, 'object') || r3IsSafeTypedEntity(crcObject, 'array')){
+		const crcObject = this.r3Context.getExpandCRCObject(roleToken, roleyrn, registerpath);
+		if(!isCRCObject(crcObject)){
 			console.error('Failed to generate CRC object from template.');
 			return null;
 		}

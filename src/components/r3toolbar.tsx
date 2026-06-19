@@ -20,8 +20,6 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import IconButton					from '@mui/material/IconButton';
 import Avatar						from '@mui/material/Avatar';
@@ -37,16 +35,18 @@ import ArrowUpwardIcon				from '@mui/icons-material/ArrowUpwardRounded';
 import AddIcon						from '@mui/icons-material/AddRounded';
 import DeleteIcon					from '@mui/icons-material/ClearRounded';
 
-import { r3Toolbar }				from './r3styles';
+import type { R3Theme }				from './r3theme';
+import { r3ToolbarStyle }			from './r3styles';
 import R3PathInfoDialog				from './r3pathinfodialog';
 import R3CreatePathDialog			from './r3createpathdialog';
 import R3CreateServiceDialog		from './r3createservicedialog';
 import R3CreateServiceTenantDialog	from './r3createservicetenantdialog';
 import R3PopupMsgDialog				from './r3popupmsgdialog';
 import R3Message					from '../util/r3message';
+import R3Provider					from '../util/r3provider';
 
-import { errorType, infoType, resourceType, roleType, policyType, serviceType, serviceResTypeUrl }					from '../util/r3types';
-import { r3CompareCaseString, r3IsEmptyStringObject, r3IsEmptyEntityObject, r3IsEmptyString, r3IsSafeTypedEntity }	from '../util/r3util';
+import { errorType, infoType, resourceType, roleType, policyType, serviceType, serviceResTypeUrl, PathDetailInfo, ServiceResType, StaticResourceObject, isServiceResType, isStaticResourceObject, isTenantData, valTypeAllObject }	from '../util/r3types';
+import { r3CompareCaseString, r3IsEmptyStringObject, r3IsEmptyEntityObject, r3IsEmptyString, r3IsBoolean, r3IsArray, r3IsString }	from '../util/r3util';
 
 //
 // Local variables
@@ -59,32 +59,68 @@ const tooltipValues = {
 };
 
 //
+// Props type
+//
+type R3ToolbarRequiredProps = {
+	theme:							R3Theme;
+	r3provider:						R3Provider;
+	toolbarData:					PathDetailInfo;
+	onArrawUpward:					() => void;
+	onCreatePath:					(newPath: string, newAllPath: string) => void;
+	onCheckPath:					(path: string) => boolean;
+	onDeletePath:					() => void;
+	onCreateServiceTenant:			(aliasRole: string) => void;
+	onCreateService:				(name: string, data: string) => void;
+	onCheckServiceName:				(name: string) => boolean;
+	onDeleteService:				(serviceOwner: boolean, hasServiceTenant: boolean) => void;
+};
+
+type R3ToolbarOptionProps = {
+	enDock?:						boolean;
+	userData?:						valTypeAllObject | null;
+	onCheckUpdating?:				(() => boolean) | null;
+};
+
+type R3ToolbarProps = R3ToolbarRequiredProps & R3ToolbarOptionProps;
+
+type R3ToolbarTooltips = {
+	toUpperPathTooltip?:			boolean;
+	pathInfoChipTooltip?:			boolean;
+	createPathTooltip?:				boolean;
+	deletePathTooltip?:				boolean;
+};
+
+type R3ToolbarState = {
+	pathInfoDialogOpen:				boolean;
+	createPathDialogOpen:			boolean;
+	createServiceDialogOpen:		boolean;
+	createServiceTenantDialogOpen:	boolean;
+	newServiceName:					string;
+	newServiceResType:				ServiceResType;
+	newVerify:						string;
+	newStaticRes:					StaticResourceObject[];
+	aliasRole:						string;
+	r3DeleteServiceMessage:			R3Message | null;
+	newPath:						string;
+	r3Message:						R3Message | null;
+	tooltips:						R3ToolbarTooltips;
+};
+
+type R3ToolbarStyleType = ReturnType<typeof r3ToolbarStyle>;
+
+//
 // Toolbar Class
 //
-export default class R3Toolbar extends React.Component
+export default class R3Toolbar extends React.Component<R3ToolbarProps, R3ToolbarState>
 {
-	static propTypes = {
-		r3provider:				PropTypes.object.isRequired,
-		enDock:					PropTypes.bool,
-		toolbarData:			PropTypes.object.isRequired,
+	sxClasses: R3ToolbarStyleType;
 
-		onArrawUpward:			PropTypes.func.isRequired,
-		onCreatePath:			PropTypes.func.isRequired,
-		onCheckPath:			PropTypes.func.isRequired,
-		onDeletePath:			PropTypes.func.isRequired,
-		onCreateServiceTenant:	PropTypes.func.isRequired,
-		onCreateService:		PropTypes.func.isRequired,
-		onCheckServiceName:		PropTypes.func.isRequired,
-		onDeleteService:		PropTypes.func.isRequired,
-		onCheckUpdating:		PropTypes.func
+	static defaultProps: R3ToolbarOptionProps = {
+		enDock:				true,
+		onCheckUpdating:	null
 	};
 
-	static defaultProps = {
-		enDock:					true,
-		onCheckUpdating:		null
-	};
-
-	state = {
+	state: R3ToolbarState = {
 		pathInfoDialogOpen:				false,
 		createPathDialogOpen:			false,
 		createServiceDialogOpen:		false,
@@ -106,7 +142,7 @@ export default class R3Toolbar extends React.Component
 		}
 	};
 
-	constructor(props)
+	constructor(props: R3ToolbarProps)
 	{
 		super(props);
 
@@ -126,10 +162,10 @@ export default class R3Toolbar extends React.Component
 		this.handleMessageDialogClose				= this.handleMessageDialogClose.bind(this);
 
 		// styles
-		this.sxClasses								= r3Toolbar(props.theme);
+		this.sxClasses								= r3ToolbarStyle(props.theme);
 	}
 
-	handlePathInfoDialogOpen(event)											// eslint-disable-line no-unused-vars
+	handlePathInfoDialogOpen(event: React.MouseEvent<HTMLElement>)
 	{
 		this.setState({
 			pathInfoDialogOpen:			true,
@@ -139,12 +175,12 @@ export default class R3Toolbar extends React.Component
 		});
 	}
 
-	handlePathInfoDialogClose(event, reason)								// eslint-disable-line no-unused-vars
+	handlePathInfoDialogClose(event: {}, reason: string)
 	{
 		this.setState({ pathInfoDialogOpen:	false });
 	}
 
-	handleCreatePathDialogOpen(event)										// eslint-disable-line no-unused-vars
+	handleCreatePathDialogOpen(event: React.MouseEvent<HTMLElement>)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -158,7 +194,7 @@ export default class R3Toolbar extends React.Component
 		});
 	}
 
-	handleCreatePathDialogClose(event, reason, isAgree, newPath)
+	handleCreatePathDialogClose(event: {}, reason: string, isAgree: boolean, newPath: string)
 	{
 		if(!isAgree){
 			this.setState({
@@ -204,7 +240,7 @@ export default class R3Toolbar extends React.Component
 		});
 	}
 
-	handleCreateServiceDialogOpen(event)									// eslint-disable-line no-unused-vars
+	handleCreateServiceDialogOpen(event: React.MouseEvent<HTMLElement>)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -223,8 +259,16 @@ export default class R3Toolbar extends React.Component
 		});
 	}
 
-	handleCreateServiceDialogClose(event, reason, isAgree, newServiceName, newServiceResType, newVerify, newStaticRes)
+	handleCreateServiceDialogClose(event: {}, reason: string | null, isAgree: boolean, newServiceName: string | null, newServiceResType: ServiceResType | null, newVerify: string | null, newStaticRes: StaticResourceObject[] | null)
 	{
+		if(!r3IsString(newVerify)){
+			newVerify = '';
+		}
+		if(!r3IsArray(newStaticRes) || !newStaticRes.every((item: unknown) => isStaticResourceObject(item))){
+			console.warn('newStaticRes parameter(' + JSON.stringify(newStaticRes) + ') is wrong.');
+			newStaticRes = [];
+		}
+
 		if(!isAgree){
 			this.setState({
 				newServiceName:			'',
@@ -235,9 +279,22 @@ export default class R3Toolbar extends React.Component
 			});
 			return;
 		}
-		if(r3IsEmptyString(newServiceName)){
+
+		if(!isServiceResType(newServiceResType)){
+			console.warn('newServiceResType parameter(' + JSON.stringify(newServiceResType) + ') is wrong.');
 			this.setState({
-				newServiceName:			newServiceName,
+				newServiceName:			'',
+				newServiceResType:		serviceResTypeUrl,
+				newVerify:				'',
+				newStaticRes:			[],
+				createServiceDialogOpen:false
+			});
+			return;
+		}
+
+		if(!r3IsString(newServiceName) || r3IsEmptyString(newServiceName)){
+			this.setState({
+				newServiceName:			r3IsString(newServiceName) ? newServiceName : '',
 				newServiceResType:		newServiceResType,
 				newVerify:				newVerify,
 				newStaticRes:			newStaticRes,
@@ -259,7 +316,7 @@ export default class R3Toolbar extends React.Component
 		}
 
 		// check type and verify/static resource
-		let	serviceData;
+		let	serviceData: string;
 		if(serviceResTypeUrl == newServiceResType){
 			serviceData = newVerify;
 		}else{	// serviceResTypeObject == newServiceResType
@@ -292,7 +349,7 @@ export default class R3Toolbar extends React.Component
 		});
 	}
 
-	handleCreateServiceTenant(event)										// eslint-disable-line no-unused-vars
+	handleCreateServiceTenant(event: React.MouseEvent<HTMLElement>)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -305,7 +362,7 @@ export default class R3Toolbar extends React.Component
 		});
 	}
 
-	handleCreateServiceTenantDialogClose(event, reason, isAgree, aliasRole)
+	handleCreateServiceTenantDialogClose(event: {}, reason: string, isAgree: boolean, aliasRole: string)
 	{
 		if(!isAgree){
 			this.setState({
@@ -318,8 +375,25 @@ export default class R3Toolbar extends React.Component
 			return;
 		}
 
+		let	_aliasRole: string;
+		if(isTenantData(this.props.toolbarData.tenant)){
+			const _tenant_prefix_path = 'yrn:yahoo:::' + this.props.toolbarData.tenant.name + ':role:';
+			if(aliasRole.startsWith(_tenant_prefix_path)){
+				// role name is full yrn path
+				_aliasRole = aliasRole.slice(_tenant_prefix_path.length);
+			}else{
+				// role name is not full yrn path
+				_aliasRole = aliasRole;
+			}
+		}else{
+			// [NOTE]
+			// Since a tenant name should already exist, this is usually not come.
+			//
+			_aliasRole = aliasRole;
+		}
+
 		// create service tenant
-		this.props.onCreateServiceTenant(aliasRole);
+		this.props.onCreateServiceTenant(_aliasRole);
 
 		// close dialog
 		this.setState({
@@ -331,7 +405,7 @@ export default class R3Toolbar extends React.Component
 		});
 	}
 
-	handleToUpperPathButton(event)											// eslint-disable-line no-unused-vars
+	handleToUpperPathButton(event: React.MouseEvent<HTMLElement>)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -347,7 +421,7 @@ export default class R3Toolbar extends React.Component
 		this.props.onArrawUpward();
 	}
 
-	handTooltipChange = (event, type, isOpen) =>
+	handTooltipChange = (event: React.MouseEvent<HTMLElement>, type: string, isOpen: boolean) =>
 	{
 		if(tooltipValues.pathInfoChip === type){
 			this.setState({
@@ -376,7 +450,7 @@ export default class R3Toolbar extends React.Component
 		}
 	};
 
-	handleDeletePath(event)													// eslint-disable-line no-unused-vars
+	handleDeletePath(event: React.MouseEvent<HTMLElement>)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -392,13 +466,13 @@ export default class R3Toolbar extends React.Component
 		this.props.onDeletePath();
 	}
 
-	handleDeleteService(event)												// eslint-disable-line no-unused-vars
+	handleDeleteService(event: React.MouseEvent<HTMLElement>)
 	{
 		if(!this.checkContentUpdating()){
 			return;
 		}
 
-		let	message;
+		let	message: R3Message;
 		if(this.props.toolbarData.serviceOwner && !this.props.toolbarData.hasServiceTenant){
 			// Delete SERVICE
 			message = new R3Message(this.props.r3provider.getR3TextRes().cDeletingService, infoType);
@@ -419,7 +493,7 @@ export default class R3Toolbar extends React.Component
 	//
 	// Handle Confirm Dialog for Delete Service(Tenant): Close( OK / Cancel )
 	//
-	handleDeleteServiceDialogClose(event, reason, result)
+	handleDeleteServiceDialogClose(event: {}, reason: string, result: boolean)
 	{
 		if(result){
 			// case for 'deleting' to do
@@ -440,7 +514,7 @@ export default class R3Toolbar extends React.Component
 		});
 	}
 
-	handleMessageDialogClose(event, reason, result)							// eslint-disable-line no-unused-vars
+	handleMessageDialogClose(event: {}, reason: string, result: boolean)
 	{
 		this.setState({
 			r3Message:	null
@@ -469,13 +543,14 @@ export default class R3Toolbar extends React.Component
 		return (
 			<Tooltip
 				title={ r3provider.getR3TextRes().tResToUpperPathTT }
-				open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.toUpperPathTooltip, 'boolean')) ? false : this.state.tooltips.toUpperPathTooltip) }
+				open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.toUpperPathTooltip)) ? false : this.state.tooltips.toUpperPathTooltip) }
 			>
 				<IconButton
 					onClick={ this.handleToUpperPathButton }
 					onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.toUpperPath, true) }
 					onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.toUpperPath, false) }
 					{ ...theme.r3AppBar.toUpperPathButton }
+					sx={ this.sxClasses.arrowUpwardIcon }
 					size="large"
 				>
 					<ArrowUpwardIcon />
@@ -488,8 +563,8 @@ export default class R3Toolbar extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		let	tooltipText;
-		let	handler;
+		let	tooltipText: string;
+		let	handler: (event: React.MouseEvent<HTMLElement>) => void;
 		if(this.props.toolbarData.canCreatePath){
 			// Create Path under ROLE/POLICY/RESOURCE
 			tooltipText	= r3provider.getR3TextRes().tResCreateChildPathTT;
@@ -509,13 +584,14 @@ export default class R3Toolbar extends React.Component
 		return (
 			<Tooltip
 				title={ tooltipText }
-				open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.createPathTooltip, 'boolean')) ? false : this.state.tooltips.createPathTooltip) }
+				open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.createPathTooltip)) ? false : this.state.tooltips.createPathTooltip) }
 			>
 				<IconButton
 					onClick={ handler }
 					onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.createPath, true) }
 					onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.createPath, false) }
 					{ ...theme.r3AppBar.createPathButton }
+					sx={ this.sxClasses.addIcon }
 					size="large"
 				>
 					<AddIcon />
@@ -573,8 +649,8 @@ export default class R3Toolbar extends React.Component
 			}
 		}
 
-		let	tooltipText;
-		let	handler;
+		let	tooltipText: string;
+		let	handler: (event: React.MouseEvent<HTMLElement>) => void;
 		if(!isDeleteService){
 			tooltipText		= r3provider.getR3TextRes().tResDeletePathTT;
 			handler			= this.handleDeletePath;
@@ -590,13 +666,14 @@ export default class R3Toolbar extends React.Component
 		return (
 			<Tooltip
 				title={ tooltipText }
-				open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deletePathTooltip, 'boolean')) ? false : this.state.tooltips.deletePathTooltip) }
+				open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.deletePathTooltip)) ? false : this.state.tooltips.deletePathTooltip) }
 			>
 				<IconButton
 					onClick={ handler }
 					onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.deletePath, true) }
 					onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.deletePath, false) }
 					{ ...theme.r3AppBar.deletePathButton }
+					sx={ this.sxClasses.deleteIcon }
 					size="large"
 				>
 					<DeleteIcon />
@@ -646,14 +723,14 @@ export default class R3Toolbar extends React.Component
 		return (
 			<Tooltip
 				title={ r3provider.getR3TextRes().tResPathChipTT }
-				open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.pathInfoChipTooltip, 'boolean')) ? false : this.state.tooltips.pathInfoChipTooltip) }
+				open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.pathInfoChipTooltip)) ? false : this.state.tooltips.pathInfoChipTooltip) }
 			>
 				<Chip
 					avatar={ avatar }
 					label={ label }
 					onClick={ this.handlePathInfoDialogOpen }
-					onMouseEnter={ event => this.handTooltipChange(event, tooltipValues.pathInfoChip, true) }
-					onMouseLeave={ event => this.handTooltipChange(event, tooltipValues.pathInfoChip, false) }
+					onMouseEnter={ (event: React.MouseEvent<HTMLElement>) => this.handTooltipChange(event, tooltipValues.pathInfoChip, true) }
+					onMouseLeave={ (event: React.MouseEvent<HTMLElement>) => this.handTooltipChange(event, tooltipValues.pathInfoChip, false) }
 					{ ...theme.r3Toolbar.chip }
 					sx={ this.sxClasses.chip }
 				/>
@@ -667,7 +744,7 @@ export default class R3Toolbar extends React.Component
 
 		let	themeToolbar	= this.props.enDock ? theme.r3Toolbar.toolbar : theme.r3Toolbar.smallToolbar;
 		let	name			= '';
-		let	ownerTag;
+		let	ownerTag: React.ReactNode;
 		if(r3IsEmptyString(this.props.toolbarData.name)){
 			if(r3CompareCaseString(serviceType, this.props.toolbarData.type) && !r3IsEmptyString(this.props.toolbarData.service)){
 				name		= this.props.toolbarData.service;
@@ -683,7 +760,7 @@ export default class R3Toolbar extends React.Component
 				}
 			}
 		}else{
-			name			= this.props.toolbarData.hasParent ? ('.../' + this.props.toolbarData.name) : this.props.toolbarData.name;
+			name = this.props.toolbarData.hasParent ? ('.../' + this.props.toolbarData.name) : this.props.toolbarData.name;
 		}
 
 		return (
@@ -744,7 +821,7 @@ export default class R3Toolbar extends React.Component
 					createMode={ true }
 					tenant={ this.props.toolbarData.tenant }
 					newServiceName={ this.state.newServiceName }
-					newServiceResType={ this.state.serviceResTypeUrl }
+					newServiceResType={ this.state.newServiceResType }
 					newVerify={ this.state.newVerify }
 					newStaticRes={ this.state.newStaticRes }
 					onClose={ this.handleCreateServiceDialogClose }

@@ -19,20 +19,33 @@
  *
  */
 
-export const clientTypes = (() => {
+type MobileType = {
+	all:		boolean;
+	iPhone:		boolean;
+	Android:	boolean;
+};
+
+type ClientTypes = {
+	isMobile:	boolean;
+	mobiles:	MobileType;
+	isTablet:	boolean;
+	isPC:		boolean;
+};
+
+export const clientTypes: ClientTypes = (() => {
 	//
 	// [NOTE][TODO]
 	// Since the window object does not exist in the test with JEST, adjust it here.
 	// I should be able to adjust the environment with "@ jest-environment", but it didn't work.
-	// 
-	let userAgent;
+	//
+	let userAgent: string;
 	if('undefined' != typeof window){
 		userAgent = window.navigator.userAgent.toLowerCase();
 	}else{
 		userAgent = '';
 	}
 
-	let	mobileType = {
+	const mobileType: MobileType = {
 		all: (
 			(-1 != userAgent.indexOf('windows')	&& -1 != userAgent.indexOf('phone'))	||
 			(-1 != userAgent.indexOf('android')	&& -1 != userAgent.indexOf('mobile'))	||
@@ -45,7 +58,7 @@ export const clientTypes = (() => {
 		Android:	(-1 != userAgent.indexOf('android')	&& -1 != userAgent.indexOf('mobile'))
 	};
 
-	let	tabletType = (
+	const tabletType: boolean = (
 		(-1 != userAgent.indexOf('windows')	&& -1 != userAgent.indexOf('touch'))	||
 		(-1 != userAgent.indexOf('android')	&& -1 == userAgent.indexOf('mobile'))	||
 		(-1 != userAgent.indexOf('firefox')	&& -1 != userAgent.indexOf('tablet'))	||
@@ -55,7 +68,7 @@ export const clientTypes = (() => {
 		(-1 != userAgent.indexOf('playbook'))
 	);
 
-	let	pcType =	(!mobileType.all && !tabletType);
+	const pcType: boolean =	(!mobileType.all && !tabletType);
 
 	return {
 		isMobile:	mobileType.all,

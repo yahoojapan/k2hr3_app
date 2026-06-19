@@ -19,9 +19,20 @@
  *
  */
 
-import { r3CompareCaseString } from '../util/r3util';
+import { r3CompareCaseString }	from '../util/r3util';
+import { effectValueAllow, effectValueDeny, actionValueRead, actionValueWrite, StringValObj }	from '../util/r3types';
 
-export const r3GetTextRes = (lang) =>
+export type PolicyEffect = {
+	name:	string;
+	value:	string;
+}
+
+export type PolicyAction = {
+	name:	string;
+	value:	string;
+}
+
+export const r3GetTextRes = (lang: string): StringValObj =>
 {
 	// [NOTE][FIXME]
 	// import could not be used in scope area. And require with dynamic file path
@@ -29,7 +40,7 @@ export const r3GetTextRes = (lang) =>
 	// 'Critical dependency: the request of a dependency is an expression'
 	// Thus this function uses require with static file path. :-(
 	//
-	let	r3TextRes;
+	let	r3TextRes: StringValObj;
 	if(r3CompareCaseString(lang, 'ja')){
 		r3TextRes = require('./r3textres_ja').r3TextRes;
 	}else{
@@ -41,28 +52,28 @@ export const r3GetTextRes = (lang) =>
 //
 // Effect in Policy Resources
 //
-export const policyEffects	= [
+export const policyEffects: PolicyEffect[] = [
 	{
 		name:					'ALLOW',
-		value:					'allow'
+		value:					effectValueAllow
 	},
 	{
 		name:					'DENY',
-		value:					'deny'
+		value:					effectValueDeny
 	}
 ];
 
 //
 // Action in Policy Resources
 //
-export const policyActions	= [
+export const policyActions: PolicyAction[] = [
 	{
 		name:					'READ',
-		value:					'yrn:yahoo::::action:read'
+		value:					actionValueRead
 	},
 	{
 		name:					'WRITE',
-		value:					'yrn:yahoo::::action:write'
+		value:					actionValueWrite
 	}
 ];
 

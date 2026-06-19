@@ -20,8 +20,6 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import Button						from '@mui/material/Button';
 import Dialog						from '@mui/material/Dialog';
@@ -40,9 +38,9 @@ import TableRow						from '@mui/material/TableRow';
 import Popover						from '@mui/material/Popover';
 import FormControlLabel				from '@mui/material/FormControlLabel';
 import Checkbox						from '@mui/material/Checkbox';
-import Select						from '@mui/material/Select';
 import MenuItem						from '@mui/material/MenuItem';			// for select
 import Box							from '@mui/material/Box';
+import Select, { SelectChangeEvent }	from '@mui/material/Select';
 
 import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
 import CopyClipBoardIcon			from '@mui/icons-material/AssignmentTurnedInRounded';
@@ -54,10 +52,12 @@ import BackPageIcon					from '@mui/icons-material/Cancel';
 
 import R3MsgBox						from './r3msgbox';						// Message Box
 import R3Message					from '../util/r3message';
+import R3Provider					from '../util/r3provider';
 
-import { r3PathInfoDialog }			from './r3styles';
-import { roleType, errorType }		from '../util/r3types';
-import { r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3CompareCaseString, r3IsEmptyString, r3IsSafeTypedEntity, r3CompareString, convertISOStringToLocaleString, getDiffTimeFromISOString, diffRoundType, getDiffRoundStringFromISOString, r3DeepClone } from '../util/r3util';
+import type { R3Theme }				from './r3theme';
+import { r3PathInfoDialogStyle }	from './r3styles';
+import { roleType, errorType, CRCObject, DataCallback, isRoleTokenPrimitiveInfo, RoleTokenPrimitiveInfo, RoleTokenMetadata, RoleTokenInfo, StringValObj, TenantData, isRoleTokenInfo, isRoleTokenInfoArray, isRoleTokenMetadataArray }		from '../util/r3types';
+import { r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3CompareCaseString, r3IsEmptyString, r3CompareString, convertISOStringToLocaleString, getDiffTimeFromISOString, diffRoundType, getDiffRoundStringFromISOString, r3DeepClone, r3HasKey, r3IsArray, r3IsBoolean, r3IsFunction, r3IsNumber, r3IsObject, r3IsString } from '../util/r3util';
 
 //
 // Local variables
@@ -108,23 +108,85 @@ const roletokenTextFieldName= 'roletoken-textfield';
 const codeTextFieldName		= 'register-code-textfield';
 
 //
+// Path Information Dialog interfaces
+//
+type R3PathInfoDialogRequiredProps = {
+	theme:								R3Theme;
+	r3provider:							R3Provider;
+	open:								boolean;
+	onClose:							(event: {}, reason: string) => void;
+};
+
+type R3PathInfoDialogOptionProps = {
+	tenant?:							TenantData | null;
+	service?:							string | null;
+	type?:								string | null;
+	fullpath?:							string | null;
+	currentpath?:						string | null;
+	tableRawCount?:						number;
+	userDataScript?:					string | null;
+	roleToken?:							string | null;
+};
+
+type R3PathInfoDialogProps = R3PathInfoDialogRequiredProps & R3PathInfoDialogOptionProps;
+
+type R3PathInfoDialogTooltips = {
+	// In main page
+	manageRoleTokenButtonTooltip?:		boolean;
+	dispCodeNewRoleTokenButtonTooltip?:	boolean;
+
+	// In manage role token page
+	deleteRoleTokenButtonTooltip?:		number;
+	newRoleTokenButtonTooltip?:			boolean;
+	dispCodeButtonTooltip?:				number;
+	detailCreateTimeTooltip?:			number;
+	detailExpireTimeTooltip?:			number;
+	detailRoleTokenTooltip?:			number;
+
+	// In OpenStack page
+	roletokenClipboardButtonTooltip?:	boolean;
+	copyClipboardButtonTooltip?:		boolean;
+};
+
+type R3PathInfoDialogState = {
+	// common
+	open:								boolean;
+	pageType:							number;
+	stackedPreviousPages:				number[];
+	message:							R3Message | null;
+
+	// In manage role token page
+	manageRoleTokenPageNum:				number;
+	roleTokenList:						RoleTokenMetadata[];
+	roleTokenSortKey:					string;							// default is sorting by create time
+	roleTokenSortNormal:				boolean;						// default is reverse sorting
+	newRoleTokenPopoverAnchorEl:		HTMLElement | null;
+	newRoleTokenNoExpire:				boolean;
+	newRoleTokenButtonTooltip:			boolean;
+
+	// In openstack page
+	selectedRoleToken:					string | null;
+	selectedRoleTokenTime:				string | null;
+	codeType:							string;
+	codeUDS:							string | null;
+	codeSecretYaml:						string | null;
+	codeSidecarYaml:					string | null;
+	objCrc:								CRCObject;
+
+	// tooltip
+	tooltips:							R3PathInfoDialogTooltips;
+};
+
+type R3PathInfoDialogStyleType = ReturnType<typeof r3PathInfoDialogStyle>;
+
+//
 // Path Information Class
 //
-export default class R3PathInfoDialog extends React.Component
+export default class R3PathInfoDialog extends React.Component<R3PathInfoDialogProps, R3PathInfoDialogState>
 {
-	static propTypes = {
-		r3provider:		PropTypes.object.isRequired,
-		open:			PropTypes.bool.isRequired,
-		tenant:			PropTypes.object,
-		service:		PropTypes.string,
-		type:			PropTypes.string,
-		fullpath:		PropTypes.string,
-		currentpath:	PropTypes.string,
-		tableRawCount:	PropTypes.number,
-		onClose:		PropTypes.func.isRequired
-	};
+	sxClasses: R3PathInfoDialogStyleType;
 
-	static defaultProps = {
+	static defaultProps: R3PathInfoDialogOptionProps = {
 		tenant:			null,
 		service:		null,
 		type:			null,
@@ -133,10 +195,10 @@ export default class R3PathInfoDialog extends React.Component
 		tableRawCount:	5
 	};
 
-	roletokenInputElement	= null;												// input textfield for registration code.
-	codeInputElement		= null;												// input textfield for registration code.
+	roletokenInputElement: HTMLInputElement | null	= null;						// input textfield for registration code.
+	codeInputElement: HTMLInputElement | null		= null;						// input textfield for registration code.
 
-	state = {
+	state: R3PathInfoDialogState = {
 		// common
 		open:								this.props.open,
 		pageType:							pageTypeValues.pageMain,
@@ -150,6 +212,7 @@ export default class R3PathInfoDialog extends React.Component
 		roleTokenSortNormal:				false,								// default is reverse sorting
 		newRoleTokenPopoverAnchorEl:		null,
 		newRoleTokenNoExpire:				false,
+		newRoleTokenButtonTooltip:			false,
 
 		// In openstack page
 		selectedRoleToken:					null,
@@ -179,7 +242,7 @@ export default class R3PathInfoDialog extends React.Component
 		}
 	};
 
-	constructor(props)
+	constructor(props: R3PathInfoDialogProps)
 	{
 		super(props);
 
@@ -208,14 +271,14 @@ export default class R3PathInfoDialog extends React.Component
 		this.handleCopyClipboard 			= this.handleCopyClipboard.bind(this);
 
 		// styles
-		this.sxClasses						= r3PathInfoDialog(props.theme);
+		this.sxClasses						= r3PathInfoDialogStyle(props.theme);
 	}
 
 	// [NOTE]
 	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
 	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
 	//
-	static getDerivedStateFromProps(nextProps, prevState)
+	static getDerivedStateFromProps(nextProps: R3PathInfoDialogProps, prevState: R3PathInfoDialogState): Partial<R3PathInfoDialogState> | null
 	{
 		if(prevState.open != nextProps.open){
 			return {
@@ -236,19 +299,19 @@ export default class R3PathInfoDialog extends React.Component
 		return null;														// Return null to indicate no change to state.
 	}
 
-	handleClose(event, reason)
+	handleClose(event: {}, reason: string)
 	{
 		this.props.onClose(event, reason);
 	}
 
-	handleBackPage(event)													// eslint-disable-line no-unused-vars
+	handleBackPage(event: React.MouseEvent<HTMLElement>)
 	{
-		if(!r3IsSafeTypedEntity(this.state.stackedPreviousPages, 'array') || 0 == this.state.stackedPreviousPages.length){
+		if(!r3IsArray(this.state.stackedPreviousPages) || 0 == this.state.stackedPreviousPages.length){
 			return;
 		}
 
 		let	newStackedPages	= this.state.stackedPreviousPages.slice();
-		let	prevPageType	= newStackedPages.pop();
+		let	prevPageType	= newStackedPages.pop()!;
 
 		this.setState({
 			message:				null,
@@ -257,7 +320,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleManageRoleToken(event)											// eslint-disable-line no-unused-vars
+	handleManageRoleToken(event: React.MouseEvent<HTMLElement>)
 	{
 		const { r3provider } = this.props;
 
@@ -266,7 +329,7 @@ export default class R3PathInfoDialog extends React.Component
 		_newStackedPages.push(pageTypeValues.pageMain);
 
 		// Get Role Token Lists
-		this.getRoleTokenList((error, resobj) =>
+		this.getRoleTokenList((error: Error | null, resobj: RoleTokenInfo[] | null) =>
 		{
 			if(null !== error){
 				console.info(error.message);
@@ -275,31 +338,38 @@ export default class R3PathInfoDialog extends React.Component
 				});
 				return;
 			}
+			if(null === resobj || !isRoleTokenInfoArray(resobj)){
+				console.info('Could not get role token list');
+				this.setState({
+					message:	new R3Message(_comErrorMessage + 'Could not get role token list', errorType)
+				});
+				return;
+			}
 
 			// convert and set for display
-			this.complementRoleTokenList(resobj);
+			const tokenList: RoleTokenMetadata[] = this.cvtRoleTokenInfoToMetadata(resobj);
 
 			// sort
-			this.sortRoleTokenList(resobj);
+			this.sortRoleTokenList(tokenList);
 
 			this.setState({
 				message:				null,
 				pageType:				pageTypeValues.pageManageRoleToken,
 				stackedPreviousPages:	_newStackedPages,
 				manageRoleTokenPageNum:	0,
-				roleTokenList:			resobj,
+				roleTokenList:			structuredClone(tokenList)
 			});
 		});
 	}
 
-	handleDispCodeNewRoleToken(event)										// eslint-disable-line no-unused-vars
+	handleDispCodeNewRoleToken(event: React.MouseEvent<HTMLElement>)
 	{
 		const { r3provider } = this.props;
 
 		let	_comErrorMessage = r3provider.getR3TextRes().eCommunication;
 
 		// get new role token(expire is default)
-		this.getNewRoleToken(null, (error, resobj) =>
+		this.getNewRoleToken(null, (error: Error | null, resobj: RoleTokenPrimitiveInfo | null) =>
 		{
 			if(null !== error){
 				console.info(error.message);
@@ -310,12 +380,22 @@ export default class R3PathInfoDialog extends React.Component
 				});
 				return;
 			}
+			if(!isRoleTokenPrimitiveInfo(resobj)){
+				const err = new Error('Failed to create new role token');
+				console.error(err.message);
+				this.setState({
+					pageType:				pageTypeValues.pageMain,
+					stackedPreviousPages:	[],
+					message:				new R3Message(_comErrorMessage + err.message, errorType)
+				});
+				return;
+			}
 
 			// keep new role token
 			let	_newRoleToken = resobj.roleToken;
 
 			// remake role token list
-			this.getRoleTokenList((error, resobj) =>
+			this.getRoleTokenList((error: Error | null, resobj: RoleTokenInfo[] | null) =>
 			{
 				if(null !== error){
 					console.info(error.message);
@@ -326,16 +406,25 @@ export default class R3PathInfoDialog extends React.Component
 					});
 					return;
 				}
+				if(null === resobj || !isRoleTokenInfoArray(resobj)){
+					console.info('Could not get role token list');
+					this.setState({
+						pageType:				pageTypeValues.pageMain,
+						stackedPreviousPages:	[],
+						message:				new R3Message(_comErrorMessage + 'Could not get role token list', errorType)
+					});
+					return;
+				}
 
 				// convert and set for display
-				this.complementRoleTokenList(resobj, _newRoleToken);
+				const tokenList: RoleTokenMetadata[] = this.cvtRoleTokenInfoToMetadata(resobj, _newRoleToken);
 
 				// sort
-				this.sortRoleTokenList(resobj);
+				this.sortRoleTokenList(tokenList);
 
 				// search new role token in result(token list)
-				for(let cnt = 0; cnt < resobj.length; ++cnt){
-					if(resobj[cnt].token == _newRoleToken){
+				for(let cnt = 0; cnt < tokenList.length; ++cnt){
+					if(tokenList[cnt].token == _newRoleToken){
 						// found
 						let	newStackedPages	= this.state.stackedPreviousPages.slice();
 						newStackedPages.push(pageTypeValues.pageMain);
@@ -346,12 +435,12 @@ export default class R3PathInfoDialog extends React.Component
 							pageType:				pageTypeValues.pageDisplayCode,
 							stackedPreviousPages:	newStackedPages,
 							manageRoleTokenPageNum:	0,
-							selectedRoleToken:		resobj[cnt].token,
-							selectedRoleTokenTime:	resobj[cnt].dispTime,
-							codeUDS:				resobj[cnt].codeUDS,
-							codeSecretYaml:			resobj[cnt].codeSecretYaml,
-							codeSidecarYaml:		resobj[cnt].codeSidecarYaml,
-							objCrc:					resobj[cnt].objCrc
+							selectedRoleToken:		tokenList[cnt].token,
+							selectedRoleTokenTime:	tokenList[cnt].dispTime,
+							codeUDS:				tokenList[cnt].codeUDS,
+							codeSecretYaml:			tokenList[cnt].codeSecretYaml,
+							codeSidecarYaml:		tokenList[cnt].codeSidecarYaml,
+							objCrc:					structuredClone(tokenList[cnt].objCrc)
 						});
 						return;
 					}
@@ -367,9 +456,9 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleDispCode(event, pos)
+	handleDispCode(event: React.MouseEvent<HTMLElement>, pos: number)
 	{
-		if(!r3IsSafeTypedEntity(this.state.roleTokenList, 'array') || pos < 0 || this.state.roleTokenList.length <= pos || r3IsEmptyEntity(this.state.roleTokenList[pos])){
+		if(!r3IsArray(this.state.roleTokenList) || pos < 0 || this.state.roleTokenList.length <= pos || r3IsEmptyEntity(this.state.roleTokenList[pos])){
 			return;
 		}
 
@@ -390,7 +479,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleManageRoleTokenPageChange(event, page)
+	handleManageRoleTokenPageChange(event: React.MouseEvent<HTMLButtonElement> | null, page: number)
 	{
 		this.setState({
 			message:				null,
@@ -398,7 +487,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleNewRoleToken(event)
+	handleNewRoleToken(event: React.MouseEvent<HTMLElement>)
 	{
 		this.setState({
 			newRoleTokenButtonTooltip:		false,
@@ -407,7 +496,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleCancelNewRoleToken(event)											// eslint-disable-line no-unused-vars
+	handleCancelNewRoleToken(event: {}, reason?: string)
 	{
 		this.setState({
 			newRoleTokenButtonTooltip:		false,
@@ -416,9 +505,9 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleNoExpireCheckboxChange(event)
+	handleNoExpireCheckboxChange(event: React.ChangeEvent<HTMLInputElement>)
 	{
-		let	isChecked = r3IsEmptyEntityObject(event.target, 'checked') ? null : event.target.checked;
+		let	isChecked: boolean = r3IsEmptyEntityObject(event.target, 'checked') ? false : event.target.checked;
 
 		if(this.state.newRoleTokenNoExpire === isChecked){
 			return;
@@ -429,7 +518,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleConfirmNewRoleToken(event)										// eslint-disable-line no-unused-vars
+	handleConfirmNewRoleToken(event: React.MouseEvent<HTMLElement>)
 	{
 		const { r3provider } = this.props;
 
@@ -437,7 +526,7 @@ export default class R3PathInfoDialog extends React.Component
 		let	expire = (this.state.newRoleTokenNoExpire ? 0 : null);
 
 		// get new role token
-		this.getNewRoleToken(expire, (error, resobj) =>
+		this.getNewRoleToken(expire, (error: Error | null, resobj: RoleTokenPrimitiveInfo | null) =>
 		{
 			if(null !== error){
 				console.info(error.message);
@@ -449,12 +538,23 @@ export default class R3PathInfoDialog extends React.Component
 				});
 				return;
 			}
+			if(!isRoleTokenPrimitiveInfo(resobj)){
+				const err = new Error('Failed to create new role token');
+				console.error(err.message);
+				this.setState({
+					message:						new R3Message(_comErrorMessage + err.message, errorType),
+					newRoleTokenButtonTooltip:		false,
+					newRoleTokenPopoverAnchorEl:	null,
+					newRoleTokenNoExpire:			false
+				});
+				return;
+			}
 
 			// new role token
 			let	_newRoleToken = resobj.roleToken;
 
 			// remake role token list
-			this.getRoleTokenList((error, resobj) =>
+			this.getRoleTokenList((error: Error | null, resobj: RoleTokenInfo[] | null) =>
 			{
 				if(null !== error){
 					console.info(error.message);
@@ -466,17 +566,26 @@ export default class R3PathInfoDialog extends React.Component
 					});
 					return;
 				}
+				if(null === resobj || !isRoleTokenInfoArray(resobj)){
+					console.info('Could not get role token list');
+					this.setState({
+						message:						new R3Message(_comErrorMessage + 'Could not get role token list', errorType),
+						newRoleTokenButtonTooltip:		false,
+						newRoleTokenPopoverAnchorEl:	null,
+						newRoleTokenNoExpire:			false
+					});
+				}
 
 				// convert and set for display
-				this.complementRoleTokenList(resobj, _newRoleToken);
+				const tokenList: RoleTokenMetadata[] = this.cvtRoleTokenInfoToMetadata(resobj, _newRoleToken);
 
 				// sort
-				this.sortRoleTokenList(resobj);
+				this.sortRoleTokenList(tokenList);
 
 				this.setState({
 					message:						null,
 					manageRoleTokenPageNum:			0,
-					roleTokenList:					resobj,
+					roleTokenList:					structuredClone(tokenList),
 					newRoleTokenButtonTooltip:		false,
 					newRoleTokenPopoverAnchorEl:	null,
 					newRoleTokenNoExpire:			false
@@ -485,7 +594,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleDeleteRoleToken(event, pos)
+	handleDeleteRoleToken(event: React.MouseEvent<HTMLElement>, pos: number)
 	{
 		const { r3provider } = this.props;
 
@@ -497,7 +606,7 @@ export default class R3PathInfoDialog extends React.Component
 		let	roletoken = this.state.roleTokenList[pos].token;
 
 		// delete role token
-		this.deleteRoleToken(roletoken, (error) =>
+		this.deleteRoleToken(roletoken, (error: Error | null) =>
 		{
 			if(null !== error){
 				console.info(error.message);
@@ -508,7 +617,7 @@ export default class R3PathInfoDialog extends React.Component
 			}
 
 			// remake role token list
-			this.getRoleTokenList((error, resobj) =>
+			this.getRoleTokenList((error: Error | null, resobj: RoleTokenInfo[] | null) =>
 			{
 				if(null !== error){
 					console.info(error.message);
@@ -517,22 +626,28 @@ export default class R3PathInfoDialog extends React.Component
 					});
 					return;
 				}
+				if(null === resobj || !isRoleTokenInfoArray(resobj)){
+					console.info('Could not get role token list');
+					this.setState({
+						message:	new R3Message(_comErrorMessage + 'Could not get role token list', errorType)
+					});
+				}
 
 				// convert and set for display
-				this.complementRoleTokenList(resobj);
+				const tokenList: RoleTokenMetadata[] = this.cvtRoleTokenInfoToMetadata(resobj);
 
 				// sort
-				this.sortRoleTokenList(resobj);
+				this.sortRoleTokenList(tokenList);
 
 				this.setState({
 					message:		null,
-					roleTokenList:	resobj
+					roleTokenList:	structuredClone(tokenList)
 				});
 			});
 		});
 	}
 
-	handleManageRoleTokenButtonTooltipChange = (event, isOpen) =>
+	handleManageRoleTokenButtonTooltipChange = (event: React.SyntheticEvent, isOpen: boolean) =>
 	{
 		this.setState({
 			tooltips: {
@@ -541,7 +656,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	};
 
-	handleDispCodeNewRoleTokenButtonTooltipChange = (event, isOpen) =>
+	handleDispCodeNewRoleTokenButtonTooltipChange = (event: React.SyntheticEvent, isOpen: boolean) =>
 	{
 		this.setState({
 			tooltips: {
@@ -550,7 +665,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	};
 
-	handleNewRoleTokenButtonTooltipChange = (event, isOpen) =>
+	handleNewRoleTokenButtonTooltipChange = (event: React.SyntheticEvent, isOpen: boolean) =>
 	{
 		this.setState({
 			tooltips: {
@@ -559,7 +674,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	};
 
-	handleInTableTooltipChange = (event, type, extData) =>
+	handleInTableTooltipChange = (event: React.SyntheticEvent, type: string, extData: number) =>
 	{
 		if(tooltipInTableValues.deleteRoleTokenButtonTooltip === type){
 			this.setState({
@@ -594,7 +709,7 @@ export default class R3PathInfoDialog extends React.Component
 		}
 	};
 
-	handleRoleTokenClipboardButtonTooltipChange = (event, isOpen) =>
+	handleRoleTokenClipboardButtonTooltipChange = (event: React.SyntheticEvent, isOpen: boolean) =>
 	{
 		this.setState({
 			tooltips: {
@@ -603,14 +718,14 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	};
 
-	handleRoleTokenClipboard(event)											// eslint-disable-line no-unused-vars
+	handleRoleTokenClipboard(event: React.MouseEvent<HTMLElement>)
 	{
-		if(r3IsEmptyEntityObject(this.roletokenInputElement, 'select') || !r3IsSafeTypedEntity(this.roletokenInputElement.select, 'function')){
+		if(r3IsEmptyEntityObject(this.roletokenInputElement, 'select') || !r3IsFunction(this.roletokenInputElement.select)){
 			return;
 		}
 		this.roletokenInputElement.select();		// select all text in text field
 		document.execCommand('copy');				// cpoy to clipboard
-		window.getSelection().removeAllRanges();	// unselect text
+		window.getSelection()?.removeAllRanges();	// unselect text
 		this.roletokenInputElement.blur();			// off furcus
 
 		this.setState({
@@ -620,7 +735,7 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleCopyClipboardButtonTooltipChange = (event, isOpen) =>
+	handleCopyClipboardButtonTooltipChange = (event: React.SyntheticEvent, isOpen: boolean) =>
 	{
 		this.setState({
 			tooltips: {
@@ -629,14 +744,14 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	};
 
-	handleCopyClipboard(event)												// eslint-disable-line no-unused-vars
+	handleCopyClipboard(event: React.MouseEvent<HTMLElement>)
 	{
-		if(r3IsEmptyEntityObject(this.codeInputElement, 'select') || !r3IsSafeTypedEntity(this.codeInputElement.select, 'function')){
+		if(r3IsEmptyEntityObject(this.codeInputElement, 'select') || !r3IsFunction(this.codeInputElement.select)){
 			return;
 		}
 		this.codeInputElement.select();				// select all text in text field
 		document.execCommand('copy');				// cpoy to clipboard
-		window.getSelection().removeAllRanges();	// unselect text
+		window.getSelection()?.removeAllRanges();	// unselect text
 		this.codeInputElement.blur();				// off furcus
 
 		this.setState({
@@ -646,10 +761,10 @@ export default class R3PathInfoDialog extends React.Component
 		});
 	}
 
-	handleCodeTypeChange(event)
+	handleCodeTypeChange(event: SelectChangeEvent<string>)
 	{
 		//let	key	= r3IsEmptyEntityObject(event.target, 'name') ? null : event.target.name;
-		let	newValue= r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
+		let	newValue: string | null = r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
 
 		if(r3IsEmptyString(newValue)){
 			console.warn('Changed new register code type is wrong.');
@@ -661,82 +776,96 @@ export default class R3PathInfoDialog extends React.Component
 		}
 
 		this.setState({
-			codeType:	newValue
+			codeType:	newValue!
 		});
 	}
 
 	//
 	// Get Role Token List
 	//
-	getRoleTokenList(callback)
+	getRoleTokenList(callback: DataCallback<RoleTokenInfo[]>)
 	{
 		const { r3provider } = this.props;
 
 		let	_callback	= callback;
 
-		r3provider.getRoleTokenList(this.props.tenant, this.props.currentpath, true, (error, resobj) =>
+		r3provider.getRoleTokenList(this.props.tenant!, this.props.currentpath, (error: Error | null, resobj: RoleTokenInfo[] | null) =>
 		{
 			if(null !== error){
 				console.info(error.message);
 				_callback(error, null);
 				return;
 			}
-			if(null === resobj){
-				error = new Error('Could not get role token list');
-				console.error(error.message);
-				_callback(error, null);
+			if(null === resobj || !r3IsArray(resobj) || !resobj.every((item: unknown) => isRoleTokenInfo(item))){
+				const err = new Error('Could not get role token list');
+				console.error(err.message);
+				_callback(err, null);
 				return;
 			}
 			_callback(null, resobj);
 		});
 	}
 
-	compareRoleToken = (token1, token2) =>
+	compareRoleToken = (token1: RoleTokenMetadata, token2: RoleTokenMetadata): number =>
 	{
-		let	result = this.state.roleTokenSortNormal ? 1 : -1;
-		if(r3IsEmptyString(token1[this.state.roleTokenSortKey]) && r3IsEmptyString(token2[this.state.roleTokenSortKey])){
-			result *= 0;
-		}else if(r3IsEmptyString(token1[this.state.roleTokenSortKey])){
-			result *= 1;
-		}else if(r3IsEmptyString(token2[this.state.roleTokenSortKey])){
-			result *= -1;
-		}else{
-			if(token1[this.state.roleTokenSortKey] > token2[this.state.roleTokenSortKey]){
+		let		result	= this.state.roleTokenSortNormal ? 1 : -1;
+		const	sortKey	= this.state.roleTokenSortKey;
+
+		if(r3HasKey(token1, sortKey) && r3HasKey(token2, sortKey)){
+			if(r3IsEmptyString(token1[sortKey]) && r3IsEmptyString(token2[sortKey])){
+				result *= 0;
+			}else if(r3IsEmptyString(token1[sortKey])){
 				result *= 1;
-			}else if(token1[this.state.roleTokenSortKey] < token2[this.state.roleTokenSortKey]){
+			}else if(r3IsEmptyString(token2[sortKey])){
 				result *= -1;
 			}else{
-				result *= 0;
+				if(token1[sortKey] > token2[sortKey]){
+					result *= 1;
+				}else if(token1[sortKey] < token2[sortKey]){
+					result *= -1;
+				}else{
+					result *= 0;
+				}
 			}
+		}else if(r3HasKey(token1, sortKey)){
+			result *= 1;
+		}else if(r3HasKey(token2, sortKey)){
+			result *= -1;
+		}else{
+			result *= 0;
 		}
 		return result;
 	};
 
-	sortRoleTokenList(roleTokens)
+	sortRoleTokenList(roleTokens: RoleTokenMetadata[] | null)
 	{
-		if(!r3IsSafeTypedEntity(roleTokens, 'array')){
+		if(!isRoleTokenMetadataArray(roleTokens)){
 			return;
 		}
 		roleTokens.sort(this.compareRoleToken);
 	}
 
-	complementRoleTokenList(roleTokens, newRoleToken)
+	cvtRoleTokenInfoToMetadata(detailRoleTokens: RoleTokenInfo[] | null, newRoleToken: string | null = null): RoleTokenMetadata[]
 	{
-		const { r3provider } = this.props;
+		const	{ r3provider }	= this.props;
 
-		if(!r3IsSafeTypedEntity(roleTokens, 'array')){
-			return;
+		const	unknownString	= r3provider.getR3TextRes().tResUnknownTimeUnit;
+		let		tokenMetadatas: RoleTokenMetadata[] = [];
+
+		if(!isRoleTokenInfoArray(detailRoleTokens)){
+			return tokenMetadatas;
 		}
 
-		let	unknownString = r3provider.getR3TextRes().tResUnknownTimeUnit;
-		for(let cnt = 0; cnt < roleTokens.length; ++cnt){
-			let	isNewToken		= r3CompareString(roleTokens[cnt].token, newRoleToken);
-			let	shortToken		= r3IsEmptyString(roleTokens[cnt].token) ? '...' : (roleTokens[cnt].token.slice(0, 8) + '...');
-			let	createTimeString= convertISOStringToLocaleString(roleTokens[cnt].date);
-			let	expireTimeString= convertISOStringToLocaleString(roleTokens[cnt].expire);
-			let	expireUnixTime	= getDiffTimeFromISOString(roleTokens[cnt].expire, roleTokens[cnt].date);
-			let	expireObject	= getDiffRoundStringFromISOString(roleTokens[cnt].expire, roleTokens[cnt].date);
-			let	expireString;
+		detailRoleTokens.forEach((tokenInfo: RoleTokenInfo) => {
+			const	_token				= tokenInfo.token;
+			const	isNewToken			= r3CompareString(tokenInfo.token, newRoleToken);
+			const	shortToken			= r3IsEmptyString(tokenInfo.token) ? '...' : (tokenInfo.token.slice(0, 8) + '...');
+			const	createTimeString	= convertISOStringToLocaleString(tokenInfo.date);
+			const	expireTimeString	= convertISOStringToLocaleString(tokenInfo.expire);
+			const	expireUnixTime		= getDiffTimeFromISOString(tokenInfo.expire, tokenInfo.date);
+			const	expireObject		= getDiffRoundStringFromISOString(tokenInfo.expire, tokenInfo.date);
+
+			let		expireString: string;
 			if(diffRoundType.days == expireObject.type){
 				expireString	= String(expireObject.value) + r3provider.getR3TextRes().tResDaysTimeUnit;
 			}else if(diffRoundType.hours == expireObject.type){
@@ -746,46 +875,56 @@ export default class R3PathInfoDialog extends React.Component
 			}else{	// diffRoundType.seconds == expireObject.type
 				expireString	= String(expireObject.value) + r3provider.getR3TextRes().tResSecondsTimeUnit;
 			}
-			let	dispTime		= (null == createTimeString ? unknownString : createTimeString) + ' ( ' + (null == expireTimeString ? unknownString : expireTimeString) + ' )';
-			let	codeUDS			= r3provider.getUserDataScript(roleTokens[cnt].registerpath);
-			let	codeSecretYaml	= r3provider.getSecretYaml(roleTokens[cnt].token);
-			let	codeSidecarYaml	= r3provider.getSidecarYaml(this.props.fullpath);
-			let	objCrc			= r3provider.getCRCObject(roleTokens[cnt].token, this.props.fullpath, roleTokens[cnt].registerpath);
+
+			const	dispTime			= (null == createTimeString ? unknownString : createTimeString) + ' ( ' + (null == expireTimeString ? unknownString : expireTimeString) + ' )';
+			const	codeUDS				= r3provider.getUserDataScript(tokenInfo.registerpath);
+			const	codeSecretYaml		= r3provider.getSecretYaml(tokenInfo.token);
+			const	codeSidecarYaml		= r3provider.getSidecarYaml(this.props.fullpath);
+			const	objCrc				= r3provider.getCRCObject(tokenInfo.token, this.props.fullpath, tokenInfo.registerpath);
 
 			// set
-			roleTokens[cnt].newToken		= isNewToken;
-			roleTokens[cnt].shortToken		= shortToken;
-			roleTokens[cnt].createTime		= (null == createTimeString ? unknownString : createTimeString);
-			roleTokens[cnt].expireUnixTime	= expireUnixTime;
-			roleTokens[cnt].expireTime		= expireString;
-			roleTokens[cnt].dispTime		= dispTime;
-			roleTokens[cnt].codeUDS			= codeUDS;
-			roleTokens[cnt].codeSecretYaml	= codeSecretYaml;
-			roleTokens[cnt].codeSidecarYaml	= codeSidecarYaml;
-			roleTokens[cnt].objCrc			= objCrc;
-		}
+			const	oneRoleToken: RoleTokenMetadata = {
+				token:				tokenInfo.token,
+				date:				tokenInfo.date,
+				expire:				tokenInfo.expire,
+				registerpath:		(r3IsString(tokenInfo?.registerpath) ? tokenInfo.registerpath : ''),
+				newToken:			isNewToken,
+				shortToken:			shortToken,
+				createTime:			(null == createTimeString ? unknownString : createTimeString),
+				expireUnixTime:		expireUnixTime,
+				expireTime:			expireString,
+				dispTime:			dispTime,
+				codeUDS:			codeUDS,
+				codeSecretYaml:		codeSecretYaml,
+				codeSidecarYaml:	codeSidecarYaml,
+				objCrc:				structuredClone(objCrc)
+			};
+
+			tokenMetadatas.push(oneRoleToken);
+		});
+		return tokenMetadatas;
 	}
 
 	//
 	// Get New Role Token
 	//
-	getNewRoleToken(expire, callback)
+	getNewRoleToken(expire: number | null, callback: (error: Error | null, resobj: RoleTokenPrimitiveInfo | null) => void)
 	{
 		const { r3provider } = this.props;
 
 		let	_callback	= callback;
 
-		r3provider.getNewRoleToken(this.props.tenant, this.props.currentpath, expire, (error, resobj) =>
+		r3provider.getNewRoleToken(this.props.tenant!, this.props.currentpath, expire, (error: Error | null, resobj: RoleTokenPrimitiveInfo | null) =>
 		{
 			if(null !== error){
 				console.info(error.message);
 				_callback(error, null);
 				return;
 			}
-			if(null === resobj || r3IsEmptyString(resobj.roleToken, true)){
-				error = new Error('Failed to create new role token');
-				console.error(error.message);
-				_callback(error, null);
+			if(!isRoleTokenPrimitiveInfo(resobj) || r3IsEmptyString(resobj.roleToken, true)){
+				const err = new Error('Failed to create new role token');
+				console.error(err.message);
+				_callback(err, null);
 				return;
 			}
 			_callback(null, resobj);
@@ -795,13 +934,13 @@ export default class R3PathInfoDialog extends React.Component
 	//
 	// Delete Role Token
 	//
-	deleteRoleToken(roletoken, callback)
+	deleteRoleToken(roletoken: string, callback: (error: Error | null) => void)
 	{
 		const { r3provider } = this.props;
 
 		let	_callback	= callback;
 
-		r3provider.deleteRoleToken(this.props.tenant, roletoken, (error) =>
+		r3provider.deleteRoleToken(this.props.tenant!, roletoken, (error: Error | null) =>
 		{
 			if(null !== error){
 				console.info(error.message);
@@ -829,7 +968,7 @@ export default class R3PathInfoDialog extends React.Component
 				</Typography>
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResRoleTokenManageTT }
-					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.manageRoleTokenButtonTooltip, 'boolean')) ? false : this.state.tooltips.manageRoleTokenButtonTooltip) }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.manageRoleTokenButtonTooltip)) ? false : this.state.tooltips.manageRoleTokenButtonTooltip) }
 				>
 					<Button
 						onClick={ this.handleManageRoleToken }
@@ -846,7 +985,7 @@ export default class R3PathInfoDialog extends React.Component
 				</Tooltip>
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResDispCodeNewRoleTokenTT }
-					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.dispCodeNewRoleTokenButtonTooltip, 'boolean')) ? false : this.state.tooltips.dispCodeNewRoleTokenButtonTooltip) }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.dispCodeNewRoleTokenButtonTooltip)) ? false : this.state.tooltips.dispCodeNewRoleTokenButtonTooltip) }
 				>
 					<Button
 						onClick={ this.handleDispCodeNewRoleToken }
@@ -869,7 +1008,7 @@ export default class R3PathInfoDialog extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		let	tenant;
+		let	tenant: React.ReactNode;
 		let	tenantKey = (
 			<Typography
 				{ ...theme.r3PathInfoDialog.keyTitle }
@@ -898,13 +1037,13 @@ export default class R3PathInfoDialog extends React.Component
 						{ ...theme.r3PathInfoDialog.value }
 						sx={ this.sxClasses.value }
 					>
-						{ this.props.tenant.display }
+						{ this.props.tenant!.display }
 					</Typography>
 				</React.Fragment>
 			);
 		}
 
-		let	serviceContents;
+		let	serviceContents: React.ReactNode;
 		if(!r3IsEmptyString(this.props.service)){
 			serviceContents = (
 				<React.Fragment>
@@ -924,7 +1063,7 @@ export default class R3PathInfoDialog extends React.Component
 			);
 		}
 
-		let	typeContents;
+		let	typeContents: React.ReactNode;
 		if(!r3IsEmptyString(this.props.type)){
 			typeContents = (
 				<React.Fragment>
@@ -944,7 +1083,7 @@ export default class R3PathInfoDialog extends React.Component
 			);
 		}
 
-		let	fullpathContents;
+		let	fullpathContents: React.ReactNode;
 		if(!r3IsEmptyString(this.props.fullpath)){
 			fullpathContents = (
 				<React.Fragment>
@@ -964,7 +1103,7 @@ export default class R3PathInfoDialog extends React.Component
 			);
 		}
 
-		let	roleTokenButtons;
+		let	roleTokenButtons: React.ReactNode;
 		if(!r3IsEmptyString(this.props.currentpath) && r3CompareCaseString(roleType, this.props.type) && r3IsEmptyString(this.props.service)){
 			roleTokenButtons = this.getActionToRoleTokenButtons();
 		}
@@ -983,7 +1122,7 @@ export default class R3PathInfoDialog extends React.Component
 	//---------------------------------------------------------
 	// render Manage Role Tokens Page
 	//---------------------------------------------------------
-	getManageRoleTokenInTableButtons(pos)
+	getManageRoleTokenInTableButtons(pos: number)
 	{
 		const { theme, r3provider } = this.props;
 
@@ -991,7 +1130,7 @@ export default class R3PathInfoDialog extends React.Component
 			<Box>
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResDeleteRoleTokenTT }
-					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteRoleTokenButtonTooltip, 'number') || (this.state.tooltips.deleteRoleTokenButtonTooltip != pos)) ? false : true) }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.deleteRoleTokenButtonTooltip) || (this.state.tooltips.deleteRoleTokenButtonTooltip != pos)) ? false : true) }
 				>
 					<Button
 						onClick={ (event) => this.handleDeleteRoleToken(event, pos) }
@@ -1006,7 +1145,7 @@ export default class R3PathInfoDialog extends React.Component
 
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResDispCodeButtonTT }
-					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.dispCodeButtonTooltip, 'number') || (this.state.tooltips.dispCodeButtonTooltip != pos)) ? false : true) }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.dispCodeButtonTooltip) || (this.state.tooltips.dispCodeButtonTooltip != pos)) ? false : true) }
 				>
 					<Button
 						onClick={ (event) => this.handleDispCode(event, pos) }
@@ -1094,7 +1233,7 @@ export default class R3PathInfoDialog extends React.Component
 						<React.Fragment>
 							<Tooltip
 								title={ r3provider.getR3TextRes().tResAddRoleTokenTT }
-								open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.newRoleTokenButtonTooltip, 'boolean')) ? false : this.state.tooltips.newRoleTokenButtonTooltip) }
+								open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.newRoleTokenButtonTooltip)) ? false : this.state.tooltips.newRoleTokenButtonTooltip) }
 							>
 								<Button
 									onClick={ this.handleNewRoleToken }
@@ -1154,14 +1293,14 @@ export default class R3PathInfoDialog extends React.Component
 	{
 		const { theme } = this.props;
 
-		if(!r3IsSafeTypedEntity(this.state.roleTokenList, 'array')){
+		if(!r3IsArray(this.state.roleTokenList)){
 			return;
 		}
 		let	roleTokens = this.state.roleTokenList;
 
 		return (
 			<TableBody>
-				{roleTokens.map( (item, pos) => {
+				{roleTokens.map( (item: RoleTokenMetadata, pos: number) => {
 					if(pos < (this.state.manageRoleTokenPageNum * this.props.tableRawCount) || ((this.state.manageRoleTokenPageNum + 1) * this.props.tableRawCount) <= pos){
 						return;
 					}
@@ -1190,11 +1329,11 @@ export default class R3PathInfoDialog extends React.Component
 							>
 								<Tooltip
 									title={ item.expire }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.detailCreateTimeTooltip, 'number') || (this.state.tooltips.detailCreateTimeTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.detailCreateTimeTooltip) || (this.state.tooltips.detailCreateTimeTooltip != pos)) ? false : true) }
 								>
 									<Typography
-										onMouseEnter={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.detailCreateTimeTooltip, pos) }
-										onMouseLeave={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.detailCreateTimeTooltip, -1) }
+										onMouseEnter={ (event: React.MouseEvent<HTMLElement>) => this.handleInTableTooltipChange(event, tooltipInTableValues.detailCreateTimeTooltip, pos) }
+										onMouseLeave={ (event: React.MouseEvent<HTMLElement>) => this.handleInTableTooltipChange(event, tooltipInTableValues.detailCreateTimeTooltip, -1) }
 										{ ...textTheme }
 										sx={ textCalsses }
 									>
@@ -1207,11 +1346,11 @@ export default class R3PathInfoDialog extends React.Component
 							>
 								<Tooltip
 									title={ item.expire }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.detailExpireTimeTooltip, 'number') || (this.state.tooltips.detailExpireTimeTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.detailExpireTimeTooltip) || (this.state.tooltips.detailExpireTimeTooltip != pos)) ? false : true) }
 								>
 									<Typography
-										onMouseEnter={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.detailExpireTimeTooltip, pos) }
-										onMouseLeave={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.detailExpireTimeTooltip, -1) }
+										onMouseEnter={ (event: React.MouseEvent<HTMLElement>) => this.handleInTableTooltipChange(event, tooltipInTableValues.detailExpireTimeTooltip, pos) }
+										onMouseLeave={ (event: React.MouseEvent<HTMLElement>) => this.handleInTableTooltipChange(event, tooltipInTableValues.detailExpireTimeTooltip, -1) }
 										{ ...textTheme }
 										sx={ textCalsses }
 									>
@@ -1224,12 +1363,12 @@ export default class R3PathInfoDialog extends React.Component
 							>
 								<Tooltip
 									title={ item.token }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.detailRoleTokenTooltip, 'number') || (this.state.tooltips.detailRoleTokenTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.detailRoleTokenTooltip) || (this.state.tooltips.detailRoleTokenTooltip != pos)) ? false : true) }
 									slotProps={{ popper: { sx: this.sxClasses.wordBreakTooltip } }}
 								>
 									<Typography
-										onMouseEnter={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.detailRoleTokenTooltip, pos) }
-										onMouseLeave={ event => this.handleInTableTooltipChange(event, tooltipInTableValues.detailRoleTokenTooltip, -1) }
+										onMouseEnter={ (event: React.MouseEvent<HTMLElement>) => this.handleInTableTooltipChange(event, tooltipInTableValues.detailRoleTokenTooltip, pos) }
+										onMouseLeave={ (event: React.MouseEvent<HTMLElement>) => this.handleInTableTooltipChange(event, tooltipInTableValues.detailRoleTokenTooltip, -1) }
 										{ ...textTheme }
 										sx={ textCalsses }
 									>
@@ -1248,7 +1387,7 @@ export default class R3PathInfoDialog extends React.Component
 	{
 		const { theme } = this.props;
 
-		if(!r3IsSafeTypedEntity(this.state.roleTokenList, 'array')){
+		if(!r3IsArray(this.state.roleTokenList)){
 			return;
 		}
 
@@ -1294,7 +1433,7 @@ export default class R3PathInfoDialog extends React.Component
 				<TextField
 					name={ roletokenTextFieldName }
 					value={ this.state.selectedRoleToken }
-					inputRef = { (element) => { this.roletokenInputElement = element; } } 
+					inputRef = { (element) => { this.roletokenInputElement = element; } }
 					slotProps ={{
 						input: {		sx: this.sxClasses.roletokenInputTextField	},
 						htmlInput: {	style: { padding: 0 }						}
@@ -1304,7 +1443,7 @@ export default class R3PathInfoDialog extends React.Component
 				/>
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResCopyClipboardTT }
-					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.roletokenClipboardButtonTooltip, 'boolean')) ? false : this.state.tooltips.roletokenClipboardButtonTooltip) }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.roletokenClipboardButtonTooltip)) ? false : this.state.tooltips.roletokenClipboardButtonTooltip) }
 				>
 					<Button
 						onClick={ this.handleRoleTokenClipboard }
@@ -1339,14 +1478,14 @@ export default class R3PathInfoDialog extends React.Component
 			</React.Fragment>
 		);
 
-		let	codeText = null;
-		if(codeTypeValues.crcObject == this.state.codeType.substr(0, codeTypeValues.crcObject.length)){
-			let	_crcKey = this.state.codeType.substr(codeTypeValues.crcObject.length);
-			if(r3IsSafeTypedEntity(this.state.objCrc[_crcKey], 'object') && !r3IsSafeTypedEntity(this.state.objCrc[_crcKey], 'array')){
+		let	codeText: string | null = null;
+		if(codeTypeValues.crcObject == this.state.codeType.substring(0, codeTypeValues.crcObject.length)){
+			let	_crcKey = this.state.codeType.substring(codeTypeValues.crcObject.length);
+			if(r3IsObject((this.state.objCrc)[_crcKey]) && !r3IsArray((this.state.objCrc)[_crcKey])){
 				codeText = '';
-				let	_crcSubobj = this.state.objCrc[_crcKey];
-				Object.keys(_crcSubobj).forEach(function(subobjkey){
-					if(0 < codeText.length){
+				let	_crcSubobj: StringValObj = (this.state.objCrc)[_crcKey];
+				Object.keys(_crcSubobj).forEach((subobjkey: string) => {
+					if(0 < codeText!.length){
 						codeText += '\n';
 					}
 					codeText += subobjkey;
@@ -1367,7 +1506,7 @@ export default class R3PathInfoDialog extends React.Component
 
 		// make select items
 		let	_margedCodeType = r3DeepClone(codeType);
-		Object.keys(this.state.objCrc).forEach(function(crcKey){
+		Object.keys(this.state.objCrc).forEach((crcKey: string) => {
 			_margedCodeType.push({
 				name:	crcKey,
 				value:	codeTypeValues.crcObject + crcKey
@@ -1391,7 +1530,7 @@ export default class R3PathInfoDialog extends React.Component
 					sx={ this.sxClasses.codeTypeSelect }
 				>
 					{
-						_margedCodeType.map( (item, pos) => {
+						_margedCodeType.map( (item: { name: string; value: string }, pos: number) => {
 							return (
 								<MenuItem
 									key={ pos }
@@ -1415,7 +1554,7 @@ export default class R3PathInfoDialog extends React.Component
 
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResCopyClipboardTT }
-					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.copyClipboardButtonTooltip, 'boolean')) ? false : this.state.tooltips.copyClipboardButtonTooltip) }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.copyClipboardButtonTooltip)) ? false : this.state.tooltips.copyClipboardButtonTooltip) }
 				>
 					<Button
 						onClick={ this.handleCopyClipboard }
@@ -1449,7 +1588,7 @@ export default class R3PathInfoDialog extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		if(!r3IsSafeTypedEntity(this.state.stackedPreviousPages, 'array') || 0 == this.state.stackedPreviousPages.length){
+		if(!r3IsArray(this.state.stackedPreviousPages) || 0 == this.state.stackedPreviousPages.length){
 			return;
 		}
 
@@ -1474,9 +1613,9 @@ export default class R3PathInfoDialog extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		let	title;
-		let contents;
-		let	backpagebutton;
+		let	title:			string;
+		let contents:		React.ReactNode;
+		let	backpagebutton:	React.ReactNode;
 		if(pageTypeValues.pageManageRoleToken == this.state.pageType){
 			title			= r3provider.getR3TextRes().tResRoleTokenDialogTitle;
 			contents		= this.renderManageRoleToken();
@@ -1522,7 +1661,7 @@ export default class R3PathInfoDialog extends React.Component
 				<DialogActions>
 					{ backpagebutton }
 					<Button
-						onClick={ (event, reason) => this.handleClose(event, reason) }
+						onClick={ (event) => this.handleClose(event, 'buttonClick') }
 						{ ...theme.r3PathInfoDialog.button }
 						sx={ this.sxClasses.button }
 					>

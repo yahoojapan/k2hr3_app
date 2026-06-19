@@ -19,25 +19,101 @@
  *
  */
 
-import { kwApiHostForUD, kwIncludePathForUD, kwRoleTokenForSecret, kwRawRoleToken, kwRoleTokenForRoleYrn, signinUnknownType, signinUnscopedToken, signinCredential }	from '../util/r3types';
-import { r3ConvertFromJSON, r3UnescapeHTML, r3CompareCaseString, r3IsEmptyString, r3IsEmptyEntity, r3IsSafeTypedEntity, r3IsEmptyEntityObject, r3DeepClone }			from '../util/r3util';
+import { kwApiHostForUD, kwIncludePathForUD, kwRoleTokenForSecret, kwRawRoleToken, kwRoleTokenForRoleYrn, signinUnknownType, SigninType, isSigninType, CRCObject, isCRCObject, StringValObj, isSignMinUrlEntry, isSignMinUrls, isSignUrlEntry, isSignUrls, SignUrlEntry, SignUrls }	from '../util/r3types';
+import { r3IsObject, r3IsString, r3IsBoolean, r3IsNumber, r3IsArray, r3ConvertFromJSON, r3UnescapeHTML, r3IsEmptyString, r3IsEmptyEntity, r3IsEmptyEntityObject, r3GetDecNumber, r3DeepClone }	from '../util/r3util';
+
+//
+// Types
+//
+// [NOTE]
+// K2hr3Global needs to be referenced from the test's setupGlobals.ts file,
+// so we export it.
+//
+export type K2hr3Global = {
+	r3apischeme?:		string;
+	r3apihost?:			string;
+	r3apiport?:			number | string;
+	r3appmenu?:			string;
+	r3userdata?:		string;
+	r3secretyaml?:		string;
+	r3sidecaryaml?:		string;
+	r3crcobj?:			string;
+	signintype?:		string;
+	signinurl?:			string;
+	signouturl?:		string;
+	configname?:		string;
+	uselocaltenant?:	boolean;
+	lang?:				string;
+	dbgheader?:			string;
+	dbgvalue?:			string;
+	dbgresheader?:		string;
+	errormsg?:			string;
+	username?:			string;
+	unscopedtoken?:		string;
+};
+
+type AppMenuItem = {
+	name:				string;
+	url:				string;
+};
+
+type R3GlobalObj = {
+	apischeme:			string;
+	apihost:			string;
+	apiport:			number;
+	appmenu:			AppMenuItem[] | null;
+	userdata:			string | null;
+	secretyaml:			string | null;
+	sidecaryaml:		string | null;
+	crcobj:				CRCObject;
+	login:				boolean;
+	username:			string;
+	unscopedtoken:		string;
+	signintype:			SigninType;
+	signinurl:			SignUrls;
+	signouturl:			SignUrls;
+	configname:			string | null;
+	uselocaltenant:		boolean;
+	lang:				string;
+	dbgheader:			string;
+	dbgvalue:			string;
+	dbgresheader:		string;
+	errormsg:			string | null;
+};
+
+//
+// Type checker
+//
+const isAppMenuItemArray = (obj: unknown): obj is AppMenuItem[] => {
+	if(!r3IsArray(obj)){
+		return false;
+	}
+	return obj.every((item) => {
+		return r3IsObject(item) && r3IsString(item.name) && r3IsString(item.url);
+	});
+};
+
+//
+// Declare
+//
+declare const k2hr3global: K2hr3Global;
 
 //
 // Load Global object for K2HR3 Context
 //
-const r3GlobalObject = (function()
+const r3GlobalObject: R3GlobalObj = (() =>
 {
 	//
 	// K2HR3 global variables from k2hr3global which is the only global variable.
 	//
-	let	r3globaltmp	= k2hr3global;										// eslint-disable-line no-undef
+	const r3globaltmp: K2hr3Global = k2hr3global;
 
 	// global app menu
-	let	_appmenu = null;
-	if(!r3IsEmptyEntity(r3globaltmp.r3appmenu)){
-		let	_decodemenu	= unescape(r3globaltmp.r3appmenu);				// decode
-		let	_objmenu	= r3ConvertFromJSON(_decodemenu);				// parse
-		if(r3IsSafeTypedEntity(_objmenu, 'array') && 0 < _objmenu.length){
+	let	_appmenu: AppMenuItem[] | null = null;
+	if(!r3IsEmptyEntity(r3globaltmp) && r3IsString(r3globaltmp.r3appmenu)){
+		const _decodemenu	= unescape(r3globaltmp.r3appmenu);
+		const _objmenu		= r3ConvertFromJSON(_decodemenu);
+		if(isAppMenuItemArray(_objmenu) && 0 < _objmenu.length){
 			_appmenu = _objmenu;
 		}else{
 			console.info('There is no application global menu.');
@@ -47,11 +123,11 @@ const r3GlobalObject = (function()
 	}
 
 	// user script
-	let	_userdata = null;
-	if(!r3IsEmptyEntity(r3globaltmp.r3userdata)){
-		let	_decodeuserdata	= unescape(r3globaltmp.r3userdata);			// decode
-		let	_templuserdata	= r3ConvertFromJSON(_decodeuserdata);		// parse
-		if(r3IsSafeTypedEntity(_templuserdata, 'string')){
+	let	_userdata: string | null = null;
+	if(!r3IsEmptyEntity(r3globaltmp) && r3IsString(r3globaltmp.r3userdata)){
+		const _decodeuserdata	= unescape(r3globaltmp.r3userdata);
+		const _templuserdata	= r3ConvertFromJSON(_decodeuserdata);
+		if(r3IsString(_templuserdata) && !r3IsEmptyString(_templuserdata)){
 			_userdata = _templuserdata;
 		}else{
 			console.info('There is no user script template.');
@@ -61,11 +137,11 @@ const r3GlobalObject = (function()
 	}
 
 	// secret yaml
-	let	_secretyaml = null;
-	if(!r3IsEmptyEntity(r3globaltmp.r3secretyaml)){
-		let	_decodesecretyaml	= unescape(r3globaltmp.r3secretyaml);	// decode
-		let	_templsecretyaml	= r3ConvertFromJSON(_decodesecretyaml);	// parse
-		if(r3IsSafeTypedEntity(_templsecretyaml, 'string')){
+	let	_secretyaml: string | null = null;
+	if(!r3IsEmptyEntity(r3globaltmp) && r3IsString(r3globaltmp.r3secretyaml)){
+		const _decodesecretyaml	= unescape(r3globaltmp.r3secretyaml);
+		const _templsecretyaml	= r3ConvertFromJSON(_decodesecretyaml);
+		if(r3IsString(_templsecretyaml) && !r3IsEmptyString(_templsecretyaml)){
 			_secretyaml = _templsecretyaml;
 		}else{
 			console.info('There is no secret yaml template.');
@@ -75,11 +151,11 @@ const r3GlobalObject = (function()
 	}
 
 	// sidecar yaml
-	let	_sidecaryaml = null;
-	if(!r3IsEmptyEntity(r3globaltmp.r3sidecaryaml)){
-		let	_decodesidecaryaml	= unescape(r3globaltmp.r3sidecaryaml);	// decode
-		let	_templsidecaryaml	= r3ConvertFromJSON(_decodesidecaryaml);// parse
-		if(r3IsSafeTypedEntity(_templsidecaryaml, 'string')){
+	let	_sidecaryaml: string | null = null;
+	if(!r3IsEmptyEntity(r3globaltmp) && r3IsString(r3globaltmp.r3sidecaryaml)){
+		const _decodesidecaryaml	= unescape(r3globaltmp.r3sidecaryaml);
+		const _templsidecaryaml		= r3ConvertFromJSON(_decodesidecaryaml);
+		if(r3IsString(_templsidecaryaml) && !r3IsEmptyString(_templsidecaryaml)){
 			_sidecaryaml = _templsidecaryaml;
 		}else{
 			console.info('There is no sidecar yaml template.');
@@ -89,74 +165,147 @@ const r3GlobalObject = (function()
 	}
 
 	// custom registration codes
-	let	_crcobj = {};
-	if(!r3IsEmptyEntity(r3globaltmp.r3crcobj)){
-		let	_decodecrcobj	= unescape(r3globaltmp.r3crcobj);			// decode
-		let	_objcrcobj		= r3ConvertFromJSON(_decodecrcobj);			// parse
-
-		if(r3IsSafeTypedEntity(_objcrcobj, 'object')){
-			Object.keys(_objcrcobj).forEach(function(key){
-				let	_tmporgobj	= _objcrcobj[key];
-				let	_tmpobj		= {};
-
-				if(r3IsSafeTypedEntity(_tmporgobj, 'object')){
-					Object.keys(_tmporgobj).forEach(function(subkey){
-						if(r3IsSafeTypedEntity(_tmporgobj[subkey], 'string')){
-							_tmpobj[subkey] = _tmporgobj[subkey];
-						}else{
-							console.warn('object(' + subkey + ') in crcobj(' + key + ') is not string, skip it.');
-						}
-					});
-				}else{
-					console.warn('crcobj(' + key + ') entity is not object, skip it.');
-				}
-				if(0 < Object.keys(_tmpobj).length){
-					_crcobj[key] = _tmpobj;
-				}else{
-					console.warn('crcobj(' + key + ') entity is empty, skip it.');
-				}
-			});
+	let _crcobj: CRCObject = {};
+	if(!r3IsEmptyEntity(r3globaltmp) && r3IsString(r3globaltmp.r3crcobj)){
+		const _decodecrcobj	= unescape(r3globaltmp.r3crcobj);
+		const _objcrcobj	= r3ConvertFromJSON(_decodecrcobj);
+		if(isCRCObject(_objcrcobj)){
+			_crcobj = r3DeepClone(_objcrcobj);
 		}else{
-			console.info('There is no crcobj.');
+			console.info('Something wrong in crcobj.');
 		}
 	}else{
 		console.info('There is no crcobj.');
 	}
 
 	// signinurl
-	let	_signinurl = null;
-	if(!r3IsEmptyEntity(r3globaltmp.signinurl)){
-		let	_signinurljson	= unescape(r3globaltmp.signinurl);		// decode
-		let	_signinurlobj	= r3ConvertFromJSON(_signinurljson);	// parse
-		if(!r3IsEmptyEntity(_signinurlobj)){
-			_signinurl = r3DeepClone(_signinurlobj);
+	let	_signinurl: SignUrls = {};
+	if(!r3IsEmptyEntity(r3globaltmp) && r3IsString(r3globaltmp.signinurl)){
+		const _signinurljson	= unescape(r3globaltmp.signinurl);
+		const _signinurlobj		= r3ConvertFromJSON(_signinurljson);
+		if(null === _signinurlobj){
+			if(r3IsString(_signinurljson)){							// Case: string(not json)
+				_signinurl	= {
+					'signin_default': {
+						url:		_signinurljson,
+						display:	'Sign in'
+					}
+				};
+			}else if(null === _signinurljson){						// Case: null(not json)
+				console.info('signinurl is null, so not set signinurl object.');
+			}else{													// Case: unknown
+				console.info('signinurl is unknown format.');
+			}
 		}else{
-			console.info('signinurl object is not safe object.');
+			if(isSignUrls(_signinurlobj)){							// Case: SignUrls Object(json)
+				_signinurl = r3DeepClone(_signinurlobj);
+			}else if(isSignMinUrls(_signinurlobj)){					// Case: SignMinUrls Object(json)
+				_signinurl = Object.fromEntries(
+					Object.entries(_signinurlobj).map(([key, entry]) => {
+						const oneEntry: SignUrlEntry = {
+							url:		entry.url,
+							display:	((r3IsString(entry?.display) && r3IsEmptyString(entry.display)) ? entry.display : 'Sign in')
+						};
+						return [key, oneEntry];
+					})
+				);
+			}else if(isSignUrlEntry(_signinurlobj)){				// Case: one SignUrlEntry Object(json)
+				const	_onesignin = r3DeepClone(_signinurlobj);
+				_signinurl	= {
+					'signin_default':	_onesignin
+				};
+			}else if(isSignMinUrlEntry(_signinurlobj)){				// Case: one SignMinUrlEntry Object(json)
+				const	_onesignin: SignUrlEntry = {
+					url:		_signinurlobj.url,
+					display:	((r3IsString(_signinurlobj?.display) && r3IsEmptyString(_signinurlobj.display)) ? _signinurlobj.display : 'Sign in')
+				};
+				_signinurl = {
+					'signin_default':	_onesignin
+				};
+			}else if(r3IsString(_signinurlobj)){					// Case: string(not json)
+				_signinurl	= {
+					'signin_default': {
+						url:		_signinurlobj,
+						display:	'Sign in'
+					}
+				};
+			}else if(null === _signinurlobj){						// Case: null(json)
+				console.info('signinurl is null, so not set signinurl object.');
+			}else{													// Case: unknown
+				console.info('signinurl object is unknown format.');
+			}
 		}
 	}else{
 		console.info('There is no signinurl object.');
 	}
 
 	// signouturl
-	let	_signouturl = null;
-	if(!r3IsEmptyEntity(r3globaltmp.signouturl)){
-		let	_signouturljson	= unescape(r3globaltmp.signouturl);		// decode
-		let	_signouturlobj	= r3ConvertFromJSON(_signouturljson);	// parse
-		if(!r3IsEmptyEntity(_signouturlobj)){
-			_signouturl = r3DeepClone(_signouturlobj);
+	let	_signouturl: SignUrls = {};
+	if(!r3IsEmptyEntity(r3globaltmp) && r3IsString(r3globaltmp.signouturl)){
+		const _signouturljson	= unescape(r3globaltmp.signouturl);
+		const _signouturlobj	= r3ConvertFromJSON(_signouturljson);
+		if(null === _signouturlobj){
+			if(r3IsString(_signouturljson)){						// Case: string(not json)
+				_signouturl	= {
+					'signout_default': {
+						url:		_signouturljson,
+						display:	'Sign out'
+					}
+				};
+			}else if(null === _signouturljson){						// Case: null(not json)
+				console.info('signouturl is null, so not set signouturl object.');
+			}else{													// Case: unknown
+				console.info('signouturl is unknown format.');
+			}
 		}else{
-			console.info('signouturl object is not safe object.');
+			if(isSignUrls(_signouturlobj)){							// Case: SignUrls Object(json)
+				_signouturl = r3DeepClone(_signouturlobj);
+			}else if(isSignMinUrls(_signouturlobj)){				// Case: SignMinUrls Object(json)
+				_signouturl = Object.fromEntries(
+					Object.entries(_signouturlobj).map(([key, entry]) => {
+						const oneEntry: SignUrlEntry = {
+							url:		entry.url,
+							display:	((r3IsString(entry?.display) && r3IsEmptyString(entry.display)) ? entry.display : 'Sign out')
+						};
+						return [key, oneEntry];
+					})
+				);
+			}else if(isSignUrlEntry(_signouturlobj)){				// Case: one SignUrlEntry Object(json)
+				const	_onesignout = r3DeepClone(_signouturlobj);
+				_signouturl	= {
+					'signout_default':	_onesignout
+				};
+			}else if(isSignMinUrlEntry(_signouturlobj)){			// Case: one SignMinUrlEntry Object(json)
+				const	_onesignout: SignUrlEntry = {
+					url:		_signouturlobj.url,
+					display:	((r3IsString(_signouturlobj?.display) && r3IsEmptyString(_signouturlobj.display)) ? _signouturlobj.display : 'Sign out')
+				};
+				_signouturl	= {
+					'signout_default':	_onesignout
+				};
+			}else if(r3IsString(_signouturlobj)){					// Case: string(not json)
+				_signouturl	= {
+					'signout_default': {
+						url:		_signouturlobj,
+						display:	'Sign out'
+					}
+				};
+			}else if(null === _signouturlobj){						// Case: null(json)
+				console.info('signouturl is null, so not set signouturl object.');
+			}else{													// Case: unknown
+				console.info('signouturl object is unknown format.');
+			}
 		}
 	}else{
 		console.info('There is no signouturl object.');
 	}
 
 	// configname
-	let	_configname = null;
-	if(!r3IsEmptyEntity(r3globaltmp.configname)){
-		let	_confignamejson	= unescape(r3globaltmp.configname);		// decode
-		let	_confignamestr	= r3ConvertFromJSON(_confignamejson);	// parse
-		if(!r3IsEmptyString(_confignamestr)){
+	let	_configname: string | null = null;
+	if(!r3IsEmptyEntity(r3globaltmp) && r3IsString(r3globaltmp.configname)){
+		const _confignamejson	= unescape(r3globaltmp.configname);
+		const _confignamestr	= r3ConvertFromJSON(_confignamejson);
+		if(r3IsString(_confignamestr) && !r3IsEmptyString(_confignamestr)){
 			_configname = _confignamestr;
 		}else{
 			console.info('configname is not safe string.');
@@ -166,10 +315,10 @@ const r3GlobalObject = (function()
 	}
 
 	// default object values
-	let	r3globalobj	= {
-		apischeme:		(r3IsEmptyString(r3globaltmp.r3apischeme)	? '' : r3globaltmp.r3apischeme),
-		apihost:		(r3IsEmptyString(r3globaltmp.r3apihost)		? '' : r3globaltmp.r3apihost),
-		apiport:		((r3IsEmptyEntity(r3globaltmp.r3apiport) || isNaN(r3globaltmp.r3apiport)) ? 0 : r3globaltmp.r3apiport),
+	const r3globalobj: R3GlobalObj = {
+		apischeme:		((r3IsEmptyEntity(r3globaltmp) || !r3IsString(r3globaltmp.r3apischeme)	|| r3IsEmptyString(r3globaltmp.r3apischeme))	? '' : r3globaltmp.r3apischeme),
+		apihost:		((r3IsEmptyEntity(r3globaltmp) || !r3IsString(r3globaltmp.r3apihost)	|| r3IsEmptyString(r3globaltmp.r3apihost))		? '' : r3globaltmp.r3apihost),
+		apiport:		(r3IsEmptyEntity(r3globaltmp) ? 0 : r3GetDecNumber(r3globaltmp.r3apiport)),
 		appmenu:		_appmenu,
 		userdata:		_userdata,
 		secretyaml:		_secretyaml,
@@ -178,39 +327,64 @@ const r3GlobalObject = (function()
 		login:			false,
 		username:		'',
 		unscopedtoken:	'',
-		signintype:		(r3CompareCaseString(r3globaltmp.signintype, signinUnscopedToken) ? signinUnscopedToken : r3CompareCaseString(r3globaltmp.signintype, signinCredential) ? signinCredential : signinUnknownType),
+		signintype:		(r3IsEmptyEntity(r3globaltmp) ? signinUnknownType : isSigninType(r3globaltmp.signintype) ? r3globaltmp.signintype : signinUnknownType),
 		signinurl:		_signinurl,
 		signouturl:		_signouturl,
 		configname:		_configname,
-		uselocaltenant:	(r3IsEmptyEntity(r3globaltmp.uselocaltenant) ? true : r3globaltmp.uselocaltenant),
-		lang:			(r3IsEmptyString(r3globaltmp.lang)			? 'en'	: r3globaltmp.lang),
-		dbgheader:		(r3IsEmptyString(r3globaltmp.dbgheader)		? ''	: r3globaltmp.dbgheader),
-		dbgvalue:		(r3IsEmptyString(r3globaltmp.dbgvalue)		? ''	: r3globaltmp.dbgvalue),
-		dbgresheader:	(r3IsEmptyString(r3globaltmp.dbgresheader)	? ''	: r3globaltmp.dbgresheader),
-		errormsg:		(r3IsEmptyString(r3globaltmp.errormsg)		? null	: r3globaltmp.errormsg)
+		uselocaltenant:	((r3IsEmptyEntity(r3globaltmp) || !r3IsBoolean(r3globaltmp.uselocaltenant))												? true	: r3globaltmp.uselocaltenant),
+		lang:			((r3IsEmptyEntity(r3globaltmp) || !r3IsString(r3globaltmp.lang) 		|| r3IsEmptyString(r3globaltmp.lang))			? 'en'	: r3globaltmp.lang),
+		dbgheader:		((r3IsEmptyEntity(r3globaltmp) || !r3IsString(r3globaltmp.dbgheader)	|| r3IsEmptyString(r3globaltmp.dbgheader))		? ''	: r3globaltmp.dbgheader),
+		dbgvalue:		((r3IsEmptyEntity(r3globaltmp) || !r3IsString(r3globaltmp.dbgvalue)		|| r3IsEmptyString(r3globaltmp.dbgvalue))		? ''	: r3globaltmp.dbgvalue),
+		dbgresheader:	((r3IsEmptyEntity(r3globaltmp) || !r3IsString(r3globaltmp.dbgresheader)	|| r3IsEmptyString(r3globaltmp.dbgresheader))	? ''	: r3globaltmp.dbgresheader),
+		errormsg:		((r3IsEmptyEntity(r3globaltmp) || !r3IsString(r3globaltmp.errormsg)		|| r3IsEmptyString(r3globaltmp.errormsg))		? null	: r3globaltmp.errormsg)
 	};
 
 	if(	!r3IsEmptyEntity(r3globaltmp)				&&
+		r3IsString(r3globaltmp.username)			&&
 		!r3IsEmptyString(r3globaltmp.username)		&&
+		r3IsString(r3globaltmp.unscopedtoken)		&&
 		!r3IsEmptyString(r3globaltmp.unscopedtoken)	)
 	{
 		r3globalobj.login			= true;
 		r3globalobj.username		= r3globaltmp.username;
 		r3globalobj.unscopedtoken	= r3globaltmp.unscopedtoken;
 	}
+
 	return r3globalobj;
-}());
+})();
 
 //
 // K2HR3 Context Class
 //
 export default class R3Context
 {
+	apischeme:			string;
+	apihost:			string;
+	apiport:			number;
+	appmenu:			AppMenuItem[] | null;
+	userdata:			string | null;
+	secretyaml:			string | null;
+	sidecaryaml:		string | null;
+	crcobj:				CRCObject;
+	signintype:			SigninType;
+	signinurl:			SignUrls;
+	signouturl:			SignUrls;
+	configname:			string | null;
+	uselocaltenant:		boolean;
+	lang:				string;
+	dbgHeaderName:		string;
+	dbgHeaderValue:		string;
+	dbgResHeaderName:	string;
+	errormsg:			string | null;
+	login:				boolean;
+	user:				string;
+	unscopedUserToken:	string;
+
 	// [NOTE]
 	// If signin parameter is undefined(null), it is just after loading(initializing) application.
 	// When user is signin/out, this parameter is not undefined(null).
 	//
-	constructor(signin, username, unscopedtoken)
+	constructor(signin?: boolean, username?: string, unscopedtoken?: string)
 	{
 		this.apischeme			= r3GlobalObject.apischeme;		// k2hr3 api scheme
 		this.apihost			= r3GlobalObject.apihost;		// k2hr3 api hostname
@@ -232,89 +406,91 @@ export default class R3Context
 		this.errormsg			= r3GlobalObject.errormsg;		// Error message
 
 		// User name and Unscoped User Token
-		if(	r3IsSafeTypedEntity(signin, 'boolean')	&&
-			!r3IsEmptyString(username)				&&
-			!r3IsEmptyString(unscopedtoken)			)
+		if(	r3IsBoolean(signin)				&&
+			r3IsString(username)			&&
+			!r3IsEmptyString(username)		&&
+			r3IsString(unscopedtoken)		&&
+			!r3IsEmptyString(unscopedtoken)	)
 		{
 			this.login					= true;							// Signed in
 			this.user					= username;						// Using parameter
-			this.unscopedUserToken		= unscopedtoken;				// 
+			this.unscopedUserToken		= unscopedtoken;				//
 		}else{
-			if(r3IsSafeTypedEntity(signin, 'boolean')){
+			if(r3IsBoolean(signin)){
 				this.login				= false;						// Signed out
-				this.user				= '';							// 
-				this.unscopedUserToken	= '';							// 
+				this.user				= '';							//
+				this.unscopedUserToken	= '';							//
 			}else{
-				this.login				= r3GlobalObject.login;			// login / logout
+				this.login				= r3GlobalObject.login;			// Singed in/out
 				this.user				= r3GlobalObject.username;		// Using configuration
-				this.unscopedUserToken	= r3GlobalObject.unscopedtoken;	// 
+				this.unscopedUserToken	= r3GlobalObject.unscopedtoken;	//
 			}
 		}
 	}
 
-	getApiScheme()
+	getApiScheme():	string
 	{
 		return this.apischeme;
 	}
 
-	getSafeApiScheme()
+	getSafeApiScheme():	string
 	{
 		return (r3IsEmptyString(this.apischeme) ? 'http' : this.apischeme);
 	}
 
-	getApiHost()
+	getApiHost(): string
 	{
 		return this.apihost;
 	}
 
-	getSafeApiHost()
+	getSafeApiHost(): string
 	{
 		return (r3IsEmptyString(this.apihost) ? 'localhost' : this.apihost);
 	}
 
-	getApiPort()
+	getApiPort(): number
 	{
 		return this.apiport;
 	}
 
-	getSafeApiPort()
+	getSafeApiPort(): number
 	{
-		return ((r3IsEmptyEntity(this.apiport) || isNaN(this.apiport)) ? 80 : this.apiport);
+		return ((!r3IsNumber(this.apiport) || isNaN(this.apiport)) ? 80 : this.apiport);
 	}
 
-	getAppMenu()
+	getAppMenu(): AppMenuItem[] | null
 	{
 		return this.appmenu;
 	}
 
-	getSafeAppMenu()
+	getSafeAppMenu(): AppMenuItem[] | null
 	{
-		return (r3IsEmptyEntity(this.appmenu) ? null : this.appmenu);
+		return (!isAppMenuItemArray(this.appmenu) ? null : this.appmenu);
 	}
 
-	getUserData()
+	getUserData(): string | null
 	{
 		return this.userdata;
 	}
 
-	getSecretYaml()
+	getSecretYaml(): string | null
 	{
 		return this.secretyaml;
 	}
 
-	getSidecarYaml()
+	getSidecarYaml(): string | null
 	{
 		return this.sidecaryaml;
 	}
 
-	getCRCObject()
+	getCRCObject(): CRCObject
 	{
 		return this.crcobj;
 	}
 
-	getExpandUserData(registerpath)
+	getExpandUserData(registerpath: string): string
 	{
-		if(r3IsEmptyString(this.userdata)){
+		if(!r3IsString(this.userdata) || r3IsEmptyString(this.userdata)){
 			console.info('There is no user script template.');
 			return '';
 		}
@@ -324,15 +500,15 @@ export default class R3Context
 		}
 
 		// replace keyword in template
-		let	expanded= this.userdata.replace(kwIncludePathForUD, registerpath);
-		expanded	= expanded.replace(kwApiHostForUD, this.getApiUrlBase());
+		let	expanded	= this.userdata.replace(kwIncludePathForUD, registerpath);
+		expanded		= expanded.replace(kwApiHostForUD, this.getApiUrlBase());
 
 		return expanded;
 	}
 
-	getExpandSecretYaml(roleToken)
+	getExpandSecretYaml(roleToken: string, isBase64?: boolean): string
 	{
-		if(r3IsEmptyString(this.secretyaml)){
+		if(!r3IsString(this.secretyaml) || r3IsEmptyString(this.secretyaml)){
 			console.info('There is no secret yaml template.');
 			return '';
 		}
@@ -341,29 +517,33 @@ export default class R3Context
 			return '';
 		}
 
-		let	roleToken64;
-		try{
-			// encode base64
-			var	buff64	= Buffer.from(roleToken, 'ascii');
-			roleToken64	= buff64.toString('base64');
-			if(r3IsEmptyString(roleToken64)){
-				console.error('failed to encoding by base64.');
+		let	decodeRoleToken: string;
+		if(!r3IsBoolean(isBase64) || false === isBase64){
+			decodeRoleToken = roleToken;
+		}else{
+			// decode base64
+			try{
+				const	buff64	= Buffer.from(roleToken, 'ascii');
+				decodeRoleToken	= buff64.toString('base64');
+				if(r3IsEmptyString(decodeRoleToken)){
+					console.error('failed to decoding by base64.');
+					return '';
+				}
+			}catch(exception){
+				console.error('failed to decoding by base64.');
 				return '';
 			}
-		}catch(exception){									// eslint-disable-line no-unused-vars
-			console.error('failed to encoding by base64.');
-			return '';
 		}
 
 		// replace keyword in template
-		let	expanded = this.secretyaml.replace(kwRoleTokenForSecret, roleToken64);
+		const expanded = this.secretyaml.replace(kwRoleTokenForSecret, decodeRoleToken);
 
 		return expanded;
 	}
 
-	getExpandSidecarYaml(roleyrn)
+	getExpandSidecarYaml(roleyrn: string): string
 	{
-		if(r3IsEmptyString(this.sidecaryaml)){
+		if(!r3IsString(this.sidecaryaml) || r3IsEmptyString(this.sidecaryaml)){
 			console.info('There is no sidecar yaml template.');
 			return '';
 		}
@@ -373,29 +553,31 @@ export default class R3Context
 		}
 
 		// replace keyword in template
-		let	expanded = this.sidecaryaml.replace(kwRoleTokenForRoleYrn, roleyrn);
+		const expanded = this.sidecaryaml.replace(kwRoleTokenForRoleYrn, roleyrn);
 
 		return expanded;
 	}
 
-	getExpandCRCObject(roleToken, roleyrn, registerpath)
+	getExpandCRCObject(roleToken: string, roleyrn: string, registerpath: string): CRCObject
 	{
-		let	expandedall = {};
-		if(!r3IsSafeTypedEntity(this.crcobj, 'object') || r3IsSafeTypedEntity(this.crcobj, 'array')){
+		const expandedall: CRCObject = {};
+
+		if(!isCRCObject(this.crcobj)){
 			console.info('There is no safe crcobj');
 			return expandedall;
 		}
-		let	apiHost		= this.getApiUrlBase();
-		let	_localcrc	= this.crcobj;
 
-		Object.keys(_localcrc).forEach(function(key){
-			let	_subobj = _localcrc[key];
+		const	apiHost		= this.getApiUrlBase();
+		const	_localcrc	= this.crcobj;
 
-			if(r3IsSafeTypedEntity(_subobj, 'object') && !r3IsSafeTypedEntity(_subobj, 'array')){
-				let	_expanded_subobj = {};
+		Object.keys(_localcrc).forEach((key) => {
+			const	_subobj	= _localcrc[key];
 
-				Object.keys(_subobj).forEach(function(subkey){
-					if(!r3IsEmptyString(_subobj[subkey])){
+			if(r3IsObject(_subobj)){
+				const	_expanded_subobj: StringValObj = {};
+
+				Object.keys(_subobj).forEach((subkey) => {
+					if(r3IsString(_subobj[subkey]) && !r3IsEmptyString(_subobj[subkey])){
 						// API host
 						let	expanded = _subobj[subkey].replace(kwApiHostForUD, apiHost);
 
@@ -405,14 +587,14 @@ export default class R3Context
 
 							try{
 								// encode base64
-								let	buff64		= Buffer.from(roleToken, 'ascii');
-								let	roleToken64	= buff64.toString('base64');
+								const	buff64		= Buffer.from(roleToken, 'ascii');
+								const	roleToken64	= buff64.toString('base64');
 								if(!r3IsEmptyString(roleToken64)){
 									expanded = expanded.replace(kwRoleTokenForSecret, roleToken64);
 								}else{
 									console.error('failed to encoding by base64.');
 								}
-							}catch(exception){									// eslint-disable-line no-unused-vars
+							}catch(exception){
 								console.error('failed to encoding by base64.');
 							}
 						}
@@ -450,110 +632,140 @@ export default class R3Context
 		return expandedall;
 	}
 
-	getApiUrlBase()
+	getApiUrlBase(): string
 	{
 		return (this.getSafeApiScheme() + '://' + this.getSafeApiHost() + ':' + String(this.getSafeApiPort()));
 	}
 
-	isLogin()
+	isLogin(): boolean
 	{
 		return this.login;
 	}
 
-	getUserName()
+	getUserName(): string
 	{
 		return this.user;
 	}
 
-	getSafeUserName()
+	getSafeUserName(): string
 	{
 		return (r3IsEmptyString(this.user) ? '' : this.user);
 	}
 
-	getUnscopedToken()
+	getUnscopedToken(): string
 	{
 		return this.unscopedUserToken;
 	}
 
-	getSafeUnscopedToken()
+	getSafeUnscopedToken(): string
 	{
 		return (r3IsEmptyString(this.unscopedUserToken) ? '' : this.unscopedUserToken);
 	}
 
-	getSignInType()
+	getSignInType(): SigninType
 	{
 		return this.signintype;
 	}
 
-	getSafeSignInUrl(configName)
+	// [NOTE]
+	// If configName is specified and found, the target value is returned.
+	// If configName is not specified, try to find "siginin_default" or return the only object if it exists.
+	// If not found or no SignInURL exists, an empty object is returned.
+	//
+	getSafeSignInUrl(configName?: string): SignUrlEntry
 	{
-		if(r3IsEmptyString(configName)){
+		if(!r3IsString(configName) || r3IsEmptyString(configName)){
 			//
-			// Return all object
+			// check default object
 			//
-			return (r3IsEmptyEntity(this.signinurl) ? {} : r3DeepClone(this.signinurl));
-
-		}else if(!r3IsEmptyEntityObject(this.signinurl, configName)){
-			//
-			// Return single object
-			//
-			return this.signinurl[configName];
+			if(0 == Object.keys(this.signinurl).length){
+				return { url: '', display: '' };
+			}
+			if(r3IsEmptyEntityObject(this.signinurl, 'signin_default')){
+				return r3DeepClone(this.signinurl['signin_default']);
+			}else{
+				// return first object
+				return r3DeepClone(Object.values(this.signinurl)[0]);
+			}
 		}else{
-			return null;
+			//
+			// Return one object
+			//
+			if(r3IsEmptyEntityObject(this.signinurl, configName)){
+				return { url: '', display: '' };
+			}else{
+				return r3DeepClone(this.signinurl[configName]);
+			}
 		}
 	}
 
-	getSafeSignOutUrl(configName)
+	getAllSignInUrl(configName?: string): SignUrls
 	{
-		if(r3IsEmptyString(configName)){
-			//
-			// Return all object
-			//
-			return (r3IsEmptyEntity(this.signouturl) ? {} : r3DeepClone(this.signouturl));
+		return r3DeepClone(this.signinurl);
+	}
 
-		}else if(!r3IsEmptyEntityObject(this.signouturl, configName)){
+	// [NOTE]
+	// If configName is specified and found, the target value is returned.
+	// If configName is not specified, try to find "siginout_default" or return the only object if it exists.
+	// If not found or no SignOutURL exists, an empty object is returned.
+	//
+	getSafeSignOutUrl(configName?: string): SignUrlEntry
+	{
+		if(!r3IsString(configName) || r3IsEmptyString(configName)){
 			//
-			// Return single string
+			// check default object
 			//
-			return this.signouturl[configName];
+			if(0 == Object.keys(this.signouturl).length){
+				return { url: '', display: '' };
+			}
+			if(r3IsEmptyEntityObject(this.signouturl, 'signout_default')){
+				return r3DeepClone(this.signouturl['signout_default']);
+			}else{
+				// return first object
+				return r3DeepClone(Object.values(this.signouturl)[0]);
+			}
 		}else{
-			return null;
+			//
+			// Return one object
+			//
+			if(r3IsEmptyEntityObject(this.signouturl, configName)){
+				return { url: '', display: '' };
+			}else{
+				return r3DeepClone(this.signouturl[configName]);
+			}
 		}
 	}
 
-	getSafeConfigName()
+	getAllSignOutrl(configName?: string): SignUrls
 	{
-		return (r3IsEmptyEntity(this.configname) ? '' : r3UnescapeHTML(this.configname));
+		return r3DeepClone(this.signouturl);
 	}
 
-	getSafeConfigCount(isSignin)
+	getSafeConfigName(): string
+	{
+		return ((!r3IsString(this.configname) || r3IsEmptyString(this.configname)) ? '' : r3UnescapeHTML(this.configname));
+	}
+
+	getSafeConfigCount(isSignin: boolean): number
 	{
 		if(isSignin){
-			if(r3IsEmptyEntity(this.signinurl)){
-				return 0;
-			}else{
-				return Object.keys(this.signinurl).length;
-			}
+			return Object.keys(this.signinurl).length;
 		}else{
-			if(r3IsEmptyEntity(this.signouturl)){
-				return 0;
-			}else{
-				return Object.keys(this.signouturl).length;
-			}
+			return Object.keys(this.signouturl).length;
 		}
 	}
 
-	useLocalTenant()
+	useLocalTenant(): boolean
 	{
 		return this.uselocaltenant;
 	}
 
-	getSafeLang()
+	getSafeLang(): string
 	{
 		return (r3IsEmptyString(this.lang) ? '' : r3UnescapeHTML(this.lang));
 	}
 
-	isDbgHeader()
+	isDbgHeader(): boolean
 	{
 		if(r3IsEmptyString(this.dbgHeaderName) || r3IsEmptyString(this.dbgHeaderValue)){
 			return false;
@@ -561,7 +773,7 @@ export default class R3Context
 		return true;
 	}
 
-	getDbgHeader(headers)
+	getDbgHeader(headers: StringValObj): boolean
 	{
 		if(r3IsEmptyEntity(headers)){
 			return false;
@@ -574,37 +786,37 @@ export default class R3Context
 		return true;
 	}
 
-	getDbgHeaderName()
+	getDbgHeaderName(): string
 	{
 		return this.dbgHeaderName;
 	}
 
-	getSafeDbgHeaderName()
+	getSafeDbgHeaderName(): string
 	{
 		return (this.isDbgHeader() ? this.dbgHeaderName : '');
 	}
 
-	getDbgHeaderValue()
+	getDbgHeaderValue(): string
 	{
 		return this.dbgHeaderValue;
 	}
 
-	getSafeDbgHeaderValue()
+	getSafeDbgHeaderValue(): string
 	{
 		return (this.isDbgHeader() ? this.dbgHeaderValue : '');
 	}
 
-	getDbgResHeaderName()
+	getDbgResHeaderName(): string
 	{
 		return this.dbgResHeaderName;
 	}
 
-	getSafeDbgResHeaderName()
+	getSafeDbgResHeaderName(): string
 	{
 		return (this.isDbgHeader() ? this.dbgResHeaderName : '');
 	}
 
-	getErrorMsg()
+	getErrorMsg(): string | null
 	{
 		return this.errormsg;
 	}

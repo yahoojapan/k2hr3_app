@@ -19,10 +19,12 @@
  *
  */
 
+import type { R3Theme }	from './r3theme';
+
 //
 // Styles for Container
 //
-export const r3Container = (theme) => ({
+export const r3ContainerStyle = (theme: R3Theme) => ({
 	root: {
 	},
 	paper: {
@@ -35,7 +37,7 @@ export const r3Container = (theme) => ({
 //
 // Styles for AppBar
 //
-export const r3AppBar = (theme) => ({
+export const r3AppBarStyle = (theme: R3Theme) => ({
 	root: {
 		background:				theme.palette.primary.mainGradient
 	},
@@ -60,7 +62,7 @@ export const r3AppBar = (theme) => ({
 //
 // Styles for MainTree
 //
-export const r3MainTree = (theme) => ({
+export const r3MainTreeStyle = (theme: R3Theme) => ({
 	root: {
 	},
 	tenantListText: {
@@ -103,25 +105,38 @@ export const r3MainTree = (theme) => ({
 	dockedList: {
 		float:					'left'
 	},
+	labelListItemIcon: {
+		cursor:					'pointer'
+	},
 	expandListItemIcon: {
+		cursor:					'pointer',
 		marginRight:			0
 	},
+	menuRightIcon: {
+		marginLeft:				theme.spacing(1)
+	},
 	collapse: {
+		cursor:					'pointer',
 		paddingLeft:			theme.spacing(2)
 	},
 	serviceLabelCollapse: {
+		cursor:					'pointer',
 		paddingLeft:			theme.spacing(5)				// 2 + 2 + 1
 	},
 	childListItemText: {
+		cursor:					'pointer',
 		marginLeft:				theme.spacing(5)				// 2 + 2 + 1
 	},
 	listItemText: {
+		cursor:					'pointer',
 		paddingLeft:			0
 	},
 	inServiceLabelListItemText: {
+		cursor:					'pointer',
 		paddingLeft:			0
 	},
 	inServiceChildListItemText: {
+		cursor:					'pointer',
 		marginLeft:				theme.spacing(3)				// 2 + 1
 	},
 	localTenantMenu: {
@@ -132,7 +147,7 @@ export const r3MainTree = (theme) => ({
 //
 // Styles for Toolbar
 //
-export const r3Toolbar = (theme) => ({
+export const r3ToolbarStyle = (theme: R3Theme) => ({
 	root: {
 		width:					'inherit',
 		backgroundColor:		theme.palette.primary.light
@@ -164,17 +179,27 @@ export const r3Toolbar = (theme) => ({
 		height:					theme.spacing(3)				// 24px( as same as .MuiChip-avatar class value )
 	},
 	descriptionIcon: {
-		color:					theme.palette.secondary.main
+		color:					theme.palette.secondary.main,
+		backgroundColor:		theme.palette.primary.light
 	},
 	spacerInToolbar: {
 		flexGrow:				1
+	},
+	arrowUpwardIcon: {
+		color:					theme.palette.information.main
+	},
+	addIcon: {
+		color:					theme.palette.information.main
+	},
+	deleteIcon: {
+		color:					theme.palette.information.main
 	}
 });
 
 //
 // Styles for Message Box
 //
-export const r3MsgBox = (theme) => ({
+export const r3MsgBoxStyle = (theme: R3Theme) => ({
 	root: {
 		display:				'flex',
 		margin:					theme.spacing(1),
@@ -207,7 +232,7 @@ export const r3MsgBox = (theme) => ({
 //
 // Styles for Resource Page
 //
-export const r3Resource = (theme) => ({
+export const r3ResourceStyle = (theme: R3Theme) => ({
 	root: {
 		display:				'block',
 		width:					'100%'
@@ -311,7 +336,7 @@ export const r3Resource = (theme) => ({
 //
 // Styles for Policy Page
 //
-export const r3Policy = (theme) => ({
+export const r3PolicyStyle = (theme: R3Theme) => ({
 	root: {
 		display:				'block',
 		width:					'100%'
@@ -343,7 +368,7 @@ export const r3Policy = (theme) => ({
 	},
 
 	// [NOTE]
-	// about width, please see comment in r3Resource.
+	// about width, please see comment in r3ResourceStyle.
 	//
 	resourceTextField: {
 		float:					'left',
@@ -398,7 +423,7 @@ export const r3Policy = (theme) => ({
 //
 // Styles for Role Page
 //
-export const r3Role = (theme) => ({
+export const r3RoleStyle = (theme: R3Theme) => ({
 	root: {
 		display:				'block',
 		width:					'100%'
@@ -414,7 +439,7 @@ export const r3Role = (theme) => ({
 	},
 
 	// [NOTE]
-	// about width, please see comment in r3Resource.
+	// about width, please see comment in r3ResourceStyle.
 	//
 	hostnameSubTitle: {
 		float:					'left',
@@ -524,7 +549,7 @@ export const r3Role = (theme) => ({
 //
 // Styles for Service Page
 //
-export const r3Service = (theme) => ({
+export const r3ServiceStyle = (theme: R3Theme) => ({
 	root: {
 		display:				'block',
 		width:					'100%'
@@ -617,7 +642,7 @@ export const r3Service = (theme) => ({
 //
 // Styles for Form Button
 //
-export const r3FormButtons = (theme) => ({
+export const r3FormButtonsStyle = (theme: R3Theme) => ({
 	root: {
 		float:					'right',
 		display:				'inline-block',
@@ -639,7 +664,7 @@ export const r3FormButtons = (theme) => ({
 //
 // Styles for Progress
 //
-export const r3Progress = (theme) => ({							// eslint-disable-line no-unused-vars
+export const r3ProgressStyle = (theme: R3Theme) => ({
 	root: {														// Full screen and most foreground
 		width:					'100vw',
 		height:					'100vh',
@@ -659,7 +684,7 @@ export const r3Progress = (theme) => ({							// eslint-disable-line no-unused-v
 //
 // Styles for About Dialog
 //
-export const r3AboutDialogStyles = (theme) => ({
+export const r3AboutDialogStyles = (theme: R3Theme) => ({
 	root: {
 	},
 	dialogTitle: {
@@ -683,7 +708,7 @@ export const r3AboutDialogStyles = (theme) => ({
 //
 // Styles for Create Path Dialog
 //
-export const r3AccountDialog = (theme) => ({
+export const r3AccountDialogStyles = (theme: R3Theme) => ({
 	root: {
 	},
 	dialogTitle: {
@@ -726,11 +751,11 @@ export const r3AccountDialog = (theme) => ({
 		marginRight:			theme.spacing(1)
 	}
 });
-
+	
 //
 // Styles for Signin Credential Dialog
 //
-export const r3SigninCredDialogStyles = (theme) => ({
+export const r3SigninCredDialogStyles = (theme: R3Theme) => ({
 	root: {
 	},
 	dialogTitle: {
@@ -772,7 +797,7 @@ export const r3SigninCredDialogStyles = (theme) => ({
 //
 // Styles for Popup Message Dialog
 //
-export const r3PopupMsgDialog = (theme) => ({
+export const r3PopupMsgDialogStyle = (theme: R3Theme) => ({
 	root: {
 	},
 	dialogTitle: {
@@ -817,7 +842,7 @@ export const r3PopupMsgDialog = (theme) => ({
 //
 // Styles for Path Information Dialog
 //
-export const r3PathInfoDialog = (theme) => ({
+export const r3PathInfoDialogStyle = (theme: R3Theme) => ({
 	root: {
 	},
 	dialogTitle: {
@@ -977,7 +1002,7 @@ export const r3PathInfoDialog = (theme) => ({
 //
 // Styles for Create Path Dialog
 //
-export const r3CreatePathDialog = (theme) => ({
+export const r3CreatePathDialogStyle = (theme: R3Theme) => ({
 	root: {
 	},
 	dialogTitle: {
@@ -1018,7 +1043,7 @@ export const r3CreatePathDialog = (theme) => ({
 //
 // Styles for Create Service Dialog
 //
-export const r3CreateServiceDialog = (theme) => ({
+export const r3CreateServiceDialogStyle = (theme: R3Theme) => ({
 	root: {
 	},
 	dialogTitle: {
@@ -1142,7 +1167,7 @@ export const r3CreateServiceDialog = (theme) => ({
 //
 // Styles for Create Service Tenant Dialog
 //
-export const r3CreateServiceTenantDialog = (theme) => ({
+export const r3CreateServiceTenantDialogStyle = (theme: R3Theme) => ({
 	root: {
 		height:					'1000px',
 		scrollTop:				0
@@ -1185,7 +1210,7 @@ export const r3CreateServiceTenantDialog = (theme) => ({
 //
 // Styles for Local Tenant Dialog
 //
-export const r3LocalTenantDialog = (theme) => ({
+export const r3LocalTenantDialogStyle = (theme: R3Theme) => ({
 	root: {
 	},
 	dialogTitle: {

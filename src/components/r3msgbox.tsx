@@ -20,8 +20,6 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import Paper						from '@mui/material/Paper';				// For contents wrap
 import Typography					from '@mui/material/Typography';
@@ -29,29 +27,43 @@ import ErrorIcon					from '@mui/icons-material/ErrorRounded';
 import WarningIcon					from '@mui/icons-material/WarningRounded';
 import InformationIcon				from '@mui/icons-material/InfoOutlined';
 
-import { r3MsgBox }					from './r3styles';
+import { r3MsgBoxStyle }			from './r3styles';
 import R3Message					from '../util/r3message';
-import { errorType, warningType, infoType } from '../util/r3types';			// eslint-disable-line no-unused-vars
+import type { R3Theme }				from './r3theme';
+import { valTypeAllObject } from '../util/r3types';
+
+//
+// Props type
+//
+type R3MsgBoxRequiredProps = {
+	theme:				R3Theme;
+};
+
+type R3MsgBoxOptionProps = {
+	message?:			R3Message | null;
+};
+
+type R3MsgBoxProps = R3MsgBoxRequiredProps & R3MsgBoxOptionProps;
+
+type R3MsgBoxStyleType = ReturnType<typeof r3MsgBoxStyle>;
 
 //
 // Message Box Class
 //
-export default class R3MsgBox extends React.Component
+export default class R3MsgBox extends React.Component<R3MsgBoxProps>
 {
-	static propTypes = {
-		message:	PropTypes.object
+	sxClasses: R3MsgBoxStyleType;
+
+	static defaultProps: R3MsgBoxOptionProps = {
+		message:	null
 	};
 
-	static defaultProps = {
-		message:	new R3Message()
-	};
-
-	constructor(props)
+	constructor(props: R3MsgBoxProps)
 	{
 		super(props);
 
 		// styles
-		this.sxClasses = r3MsgBox(props.theme);
+		this.sxClasses = r3MsgBoxStyle(props.theme);
 	}
 
 	getMessageContents()
@@ -62,8 +74,8 @@ export default class R3MsgBox extends React.Component
 			return;
 		}
 
-		let	themeobj;
-		let	classobj;
+		let	themeobj: valTypeAllObject;
+		let	classobj: valTypeAllObject;
 		if(this.props.message.isErrorType()){
 			themeobj	= theme.r3PopupMsgDialog.dialogErrorContentText;
 			classobj	= this.sxClasses.dialogErrorContentText;
@@ -77,7 +89,7 @@ export default class R3MsgBox extends React.Component
 		let	msgarr = this.props.message.getMessageArray();
 
 		return (
-			msgarr.map( (item, pos) =>
+			msgarr.map( (item: string, pos: number) =>
 			{
 				return (
 					<Typography
@@ -97,7 +109,7 @@ export default class R3MsgBox extends React.Component
 	{
 		const { theme } = this.props;
 
-		let	icon;
+		let	icon: React.ReactNode;
 		if(null !== this.props.message && this.props.message.isErrorType()){
 			icon = (
 				<ErrorIcon

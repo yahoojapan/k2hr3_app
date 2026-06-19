@@ -27,7 +27,7 @@
 //
 // To enable this OIDC, register this module as an 'extrouter'.
 // Then set the keys and values shown in the example below:
-// 
+//
 //	'extrouter': {
 //		'oidc': {													<---- default name
 //			'name':						'oidc',
@@ -190,24 +190,24 @@
 //
 //------------------------------------------------------------------------
 
-'use strict';
+import express		from 'express';
+import passport		from 'passport';
+import session		from 'express-session';
+// @ts-ignore -- code uses openid-client v5 API; v6 has a different interface
+import { custom, Issuer, Strategy }	from 'openid-client';
+import { base64url, createRemoteJWKSet, jwtVerify, JWTVerifyOptions }	from 'jose';
+import { valTypeAllObject, isSafeObject, isSafeFunction, isSafeHaskey, compareCaseString, isSafeArray, isSafeBoolean, isSafeEntity, isSafeJSON, isSafeString, isSafeNumber, isOIDCExtRouterConfig, isStringArray, OIDCExtRouterConfig }	from './lib/libr3util';
 
-var	r3util			= require('./lib/libr3util');
-var	express			= require('express');
-var	router			= express.Router();
-var	passport		= require('passport');
-var	session			= require('express-session');
-
-var	{ custom, Issuer, Strategy }= require('openid-client');
-var	{ decode }					= require('jose').base64url;
-var	{ createRemoteJWKSet }		= require('jose');
-var	{ jwtVerify }				= require('jose');
-
-//
+//--------------------------------------------------------------
 // Configration for OIDC
-//
-var	oidcConfig			= {};
-var	oidcConfigCookieName= 'oidc_config_name';
+//--------------------------------------------------------------
+let	oidcConfig: Record<string, OIDCExtRouterConfig>	= {};
+export let oidcConfigCookieName: string				= 'oidc_config_name';
+
+//--------------------------------------------------------------
+// Router
+//--------------------------------------------------------------
+export const router = express.Router();
 
 //
 // Setup session
@@ -233,15 +233,15 @@ router.use(passport.session());
 //--------------------------------------------------------------
 // Utility
 //--------------------------------------------------------------
-function rawGetExtRouterName(req)
+const rawGetExtRouterName = (req: express.Request): string =>
 {
-	if(!r3util.isSafeEntity(req) || !r3util.isSafeString(req.baseUrl)){
+	if(!isSafeEntity(req) || !isSafeString(req.baseUrl)){
 		console.error('Request base URL is somthing wrong, but returns default extrouter name(oidc).');
 		return 'oidc';				// default
 	}
 
-	var	urlparts = decodeURI(req.baseUrl).split('/');
-	if(!r3util.isArray(urlparts)){
+	const	urlparts = decodeURI(req.baseUrl).split('/');
+	if(!isSafeArray(urlparts)){
 		console.error('Request base URL is somthing wrong, but returns default extrouter name(oidc).');
 		return 'oidc';				// default
 	}
@@ -249,22 +249,22 @@ function rawGetExtRouterName(req)
 	//
 	// Try to find '.../<extrouter name>/login/...' or '.../<extrouter name>/logout/...'
 	//
-	var	extRounterName = null;
-	for(var cnt = 0; cnt < urlparts.length; ++cnt){
-		if(!r3util.isSafeString(urlparts[cnt])){
+	let	extRounterName: string | null = null;
+	for(let cnt = 0; cnt < urlparts.length; ++cnt){
+		if(!isSafeString(urlparts[cnt])){
 			continue;
 		}
-		if(r3util.compareCaseString(urlparts[cnt], 'login') || r3util.compareCaseString(urlparts[cnt], 'logout')){
+		if(compareCaseString(urlparts[cnt], 'login') || compareCaseString(urlparts[cnt], 'logout')){
 			break;
 		}
 		extRounterName = urlparts[cnt];
 	}
-	if(!r3util.isSafeString(extRounterName)){
+	if(!isSafeString(extRounterName)){
 		console.error('Failed to extract extRouter name from base URL(' + req.baseUrl + '), so returns default extrouter name(oidc).');
 		return 'oidc';				// default
 	}
 	return extRounterName;
-}
+};
 
 //--------------------------------------------------------------
 // Mountpath		: /<config path>/login
@@ -276,15 +276,16 @@ function rawGetExtRouterName(req)
 //
 // Login async function
 //
-async function oidcLogin(Request)
+const oidcLogin = async(Request: express.Request, Response?: express.Response, Next?: express.NextFunction): Promise<void> =>
 {
-	var	extRouterName = rawGetExtRouterName(Request);
+	const	extRouterName = rawGetExtRouterName(Request);
 
-	if(!r3util.isSafeEntity(oidcConfig[extRouterName])){
-		var error = new Error('Please check your configuarion(json) because it is invalid.');
+	if(!isSafeEntity(oidcConfig[extRouterName]) || !isOIDCExtRouterConfig(oidcConfig[extRouterName])){
+		const error = new Error('Please check your configuarion(json) because it is invalid.');
 		console.error(error.message);
 		throw error;
 	}
+	const _oidcConfigInfo = oidcConfig[extRouterName];
 
 	//
 	// Create openid client
@@ -292,16 +293,17 @@ async function oidcLogin(Request)
 	// Issuer.discovery returns Promise
 	// https://github.com/panva/node-openid-client/blob/main/lib/issuer.js#L210
 	//
-	var oidcDiscovery = Issuer.discover(oidcConfig[extRouterName].oidcDiscoveryUrl);
+	const	discoveryUrl	= _oidcConfigInfo.oidcDiscoveryUrl;
+	const	oidcDiscovery	= Issuer.discover(discoveryUrl);
 
 	//
 	// Try to login
 	//
-	await oidcDiscovery.then(function(oidcIssuer){
+	await oidcDiscovery.then((oidcIssuer: Issuer) => {
 		//
 		// put debug message
 		//
-		if(r3util.isSafeBoolean(oidcConfig[extRouterName].debug) && oidcConfig[extRouterName].debug){
+		if(isSafeHaskey(_oidcConfigInfo, 'debug') && isSafeBoolean(_oidcConfigInfo.debug) && _oidcConfigInfo.debug){
 			// debug message
 			console.log('[OIDC debug] Discovered issuer %s %O', oidcIssuer.issuer, oidcIssuer.metadata);
 
@@ -309,23 +311,33 @@ async function oidcLogin(Request)
 			custom.setHttpOptionsDefaults({
 				hooks: {
 					beforeRequest: [
-						function(options){
-							console.log('[OIDC debug] Request URL : %s %s', options.method.toUpperCase(), options.url.href);
-							console.log('[OIDC debug] Request HEADERS : %o', options.headers);
-							if(options.body){
-								console.log('[OIDC debug] Request BODY : %s', options.body);
+						(options: valTypeAllObject) => {
+							if(isSafeObject(options)){
+								const	_method	= (isSafeString(options?.method) ? options.method.toUpperCase() : 'unknown');
+								const	_href	= ((isSafeObject(options?.url) && isSafeString(options.url?.href)) ? options.url.href : 'unknown');
+
+								console.log('[OIDC debug] Request URL : %s %s', _method, _href);
+								console.log('[OIDC debug] Request HEADERS : %o', options.headers);
+								if(isSafeString(options?.body)){
+									console.log('[OIDC debug] Request BODY : %s', options.body);
+								}
 							}
 						}
 					],
 					afterResponse: [
-						function(response){
-							console.log('[OIDC debug] Response URL : %s %s', response.request.options.method.toUpperCase(), response.request.options.url.href);
-							console.log('[OIDC debug] Response STATUS : %i', response.statusCode);
-							console.log('[OIDC debug] Response HEADERS : %o', response.headers);
-							if (response.body) {
-								console.log('[OIDC debug] Response BODY : %s', response.body);
+						(response: valTypeAllObject) => {
+							if(isSafeObject(response)){
+								const	_method	= ((isSafeObject(response?.request) && isSafeObject(response.request?.options) && isSafeString(response.request.options?.method)) ? response.request.options.method.toUpperCase() : 'unknown');
+								const	_href	= ((isSafeObject(response?.request) && isSafeObject(response.request?.options) && isSafeObject(response.request.options?.url) &&  isSafeString(response.request.options.url?.href)) ? response.request.options.url.href : 'unknown');
+
+								console.log('[OIDC debug] Response URL : %s %s', _method, _href);
+								console.log('[OIDC debug] Response STATUS : %i', response.statusCode);
+								console.log('[OIDC debug] Response HEADERS : %o', response.headers);
+								if(isSafeString(response?.body)){
+									console.log('[OIDC debug] Response BODY : %s', response.body);
+								}
+								return response;
 							}
-							return response;
 						}
 					]
 				}
@@ -335,38 +347,47 @@ async function oidcLogin(Request)
 		//
 		// Create a client handler
 		//
-		var clientParams = {
-			client_id:		oidcConfig[extRouterName].params.client_id,
-			client_secret:	oidcConfig[extRouterName].params.client_secret,
-			redirect_uris:	[ oidcConfig[extRouterName].params.redirectUrl ]
+		const	clientParams = {
+			client_id:		_oidcConfigInfo.params.client_id,
+			client_secret:	_oidcConfigInfo.params.client_secret,
+			redirect_uris:	[ ...(_oidcConfigInfo.params.redirectUrl) ]
 		};
-		var client = new oidcIssuer.Client(clientParams);
+
+		const	client = new oidcIssuer.Client(clientParams);
 		client[custom.clock_tolerance] = 5;							// to allow a second 5 skew
 
 		//
 		// Calls passport middleware
 		//
 		passport.use(
-			'oidc', 
+			'oidc',
 			new Strategy(
 				{ client },
-				function(tokenset, done){
+				(tokenset: { id_token: string }, done: (err: unknown, token: string) => void) => {
 					return done(null, tokenset.id_token);
 				}
 			)
 		);
-	}).catch(function(error){
+
+	}).catch((error: Error) => {
 		console.error('Authenticate discovery Error by ' + error.message);
 		throw error;
 	});
-}
+};
 
 //
 // Login by calling passport.authenticate
 //
-var authenticate = async function(Request, Response, Next)
+const authenticate = async(Request: express.Request, Response: express.Response, Next: express.NextFunction): Promise<string> =>
 {
-	var	extRouterName = rawGetExtRouterName(Request);
+	const	extRouterName = rawGetExtRouterName(Request);
+
+	if(!isSafeEntity(oidcConfig[extRouterName]) || !isOIDCExtRouterConfig(oidcConfig[extRouterName])){
+		const error = new Error('Please check your configuarion(json) because it is invalid.');
+		console.error(error.message);
+		throw error;
+	}
+	const _oidcConfigInfo = oidcConfig[extRouterName];
 
 	//
 	// Login by invoking passport middleware to get an token
@@ -376,22 +397,32 @@ var authenticate = async function(Request, Response, Next)
 	//
 	// Create and return Promise object
 	//
-	return new Promise(function(resolve, reject){
+	let _scope: string[] = [];
+	if(isSafeString(_oidcConfigInfo.scope)){
+		_scope = [ ...(_oidcConfigInfo.scope) ];
+	}else if(isStringArray(_oidcConfigInfo.scope)){
+		_scope = _oidcConfigInfo.scope;
+	}
+
+	return new Promise<string>((resolve, reject) => {
 		passport.authenticate(
 			'oidc',
 			{
-				scope:	oidcConfig[extRouterName].scope
+				scope:	_scope
 			},
-			function(error, token){
+			(error: Error | null, token: string) => {
 				if(error){
 					reject(error);
+					return;
 				}
 				resolve(token);
-			})(Request, Response, Next);
+			}
+		)(Request, Response, Next);
 
-	}).catch(function (error){
+	}).catch((error) => {
 		console.error('Authenticate passport.authenticate Error by ' + error.message);
 		Response.redirect('/');
+		throw error;
 	});
 };
 
@@ -406,90 +437,102 @@ router.get('/login', authenticate);
 //
 // Utility function for OIDC authentication
 //
-async function oidcAuthenticate(Request, Response, Next)
+const oidcAuthenticate = async(Request: express.Request, Response: express.Response, Next: express.NextFunction): Promise<string> =>
 {
-	var	token = await authenticate(Request, Response, Next).catch(function(error){
+	const	token = await authenticate(Request, Response, Next).catch((error) => {
 		console.error(error.message);
 		throw error;
 	});
 	return token;
-}
+};
 
 //
 // Utility function for token
 //
-async function oidcVerifyToken(token, extRouterName)
+const oidcVerifyToken = async(token: string, extRouterName: string): Promise<void> =>
 {
-	var	jwtParam	= {
-		issuer:		oidcConfig[extRouterName].oidcDiscoveryUrl,
-		audience:	oidcConfig[extRouterName].params.client_id
-	};
-	var	strurl		= oidcConfig[extRouterName].oidcDiscoveryUrl + '/keys';
-	var	JWKS		= createRemoteJWKSet(new URL(strurl));
+	if(!isSafeString(extRouterName) || !isSafeEntity(oidcConfig[extRouterName]) || !isOIDCExtRouterConfig(oidcConfig[extRouterName])){
+		const error = new Error('Please check your configuarion(json) because it is invalid.');
+		console.error(error.message);
+		throw error;
+	}
+	const	_oidcConfigInfo	= oidcConfig[extRouterName];
+	const	_issure			= _oidcConfigInfo.oidcDiscoveryUrl;
 
-	await jwtVerify(token, JWKS, jwtParam).catch(function(error){
+	const	jwtParam: JWTVerifyOptions = {
+		issuer:		_issure,
+		audience:	_oidcConfigInfo.params.client_id
+	};
+	const	strurl	= _issure + '/keys';
+	const	JWKS	= createRemoteJWKSet(new URL(strurl));
+
+	await jwtVerify(token, JWKS, jwtParam).catch((error) => {
 		console.error(error.message);
 		throw error;
 	});
-}
+};
 
 //
 // Authentication
 //
-var sessionize = async function(Request, Response, Next)
+const sessionize = async(Request: express.Request, Response: express.Response, Next: express.NextFunction): Promise<string> =>
 {
-	var	extRouterName = rawGetExtRouterName(Request);
+	const	extRouterName = rawGetExtRouterName(Request);
 
-	if(!r3util.isSafeEntity(oidcConfig) || !r3util.isSafeEntity(oidcConfig[extRouterName])){
-		var error = 'Please check your configuarion(json) because it is invalid.';
+	if(!isSafeEntity(oidcConfig[extRouterName]) || !isOIDCExtRouterConfig(oidcConfig[extRouterName])){
+		const error = 'Please check your configuarion(json) because it is invalid.';
 		console.error('Failed to sessionize init, ' + error);
 		Response.status(500);											// 500: Internal Server Error
 		return;
 	}
+	const	_oidcConfigInfo	= oidcConfig[extRouterName];
 
 	//
 	// Get oidc token in request
 	//
-	await oidcAuthenticate(Request, Response, Next).then(async function(oidc_token)
+	await oidcAuthenticate(Request, Response, Next).then(async(oidc_token_raw: string): Promise<void> =>
 	{
 		//
 		// get payload in oidc token
 		//
-		var	parts = oidc_token.split('.', 2);
+		const	oidc_token	= oidc_token_raw;
+		const	parts		= oidc_token.split('.', 2);
 		if(2 > parts.length){
-			var error = 'Failed to parse payload from oidc token.';
+			const	error = 'Failed to parse payload from oidc token.';
 			console.error(error);
 			Response.status(401);										// 401: Unauthorized
 			return;
 		}
-		var raw_payload	= new TextDecoder().decode(decode(parts[1]));
-		if(!r3util.isSafeJSON(raw_payload)){
-			error = 'Failed to decode json payload from oidc token.';
+
+		const	raw_payload	= new TextDecoder().decode(base64url.decode(parts[1]));
+		if(!isSafeJSON(raw_payload)){
+			const	error = 'Failed to decode json payload from oidc token.';
 			console.error(error);
 			Response.status(401);										// 401: Unauthorized
 			return;
 		}
-		var	payload = JSON.parse(raw_payload);
+		const	payload = JSON.parse(raw_payload);
 
 		//
 		// put debug message
 		//
-		if(r3util.isSafeBoolean(oidcConfig[extRouterName].debug) && oidcConfig[extRouterName].debug){
+		if(isSafeHaskey(_oidcConfigInfo, 'debug') && isSafeBoolean(_oidcConfigInfo.debug) && _oidcConfigInfo.debug){
 			console.log('[OIDC debug] payload = ' + JSON.stringify(payload));
 		}
 
 		//
 		// check user name key
 		//
-		if(r3util.isSafeString(oidcConfig[extRouterName].params.usernamekey)){
-			var	found_key = false;
-			Object.keys(payload).forEach(function(onekey){
-				if(onekey == oidcConfig[extRouterName].params.usernamekey){
+		if(isSafeHaskey(_oidcConfigInfo.params, 'usernamekey') && isSafeString(_oidcConfigInfo.params.usernamekey)){
+			const	_username = _oidcConfigInfo.params.usernamekey;
+			let		found_key = false;
+			Object.keys(payload).forEach((onekey: unknown) => {
+				if(isSafeString(onekey) && onekey == _username){
 					found_key = true;
 				}
 			});
-			if(!found_key || !r3util.isSafeString(payload[oidcConfig[extRouterName].params.usernamekey])){
-				error = 'Not find or empty user name in oidc token.';
+			if(!found_key || !isSafeObject(payload) || !isSafeHaskey(payload, _username) || !isSafeString(payload[_username])){
+				const	error = 'Not find or empty user name in oidc token.';
 				console.error(error);
 				Response.status(401);									// 401: Unauthorized
 				return;
@@ -499,39 +542,50 @@ var sessionize = async function(Request, Response, Next)
 		//
 		// Verify token
 		//
-		await oidcVerifyToken(oidc_token, extRouterName).then(function()
+		await oidcVerifyToken(oidc_token, extRouterName).then((): void =>
 		{
 			//
 			// oidc token verified
 			//
 
-			// sessionize
-			Response.session = null;									// session removed
-
 			// token cookie
-			Response.cookie(oidcConfig[extRouterName].params.cookiename, oidc_token, {
+			const	_cookiename	= (isSafeHaskey(_oidcConfigInfo.params, 'cookiename') && isSafeString(_oidcConfigInfo.params.cookiename)) ? _oidcConfigInfo.params.cookiename : '';
+			const	_cookieexp	= (isSafeHaskey(_oidcConfigInfo.params, 'cookieexpire') && isSafeNumber(_oidcConfigInfo.params.cookieexpire)) ? _oidcConfigInfo.params.cookieexpire : 1;
+			Response.cookie(_cookiename, {
 				httpOnly:	true,
 				secure:		Request.protocol === 'https',
-				maxAge:		oidcConfig[extRouterName].params.cookieexpire * 1000,	// set expire
+				maxAge:		_cookieexp * 1000,					// set expire
 			});
 
 			// oidc name cookie
 			Response.cookie(oidcConfigCookieName, extRouterName, {
 				httpOnly:	true,
 				secure:		Request.protocol === 'https',
-				maxAge:		oidcConfig[extRouterName].params.cookieexpire * 1000,	// set expire
+				maxAge:		_cookieexp * 1000,					// set expire
 			});
 
-			Response.redirect('/');
-
-		}).catch(function(err){
-			console.error('Failed to verify oidc token by ' + err.message);
+			// Complete session destruction and redirection
+			if(Request.session && isSafeFunction(Request.session.destroy)){
+				// Redirect after the session destruction is complete
+				Request.session.destroy((err) => {
+					if(null !== err){
+						console.error('Failed to destroy session: ', JSON.stringify(err));
+					}
+					Response.redirect('/');
+				});
+			}else{
+				// Fallback in case the session does not exist or there is no destroy function
+				Request.session = null;
+				Response.redirect('/');
+			}
+		}).catch((err: unknown) => {
+			console.error('Failed to verify oidc token by error: ' + JSON.stringify(err));
 			Response.status(401);										// 401: Unauthorized
 			return;
 		});
 
-	}).catch(function(err){
-		error = 'Failed to get oidc token in request.' + err.message;
+	}).catch((err) => {
+		const	error = 'Failed to get oidc token in request: ' + JSON.stringify(err);
 		console.error(error);
 		Response.status(401);											// 401: Unauthorized
 		return;
@@ -555,25 +609,29 @@ router.get('/login/cb', sessionize);
 // URL Arguments
 //		extrouter				: <extrouter name>
 //
-router.get('/logout', function(Request, Response, Next)			// eslint-disable-line no-unused-vars
+router.get('/logout', (Request: express.Request, Response: express.Response, Next: express.NextFunction): void =>
 {
-	var	extRouterName = rawGetExtRouterName(Request);
+	const	extRouterName = rawGetExtRouterName(Request);
 
-	if(!r3util.isSafeEntity(oidcConfig[extRouterName])){
-		var error = 'Please check your configuarion(json) because it is invalid.';
+	if(!isSafeEntity(oidcConfig[extRouterName]) || !isOIDCExtRouterConfig(oidcConfig[extRouterName])){
+		const	error: string = 'Please check your configuarion(json) because it is invalid.';
 		console.error('Failed logout processing, ' + error);
 		Response.status(500);									// 500: Internal Server Error
 		Response.send(error);
 		return;
 	}
+	const	_oidcConfigInfo	= oidcConfig[extRouterName];
 
 	//
 	// Cleanup : clear the cookie if exist
 	//
-	Response.clearCookie(oidcConfig[extRouterName].params.cookiename);	// cookie name(id_token as deafult)
-	Response.clearCookie(oidcConfigCookieName);							// cookie name(oidc config name)
+	const	_cookiename	= (isSafeHaskey(_oidcConfigInfo.params, 'cookiename') && isSafeString(_oidcConfigInfo.params.cookiename)) ? _oidcConfigInfo.params.cookiename : '';
+	const	_mainurl	= _oidcConfigInfo.mainUrl;
 
-	Response.redirect(oidcConfig[extRouterName].mainUrl);
+	Response.clearCookie(_cookiename);							// cookie name(id_token as deafult)
+	Response.clearCookie(oidcConfigCookieName);					// cookie name(oidc config name)
+
+	Response.redirect(_mainurl);
 
 	return;
 });
@@ -585,40 +643,34 @@ router.get('/logout', function(Request, Response, Next)			// eslint-disable-line
 // setConfig is called in app.js to set configurations that are
 // defined in configuration file(json)
 //
-var setConfig = function(config, extRouterName)
+export const setConfig = (config: valTypeAllObject, extRouterName: string): boolean =>
 {
-	// check required member in config
-	if(	!r3util.isSafeEntity(config)						||
-		!r3util.isSafeEntity(config.oidcDiscoveryUrl)		||
-		!r3util.isSafeEntity(config.logoutUrl)				||
-		!r3util.isSafeEntity(config.mainUrl)				||
-		!r3util.isSafeEntity(config.params)					||
-		!r3util.isSafeEntity(config.params.client_secret)	||
-		!r3util.isSafeEntity(config.params.client_id)		||
-		!r3util.isSafeEntity(config.params.redirectUrl)		)
-	{
-		console.error('Please check your configuarion(json) because it is invalid : config = ' + JSON.stringify(config));
-		return false;
-	}
-	if(!r3util.isSafeString(extRouterName)){
+	if(!isSafeString(extRouterName)){
 		console.error('Please check your configuarion(json) because it does not have ' + JSON.stringify(extRouterName) + ' entity or it is empty.');
 		return false;
 	}
-	if(r3util.isSafeEntity(oidcConfig[extRouterName])){
+	if(isSafeEntity(oidcConfig[extRouterName])){
 		console.error('Please check your configuarion(json) because it has multi ' + JSON.stringify(extRouterName) + ' entities.');
 		return false;
 	}
 
+	// check required member in config
+	if(!isOIDCExtRouterConfig(config)){
+		console.error('Please check your configuarion(json) because it is invalid : config = ' + JSON.stringify(config));
+		return false;
+	}
+
+	// Set
 	oidcConfig[extRouterName] = config;
 
-	if(!r3util.isSafeEntity(oidcConfig[extRouterName].params.usernamekey)){
+	if(!isSafeHaskey(oidcConfig[extRouterName].params, 'usernamekey') || !isSafeString(oidcConfig[extRouterName].params.usernamekey)){
 		console.warn('The key name in configuration(usernamekey) is empty, then it check will no longer be performed.');
 	}
-	if(!r3util.isSafeEntity(oidcConfig[extRouterName].params.cookiename)){
+	if(!isSafeHaskey(oidcConfig[extRouterName].params, 'cookiename') || !isSafeString(oidcConfig[extRouterName].params.cookiename)){
 		console.warn('The cookie name in configuration(cookiename) is empty, so id_token is used as default.');
 		oidcConfig[extRouterName].params.cookiename = 'id_token';
 	}
-	if(!r3util.isSafeEntity(oidcConfig[extRouterName].params.cookieexpire) || 'number' != typeof oidcConfig[extRouterName].params.cookieexpire){
+	if(!isSafeHaskey(oidcConfig[extRouterName].params, 'cookieexpire') || !isSafeNumber(oidcConfig[extRouterName].params.cookieexpire)){
 		console.warn('The cookie expire(sec) in configuration(cookieexpire) is empty, so id_token is used as default.');
 		oidcConfig[extRouterName].params.cookieexpire = 60;			// 60 sec as default
 	}
@@ -632,23 +684,13 @@ var setConfig = function(config, extRouterName)
 // getConfig returns configurations that are defined in
 // configuration file(json)
 //
-var getConfig = function()
+export const getConfig = (): Record<string, OIDCExtRouterConfig> | null =>
 {
-	if(!r3util.isSafeEntity(oidcConfig)){
+	if(!isSafeEntity(oidcConfig)){
 		console.error('Please check your configuarion(json) because it is invalid.');
 		return null;
 	}
 	return oidcConfig;
-};
-
-//---------------------------------------------------------
-// Exports
-//---------------------------------------------------------
-module.exports = {
-	router:					router,
-	setConfig:				setConfig,
-	getConfig:				getConfig,
-	oidcConfigCookieName:	oidcConfigCookieName
 };
 
 /*

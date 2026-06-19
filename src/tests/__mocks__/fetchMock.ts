@@ -19,14 +19,26 @@
  *
  */
 
-import { r3ParseUrl, r3ArrayHasValue, r3CompareString, r3IsEmptyString, r3IsEmptyEntity } from '../../src/util/r3util';
+import { StringValObj, valTypeAllObject } from '../../util/r3types';
+import { r3ParseUrl, r3ArrayHasValue, r3CompareString, r3IsEmptyString } from '../../util/r3util';
+
+interface FetchOption {
+	method?:	string;
+	headers?:	StringValObj;
+}
+
+interface FetchResponse {
+	ok:			boolean;
+	status:		number;
+	json:		() => valTypeAllObject;
+}
 
 //
 // Return promise object for error
 //
-const fetchError = (message) =>
+const fetchError = (message: string): Promise<Response> =>
 {
-	return new Promise((resolve, reject) =>
+	return new Promise((_resolve, reject) =>
 	{
 		reject(new Error('Error occurred in fetch mock function : ' + message));
 	});
@@ -35,41 +47,35 @@ const fetchError = (message) =>
 //
 // Return promise object for success
 //
-const fetchSuccess = (object) =>
+const fetchSuccess = (object: valTypeAllObject): Promise<Response> =>
 {
-	return new Promise((resolve, reject) =>						// eslint-disable-line no-unused-vars
+	return new Promise((resolve) =>
 	{
-		resolve({
-			ok:			true,
-			status:		200,
-			json:		() => { return object; }
+		const realResponse = new Response(JSON.stringify(object), {
+			status: 200,
+			headers: { 'Content-Type': 'application/json' }
 		});
+		resolve(realResponse);
 	});
 };
 
 //
 // mock for fetch function
 //
-global.fetch = jest.fn().mockImplementation((url, option) =>	// eslint-disable-line no-undef
+jest.spyOn(global, 'fetch').mockImplementation((url: string | URL | Request, option?: RequestInit): Promise<Response> =>
 {
 	//
 	// Check option
 	//
-	if(r3IsEmptyEntity(option)){
-		return fetchError('option is wrong object or empty');
-	}
-	if(r3IsEmptyString(option.method)){
-		return fetchError('option.method is empty');
-	}
-	if(r3IsEmptyEntity(option.headers)){
-		return fetchError('option is wrong object or empty');
+	if(!option){
+		return fetchError('option is empty');
 	}
 
 	//
 	// Check and parse url
 	//
 	let	path		= '/';
-	let	parsedUrl	= r3ParseUrl(url);
+	const	parsedUrl	= r3ParseUrl(String(url));
 	if(!r3ArrayHasValue(parsedUrl, 'path')){
 		path		= parsedUrl.path;
 	}
@@ -80,9 +86,12 @@ global.fetch = jest.fn().mockImplementation((url, option) =>	// eslint-disable-l
 		//
 		//console.info('DEBUG Request => url: ' + JSON.stringify(url) + ', parsedUrl: ' + JSON.stringify(parsedUrl) + ', path: ' + JSON.stringify(path) + ', option: ' + JSON.stringify(option));
 
-		if(r3IsEmptyString(option.headers['x-auth-token'])){
+		const headers	= new Headers(option.headers);
+		const authToken	= headers.get('x-auth-token');
+
+		if(r3IsEmptyString(authToken)){
 			return fetchError('Not found x-auth-token in option.headers');
-		}else if(r3CompareString(option.headers['x-auth-token'], 'U=UnscopedUserToken_ForTestByJEST')){	// unscoped token, see package.json
+		}else if(r3CompareString(authToken, 'U=UnscopedUserToken_ForTestByJEST')){		// unscoped token, see package.json
 			return fetchSuccess({
 				result:		true,
 				message:	'succeed',
@@ -95,7 +104,7 @@ global.fetch = jest.fn().mockImplementation((url, option) =>	// eslint-disable-l
 				]
 			});
 		}else{
-			return fetchError('Unknown Token(' + option.headers['x-auth-token'] + ')');
+			return fetchError('Unknown Token(' + authToken + ')');
 		}
 
 	}else if(r3CompareString(path, '/v1/tenant?expand=true')){
@@ -116,6 +125,8 @@ global.fetch = jest.fn().mockImplementation((url, option) =>	// eslint-disable-l
 		return fetchError('Unknown path(' + path + ')');
 	}
 });
+
+export {};
 
 /*
  * Local variables:

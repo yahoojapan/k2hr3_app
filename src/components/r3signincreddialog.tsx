@@ -20,8 +20,6 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import TextField					from '@mui/material/TextField';
 import Button						from '@mui/material/Button';
@@ -40,7 +38,9 @@ import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
 import CancelIcon					from '@mui/icons-material/Cancel';
 import WarningIcon					from '@mui/icons-material/WarningRounded';
 
+import R3Provider					from '../util/r3provider';
 import { r3IsEmptyString }			from '../util/r3util';
+import type { R3Theme }				from './r3theme';
 import { r3SigninCredDialogStyles }	from './r3styles';
 
 //
@@ -50,21 +50,41 @@ const userNameTextFieldId		= 'username-textfield-id';
 const passphraseTextFieldId		= 'passphrase-textfield-id';
 
 //
+// Props/State type
+//
+type R3SigninCredDialogRequiredProps = {
+	theme:				R3Theme;
+	r3provider:			R3Provider;
+	onClose:			(event: {}, reason: string | null, confirmed: boolean, name: string | null, passphrase: string | null) => void;
+};
+
+type R3SigninCredDialogOptionProps = {
+	open?:				boolean;
+	name?:				string | null;
+	passphrase?:		string | null;
+	message?:			string;
+	showPassphrase?:	boolean;
+};
+
+type R3SigninCredDialogProps = R3SigninCredDialogRequiredProps & R3SigninCredDialogOptionProps;
+
+type R3SigninCredDialogState = {
+	name:				string;
+	passphrase:			string;
+	showPassphrase:		boolean;
+	open:				boolean;
+};
+
+type R3SigninCredDialogStylesType = ReturnType<typeof r3SigninCredDialogStyles>;
+
+//
 // SignIn by Credential Dialog
 //
-export default class R3SigninCredDialog extends React.Component
+export default class R3SigninCredDialog extends React.Component<R3SigninCredDialogProps, R3SigninCredDialogState>
 {
-	static propTypes = {
-		r3provider:		PropTypes.object.isRequired,
-		open:			PropTypes.bool,
-		name:			PropTypes.string,
-		passphrase:		PropTypes.string,
-		message:		PropTypes.string,
+	sxClasses: R3SigninCredDialogStylesType;
 
-		onClose:		PropTypes.func.isRequired
-	};
-
-	static defaultProps = {
+	static defaultProps: R3SigninCredDialogOptionProps = {
 		open:			false,
 		name:			'',
 		passphrase:		'',
@@ -78,7 +98,7 @@ export default class R3SigninCredDialog extends React.Component
 		open:			this.props.open
 	};
 
-	constructor(props)
+	constructor(props: R3SigninCredDialogProps)
 	{
 		super(props);
 
@@ -95,7 +115,7 @@ export default class R3SigninCredDialog extends React.Component
 	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
 	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
 	//
-	static getDerivedStateFromProps(nextProps, prevState)
+	static getDerivedStateFromProps(nextProps: R3SigninCredDialogProps, prevState: R3SigninCredDialogState): Partial<R3SigninCredDialogState> | null
 	{
 		if(prevState.open != nextProps.open){
 			if(nextProps.open){
@@ -119,14 +139,14 @@ export default class R3SigninCredDialog extends React.Component
 		return null;															// Return null to indicate no change to state.
 	}
 
-	handleUserNameChange(event)
+	handleUserNameChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
 	{
 		this.setState({
 			name:		event.target.value
 		});
 	}
 
-	handlePassPhraseChange(event)
+	handlePassPhraseChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
 	{
 		this.setState({
 			passphrase:	event.target.value

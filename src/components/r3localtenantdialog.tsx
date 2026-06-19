@@ -20,8 +20,6 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import TextField					from '@mui/material/TextField';
 import Button						from '@mui/material/Button';
@@ -44,11 +42,62 @@ import DeleteIcon					from '@mui/icons-material/Delete';
 
 import R3PopupMsgDialog				from './r3popupmsgdialog';
 import R3Message					from '../util/r3message';
-import { warningType }				from '../util/r3types';
+import R3Provider					from '../util/r3provider';
 
-import { r3LocalTenantDialog }		from './r3styles';
+import { r3LocalTenantDialogStyle }	from './r3styles';
+import type { R3Theme }				from './r3theme';
+import { valTypeAllObject, warningType }		from '../util/r3types';
 import { regTenantUserName, localTenantPrefix } from '../util/r3define';
-import { r3DeepClone, r3IsEmptyString, r3IsEmptyEntityObject, r3IsSafeTypedEntity, r3ArrayHasValue, r3CompareString, r3DeepCompare } from '../util/r3util';
+import { r3DeepClone, r3IsEmptyString, r3IsEmptyEntityObject, r3ArrayHasValue, r3CompareString, r3DeepCompare, r3IsArray, r3IsBoolean, r3IsNumber } from '../util/r3util';
+
+//
+// Interfaces
+//
+type R3LocalTenantDialogRequiredProps = {
+	theme:							R3Theme;
+	r3provider:						R3Provider;
+	onClose:						(event: React.SyntheticEvent | {}, reason: string | null, confirmed: boolean, tenantName: string | null, tenantId: string | null, tenantDisplay: string | null, tenantDescription: string | null, tenantUsers: string[] | null) => void;
+};
+
+type R3LocalTenantDialogOptionProps = {
+	open?:							boolean;
+	createMode?:					boolean;
+	userName?:						string;
+	allTenantNames?:				string[];
+	tenantName?:					string;
+	tenantId?:						string;
+	tenantDisplay?:					string;
+	tenantDescription?:				string;
+	tenantUsers?:					string[];
+	tenantUserListRow?:				number;
+};
+
+type R3LocalTenantDialogProps = R3LocalTenantDialogRequiredProps & R3LocalTenantDialogOptionProps;
+
+type R3LocalTenantDialogState = {
+	open:							boolean;
+
+	// main
+	tenantName:						string;
+	tenantDisplay:					string;
+	tenantDescription:				string;
+	tenantUsers:					string[];
+	tenantNameMessage:				string | null;
+	confirmMessage:					R3Message | null;
+
+	// popover
+	popoverTenantUserAddAnchorEl:	HTMLElement | null;
+	popoverTenantUserAddValue:		string | null;
+	popoverTenantUsersEditAnchorEl:	HTMLElement | null;
+	popoverTenantUsers:				string[];
+	popoverTenantUsersPageNum:		number;
+	popoverComfirmMessage:			string | null;
+
+	// tooltips
+	tooltips:						Record<string, boolean | number>;
+};
+
+type R3LocalTenantDialogStyleType = ReturnType<typeof r3LocalTenantDialogStyle>;
 
 //
 // Local variables
@@ -75,25 +124,11 @@ const disableAllToolTip = {
 //
 // Create Local Tenant Dialog Class
 //
-export default class R3LocalTenantDialog extends React.Component
+export default class R3LocalTenantDialog extends React.Component<R3LocalTenantDialogProps, R3LocalTenantDialogState>
 {
-	static propTypes = {
-		r3provider:			PropTypes.object.isRequired,
-		open:				PropTypes.bool,
-		createMode:			PropTypes.bool.isRequired,					// Create mode
-		userName:			PropTypes.string,
-		allTenantNames:		PropTypes.array,
-		tenantName:			PropTypes.string,
-		tenantId:			PropTypes.string,
-		tenantDisplay:		PropTypes.string,
-		tenantDescription:	PropTypes.string,
-		tenantUsers:		PropTypes.array,
-		tenantUserListRow:	PropTypes.number,
+	sxClasses: R3LocalTenantDialogStyleType;
 
-		onClose:			PropTypes.func.isRequired
-	};
-
-	static defaultProps = {
+	static defaultProps: R3LocalTenantDialogOptionProps = {
 		open:				false,
 		createMode:			false,
 		userName:			'',
@@ -106,14 +141,14 @@ export default class R3LocalTenantDialog extends React.Component
 		tenantUserListRow:	5
 	};
 
-	state = {
+	state: R3LocalTenantDialogState = {
 		open:							this.props.open,
 
 		// main
 		tenantName:						(this.props.createMode ? '' : this.props.tenantName),
 		tenantDisplay:					(this.props.createMode ? '' : this.props.tenantDisplay),
 		tenantDescription:				(this.props.createMode ? '' : this.props.tenantDescription),
-		tenantUsers:					(this.props.createMode ? [] : r3IsSafeTypedEntity(this.props.tenantUsers, 'array') ? [] : r3DeepClone(this.props.tenantUsers).sort()),
+		tenantUsers:					(this.props.createMode ? [] : r3IsArray(this.props.tenantUsers) ?r3DeepClone(this.props.tenantUsers).sort() : []),
 		tenantNameMessage:				null,
 		confirmMessage:					null,
 
@@ -129,7 +164,7 @@ export default class R3LocalTenantDialog extends React.Component
 		tooltips: 						disableAllToolTip
 	};
 
-	constructor(props)
+	constructor(props: R3LocalTenantDialogProps)
 	{
 		super(props);
 
@@ -153,14 +188,14 @@ export default class R3LocalTenantDialog extends React.Component
 		this.handleDialogCloseButton		= this.handleDialogCloseButton.bind(this);
 
 		// styles
-		this.sxClasses						= r3LocalTenantDialog(props.theme);
+		this.sxClasses						= r3LocalTenantDialogStyle(props.theme);
 	}
 
 	// [NOTE]
 	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
 	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
 	//
-	static getDerivedStateFromProps(nextProps, prevState)
+	static getDerivedStateFromProps(nextProps: R3LocalTenantDialogProps, prevState: R3LocalTenantDialogState): Partial<R3LocalTenantDialogState> | null
 	{
 		if(prevState.open != nextProps.open){
 			if(nextProps.open){
@@ -213,7 +248,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Handle Popup Message Close ( OK / Cancel )
 	//
-	handConfirmMessageClose(event, reason, result)
+	handConfirmMessageClose(event: {}, reason: string | null, result: boolean)
 	{
 		if(result){
 			// continue
@@ -229,13 +264,13 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Handle Dialog Close ( OK / Cancel )
 	//
-	handleDialogCloseButton(event)
+	handleDialogCloseButton(event: React.SyntheticEvent)
 	{
 		const { r3provider } = this.props;
 
 		let	r3messageobj = null;
 		if(!this.props.createMode){
-			if(!r3IsSafeTypedEntity(this.state.tenantUsers, 'array') || 0 === this.state.tenantUsers.length){
+			if(!r3IsArray(this.state.tenantUsers) || 0 === this.state.tenantUsers.length){
 				// no user
 				r3messageobj = new R3Message(r3provider.getR3TextRes().wStaticResTenantDeleting, warningType);
 			}else if(!r3ArrayHasValue(this.state.tenantUsers, this.props.userName)){
@@ -256,12 +291,12 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Handle Tenant Name Change
 	//
-	handleTenantNameChange(event)
+	handleTenantNameChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
 	{
 		const { r3provider } = this.props;
 
 		// check
-		let newTenantName;
+		let newTenantName: string;
 		if(0 !== event.target.value.indexOf(localTenantPrefix)){
 			newTenantName = localTenantPrefix + event.target.value;
 		}else{
@@ -281,7 +316,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Handle Display Name Change
 	//
-	handleDisplayChange(event)
+	handleDisplayChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
 	{
 		this.setState({
 			tenantDisplay:	event.target.value
@@ -291,7 +326,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Handle Description Change
 	//
-	handleDescriptionChange(event)
+	handleDescriptionChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
 	{
 		this.setState({
 			tenantDescription:	event.target.value
@@ -301,7 +336,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Handle Tooltip Change
 	//
-	handTooltipChange = (event, type, extData) =>
+	handTooltipChange = (event: React.SyntheticEvent, type: string, extData: boolean | number) =>
 	{
 		if(tooltipValues.usersEditButtonTooltip === type){
 			this.setState({
@@ -327,10 +362,10 @@ export default class R3LocalTenantDialog extends React.Component
 	//----------------------------------------------------------
 	// Common Utilities
 	//----------------------------------------------------------
-	checkTenantNameConflict(tenantName)
+	checkTenantNameConflict(tenantName: string)
 	{
 		// check
-		let checkTenantName;
+		let checkTenantName: string;
 		if(0 !== tenantName.indexOf(localTenantPrefix)){
 			checkTenantName = localTenantPrefix + tenantName;
 		}else{
@@ -342,11 +377,11 @@ export default class R3LocalTenantDialog extends React.Component
 	//----------------------------------------------------------
 	// [Popover] Edit Tenant User
 	//----------------------------------------------------------
-	handleTenantUsersEditButton(event)
+	handleTenantUsersEditButton(event: React.MouseEvent<HTMLElement>)
 	{
 		this.setState({
 			popoverTenantUsersEditAnchorEl:	event.currentTarget,
-			popoverTenantUsers:				(!r3IsSafeTypedEntity(this.state.tenantUsers, 'array') ? [] : r3DeepClone(this.state.tenantUsers).sort()),
+			popoverTenantUsers:				(r3IsArray(this.state.tenantUsers) ? r3DeepClone(this.state.tenantUsers).sort() : []),
 			popoverTenantUsersPageNum:		0,
 			popoverComfirmMessage:			null,
 			tooltips: 						disableAllToolTip
@@ -356,7 +391,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Edit Tenant User : Delete
 	//
-	handleDeleteTenantUsersEdit(event, pos)
+	handleDeleteTenantUsersEdit(event: React.SyntheticEvent, pos: number)
 	{
 		const { r3provider } = this.props;
 
@@ -384,7 +419,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Edit Tenant User : Delete
 	//
-	handleChangeRowTenantUsersEdit(event, page)
+	handleChangeRowTenantUsersEdit(event: React.MouseEvent<HTMLButtonElement> | null, page: number)
 	{
 		this.setState({
 			popoverTenantUsersPageNum:	page,
@@ -396,7 +431,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Edit Tenant User : Confirm
 	//
-	handleConfirmTenantUsersEdit(event)										// eslint-disable-line no-unused-vars
+	handleConfirmTenantUsersEdit(event: React.SyntheticEvent)
 	{
 		// update state
 		let	newTenantUsers = r3DeepClone(this.state.popoverTenantUsers).sort();
@@ -413,7 +448,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Edit Tenant User : Cancel
 	//
-	handleCancelTenantUsersEdit(event)											// eslint-disable-line no-unused-vars
+	handleCancelTenantUsersEdit(event: React.SyntheticEvent)
 	{
 		this.setState({
 			popoverTenantUsersEditAnchorEl:	null,
@@ -427,23 +462,23 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Edit Tenant User : Create user name item
 	//
-	getPopoverTenantUserListItem(pos, userNameItem)
+	getPopoverTenantUserListItem(pos: number, userNameItem: string)
 	{
 		const { theme, r3provider } = this.props;
 
-		let	userNameStyle;
+		let	userNameStyle: valTypeAllObject;
 		if(userNameItem == this.props.userName){
 			userNameStyle = this.sxClasses.popoverTenantUserOwnName;
 		}else{
 			userNameStyle = this.sxClasses.popoverTenantUserName;
 		}
 
-		let	deleteUserBtn;
+		let	deleteUserBtn: React.ReactNode;
 		if(!this.props.createMode || userNameItem != this.props.userName){
 			deleteUserBtn = (
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResTenantUserDeleteTT }
-					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.usersDeleteButtonTooltip, 'number') || (this.state.tooltips.usersDeleteButtonTooltip != pos)) ? false : true) }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.usersDeleteButtonTooltip) || (this.state.tooltips.usersDeleteButtonTooltip != pos)) ? false : true) }
 				>
 					<Button
 						onClick={ (event) => this.handleDeleteTenantUsersEdit(event, pos) }
@@ -484,7 +519,7 @@ export default class R3LocalTenantDialog extends React.Component
 
 		return(
 			<Box>
-				{ tenantUsers.map( (item, pos) => {
+				{ tenantUsers.map( (item: string, pos: number) => {
 					if(pos < (pageNum * this.props.tenantUserListRow) || ((pageNum + 1) * this.props.tenantUserListRow) <= pos){
 						return;
 					}
@@ -501,7 +536,7 @@ export default class R3LocalTenantDialog extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		let	message;
+		let	message: React.ReactNode;
 		if(null != this.state.popoverComfirmMessage){
 			message = (
 				<Typography
@@ -558,7 +593,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//----------------------------------------------------------
 	// [Popover] Add Tenant User
 	//----------------------------------------------------------
-	handleTenantUserAddButton(event)
+	handleTenantUserAddButton(event: React.MouseEvent<HTMLElement>)
 	{
 		this.setState({
 			popoverTenantUserAddAnchorEl:	event.currentTarget,
@@ -571,7 +606,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Add Tenant User : Change
 	//
-	handleChangeTenantUserAdd(event)
+	handleChangeTenantUserAdd(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
 	{
 		this.setState({
 			popoverTenantUserAddValue:	event.target.value,
@@ -582,7 +617,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Add Tenant User : Confirm
 	//
-	handleConfirmTenantUserAdd(event)										// eslint-disable-line no-unused-vars
+	handleConfirmTenantUserAdd(event: React.SyntheticEvent)
 	{
 		const { r3provider } = this.props;
 
@@ -626,7 +661,7 @@ export default class R3LocalTenantDialog extends React.Component
 	//
 	// Add Tenant User : Cancel
 	//
-	handleCancelTenantUserAdd(event)											// eslint-disable-line no-unused-vars
+	handleCancelTenantUserAdd(event: React.SyntheticEvent)
 	{
 		this.setState({
 			popoverTenantUserAddAnchorEl:	null,
@@ -642,7 +677,7 @@ export default class R3LocalTenantDialog extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		let	message;
+		let	message: React.ReactNode;
 		if(null != this.state.popoverComfirmMessage){
 			message = (
 				<Typography
@@ -704,15 +739,15 @@ export default class R3LocalTenantDialog extends React.Component
 		//
 		// Variables by create mode
 		//
-		let	dialogTitle;
-		let	tenantNameValueContent;
-		let	tenantIdContent;
+		let	dialogTitle:			string;
+		let	tenantNameValueContent:	React.ReactNode;
+		let	tenantIdContent:		React.ReactNode;
 		if(this.props.createMode){
 			// Create
 			dialogTitle = r3provider.getR3TextRes().cCreateLocalTenantTitle;
 
 			// Messages
-			let	tenantNameMessage;
+			let	tenantNameMessage: React.ReactNode;
 			if(null != this.state.tenantNameMessage){
 				tenantNameMessage = (
 					<Typography
@@ -790,8 +825,8 @@ export default class R3LocalTenantDialog extends React.Component
 		//
 		// User edit button
 		//
-		let	disableManageButton;
-		if(!r3IsSafeTypedEntity(this.state.tenantUsers, 'array') || 0 === this.state.tenantUsers.length){
+		let	disableManageButton: boolean;
+		if(!r3IsArray(this.state.tenantUsers) || 0 === this.state.tenantUsers.length){
 			disableManageButton = true;
 		}else if(this.props.createMode && 1 === this.state.tenantUsers.length && r3ArrayHasValue(this.state.tenantUsers, this.props.userName)){
 			disableManageButton = true;
@@ -822,7 +857,7 @@ export default class R3LocalTenantDialog extends React.Component
 				userListErrorMessage = r3provider.getR3TextRes().eLocalTenantUserDelOwn;	// Removing self to not access
 			}
 		}
-		let	userListMessage;
+		let	userListMessage: React.ReactNode;
 		if(null != userListErrorMessage){
 			userListMessage = (
 				<Typography
@@ -837,7 +872,7 @@ export default class R3LocalTenantDialog extends React.Component
 		//
 		// Popup messages
 		//
-		let	confirmMessage;
+		let	confirmMessage: React.ReactNode;
 		if(this.state.confirmMessage){
 			confirmMessage = (
 				<R3PopupMsgDialog
@@ -853,7 +888,7 @@ export default class R3LocalTenantDialog extends React.Component
 		//
 		// Dialog button state
 		//
-		let	enableButtonOK;
+		let	enableButtonOK: boolean;
 		if(this.props.createMode){
 			if(	!r3IsEmptyString(this.state.tenantName, true)					&&					// specified tenant name
 				!this.checkTenantNameConflict(this.state.tenantName)			&&					// tenant name does not conflict
@@ -958,7 +993,7 @@ export default class R3LocalTenantDialog extends React.Component
 					>
 						<Tooltip
 							title={ r3provider.getR3TextRes().tResTenantUsersEditTT }
-							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.usersEditButtonTooltip, 'boolean')) ? false : this.state.tooltips.usersEditButtonTooltip) }
+							open={ (r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.usersEditButtonTooltip)) ? false : this.state.tooltips.usersEditButtonTooltip === true }
 						>
 							<IconButton
 								disabled={ disableManageButton }
@@ -974,7 +1009,7 @@ export default class R3LocalTenantDialog extends React.Component
 						</Tooltip>
 						<Tooltip
 							title={ r3provider.getR3TextRes().tResTenantUsersAddTT }
-							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.userAddButtonTooltip, 'boolean')) ? false : this.state.tooltips.userAddButtonTooltip) }
+							open={ (r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.userAddButtonTooltip)) ? false : this.state.tooltips.userAddButtonTooltip === true }
 						>
 							<Button
 								onClick={ this.handleTenantUserAddButton }

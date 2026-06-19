@@ -19,62 +19,111 @@
  *
  */
 
+import type { valTypeAll, valTypeAllObject, StringValObj, RoleHostInfo, ParseKVResult, ParseUrlResult, DiffRoundResult } from '../util/r3types';
+
+//
+// Typechecker
+//
+export const r3IsString = (str: unknown): str is string =>
+{
+	if(undefined === str || null === str){
+		return false;
+	}
+	return 'string' === typeof str;
+};
+
+export const r3IsBoolean = (bool: unknown): bool is boolean =>
+{
+	if(undefined === bool || null === bool){
+		return false;
+	}
+	return 'boolean' === typeof bool;
+};
+
+export const r3IsNumber = (num: unknown): num is number =>
+{
+	if(undefined === num || null === num){
+		return false;
+	}
+	return 'number' === typeof num;
+};
+
+export const r3IsObject = (obj: unknown): obj is valTypeAllObject =>
+{
+	if(undefined === obj || null === obj || Array.isArray(obj)){
+		return false;
+	}
+	return obj instanceof Object;
+};
+
+export const r3IsStringValObject = (val: unknown): val is StringValObj =>
+{
+	if(!r3IsObject(val)){
+		return false;
+	}
+	return Object.values(val).every(val => r3IsString(val));
+};
+
+export const r3IsArray = (arr: unknown): arr is unknown[] =>
+{
+	if(undefined === arr || null === arr){
+		return false;
+	}
+	return Array.isArray(arr);
+};
+
+export const r3IsStringArray = (val: unknown): val is string[] =>
+{
+	if(!r3IsArray(val)){
+		return false;
+	}
+	return val.every((item: unknown) => r3IsString(item));
+};
+
+export const r3IsFunction = (func: unknown): func is Function =>
+{
+	if(undefined === func || null === func){
+		return false;
+	}
+	return 'function' === typeof func;
+};
+
 //
 // utility function for compare string
 //
-export const r3CompareString = (str1, str2) =>
+export const r3CompareString = (str1: unknown, str2: unknown): boolean =>
 {
-	if(	undefined === str1 || null === str1 || 'string' !== typeof str1 ||
-		undefined === str2 || null === str2 || 'string' !== typeof str2 ||
-		str1 !== str2 )
-	{
+	if(!r3IsString(str1) || !r3IsString(str2) || str1 !== str2){
 		return false;
 	}
 	return true;
 };
 
-export const r3CompareCaseString = (str1, str2) =>
+export const r3CompareCaseString = (str1: unknown, str2: unknown): boolean =>
 {
-	if(	undefined === str1 || null === str1 || 'string' !== typeof str1 ||
-		undefined === str2 || null === str2 || 'string' !== typeof str2 ||
-		str1.toLowerCase() !== str2.toLowerCase() )
-	{
+	if(!r3IsString(str1) || !r3IsString(str2) || str1.toLowerCase() !== str2.toLowerCase()){
 		return false;
 	}
 	return true;
 };
 
-export const r3IsEmptyEntity = (obj) =>
+export const r3IsEmptyEntity = (obj: unknown): boolean =>
 {
-	if(undefined === obj || null === obj || ('object' !== typeof obj && 'boolean' !== typeof obj && 'string' !== typeof obj && 'function' !== typeof obj && isNaN(obj))){
+	if(undefined === obj || null === obj || (!r3IsObject(obj) && !r3IsBoolean(obj) && !r3IsString(obj) && !r3IsNumber(obj) && !r3IsArray(obj))){
 		return true;
 	}
 	return false;
 };
 
-export const r3IsSafeTypedEntity = (obj, type) =>
+export const r3IsEmptyString = (str: unknown, istrimed?: boolean): boolean =>
 {
-	if(r3IsEmptyEntity(obj) || r3IsEmptyString(type, true)){
-		return false;
-	}
-	if('array' === type.toLowerCase()){
-		if(!(obj instanceof Array)){
-			return false;
-		}
-	}else{
-		if(type.toLowerCase() !== typeof obj){
-			return false;
-		}
-	}
-	return true;
-};
-
-export const r3IsEmptyString = (str, istrimed) =>
-{
-	if(undefined === str || null === str || 'string' !== typeof str || '' === str){
+	if(!r3IsString(str)){
 		return true;
 	}
-	if(undefined !== istrimed && null !== istrimed && 'boolean' === typeof istrimed && istrimed && '' === str.trim()){
+	if('' === str){
+		return true;
+	}
+	if(r3IsBoolean(istrimed) && istrimed && '' === str.trim()){
 		return true;
 	}
 	return false;
@@ -83,44 +132,83 @@ export const r3IsEmptyString = (str, istrimed) =>
 //
 // utility function for name in object
 //
-export const r3IsEmptyEntityObject = (obj, name) =>
+export const r3HasKey = <T extends object>(obj: T, key: string): key is Extract<keyof T, string> =>
 {
-	if(	undefined === obj || null === obj || !(obj instanceof Object)					||
-		undefined === name || null === name || 'string' !== typeof name || '' === name	||
-		undefined === obj[name] || null === obj[name]									)
-	{
+	return key in obj;
+};
+
+export const r3IsEmptyEntityObject = (obj: unknown, name: string): boolean =>
+{
+	if(!r3IsObject(obj) || !r3IsString(name) || r3IsEmptyString(name, true)){
+		return true;
+	}
+	if(!r3HasKey(obj, name) || undefined === obj[name] || null === obj[name]){
 		return true;
 	}
 	return false;
+};
+
+//
+// utility function for get string with default
+//
+export const r3GetSafeString = (str: unknown, defaultstr: string | null = null): string =>
+{
+	if(r3IsString(str) && !r3IsEmptyString(str, true)){
+		return str;
+	}
+	if(r3IsString(defaultstr)){
+		return defaultstr;
+	}
+	return '';
 };
 
 //
 // utility function for string in object
 //
-export const r3IsEmptyStringObject = (obj, name) =>
+export const r3IsEmptyStringObject = (obj: unknown, name: string): boolean =>
 {
-	if(	undefined === obj || null === obj || !(obj instanceof Object)										||
-		undefined === name || null === name || 'string' !== typeof name || '' === name						||
-		undefined === obj[name] || null === obj[name] || 'string' !== typeof obj[name] || '' === obj[name]	)
-	{
+	if(!r3IsObject(obj) || !r3IsString(name) || r3IsEmptyString(name, true) || r3IsEmptyEntityObject(obj, name) || !r3IsString(obj[name]) || r3IsEmptyString(obj[name], true)){
 		return true;
 	}
 	return false;
 };
 
 //
+// utility convert to number
+//
+export const r3GetDecNumber = (num: unknown): number =>
+{
+	if(r3IsNumber(num)){
+		return num;
+	}
+	if(r3IsString(num) && !r3IsEmptyString(num) && !Number.isNaN(Number(num))){
+		return parseInt(num, 10);
+	}
+	return 0;
+};
+
+//
 // utility function for merging
 //
-export const r3ObjMerge = (baseObj, ...addObjs) =>
+export const r3ObjMerge = (baseObj: unknown, ...addObjs: unknown[]): valTypeAllObject =>
 {
-	let	newObj = {};
-	if(undefined !== baseObj && null !== baseObj){
+	let newObj: valTypeAllObject = {};
+	if(r3IsObject(baseObj)){
 		newObj = Object.assign(newObj, baseObj);
 	}
-	for(let cnt = 0; cnt < addObjs.length; ++cnt){
-		newObj = Object.assign(newObj, addObjs[cnt]);
-	}
+	addObjs.forEach(obj => {
+		if(r3IsObject(obj)){
+			newObj = Object.assign(newObj, obj);
+		}
+	});
 	return newObj;
+};
+
+export const r3StringValObjMerge = (baseObj: unknown, addObj: unknown): StringValObj =>
+{
+	const baseSafe	= r3IsStringValObject(baseObj) ? baseObj : {};
+	const addSafe	= r3IsStringValObject(addObj) ? addObj : {};
+	return { ...baseSafe, ...addSafe };
 };
 
 //
@@ -129,52 +217,37 @@ export const r3ObjMerge = (baseObj, ...addObjs) =>
 // This function is for deep clone source object.
 // Be careful for this function can not clone function(and class) and
 // unknown type source object.
-// This function can clone only undefined, null, boolean, string, 
+// This function can clone only undefined, null, boolean, string,
 // number, basically object, array.
 //
-export const r3DeepClone = (src) =>
+export const r3DeepClone = <T>(src: T): T =>
 {
 	if(undefined === src){
-		return undefined;
+		return undefined as T;
 
 	}else if(null === src){
-		return null;
+		return null as T;
 
-	}else if('boolean' === typeof src){
+	}else if(r3IsBoolean(src) || r3IsNumber(src) || r3IsString(src)){
 		return src;
 
-	}else if('number' === typeof src){
-		return src;
-
-	}else if('string' === typeof src){
-		return src;
-
-	}else if('function' === typeof src){
+	}else if(r3IsFunction(src)){
 		console.warn('r3DeepClone : could not clone funtion, thus return reference.');
 		return src;
 
-	}else if('object' === typeof src){
-		if(src instanceof Array){
-			let	arr = [];
-			for(let cnt = 0; cnt < src.length; ++cnt){
-				arr.push(r3DeepClone(src[cnt]));
-			}
-			return arr;
+	}else if(r3IsArray(src)){
+		const arr = src.map(item => r3DeepClone(item));
+		return arr as T;
 
-		}else if(src instanceof Object){
-			let	obj		= {};
-			let	names	= Object.keys(src);
-			for(let cnt = 0; cnt < names.length; ++cnt){
-				obj[names[cnt]] = r3DeepClone(src[names[cnt]]);
-			}
-			return obj;
-
-		}else{
-			console.warn('r3DeepClone : unknown instance base in object type, thus could not clone and return reference.');
-			return src;
-		}
+	}else if(r3IsObject(src)){
+		const obj: valTypeAllObject = {};
+		Object.entries(src).forEach(([key, value]) => {
+			obj[key] = r3DeepClone(value);
+		});
+		return obj as T;
 	}
 	console.warn('r3DeepClone : unknown type, thus could not clone and return reference.');
+
 	return src;
 };
 
@@ -184,13 +257,13 @@ export const r3DeepClone = (src) =>
 // This function is for deep compare two objects.
 // Be careful for this function can not compare function(and class) and
 // unknown type source object.
-// This function can compare only undefined, null, boolean, string, 
+// This function can compare only undefined, null, boolean, string,
 // number, basically object, array.
 //
-export const r3DeepCompare = (obj1, obj2) =>
+export const r3DeepCompare = (obj1: unknown, obj2: unknown): boolean =>
 {
-	let	tmpObj1 = obj1;
-	let	tmpObj2 = obj2;
+	let	tmpObj1: unknown = obj1;
+	let	tmpObj2: unknown = obj2;
 	if(r3IsJSON(tmpObj1)){
 		tmpObj1 = r3ConvertFromJSON(tmpObj1);
 	}
@@ -217,105 +290,97 @@ export const r3DeepCompare = (obj1, obj2) =>
 		console.warn('r3DeepCompare : could not compare funtion.');
 		return ('function' === typeof tmpObj2 && r3GetJSON(tmpObj1) === r3GetJSON(tmpObj2));
 
-	}else if('object' === typeof tmpObj1){
-		if(tmpObj1 instanceof Array){
-			if('object' === typeof tmpObj2 && tmpObj2 instanceof Array){
-				if(tmpObj1.length !== tmpObj2.length){
-					return false;
-				}
-				let	arrCheck = {};
-				for(let cnt1 = 0; cnt1 < tmpObj1.length; ++cnt1){
-					let	found = false;
-					for(let cnt2 = 0; cnt2 < tmpObj2.length; ++cnt2){
-						if(undefined === arrCheck[cnt2]){
-							if(r3DeepCompare(tmpObj1[cnt1], tmpObj2[cnt2])){
-								arrCheck[cnt2]	= true;
-								found			= true;
-								break;
-							}
-						}
-					}
-					if(!found){
-						return false;
-					}
-				}
-				return true;
-			}else{
-				return false;
-			}
-
-		}else if(tmpObj1 instanceof Object){
-			if('object' === typeof tmpObj2 && tmpObj2 instanceof Object){
-				let	namesObj1 = Object.keys(tmpObj1);
-				let	namesObj2 = Object.keys(tmpObj2);
-				if(namesObj1.length !== namesObj2.length){
-					return false;
-				}
-				for(let cnt1 = 0; cnt1 < namesObj1.length; ++cnt1){
-					let	found = false;
-					for(let cnt2 = 0; cnt2 < namesObj2.length; ++cnt2){
-						if(r3DeepCompare(namesObj1[cnt1], namesObj2[cnt2]) && r3DeepCompare(tmpObj1[namesObj1[cnt1]], tmpObj2[namesObj2[cnt2]])){
-							found = true;
-							break;
-						}
-					}
-					if(!found){
-						return false;
-					}
-				}
-				return true;
-			}else{
-				return false;
-			}
-		}else{
+	}else if(r3IsArray(tmpObj1)){
+		if(!r3IsArray(tmpObj2) || tmpObj1.length !== tmpObj2.length){
 			return false;
 		}
+		const arrCheck: Record<number, boolean> = {};
+		for(let cnt1 = 0; cnt1 < tmpObj1.length; ++cnt1){
+			let	found = false;
+			for(let cnt2 = 0; cnt2 < tmpObj2.length; ++cnt2){
+				if(undefined === arrCheck[cnt2] && r3DeepCompare(tmpObj1[cnt1], tmpObj2[cnt2])){
+					arrCheck[cnt2]	= true;
+					found			= true;
+					break;
+				}
+			}
+			if(!found){
+				return false;
+			}
+		}
+		return true;
+
+	}else if(r3IsObject(tmpObj1)){
+		if(!r3IsObject(tmpObj2)){
+			return false;
+		}
+		const namesObj1 = Object.keys(tmpObj1);
+		const namesObj2 = Object.keys(tmpObj2);
+
+		if(namesObj1.length !== namesObj2.length){
+			return false;
+		}
+
+		for(let cnt1 = 0; cnt1 < namesObj1.length; ++cnt1){
+			let	found = false;
+			for(let cnt2 = 0; cnt2 < namesObj2.length; ++cnt2){
+				if(r3DeepCompare(namesObj1[cnt1], namesObj2[cnt2]) && r3DeepCompare(tmpObj1[namesObj1[cnt1]], tmpObj2[namesObj2[cnt2]])){
+					found = true;
+					break;
+				}
+			}
+			if(!found){
+				return false;
+			}
+		}
+		return true;
+	}else{
+		console.warn('r3DeepCompare : unknown type, thus could not compare.');
+		return (typeof tmpObj1 === typeof tmpObj2 && r3GetJSON(tmpObj1) === r3GetJSON(tmpObj2));
 	}
-	console.warn('r3DeepCompare : unknown type, thus could not compare.');
-	return (typeof tmpObj1 === typeof tmpObj2 && r3GetJSON(tmpObj1) === r3GetJSON(tmpObj2));
 };
 
-export const r3IsJSON = (str) =>
+export const r3IsJSON = (str: unknown): boolean =>
 {
-	if('string' !== typeof str){
+	if(!r3IsString(str)){
 		return false;
 	}
 	try{
-		var tmpstr = JSON.parse(str);					// eslint-disable-line no-unused-vars
-	}catch(exception){									// eslint-disable-line no-unused-vars
+		JSON.parse(str);
+	}catch(exception){
 		return false;
 	}
 	return true;
 };
 
-export const r3ConvertFromJSON = (obj) =>
+export const r3ConvertFromJSON = (obj: unknown): valTypeAll =>
 {
-	if('string' !== typeof obj){
+	if(!r3IsString(obj)){
 		return null;
 	}
 	try{
 		return JSON.parse(obj);
-	}catch(exception){									// eslint-disable-line no-unused-vars
+	}catch(exception){
 		return null;
 	}
 };
 
-export const r3GetJSON = (obj) =>
+export const r3GetJSON = (obj: unknown): string =>
 {
-	if('string' === typeof obj){
-		if(!r3IsJSON(obj)){
+	if(r3IsString(obj)){
+		if(r3IsJSON(obj)){
 			return obj;
 		}
-		// to object
+		// obj is string but not JSON string, so try to parse it(if faulure, obj is set null)
 		obj = r3ConvertFromJSON(obj);
 	}
 	return JSON.stringify(obj);
 };
 
-export const r3RenameObjectKey = (obj, oldKey, newKey) =>
+export const r3RenameObjectKey = (obj: valTypeAll, oldKey: string, newKey: string): valTypeAll =>
 {
-	let	inputObj;
-	let	isCvt;
+	let	inputObj:	valTypeAll;
+	let	isCvt:		boolean;
 	if(r3IsJSON(obj)){
 		inputObj	= r3ConvertFromJSON(obj);
 		isCvt		= true;
@@ -323,12 +388,12 @@ export const r3RenameObjectKey = (obj, oldKey, newKey) =>
 		inputObj	= obj;
 		isCvt		= false;
 	}
-	if('object' !== typeof inputObj || !(inputObj instanceof Object)){
+	if(!r3IsObject(inputObj)){
 		return obj;
 	}
 
-	let	outputObj	= {};
-	let	keyNames	= Object.keys(inputObj);
+	const outputObj: valTypeAllObject	= {};
+	const keyNames						= Object.keys(inputObj);
 	for(let cnt = 0; cnt < keyNames.length; ++cnt){
 		if(oldKey === keyNames[cnt]){
 			outputObj[newKey]		= inputObj[keyNames[cnt]];
@@ -337,16 +402,18 @@ export const r3RenameObjectKey = (obj, oldKey, newKey) =>
 		}
 	}
 	if(isCvt){
-		outputObj = JSON.stringify(outputObj);
+		return JSON.stringify(outputObj);
 	}
 	return outputObj;
 };
 
-export const r3ArrayHasValue = (arr, value) =>
+export const r3ArrayHasValue = (arr: unknown, value: unknown): boolean =>
 {
-	if(undefined === arr || null === arr || !(arr instanceof Array) || undefined === value){
+	if(!r3IsArray(arr)){
 		return false;
 	}
+	// [NOTE]
+	// don't use forEach because we want to return immediately after detection.
 	for(let cnt = 0; cnt < arr.length; ++cnt){
 		if(r3DeepCompare(arr[cnt], value)){
 			return true;
@@ -355,14 +422,14 @@ export const r3ArrayHasValue = (arr, value) =>
 	return false;
 };
 
-export const r3ArrayRemoveValue = (arr, value) =>
+export const r3ArrayRemoveValue = (arr: unknown, value: unknown): boolean =>
 {
-	if(undefined === arr || null === arr || !(arr instanceof Array) || undefined === value){
+	if(!r3IsArray(arr)){
 		return false;
 	}
 	for(let cnt = 0; cnt < arr.length; ){
 		if(r3DeepCompare(arr[cnt], value)){
-			delete arr.splice(cnt, 1);
+			arr.splice(cnt, 1);
 		}else{
 			++cnt;
 		}
@@ -370,9 +437,9 @@ export const r3ArrayRemoveValue = (arr, value) =>
 	return false;
 };
 
-export const r3ArrayAddValue = (arr, value) =>
+export const r3ArrayAddValue = (arr: unknown, value: unknown): boolean =>
 {
-	if(undefined === arr || null === arr || !(arr instanceof Array) || undefined === value){
+	if(!r3IsArray(arr)){
 		return false;
 	}
 	for(let cnt = 0; cnt < arr.length; ++cnt){
@@ -387,64 +454,60 @@ export const r3ArrayAddValue = (arr, value) =>
 //
 // utility methods for hostname + port + cuk
 //
-export const parseCombineHostObject = (combineHostObject) =>
+export const parseCombineHostObject = (combineHostObject: string): RoleHostInfo =>
 {
-	let	result	= {
-		hostname:	'',
-		port:		0,
-		cuk:		null,
-		extra:		null,
-		tag:		null
+	let	result: RoleHostInfo = {
+		host:	'',
+		port:	0,
+		cuk:	null,
+		extra:	null,
+		tag:	null
 	};
 
 	if(r3IsEmptyString(combineHostObject, true)){
 		return result;
 	}
-	let	hostname	= '';
-	let	port		= 0;
-	let	cuk			= null;
-	let	extra		= null;
-	let	tag			= null;
-	let	inboundip	= null;
-	let	outboundip	= null;
+	let	hostname: string			= '';
+	let	port: number				= 0;
+	let	cuk: string | null			= null;
+	let	extra: string | null		= null;
+	let	tag: string | null			= null;
+	let	inboundip: string | null	= null;
+	let	outboundip: string | null	= null;
 
 	// 1) hostname
-	var	sepPos					= combineHostObject.indexOf(' ');				// separator is ' '
+	let	sepPos					= combineHostObject.indexOf(' ');				// separator is ' '
 	if(-1 === sepPos){
 		hostname				= combineHostObject;
 		combineHostObject		= '';
 	}else{
 		if(0 === sepPos){
 			hostname			= '';											// wrong host name
-			combineHostObject	= combineHostObject.substr(sepPos + 1);
+			combineHostObject	= combineHostObject.substring(sepPos + 1);
 		}else{
-			hostname			= combineHostObject.substr(0, sepPos);
-			combineHostObject	= combineHostObject.substr(sepPos + 1);
+			hostname			= combineHostObject.substring(0, sepPos);
+			combineHostObject	= combineHostObject.substring(sepPos + 1);
 		}
 
 		// 2) port
 		sepPos					= combineHostObject.indexOf(' ');				// separator is ' '
 		if(-1 === sepPos){
 			if(!r3IsEmptyEntity(combineHostObject)){
-				if('string' === typeof combineHostObject && !isNaN(combineHostObject.trim())){
+				if(!isNaN(Number(combineHostObject.trim()))){
 					port		= parseInt(combineHostObject.trim());
-				}else if('number' === typeof combineHostObject){
-					port		= combineHostObject;
 				}
 			}
 		}else if(0 === sepPos){
 			port				= 0;
-			combineHostObject	= combineHostObject.substr(sepPos + 1);
+			combineHostObject	= combineHostObject.substring(sepPos + 1);
 		}else{
-			let	tmpstr			= combineHostObject.substr(0, sepPos);
+			const tmpstr		= combineHostObject.substring(0, sepPos);
 			if(!r3IsEmptyEntity(tmpstr)){
-				if('string' === typeof tmpstr && !isNaN(tmpstr.trim())){
+				if(!isNaN(Number(tmpstr.trim()))){
 					port		= parseInt(tmpstr.trim());
-				}else if('number' === typeof tmpstr){
-					port		= tmpstr;
 				}
 			}
-			combineHostObject	= combineHostObject.substr(sepPos + 1);
+			combineHostObject	= combineHostObject.substring(sepPos + 1);
 		}
 
 		// 3) cuk
@@ -455,10 +518,10 @@ export const parseCombineHostObject = (combineHostObject) =>
 		}else{
 			if(0 === sepPos){
 				cuk					= null;
-				combineHostObject	= combineHostObject.substr(sepPos + 1);
+				combineHostObject	= combineHostObject.substring(sepPos + 1);
 			}else{
-				cuk					= combineHostObject.substr(0, sepPos);
-				combineHostObject	= combineHostObject.substr(sepPos + 1);
+				cuk					= combineHostObject.substring(0, sepPos);
+				combineHostObject	= combineHostObject.substring(sepPos + 1);
 			}
 		}
 
@@ -471,10 +534,10 @@ export const parseCombineHostObject = (combineHostObject) =>
 			}else{
 				if(0 === sepPos){
 					extra				= null;
-					combineHostObject	= combineHostObject.substr(sepPos + 1);
+					combineHostObject	= combineHostObject.substring(sepPos + 1);
 				}else{
-					extra				= combineHostObject.substr(0, sepPos);
-					combineHostObject	= combineHostObject.substr(sepPos + 1);
+					extra				= combineHostObject.substring(0, sepPos);
+					combineHostObject	= combineHostObject.substring(sepPos + 1);
 				}
 			}
 		}
@@ -488,10 +551,10 @@ export const parseCombineHostObject = (combineHostObject) =>
 			}else{
 				if(0 === sepPos){
 					tag					= null;
-					combineHostObject	= combineHostObject.substr(sepPos + 1);
+					combineHostObject	= combineHostObject.substring(sepPos + 1);
 				}else{
-					tag					= combineHostObject.substr(0, sepPos);
-					combineHostObject	= combineHostObject.substr(sepPos + 1);
+					tag					= combineHostObject.substring(0, sepPos);
+					combineHostObject	= combineHostObject.substring(sepPos + 1);
 				}
 			}
 		}
@@ -505,10 +568,10 @@ export const parseCombineHostObject = (combineHostObject) =>
 			}else{
 				if(0 === sepPos){
 					inboundip			= null;
-					combineHostObject	= combineHostObject.substr(sepPos + 1);
+					combineHostObject	= combineHostObject.substring(sepPos + 1);
 				}else{
-					inboundip			= combineHostObject.substr(0, sepPos);
-					combineHostObject	= combineHostObject.substr(sepPos + 1);
+					inboundip			= combineHostObject.substring(0, sepPos);
+					combineHostObject	= combineHostObject.substring(sepPos + 1);
 				}
 			}
 		}
@@ -522,10 +585,10 @@ export const parseCombineHostObject = (combineHostObject) =>
 			}else{
 				if(0 === sepPos){
 					outboundip			= null;
-					combineHostObject	= combineHostObject.substr(sepPos + 1);
+					combineHostObject	= combineHostObject.substring(sepPos + 1);
 				}else{
-					outboundip			= combineHostObject.substr(0, sepPos);
-					combineHostObject	= combineHostObject.substr(sepPos + 1);
+					outboundip			= combineHostObject.substring(0, sepPos);
+					combineHostObject	= combineHostObject.substring(sepPos + 1);
 				}
 			}
 		}
@@ -535,7 +598,7 @@ export const parseCombineHostObject = (combineHostObject) =>
 		// something error in values
 		return result;
 	}
-	result.hostname		= hostname;
+	result.host			= hostname;
 	result.port			= port;
 	result.cuk			= cuk;
 	result.extra		= extra;
@@ -549,67 +612,64 @@ export const parseCombineHostObject = (combineHostObject) =>
 //
 // utility methods for hostname + port + cuk
 //
-export const getCombineHostObject = (hostname, port, cuk, extra, tag, inboundip, outboundip) =>
+export const getCombineHostObject = (hostname: string, port: string | number | null, cuk: string | null, extra: string | null, tag: string | null, inboundip: string | null, outboundip: string | null): string =>
 {
 	let	result = '';
-	if(	r3IsEmptyString(hostname, true)																	&&
-		(undefined !== port && null !== port && ('string' === typeof port || 'number' === typeof port))	)
-	{
+	if(r3IsEmptyString(hostname, true) && (r3IsString(port) || r3IsNumber(port))){
 		return result;
 	}
-
 	if(!r3IsEmptyString(hostname, true)){
 		result += hostname.trim();
 	}
 
-	if(undefined !== port && null !== port && ('string' === typeof port || 'number' === typeof port)){
-		if('string' === typeof port){
-			if(!isNaN(port.trim())){
-				port = parseInt(port.trim());
-			}else if('*' === port.trim()){
-				port = 0;
-			}else{
-				// wrong string...
-				port = 0;
-			}
+	let	numPort: number;
+	if(r3IsString(port)){
+		if(!isNaN(Number(port.trim()))){
+			numPort = parseInt(port.trim());
+		}else if('*' === port.trim()){
+			numPort = 0;
+		}else{
+			numPort = 0;					// wrong string...
 		}
+	}else if(r3IsNumber(port)){
+		numPort = port;
 	}else{
-		port = 0;
+		numPort = 0;
 	}
-	result += ' ' + String(port);
+	result += ' ' + String(numPort);
 
-	if(r3IsEmptyString(cuk, true)){
-		cuk = '';
+	let	cukStr: string;
+	if(!r3IsString(cuk) || r3IsEmptyString(cuk, true)){
+		cukStr = '';
 	}else{
-		cuk = cuk.trim();
+		cukStr = cuk.trim();
 	}
-	result += ' ' + cuk;
+	result += ' ' + cukStr;
 
-	if(!r3IsEmptyString(extra)){
+	if(r3IsString(extra) && !r3IsEmptyString(extra)){
 		result += ' ' + extra;
 	}else if(!r3IsEmptyString(tag)){
 		result += ' ';
 	}
 
-	if(!r3IsEmptyString(tag)){
+	if(r3IsString(tag) && !r3IsEmptyString(tag)){
 		result += ' ' + tag;
 	}else{
 		result += ' ';
 	}
 
-	if(!r3IsEmptyString(inboundip)){
+	if(r3IsString(inboundip) && !r3IsEmptyString(inboundip)){
 		result += ' ' + inboundip;
 	}else{
 		result += ' ';
 	}
 
-	if(!r3IsEmptyString(outboundip)){
+	if(r3IsString(outboundip) && !r3IsEmptyString(outboundip)){
 		result += ' ' + outboundip;
 	}else{
 		result += ' ';
 	}
-
-	result.trimEnd();
+	result = result.trimEnd();
 
 	return result;
 };
@@ -617,9 +677,9 @@ export const getCombineHostObject = (hostname, port, cuk, extra, tag, inboundip,
 //
 // utility methods for parser
 //
-export const parseKVString = (basestr, key) =>
+export const parseKVString = (basestr: string, key: string): ParseKVResult =>
 {
-	let	result = {reststr: null, value: null};
+	let	result: ParseKVResult = {reststr: null, value: null};
 	if(r3IsEmptyString(basestr)){
 		return result;
 	}
@@ -629,36 +689,36 @@ export const parseKVString = (basestr, key) =>
 		return result;
 	}
 
-	let	sepCommaArray	= basestr.split(/,/);
-	let	valueStr		= null;
-	let	restStr			= null;
+	const	sepCommaArray			= basestr.split(/,/);
+	let		valueStr: string | null	= null;
+	let		restStr: string | null	= null;
 	for(let cnt = 0; cnt < sepCommaArray.length; ++cnt){
 		if(null === valueStr){
-			let	commaStr	= sepCommaArray[cnt].trim();
-			let	pos			= commaStr.indexOf(key);
+			const	commaStr	= sepCommaArray[cnt].trim();
+			let		pos			= commaStr.indexOf(key);
 			if(0 !== pos){
 				// not found 'key'
 				if(null !== restStr){
 					restStr	+= ',';
 				}else{
-					restStr	+= '';
+					restStr	= '';
 				}
 				restStr		+= sepCommaArray[cnt];
 				continue;
 			}
-			let	afterStr	= commaStr.substr(pos + key.length).trim();
-			pos				= afterStr.indexOf('=');
+			let	afterStr: string | null	= commaStr.substring(pos + key.length).trim();
+			pos							= afterStr.indexOf('=');
 			if(0 !== pos){
 				// not found 'key='
 				if(null !== restStr){
 					restStr	+= ',';
 				}else{
-					restStr	+= '';
+					restStr	= '';
 				}
 				restStr		+= sepCommaArray[cnt];
 				continue;
 			}
-			afterStr		= afterStr.substr(pos + 1).trim();
+			afterStr		= afterStr.substring(pos + 1).trim();
 			pos				= afterStr.indexOf(',');
 			if(-1 === pos){
 				// not found ','(next value)
@@ -666,29 +726,29 @@ export const parseKVString = (basestr, key) =>
 				afterStr	= null;
 			}else if(0 === pos){
 				valueStr	= '';
-				afterStr	= afterStr.substr(pos + 1);
+				afterStr	= afterStr.substring(pos + 1);
 			}else{
 				// found ','(next value)
-				valueStr	= afterStr.substr(0, pos).trim();
-				afterStr	= afterStr.substr(pos + 1).trim();
+				valueStr	= afterStr.substring(0, pos).trim();
+				afterStr	= afterStr.substring(pos + 1).trim();
 			}
 
 			// merge rest string
 			if(null === restStr){
-				restStr	= '';
+				restStr		= '';
 			}else{
-				restStr	+= ',';
+				restStr		+= ',';
 			}
-			restStr		+= afterStr;
+			restStr			+= afterStr;
 
 		}else{
 			// already found key and set value
 			if(null !== restStr){
-				restStr	+= ',';
+				restStr		+= ',';
 			}else{
-				restStr	+= '';
+				restStr		= '';
 			}
-			restStr		+= sepCommaArray[cnt];
+			restStr			+= sepCommaArray[cnt];
 		}
 	}
 
@@ -707,9 +767,9 @@ export const parseKVString = (basestr, key) =>
 //
 const reg_url = /^(https?):\/\/([a-z|A-Z|0-9|$|%|&|(|)|-|=|~|^|||@|+|.|_]+)((:[1-9]\d*)?)((\/.*)*)$/;
 
-export const r3IsSafeUrl = (strurl) =>
+export const r3IsSafeUrl = (strurl: unknown): boolean =>
 {
-	if(r3IsEmptyString(strurl)){
+	if(!r3IsString(strurl) || r3IsEmptyString(strurl)){
 		return false;
 	}
 	if(null === strurl.match(reg_url)){
@@ -718,21 +778,23 @@ export const r3IsSafeUrl = (strurl) =>
 	return true;
 };
 
-export const r3ParseUrl = (strurl) =>
+export const r3ParseUrl = (strurl: string): ParseUrlResult | null =>
 {
 	if(r3IsEmptyString(strurl)){
 		return null;
 	}
-	let	matches = strurl.match(reg_url);
-	if(null === matches || !(matches instanceof Array) || matches < 7){
+	const	matches = strurl.match(reg_url);
+	if(null === matches || matches.length < 7){
 		return null;
 	}
-	let	resobj		= {};
-	resobj.https	= r3CompareCaseString(matches[1], 'https');
-	resobj.host		= matches[2];
-	resobj.path		= matches[5];
-	if((undefined === matches[3] || null === matches[3] || 'string' !== typeof matches[3]) && !isNaN(matches[3].substr(1))){
-		resobj.port	= parseInt(matches[3].substr(1));
+	const resobj: ParseUrlResult = {
+		https:	r3CompareCaseString(matches[1], 'https'),
+		host:	matches[2],
+		path:	matches[5],
+		port:	0
+	};
+	if(r3IsString(matches[3]) && !isNaN(parseInt(matches[3].substring(1)))){
+		resobj.port	= parseInt(matches[3].substring(1));
 	}else{
 		resobj.port	= resobj.https ? 443 : 80;
 	}
@@ -742,7 +804,7 @@ export const r3ParseUrl = (strurl) =>
 //
 // unescapeHTML
 //
-export const r3UnescapeHTML = (str) =>
+export const r3UnescapeHTML = (str: string): string =>
 {
 	return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 };
@@ -752,33 +814,32 @@ export const r3UnescapeHTML = (str) =>
 //
 // Convert UTC ISO 8601 String to Locale String
 //
-export const convertISOStringToLocaleString = (strIso) =>
+export const convertISOStringToLocaleString = (strIso: string): string | null =>
 {
 	if(r3IsEmptyString(strIso, true)){
 		return null;
 	}
-	let	dateObj = new Date(strIso);
-
-	let	dateStr	= dateObj.toLocaleDateString();
-	let	timeStr	= dateObj.toLocaleTimeString();
+	const	dateObj	= new Date(strIso);
+	const	dateStr	= dateObj.toLocaleDateString();
+	const	timeStr	= dateObj.toLocaleTimeString();
 	if((-1 == dateStr.indexOf('/') && -1 == dateStr.indexOf('-')) || -1 == timeStr.indexOf(':')){
 		return null;
 	}
 	return (dateStr + ' ' + timeStr);
 };
 
-export const getDiffTimeFromISOString = (strIso1, strIso2) =>
+export const getDiffTimeFromISOString = (strIso1: string, strIso2: string): number =>
 {
 	if(r3IsEmptyString(strIso1, true) || r3IsEmptyString(strIso2, true)){
 		return 0;
 	}
-	let	dateObj1= new Date(strIso1);
-	let	dateObj2= new Date(strIso2);
-	let	diffNum	= dateObj1 - dateObj2;
+	const	dateObj1	= new Date(strIso1);
+	const	dateObj2	= new Date(strIso2);
+	const	diffNum		= dateObj1.getTime() - dateObj2.getTime();
 	if(isNaN(diffNum)){
 		return 0;
 	}
-	return Math.floor(Math.abs(diffNum) / 1000);			// ms -> s
+	return Math.floor(Math.abs(diffNum) / 1000);
 };
 
 export const diffRoundType = {
@@ -786,17 +847,19 @@ export const diffRoundType = {
 	hours:		'hours',
 	minutes:	'minutes',
 	seconds:	'seconds'
-};
-export const getDiffRoundStringFromISOString = (strIso1, strIso2) =>
+} as const;
+
+export const getDiffRoundStringFromISOString = (strIso1: string, strIso2: string): DiffRoundResult =>
 {
-	let	diffAll = getDiffTimeFromISOString(strIso1, strIso2);
-	let	diffSec	= diffAll % 60;
-	diffAll		= Math.floor(diffAll / 60);
-	let	diffMin	= diffAll % 60;
-	diffAll		= Math.floor(diffAll / 60);
-	let	diffHour= diffAll % 24;
-	let	diffDay	= Math.floor(diffAll / 24);
-	let	result;
+	let		diffAll	= getDiffTimeFromISOString(strIso1, strIso2);
+	const	diffSec	= diffAll % 60;
+	diffAll			= Math.floor(diffAll / 60);
+	const	diffMin	= diffAll % 60;
+	diffAll			= Math.floor(diffAll / 60);
+	const	diffHour= diffAll % 24;
+	const	diffDay	= Math.floor(diffAll / 24);
+
+	let		result: DiffRoundResult;
 	if(0 < diffDay){
 		result	= {
 			type:	diffRoundType.days,

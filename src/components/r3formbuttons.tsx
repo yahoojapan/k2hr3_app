@@ -20,38 +20,51 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import Button						from '@mui/material/Button';
 import Box							from '@mui/material/Box';
 import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
 import CancelIcon					from '@mui/icons-material/Cancel';
 
-import { r3FormButtons }			from './r3styles';
+import R3Provider					from '../util/r3provider';
+import type { R3Theme }				from './r3theme';
+import { r3FormButtonsStyle }		from './r3styles';
+
+//
+// Props type
+//
+type R3FormButtonsRequiredProps = {
+	theme:				R3Theme;
+	r3provider:			R3Provider;
+	onSave:				(event: React.MouseEvent<HTMLElement>) => void;
+	onCancel:			(event: React.MouseEvent<HTMLElement>) => void;
+};
+
+type R3FormButtonsOptionProps = {
+	status?:			boolean;
+};
+
+type R3FormButtonsProps = R3FormButtonsRequiredProps & R3FormButtonsOptionProps;
+
+type R3FormButtonsStyleType = ReturnType<typeof r3FormButtonsStyle>;
 
 //
 // Form Button Class
 //
-export default class R3FormButtons extends React.Component
+export default class R3FormButtons extends React.Component<R3FormButtonsProps>
 {
-	static propTypes = {
-		r3provider:	PropTypes.object.isRequired,
-		status:		PropTypes.bool,
-		onSave:		PropTypes.func.isRequired,
-		onCancel:	PropTypes.func.isRequired
+	sxClasses: R3FormButtonsStyleType;
+
+	static defaultProps: R3FormButtonsOptionProps = {
+		status:	false
 	};
 
-	static defaultProps = {
-		status:		false
-	};
-
-	constructor(props)
+	constructor(props: R3FormButtonsProps)
 	{
 		super(props);
 
 		// styles
-		this.sxClasses = r3FormButtons(props.theme);
+		this.sxClasses = r3FormButtonsStyle(props.theme);
 	}
 
 	render()

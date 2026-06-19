@@ -20,14 +20,12 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';									// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
-
 import Paper						from '@mui/material/Paper';							// For contents wrap
 import Box							from '@mui/material/Box';
 
 // Styles
-import { r3Container }				from './r3styles';									// But nothing for r3Container now.
+import { r3ContainerStyle }			from './r3styles';									// But nothing for r3Container now.
+import type { R3Theme }				from './r3theme';
 
 // Parts
 import R3AppBar						from './r3appbar';									// AppBar
@@ -45,47 +43,128 @@ import R3Role						from './r3role';
 import R3Policy						from './r3policy';
 import R3Service					from './r3service';
 
-// For context
-import { R3CommonContext }			from './r3commoncontext';
-
 // Utilities
-import R3Provider					from '../util/r3provider';
 import R3Message					from '../util/r3message';
+import R3Provider					from '../util/r3provider';
+
 import { localTenantPrefix }		from '../util/r3define';
 import { clientTypes }				from '../util/r3device';
 import { r3LicensesJsonString }		from '../util/r3licenses';
 import { r3VersionString }			from '../util/r3version';
-import { resourceType, roleType, policyType, serviceType, errorType, warningType, infoType, signinUnknownType, signinUnscopedToken, signinCredential } from '../util/r3types';		// eslint-disable-line no-unused-vars
-import { r3DeepCompare, r3IsEmptyStringObject, r3CompareString, r3CompareCaseString, r3IsEmptyString, r3IsEmptyEntity, r3IsEmptyEntityObject, r3ConvertFromJSON, r3IsSafeTypedEntity, r3DeepClone } from '../util/r3util';
+import { r3DeepCompare, r3IsEmptyStringObject, r3CompareString, r3CompareCaseString, r3IsString, r3IsEmptyString, r3IsEmptyEntity, r3IsEmptyEntityObject, r3DeepClone, r3IsArray, r3IsBoolean, r3IsFunction } from '../util/r3util';
+import { resourceType, roleType, policyType, serviceType, errorType, infoType, signinUnscopedToken, signinCredential, MessageType, ItemType, isItemType, DataCallback, PolicyData, ResourceData, RoleData, ServiceData, TenantData, isPolicyData, isResourceData, isRoleData, isServiceData, isTenantData, TreeListItem, PathDetailInfo, getLicenseEntryObject, actionValueRead, effectValueAllow, isSignUrlEntry, isTreeListItemArray } from '../util/r3types';
+
+//
+// Props type
+//
+type R3ContainerRequiredProps = {
+	theme:				R3Theme;
+};
+
+type R3ContainerOptionProps = {
+	title?:				string;
+};
+
+type R3ContainerProps = R3ContainerRequiredProps & R3ContainerOptionProps;
+
+type R3ContainerSelected = {
+	tenant?:			TenantData | null;
+	type?:				ItemType | null;
+	service?:			string | null;
+	path?:				string | null;
+};
+
+type R3ContainerState = {
+	selected?:			R3ContainerSelected;
+	tenants?:			TenantData[];
+	mainTree?:			TreeListItem[];
+	mainTreeEndock?:	boolean;
+	mainTreeDocked?:	boolean;
+	mainTreeOpen?:		boolean;
+	service?:			ServiceData;
+	role?:				RoleData;
+	policy?:			PolicyData;
+	resource?:			ResourceData;
+	toolbarData?:		PathDetailInfo;
+	message?:			R3Message;
+	aboutDialogOpen?:	boolean;
+	licensePackage?:	string | null;
+	licenseType?:		string | null;
+	licenseText?:		string | null;
+	r3VersionText?:		string | null;
+	accountDialogOpen?:	boolean;
+	username?:			string | null;
+	unscopedtoken?:		string | null;
+	useLocalTenant?:	boolean;
+	signinDialogOpen?:	boolean;
+};
+
+type R3ContainerStateAll = Required<R3ContainerState>;
+
+type R3ContainerStyleType = ReturnType<typeof r3ContainerStyle>;
+
+//
+// Default(initial) values
+//
+const initialServiceData: ServiceData = {
+	verify:			null,
+	tenant:			[]
+};
+
+const initialRoleData: RoleData = {
+	policies:		[]
+};
+
+const initialPolicyData: PolicyData = {
+	name:			'',
+	effect:			effectValueAllow,
+	action:			[actionValueRead],
+	resource:		[],
+	alias:			[]
+};
+
+const initialResourceData: ResourceData = {
+};
 
 //
 // Container Class
 //
-export default class R3Container extends React.Component
+export default class R3Container extends React.Component<R3ContainerProps, R3ContainerState>
 {
-	static propTypes = {
-		title:			PropTypes.string
+	// styles
+	sxClasses: R3ContainerStyleType;
+
+	static defaultProps: R3ContainerOptionProps = {
+		title:	'K2HR3'
 	};
 
-	static defaultProps = {
-		title:			'K2HR3'
-	};
+	// [NOTE] Argument "signin" must not be specified here.
+	//
+	// When "mode=development", R3Container is initialized twice because
+	// "<React.StrictMode>" is specified. (It is initialized once when
+	// "mode=production".)
+	// If you are using an R3Provider for the demo page, if the "signin"
+	// argument is "undefined", singn in information and other initialization
+	// will be performed. (The demo page will be displayed as logged in.)
+	// Please note that specifying the "signin" argument will not initialize
+	// the system, making it unstable.
+	//
+	r3provider: R3Provider		= new R3Provider(this.cbProgressControl);
 
 	// State for not render
-	r3provider			= new R3Provider(this.cbProgressControl);	// [NOTE] signin must not be specified here.
-	contentUpdating		= false;
-	progressDisplayFunc	= null;										// Callback from R3Progress for registering its method function.
+	contentUpdating				= false;
+	progressDisplayFunc: ((isDisplay: boolean) => void) | null	= null;		// Callback from R3Progress for registering its method function.
 
 	// Licenses
-	licensesObj			= r3ConvertFromJSON(r3LicensesJsonString);
+	licensesObj 				= getLicenseEntryObject(r3LicensesJsonString);
 
 	// for dispatching contents
-	static dispUnique	= 0;
+	static dispUnique			= 0;
 
 	// State
 	//
 	// [NOTE] type/service in selected
-	// 
+	//
 	// If selected.type is ROLE or POLICY or RESOURCE and selected.service
 	// is empty, it means that "ROLE/POLICY/RESOURCE" top or the pass under
 	// those is selected.
@@ -100,7 +179,7 @@ export default class R3Container extends React.Component
 	// (under SERVICE) is selected.
 	// At this case, when selected.path is not empty,
 	// "SERVICE > service name > ROLE/POLICY/RESOURCE > path" is selected.
-	// 
+	//
 	// <<DETAIL EXAMPLE>>
 	// [type]				[service]		[path]		[selected item]
 	// ROLE/POLICY/RESOURCE	empty			empty/path	ROLE/POLICY/RESOURCE top or path under it
@@ -109,7 +188,7 @@ export default class R3Container extends React.Component
 	// ROLE/POLICY/RESOURCE	service name	empty		"SERVICE > service name > ROLE/POLICY/RESOURCE"
 	// ROLE/POLICY/RESOURCE	service name	path		"SERVICE > service name > ROLE/POLICY/RESOURCE > path"
 	//
-	state = {
+	state: R3ContainerStateAll = {
 		selected: {
 			tenant:				null,
 			type:				null,
@@ -121,10 +200,10 @@ export default class R3Container extends React.Component
 		mainTreeEndock:			!clientTypes.isMobile,
 		mainTreeDocked:			(clientTypes.isMobile || clientTypes.isTablet ? false : true),
 		mainTreeOpen:			false,
-		service:				{},
-		role:					{},
-		policy:					{},
-		resource:				{},
+		service:				r3DeepClone(initialServiceData),
+		role:					r3DeepClone(initialRoleData),
+		policy:					r3DeepClone(initialPolicyData),
+		resource:				r3DeepClone(initialResourceData),
 		toolbarData:			this.r3provider.getPathDetailInfo(null, null, false, false, null, null),
 		message:				new R3Message(this.r3provider.getR3TextRes().iNotSelectTenant),
 		aboutDialogOpen:		false,
@@ -139,7 +218,7 @@ export default class R3Container extends React.Component
 		signinDialogOpen:		false
 	};
 
-	constructor(props)
+	constructor(props: R3ContainerProps)
 	{
 		super(props);
 
@@ -184,25 +263,25 @@ export default class R3Container extends React.Component
 		this.cbRefRegister					= this.cbRefRegister.bind(this);			// For registering callback from progress
 
 		// styles
-		this.sxClasses						= r3Container(props.theme);
+		this.sxClasses						= r3ContainerStyle(props.theme);
 	}
 
 	componentDidMount()
 	{
 		// Initialize tenant
-		this.r3provider.getTenantList(false, this.state.useLocalTenant, (error, resobj) => this.cbTenantList(error, resobj));
+		this.r3provider.getTenantList(false, this.state.useLocalTenant, (error: Error | null, resobj: TenantData[] | null) => this.cbTenantList(error, resobj));
 	}
 
 	//
 	// Re-Initialize by sign in/out
 	//
-	componentReinitialize(isSignIn, username, unscopedtoken)
+	componentReinitialize(isSignIn: boolean, username?: string, unscopedtoken?: string)
 	{
 		// Re-Initialize provider object
 		this.r3provider = new R3Provider(this.cbProgressControl, isSignIn, username, unscopedtoken);
 
 		// Re-Initialize & Update state
-		this.updateState({
+		let initStats: R3ContainerStateAll = {
 			selected: {
 				tenant:				null,
 				type:				null,
@@ -214,25 +293,28 @@ export default class R3Container extends React.Component
 			mainTreeEndock:			!clientTypes.isMobile,
 			mainTreeDocked:			(clientTypes.isMobile || clientTypes.isTablet ? false : true),
 			mainTreeOpen:			false,
-			service:				{},
-			role:					{},
-			policy:					{},
-			resource:				{},
+			service:				r3DeepClone(initialServiceData),
+			role:					r3DeepClone(initialRoleData),
+			policy:					r3DeepClone(initialPolicyData),
+			resource:				r3DeepClone(initialResourceData),
 			toolbarData:			this.r3provider.getPathDetailInfo(null, null, false, false, null, null),
+			message:				new R3Message(this.r3provider.getR3TextRes().iNotSelectTenant),
 			aboutDialogOpen:		false,
 			licensePackage:			null,
 			licenseType:			null,
 			licenseText:			null,
 			r3VersionText:			null,
 			accountDialogOpen:		false,
-			username:				username,
-			unscopedtoken:			unscopedtoken,
+			username:				this.r3provider.getR3Context().getSafeUserName(),
+			unscopedtoken:			this.r3provider.getR3Context().getSafeUnscopedToken(),
+			useLocalTenant:			this.r3provider.getR3Context().useLocalTenant(),
 			signinDialogOpen:		false
-		});
+		};
+		this.updateState(initStats);
 
 		if(isSignIn){
 			// Re-Initialize tenant list
-			this.r3provider.getTenantList(true, this.state.useLocalTenant, (error, resobj) => this.cbTenantList(error, resobj));
+			this.r3provider.getTenantList(true, this.state.useLocalTenant, (error: Error | null, resobj: TenantData[] | null) => this.cbTenantList(error, resobj));
 
 			// All parts updates
 			this.updateStateAllParts(this.state.selected.tenant, this.state.selected.service, this.state.selected.type, this.state.selected.path, false, (isSignIn ? (this.r3provider.getR3TextRes().iSignined + this.r3provider.getR3TextRes().iNotSignin) : (this.r3provider.getR3TextRes().iSignouted + this.r3provider.getR3TextRes().iNotSignin)));
@@ -242,13 +324,13 @@ export default class R3Container extends React.Component
 	//
 	// Utility for updating State
 	//
-	updateState(newState, message = null, type = infoType)
+	updateState(newState: R3ContainerState | null, message: string | null = null, type: MessageType = infoType)
 	{
 		if(r3IsEmptyEntity(newState)){
 			newState = {};
 		}
 		if(!this.r3provider.getR3Context().isLogin()){
-			var	r3providerMsg = this.r3provider.getR3Context().getErrorMsg();
+			let	r3providerMsg = this.r3provider.getR3Context().getErrorMsg();
 			if(!r3IsEmptyString(r3providerMsg)){
 				newState.message = new R3Message(r3providerMsg, errorType);
 			}else{
@@ -279,21 +361,21 @@ export default class R3Container extends React.Component
 	//
 	// Callback for provider
 	//
-	cbTenantList(error, tenants)
+	cbTenantList(error: Error | null, tenants: TenantData[] | null)
 	{
 		if(null !== error){
 			this.updateState(null, this.r3provider.getR3TextRes().eCommunication + error.message, errorType);
 		}else{
 			this.updateState({
 				tenants:	tenants
-			}, ((!r3IsSafeTypedEntity(tenants, 'array') || 0 === tenants.length) ? this.r3provider.getR3TextRes().iNotHaveAnyTenant : null));
+			}, ((!r3IsArray(tenants) || 0 === tenants.length) ? this.r3provider.getR3TextRes().iNotHaveAnyTenant : null));
 		}
 	}
 
 	//
 	// Update MainTree List
 	//
-	updateMainTreeList(selectedTenant, selectedService, selectedType, selectedPath, callback)
+	updateMainTreeList(selectedTenant: TenantData | null, selectedService: string | null, selectedType: ItemType | null, selectedPath: string | null, callback: (error: Error | null, resobj: TreeListItem[] | null) => void)
 	{
 		console.info('CALL : updateMainTreeList');
 
@@ -305,7 +387,7 @@ export default class R3Container extends React.Component
 
 		this.cbProgressControl(true);										// collectively display progress
 
-		this.r3provider.getAllTreeList(_tenant, (error, resobj) =>
+		this.r3provider.getAllTreeList(_tenant, (error: Error | null, resobj: TreeListItem[] | null) =>
 		{
 			// always error is null
 			if(null !== error){
@@ -325,7 +407,7 @@ export default class R3Container extends React.Component
 	//
 	// Update Service Data
 	//
-	updateServiceData(selectedTenant, selectedService, treeList, callback)
+	updateServiceData(selectedTenant: TenantData | null, selectedService: string | null, treeList: TreeListItem[], callback: DataCallback<ServiceData>)
 	{
 		console.info('CALL : updateServiceData');
 
@@ -333,11 +415,13 @@ export default class R3Container extends React.Component
 		let	_tenant		= selectedTenant;
 		let	_service	= selectedService;
 
-		if(	r3IsEmptyStringObject(_tenant, 'name')	||
+		if(	!isTenantData(_tenant)					||
+			r3IsEmptyString(_tenant.name, true)		||
+			!r3IsString(_service)					||
 			r3IsEmptyString(_service)				)
 		{
 			// update state
-			_callback(null, {});
+			_callback(null, initialServiceData);
 			return;
 		}
 
@@ -348,11 +432,11 @@ export default class R3Container extends React.Component
 			this.cbProgressControl(false);									// collectively undisplay progress
 
 			// tenant is not service owner, then service data is empty
-			_callback(null, {});
+			_callback(null, initialServiceData);
 			return;
 		}
 
-		this.r3provider.getServiceData(_tenant, _service, (error, resobj) =>
+		this.r3provider.getServiceData(_tenant, _service, (error: Error | null, resobj: ServiceData | null) =>
 		{
 			this.cbProgressControl(false);									// collectively undisplay progress
 
@@ -361,11 +445,12 @@ export default class R3Container extends React.Component
 				_callback(error, null);
 				return;
 			}
-			if(null === resobj){
-				console.error('Could not get role data for tenant(' + _tenant + '), service(' + _service + ')');
-				resobj = {};
+			if(!isServiceData(resobj)){
+				const err = new Error('Could not get role data for tenant(' + _tenant + '), service(' + _service + ')');
+				console.info(err.message);
+				_callback(err, null);
+				return;
 			}
-
 			_callback(null, resobj);
 		});
 	}
@@ -373,7 +458,7 @@ export default class R3Container extends React.Component
 	//
 	// Update Role Data
 	//
-	updateRoleData(selectedTenant, selectedService, selectedType, selectedPath, callback)
+	updateRoleData(selectedTenant: TenantData | null, selectedService: string | null, selectedType: ItemType | null, selectedPath: string | null, callback: DataCallback<RoleData>)
 	{
 		console.info('CALL : updateRoleData');
 
@@ -383,27 +468,31 @@ export default class R3Container extends React.Component
 		let	_type		= selectedType;
 		let	_path		= selectedPath;
 
-		if(	r3IsEmptyStringObject(_tenant, 'name')	||
+		if(	!isTenantData(_tenant)					||
+			r3IsEmptyString(_tenant.name, true)		||
+			!isItemType(_type)						||
 			!r3CompareString(_type, roleType)		||
+			!r3IsString(_path)						||
 			r3IsEmptyString(_path)					)
 		{
 			// update state
-			_callback(null, {});
+			_callback(null, initialRoleData);
 			return;
 		}
 
-		this.r3provider.getRoleData(_tenant, _service, _path, false, (error, resobj) =>
+		this.r3provider.getRoleData(_tenant, _service, _path, false, (error: Error | null, resobj: RoleData | null) =>
 		{
 			if(null !== error){
 				console.info(error.message);
 				_callback(error, null);
 				return;
 			}
-			if(null === resobj){
-				console.error('Could not get role data for tenant(' + _tenant + '), path(' + _path + ')');
-				resobj = {};
+			if(!isRoleData(resobj)){
+				const err = new Error('Could not get role data for tenant(' + _tenant + '), path(' + _path + ')');
+				console.info(err.message);
+				_callback(err, null);
+				return;
 			}
-
 			_callback(null, resobj);
 		});
 	}
@@ -411,7 +500,7 @@ export default class R3Container extends React.Component
 	//
 	// Update Policy Data
 	//
-	updatePolicyData(selectedTenant, selectedService, selectedType, selectedPath, callback)
+	updatePolicyData(selectedTenant: TenantData | null, selectedService: string | null, selectedType: ItemType | null, selectedPath: string | null, callback: DataCallback<PolicyData>)
 	{
 		console.info('CALL : updatePolicyData');
 		let	_callback	= callback;
@@ -420,27 +509,31 @@ export default class R3Container extends React.Component
 		let	_type		= selectedType;
 		let	_path		= selectedPath;
 
-		if(	r3IsEmptyStringObject(_tenant, 'name')	||
+		if(	!isTenantData(_tenant)					||
+			r3IsEmptyString(_tenant.name, true)		||
+			!isItemType(_type)						||
 			!r3CompareString(_type, policyType)		||
+			!r3IsString(_path)						||
 			r3IsEmptyString(_path)					)
 		{
 			// update state
-			_callback(null, {});
+			_callback(null, initialPolicyData);
 			return;
 		}
 
-		this.r3provider.getPolicyData(_tenant, _service, _path, (error, resobj) =>
+		this.r3provider.getPolicyData(_tenant, _service, _path, (error: Error | null, resobj: PolicyData | null) =>
 		{
 			if(null !== error){
 				console.info(error.message);
 				_callback(error, null);
 				return;
 			}
-			if(null === resobj){
-				console.error('Could not get policy data for tenant(' + _tenant + '), path(' + _path + ')');
-				resobj = {};
+			if(!isPolicyData(resobj)){
+				const err = new Error('Could not get policy data for tenant(' + _tenant + '), path(' + _path + ')');
+				console.info(err.message);
+				_callback(err, null);
+				return;
 			}
-
 			_callback(null, resobj);
 		});
 	}
@@ -448,7 +541,7 @@ export default class R3Container extends React.Component
 	//
 	// Update Resource Data
 	//
-	updateResourceData(selectedTenant, selectedService, selectedType, selectedPath, callback)
+	updateResourceData(selectedTenant: TenantData | null, selectedService: string | null, selectedType: ItemType | null, selectedPath: string | null, callback: DataCallback<ResourceData>)
 	{
 		console.info('CALL : updateResourceData');
 
@@ -458,35 +551,39 @@ export default class R3Container extends React.Component
 		let	_type		= selectedType;
 		let	_path		= selectedPath;
 
-		if(	r3IsEmptyStringObject(_tenant, 'name')	||
+		if(	!isTenantData(_tenant)					||
+			r3IsEmptyString(_tenant.name, true)		||
+			!isItemType(_type)						||
 			!r3CompareString(_type, resourceType)	||
+			!r3IsString(_path)						||
 			r3IsEmptyString(_path)					)
 		{
 			// update state
-			_callback(null, {});
+			_callback(null, initialResourceData);
 			return;
 		}
 
-		this.r3provider.getResourceData(_tenant, _service, _path, false, (error, resobj) =>
+		this.r3provider.getResourceData(_tenant, _service, _path, false, (error: Error | null, resobj: ResourceData | null) =>
 		{
 			if(null !== error){
 				console.info(error.message);
 				_callback(error, null);
 				return;
 			}
-			if(null === resobj){
-				console.error('Could not get resource data for tenant(' + _tenant + '), path(' + _path + ')');
-				resobj = {};
+			if(!isResourceData(resobj)){
+				const err = new Error('Could not get resource data for tenant(' + _tenant + '), path(' + _path + ')');
+				console.info(err.message);
+				_callback(err, null);
+				return;
 			}
-
 			_callback(null, resobj);
 		});
 	}
 
-	updateStateAllParts(tenant, service, type, path, openMainTree, message = null, msgType = infoType)
+	updateStateAllParts(tenant: TenantData | null, service: string | null, type: ItemType | null, path: string | null, openMainTree: boolean, message: string | null = null, msgType: MessageType = infoType)
 	{
 		// new state data
-		let	newState = {
+		let	newState: R3ContainerState = {
 			selected: {
 				tenant:			tenant,
 				service:		service,
@@ -504,26 +601,38 @@ export default class R3Container extends React.Component
 
 		this.cbProgressControl(true);										// collectively display progress
 
-		this.updateMainTreeList(_tenant, _service, _type, _path, (error, mainTree) =>
+		this.updateMainTreeList(_tenant, _service, _type, _path, (error: Error | null, mainTree: TreeListItem[] | null) =>
 		{
 			if(null !== error){
 				this.cbProgressControl(false);								// collectively undisplay progress
 				console.info(error.message);
 				return;
 			}
+			if(!isTreeListItemArray(mainTree)){
+				this.cbProgressControl(false);								// collectively undisplay progress
+				console.info('Could not get Tree list');
+				return;
+			}
+
 			newState.mainTree		= mainTree;
 			newState.toolbarData	= this.r3provider.getPathDetailInfo(_tenant, _service, this.r3provider.checkServiceOwnerInTreeList(newState.mainTree, _service), this.r3provider.checkServiceTenantInTreeList(newState.mainTree, _service), _type, _path);
 
-			this.updateServiceData(_tenant, _service, mainTree, (error, serviceData) =>
+			this.updateServiceData(_tenant, _service, mainTree, (error: Error | null, serviceData: ServiceData | null) =>
 			{
 				if(null !== error){
 					this.cbProgressControl(false);							// collectively undisplay progress
 					console.info(error.message);
+					this.updateState(null, error.message, errorType);
 					return;
 				}
-				newState.service= serviceData;
+				if(!isServiceData(serviceData)){
+					this.cbProgressControl(false);							// collectively undisplay progress
+					console.info('Could not update servide data.');
+					return;
+				}
+				newState.service = serviceData;
 
-				this.updateRoleData(_tenant, _service, _type, _path, (error, role) =>
+				this.updateRoleData(_tenant, _service, _type, _path, (error: Error | null, role: RoleData | null) =>
 				{
 					if(null !== error){
 						this.cbProgressControl(false);						// collectively undisplay progress
@@ -531,9 +640,14 @@ export default class R3Container extends React.Component
 						this.updateState(null, error.message, errorType);
 						return;
 					}
+					if(!isRoleData(role)){
+						this.cbProgressControl(false);							// collectively undisplay progress
+						console.info('Could not update role data.');
+						return;
+					}
 					newState.role = role;
 
-					this.updatePolicyData(_tenant, _service, _type, _path, (error, policy) =>
+					this.updatePolicyData(_tenant, _service, _type, _path, (error: Error | null, policy: PolicyData | null) =>
 					{
 						if(null !== error){
 							this.cbProgressControl(false);					// collectively undisplay progress
@@ -541,15 +655,25 @@ export default class R3Container extends React.Component
 							this.updateState(null, error.message, errorType);
 							return;
 						}
+						if(!isPolicyData(policy)){
+							this.cbProgressControl(false);					// collectively undisplay progress
+							console.info('Could not update policy data.');
+							return;
+						}
 						newState.policy = policy;
 
-						this.updateResourceData(_tenant, _service, _type, _path, (error, resource) =>
+						this.updateResourceData(_tenant, _service, _type, _path, (error: Error | null, resource: ResourceData | null) =>
 						{
 							this.cbProgressControl(false);					// collectively undisplay progress
 
 							if(null !== error){
 								console.info(error.message);
 								this.updateState(null, error.message, errorType);
+								return;
+							}
+							if(!isResourceData(resource)){
+								this.cbProgressControl(false);					// collectively undisplay progress
+								console.info('Could not update resource data.');
 								return;
 							}
 							newState.resource = resource;
@@ -574,7 +698,7 @@ export default class R3Container extends React.Component
 	//
 	// Handle Tenant in MainTree Change
 	//
-	handleTenantChange(tenant)
+	handleTenantChange(tenant: TenantData | null)
 	{
 		let	type	= (r3DeepCompare(tenant, this.state.selected.tenant) ? this.state.selected.type		: null);
 		let	service	= (r3DeepCompare(tenant, this.state.selected.tenant) ? this.state.selected.service	: null);
@@ -589,26 +713,26 @@ export default class R3Container extends React.Component
 	// [NOTE]
 	// This CallBack is for creating/updating a Local Tenant.
 	//
-	cbUpdateChangeTenant(error, tenants, tenantname)
+	cbUpdateChangeTenant(error: Error | null, tenants: TenantData[] | null, tenantname: string | null)
 	{
 		if(null !== error){
 			this.updateState(null, this.r3provider.getR3TextRes().eCommunication + error.message, errorType);
-		}else{
+		}else if(tenants !== null){
 			// update tenant list
 			this.updateState({
 				tenants:	r3DeepClone(tenants)
-			}, ((!r3IsSafeTypedEntity(tenants, 'array') || 0 === tenants.length) ? this.r3provider.getR3TextRes().iNotHaveAnyTenant : null));
+			}, ((!r3IsArray(tenants) || 0 === tenants.length) ? this.r3provider.getR3TextRes().iNotHaveAnyTenant : null));
 
 			// change selected tenant
-			let	_selectedTenant = null;
+			let	_selectedTenant: TenantData | null = null;
 			if(!r3IsEmptyString(tenantname)){
-				let	_tenantName;
+				let	_tenantName: string;
 				if(0 === tenantname.indexOf(localTenantPrefix)){
 					_tenantName = tenantname;
 				}else{
 					_tenantName = localTenantPrefix + tenantname;
 				}
-				tenants.map( (item) => {
+				tenants.map( (item: TenantData) => {
 					if(!r3IsEmptyString(item.name) && item.name == _tenantName){
 						// found
 						_selectedTenant = r3DeepClone(item);
@@ -627,7 +751,7 @@ export default class R3Container extends React.Component
 	//	description		: Description name allowed empty
 	//	users			: User name list included self name
 	//
-	handleLocalTenantCreate(name, display, description, users)
+	handleLocalTenantCreate(name: string, display: string, description: string, users: string[])
 	{
 		console.info('CALL : handleLocalTenantCreate');
 
@@ -638,7 +762,7 @@ export default class R3Container extends React.Component
 
 		this.cbProgressControl(true);										// collectively display progress
 
-		this.r3provider.createLocalTenant(_name, _display, _description, _users, (error) =>
+		this.r3provider.createLocalTenant(_name, _display, _description, _users, (error: Error | null) =>
 		{
 			if(null !== error){
 				this.cbProgressControl(false);								// collectively undisplay progress
@@ -649,7 +773,7 @@ export default class R3Container extends React.Component
 			//
 			// update tenant list and change to new local tenant
 			//
-			this.r3provider.getTenantList(true, this.state.useLocalTenant, (error, resobj) => this.cbUpdateChangeTenant(error, resobj, _name));
+			this.r3provider.getTenantList(true, this.state.useLocalTenant, (error: Error | null, resobj: TenantData[] | null) => this.cbUpdateChangeTenant(error, resobj, _name));
 
 			this.cbProgressControl(false);									// collectively undisplay progress
 		});
@@ -664,7 +788,7 @@ export default class R3Container extends React.Component
 	//	description		: Description name allowed empty
 	//	users			: User name list
 	//
-	handleLocalTenantChange(name, id, display, description, users)
+	handleLocalTenantChange(name: string, id: string, display: string, description: string, users: string[])
 	{
 		console.info('CALL : handleLocalTenantChange');
 
@@ -676,7 +800,7 @@ export default class R3Container extends React.Component
 
 		this.cbProgressControl(true);										// collectively display progress
 
-		this.r3provider.updateLocalTenant(_name, _id, _display, _description, _users, (error) =>
+		this.r3provider.updateLocalTenant(_name, _id, _display, _description, _users, (error: Error | null) =>
 		{
 			if(null !== error){
 				this.cbProgressControl(false);								// collectively undisplay progress
@@ -687,7 +811,7 @@ export default class R3Container extends React.Component
 			//
 			// update tenant list and change to new local tenant
 			//
-			this.r3provider.getTenantList(true, this.state.useLocalTenant, (error, resobj) => this.cbUpdateChangeTenant(error, resobj, _name));
+			this.r3provider.getTenantList(true, this.state.useLocalTenant, (error: Error | null, resobj: TenantData[] | null) => this.cbUpdateChangeTenant(error, resobj, _name));
 
 			this.cbProgressControl(false);									// collectively undisplay progress
 		});
@@ -699,7 +823,7 @@ export default class R3Container extends React.Component
 	//	name			: Local Tenant name(prefix with local@) to delete
 	//	id				: Local Tenant id
 	//
-	handleLocalTenantDelete(name, id)
+	handleLocalTenantDelete(name: string, id: string)
 	{
 		console.info('CALL : handleLocalTenantDelete');
 
@@ -708,7 +832,7 @@ export default class R3Container extends React.Component
 
 		this.cbProgressControl(true);										// collectively display progress
 
-		this.r3provider.deleteLocalTenant(_name, _id, (error) =>
+		this.r3provider.deleteLocalTenant(_name, _id, (error: Error | null) =>
 		{
 			if(null !== error){
 				this.cbProgressControl(false);								// collectively undisplay progress
@@ -719,7 +843,7 @@ export default class R3Container extends React.Component
 			//
 			// update tenant list and change to new local tenant
 			//
-			this.r3provider.getTenantList(true, this.state.useLocalTenant, (error, resobj) => this.cbUpdateChangeTenant(error, resobj, null));
+			this.r3provider.getTenantList(true, this.state.useLocalTenant, (error: Error | null, resobj: TenantData[] | null) => this.cbUpdateChangeTenant(error, resobj, null));
 
 			this.cbProgressControl(false);									// collectively undisplay progress
 		});
@@ -728,9 +852,9 @@ export default class R3Container extends React.Component
 	//
 	// Handle Top level type in MainTree Change
 	//
-	handleTypeChange(newType)
+	handleTypeChange(newType: string)
 	{
-		let	type	= r3IsEmptyStringObject(this.state.selected.tenant, 'name') ? null : newType;
+		let	type: ItemType | null	= r3IsEmptyStringObject(this.state.selected.tenant, 'name') ? null : isItemType(newType) ? newType : null;
 
 		this.updateStateAllParts(this.state.selected.tenant, null, type, null, true, (null === type ? this.r3provider.getR3TextRes().iNotSelectTenant : this.r3provider.getR3TextRes().iSucceedChangeType));
 	}
@@ -738,16 +862,19 @@ export default class R3Container extends React.Component
 	//
 	// Handle ROLE/POLICY/RESOURCE(not under SERVICE) Item Change
 	//
-	handleListItemChange(type, path)
+	handleListItemChange(type: string, path: string)
 	{
 		// this handler is called when "tenant > ROLE/POLICY/RESOURCE/ > item" is selected.
 		// it means service name is empty(not selected).
 		//
+		if(!isItemType(type)){
+			return;
+		}
 		this.updateStateAllParts(this.state.selected.tenant, null, type, path, false, this.r3provider.getR3TextRes().iSucceedChangePath);
 	}
 
 	// Handle Service name under "SERVICE" Change
-	handleNameItemInServiceChange(servicename)
+	handleNameItemInServiceChange(servicename: string)
 	{
 		//
 		// Type is serviceType("service")
@@ -758,14 +885,20 @@ export default class R3Container extends React.Component
 	}
 
 	// Handle Type(ROLE/POLICY/RESOURCE) under "SERVICE > Service name" Change
-	handleTypeInServiceChange(servicename, type_in_service)
+	handleTypeInServiceChange(servicename: string, type_in_service: string)
 	{
+		if(!isItemType(type_in_service)){
+			return;
+		}
 		this.updateStateAllParts(this.state.selected.tenant, servicename, type_in_service, null, true, this.r3provider.getR3TextRes().iSucceedChangeServiceType);
 	}
 
 	// Handle Item under "SERVICE > Service name > Type(ROLE/POLICY/RESOURCE)" Change
-	handleListItemInServiceChange(servicename, type_in_service, path)
+	handleListItemInServiceChange(servicename: string, type_in_service: string, path: string)
 	{
+		if(!isItemType(type_in_service)){
+			return;
+		}
 		this.updateStateAllParts(this.state.selected.tenant, servicename, type_in_service, path, false, this.r3provider.getR3TextRes().iSucceedChangeServicePath);
 	}
 
@@ -801,7 +934,7 @@ export default class R3Container extends React.Component
 	//
 	// Handle MainTree docking status
 	//
-	handleTreeDocking(isDocking)
+	handleTreeDocking(isDocking: boolean)
 	{
 		this.updateState({
 			mainTreeDocked:		isDocking,
@@ -832,11 +965,11 @@ export default class R3Container extends React.Component
 		}
 
 		// make new type/service/path
-		let	_newType;
-		let	_newServiceName;
-		let	_newPath;
-		let	_message;
-		let	separatorPos;
+		let	_newType:			ItemType;
+		let	_newServiceName:	string | null;
+		let	_newPath:			string | null;
+		let	_message:			string;
+		let	separatorPos:		number;
 		if(r3CompareCaseString(serviceType, this.state.selected.type) && !r3IsEmptyString(this.state.selected.service)){
 			// now "SERVICE > service name", move to SERVICE top
 			_newType		= serviceType;
@@ -867,7 +1000,7 @@ export default class R3Container extends React.Component
 					// now "SERVICE > service name > ROLE/POLICY/RESOURCE > path/path...", move to upper path
 					_newType		= this.state.selected.type;
 					_newServiceName	= this.state.selected.service;
-					_newPath		= this.state.selected.path.substr(0, separatorPos);
+					_newPath		= this.state.selected.path.substring(0, separatorPos);
 					_message		= this.r3provider.getR3TextRes().iSucceedChangePath;
 				}
 			}
@@ -885,7 +1018,7 @@ export default class R3Container extends React.Component
 				// now "ROLE/POLICY/RESOURCE > path/path...", move to move to upper path
 				_newType		= this.state.selected.type;
 				_newServiceName	= null;
-				_newPath		= this.state.selected.path.substr(0, separatorPos);
+				_newPath		= this.state.selected.path.substring(0, separatorPos);
 				_message		= this.r3provider.getR3TextRes().iSucceedChangePath;
 			}
 		}
@@ -897,13 +1030,13 @@ export default class R3Container extends React.Component
 	//
 	// Handle Create Path
 	//
-	handleCreatePath(newPath, newAllPath)
+	handleCreatePath(newPath: string, newAllPath: string)
 	{
 		console.info('CALL CREATE PATH : ' + newPath + '(' + newAllPath + ')');
 
 		let	_path = newAllPath.trim();
 
-		this.r3provider.createEmptyData(this.state.selected.tenant, this.state.selected.type, _path, (error) =>
+		this.r3provider.createEmptyData(this.state.selected.tenant, this.state.selected.type, _path, (error: Error | null) =>
 		{
 			if(null !== error){
 				this.updateState(null, this.r3provider.getR3TextRes().eCommunication + error.message, errorType);
@@ -918,7 +1051,7 @@ export default class R3Container extends React.Component
 	//
 	// Handle Check Confrict Path
 	//
-	handleCheckConflictPath(newCreatePath)
+	handleCheckConflictPath(newCreatePath: string)
 	{
 		if(r3IsEmptyString(this.state.selected.type) || r3CompareCaseString(serviceType, this.state.selected.type) || !r3IsEmptyString(this.state.selected.service)){
 			//
@@ -939,7 +1072,7 @@ export default class R3Container extends React.Component
 	//
 	// Handle Check Confrict Service Name
 	//
-	handleCheckConflictServiceName(newServiceName)
+	handleCheckConflictServiceName(newServiceName: string)
 	{
 		if(!r3CompareCaseString(serviceType, this.state.selected.type) || !r3IsEmptyString(this.state.selected.service)){
 			//
@@ -959,9 +1092,9 @@ export default class R3Container extends React.Component
 	//
 	// Utility : find same path under items
 	//
-	findCheckConflictPath(items, itemPath, isCheckNest)
+	findCheckConflictPath(items: TreeListItem[] | undefined, itemPath: string, isCheckNest: boolean = false)
 	{
-		if(!r3IsSafeTypedEntity(items, 'array') || r3IsEmptyString(itemPath)){
+		if(!r3IsArray(items) || r3IsEmptyString(itemPath)){
 			return false;
 		}
 		for(let cnt = 0; cnt < items.length; ++cnt){
@@ -985,7 +1118,7 @@ export default class R3Container extends React.Component
 		if(r3IsEmptyEntity(this.state.selected.path)){
 			return;
 		}
-		this.r3provider.removeData(this.state.selected.tenant, this.state.selected.type, this.state.selected.path, (error) =>
+		this.r3provider.removeData(this.state.selected.tenant, this.state.selected.type, this.state.selected.path, (error: Error | null) =>
 		{
 			if(null !== error){
 				this.updateState(null, this.r3provider.getR3TextRes().eCommunication + error.message, errorType);
@@ -997,28 +1130,28 @@ export default class R3Container extends React.Component
 		});
 	}
 
-	handleDeleteService(isServiceOwner, isServiceTenant)
+	handleDeleteService(isServiceOwner: boolean, isServiceTenant: boolean)
 	{
 		console.info('CALL DELETE SERVICE');
 
-		if(	r3IsEmptyString(this.state.selected.service)	||
-			!r3IsSafeTypedEntity(isServiceTenant, 'boolean')||
-			!r3IsSafeTypedEntity(isServiceOwner, 'boolean')	)
+		if(	r3IsEmptyString(this.state.selected.service)||
+			!r3IsBoolean(isServiceTenant)				||
+			!r3IsBoolean(isServiceOwner)				)
 		{
 			return;
 		}
 		let	_isServiceOwner	= isServiceOwner;
 		let	_isServiceTenant= isServiceTenant;
 
-		this.r3provider.removeService(this.state.selected.tenant, this.state.selected.service, isServiceTenant, (error) =>
+		this.r3provider.removeService(this.state.selected.tenant, this.state.selected.service, isServiceTenant, (error: Error | null) =>
 		{
 			if(null !== error){
 				this.updateState(null, this.r3provider.getR3TextRes().eCommunication + error.message, errorType);
 				return;
 			}
 
-			let	_servicename;
-			let	_type;
+			let	_servicename:	string | null;
+			let	_type:			ItemType;
 			if(!_isServiceTenant){
 				// Case : remove service
 				_servicename		= null;
@@ -1042,9 +1175,9 @@ export default class R3Container extends React.Component
 	//
 	// Handle Updating flag
 	//
-	handleContentUpdating(isUpdating)
+	handleContentUpdating(isUpdating: boolean)
 	{
-		if(r3IsSafeTypedEntity(isUpdating, 'boolean')){
+		if(r3IsBoolean(isUpdating)){
 			this.contentUpdating = isUpdating;
 		}
 	}
@@ -1052,11 +1185,11 @@ export default class R3Container extends React.Component
 	//
 	// Handle Save
 	//
-	handleSave(data)
+	handleSave(data: RoleData | PolicyData | ResourceData)
 	{
 		console.info('CALL SAVE DATA : ' + JSON.stringify(data));
 
-		this.r3provider.updateData(this.state.selected.tenant, this.state.selected.type, this.state.selected.path, data, (error) =>
+		this.r3provider.updateData(this.state.selected.tenant, this.state.selected.type, this.state.selected.path, data, (error: Error | null) =>
 		{
 			// set off updating flag
 			//
@@ -1078,11 +1211,11 @@ export default class R3Container extends React.Component
 	//
 	// Handle Save for Service
 	//
-	handleServiceSave(data)
+	handleServiceSave(data: ServiceData)
 	{
 		console.info('CALL SERVICE SAVE DATA : ' + JSON.stringify(data));
 
-		this.r3provider.updateServiceData(this.state.selected.tenant, this.state.selected.service, data.tenant, true, data.verify, (error) =>
+		this.r3provider.updateServiceData(this.state.selected.tenant, this.state.selected.service, data.tenant, true, data.verify, (error: Error | null) =>
 		{
 			// set off updating flag
 			//
@@ -1104,14 +1237,14 @@ export default class R3Container extends React.Component
 	//
 	// Handle Create for Service
 	//
-	handleCreateService(newServiceName, newVerify)
+	handleCreateService(newServiceName: string, newVerify: string)
 	{
 		console.info('CALL CREATE SERVICE : Service Name=' + JSON.stringify(newServiceName) + ', Verify=' + JSON.stringify(newVerify));
 
 		let	_newServiceName = newServiceName;
 		let	_newVerify		= newVerify;
 
-		this.r3provider.createInitializedService(this.state.selected.tenant, _newServiceName, _newVerify, (error) =>
+		this.r3provider.createInitializedService(this.state.selected.tenant, _newServiceName, _newVerify, (error: Error | null) =>
 		{
 			if(null !== error){
 				this.updateState(null, this.r3provider.getR3TextRes().eCommunication + error.message, errorType);
@@ -1126,12 +1259,12 @@ export default class R3Container extends React.Component
 	//
 	// Handle Create for Service Tenant
 	//
-	handleCreateServiceTenant(aliasRole)
+	handleCreateServiceTenant(aliasRole: string | null)
 	{
 		console.info('CALL CREATE SERVICE/TENANT');
 
 		let	_aliasRole = aliasRole;
-		this.r3provider.createServiceTenant(this.state.selected.tenant, this.state.selected.service, _aliasRole, (error) =>
+		this.r3provider.createServiceTenant(this.state.selected.tenant, this.state.selected.service, _aliasRole, (error: Error | null) =>
 		{
 			if(null !== error){
 				this.updateState(null, this.r3provider.getR3TextRes().eCommunication + error.message, errorType);
@@ -1146,7 +1279,7 @@ export default class R3Container extends React.Component
 	//
 	// Handle Singin/Signout
 	//
-	handleSign(configName)
+	handleSign(configName?: string)
 	{
 		let	type = this.r3provider.getR3Context().getSignInType();
 
@@ -1154,35 +1287,50 @@ export default class R3Container extends React.Component
 			//
 			// Unscoped Token Login Type
 			//
-			let	signurl = '';
+			let	signurl: string = '';
 
 			if(this.r3provider.getR3Context().isLogin()){
-				if(!r3IsEmptyString(configName)){
-					console.info('Signout does not require config name, but ' + configName + ' is specified, it is ignored.');
+				//
+				// Currently signed in -> Get the signout URL
+				//
+				let	_configName: string | undefined	= configName;
+				if(!r3IsEmptyString(_configName)){
+					console.info('Signout does not require config name, but ' + _configName + ' is specified, it is ignored.');
 				}
-				configName	= this.r3provider.getR3Context().getSafeConfigName();
-				signurl		= this.r3provider.getR3Context().getSafeSignOutUrl(configName);		// value is 'URL'
 
+				// try to get by config name
+				_configName		= this.r3provider.getR3Context().getSafeConfigName();
+				let	signoutobj	= this.r3provider.getR3Context().getSafeSignOutUrl(_configName);
+
+				if(!isSignUrlEntry(signoutobj)){
+					// try to get default
+					signoutobj	= this.r3provider.getR3Context().getSafeSignOutUrl();
+				}
+				if(isSignUrlEntry(signoutobj)){
+					if(r3IsString(signoutobj.url) && !r3IsEmptyString(signoutobj.url)){
+						signurl = signoutobj.url;
+					}
+				}
 			}else{
-				if(!r3IsEmptyString(configName)){
-					signurl = this.r3provider.getR3Context().getSafeSignInUrl(configName).url;	// value is 'URL'
-
-				}else if(1 <= this.r3provider.getR3Context().getSafeConfigCount(true)){
-					let	signinObj = this.r3provider.getR3Context().getSafeSignInUrl();
-
-					Object.keys(signinObj).forEach(function(_configName){
-						// Get first config name
-						if(r3IsEmptyString(configName)){
-							configName = _configName;
-						}
-					});
-					signurl = this.r3provider.getR3Context().getSafeSignInUrl(configName).url;	// value is 'URL'
-
-				}else{
-					console.info('Signin URL does not find.');
+				//
+				// Currently signed out -> Get the signin URL
+				//
+				let	signinobj = this.r3provider.getR3Context().getSafeSignInUrl(configName);		// config name is allowed undefined/null
+				if(!isSignUrlEntry(signinobj)){
+					// try to get default
+					signinobj	= this.r3provider.getR3Context().getSafeSignInUrl();
+				}
+				if(isSignUrlEntry(signinobj)){
+					if(r3IsString(signinobj.url) && !r3IsEmptyString(signinobj.url)){
+						signurl = signinobj.url;
+					}
 				}
 			}
-			window.location.href = signurl;
+			if(!r3IsEmptyString(signurl)){
+				window.location.href = signurl;
+			}else{
+				console.info('Signin URL does not find.');
+			}
 
 		}else if(signinCredential == type){
 			//
@@ -1206,7 +1354,7 @@ export default class R3Container extends React.Component
 	//
 	// Handle Open About Dialog
 	//
-	handleAbout(package_name)
+	handleAbout(package_name: string | null)
 	{
 		if(!r3IsEmptyString(package_name) && !r3IsEmptyEntityObject(this.licensesObj, package_name)){
 			// Licenses
@@ -1234,7 +1382,7 @@ export default class R3Container extends React.Component
 	//
 	// Handle Close About Dialog
 	//
-	handAboutDialogClose(event, reason)										// eslint-disable-line no-unused-vars
+	handAboutDialogClose(_event: {}, _reason: string | null)
 	{
 		this.updateState({
 			aboutDialogOpen:	false,
@@ -1258,7 +1406,7 @@ export default class R3Container extends React.Component
 	//
 	// Handle Close Account Dialog
 	//
-	handAccountDialogClose(event, reason)									// eslint-disable-line no-unused-vars
+	handAccountDialogClose(_event: {}, _reason: string | null)
 	{
 		this.updateState({
 			accountDialogOpen:	false
@@ -1268,22 +1416,25 @@ export default class R3Container extends React.Component
 	//
 	// Handle Close Direct SignIn Dialog
 	//
-	handSignInDialogClose(event, reason, doSignIn, username, passphrase)
+	handSignInDialogClose(_event: {}, _reason: string | null, doSignIn: boolean, username: string | null, passphrase: string | null)
 	{
 		if(doSignIn){
 			// [NOTE]
 			// username is not empty when this handler is called with signin type.
 			//
+			if(null === username){
+				return;
+			}
 			let	_username = username.trim();
 
 			// Try to sign in
-			this.r3provider.getUnscopedUserToken(_username, passphrase, (error, token) =>
+			this.r3provider.getUnscopedUserToken(_username, passphrase, (error: Error | null, token: string | null) =>
 			{
 				if(null !== error){
 					this.updateState(null, this.r3provider.getR3TextRes().eCommunication + error.message, errorType);
 					return;
 				}
-				this.componentReinitialize(true, _username, token);
+				this.componentReinitialize(true, _username, (r3IsString(token) ? token: ''));
 			});
 		}
 
@@ -1295,7 +1446,7 @@ export default class R3Container extends React.Component
 	//
 	// Callback from R3Provider for Progress
 	//
-	cbProgressControl(isDisplay)
+	cbProgressControl(isDisplay: boolean)
 	{
 		if(this.progressDisplayFunc){
 			this.progressDisplayFunc(isDisplay);
@@ -1305,9 +1456,9 @@ export default class R3Container extends React.Component
 	//
 	// Callback from R3Progress for register object reference
 	//
-	cbRefRegister(func)
+	cbRefRegister(func: (isDisplay: boolean) => void)
 	{
-		if(!r3IsSafeTypedEntity(func, 'function')){
+		if(!r3IsFunction(func)){
 			console.error('call cbRefRegister with invalid function parameter.');
 			return;
 		}
@@ -1393,7 +1544,6 @@ export default class R3Container extends React.Component
 							tenant={ this.state.selected.tenant.name }
 							service={ this.state.service }
 							dispUnique={ R3Container.dispUnique }
-							r3provider={ this.r3provider }
 							onSave={ this.handleServiceSave }
 							onUpdate={ this.handleContentUpdating }
 						/>
@@ -1413,117 +1563,108 @@ export default class R3Container extends React.Component
 	{
 		let	signinDialogMsg	= (r3CompareCaseString('http', this.r3provider.getR3Context().getSafeApiScheme()) ? this.r3provider.getR3TextRes().wDeprecateAuth : '');
 
-		//
-		// Common context for all child components
-		//
-		const commonContext = { r3Context: this.r3provider.getR3Context() };
-
 		return (
-			<R3CommonContext.Provider
-				value={ commonContext }
-			>
-				<React.Fragment>
-					<R3AppBar
+			<React.Fragment>
+				<R3AppBar
+					theme={ this.props.theme }
+					r3provider={ this.r3provider }
+					title={ this.props.title }
+					enDock={ this.state.mainTreeEndock }
+					isDocking={ this.state.mainTreeDocked }
+					licensesObj={ this.licensesObj }
+					onTreeDetach={ this.handleTreeDetach }
+					onOpenTree={ this.handleTreeOpen }
+					onCheckUpdating={ this.handleIsContentUpdating }
+					onAbout={ this.handleAbout }
+					onSign={ this.handleSign }
+					onAccount={ this.handleAccount }
+				/>
+				<Box>
+					<R3MainTree
 						theme={ this.props.theme }
 						r3provider={ this.r3provider }
 						title={ this.props.title }
 						enDock={ this.state.mainTreeEndock }
 						isDocking={ this.state.mainTreeDocked }
 						licensesObj={ this.licensesObj }
-						onTreeDetach={ this.handleTreeDetach }
-						onOpenTree={ this.handleTreeOpen }
+						open={ this.state.mainTreeOpen }
+						editableLocalTenant={ this.state.useLocalTenant }
+						userName={ this.state.username }
+						tenants={ this.state.tenants }
+						treeList={ this.state.mainTree }
+						selectedTenant={ this.state.selected.tenant }
+						selectedType={ this.state.selected.type }
+						selectedService={ this.state.selected.service }
+						selectedPath={ this.state.selected.path }
+						onTenantChange={ this.handleTenantChange }
+						onLocalTenantCreate={ this.handleLocalTenantCreate }
+						onLocalTenantChange={ this.handleLocalTenantChange }
+						onLocalTenantDelete={ this.handleLocalTenantDelete }
+						onTypeItemChange={ this.handleTypeChange }
+						onListItemChange={ this.handleListItemChange }
+						onNameItemInServiceChange={ this.handleNameItemInServiceChange }
+						onTypeInServiceChange={ this.handleTypeInServiceChange }
+						onListItemInServiceChange={ this.handleListItemInServiceChange }
+						onPopupClose={ this.handleTreePopupClose }
+						onTreeDocking={ this.handleTreeDocking }
 						onCheckUpdating={ this.handleIsContentUpdating }
 						onAbout={ this.handleAbout }
-						onSign={ this.handleSign }
-						onAccount={ this.handleAccount }
 					/>
 					<Box>
-						<R3MainTree
+						<R3Toolbar
 							theme={ this.props.theme }
 							r3provider={ this.r3provider }
-							title={ this.props.title }
 							enDock={ this.state.mainTreeEndock }
-							isDocking={ this.state.mainTreeDocked }
-							licensesObj={ this.licensesObj }
-							open={ this.state.mainTreeOpen }
-							editableLocalTenant={ this.state.useLocalTenant }
-							userName={ this.state.username }
-							tenants={ this.state.tenants }
-							treeList={ this.state.mainTree }
-							selectedTenant={ this.state.selected.tenant }
-							selectedType={ this.state.selected.type }
-							selectedService={ this.state.selected.service }
-							selectedPath={ this.state.selected.path }
-							onTenantChange={ this.handleTenantChange }
-							onLocalTenantCreate={ this.handleLocalTenantCreate }
-							onLocalTenantChange={ this.handleLocalTenantChange }
-							onLocalTenantDelete={ this.handleLocalTenantDelete }
-							onTypeItemChange={ this.handleTypeChange }
-							onListItemChange={ this.handleListItemChange }
-							onNameItemInServiceChange={ this.handleNameItemInServiceChange }
-							onTypeInServiceChange={ this.handleTypeInServiceChange }
-							onListItemInServiceChange={ this.handleListItemInServiceChange }
-							onPopupClose={ this.handleTreePopupClose }
-							onTreeDocking={ this.handleTreeDocking }
+							toolbarData={ this.state.toolbarData }
+							onArrawUpward={ this.handleMoveToUpPath }
+							onCreatePath={ this.handleCreatePath }
+							onCheckPath={ this.handleCheckConflictPath }
+							onDeletePath={ this.handleDeletePath }
+							onCreateService={ this.handleCreateService }
+							onCreateServiceTenant={ this.handleCreateServiceTenant }
+							onCheckServiceName={ this.handleCheckConflictServiceName }
+							onDeleteService={ this.handleDeleteService }
 							onCheckUpdating={ this.handleIsContentUpdating }
-							onAbout={ this.handleAbout }
 						/>
-						<Box>
-							<R3Toolbar
-								theme={ this.props.theme }
-								r3provider={ this.r3provider }
-								enDock={ this.state.mainTreeEndock }
-								toolbarData={ this.state.toolbarData }
-								onArrawUpward={ this.handleMoveToUpPath }
-								onCreatePath={ this.handleCreatePath }
-								onCheckPath={ this.handleCheckConflictPath }
-								onDeletePath={ this.handleDeletePath }
-								onCreateService={ this.handleCreateService }
-								onCreateServiceTenant={ this.handleCreateServiceTenant }
-								onCheckServiceName={ this.handleCheckConflictServiceName }
-								onDeleteService={ this.handleDeleteService }
-								onCheckUpdating={ this.handleIsContentUpdating }
-							/>
-							<R3MsgBox
-								theme={ this.props.theme }
-								message={ this.state.message }
-							/>
-							{ this.getContent() }
-						</Box>
+						<R3MsgBox
+							theme={ this.props.theme }
+							message={ this.state.message }
+						/>
+						{ this.getContent() }
 					</Box>
-					<R3AboutDialog
-						theme={ this.props.theme }
-						r3provider={ this.r3provider }
-						open={ this.state.aboutDialogOpen }
-						onClose={ this.handAboutDialogClose }
-						licensePackage={ this.state.licensePackage }
-						licenseType={ this.state.licenseType }
-						licenseText={ this.state.licenseText }
-						r3VersionText={ this.state.r3VersionText }
-					/>
-					<R3AccountDialog
-						theme={ this.props.theme }
-						r3provider={ this.r3provider }
-						open={ this.state.accountDialogOpen }
-						onClose={ this.handAccountDialogClose }
-						username={ this.state.username }
-						unscopedtoken={ this.state.unscopedtoken }
-					/>
-					<R3SigninDialog
-						theme={ this.props.theme }
-						r3provider={ this.r3provider }
-						open={ this.state.signinDialogOpen }
-						name={ null }
-						passphrase={ null }
-						message={ signinDialogMsg }
-						onClose={ this.handSignInDialogClose }
-					/>
-					<R3Progress
-						theme={ this.props.theme }
-						cbRefRegister={ this.cbRefRegister }
-					/>
-				</React.Fragment>
-			</R3CommonContext.Provider>
+				</Box>
+				<R3AboutDialog
+					theme={ this.props.theme }
+					r3provider={ this.r3provider }
+					open={ this.state.aboutDialogOpen }
+					onClose={ this.handAboutDialogClose }
+					licensePackage={ this.state.licensePackage }
+					licenseType={ this.state.licenseType }
+					licenseText={ this.state.licenseText }
+					r3VersionText={ this.state.r3VersionText }
+				/>
+				<R3AccountDialog
+					theme={ this.props.theme }
+					r3provider={ this.r3provider }
+					open={ this.state.accountDialogOpen }
+					onClose={ this.handAccountDialogClose }
+					username={ this.state.username }
+					unscopedtoken={ this.state.unscopedtoken }
+				/>
+				<R3SigninDialog
+					theme={ this.props.theme }
+					r3provider={ this.r3provider }
+					open={ this.state.signinDialogOpen }
+					name={ null }
+					passphrase={ null }
+					message={ signinDialogMsg }
+					onClose={ this.handSignInDialogClose }
+				/>
+				<R3Progress
+					theme={ this.props.theme }
+					cbRefRegister={ this.cbRefRegister }
+				/>
+			</React.Fragment>
 		);
 	}
 }

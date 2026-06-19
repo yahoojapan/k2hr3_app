@@ -20,8 +20,6 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import AppBar						from '@mui/material/AppBar';
 import Toolbar						from '@mui/material/Toolbar';
@@ -49,16 +47,75 @@ import OwnerIcon					from '@mui/icons-material/Person';
 import MoreVertIcon					from '@mui/icons-material/MoreVert';
 import EditIcon						from '@mui/icons-material/Edit';
 
-import { r3MainTree }				from './r3styles';
+import type { R3Theme }				from './r3theme';
+import { r3MainTreeStyle }				from './r3styles';
 import R3LocalTenantDialog			from './r3localtenantdialog';
 import R3PopupMsgDialog				from './r3popupmsgdialog';
 import R3Message					from '../util/r3message';
-import { serviceType, errorType }	from '../util/r3types';
+import R3Provider					from '../util/r3provider';
 import { localTenantPrefix }		from '../util/r3define';
-import { r3DeepCompare, r3IsEmptyEntity, r3IsEmptyStringObject, r3IsEmptyString, r3CompareCaseString, r3IsEmptyEntityObject, r3IsSafeTypedEntity, r3DeepClone }	from '../util/r3util';
+import { TreeListItem, serviceType, errorType, LicenseEntryObject, TenantData }	from '../util/r3types';
+import { r3IsNumber, r3IsArray, r3DeepCompare, r3IsEmptyEntity, r3IsEmptyStringObject, r3IsEmptyString, r3CompareCaseString, r3IsEmptyEntityObject, r3DeepClone, r3IsBoolean }	from '../util/r3util';
 
-// For context
-import { R3CommonContext }			from './r3commoncontext';
+//
+// Props and State type
+//
+type R3MainTreeRequiredProps = {
+	theme:						R3Theme;
+	r3provider:					R3Provider;
+	title:						string;
+	tenants:					TenantData[];
+	onTenantChange:				(tenant: TenantData) => void;
+	onLocalTenantCreate:		(name: string, display: string, description: string, users: string[]) => void;
+	onLocalTenantChange:		(name: string, id: string, display: string, description: string, users: string[]) => void;
+	onLocalTenantDelete:		(name: string, id: string) => void;
+	onTypeItemChange:			(type: string) => void;
+	onListItemChange:			(type: string, path: string) => void;
+	onNameItemInServiceChange:	(servicename: string) => void;
+	onTypeInServiceChange:		(servicename: string, type_in_service: string) => void;
+	onListItemInServiceChange:	(servicename: string, type_in_service: string, path: string) => void;
+	onPopupClose:				() => void;
+	onTreeDocking:				(docking: boolean) => void;
+	onAbout:					(packageName: string | null) => void;
+};
+
+type R3MainTreeOptionProps = {
+	open?:						boolean;
+	enDock?:					boolean;
+	isDocking?:					boolean;
+	licensesObj?:				LicenseEntryObject;
+
+	editableLocalTenant?:		boolean;
+	userName?:					string | null;
+	treeList?:					TreeListItem[] | null;
+
+	selectedTenant?:			TenantData | null;
+	selectedType?:				string | null;
+	selectedService?:			string | null;
+	selectedPath?:				string | null;
+
+	onCheckUpdating?:			(() => boolean) | null;
+	onOpenChange?:				((open: boolean) => void) | null;
+};
+
+type R3MainTreeProps = R3MainTreeRequiredProps & R3MainTreeOptionProps;
+
+type R3MainTreeState = {
+	r3Message:					R3Message | null;
+	dummyBarMenuAnchorEl:		HTMLElement | null;
+	dummyLicenseMenuAnchorEl:	HTMLElement | null;
+	tenantMenuAnchorEl:			HTMLElement | null;
+	localTenantDialogOpen:		boolean;
+	localTenantCreateMode:		boolean;
+	tooltips: {
+		mainMenuTooltip?:		boolean;
+		tenantEditTooltip?:		boolean;
+		tenantMenuTooltip?:		boolean;
+	};
+	collapseExpands:			Record<string, boolean>;
+};
+
+type R3MainTreeStyleType = ReturnType<typeof r3MainTreeStyle>;
 
 //
 // Local variables
@@ -93,63 +150,29 @@ const tooltipValues = {
 //
 // Main TreeView Class
 //
-export default class R3MainTree extends React.Component
+export default class R3MainTree extends React.Component<R3MainTreeProps, R3MainTreeState>
 {
-	// Set context as this.context
-	static contextType		= R3CommonContext;
+	sxClasses: R3MainTreeStyleType;
 
-	static propTypes = {
-		r3provider:					PropTypes.object.isRequired,
-		title:						PropTypes.string.isRequired,
-		open:						PropTypes.bool,
-		enDock:						PropTypes.bool,
-		isDocking:					PropTypes.bool,
-		licensesObj:				PropTypes.object,
+	static defaultProps: R3MainTreeOptionProps = {
+		open:					false,
+		enDock:					true,
+		isDocking:				true,
+		licensesObj:			null,
 
-		editableLocalTenant:		PropTypes.bool,
-		userName:					PropTypes.string,
-		tenants:					PropTypes.array.isRequired,
-		treeList:					PropTypes.array,
+		editableLocalTenant:	true,
+		userName:				null,
+		treeList:				null,
 
-		selectedTenant:				PropTypes.object,
-		selectedType:				PropTypes.string,
-		selectedService:			PropTypes.string,
-		selectedPath:				PropTypes.string,
+		selectedTenant:			null,
+		selectedType:			null,
+		selectedService:		null,
+		selectedPath:			null,
 
-		onTenantChange:				PropTypes.func.isRequired,
-		onLocalTenantCreate:		PropTypes.func.isRequired,
-		onLocalTenantChange:		PropTypes.func.isRequired,
-		onLocalTenantDelete:		PropTypes.func.isRequired,
-		onTypeItemChange:			PropTypes.func.isRequired,
-		onListItemChange:			PropTypes.func.isRequired,
-		onNameItemInServiceChange:	PropTypes.func.isRequired,
-		onTypeInServiceChange:		PropTypes.func.isRequired,
-		onListItemInServiceChange:	PropTypes.func.isRequired,
-		onPopupClose:				PropTypes.func.isRequired,
-		onTreeDocking:				PropTypes.func.isRequired,
-		onCheckUpdating:			PropTypes.func,
-		onAbout:					PropTypes.func.isRequired
+		onCheckUpdating:		null
 	};
 
-	static defaultProps = {
-		open:						false,
-		enDock:						true,
-		isDocking:					true,
-		licensesObj:				null,
-
-		editableLocalTenant:		true,
-		userName:					null,
-		treeList:					null,
-
-		selectedTenant:				null,
-		selectedType:				null,
-		selectedService:			null,
-		selectedPath:				null,
-
-		onCheckUpdating:			null
-	};
-
-	state = {
+	state: R3MainTreeState = {
 		r3Message:					null,
 		dummyBarMenuAnchorEl:		null,
 		dummyLicenseMenuAnchorEl:	null,
@@ -165,7 +188,7 @@ export default class R3MainTree extends React.Component
 		collapseExpands:			{}
 	};
 
-	constructor(props)
+	constructor(props: R3MainTreeProps)
 	{
 		super(props);
 
@@ -188,10 +211,10 @@ export default class R3MainTree extends React.Component
 		this.handMessageDialogClose			= this.handMessageDialogClose.bind(this);
 
 		// styles
-		this.sxClasses						= r3MainTree(props.theme);
+		this.sxClasses						= r3MainTreeStyle(props.theme);
 	}
 
-	handleTenantEditButton(event)									// eslint-disable-line no-unused-vars
+	handleTenantEditButton(event: React.MouseEvent<HTMLElement>)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -206,7 +229,7 @@ export default class R3MainTree extends React.Component
 		});
 	}
 
-	handLocalTenantDialogClose(event, reason, result, newTenantName, tenantId, newTenantDisplay, newTenantDescription, newTenantUsers)
+	handLocalTenantDialogClose(event: React.SyntheticEvent | {}, reason: string | null, result: boolean, newTenantName: string | null, tenantId: string | null, newTenantDisplay: string | null, newTenantDescription: string | null, newTenantUsers: string[] | null)
 	{
 		if(!result){
 			this.setState({
@@ -230,7 +253,7 @@ export default class R3MainTree extends React.Component
 		if(this.state.localTenantCreateMode){
 			// create
 			this.props.onLocalTenantCreate(newTenantName, newTenantDisplay, newTenantDescription, newTenantUsers);
-		}else if(!r3IsSafeTypedEntity(newTenantUsers, 'array') || 0 === newTenantUsers.length){
+		}else if(!r3IsArray(newTenantUsers) || 0 === newTenantUsers.length){
 			// delete
 			this.props.onLocalTenantDelete(newTenantName, tenantId);
 		}else{
@@ -249,7 +272,7 @@ export default class R3MainTree extends React.Component
 		});
 	}
 
-	handleTenantMenuButton(event)
+	handleTenantMenuButton(event: React.MouseEvent<HTMLElement>)
 	{
 		this.setState({
 			tenantMenuAnchorEl:		event.currentTarget,
@@ -259,17 +282,17 @@ export default class R3MainTree extends React.Component
 		});
 	}
 
-	handleTenantMenuClose(event)									// eslint-disable-line no-unused-vars
+	handleTenantMenuClose(event: React.SyntheticEvent)
 	{
 		this.setState({
 			tenantMenuAnchorEl:	null
 		});
 	}
 
-	handleTenantChange = (event, value) =>
+	handleTenantChange = (event: React.MouseEvent<HTMLElement>, value: number) =>
 	{
 		if(this.checkContentUpdating()){
-			this.props.tenants.map( (item, pos) => {
+			this.props.tenants.map( (item: TenantData, pos: number) => {
 				if(value === pos){
 					// if selected tenant is changed, we need to clear collapseExpands{}.
 					//
@@ -296,7 +319,7 @@ export default class R3MainTree extends React.Component
 		});
 	};
 
-	handleCreateLocalTenant = (event) =>							// eslint-disable-line no-unused-vars
+	handleCreateLocalTenant = (event: React.MouseEvent<HTMLElement>) =>
 	{
 		if(this.checkContentUpdating()){
 			// open dialog and closing menu
@@ -313,11 +336,11 @@ export default class R3MainTree extends React.Component
 		});
 	};
 
-	updateCollapseChange(prevSelected, collapseKey)
+	updateCollapseChange(prevSelected: boolean, collapseKey: string)
 	{
 		let newCollapseExpands	= Object.assign({}, this.state.collapseExpands);
 
-		if(r3IsEmptyEntityObject(newCollapseExpands, collapseKey) || !r3IsSafeTypedEntity(newCollapseExpands[collapseKey], 'boolean')){
+		if(r3IsEmptyEntityObject(newCollapseExpands, collapseKey) || !r3IsBoolean(newCollapseExpands[collapseKey])){
 			// not found collapseKey's state, it means that item does not expand now.
 			if(prevSelected){
 				// now selected		-> expanding
@@ -340,7 +363,7 @@ export default class R3MainTree extends React.Component
 		});
 	}
 
-	handleTypeItemChange(event, type, prevSelected, collapseKey)
+	handleTypeItemChange(event: React.MouseEvent<HTMLElement>, type: string, prevSelected: boolean, collapseKey: string)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -350,7 +373,7 @@ export default class R3MainTree extends React.Component
 		this.props.onTypeItemChange(type);
 	}
 
-	handleListItemChange(event, type, path, prevSelected, collapseKey)
+	handleListItemChange(event: React.MouseEvent<HTMLElement>, type: string, path: string, prevSelected: boolean, collapseKey: string)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -360,7 +383,7 @@ export default class R3MainTree extends React.Component
 		this.props.onListItemChange(type, path);
 	}
 
-	handleNameItemInServiceChange(event, servicename, prevSelected, collapseKey)
+	handleNameItemInServiceChange(event: React.MouseEvent<HTMLElement>, servicename: string, prevSelected: boolean, collapseKey: string)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -370,7 +393,7 @@ export default class R3MainTree extends React.Component
 		this.props.onNameItemInServiceChange(servicename);
 	}
 
-	handleTypeInServiceChange(event, servicename, type_in_service, prevSelected, collapseKey)
+	handleTypeInServiceChange(event: React.MouseEvent<HTMLElement>, servicename: string, type_in_service: string, prevSelected: boolean, collapseKey: string)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -380,7 +403,7 @@ export default class R3MainTree extends React.Component
 		this.props.onTypeInServiceChange(servicename, type_in_service);
 	}
 
-	handleListItemInServiceChange(event, servicename, type_in_service, path, prevSelected, collapseKey)
+	handleListItemInServiceChange(event: React.MouseEvent<HTMLElement>, servicename: string, type_in_service: string, path: string, prevSelected: boolean, collapseKey: string)
 	{
 		if(!this.checkContentUpdating()){
 			return;
@@ -390,13 +413,13 @@ export default class R3MainTree extends React.Component
 		this.props.onListItemInServiceChange(servicename, type_in_service, path);
 	}
 
-	handleTreePopupClose(event)										// eslint-disable-line no-unused-vars
+	handleTreePopupClose(event: object, _reason?: string)
 	{
 		console.info('CALL - Drawer close');
 		this.props.onPopupClose();
 	}
 
-	handleDummyBarButton(event)
+	handleDummyBarButton(event: React.MouseEvent<HTMLElement>)
 	{
 		this.setState({
 			dummyBarMenuAnchorEl:		event.currentTarget,
@@ -407,7 +430,7 @@ export default class R3MainTree extends React.Component
 		});
 	}
 
-	handleDummyBarMenuClose(event)									// eslint-disable-line no-unused-vars
+	handleDummyBarMenuClose(event: React.SyntheticEvent)
 	{
 		this.setState({
 			dummyBarMenuAnchorEl:		null,
@@ -415,7 +438,7 @@ export default class R3MainTree extends React.Component
 		});
 	}
 
-	handleDummyBarClick = (event, value) =>
+	handleDummyBarClick = (event: React.MouseEvent<HTMLElement>, value: string | number | null) =>
 	{
 		// [NOTE]
 		// The sub MenuItem for licenses menu is received in the OnClick event,
@@ -425,7 +448,7 @@ export default class R3MainTree extends React.Component
 		//
 		if(r3IsEmptyEntity(value)){
 			// Licenses
-			if(!r3IsEmptyString(event.target.innerText)){
+			if(event.target instanceof HTMLElement && !r3IsEmptyString(event.target.innerText)){
 				this.props.onAbout(event.target.innerText);
 			}
 		}else{
@@ -443,13 +466,10 @@ export default class R3MainTree extends React.Component
 					return;
 				}
 
-			}else if(!isNaN(value)){
-				let	_appmenu= this.context.r3Context.getSafeAppMenu();
-				let	_pos	= parseInt(value);
-				if(	0 <= _pos &&
-					undefined !== _appmenu && null !== _appmenu && _appmenu instanceof Array && _pos < _appmenu.length &&
-					!r3IsEmptyStringObject(_appmenu[_pos], 'url'))
-				{
+			}else if(r3IsNumber(value) && !isNaN(value)){
+				let	_appmenu= this.props.r3provider.getR3Context().getSafeAppMenu();
+				let	_pos	= value;
+				if(0 <= _pos && r3IsArray(_appmenu) && _pos < _appmenu.length && !r3IsEmptyStringObject(_appmenu[_pos], 'url')){
 					window.open(_appmenu[_pos].url);
 				}
 			}
@@ -465,14 +485,14 @@ export default class R3MainTree extends React.Component
 		});
 	};
 
-	handMessageDialogClose(event, reason, result)				// eslint-disable-line no-unused-vars
+	handMessageDialogClose(_event: {}, _reason: string | undefined, _result: boolean)
 	{
 		this.setState({
 			r3Message:	null
 		});
 	}
 
-	handTooltipChange = (event, type, isOpen) =>
+	handTooltipChange = (event: React.MouseEvent<HTMLElement>, type: string, isOpen: boolean) =>
 	{
 		if(tooltipValues.mainMenu === type){
 			this.setState({
@@ -567,8 +587,8 @@ export default class R3MainTree extends React.Component
 			);
 		}
 
-		let	_appmenu = this.context.r3Context.getSafeAppMenu();
-		if(undefined !== _appmenu && null !== _appmenu && _appmenu instanceof Array && 0 < _appmenu.length){
+		let	_appmenu = this.props.r3provider.getR3Context().getSafeAppMenu();
+		if(r3IsArray(_appmenu) && 0 < _appmenu.length){
 			for(let cnt = 0; cnt < _appmenu.length; ++cnt){
 				if(r3IsEmptyStringObject(_appmenu[cnt], 'name')){
 					continue;
@@ -626,7 +646,7 @@ export default class R3MainTree extends React.Component
 	{
 		const { r3provider } = this.props;
 
-		if(!(this.props.tenants instanceof Array) || 0 === this.props.tenants.length){
+		if(!r3IsArray(this.props.tenants) || 0 === this.props.tenants.length){
 			return (
 				<MenuItem
 					key={ componentKeyIds.noTenantList }
@@ -637,7 +657,7 @@ export default class R3MainTree extends React.Component
 			);
 		}else{
 			return (
-				this.props.tenants.map( (item, pos) => {
+				this.props.tenants.map( (item: TenantData, pos: number) => {
 					return (
 						<MenuItem
 							key={ pos }
@@ -699,7 +719,7 @@ export default class R3MainTree extends React.Component
 				>
 					<Tooltip
 						title={ r3provider.getR3TextRes().tResMainMenuTT }
-						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.mainMenuTooltip, 'boolean')) ? false : this.state.tooltips.mainMenuTooltip) }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.mainMenuTooltip)) ? false : this.state.tooltips.mainMenuTooltip) }
 					>
 						<IconButton
 							onClick={ this.handleDummyBarButton }
@@ -725,7 +745,7 @@ export default class R3MainTree extends React.Component
 
 					<Typography
 						{ ...theme.r3MainTree.title }
-						ex={ this.sxClasses.title }
+						sx={ this.sxClasses.title }
 					>
 						{ this.props.title }
 					</Typography>
@@ -741,16 +761,16 @@ export default class R3MainTree extends React.Component
 		let	menuItem				= this.getTenantListMenuItems();
 		let	menuLocalTenantItem		= this.getLocalTenantMenuItem();
 		let	menuLocalTenantDivider	= this.getLocalTenantMenuDivider();
-		let	titleName				= ((this.props.tenants instanceof Array && 0 < this.props.tenants.length) ? r3provider.getR3TextRes().tResUnselectedTenantLabel : r3provider.getR3TextRes().tResNoTenantLabel);
+		let	titleName				= ((r3IsArray(this.props.tenants) && 0 < this.props.tenants.length) ? r3provider.getR3TextRes().tResUnselectedTenantLabel : r3provider.getR3TextRes().tResNoTenantLabel);
 		let	themeToolbar			= (this.props.enDock ? theme.r3MainTree.subheaderToolbar : theme.r3MainTree.smallSubheaderToolbar);
 
-		this.props.tenants.map( (tenant, pos) => {			// eslint-disable-line no-unused-vars
+		this.props.tenants.map( (tenant: TenantData, _pos: number) => {
 			if(r3DeepCompare(tenant, this.props.selectedTenant)){
 				titleName	= tenant.display;
 			}
 		});
 
-		// 
+		//
 		// Local tenant edit button
 		//
 		let	tenantEditBtn;
@@ -758,12 +778,12 @@ export default class R3MainTree extends React.Component
 			this.props.editableLocalTenant									&&
 			!r3IsEmptyEntityObject(this.props.selectedTenant, 'name')		&&
 			0 === this.props.selectedTenant.name.indexOf(localTenantPrefix)	&&
-			r3IsSafeTypedEntity(this.props.selectedTenant.users, 'array')	)
+			r3IsArray(this.props.selectedTenant.users)						)
 		{
 			tenantEditBtn = (
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResTenantEditTT }
-					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.tenantEditTooltip, 'boolean')) ? false : this.state.tooltips.tenantEditTooltip) }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.tenantEditTooltip)) ? false : this.state.tooltips.tenantEditTooltip) }
 				>
 					<IconButton
 						onClick={ this.handleTenantEditButton }
@@ -813,7 +833,7 @@ export default class R3MainTree extends React.Component
 
 					<Tooltip
 						title={ r3provider.getR3TextRes().tResSelectTenantTT }
-						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.tenantMenuTooltip, 'boolean')) ? false : this.state.tooltips.tenantMenuTooltip) }
+						open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.tenantMenuTooltip)) ? false : this.state.tooltips.tenantMenuTooltip) }
 					>
 						<IconButton
 							disabled={ r3IsEmptyString(this.props.userName) }
@@ -862,35 +882,35 @@ export default class R3MainTree extends React.Component
 	//
 	// For children under TOP > ROLE/POLICY/RESOURCE
 	//
-	getChildrenListItems(treeList, type)
+	getChildrenListItems(treeList: TreeListItem[], type: string)
 	{
 		const { theme } = this.props;
 
-		if(undefined === treeList || !(treeList instanceof Array)){
+		if(!r3IsArray(treeList)){
 			return;
 		}
 		let	_type = type;
 
 		return (
-			treeList.map( (item, pos) => {							// eslint-disable-line no-unused-vars
+			treeList.map( (item: TreeListItem, _pos: number) => {
 				let	listItemKey		= _type + '_' + item.path;
 				let	isSelected		= (undefined != item.selected ? true : false);
 
 				let	isCollapseExpand = false;
-				if(!r3IsEmptyEntityObject(this.state.collapseExpands, listItemKey) && r3IsSafeTypedEntity(this.state.collapseExpands[listItemKey], 'boolean')){
+				if(!r3IsEmptyEntityObject(this.state.collapseExpands, listItemKey) && r3IsBoolean(this.state.collapseExpands[listItemKey])){
 					isCollapseExpand = this.state.collapseExpands[listItemKey];
 				}
 
 				let	expandIcon;
 				let	collapseItem;
-				if(undefined !== item.children && (item.children instanceof Array) && 0 < item.children.length){
+				if(r3IsArray(item.children) && 0 < item.children.length){
 					let childrenItem = this.getChildrenListItems(item.children, _type);
 
 					if(childrenItem){
 						if(isCollapseExpand){
 							expandIcon = (
 								<ListItemIcon
-									ex={ this.sxClasses.expandListItemIcon }
+									sx={ this.sxClasses.expandListItemIcon }
 								>
 									<ExpandLessIcon />
 								</ListItemIcon>
@@ -935,7 +955,7 @@ export default class R3MainTree extends React.Component
 						key={ listItemKey }
 					>
 						<ListItem
-							onClick={ (event) => this.handleListItemChange(event, _type, item.path, isSelected, listItemKey) }
+							onClick={ (event: React.MouseEvent<HTMLElement>) => this.handleListItemChange(event, _type, item.path, isSelected, listItemKey) }
 							{ ...theme.r3MainTree.listItemButton }
 						>
 							<ListItemText
@@ -955,26 +975,26 @@ export default class R3MainTree extends React.Component
 	//
 	// For Service Name(TOP) under TOP > SERVICE
 	//
-	getServicesListItems(treeList)
+	getServicesListItems(treeList: TreeListItem[])
 	{
 		const { theme } = this.props;
 
-		if(undefined === treeList || !(treeList instanceof Array)){
+		if(!r3IsArray(treeList)){
 			return;
 		}
 
 		return (
-			treeList.map( (item, pos) => {							// eslint-disable-line no-unused-vars
+			treeList.map( (item: TreeListItem, _pos: number) => {
 				let	listItemKey		= 'service_' + item.path;
 				let	isSelected		= (undefined != item.selected ? true : false);
 
 				let	isCollapseExpand = false;
-				if(!r3IsEmptyEntityObject(this.state.collapseExpands, listItemKey) && r3IsSafeTypedEntity(this.state.collapseExpands[listItemKey], 'boolean')){
+				if(!r3IsEmptyEntityObject(this.state.collapseExpands, listItemKey) && r3IsBoolean(this.state.collapseExpands[listItemKey])){
 					isCollapseExpand = this.state.collapseExpands[listItemKey];
 				}
 
 				let	ownerIcon;
-				if(r3IsSafeTypedEntity(item.owner, 'boolean') && true === item.owner){
+				if(r3IsBoolean(item.owner) && true === item.owner){
 					ownerIcon = (
 						<ListItemIcon>
 							<OwnerIcon
@@ -986,7 +1006,7 @@ export default class R3MainTree extends React.Component
 
 				let	expandIcon;
 				let	collapseItem;
-				if(undefined !== item.children && (item.children instanceof Array) && 0 < item.children.length){
+				if(r3IsArray(item.children) && 0 < item.children.length){
 					let childrenItem = this.getServiceMainListItems(item.children, item.path);
 					if(childrenItem){
 						if(isCollapseExpand){
@@ -1037,7 +1057,7 @@ export default class R3MainTree extends React.Component
 						key={ listItemKey }
 					>
 						<ListItem
-							onClick={ (event) => this.handleNameItemInServiceChange(event, item.path, isSelected, listItemKey) }
+							onClick={ (event: React.MouseEvent<HTMLElement>) => this.handleNameItemInServiceChange(event, item.path, isSelected, listItemKey) }
 							{ ...theme.r3MainTree.listItemButton }
 						>
 							<ListItemText
@@ -1060,29 +1080,29 @@ export default class R3MainTree extends React.Component
 	//
 	//	service_name		: "service name"
 	//
-	getServiceMainListItems(treeList, service_name)
+	getServiceMainListItems(treeList: TreeListItem[], service_name: string)
 	{
 		const { theme } = this.props;
 
-		if(undefined === treeList || !(treeList instanceof Array)){
+		if(!r3IsArray(treeList)){
 			return;
 		}
 		let	_service_name = service_name;
 
 		return (
-			treeList.map( (item, pos) => {							// eslint-disable-line no-unused-vars
+			treeList.map( (item: TreeListItem, _pos: number) => {
 
 				let	listItemKey		= 'service_' + _service_name + '_' + item.path;
 				let	isSelected		= (undefined != item.selected ? true : false);
 
 				let	isCollapseExpand = false;
-				if(!r3IsEmptyEntityObject(this.state.collapseExpands, listItemKey) && r3IsSafeTypedEntity(this.state.collapseExpands[listItemKey], 'boolean')){
+				if(!r3IsEmptyEntityObject(this.state.collapseExpands, listItemKey) && r3IsBoolean(this.state.collapseExpands[listItemKey])){
 					isCollapseExpand = this.state.collapseExpands[listItemKey];
 				}
 
 				let	expandIcon;
 				let	collapseItem;
-				if(undefined !== item.children && (item.children instanceof Array) && 0 < item.children.length){
+				if(r3IsArray(item.children) && 0 < item.children.length){
 					let childrenItem = this.getServiceChildrenListItems(item.children, _service_name, item.path);
 					if(childrenItem){
 						if(isCollapseExpand){
@@ -1133,10 +1153,12 @@ export default class R3MainTree extends React.Component
 						key={ listItemKey }
 					>
 						<ListItem
-							onClick={ (event) => this.handleTypeInServiceChange(event, _service_name, item.path, isSelected, listItemKey) }
+							onClick={ (event: React.MouseEvent<HTMLElement>) => this.handleTypeInServiceChange(event, _service_name, item.path, isSelected, listItemKey) }
 							{ ...theme.r3MainTree.listItemButton }
 						>
-							<ListItemIcon>
+							<ListItemIcon
+								sx={ this.sxClasses.labelListItemIcon }
+							>
 								<LabelIcon />
 							</ListItemIcon>
 							<ListItemText
@@ -1159,29 +1181,29 @@ export default class R3MainTree extends React.Component
 	//	service_name		: "service name"
 	//	type_in_service		: "type" under service
 	//
-	getServiceChildrenListItems(treeList, service_name, type_in_service)
+	getServiceChildrenListItems(treeList: TreeListItem[], service_name: string, type_in_service: string)
 	{
 		const { theme } = this.props;
 
-		if(undefined === treeList || !(treeList instanceof Array)){
+		if(!r3IsArray(treeList)){
 			return;
 		}
 		let	_service_name		= service_name;
 		let	_type_in_service	= type_in_service;
 
 		return (
-			treeList.map( (item, pos) => {							// eslint-disable-line no-unused-vars
+			treeList.map( (item: TreeListItem, _pos: number) => {
 				let	listItemKey		= 'service_' + _service_name + '_' + _type_in_service + '_' + item.path;
 				let	isSelected		= (undefined != item.selected ? true : false);
 
 				let	isCollapseExpand = false;
-				if(!r3IsEmptyEntityObject(this.state.collapseExpands, listItemKey) && r3IsSafeTypedEntity(this.state.collapseExpands[listItemKey], 'boolean')){
+				if(!r3IsEmptyEntityObject(this.state.collapseExpands, listItemKey) && r3IsBoolean(this.state.collapseExpands[listItemKey])){
 					isCollapseExpand = this.state.collapseExpands[listItemKey];
 				}
 
 				let	expandIcon;
 				let	collapseItem;
-				if(undefined !== item.children && (item.children instanceof Array) && 0 < item.children.length){
+				if(r3IsArray(item.children) && 0 < item.children.length){
 					let childrenItem = this.getServiceChildrenListItems(item.children, _service_name, _type_in_service);
 					if(childrenItem){
 						if(isCollapseExpand){
@@ -1232,7 +1254,7 @@ export default class R3MainTree extends React.Component
 						key={ listItemKey }
 					>
 						<ListItem
-							onClick={ (event) => this.handleListItemInServiceChange(event, _service_name, _type_in_service, item.path, isSelected, listItemKey) }
+							onClick={ (event: React.MouseEvent<HTMLElement>) => this.handleListItemInServiceChange(event, _service_name, _type_in_service, item.path, isSelected, listItemKey) }
 							{ ...theme.r3MainTree.listItemButton }
 						>
 							<ListItemText
@@ -1253,30 +1275,30 @@ export default class R3MainTree extends React.Component
 	//
 	// For TOP
 	//
-	getMainListItems(treeList)
+	getMainListItems(treeList: TreeListItem[])
 	{
 		const { theme } = this.props;
 
 		console.info('CALL : getMainListItems');
 
-		if(undefined === treeList || !(treeList instanceof Array)){
+		if(!r3IsArray(treeList)){
 			return;
 		}
 
 		return (
-			treeList.map( (item, pos) =>							// eslint-disable-line no-unused-vars
+			treeList.map( (item: TreeListItem, _pos: number) =>
 			{
 				let	listItemKey		= 'top_' + item.path;
 				let	isSelected		= (undefined != item.selected ? true : false);
 
 				let	isCollapseExpand = false;
-				if(!r3IsEmptyEntityObject(this.state.collapseExpands, listItemKey) && r3IsSafeTypedEntity(this.state.collapseExpands[listItemKey], 'boolean')){
+				if(!r3IsEmptyEntityObject(this.state.collapseExpands, listItemKey) && r3IsBoolean(this.state.collapseExpands[listItemKey])){
 					isCollapseExpand = this.state.collapseExpands[listItemKey];
 				}
 
 				let	expandIcon;
 				let	collapseItem;
-				if(r3IsSafeTypedEntity(item.children, 'array') && 0 < item.children.length){
+				if(r3IsArray(item.children) && 0 < item.children.length){
 					let childrenItem;
 					if(r3CompareCaseString(serviceType, item.path)){
 						childrenItem = this.getServicesListItems(item.children);
@@ -1331,10 +1353,12 @@ export default class R3MainTree extends React.Component
 						key={ listItemKey }
 					>
 						<ListItem
-							onClick={ (event) => this.handleTypeItemChange(event, item.path, isSelected, listItemKey) }
+							onClick={ (event: React.MouseEvent<HTMLElement>) => this.handleTypeItemChange(event, item.path, isSelected, listItemKey) }
 							{ ...theme.r3MainTree.listItemButton }
 						>
-							<ListItemIcon>
+							<ListItemIcon
+								sx={ this.sxClasses.labelListItemIcon }
+							>
 								<LabelIcon />
 							</ListItemIcon>
 							<ListItemText
@@ -1393,7 +1417,7 @@ export default class R3MainTree extends React.Component
 					tenantId={			(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'id'))			? '' : this.props.selectedTenant.id }
 					tenantDisplay={		(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'display'))		? '' : this.props.selectedTenant.display }
 					tenantDescription={	(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'description'))	? '' : this.props.selectedTenant.description }
-					tenantUsers={		(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'users') || !r3IsSafeTypedEntity(this.props.selectedTenant.users, 'array')) ? [ this.props.userName ] : r3DeepClone(this.props.selectedTenant.users).sort() }
+					tenantUsers={		(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'users') || !r3IsArray(this.props.selectedTenant.users)) ? [ this.props.userName ] : r3DeepClone(this.props.selectedTenant.users).sort() }
 					onClose={ this.handLocalTenantDialogClose }
 				/>
 			</React.Fragment>
@@ -1436,7 +1460,7 @@ export default class R3MainTree extends React.Component
 						tenantId={			(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'id'))			? '' : this.props.selectedTenant.id }
 						tenantDisplay={		(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'display'))		? '' : this.props.selectedTenant.display }
 						tenantDescription={	(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'description'))	? '' : this.props.selectedTenant.description }
-						tenantUsers={		(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'users') || !r3IsSafeTypedEntity(this.props.selectedTenant.users, 'array')) ? [ this.props.userName ] : r3DeepClone(this.props.selectedTenant.users).sort() }
+						tenantUsers={		(this.state.localTenantCreateMode || r3IsEmptyEntity(this.props.selectedTenant) || r3IsEmptyEntityObject(this.props.selectedTenant, 'users') || !r3IsArray(this.props.selectedTenant.users)) ? [ this.props.userName ] : r3DeepClone(this.props.selectedTenant.users).sort() }
 						onClose={ this.handLocalTenantDialogClose }
 					/>
 				</React.Fragment>

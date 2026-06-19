@@ -19,6 +19,8 @@
  *
  */
 
+import { StringValObj }	from '../util/r3types';
+
 //
 // Text Resources for Japanese
 //
@@ -28,7 +30,7 @@
 //				c		=> Confirm
 //				tRes	=> Text Resource(other)
 //
-export const r3TextRes = {
+export const r3TextRes: StringValObj = {
 	iNotSignin:					'最初にサインインしてください。',
 	iNotSelectTenant:			'最初にテナントを選択し、次に ROLE / RESOURCE / POLICY を選択し、参照、編集してください。',
 	iNotSelectPath:				'SERVICE / ROLE / RESOURCE / POLICY 以下のパスを選択し、参照、編集してください。',
@@ -166,7 +168,7 @@ export const r3TextRes = {
 	tResTenantUsersEditBtn:		'更新',
 	tResStaticResKeyPopover:	'キー名',
 	tResStaticResKValPopover:	'値',
-	tResAliasRoleHint:			'サービス連携するテナント(yrn:yahoo:::<tenant>)',
+	tResAliasRoleHint:			'ロールパス：テナント以下のパスで指定(yrn:yahoo:::',
 	tResResourceValueSubTitle:	'リソース値',
 	tResResourceValueTypeText:	'文字列タイプ(テキストデータ)',
 	tResResourceValueTypeObj:	'オブジェクトタイプ（JSONフォーマット文字列）',
@@ -267,6 +269,7 @@ export const r3TextRes = {
 	eNoChange:					'変更箇所が見当たりません。（同じ値です）',
 	eEffectType:				'EFFECTの値が不正です。',
 	eActionType:				'ACTIONの値が不正です。',
+	eNoActionType:				'ACTIONは必ず一つ以上のタイプを選択する必要があります。',
 	eResourceArray:				'RESOURCEの値（YRNで開始されている必要があります）が不正です。',
 	eAliasArray:				'ALIASの値が不正です。',
 	eTenantArray:				'TENANTの値が不正です。（同じ値が複数指定されています）',

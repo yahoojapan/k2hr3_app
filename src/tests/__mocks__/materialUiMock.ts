@@ -19,6 +19,8 @@
  *
  */
 
+import { valTypeAllObject }	from '../../util/r3types';
+
 //
 // This mock function is used in calling parameter for react-test-renderer create method.
 // The ToolChip and Ripple object in material-ui react object is using browser DOM object.
@@ -39,7 +41,11 @@
 // Then you can see that the 'style' is 'wrapper' member. So that you should add object
 // 'wrapper' with empty 'style' in mocks object.
 //
-const mocks = {
+interface MockElement {
+	ref?:	string;
+}
+
+const mocks: Record<string, valTypeAllObject> = {
 	tooltip: {
 		offsetWidth: 100
 	},
@@ -60,7 +66,7 @@ const mocks = {
 	}
 };
 
-export const createNodeMock = (element) =>
+export const createNodeMock = (element: MockElement): valTypeAllObject | null =>
 {
 	if(	undefined === element            || null === element           ||
 		undefined === element.ref        || null === element.ref       ||

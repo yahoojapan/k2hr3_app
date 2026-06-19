@@ -14,38 +14,28 @@
  * the license file that was distributed with this source code.
  *
  * AUTHOR:   Takeshi Nakatani
- * CREATE:   Fri Oct 6 2017
+ * CREATE:   Tue Aug 15 2017
  * REVISION:
  *
  */
 
-import express						from 'express';
-import { SignMinUrlEntry, SignMinUrls }	from './libr3util';
+import path from 'path';
 
-//---------------------------------------------------------
-// Exports
-//---------------------------------------------------------
-//
-// Direct SignIn to keystone
-//
-export const getUserName = (req: express.Request): string | null =>
-{
-	return null;
-};
-
-export const getSignInUri = (req: express.Request): SignMinUrls | SignMinUrlEntry | string | null =>
-{
-	return null;
-};
-
-export const getSignOutUri = (req: express.Request): SignMinUrls | SignMinUrlEntry | string | null =>
-{
-	return null;
-};
-
-export const getSignInType = (): string =>
-{
-	return 'credential';
+module.exports = {
+	resolveSnapshotPath: (testPath: string, snapshotExtension: string): string => {
+		const srcPath	= testPath.replace(/dist[/\\]/, 'src/');
+		const dir		= path.dirname(srcPath);
+		const basename	= path.basename(srcPath);
+		return path.join(dir, '__snapshots__', basename + snapshotExtension).replace(/\\/g, '/');
+	},
+	resolveTestPath: (snapshotPath: string, snapshotExtension: string): string => {
+		return snapshotPath
+			.replace(/[/\\]__snapshots__[/\\]/, '/')
+			.replace(snapshotExtension, '')
+			.replace(/src[/\\]/, 'dist/')
+			.replace(/\\/g, '/');
+	},
+	testPathForConsistencyCheck: 'dist/tests/__tests__/r3container-test.js',
 };
 
 /*

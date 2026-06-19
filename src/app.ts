@@ -19,36 +19,44 @@
  *
  */
 
-'use strict';
-
 //
 // Require
 //
-var express		= require('express');
-var path		= require('path');
-var favicon		= require('serve-favicon');										// eslint-disable-line no-unused-vars
-var logger		= require('morgan');
-var cookieParser= require('cookie-parser');
-var bodyParser	= require('body-parser');
-var	r3Conf		= require('./routes/lib/libr3appconfig').r3AppConfig;
-var	appConf		= new r3Conf();
-var	r3util		= require('./routes/lib/libr3util');
+import express			from 'express';
+import path				from 'path';
+import favicon			from 'serve-favicon';
+import logger			from 'morgan';
+import cookieParser		from 'cookie-parser';
+import bodyParser		from 'body-parser';
+import R3AppConfig		from './routes/lib/libr3appconfig';
+import { isSafeEntity, isSafeString, ExtRouterSetConfig, isExtRouterInfos, isExtRouterInfo, isOIDCRouterInfo, isExtRouterSetConfig, isSafeObject }	from './routes/lib/libr3util';
 
 //
 // Router
 //
-var index		= require('./routes/index');
-var tokens		= require('./routes/tokens');
+import index							from './routes/index';
+import tokens							from './routes/tokens';
+
+//
+// Types
+//
+type ExtRouterModule = {
+	setConfig:	ExtRouterSetConfig;
+	router:		express.Router;
+};
+
+type ExtRouterModules = Record<string, ExtRouterModule>;
 
 //
 // The application
 //
-var app			= express();
+let app			= express();
+let	appConf		= new R3AppConfig();
 
 //
 // View engine
 //
-app.set('views',		path.join(__dirname, 'views'));
+app.set('views',		path.join(__dirname, '..', 'views'));
 app.set('view engine',	'ejs');
 
 //
@@ -59,7 +67,7 @@ app.set('view engine',	'ejs');
 //
 // Setup Log
 //
-app.use(logger(appConf.getAccessLogFormat(), appConf.getMorganLoggerOption(__dirname)));
+app.use(logger(appConf.getAccessLogFormat(), appConf.getMorganLoggerOption(path.join(__dirname, '..'))));
 
 //
 // Setup others
@@ -69,39 +77,40 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/',				index);
-app.use('/public/js',		express.static(__dirname + '/public/js'));		// for bundle.js
-app.use('/public/tokens',	tokens);										// for user token
-app.use('/status.html',		express.static(__dirname + '/public/status.html'));
+app.use('/public/js',		express.static(path.join(__dirname, '..', 'public/js')));	// for bundle.js
+app.use('/public/tokens',	tokens);													// for user token
+app.use('/status.html',		express.static(path.join(__dirname, '..', 'public/status.html')));
 
 //
 // Setup extension router
 //
-var	cfgExtRouter= appConf.getExtRouter();
+const cfgExtRouters = appConf.getExtRouters();
 
-if(r3util.isSafeEntity(cfgExtRouter)){
-	var routerObject = {};
-	Object.keys(cfgExtRouter).forEach(function(routername){
-		// check name/path
-		if(r3util.isSafeString(cfgExtRouter[routername].name) && r3util.isSafeString(cfgExtRouter[routername].path)){
-			var	routerTypeName = cfgExtRouter[routername].name;
+if(isExtRouterInfos(cfgExtRouters)){
+	let extRouterMods: ExtRouterModules = {};						// for detecting the same value
 
-			if(!r3util.isSafeEntity(routerObject[routerTypeName])){
-				routerObject[routerTypeName] = require('./routes/' + cfgExtRouter[routername].name);
+	Object.keys(cfgExtRouters).forEach((routername) => {
+		const	oneExtRouter = cfgExtRouters[routername];
+
+		if(isExtRouterInfo(oneExtRouter) || isOIDCRouterInfo(oneExtRouter)){
+			const extRouterName = oneExtRouter.name;
+
+			if(!isSafeEntity(extRouterMods[extRouterName])){
+				extRouterMods[extRouterName] = require('./routes/' + extRouterName);
 			}
 
-			// check setConfig function
-			if(r3util.isSafeEntity(routerObject[routerTypeName].setConfig) && 'function' == typeof routerObject[routerTypeName].setConfig){
-				var	routerConfig = r3util.isSafeEntity(cfgExtRouter[routername].config) ? cfgExtRouter[routername].config : null;
-				if(!routerObject[routerTypeName].setConfig(routerConfig, routername)){
-					console.error('failed to set configuration for extension router(name=' + JSON.stringify(cfgExtRouter[routername].name) + ', path=' + JSON.stringify(cfgExtRouter[routername].path) + ').');
+			// check having setConfig function
+			if(isExtRouterSetConfig(extRouterMods[extRouterName].setConfig)){
+				const extRouterConfig = isSafeObject(oneExtRouter.config) ? oneExtRouter.config : null;
+
+				if(!extRouterMods[extRouterName].setConfig(extRouterConfig, routername)){
+					console.error('failed to set configuration for extension router(name=' + JSON.stringify(routername) + ', path=' + JSON.stringify(oneExtRouter.path) + ').');
 				}
 			}
 
 			// set router
-			app.use(cfgExtRouter[routername].path, routerObject[routerTypeName].router);
-			console.log('success set extension router(name=' + JSON.stringify(cfgExtRouter[routername].name) + ', path=' + JSON.stringify(cfgExtRouter[routername].path) + ').');
-		}else{
-			console.error('something wrong extrouter configration(name=' + JSON.stringify(cfgExtRouter[routername].name) + ', path=' + JSON.stringify(cfgExtRouter[routername].path) + ').');
+			app.use(oneExtRouter.path, extRouterMods[extRouterName].router);
+			console.log('success set extension router(name=' + JSON.stringify(routername) + ', path=' + JSON.stringify(oneExtRouter.path) + ').');
 		}
 	});
 }
@@ -109,17 +118,17 @@ if(r3util.isSafeEntity(cfgExtRouter)){
 //
 // Last handling after all routing
 //
-app.use(function(req, res, next)
+app.use((req: express.Request, res: express.Response, next: express.NextFunction) =>
 {
-	var	err		= new Error('Not Found');
-	err.status	= 404;
+	let	err: Error & { status?: number }	= new Error('Not Found');
+	err.status		= 404;
 	next(err);
 });
 
 //
 // Error handler
 //
-app.use(function(err, req, res, next)										// eslint-disable-line no-unused-vars
+app.use((err: Error & { status?: number }, req: express.Request, res: express.Response, next: express.NextFunction) =>
 {
 	// set locals, only providing error in development
 	res.locals.message	= err.message;
@@ -130,7 +139,7 @@ app.use(function(err, req, res, next)										// eslint-disable-line no-unused-
 	res.render('error');
 });
 
-module.exports = app;
+export default app;
 
 /*
  * Local variables:

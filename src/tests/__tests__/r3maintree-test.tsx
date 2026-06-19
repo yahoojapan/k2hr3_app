@@ -19,17 +19,17 @@
  *
  */
 
-import React					from 'react';										// eslint-disable-line no-unused-vars
+import React					from 'react';
 import renderer					from 'react-test-renderer';
-import getElementWithContext	from 'react-test-context-provider';					// for context provider
 import { ThemeProvider }		from '@mui/material/styles';
 import { StyledEngineProvider, CssBaseline}	from '@mui/material';					// for jss and reset.css
 
-import r3Theme					from '../../src/components/r3theme';				// custom theme
-import R3MainTree				from '../../src/components/r3maintree';
-import R3Provider				from '../../src/util/r3provider';
+import r3Theme					from '../../components/r3theme';					// custom theme
+import R3MainTree				from '../../components/r3maintree';
+import R3Provider				from '../../util/r3provider';
+import { TreeListItem }			from '../../util/r3types';
 
-import mock_fetch				from '../__mocks__/fetchMock';						// eslint-disable-line no-unused-vars
+import '../__mocks__/fetchMock';
 import { createNodeMock }		from '../__mocks__/materialUiMock';					// for material-ui
 
 //
@@ -45,20 +45,20 @@ import { createNodeMock }		from '../__mocks__/materialUiMock';					// for materi
 //			.mockReturnValueOnce('x')
 //			.mockReturnValue(true);
 //
-const TenantChange				= jest.fn();							// eslint-disable-line no-undef
-const localTenantCreate			= jest.fn();							// eslint-disable-line no-undef
-const localTenantChange			= jest.fn();							// eslint-disable-line no-undef
-const localTenantDelete			= jest.fn();							// eslint-disable-line no-undef
-const TypeItemChange			= jest.fn();							// eslint-disable-line no-undef
-const ListItemChange			= jest.fn();							// eslint-disable-line no-undef
-const NameItemInServiceChange	= jest.fn();							// eslint-disable-line no-undef
-const TypeInServiceChange		= jest.fn();							// eslint-disable-line no-undef
-const ListItemInServiceChange	= jest.fn();							// eslint-disable-line no-undef
-const OpenChange				= jest.fn();							// eslint-disable-line no-undef
-const PopupClose				= jest.fn();							// eslint-disable-line no-undef
-const TreeDocking				= jest.fn();							// eslint-disable-line no-undef
-const CheckUpdating				= jest.fn();							// eslint-disable-line no-undef
-const About						= jest.fn();							// eslint-disable-line no-undef
+const TenantChange				= jest.fn();
+const localTenantCreate			= jest.fn();
+const localTenantChange			= jest.fn();
+const localTenantDelete			= jest.fn();
+const TypeItemChange			= jest.fn();
+const ListItemChange			= jest.fn();
+const NameItemInServiceChange	= jest.fn();
+const TypeInServiceChange		= jest.fn();
+const ListItemInServiceChange	= jest.fn();
+const OpenChange				= jest.fn();
+const PopupClose				= jest.fn();
+const TreeDocking				= jest.fn();
+const CheckUpdating				= jest.fn();
+const About						= jest.fn();
 
 //
 // Dummy datas
@@ -69,7 +69,7 @@ const tenants = [
 	{name: 'local@3000', id: '3000-000', display: 'GROUP1:LOCAL1', description: 'GROUP0:DESC LOCAL1', users: [ 'test' ]}
 ];
 
-const treelist = [
+const treelist: TreeListItem[] = [
 	{
 		name:		'SERVICE',
 		path:		'service:',
@@ -179,14 +179,11 @@ const selectedpath		= 'service:child_service:resource:dummyserviceresource';
 //
 // Main test
 //
-describe('R3MainTree', () => {											// eslint-disable-line no-undef
-	it('test snapshot for R3MainTree', () => {							// eslint-disable-line no-undef
+describe('R3MainTree', () => {
+	it('test snapshot for R3MainTree', () => {
 		const r3provider	= new R3Provider(null);
 
-		const element		= getElementWithContext(
-			{
-				r3Context:	r3provider.getR3Context()
-			},
+		const element		= (
 			<StyledEngineProvider injectFirst>
 				<ThemeProvider theme={ r3Theme } >
 					<CssBaseline />
@@ -225,8 +222,8 @@ describe('R3MainTree', () => {											// eslint-disable-line no-undef
 		);
 
 		const component = renderer.create(element, { createNodeMock });
-		let tree		= component.toJSON();
-		expect(tree).toMatchSnapshot();									// eslint-disable-line no-undef
+		const tree		= component.toJSON();
+		expect(tree).toMatchSnapshot();
 	});
 });
 

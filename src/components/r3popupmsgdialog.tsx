@@ -20,8 +20,6 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import Button						from '@mui/material/Button';
 import Dialog						from '@mui/material/Dialog';
@@ -36,36 +34,50 @@ import ErrorIcon					from '@mui/icons-material/ErrorRounded';
 import WarningIcon					from '@mui/icons-material/WarningRounded';
 import InformationIcon				from '@mui/icons-material/InfoOutlined';
 
-import { r3PopupMsgDialog }			from './r3styles';
+import R3Message					from '../util/r3message';
+import R3Provider					from '../util/r3provider';
+import type { R3Theme }				from './r3theme';
+import { r3PopupMsgDialogStyle }	from './r3styles';
+
+//
+// Props type
+//
+type R3PopupMsgDialogRequiredProps = {
+	theme:				R3Theme;
+	r3provider:			R3Provider;
+};
+
+type R3PopupMsgDialogOptionProps = {
+	title?:				string | null;
+	r3Message?:			R3Message | null;
+	twoButton?:			boolean;
+	onClose?:			((event: {}, reason: string | null, confirmed: boolean) => void) | null;
+};
+
+type R3PopupMsgDialogProps = R3PopupMsgDialogRequiredProps & R3PopupMsgDialogOptionProps;
+
+type R3PopupMsgDialogStyleType = ReturnType<typeof r3PopupMsgDialogStyle>;
 
 //
 // Popup Message Dialog Class
 //
-export default class R3PopupMsgDialog extends React.Component
+export default class R3PopupMsgDialog extends React.Component<R3PopupMsgDialogProps>
 {
-	static propTypes = {
-		r3provider:		PropTypes.object.isRequired,
-		title:			PropTypes.string,
-		r3Message:		PropTypes.object,
-		twoButton:		PropTypes.bool,
+	sxClasses: R3PopupMsgDialogStyleType;
 
-		onClose:		PropTypes.func
-	};
-
-	static defaultProps = {
+	static defaultProps: R3PopupMsgDialogOptionProps = {
 		title:			null,
 		r3Message:		null,
 		twoButton:		false,
-
 		onClose:		null
 	};
 
-	constructor(props)
+	constructor(props: R3PopupMsgDialogProps)
 	{
 		super(props);
 
 		// styles
-		this.sxClasses = r3PopupMsgDialog(props.theme);
+		this.sxClasses = r3PopupMsgDialogStyle(props.theme);
 	}
 
 	getIcon()

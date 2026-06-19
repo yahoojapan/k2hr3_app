@@ -19,20 +19,20 @@
  *
  */
 
-import style				from '../public/css/style.css';						// eslint-disable-line no-unused-vars
+import '../public/css/style.css';
 
-import React				from 'react';
-import { createRoot }		from 'react-dom/client';
-import { ThemeProvider }	from '@mui/material/styles';
-import { StyledEngineProvider, CssBaseline}	from '@mui/material';				// for jss and reset.css
+import React									from 'react';
+import { createRoot }							from 'react-dom/client';
+import { ThemeProvider }						from '@mui/material/styles';
+import { StyledEngineProvider, CssBaseline }	from '@mui/material';
 
-import r3Theme				from './components/r3theme';						// custom theme
-import R3Container			from './components/r3container';
+import r3Theme									from './components/r3theme';
+import R3Container								from './components/r3container';
 
 //
 // Main Container
 //
-const root = createRoot(document.getElementById('r3app'));
+const root = createRoot(document.getElementById('r3app')!);
 root.render(
 	<React.StrictMode>
 		<StyledEngineProvider injectFirst>

@@ -19,17 +19,17 @@
  *
  */
 
-import React					from 'react';										// eslint-disable-line no-unused-vars
+import React					from 'react';
 import renderer					from 'react-test-renderer';
-import getElementWithContext	from 'react-test-context-provider';					// for context provider
 import { ThemeProvider }		from '@mui/material/styles';
 import { StyledEngineProvider, CssBaseline}	from '@mui/material';					// for jss and reset.css
 
-import r3Theme					from '../../src/components/r3theme';				// custom theme
-import R3Toolbar				from '../../src/components//r3toolbar';
-import R3Provider				from '../../src/util/r3provider';
+import r3Theme					from '../../components/r3theme';					// custom theme
+import R3Toolbar				from '../../components//r3toolbar';
+import R3Provider				from '../../util/r3provider';
+import { PathDetailInfo, serviceType }		from '../../util/r3types';
 
-import mock_fetch				from '../__mocks__/fetchMock';						// eslint-disable-line no-unused-vars
+import '../__mocks__/fetchMock';
 import { createNodeMock }		from '../__mocks__/materialUiMock';					// for material-ui
 
 //
@@ -45,25 +45,25 @@ import { createNodeMock }		from '../__mocks__/materialUiMock';					// for materi
 //			.mockReturnValueOnce('x')
 //			.mockReturnValue(true);
 //
-const ArrawUpward			= jest.fn();								// eslint-disable-line no-undef
-const CreatePath			= jest.fn();								// eslint-disable-line no-undef
-const CheckPath				= jest.fn();								// eslint-disable-line no-undef
-const DeletePath			= jest.fn();								// eslint-disable-line no-undef
-const CreateService			= jest.fn();								// eslint-disable-line no-undef
-const CreateServiceTenant	= jest.fn();								// eslint-disable-line no-undef
-const CheckServiceName		= jest.fn();								// eslint-disable-line no-undef
-const DeleteService			= jest.fn();								// eslint-disable-line no-undef
-const CheckUpdating			= jest.fn();								// eslint-disable-line no-undef
+const ArrawUpward			= jest.fn();
+const CreatePath			= jest.fn();
+const CheckPath				= jest.fn();
+const DeletePath			= jest.fn();
+const CreateService			= jest.fn();
+const CreateServiceTenant	= jest.fn();
+const CheckServiceName		= jest.fn();
+const DeleteService			= jest.fn();
+const CheckUpdating			= jest.fn();
 
 //
 // Dummy datas
 //
-const toolbardata = {
+const toolbardata: PathDetailInfo = {
 	tenant:				{name: '10000', display: 'GROUP0:TENANT0'},
 	service:			'dummyservice',
 	serviceOwner:		true,
 	hasServiceTenant:	false,
-	type:				'service',
+	type:				serviceType,
 	name:				'dummyresource',
 	fullpath:			'yrn:yahoo:dummyservice::dummytenant:resource:dummyresource',
 	currentpath:		'dummyresource',
@@ -82,12 +82,9 @@ const userdata = {
 //
 // Main test
 //
-describe('R3ToolBar', () => {											// eslint-disable-line no-undef
-	it('test snapshot for R3ToolBar', () => {							// eslint-disable-line no-undef
-		const element		= getElementWithContext(
-			{
-				r3Context:	r3provider.getR3Context()
-			},
+describe('R3ToolBar', () => {
+	it('test snapshot for R3ToolBar', () => {
+		const element		= (
 			<StyledEngineProvider injectFirst>
 				<ThemeProvider theme={ r3Theme } >
 					<CssBaseline />
@@ -111,8 +108,8 @@ describe('R3ToolBar', () => {											// eslint-disable-line no-undef
 		);
 
 		const component = renderer.create(element, { createNodeMock });
-		let tree		= component.toJSON();
-		expect(tree).toMatchSnapshot();									// eslint-disable-line no-undef
+		const tree		= component.toJSON();
+		expect(tree).toMatchSnapshot();
 	});
 });
 

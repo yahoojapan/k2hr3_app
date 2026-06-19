@@ -19,20 +19,82 @@
  *
  */
 
-'use strict';
+import express		from 'express';
+import morgan		from 'morgan';
+import path			from 'path';
+import rawConfig	from 'config';
+import { Console }	from 'console';
+import { createStream, RotatingFileStream, Options as logrotateOptions }	from 'rotating-file-stream';
+import { CRCObject, valTypeAllObject, checkMakeDir, getSafeString, isCRCObject, isSafeObject, isSafeBoolean, isSafeNumber, isSafeEntity, isSafeString, ValidatorModule, AppMenuItem, ExtRouterInfo, OIDCRouterInfo, ExtRouterInfos, deepClone, isSafeHaskey, isValidatorModule, isExtRouterInfos, isExtRouterInfo, isOIDCRouterInfo, isAppMenuItemArray }	from './libr3util';
 
-var	path		= require('path');
-var	rotatefs	= require('rotating-file-stream');		// [NOTICE] rotating-file-stream is using fsevents optionally.
-var	r3util		= require('./libr3util');
+//
+// Types
+//
+type ConfigData = {
+	scheme: 			string;								// This nodejs server scheme
+	port:				number | string;					// This nodejs server port
+	multiproc:			boolean;							// Run multi processes mode
+	runuser:			string;								// User for process owner
+	privatekey:			string;								// Private key path for https
+	cert:				string;								// Certification file path for https
+	ca:					string;								// CA path for https
+	logdir:				string | null;						// Path for logging directory
+	fixedlogdir:		string | null;						// Fixed log directory
+	accesslogname:		string;								// Access log name
+	accesslogform:		string;								// Access log format by morgan
+	consolelogname:		string | null;						// Console(Error) log name
+
+	logrotateopt: 		logrotateOptions;					// rotating-file-stream option object
+
+	apihost:			string;								// API host
+	apischeme:			string;								// API scheme
+	apiport:			number;								// API port
+
+	userdata:			string;								// User Data Script for OpenStack
+	secretyaml:			string;								// Secret Yaml for kubernetes
+	sidecaryaml:		string;								// Sidecar Yaml for kubernetes
+	crcobj:				CRCObject;							// Custom Registration Codes(CRC) object
+	appmenu:			AppMenuItem[] | null;				// The menu array for application
+	validator:			string;								// Validator object module
+	validobj:			ValidatorModule | null;				// Generated(required) validator object module
+	rejectUnauthorized:	boolean;							// reject mode
+	uselocaltenant:		boolean;							// Use Local Tenant
+	lang:				string;								// Language for javascript application
+	extrouter:			ExtRouterInfos;						// Configuration of Router module to be expanded(ex. { 'routername': ExtRouterInfo[], ... })
+};
+
+//
+// Variables
+//
+const config: valTypeAllObject	= (isSafeObject(rawConfig) ? rawConfig : {});
+
+//
+// Normalize a port into a number, string.
+//
+const normalizePort = (val: unknown): number | string | null =>
+{
+	if(isSafeString(val)){
+		const _port = parseInt(val, 10);
+		if(isNaN(_port)){
+			// named pipe
+			return val;
+		}
+	}else if(isSafeNumber(val)){
+		if(0 <= val){
+			// port number
+			return val;
+		}
+	}
+	return null;
+};
 
 //---------------------------------------------------------
 // load configuration for API
 //---------------------------------------------------------
-var	loadedConfig = (function()
+const loadedConfig: ConfigData = (() =>
 {
-	var	config	= require('config');
-	var	data	= {
-		scheme:				'http',						// This nodejs server scheme
+	const data: ConfigData = {
+		scheme: 			'http',						// This nodejs server scheme
 		port:				80,							// This nodejs server port
 		multiproc:			true,						// Run multi processes mode
 		runuser:			'',							// User for process owner
@@ -44,25 +106,14 @@ var	loadedConfig = (function()
 		accesslogname:		'access.log',				// Access log name
 		accesslogform:		'combined',					// Access log format by morgan
 		consolelogname:		null,						// Console(Error) log name
+
 		logrotateopt: 		{							// rotating-file-stream option object
 			compress:			'gzip',					// gzip		: compression method of rotated files.
 			interval:			'6h',					// 6 hour	: the time interval to rotate the file.
 			initialRotation:	true,					// true		: initial rotation based on not-rotated file timestamp.
 			path:				null					// null		: the base path for files.(* this value is replace by 'logdir')
-			/*
-			*  [NOTE] following option is not specified now.
-			*
-			rotationTime:		true,					// true		: makes rotated file name with time of rotation.
-			highWaterMark:		null,					// null		: proxied to new stream.
-			history:			null,					// null		: the history filename.
-			immutable:			null,					// null		: never mutates file names.
-			maxFiles:			null,					// null		: the maximum number of rotated files to keep.
-			maxSize:			null,					// null		: the maximum size of rotated files to keep.
-			mode:				null,					// null		: proxied to fs.createWriteStream
-			rotate:				null,					// null		: enables the classical UNIX logrotate behaviour.
-			size:				null					// null		: the file size to rotate the file.
-			*/
 		},
+
 		apihost:			'localhost',				// API host
 		apischeme:			'http',						// API scheme
 		apiport:			3001,						// API port
@@ -77,251 +128,246 @@ var	loadedConfig = (function()
 		rejectUnauthorized:	true,						// reject mode
 		uselocaltenant:		true,						// Use Local Tenant
 		lang:				'en',						// Language for javascript application
-		extrouter:			{							// Configuration of Router module to be expanded
-			/*
-			* [NOTE]	Define the following objects as an array.
-			*			Define one object for one extended Router.
-			*
-			routername: {
-				name:			'file path',			// Specify JS file name(except js extension) for defining Router. The "/router" directory is current.
-				path:			'route top path',		// Specify the router entry path(ex. "/myenter").
-				config:			{}						// Specify the configuration required for the extended router. (Value, array, object)
-			},
-			...
-			*/
-		}
+		extrouter:			{}							// Configuration of Router module to be expanded(ex. { 'routername': ExtRouterInfo[], ... })
 	};
 
-	if(r3util.isSafeEntity(config)){
-		var	tmp;
-
+	if(isSafeObject(config)){
 		// scheme & port
-		if(r3util.isSafeString(config.scheme)){
-			data.scheme		= r3util.getSafeString(config.scheme);
+		if(isSafeString(config?.scheme)){
+			data.scheme		= getSafeString(config.scheme);
 			if('https' === data.scheme.toLowerCase()){
 				data.port	= 443;
 			}
 		}
-		if(r3util.isSafeEntity(config.port)){
-			tmp = normalizePort(config.port);
-			if(false !== tmp){
+		if(isSafeEntity(config?.port)){
+			const	tmp = normalizePort(config.port);
+			if(isSafeString(tmp) || isSafeNumber(tmp)){
 				data.port	= tmp;
 			}
-		}else if(r3util.isSafeEntity(process.env.PORT)){	// Get port from environment
-			tmp = normalizePort(process.env.PORT);
-			if(false !== tmp){
+		}else if(isSafeObject(process?.env) && isSafeString(process.env?.PORT)){	// Get port from environment
+			const	tmp = normalizePort(process.env.PORT);
+			if(isSafeString(tmp) || isSafeNumber(tmp)){
 				data.port	= tmp;
 			}
 		}
+
 		// private key & cert & ca
-		if(r3util.isSafeString(config.privatekey) || null === config.privatekey){
-			data.privatekey	= r3util.getSafeString(config.privatekey);
+		if(isSafeString(config?.privatekey) || null === config.privatekey){
+			data.privatekey	= getSafeString(config.privatekey);
 		}
-		if(r3util.isSafeString(config.cert) || null === config.cert){
-			data.cert		= r3util.getSafeString(config.cert);
+		if(isSafeString(config?.cert) || null === config.cert){
+			data.cert		= getSafeString(config.cert);
 		}
-		if(r3util.isSafeString(config.ca) || null === config.ca){
-			data.ca			= r3util.getSafeString(config.ca);
+		if(isSafeString(config?.ca) || null === config.ca){
+			data.ca			= getSafeString(config.ca);
 		}
+
 		// multi processes
-		if(r3util.isSafeBoolean(config.multiproc)){
+		if(isSafeBoolean(config?.multiproc)){
 			data.multiproc	= config.multiproc;
 		}
+
 		// run user
-		if(r3util.isSafeString(config.runuser) || null === config.runuser){
-			data.runuser	= r3util.getSafeString(config.runuser);
+		if(isSafeString(config?.runuser) || null === config.runuser){
+			data.runuser	= getSafeString(config.runuser);
 		}
+
 		// log directory
-		if(r3util.isSafeString(config.logdir) || null === config.logdir){
-			data.logdir		= r3util.getSafeString(config.logdir);
+		if(isSafeString(config?.logdir) || null === config.logdir){
+			data.logdir		= getSafeString(config.logdir);
 		}
+
 		// access log file name
-		if(r3util.isSafeString(config.accesslogname) || null === config.accesslogname){
-			data.accesslogname	= r3util.getSafeString(config.accesslogname);
+		if(isSafeString(config?.accesslogname) || null === config.accesslogname){
+			data.accesslogname	= getSafeString(config.accesslogname);
 		}
+
 		// access log format
-		if(r3util.isSafeString(config.accesslogform)){
-			data.accesslogform	= r3util.getSafeString(config.accesslogform);
+		if(isSafeString(config?.accesslogform)){
+			data.accesslogform	= getSafeString(config.accesslogform);
 		}
+
 		// console(error) log file name
-		if(r3util.isSafeString(config.consolelogname) || null === config.consolelogname){
-			data.consolelogname	= r3util.getSafeString(config.consolelogname);
+		if(isSafeString(config?.consolelogname) || null === config.consolelogname){
+			data.consolelogname	= getSafeString(config.consolelogname);
 		}
+
 		// log rotation option
-		if(r3util.isSafeEntity(config.logrotateopt) && 'object' == typeof config.logrotateopt && !r3util.isArray(config.logrotateopt)){
-			Object.keys(config.logrotateopt).forEach(function(key){
-				if(r3util.isSafeEntity(config.logrotateopt[key])){
-					data.logrotateopt[key] = config.logrotateopt[key];
-				}else{
-					// [NOTE] Not allow keyname
-				}
-			});
+		if(isSafeObject(config?.logrotateopt)){
+			if(isSafeObject(data?.logrotateopt)){
+				const configLogRotateOpt = config.logrotateopt;
+				const targetLogRotateOpt = data.logrotateopt;
+
+				Object.keys(targetLogRotateOpt).forEach((key) => {
+					if(isSafeEntity(configLogRotateOpt[key])){
+						targetLogRotateOpt[key] = configLogRotateOpt[key];
+					}
+				});
+			}
 		}
 
 		// api host & scheme & port
-		if(r3util.isSafeString(config.apihost)){
-			data.apihost	= r3util.getSafeString(config.apihost);
+		if(isSafeString(config?.apihost)){
+			data.apihost	= getSafeString(config.apihost);
 		}
-		if(r3util.isSafeString(config.apischeme)){
-			data.apischeme	= r3util.getSafeString(config.apischeme);
+		if(isSafeString(config?.apischeme)){
+			data.apischeme	= getSafeString(config.apischeme);
 			if('https' === data.apischeme.toLowerCase()){
 				data.apiport= 443;
 			}
 		}
-		if(r3util.isSafeEntity(config.apiport) && !isNaN(config.apiport)){
-			data.apiport	= config.apiport;
+		if(isSafeEntity(config?.apiport)){
+			const tmpport = parseInt(String(config.apiport), 10);
+			if(!isNaN(tmpport)){
+				data.apiport = tmpport;
+			}
 		}
 
 		// User Date Script
-		if(r3util.isSafeString(config.userdata)){
-			data.userdata	= r3util.getSafeString(config.userdata);
+		if(isSafeString(config?.userdata)){
+			data.userdata	= getSafeString(config.userdata);
 		}
+
 		// Secret Yaml
-		if(r3util.isSafeString(config.secretyaml)){
-			data.secretyaml	= r3util.getSafeString(config.secretyaml);
+		if(isSafeString(config?.secretyaml)){
+			data.secretyaml	= getSafeString(config.secretyaml);
 		}
+
 		// Sidecar Yaml
-		if(r3util.isSafeString(config.sidecaryaml)){
-			data.sidecaryaml	= r3util.getSafeString(config.sidecaryaml);
+		if(isSafeString(config?.sidecaryaml)){
+			data.sidecaryaml= getSafeString(config.sidecaryaml);
 		}
+
 		// Custom Configuration Codes(CRC) object
-		if(r3util.isSafeEntity(config.crcobj) && 'object' == typeof config.crcobj && !r3util.isArray(config.crcobj)){
-			Object.keys(config.crcobj).forEach(function(key){
-				if(r3util.isSafeEntity(config.crcobj[key]) && 'object' == typeof config.crcobj[key]){
-					data.crcobj[key] = config.crcobj[key];
-				}else{
-					// [NOTE] Something wrong object, skip it.
-				}
-			});
+		if(isCRCObject(config?.crcobj)){
+			data.crcobj		= deepClone(config.crcobj);
 		}
+
 		// App menu
-		if(r3util.isArray(config.appmenu)){
+		if(isAppMenuItemArray(config?.appmenu)){
 			data.appmenu	= config.appmenu;
 		}
-		// Validator & validobj
-		if(r3util.isSafeString(config.validator)){
-			data.validator	= r3util.getSafeString(config.validator);
+
+		// Validator
+		if(isSafeString(config?.validator)){
+			data.validator	= getSafeString(config.validator);
 		}
-		data.validobj		= require('./' + data.validator);
+
+		// Validator Module
+		try{
+			const	_validmod	= require('./' + data.validator);
+			if(isValidatorModule(_validmod)){
+				data.validobj	= _validmod;
+			}else{
+				console.error('invalid validator module:' + data.validator);
+				data.validobj = null;
+			}
+		}catch(_error){
+			// not found file
+			console.error('failed to load varidator module:' + data.validator);
+			data.validobj = null;
+		}
 
 		// Reject mode at unauth
-		if((r3util.isSafeBoolean(config.rejectunauth) && !config.rejectunauth) || (process.env.NODE_ENV !== 'production')){
+		if((isSafeBoolean(config?.rejectunauth) && !config.rejectunauth) || (process.env.NODE_ENV !== 'production')){
 			data.rejectUnauthorized	= false;
 		}
 
 		// Use Local Tenant
-		if(r3util.isSafeBoolean(config.uselocaltenant)){
+		if(isSafeBoolean(config?.uselocaltenant)){
 			data.uselocaltenant = config.uselocaltenant;
 		}
 
 		// Lang
-		if(r3util.isSafeString(config.lang)){
-			data.lang		= r3util.getSafeString(config.lang).toLowerCase();
+		if(isSafeString(config?.lang)){
+			data.lang		= getSafeString(config.lang).toLowerCase();
 		}
 
 		// Extension Router
-		if(r3util.isSafeEntity(config.extrouter)){
-			// copy objects
-			try{
-				var	tmpstr		= JSON.stringify(config.extrouter);
-				data.extrouter	= JSON.parse(tmpstr);
-			}catch(err){											// eslint-disable-line no-unused-vars
+		if(isSafeObject(config?.extrouter)){
+			if(isExtRouterInfos(config.extrouter)){
+				data.extrouter = deepClone(config.extrouter);
+			}else{
 				console.error('something wrong extrouter value in configration. then skip this value to load.');
 			}
 		}
 	}
 	return data;
-}());
-
-//
-// Normalize a port into a number, string, or false.
-//
-function normalizePort(val)
-{
-	var	port = parseInt(val, 10);
-	if(isNaN(port)){
-		// named pipe
-		if(!r3util.isSafeString(val)){
-			return false;
-		}
-		return val;
-	}
-	if(0 <= port){
-		// port number
-		return port;
-	}
-	return false;
-}
+})();
 
 //---------------------------------------------------------
 // Configuration Class
 //---------------------------------------------------------
-var R3AppConfig = (function()
+export default class R3AppConfig
 {
+	private loadedConfig:	ConfigData;
+	private consolelog:		Console | null;
+
 	//
 	// Constructor
 	//
-	var R3AppConfig = function()
+	constructor()
 	{
 		this.loadedConfig	= loadedConfig;
 		this.consolelog		= null;
-	};
-
-	var proto = R3AppConfig.prototype;
+	}
 
 	//
 	// Methods
 	//
-	proto.getScheme = function()
+	getScheme = (): string =>
 	{
 		return this.loadedConfig.scheme;
 	};
 
-	proto.getPort = function()
+	getPort = (): number | string =>
 	{
 		return this.loadedConfig.port;
 	};
 
-	proto.isMultiProc = function()
+	isMultiProc = (): boolean =>
 	{
 		return this.loadedConfig.multiproc;
 	};
 
-	proto.getRunUser = function()
+	getRunUser = (): string =>
 	{
 		return this.loadedConfig.runuser;
 	};
 
-	proto.getPrivateKey = function()
+	getPrivateKey = (): string =>
 	{
 		return this.loadedConfig.privatekey;
 	};
 
-	proto.getCert = function()
+	getCert = (): string =>
 	{
 		return this.loadedConfig.cert;
 	};
 
-	proto.getCA = function()
+	getCA = (): string =>
 	{
 		return this.loadedConfig.ca;
 	};
 
-	proto.updateLogDir = function(basepath)
+	updateLogDir = (basepath: string | null): string | null =>
 	{
-		var	dirpath = null;
+		let	dirpath: string | null = null;
 		if(null !== this.loadedConfig.logdir){
 			if(0 === this.loadedConfig.logdir.indexOf('/')){
-				dirpath = path.join(this.loadedConfig.logdir);										// logdir is full path
+				// logdir is full path
+				dirpath = path.join(this.loadedConfig.logdir);
 			}else{
-				if(r3util.isSafeString(basepath)){
+				if(isSafeString(basepath)){
 					if(0 === basepath.indexOf('/')){
 						dirpath = path.join(basepath, this.loadedConfig.logdir);
 					}else{
-						dirpath = path.join(__dirname, '../..', basepath, this.loadedConfig.logdir);// from top directory
+						// from top directory
+						dirpath = path.join(__dirname, '../../..', basepath, this.loadedConfig.logdir);
 					}
 				}else{
-					dirpath = path.join(__dirname, '../..', this.loadedConfig.logdir);				// from top directory
+					// from top directory
+					dirpath = path.join(__dirname, '../../..', this.loadedConfig.logdir);
 				}
 			}
 		}else{
@@ -330,74 +376,72 @@ var R3AppConfig = (function()
 
 		// update log directory
 		this.loadedConfig.fixedlogdir = dirpath;
-		if(r3util.isSafeString(dirpath)){
+		if(isSafeString(dirpath)){
 			// check log directory and make it if not exists
-			if(null !== dirpath && !r3util.checkMakeDir(dirpath)){
+			if(null !== dirpath && !checkMakeDir(dirpath)){
 				console.warn('Log directory(' + dirpath + ') is not existed, and could not create it.');
 				dirpath = null;		// continue with no log directory
 			}else{
 				// set dir path to log rotation option
-				this.loadedConfig.logrotateopt['path'] = dirpath;
+				this.loadedConfig.logrotateopt.path = dirpath;
 			}
 		}
-
 		return dirpath;
 	};
 
-	proto.getAccessLogName = function()
+	getAccessLogName = (): string =>
 	{
 		return this.loadedConfig.accesslogname;
 	};
 
-	proto.getAccessLogFormat = function()
+	getAccessLogFormat = (): string =>
 	{
 		return this.loadedConfig.accesslogform;
 	};
 
-	proto.getConsoleLogName = function()
+	getConsoleLogName = (): string | null =>
 	{
 		return this.loadedConfig.consolelogname;
 	};
 
-	proto.getLogRotateOption = function()
+	getLogRotateOption = (): logrotateOptions =>
 	{
 		return this.loadedConfig.logrotateopt;
 	};
 
-	proto.getRotateLogStream = function(basedir, filename)
+	getRotateLogStream = (basedir: string | null, filename: string): RotatingFileStream | null =>
 	{
-		var	logstream	= null;
-		var	logdir		= this.updateLogDir(basedir);
-		if(null == logdir){
+		let logstream: RotatingFileStream | null	= null;
+		let	logdir: string | null					= this.updateLogDir(basedir);
+
+		if(null === logdir){
 			return logstream;
 		}
-		if(!r3util.isSafeString(filename)){
+		if(!isSafeString(filename)){
 			return logstream;
 		}
 		try{
-			logstream = rotatefs.createStream(filename, this.loadedConfig.logrotateopt);
-		}catch(error){
-			console.warn('Could not create log rotate option by : ' + JSON.stringify(error.message));
+			logstream = createStream(filename, this.loadedConfig.logrotateopt);
+		}catch(error: unknown){
+			console.warn('Could not create log rotate option by : ' + JSON.stringify((isSafeObject(error) && isSafeString(error?.message)) ? error.message : 'unknown'));
 			logstream = null;
 		}
 		return logstream;
 	};
 
-	proto.getMorganLoggerOption = function(basedir)
+	getMorganLoggerOption = (basedir: string | null): morgan.Options<express.Request, express.Response> | null =>
 	{
-		var	loggeropt = null;
-		var	logstream = this.getRotateLogStream(basedir, this.loadedConfig.accesslogname);
+		let logstream = this.getRotateLogStream(basedir, this.loadedConfig.accesslogname);
 		if(null !== logstream){
-			loggeropt = {
-				stream: logstream
-			};
+			const loggeropt: morgan.Options<express.Request, express.Response> = { stream: logstream };
+			return loggeropt;
 		}
-		return loggeropt;
+		return null;
 	};
 
-	proto.setConsoleLogging = function(basedir)
+	setConsoleLogging = (basedir: string | null): boolean =>
 	{
-		var	logstream = this.getRotateLogStream(basedir, this.loadedConfig.consolelogname);
+		let	logstream = this.getRotateLogStream(basedir, this.loadedConfig.consolelogname);
 		if(null !== logstream){
 			this.consolelog		= new console.Console(logstream, logstream);
 			global.console.error= this.consolelog.error;
@@ -409,113 +453,99 @@ var R3AppConfig = (function()
 		return true;
 	};
 
-	proto.getApiHost = function()
+	getApiHost = (): string =>
 	{
 		return this.loadedConfig.apihost;
 	};
 
-	proto.getApiScheme = function()
+	getApiScheme = (): string =>
 	{
 		return this.loadedConfig.apischeme;
 	};
 
-	proto.getApiPort = function()
+	getApiPort = (): number =>
 	{
 		return this.loadedConfig.apiport;
 	};
 
-	proto.getUserData = function()
+	getUserData = (): string =>
 	{
 		return this.loadedConfig.userdata;
 	};
 
-	proto.getSecretYaml = function()
+	getSecretYaml = (): string =>
 	{
 		return this.loadedConfig.secretyaml;
 	};
 
-	proto.getSidecarYaml = function()
+	getSidecarYaml = (): string =>
 	{
 		// make k2hr3-k8s-init.sh parameters which is built from configuration.
 		//
-		var	params	= '-host ' + this.loadedConfig.apihost + ' -port ' + this.loadedConfig.apiport + ' -schema ' + this.loadedConfig.apischeme;
+		const	params	= '-host ' + this.loadedConfig.apihost + ' -port ' + String(this.loadedConfig.apiport) + ' -schema ' + this.loadedConfig.apischeme;
 
 		// repace '{{= %K2HR3_REST_API_HOST% }}' in sidecaryaml
 		//
 		// replace keyword in template
-		var	replace	= this.loadedConfig.sidecaryaml.replace(/{{= %K2HR3_REST_API_HOST% }}/g, params);
+		const	replace	= this.loadedConfig.sidecaryaml.replace(/{{= %K2HR3_REST_API_HOST% }}/g, params);
 
 		return replace;
 	};
 
-	proto.getCRCObject = function()
+	getCRCObject = (): CRCObject =>
 	{
 		return this.loadedConfig.crcobj;
 	};
 
-	proto.getAppMenu = function()
+	getAppMenu = (): AppMenuItem[] | null =>
 	{
 		return this.loadedConfig.appmenu;
 	};
 
-	proto.getUserValidator = function()
+	getUserValidator = (): string =>
 	{
 		return this.loadedConfig.validator;
 	};
 
-	proto.getUserValidatorObj = function()
+	getUserValidatorObj = (): ValidatorModule | null =>
 	{
 		return this.loadedConfig.validobj;
 	};
 
-	proto.getRejectUnauthorized = function()
+	getRejectUnauthorized = (): boolean =>
 	{
 		return this.loadedConfig.rejectUnauthorized;
 	};
 
-	proto.useLocalTenant = function()
+	useLocalTenant = (): boolean =>
 	{
 		return this.loadedConfig.uselocaltenant;
 	};
 
-	proto.getLang = function()
+	getLang = (): string =>
 	{
 		return this.loadedConfig.lang;
 	};
 
-	proto.getExtRouter = function(routername)
+	getExtRouters = (routername?: string | null): ExtRouterInfos =>
 	{
-		if(r3util.isSafeEntity(routername)){
-			if(!r3util.isSafeString(routername)){
-				console.error('routername('  + JSON.stringify(routername) + ') parameter is not empty but not string.');
-				return null;
-			}
-			if(!r3util.isSafeEntity(this.loadedConfig.extrouter)){
-				console.warn('extrouter configuration does not have router routername('  + JSON.stringify(routername) + ').');
-				return null;
-			}
-			if(!r3util.isSafeEntity(this.loadedConfig.extrouter[routername])){
-				console.warn('extrouter configuration does not have router routername('  + JSON.stringify(routername) + ').');
-				return null;
-			}
-			return this.loadedConfig.extrouter[routername];
-		}else{
-			// return all extrouter object
-			return this.loadedConfig.extrouter;
-		}
+		return this.loadedConfig.extrouter;
 	};
 
-	return R3AppConfig;
-})();
+	getExtRouter = (routername: string): ExtRouterInfo | OIDCRouterInfo | null =>
+	{
+		if(!isSafeString(routername)){
+			console.error('routername(' + JSON.stringify(routername) + ') parameter is not empty but not string.');
+			return null;
+		}
+		if(isSafeHaskey(this.loadedConfig.extrouter, routername) && (isExtRouterInfo(this.loadedConfig.extrouter[routername]) || isOIDCRouterInfo(this.loadedConfig.extrouter[routername]))){
+			return this.loadedConfig.extrouter[routername];
+		}
+		console.warn('extrouter configuration does not have router routername(' + JSON.stringify(routername) + ').');
 
-//---------------------------------------------------------
-// Exports
-//---------------------------------------------------------
-exports.r3AppConfig				= R3AppConfig;
-
-// SignIn types
-exports.r3SigninUnscopedToken	= 'unsopedtoken';
-exports.r3SigninCredential		= 'credential';
+		return null;
+	};
+}
 
 /*
  * Local variables:

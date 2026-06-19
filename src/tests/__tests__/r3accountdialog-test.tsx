@@ -19,17 +19,16 @@
  *
  */
 
-import React					from 'react';										// eslint-disable-line no-unused-vars
+import React					from 'react';
 import renderer					from 'react-test-renderer';
-import getElementWithContext	from 'react-test-context-provider';					// for context provider
 import { ThemeProvider }		from '@mui/material/styles';
 import { StyledEngineProvider, CssBaseline}	from '@mui/material';					// for jss and reset.css
 
-import r3Theme					from '../../src/components/r3theme';				// custom theme
-import R3AccountDialog			from '../../src/components/r3accountdialog';
-import R3Provider				from '../../src/util/r3provider';
+import r3Theme					from '../../components/r3theme';					// custom theme
+import R3AccountDialog			from '../../components/r3accountdialog';
+import R3Provider				from '../../util/r3provider';
 
-import mock_fetch				from '../__mocks__/fetchMock';						// eslint-disable-line no-unused-vars
+import '../__mocks__/fetchMock';
 import { createNodeMock }		from '../__mocks__/materialUiMock';					// for material-ui
 
 // [NOTE]
@@ -51,10 +50,17 @@ import { createNodeMock }		from '../__mocks__/materialUiMock';					// for materi
 // To avoid this, define createPortal as mock.
 // Along with this, an error will occur in Modal/Fade.(described later)
 //
-import ReactDOM					from 'react-dom';									// For mock of createPortal
+import ReactDOM				from 'react-dom';									// For mock of createPortal
 
-const mockCreatePortal = jest.fn((element, node) => {								// eslint-disable-line no-undef, no-unused-vars
-	return element;
+const mockCreatePortal = jest.fn((element: React.ReactNode, _node: Element | DocumentFragment): React.ReactPortal =>
+{
+	const	DummyComponent = (): React.ReactElement | null => null;		// for type member value(= string | JSXElementConstructor)
+	return {
+		type:		DummyComponent,
+		props:		{ children: element },
+		key:		null,
+		children:	element
+	};
 });
 
 // [NOTE][FIXME]
@@ -64,7 +70,16 @@ const mockCreatePortal = jest.fn((element, node) => {								// eslint-disable-l
 // This error can be avoided by setting the disablePortal property of
 // the Dialog class to true.
 //
-r3Theme.r3AccountDialog.root['disablePortal'] = true;
+const testTheme = {
+	...r3Theme,
+	r3AccountDialog: {
+		...r3Theme.r3AccountDialog,
+		root: {
+			...r3Theme.r3AccountDialog.root,
+			disablePortal:	true				// for test
+		}
+	}
+};
 
 // [NOTE]
 // The Transition class used in this dialog is Fade.
@@ -76,10 +91,10 @@ r3Theme.r3AccountDialog.root['disablePortal'] = true;
 // Unlike before, by changing the mock content, you can fully check
 // the snapshots in the Dialog.
 //
-jest.mock('@mui/material/Fade', () => {												// eslint-disable-line no-undef
+jest.mock('@mui/material/Fade', () => {
 	return '';
 });
-jest.mock('@mui/material/Modal', () => {											// eslint-disable-line no-undef
+jest.mock('@mui/material/Modal', () => {
 	return '';
 });
 
@@ -96,32 +111,36 @@ jest.mock('@mui/material/Modal', () => {											// eslint-disable-line no-und
 //			.mockReturnValueOnce('x')
 //			.mockReturnValue(true);
 //
-const close	= jest.fn();															// eslint-disable-line no-undef
+const close	= jest.fn();
 
 //
 // Main test
 //
-describe('R3AccountDialog', () => {													// eslint-disable-line no-undef
-	beforeAll(() => {																// eslint-disable-line no-undef
-		ReactDOM.createPortal = mockCreatePortal;
+describe('R3AccountDialog', () =>
+{
+	let	createPortalSpy: jest.SpyInstance;
+
+	beforeAll(() => {
+		createPortalSpy = jest.spyOn(ReactDOM, 'createPortal').mockImplementation(mockCreatePortal);
 	});
 
-	afterEach(() => {																// eslint-disable-line no-undef
-		ReactDOM.createPortal.mockClear();
+	afterEach(() => {
+		createPortalSpy.mockClear();
 	});
 
-	it('test snapshot for R3AccountDialog', () => {									// eslint-disable-line no-undef
+	afterAll(() => {
+		createPortalSpy.mockRestore();
+	});
+
+	it('test snapshot for R3AccountDialog', () => {
 		const r3provider	= new R3Provider(null);
 
-		const element		= getElementWithContext(
-			{
-				r3Context:	r3provider.getR3Context()
-			},
+		const element		= (
 			<StyledEngineProvider injectFirst>
-				<ThemeProvider theme={ r3Theme } >
+				<ThemeProvider theme={ testTheme } >
 					<CssBaseline />
 					<R3AccountDialog
-						theme={ r3Theme }
+						theme={ testTheme }
 						r3provider={ r3provider }
 						open={ true }
 						username={ 'JEST_TEST_USERNAME' }
@@ -133,8 +152,8 @@ describe('R3AccountDialog', () => {													// eslint-disable-line no-undef
 		);
 
 		const component = renderer.create(element, { createNodeMock });
-		let tree		= component.toJSON();
-		expect(tree).toMatchSnapshot();												// eslint-disable-line no-undef
+		const tree		= component.toJSON();
+		expect(tree).toMatchSnapshot();
 	});
 });
 

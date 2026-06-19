@@ -20,23 +20,27 @@
  *
  */
 
-'use strict';
-
 //
 // Module dependencies.
 //
-var	app		= require('../app');
-var	debug	= require('debug')('k2hr3-app:server');
-var	fs		= require('fs');
-var cluster	= require('cluster');
-var numCPUs	= require('os').cpus().length;
-var	r3Conf	= require('../routes/lib/libr3appconfig').r3AppConfig;
-var	appConf	= new r3Conf();
+import app			from '../app';
+import dbg			from 'debug';
+import fs			from 'fs';
+import cluster		from 'cluster';
+import os			from 'os';
+import http			from 'http';
+import https		from 'https';
+import R3AppConfig	from '../routes/lib/libr3appconfig';
+
+let	debug	= dbg('k2hr3-app:server');
+let numCPUs	= os.cpus().length;
+let	appConf	= new R3AppConfig();
+let	server: http.Server | https.Server;
 
 //
 // Setup console logging
 //
-appConf.setConsoleLogging(__dirname + '/..');									// replace output from stdout/stderr to file if set in config
+appConf.setConsoleLogging(__dirname + '/../..');								// replace output from stdout/stderr to file if set in config
 
 //
 // Start multi or single processing
@@ -45,13 +49,11 @@ if(cluster.isMaster && appConf.isMultiProc()){
 	console.log(`Master ${process.pid} is running`);
 
 	// Fork workers.
-	var	cnt;
-	for (cnt = 0; cnt < numCPUs; ++cnt) {
+	for(let cnt = 0; cnt < numCPUs; ++cnt){
 		cluster.fork();
 	}
 
-	cluster.on('exit', function(worker, code, signal)
-	{
+	cluster.on('exit', (worker, code, signal) => {
 		if(signal){
 			console.log(`worker was killed by signal: ${signal}`);
 		}else if(0 !== code){
@@ -64,12 +66,12 @@ if(cluster.isMaster && appConf.isMultiProc()){
 	//
 	// Check scheme and etc
 	//
-	var	options;
-	var	secure	= false;
-	var key		= appConf.getPrivateKey();	// allow empty
-	var cert	= appConf.getCert();		// allow empty
-	var ca		= appConf.getCA();			// allow empty
-	var	port	= appConf.getPort();
+	let	options: { key: Buffer; cert: Buffer; ca: Buffer };
+	let	secure	= false;
+	let key		= appConf.getPrivateKey();	// allow empty
+	let cert	= appConf.getCert();		// allow empty
+	let ca		= appConf.getCA();			// allow empty
+	let	port	= appConf.getPort();
 	if('https' == appConf.getScheme() || 'HTTPS' == appConf.getScheme()){
 		secure	= true;
 		options = {
@@ -87,9 +89,8 @@ if(cluster.isMaster && appConf.isMultiProc()){
 	//
 	// Others
 	//
-	var os		= require('os');
-	var hostname= os.hostname()	|| '127.0.0.1';
-	var user	= appConf.getRunUser();
+	let hostname= os.hostname()	|| '127.0.0.1';
+	let user	= appConf.getRunUser();
 
 	//
 	// Get port and store in Express.
@@ -100,26 +101,59 @@ if(cluster.isMaster && appConf.isMultiProc()){
 	//
 	// Create HTTP server.
 	//
-	var	server;
 	if(secure){
-		var	https	= require('https');
-		server		= https.createServer(options, app);
+		server	= https.createServer(options, app);
 	}else{
-		var	http	= require('http');
-		server		= http.createServer(app);
+		server	= http.createServer(app);
 	}
-	
+
+	//
+	// Event listener for HTTP server "error" event.
+	//
+	const onError = (error: NodeJS.ErrnoException) =>
+	{
+		if('listen' !== error.syscall){
+			throw error;
+		}
+		let	_port = appConf.getPort();
+		let	bind = ('string' === typeof _port) ? 'Pipe ' + _port : 'Port ' + _port;
+
+		// handle specific listen errors with friendly messages
+		switch(error.code){
+			case 'EACCES':
+				console.error(bind + ' requires elevated privileges');
+				process.exit(1);
+				break;
+			case 'EADDRINUSE':
+				console.error(bind + ' is already in use');
+				process.exit(1);
+				break;
+			default:
+				throw error;
+		}
+	};
+
+	//
+	// Event listener for HTTP/HTTPS server "listening" event.
+	//
+	const onListening = () =>
+	{
+		let	addr = server.address();
+		let	bind = ('string' === typeof addr) ? 'pipe ' + addr : 'port ' + addr.port;
+		debug('Listening on ' + bind);
+	};
+
 	//
 	// Listen on provided port, on all network interfaces.
 	//
-	server.listen(port, function()
+	server.listen(port, () =>
 	{
 		if(undefined !== user && null !== user && 'string' == typeof user && '' !== user){
 			console.log('Attempting setuid to user "' + user + '"...');
 			try {
 				process.setuid(user);
 				console.log('Succeeded to setuid');
-			} catch (err) {								// eslint-disable-line no-unused-vars
+			}catch (err){
 				console.log('Failed to setuid');
 				process.exit(1);
 			}
@@ -130,41 +164,6 @@ if(cluster.isMaster && appConf.isMultiProc()){
 
 	console.log('Server running at ' + appConf.getScheme() + '://' + hostname + ':' + port + '/');
 	console.log(`Worker ${process.pid} started`);
-}
-
-//
-// Event listener for HTTP server "error" event.
-//
-function onError(error)
-{
-	if('listen' !== error.syscall){
-		throw error;
-	}
-	var	bind = ('string' === typeof port) ? 'Pipe ' + port : 'Port ' + port;
-
-	// handle specific listen errors with friendly messages
-	switch(error.code){
-		case 'EACCES':
-			console.error(bind + ' requires elevated privileges');
-			process.exit(1);
-			break;
-		case 'EADDRINUSE':
-			console.error(bind + ' is already in use');
-			process.exit(1);
-			break;
-		default:
-			throw error;
-	}
-}
-
-//
-// Event listener for HTTP/HTTPS server "listening" event.
-//
-function onListening()
-{
-	var	addr	= server.address();
-	var	bind	= ('string' === typeof addr) ? 'pipe ' + addr : 'port ' + addr.port;
-	debug('Listening on ' + bind);
 }
 
 /*

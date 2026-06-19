@@ -19,13 +19,11 @@
  *
  */
 
-'use strict';
+import express		from 'express';
+import R3UserToken 	from './lib/libr3tokens';
+import { getSafeString, isSafeEntity, isSafeString }	from './lib/libr3util';
 
-var	express		= require('express');
-var	router		= express.Router();
-
-var	libTokens	= require('./lib/libr3tokens').r3UserToken;
-var	r3util		= require('./lib/libr3util');
+let	router = express.Router();
 
 //
 // Mountpath				: '/public/tokens'
@@ -46,22 +44,22 @@ var	r3util		= require('./lib/libr3util');
 // response	status			: 200, etc
 //			body			: token string(or message if error)
 //
-router.get('/', function(req, res, next)					// eslint-disable-line no-unused-vars
+router.get('/', (req: express.Request, res: express.Response, next: express.NextFunction) =>
 {
-	if(!r3util.isSafeEntity(req) || !r3util.isSafeEntity(req.query)){
+	if(!isSafeEntity(req) || !isSafeEntity(req.query)){
 		console.error('The request is something wrong.');
-		res.status(400);									// 400: Bad Request
+		res.status(400);										// 400: Bad Request
 		res.send('The request is something wrong.');
 		return;
 	}
 	res.type('application/json; charset=utf-8');
 
-	var	tokensObj	= new libTokens(req);
-	var	_res		= res;
-	var	_req		= req;
+	let	tokensObj	= new R3UserToken(req);
+	let	_res		= res;
+	let	_req		= req;
 
-	if(!r3util.isSafeString(req.query.tenantname)){
-		tokensObj.getUnscopedUserToken(function(error, token)
+	if(!isSafeString(req.query.tenantname)){
+		tokensObj.getUnscopedUserToken((error: Error | null, token: string | null) =>
 		{
 			if(null !== error){
 				console.error('Could not get Unscoped user token by ' + error.message);
@@ -80,8 +78,8 @@ router.get('/', function(req, res, next)					// eslint-disable-line no-unused-va
 		// [NOTE]
 		// This code is to set x-auth-token from url arg for debugging manually.
 		//
-		if('development' === req.app.get('env') && !tokensObj.hasTokenHeader() && r3util.isSafeString(req.query.debugtoken)){
-			req.headers['x-auth-token'] = 'U=' + r3util.getSafeString(req.query.debugtoken);
+		if('development' === req.app.get('env') && !tokensObj.hasTokenHeader(req) && isSafeString(req.query.debugtoken)){
+			req.headers['x-auth-token'] = 'U=' + getSafeString(req.query.debugtoken);
 		}
 
 		if(!tokensObj.hasTokenHeader(req)){
@@ -90,11 +88,11 @@ router.get('/', function(req, res, next)					// eslint-disable-line no-unused-va
 			//
 			// First: Get unscoped token
 			//
-			tokensObj.getUnscopedUserToken(function(error, token)
+			tokensObj.getUnscopedUserToken((error: Error | null, token: string | null) =>
 			{
 				if(null !== error){
 					console.error('Could not get Unscoped user token by ' + error.message);
-					_res.status(400);								// 400: Bad Request
+					_res.status(400);							// 400: Bad Request
 					_res.send(error.message);
 					return;
 				}
@@ -104,15 +102,15 @@ router.get('/', function(req, res, next)					// eslint-disable-line no-unused-va
 				//
 				// 2'nd: Get scoped token
 				//
-				tokensObj.getScopedUserToken(_req, r3util.getSafeString(_req.query.tenantname), function(error, token)
+				tokensObj.getScopedUserToken(_req, getSafeString(_req.query.tenantname), (error: Error | null, token: string | null) =>
 				{
 					if(null !== error){
 						console.error('Could not get Scoped user token by ' + error.message);
-						_res.status(400);								// 400: Bad Request
+						_res.status(400);						// 400: Bad Request
 						_res.send(error.message);
 						return;
 					}
-					_res.status(200);									// 200
+					_res.status(200);							// 200
 					_res.send(JSON.stringify(token));
 				});
 			});
@@ -121,22 +119,22 @@ router.get('/', function(req, res, next)					// eslint-disable-line no-unused-va
 			//
 			// Found x-auth-token header
 			//
-			tokensObj.getScopedUserToken(req, r3util.getSafeString(req.query.tenantname), function(error, token)
+			tokensObj.getScopedUserToken(req, getSafeString(req.query.tenantname), (error: Error | null, token: string | null) =>
 			{
 				if(null !== error){
 					console.error('Could not get Scoped user token by ' + error.message);
-					_res.status(400);								// 400: Bad Request
+					_res.status(400);							// 400: Bad Request
 					_res.send(error.message);
 					return;
 				}
-				_res.status(200);									// 200
+				_res.status(200);								// 200
 				_res.send(JSON.stringify(token));
 			});
 		}
 	}
 });
 
-module.exports = router;
+export default router;
 
 /*
  * Local variables:

@@ -18,62 +18,182 @@
  *
  */
 
-//
-// [NOTE]
-// This file is the old .eslintrc.js file converted by @eslint/migrate-config.
-//
 import react from "eslint-plugin-react";
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsparser from "@typescript-eslint/parser";
 import globals from "globals";
 import babelParser from "@babel/eslint-parser";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-	baseDirectory: __dirname,
-	recommendedConfig: js.configs.recommended,
-	allConfig: js.configs.all
-});
+export default [
+	js.configs.recommended,
 
-export default [...compat.extends("eslint:recommended"), {
-	plugins: {
-		react,
-	},
-	languageOptions: {
-		globals: {
-			...globals.node,
-			...globals.browser,
-			...globals.commonjs,
+	//
+	// TypeScript files (src/**/*.ts, src/**/*.tsx)
+	//
+	{
+		files: ["src/**/*.ts", "src/**/*.tsx"],
+		plugins: {
+			react,
+			"@typescript-eslint": tseslint,
 		},
-		parser: babelParser,
-		ecmaVersion: 6,
-		sourceType: "module",
-		parserOptions: {
-			ecmaFeatures: {
-				jsx: true,
-				legacyDecorators: true,
+		languageOptions: {
+			globals: {
+				...globals.node,
+				...globals.browser,
 			},
-			requireConfigFile: false,
-			babelOptions: {
-				presets: ["@babel/preset-react"],
+			parser: tsparser,
+			ecmaVersion: 2020,
+			sourceType: "module",
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true,
+				},
 			},
 		},
+		rules: {
+			indent: ["error", "tab", {
+				SwitchCase: 1,
+			}],
+			"no-console": 0,
+			"no-var": "error",
+			"linebreak-style": ["error", "unix"],
+			quotes: ["error", "single"],
+			semi: ["error", "always"],
+			"react/jsx-uses-vars": 1,
+			"no-unused-vars": "off",
+			"@typescript-eslint/no-unused-vars": "off",
+			"@typescript-eslint/no-explicit-any": "warn",
+			"no-redeclare": "off",
+			"no-undef": "off",
+		},
 	},
-	files: ["**/*.js", "**/*.ts", "**/*.jsx", "**/www", "**/build_all_licenses"],
-	rules: {
-		indent: ["error", "tab", {
-			SwitchCase: 1,
-		}],
-		"no-console": 0,
-		"linebreak-style": ["error", "unix"],
-		quotes: ["error", "single"],
-		semi: ["error", "always"],
-		"react/jsx-uses-vars": 1,
+
+	//
+	// Test files (src/tests/**/*.ts, src/tests/**/*.tsx)
+	//
+	{
+		files: ["src/tests/**/*.ts", "src/tests/**/*.tsx"],
+		plugins: {
+			react,
+			"@typescript-eslint": tseslint,
+		},
+		languageOptions: {
+			globals: {
+				...globals.node,
+				...globals.browser,
+				...globals.jest,
+			},
+			parser: tsparser,
+			ecmaVersion: 2020,
+			sourceType: "module",
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true,
+				},
+			},
+		},
+		rules: {
+			indent: ["error", "tab", {
+				SwitchCase: 1,
+			}],
+			"no-console": 0,
+			"no-var": "error",
+			"linebreak-style": ["error", "unix"],
+			quotes: ["error", "single"],
+			semi: ["error", "always"],
+			"react/jsx-uses-vars": 1,
+			"no-unused-vars": "off",
+			"@typescript-eslint/no-unused-vars": "off",
+			"@typescript-eslint/no-explicit-any": "warn",
+			"no-redeclare": "off",
+			"no-undef": "off",
+		},
 	},
-}];
+
+	//
+	// Demo files (demo/*.ts)
+	//
+	{
+		files: ["demo/*.ts"],
+		plugins: {
+			"@typescript-eslint": tseslint,
+		},
+		languageOptions: {
+			globals: {
+				...globals.node,
+				...globals.browser,
+			},
+			parser: tsparser,
+			ecmaVersion: 2020,
+			sourceType: "module",
+			parserOptions: {
+				project: "./demo/tsconfig.json",
+			},
+		},
+		rules: {
+			indent: ["error", "tab", {
+				SwitchCase: 1,
+			}],
+			"no-console": 0,
+			"no-var": "error",
+			"linebreak-style": ["error", "unix"],
+			quotes: ["error", "single"],
+			semi: ["error", "always"],
+			"no-unused-vars": "off",
+			"@typescript-eslint/no-unused-vars": "off",
+			"@typescript-eslint/no-explicit-any": "warn",
+			"no-redeclare": "off",
+			"no-undef": "off",
+		},
+	},
+
+	//
+	// Config files (webpack.config.js, etc.)
+	//
+	{
+		files: ["*.js", "*.mjs"],
+		languageOptions: {
+			globals: {
+				...globals.node,
+			},
+			ecmaVersion: 2020,
+			sourceType: "module",
+		},
+		rules: {
+			indent: ["error", "tab", {
+				SwitchCase: 1,
+			}],
+			"no-console": 0,
+			"linebreak-style": ["error", "unix"],
+			quotes: ["error", "single"],
+			semi: ["error", "always"],
+		},
+	},
+
+	//
+	// Shell script entry points (bin/build_all_licenses)
+	//
+	{
+		files: ["bin/build_all_licenses"],
+		languageOptions: {
+			globals: {
+				...globals.node,
+			},
+			ecmaVersion: 2020,
+			sourceType: "commonjs",
+		},
+		rules: {
+			indent: ["error", "tab", {
+				SwitchCase: 1,
+			}],
+			"no-console": 0,
+			"linebreak-style": ["error", "unix"],
+			quotes: ["error", "single"],
+			semi: ["error", "always"],
+		},
+	},
+];
 
 /*
  * Local variables:

@@ -2,7 +2,7 @@
  *
  * K2HR3 Web Application
  *
- * Copyright 2026 Yahoo Japan Corporation.
+ * Copyright 2017 Yahoo Japan Corporation.
  *
  * K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers
  * common management information for the cloud.
@@ -14,19 +14,30 @@
  * the license file that was distributed with this source code.
  *
  * AUTHOR:   Takeshi Nakatani
- * CREATE:   Thu May 14 2026
+ * CREATE:   Tue Aug 15 2017
  * REVISION:
  *
  */
 
-{
-	"extends": "../tsconfig.json",
-	"compilerOptions": {
-		"rootDir": "..",
-		"noEmit": true
-	},
-	"include": ["*.ts", "../src/**/*"]
+import { K2hr3Global } from '../util/r3context';
+
+declare global {
+	var k2hr3global: K2hr3Global;
 }
+
+global.k2hr3global = {
+	r3apischeme:	'http',
+	r3apihost:		'localhost',
+	r3apiport:		'3000',
+	r3appmenu:		'[{"name": "Dummy Menu", "url": "https://localhost/dummy/menu/"}]',
+	r3userdata:		'"#include\\n{{= %K2HR3_API_HOST_URI% }}/v1/userdata/TestRegisterPathForJEST\\n"',
+	username:		'test',
+	unscopedtoken:	'UnscopedUserToken_ForTestByJEST',
+	uselocaltenant:	true,
+	dbgheader:		'x-k2hr3-debug',
+	dbgvalue:		'debug',
+	dbgresheader:	'x-k2hr3-error'
+};
 
 /*
  * Local variables:

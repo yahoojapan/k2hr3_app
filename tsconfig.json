@@ -1,0 +1,57 @@
+/*
+ *
+ * K2HR3 Web Application
+ *
+ * Copyright 2026 Yahoo Japan Corporation.
+ *
+ * K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers
+ * common management information for the cloud.
+ * K2HR3 can dynamically manage information as "who", "what", "operate".
+ * These are stored as roles, resources, policies in K2hdkc, and the
+ * client system can dynamically read and modify these information.
+ *
+ * For the full copyright and license information, please view
+ * the license file that was distributed with this source code.
+ *
+ * AUTHOR:   Takeshi Nakatani
+ * CREATE:   Thu May 14 2026
+ * REVISION:
+ *
+ */
+
+{
+	"compilerOptions": {
+		"target": "ES2020",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"jsx": "react",
+		"strict": true,
+		"noImplicitAny": true,
+		"strictNullChecks": false,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+		"outDir": "./dist",
+		"rootDir": "./src",
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"allowSyntheticDefaultImports": true,
+		"types": ["node", "jest"]
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist", "public"]
+}
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noexpandtab sw=4 ts=4 fdm=marker
+ * vim<600: noexpandtab sw=4 ts=4
+ */

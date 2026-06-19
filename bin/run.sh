@@ -40,6 +40,8 @@ PRGNAME_PREFIX=$(echo "${PRGNAME}" | sed -e 's#\.sh.*$##g')
 PROC_PID_BASENAME="k2hr3pp-${PRGNAME_PREFIX}.pid"
 PROC_PID_FILE=""
 
+TARGET_PROGRAM="dist/bin/www.js"
+
 #==============================================================
 # Utility functions
 #==============================================================
@@ -312,11 +314,11 @@ fi
 cd "${SRCTOP}" || exit 1
 
 echo "***** RUN *****"
-echo "NODE_PATH=${MY_NODE_PATH} NODE_ENV=${NODE_ENV_VALUE} NODE_DEBUG=${DEBUG_ENV_CUSTOM} node ${INSPECTOR_OPT} bin/www"
+echo "NODE_PATH=${MY_NODE_PATH} NODE_ENV=${NODE_ENV_VALUE} NODE_DEBUG=${DEBUG_ENV_CUSTOM} node ${INSPECTOR_OPT} ${TARGET_PROGRAM}"
 echo ""
 
 EXIT_CODE=0
-if ! /bin/sh -c "NODE_PATH=${MY_NODE_PATH} NODE_ENV=${NODE_ENV_VALUE} NODE_DEBUG=${DEBUG_ENV_CUSTOM} node ${INSPECTOR_OPT} bin/www"; then
+if ! /bin/sh -c "NODE_PATH=${MY_NODE_PATH} NODE_ENV=${NODE_ENV_VALUE} NODE_DEBUG=${DEBUG_ENV_CUSTOM} node ${INSPECTOR_OPT} ${TARGET_PROGRAM}"; then
 	EXIT_CODE="$?"
 	echo "[INFO] Process exited with exit code: ${EXIT_CODE}"
 fi

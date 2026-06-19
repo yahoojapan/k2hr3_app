@@ -19,6 +19,8 @@
  *
  */
 
+import { StringValObj }	from '../util/r3types';
+
 //
 // Text Resources for English
 //
@@ -28,7 +30,7 @@
 //				c		=> Confirm
 //				tRes	=> Text Resource(other)
 //
-export const r3TextRes = {
+export const r3TextRes: StringValObj = {
 	iNotSignin:					'Please signin first.',
 	iNotSelectTenant:			'First select the tenant, then select ROLE / RESOURCE / POLICY, then browse and edit.',
 	iNotSelectPath:				'Please select the item of SERVICE / ROLE / RESOURCE / POLICY, and reference and edit it.',
@@ -166,7 +168,7 @@ export const r3TextRes = {
 	tResTenantUsersEditBtn:		'UPDATE',
 	tResStaticResKeyPopover:	'KEY NAME',
 	tResStaticResKValPopover:	'VALUE',
-	tResAliasRoleHint:			'Role path under tenant(yrn:yahoo:::<tenant>)',
+	tResAliasRoleHint:			'Only Role path under tenant(yrn:yahoo:::',
 	tResResourceValueSubTitle:	'VALUE',
 	tResResourceValueTypeText:	'String Type(text data)',
 	tResResourceValueTypeObj:	'Object Type(string formatted by JSON)',
@@ -268,6 +270,7 @@ export const r3TextRes = {
 	eNoChange:					'I can not find any changes. (It is the same value)',
 	eEffectType:				'The value of EFFECT is invalid.',
 	eActionType:				'The value of ACTION is invalid.',
+	eNoActionType:				'The ACTION must be selected at least one.',
 	eResourceArray:				'RESOURCE value (must be started with YRN) is invalid.',
 	eAliasArray:				'The value of ALIAS is invalid.',
 	eTenantArray:				'The value of TENANT is invalid. (The same value is specified more than once)',

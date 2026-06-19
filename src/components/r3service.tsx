@@ -20,8 +20,6 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import TextField					from '@mui/material/TextField';
 import Typography					from '@mui/material/Typography';
@@ -41,16 +39,71 @@ import DeleteIcon					from '@mui/icons-material/ClearRounded';
 import AddIcon						from '@mui/icons-material/AddRounded';
 import EditIcon						from '@mui/icons-material/Edit';
 
-import { r3Service }				from './r3styles';
+import type { R3Theme }				from './r3theme';
+import { r3ServiceStyle }			from './r3styles';
 import R3FormButtons				from './r3formbuttons';					// Buttons
 import R3Message					from '../util/r3message';
+import R3Provider					from '../util/r3provider';
 import R3CreateServiceDialog		from './r3createservicedialog';
 import R3PopupMsgDialog				from './r3popupmsgdialog';
 
 import { regYrnTenantPathPrefix, regYrnAnyTenantPath }	from '../util/r3define';
 import { getServiceResourceType, normalizeServiceReourceStaticObject }	from '../util/r3verifyutil';
-import { errorType, actionTypeValue, actionTypeDelete, actionTypeAdd, serviceResTypeUrl, serviceResTypeObject, serviceResTypeUnknown }	from '../util/r3types';
-import { r3DeepClone, r3DeepCompare, r3CompareCaseString, r3IsEmptyEntityObject, r3IsEmptyString, r3IsEmptyEntity, r3IsSafeTypedEntity, r3IsJSON, r3ConvertFromJSON } from '../util/r3util';
+import { StaticResourceObject, errorType, actionTypeValue, actionTypeDelete, actionTypeAdd, serviceResTypeUrl, serviceResTypeObject, serviceResTypeUnknown, ServiceData, ServiceResType, isServiceResType, isServiceResourceObjectArray, isStaticResourceObject }	from '../util/r3types';
+import { r3IsNumber, r3IsBoolean, r3DeepClone, r3DeepCompare, r3CompareCaseString, r3IsEmptyEntityObject, r3IsEmptyString, r3IsEmptyEntity, r3IsJSON, r3ConvertFromJSON, r3IsArray, r3IsString } from '../util/r3util';
+
+//
+// Interfaces
+//
+type R3ServiceTooltips = {
+	deleteTenantTooltip?:				number;
+	addTenantTooltip?:					boolean;
+	addResStaticObjTooltip?:			boolean;
+	nameResStaticObjTooltip?:			number;
+	jsonResStaticObjTooltip?:			number;
+	delResStaticObjTooltip?:			number;
+	editResStaticObjTooltip?:			number;
+};
+
+type R3ServiceRequiredProps = {
+	theme:								R3Theme;
+	r3provider:							R3Provider;
+	tenant:								string;
+	service:							ServiceData;
+	dispUnique:							string | number;
+	onSave:								(service: ServiceData) => void;
+	onUpdate:							(changed: boolean) => void;
+};
+
+type R3ServiceOptionProps = {
+	isReadMode?:						boolean;
+	tableRawCount?:						number;
+};
+
+type R3ServiceProps = R3ServiceRequiredProps & R3ServiceOptionProps;
+
+type R3ServiceResourceBase = {
+	serviceResType:						ServiceResType;
+	serviceResVerifyUrl:				string;
+	serviceResStaticObject:				StaticResourceObject[];
+	serviceResUnknown:					string;
+}
+
+type R3ServiceState = R3ServiceResourceBase & {
+	dispUnique:							string | number;
+	service:							ServiceData;
+	serviceResStaticObjPageNum:			number;
+	addTenant:							string;
+	changed:							boolean;
+	staticResourceDialog:				boolean;
+	staticResourceObjectPos:			number;
+	staticResourceObject:				StaticResourceObject[];
+	confirmMessageObject:				R3Message | null;
+	messageDialogObject:				R3Message | null;
+	tooltips:							R3ServiceTooltips;
+}
+
+type R3ServiceStyleType = ReturnType<typeof r3ServiceStyle>;
 
 //
 // Local variables
@@ -77,32 +130,25 @@ const serviceComponentValues = {
 //
 // Service Contents Class
 //
-export default class R3Service extends React.Component
+export default class R3Service extends React.Component<R3ServiceProps, R3ServiceState>
 {
-	static propTypes = {
-		r3provider:		PropTypes.object.isRequired,
-		tenant:			PropTypes.string.isRequired,
-		service:		PropTypes.object.isRequired,
-		dispUnique:		PropTypes.number.isRequired,
-		tableRawCount:	PropTypes.number,
-		onSave:			PropTypes.func.isRequired,
-		onUpdate:		PropTypes.func.isRequired
-	};
+	sxClasses: R3ServiceStyleType;
 
-	static defaultProps = {
+	static defaultProps: R3ServiceOptionProps = {
+		isReadMode:		false,
 		tableRawCount:	5
 	};
 
-	static orgServiceResource = {
-		serviceResType:				null,
-		serviceResVerifyUrl:		null,
-		serviceResStaticObject:		null,
-		serviceResUnknown:			null,
+	static orgServiceResource: R3ServiceResourceBase = {
+		serviceResType:				serviceResTypeUnknown,
+		serviceResVerifyUrl:		'',
+		serviceResStaticObject:		[],
+		serviceResUnknown:			'',
 	};
 
 	state = R3Service.createState(this.props.service, this.props.dispUnique);
 
-	constructor(props)
+	constructor(props: R3ServiceProps)
 	{
 		super(props);
 
@@ -125,7 +171,7 @@ export default class R3Service extends React.Component
 		this.handleCheckStaticResourceName		= this.handleCheckStaticResourceName.bind(this);
 
 		// styles
-		this.sxClasses							= r3Service(props.theme);
+		this.sxClasses							= r3ServiceStyle(props.theme);
 	}
 
 	componentDidMount()
@@ -138,7 +184,7 @@ export default class R3Service extends React.Component
 	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
 	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
 	//
-	static getDerivedStateFromProps(nextProps, prevState)
+	static getDerivedStateFromProps(nextProps: R3ServiceProps, prevState: R3ServiceState): R3ServiceState | null
 	{
 		if(nextProps.dispUnique !== prevState.dispUnique){
 			// Switching content
@@ -147,7 +193,7 @@ export default class R3Service extends React.Component
 		return null;	// Return null to indicate no change to state.
 	}
 
-	static createState(service, dispUnique)
+	static createState(service: ServiceData, dispUnique: string | number): R3ServiceState
 	{
 		// keep original analyzed verify data
 		R3Service.orgServiceResource.serviceResType				= getServiceResourceType(service.verify);
@@ -155,7 +201,7 @@ export default class R3Service extends React.Component
 		R3Service.orgServiceResource.serviceResStaticObject		= [];
 		R3Service.orgServiceResource.serviceResUnknown			= '';
 
-		if(R3Service.orgServiceResource.serviceResType == serviceResTypeUrl){
+		if(R3Service.orgServiceResource.serviceResType == serviceResTypeUrl && r3IsString(service.verify)){
 			R3Service.orgServiceResource.serviceResVerifyUrl	= service.verify;
 		}else if(R3Service.orgServiceResource.serviceResType == serviceResTypeObject){
 			R3Service.orgServiceResource.serviceResStaticObject	= normalizeServiceReourceStaticObject(service.verify);
@@ -164,7 +210,7 @@ export default class R3Service extends React.Component
 		}
 
 		// new state
-		return {
+		let	newState: R3ServiceState = {
 			dispUnique:						dispUnique,
 			service:						r3DeepClone(service),
 			serviceResType:					R3Service.orgServiceResource.serviceResType,
@@ -190,21 +236,28 @@ export default class R3Service extends React.Component
 				editResStaticObjTooltip:	-1
 			}
 		};
+
+		return newState;
 	}
 
 	//
 	// Check all state
 	//
-	isChangedState(newResType, newVerify, newTenants)
+	isChangedState(newResType: string, newVerify: string | StaticResourceObject[], newTenants: string[]): boolean
 	{
 		let	is_changed	= false;
+
+		if(!isServiceResType(newResType)){
+			return is_changed;
+		}
 
 		// check verify
 		if(newResType != R3Service.orgServiceResource.serviceResType){
 			is_changed	= true;
 		}else{
-			if(newResType == serviceResTypeUrl && newVerify != R3Service.orgServiceResource.serviceResVerifyUrl){
+			if(newResType == serviceResTypeUrl && (!r3IsString(newVerify) || newVerify != R3Service.orgServiceResource.serviceResVerifyUrl)){
 				is_changed = true;
+
 			}else if(newResType == serviceResTypeObject){
 				if(!r3DeepCompare(newVerify, R3Service.orgServiceResource.serviceResStaticObject)){
 					is_changed = true;
@@ -215,8 +268,8 @@ export default class R3Service extends React.Component
 		}
 
 		// check tenants
-		if(r3IsSafeTypedEntity(newTenants, 'array')){
-			if(r3IsEmptyEntity(this.props.service) || !r3IsSafeTypedEntity(this.props.service.tenant, 'array')){
+		if(r3IsArray(newTenants)){
+			if(r3IsEmptyEntity(this.props.service) || !r3IsArray(this.props.service.tenant)){
 				is_changed = true;
 			}else{
 				if(!r3DeepCompare(this.props.service.tenant, newTenants)){
@@ -230,7 +283,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Form Button : Save
 	//
-	handleSave(event)														// eslint-disable-line no-unused-vars
+	handleSave(event: React.MouseEvent<HTMLElement>)
 	{
 		if(!this.state.changed){
 			// no change, nothing to do
@@ -245,7 +298,7 @@ export default class R3Service extends React.Component
 		//
 		// Check and Set service resource value to service
 		//
-		let	errorMessage;
+		let	errorMessage: string | null;
 		if(this.state.serviceResType == serviceResTypeUrl){
 			newService.verify	= this.state.serviceResVerifyUrl;
 			errorMessage		= this.props.r3provider.getErrorServiceResourceVerify(this.state.serviceResVerifyUrl);
@@ -266,13 +319,13 @@ export default class R3Service extends React.Component
 		//
 		// Tenant
 		//
-		if(!r3IsSafeTypedEntity(newService.tenant, 'array')){
+		if(!r3IsArray(newService.tenant)){
 			newService.tenant = [];
 		}
 		// check empty and yrn path by regex
 		let	regTenantPath = new RegExp(regYrnAnyTenantPath);
-		let	cnt;
-		let	cnt2;
+		let	cnt: number;
+		let	cnt2: number;
 		for(cnt = 0; cnt < newService.tenant.length; ++cnt){
 			newService.tenant[cnt] = newService.tenant[cnt].trim();
 			if('*' !== newService.tenant[cnt] && null === newService.tenant[cnt].match(regTenantPath)){
@@ -311,7 +364,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Form Button : Cancel
 	//
-	handleCancel(event)														// eslint-disable-line no-unused-vars
+	handleCancel(event: React.MouseEvent<HTMLElement>)
 	{
 		if(this.state.changed){
 			this.setState({
@@ -323,7 +376,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Confirm Dialog : Close( OK / Cancel )
 	//
-	handleConfirmDialogClose(event, reason, result)
+	handleConfirmDialogClose(event: {}, reason: string, result: boolean)
 	{
 		if(result){
 			// case for 'cancel updating' to do
@@ -342,7 +395,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Message Dialog : Close
 	//
-	handleMessageDialogClose(event, reason, result)							// eslint-disable-line no-unused-vars
+	handleMessageDialogClose(event: {}, reason: string, result: boolean)
 	{
 		this.setState({
 			messageDialogObject:	null
@@ -352,11 +405,11 @@ export default class R3Service extends React.Component
 	//
 	// Handle Verify Value : Change
 	//
-	handleVerifyChange(event)
+	handleVerifyChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
 	{
-		let	newValue = r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
+		let	newValue: string | null = r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
 
-		if(!r3IsSafeTypedEntity(newValue, 'string')){
+		if(!r3IsString(newValue)){
 			console.warn('Changed verify new value is wrong.');
 			return;
 		}
@@ -379,11 +432,14 @@ export default class R3Service extends React.Component
 	//
 	// Handle Tenants : Change
 	//
-	handleTenantsChange(event, type, pos)
+	handleTenantsChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.MouseEvent<HTMLElement>, type: string, pos: number)
 	{
-		let	changedValue	= r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
-		let	newTenants		= [];
-		if(r3IsSafeTypedEntity(this.state.service.tenant, 'array')){
+		let	changedValue: string | null	= null;
+		if(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement){
+			changedValue = r3IsEmptyEntityObject(event.target, 'value') ? null : event.target.value;
+		}
+		let	newTenants: string[]		= [];
+		if(r3IsArray(this.state.service.tenant)){
 			newTenants		= r3DeepClone(this.state.service.tenant);
 		}
 
@@ -422,7 +478,7 @@ export default class R3Service extends React.Component
 		newService.tenant	= newTenants;
 
 		// set parent changed state
-		let	nowVerify;
+		let	nowVerify: string | StaticResourceObject[];
 		if(this.state.serviceResType == serviceResTypeUrl){
 			nowVerify	= this.state.serviceResVerifyUrl;
 		}else if(this.state.serviceResType == serviceResTypeObject){
@@ -444,7 +500,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Add New Tenant : Change
 	//
-	handleAddTenantsChange(event)
+	handleAddTenantsChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
 	{
 		// update state
 		this.setState({
@@ -452,45 +508,45 @@ export default class R3Service extends React.Component
 		});
 	}
 
-	handTooltipChange = (event, type, extData) =>
+	handTooltipChange = (event: React.MouseEvent<HTMLElement>, type: string, extData: number | boolean) =>
 	{
-		if(tooltipValues.deleteTenantTooltip === type){
+		if(tooltipValues.deleteTenantTooltip === type && r3IsNumber(extData)){
 			this.setState({
 				tooltips: {
 					deleteTenantTooltip:		extData
 				}
 			});
-		}else if(tooltipValues.addTenantTooltip === type){
+		}else if(tooltipValues.addTenantTooltip === type && r3IsBoolean(extData)){
 			this.setState({
 				tooltips: {
 					addTenantTooltip:			extData
 				}
 			});
-		}else if(tooltipValues.nameResStaticObjTooltip === type){
+		}else if(tooltipValues.nameResStaticObjTooltip === type && r3IsNumber(extData)){
 			this.setState({
 				tooltips: {
 					nameResStaticObjTooltip:	extData
 				}
 			});
-		}else if(tooltipValues.jsonResStaticObjTooltip === type){
+		}else if(tooltipValues.jsonResStaticObjTooltip === type && r3IsNumber(extData)){
 			this.setState({
 				tooltips: {
 					jsonResStaticObjTooltip:	extData
 				}
 			});
-		}else if(tooltipValues.addResStaticObjTooltip === type){
+		}else if(tooltipValues.addResStaticObjTooltip === type && r3IsBoolean(extData)){
 			this.setState({
 				tooltips: {
 					addResStaticObjTooltip:		extData
 				}
 			});
-		}else if(tooltipValues.delResStaticObjTooltip === type){
+		}else if(tooltipValues.delResStaticObjTooltip === type && r3IsNumber(extData)){
 			this.setState({
 				tooltips: {
 					delResStaticObjTooltip:		extData
 				}
 			});
-		}else if(tooltipValues.editResStaticObjTooltip === type){
+		}else if(tooltipValues.editResStaticObjTooltip === type && r3IsNumber(extData)){
 			this.setState({
 				tooltips: {
 					editResStaticObjTooltip:	extData
@@ -499,17 +555,17 @@ export default class R3Service extends React.Component
 		}
 	};
 
-	getTenantsContents(items)
+	getTenantsContents(items: string[])
 	{
 		const { theme, r3provider } = this.props;
 
-		if(!r3IsSafeTypedEntity(items, 'array')){
+		if(!r3IsArray(items)){
 			return;
 		}
 
 		let	tenantYrn = regYrnTenantPathPrefix + this.props.tenant;
 
-		return items.map( (item, pos) =>
+		return items.map( (item: string, pos: number) =>
 		{
 			if(r3CompareCaseString(tenantYrn, item)){
 				// item is owner tenant, this value could not change.
@@ -519,7 +575,7 @@ export default class R3Service extends React.Component
 			let	deleteButton = (
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResServiceTenantDelTT }
-					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.deleteTenantTooltip, 'number') || (this.state.tooltips.deleteTenantTooltip != pos)) ? false : true) }
+					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.deleteTenantTooltip) || (this.state.tooltips.deleteTenantTooltip != pos)) ? false : true) }
 				>
 					<IconButton
 						onClick={ (event) => this.handleTenantsChange(event, actionTypeDelete, pos) }
@@ -574,7 +630,7 @@ export default class R3Service extends React.Component
 
 				<Tooltip
 					title={ r3provider.getR3TextRes().tResServiceTenantAddTT }
-					open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.addTenantTooltip, 'boolean')) ? false : this.state.tooltips.addTenantTooltip) }
+					open={ (r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.addTenantTooltip)) ? false : this.state.tooltips.addTenantTooltip === true }
 				>
 					<IconButton
 						onClick={ (event) => this.handleTenantsChange(event, actionTypeAdd, 0) }
@@ -594,14 +650,18 @@ export default class R3Service extends React.Component
 	//
 	// Handle Service resource type : Change
 	//
-	handleResourceTypeChange(event, type)
+	handleResourceTypeChange(event: React.ChangeEvent<HTMLInputElement>, type: string | null = null)
 	{
+		if(!isServiceResType(type)){
+			console.warn('changed value type(' + JSON.stringify(type) + ') is not ResourceType.');
+			return;
+		}
 		if(this.state.serviceResType === type){
 			console.warn('changed value type(' + JSON.stringify(type) + ') is something wrong.');
 			return;
 		}
 		let	newResType	= type;
-		let	newVerify;
+		let	newVerify: string | StaticResourceObject[];
 		if(newResType == serviceResTypeUrl){
 			newVerify	= this.state.serviceResVerifyUrl;
 		}else if(newResType == serviceResTypeObject){
@@ -624,7 +684,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Add new static resource
 	//
-	handleNewStaticResourceObj(event)										// eslint-disable-line no-unused-vars
+	handleNewStaticResourceObj(event: React.MouseEvent<HTMLElement>)
 	{
 		// update state
 		this.setState({
@@ -637,9 +697,9 @@ export default class R3Service extends React.Component
 	//
 	// Handle Delete static resource
 	//
-	handleDelStaticResourceObj(event, pos)
+	handleDelStaticResourceObj(event: React.MouseEvent<HTMLElement>, pos: number)
 	{
-		if(!r3IsSafeTypedEntity(this.state.serviceResStaticObject, 'array')){
+		if(!r3IsArray(this.state.serviceResStaticObject)){
 			return;
 		}
 		if(this.state.serviceResStaticObject.length <= pos){
@@ -647,7 +707,7 @@ export default class R3Service extends React.Component
 		}
 
 		// remove resouce
-		let newStaticRes = this.state.serviceResStaticObject.filter( (item, itemPos) => itemPos !== pos);
+		let newStaticRes = this.state.serviceResStaticObject.filter((item: StaticResourceObject, itemPos: number) => itemPos !== pos);
 
 		// set parent changed state
 		let	changed			= this.isChangedState(this.state.serviceResType, newStaticRes, this.state.service.tenant);
@@ -663,9 +723,9 @@ export default class R3Service extends React.Component
 	//
 	// Handle Edit static resource
 	//
-	handleEditStaticResourceObj(event, pos)
+	handleEditStaticResourceObj(event: React.MouseEvent<HTMLElement>, pos: number)
 	{
-		if(!r3IsSafeTypedEntity(this.state.serviceResStaticObject, 'array')){
+		if(!r3IsArray(this.state.serviceResStaticObject)){
 			return;
 		}
 		if(this.state.serviceResStaticObject.length <= pos){
@@ -680,14 +740,14 @@ export default class R3Service extends React.Component
 			oneStaticRes.type				= 'string';
 			oneStaticRes.editingObjectData	= '';
 			oneStaticRes.editingStringData	= '';
-		}else if(r3IsJSON(oneStaticRes.data)){
+		}else if(r3IsString(oneStaticRes.data) && r3IsJSON(oneStaticRes.data)){
 			let	tempobj = r3ConvertFromJSON(oneStaticRes.data);
-			if(r3IsSafeTypedEntity(tempobj, 'string')){
+			if(r3IsString(tempobj)){
 				// data is JSON formatted, but it is string -> type: string
 				oneStaticRes.type				= 'string';
 				oneStaticRes.editingObjectData	= '';
 				oneStaticRes.editingStringData	= tempobj;
-			}else if(r3IsSafeTypedEntity(tempobj, 'number')){
+			}else if(r3IsNumber(tempobj)){
 				// data is JSON formatted, but it is number -> type: string
 				oneStaticRes.type				= 'string';
 				oneStaticRes.editingObjectData	= '';
@@ -698,7 +758,7 @@ export default class R3Service extends React.Component
 				oneStaticRes.editingObjectData	= oneStaticRes.data;
 				oneStaticRes.editingStringData	= '';
 			}
-		}else if(r3IsSafeTypedEntity(oneStaticRes.data, 'string')){
+		}else if(r3IsString(oneStaticRes.data)){
 			// data is string -> type: string
 			oneStaticRes.type				= 'string';
 			oneStaticRes.editingObjectData	= '';
@@ -721,9 +781,24 @@ export default class R3Service extends React.Component
 	//
 	// Handle Close static resource dialog
 	//
-	handleCloseStaticResourceDialog(event, reason, isAgree, newOneStaticRes)
+	handleCloseStaticResourceDialog(event: {}, reason: string | null, isAgree: boolean, newServiceName: string | null, newServiceResType: ServiceResType | null, newVerify: string | null, newStaticRes: StaticResourceObject[] | null)
 	{
+		if(r3IsString(newServiceName) || isServiceResType(newServiceResType) || r3IsString(newVerify)){
+			console.warn('Unnecessary parameters(newServiceName=' + JSON.stringify(newServiceName) + ', newServiceResType=' + JSON.stringify(newServiceResType) + ', newVerify=' + JSON.stringify(newVerify) + ') were specified, but they will be ignored.');
+		}
 		if(!isAgree){
+			this.setState({
+				staticResourceDialog:		false,
+				staticResourceObjectPos:	-1,
+				staticResourceObject:		[]
+			});
+			return;
+		}
+		if(!r3IsArray(newStaticRes) || 1 !== newStaticRes.length || !newStaticRes.every((item: unknown) => isStaticResourceObject(item))){
+			// [NOTE]
+			// If newStaticRes is null, isAgree is false, and therefore this logic is basically not come.
+			//
+			console.warn('newStaticRes parameter(' + JSON.stringify(newStaticRes) + ') is wrong.');
 			this.setState({
 				staticResourceDialog:		false,
 				staticResourceObjectPos:	-1,
@@ -733,20 +808,20 @@ export default class R3Service extends React.Component
 		}
 
 		// add/edit new static resource
-		let newStaticRes = r3DeepClone(this.state.serviceResStaticObject);
-		if(0 <= this.state.staticResourceObjectPos && this.state.staticResourceObjectPos < newStaticRes.length){
-			newStaticRes[this.state.staticResourceObjectPos] = newOneStaticRes;
+		let mergedStaticRes = r3DeepClone(this.state.serviceResStaticObject);
+		if(0 <= this.state.staticResourceObjectPos && this.state.staticResourceObjectPos < mergedStaticRes.length){
+			mergedStaticRes[this.state.staticResourceObjectPos] = newStaticRes[0];
 		}else{
-			newStaticRes.push(newOneStaticRes);
+			mergedStaticRes.push(newStaticRes[0]);
 		}
 
 		// set parent changed state
-		let	changed			= this.isChangedState(this.state.serviceResType, newStaticRes, this.state.service.tenant);
+		let	changed			= this.isChangedState(this.state.serviceResType, mergedStaticRes, this.state.service.tenant);
 		this.props.onUpdate(changed);
 
 		// update state
 		this.setState({
-			serviceResStaticObject:		newStaticRes,
+			serviceResStaticObject:		mergedStaticRes,
 			changed:					changed,
 
 			staticResourceDialog:		false,
@@ -758,7 +833,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Check conflict static resource name
 	//
-	handleCheckStaticResourceName(staticResName)
+	handleCheckStaticResourceName(staticResName: string): boolean
 	{
 		for(let cnt = 0; cnt < this.state.serviceResStaticObject.length; ++cnt){
 			if(cnt == this.state.staticResourceObjectPos){
@@ -774,7 +849,7 @@ export default class R3Service extends React.Component
 	//
 	// Handle Static resource object page : Change
 	//
-	handleResStaticObjPageChange(event, page)
+	handleResStaticObjPageChange(event: React.MouseEvent<HTMLButtonElement> | null, page: number = 0)
 	{
 		this.setState({
 			serviceResStaticObjPageNum:	page
@@ -838,7 +913,7 @@ export default class R3Service extends React.Component
 					>
 						<Tooltip
 							title={ r3provider.getR3TextRes().tResServiceAddStaticResTT }
-							open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.addResStaticObjTooltip, 'boolean')) ? false : this.state.tooltips.addResStaticObjTooltip) }
+							open={ (r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsBoolean(this.state.tooltips.addResStaticObjTooltip)) ? false : this.state.tooltips.addResStaticObjTooltip === true }
 						>
 							<IconButton
 								onClick={ this.handleNewStaticResourceObj }
@@ -861,14 +936,14 @@ export default class R3Service extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		if(!r3IsSafeTypedEntity(this.state.serviceResStaticObject, 'array')){
+		if(!r3IsArray(this.state.serviceResStaticObject)){
 			return;
 		}
 		let	resources = this.state.serviceResStaticObject;
 
 		return (
 			<TableBody>
-				{resources.map( (item, pos) => {
+				{resources.map((item: StaticResourceObject, pos: number) => {
 					if(pos < (this.state.serviceResStaticObjPageNum * this.props.tableRawCount) || ((this.state.serviceResStaticObjPageNum + 1) * this.props.tableRawCount) <= pos){
 						return;
 					}
@@ -895,11 +970,11 @@ export default class R3Service extends React.Component
 							>
 								<Tooltip
 									title={ orgName }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.nameResStaticObjTooltip, 'number') || (this.state.tooltips.nameResStaticObjTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.nameResStaticObjTooltip) || (this.state.tooltips.nameResStaticObjTooltip != pos)) ? false : true) }
 								>
 									<Typography
-										onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, pos) }
-										onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, -1) }
+										onMouseEnter={ (event: React.MouseEvent<HTMLElement>) => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, pos) }
+										onMouseLeave={ (event: React.MouseEvent<HTMLElement>) => this.handTooltipChange(event, tooltipValues.nameResStaticObjTooltip, -1) }
 										{ ...theme.r3Service.textTableContent }
 										sx={ this.sxClasses.textTableContent }
 									>
@@ -913,11 +988,11 @@ export default class R3Service extends React.Component
 							>
 								<Tooltip
 									title={ orgJson }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.jsonResStaticObjTooltip, 'number') || (this.state.tooltips.jsonResStaticObjTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.jsonResStaticObjTooltip) || (this.state.tooltips.jsonResStaticObjTooltip != pos)) ? false : true) }
 								>
 									<Typography
-										onMouseEnter={ (event) => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, pos) }
-										onMouseLeave={ (event) => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, -1) }
+										onMouseEnter={ (event: React.MouseEvent<HTMLElement>) => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, pos) }
+										onMouseLeave={ (event: React.MouseEvent<HTMLElement>) => this.handTooltipChange(event, tooltipValues.jsonResStaticObjTooltip, -1) }
 										{ ...theme.r3Service.textTableContent }
 										sx={ this.sxClasses.textTableContent }
 									>
@@ -930,7 +1005,7 @@ export default class R3Service extends React.Component
 							>
 								<Tooltip
 									title={ r3provider.getR3TextRes().tResServiceDelStaticResTT }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.delResStaticObjTooltip, 'number') || (this.state.tooltips.delResStaticObjTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.delResStaticObjTooltip) || (this.state.tooltips.delResStaticObjTooltip != pos)) ? false : true) }
 								>
 									<IconButton
 										onClick={ (event) => this.handleDelStaticResourceObj(event, pos) }
@@ -945,7 +1020,7 @@ export default class R3Service extends React.Component
 								</Tooltip>
 								<Tooltip
 									title={ r3provider.getR3TextRes().tResServiceEditStaticResTT }
-									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsSafeTypedEntity(this.state.tooltips.editResStaticObjTooltip, 'number') || (this.state.tooltips.editResStaticObjTooltip != pos)) ? false : true) }
+									open={ ((r3IsEmptyEntityObject(this.state, 'tooltips') || !r3IsNumber(this.state.tooltips.editResStaticObjTooltip) || (this.state.tooltips.editResStaticObjTooltip != pos)) ? false : true) }
 								>
 									<IconButton
 										onClick={ (event) => this.handleEditStaticResourceObj(event, pos) }
@@ -970,7 +1045,7 @@ export default class R3Service extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		if(!r3IsSafeTypedEntity(this.state.serviceResStaticObject, 'array')){
+		if(!r3IsArray(this.state.serviceResStaticObject)){
 			return;
 		}
 
@@ -995,7 +1070,7 @@ export default class R3Service extends React.Component
 					rowsPerPage={ this.props.tableRawCount }
 					page={ this.state.serviceResStaticObjPageNum }
 					rowsPerPageOptions={ [] }
-					onPageChange={ (event) => this.handleResStaticObjPageChange(event) }
+					onPageChange={ (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => this.handleResStaticObjPageChange(event, page) }
 				/>
 				<TextField
 					name={ serviceComponentValues.resStaticObjTextFieldName }
@@ -1059,8 +1134,8 @@ export default class R3Service extends React.Component
 			</Typography>
 		);
 
-		let	radioValue;
-		let	serviceResource;
+		let	radioValue: string;
+		let	serviceResource: React.ReactNode;
 		if(serviceResTypeUrl == this.state.serviceResType){
 			radioValue		= serviceResTypeUrl;
 			serviceResource	= this.renderServiceResourceVerifyUrl();
@@ -1077,7 +1152,7 @@ export default class R3Service extends React.Component
 				<RadioGroup
 					name={ serviceComponentValues.serviceResourceTypeName }
 					value={ radioValue }
-					onChange={ (event) => this.handleResourceTypeChange(event) }
+					onChange={ (event, value) => this.handleResourceTypeChange(event, value) }
 					{ ...theme.r3Service.valueRadioGroup }
 					sx={ this.sxClasses.valueRadioGroup }
 				>
@@ -1139,8 +1214,8 @@ export default class R3Service extends React.Component
 					theme={ theme }
 					r3provider={ this.props.r3provider }
 					status={ this.state.changed }
-					onSave={ (event) => this.handleSave(event) }
-					onCancel={ (event) => this.handleCancel(event) }
+					onSave={ (event: React.MouseEvent<HTMLElement>) => this.handleSave(event) }
+					onCancel={ (event: React.MouseEvent<HTMLElement>) => this.handleCancel(event) }
 				/>
 
 				<R3CreateServiceDialog

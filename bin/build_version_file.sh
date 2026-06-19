@@ -30,13 +30,11 @@ SRCTOP=$(cd "${SCRIPTDIR}/.." || exit 1; pwd)
 # Variables
 #
 PACKAGE_JSON_FILE="${SRCTOP}/package.json"
-K2HR3_VERSION_JS_FILE="${SRCTOP}/src/util/r3version.js"
+K2HR3_VERSION_JS_FILE="${SRCTOP}/src/util/r3version.ts"
 
 #==========================================================
 # Main
 #==========================================================
-
-
 if [ ! -f "${PACKAGE_JSON_FILE}" ]; then
 	echo "[ERROR] Not found ${PACKAGE_JSON_FILE}"
 	exit 1

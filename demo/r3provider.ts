@@ -19,28 +19,46 @@
  *
  */
 
-import crypto			from 'crypto';
+import crypto								from 'crypto';
+import path									from 'path';
+import R3Context							from '../util/r3context';
+import { r3GetTextRes, localTenantPrefix }	from '../util/r3define';
+import { checkServiceResourceValue }		from '../util/r3verifyutil';
+import { resourceType, roleType, policyType, serviceType, ItemType, isItemType, ErrorCallback, DataCallback, FetchError, PathDetailInfo, PolicyActionType, PolicyData, PolicyEffectType, ProgressCallback, ResourceData, RoleData, RoleHostList, RoleTokenPrimitiveInfo, RoleTokenListResponseInfo, RoleTokenInfo, ServiceData, StaticResourceObject, ServiceResourceObject, isServiceResourceObjectArray, StringValObj, TenantData, TokenCallback, TreeListItem, actionValueRead, actionValueWrite, effectValueAllow, CRCObject, isCRCObject, isPolicyActionType, isPolicyActionTypeArray, isPolicyData, isPolicyEffectType, isResourceData, isRoleData, isRoleHostList, isTenantData, isTreeListItem, isRoleTokenListResponseInfo, valTypeAllObject }	from '../util/r3types';
+import { r3IsString, r3IsFunction, r3IsObject, r3IsArray, r3IsBoolean, r3IsNumber, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsEmptyString, r3CompareCaseString, r3DeepClone, r3GetSafeString, r3IsStringArray } from '../util/r3util';
 
-import R3Context		from '../util/r3context';
-import { r3GetTextRes, localTenantPrefix }					from '../util/r3define';
-import { resourceType, roleType, policyType, serviceType }	from '../util/r3types';
-import { checkServiceResourceValue }						from '../util/r3verifyutil';
-import { r3IsEmptyEntity, r3IsEmptyEntityObject, r3IsEmptyStringObject, r3IsSafeTypedEntity, r3IsEmptyString, r3CompareCaseString, r3DeepClone } from '../util/r3util';
+//
+// Demo data types
+//
+type DemoTreeNode = valTypeAllObject & {
+	name:			string;
+	path:			string;
+	children:		DemoTreeNode[];
+};
+
+type DemoRoleTokenListInfo = Required<RoleTokenListResponseInfo>;
+
+type DemoRoleTokenEntry = {
+	path:			string;
+	roletokens:		Record<string, DemoRoleTokenListInfo | {}>;
+};
+
+type DemoRoleTokenList = Record<string, DemoRoleTokenEntry[]>;
 
 //
 // Internal demo data
 //
-const DemoInitialInternalData = {
+const DemoInitialInternalData: Record<string, DemoTreeNode[]> = {
 	// Tenant = No service
 	'foo-tenant': [
 		{
 			name:		'SERVICE',
-			path:		'service',
+			path:		serviceType,
 			children:	[]
 		},
 		{
 			name:		'ROLE',
-			path:		'role',
+			path:		roleType,
 			children: [
 				{
 					name:		'foo-tenant-role',
@@ -83,7 +101,7 @@ const DemoInitialInternalData = {
 		},
 		{
 			name:		'RESOURCE',
-			path:		'resource',
+			path:		resourceType,
 			children: [
 				{
 					name:		'foo-tenant-resource',
@@ -136,19 +154,18 @@ const DemoInitialInternalData = {
 		},
 		{
 			name:		'POLICY',
-			path:		'policy',
+			path:		policyType,
 			children: [
 				{
 					name:		'foo-tenant-policy',
 					path:		'foo-tenant-policy',
 					children:	[],
 					// policy data
-					effect:		'allow',
+					effect:		effectValueAllow,
 					action: [
-						'yrn:yahoo::::action:read',
-						'yrn:yahoo::::action:write'
+						actionValueRead,
+						actionValueWrite
 					],
-					condition:	[],
 					resource: [
 						'yrn:yahoo:::foo-tenant:resource:foo-tenant-resource'
 					],
@@ -162,7 +179,7 @@ const DemoInitialInternalData = {
 	'service-owner': [
 		{
 			name:		'SERVICE',
-			path:		'service',
+			path:		serviceType,
 			children: [
 				{
 					name:			'demo-service',
@@ -181,17 +198,17 @@ const DemoInitialInternalData = {
 		},
 		{
 			name:		'ROLE',
-			path:		'role',
+			path:		roleType,
 			children:	[]
 		},
 		{
 			name:		'RESOURCE',
-			path:		'resource',
+			path:		resourceType,
 			children:	[]
 		},
 		{
 			name:		'POLICY',
-			path:		'policy',
+			path:		policyType,
 			children:	[]
 		},
 	],
@@ -200,7 +217,7 @@ const DemoInitialInternalData = {
 	'service-user': [
 		{
 			name:		'SERVICE',
-			path:		'service',
+			path:		serviceType,
 			children: [
 				{
 					name:			'demo-service',
@@ -210,7 +227,7 @@ const DemoInitialInternalData = {
 					children: [
 						{
 							name:	'ROLE',
-							path:	'role',
+							path:	roleType,
 							children: [
 								{
 									name:		'acr-role',
@@ -230,7 +247,7 @@ const DemoInitialInternalData = {
 						},
 						{
 							name:	'RESOURCE',
-							path:	'resource',
+							path:	resourceType,
 							children: [
 								{
 									name:		'demo-service-resource',
@@ -249,18 +266,17 @@ const DemoInitialInternalData = {
 						},
 						{
 							name:	'POLICY',
-							path:	'policy',
+							path:	policyType,
 							children: [
 								{
 									name:		'acr-policy',
 									path:		'acr-policy',
 									children:	[],
 									// policy data in service
-									effect:		'allow',
+									effect:		effectValueAllow,
 									action: [
-										'yrn:yahoo::::action:read'
+										actionValueRead
 									],
-									condition:	[],
 									resource: [
 										'yrn:yahoo:demo-service::service-user:resource:demo-service-resource'
 									],
@@ -274,7 +290,7 @@ const DemoInitialInternalData = {
 		},
 		{
 			name:		'ROLE',
-			path:		'role',
+			path:		roleType,
 			children: [
 				{
 					name:		'service-user-role',
@@ -292,7 +308,7 @@ const DemoInitialInternalData = {
 		},
 		{
 			name:		'RESOURCE',
-			path:		'resource',
+			path:		resourceType,
 			children: [
 				{
 					name:		'service-user-resource',
@@ -309,18 +325,17 @@ const DemoInitialInternalData = {
 		},
 		{
 			name:		'POLICY',
-			path:		'policy',
+			path:		policyType,
 			children: [
 				{
 					name:		'service-user-policy',
 					path:		'service-user-policy',
 					children:	[],
 					// policy data in service
-					effect:		'allow',
+					effect:		effectValueAllow,
 					action: [
-						'yrn:yahoo::::action:read'
+						actionValueRead
 					],
-					condition:	[],
 					resource:	[],
 					alias:		[]
 				}
@@ -331,22 +346,22 @@ const DemoInitialInternalData = {
 	'local@tenant': [
 		{
 			name:		'SERVICE',
-			path:		'service',
+			path:		serviceType,
 			children:	[]
 		},
 		{
 			name:		'ROLE',
-			path:		'role',
+			path:		roleType,
 			children:	[]
 		},
 		{
 			name:		'RESOURCE',
-			path:		'resource',
+			path:		resourceType,
 			children:	[]
 		},
 		{
 			name:		'POLICY',
-			path:		'policy',
+			path:		policyType,
 			children:	[]
 		},
 	]
@@ -355,25 +370,25 @@ const DemoInitialInternalData = {
 //
 // New local tenant initial data
 //
-const DemoInitialLocalTenantData = [
+const DemoInitialLocalTenantData: DemoTreeNode[] = [
 	{
 		name:		'SERVICE',
-		path:		'service',
+		path:		serviceType,
 		children:	[]
 	},
 	{
 		name:		'ROLE',
-		path:		'role',
+		path:		roleType,
 		children:	[]
 	},
 	{
 		name:		'RESOURCE',
-		path:		'resource',
+		path:		resourceType,
 		children:	[]
 	},
 	{
 		name:		'POLICY',
-		path:		'policy',
+		path:		policyType,
 		children:	[]
 	}
 ];
@@ -381,7 +396,7 @@ const DemoInitialLocalTenantData = [
 //
 // Internal demo tenant data
 //
-const DemoInitialTenantData = [
+const DemoInitialTenantData: TenantData[] = [
 	{
 		// Tenant = No service
 		'name':			'foo-tenant',
@@ -413,7 +428,7 @@ const DemoInitialTenantData = [
 	}
 ];
 
-const DemoInitialRoleTokens = {
+const DemoInitialRoleTokens: DemoRoleTokenList = {
 	// Tenant = No service
 	'foo-tenant': [
 		{
@@ -482,7 +497,15 @@ let	isStartup = true;
 //
 export default class R3Provider
 {
-	constructor(cbProgressControl, signin, username, unscopedtoken)
+	demoDummyDatas:		StringValObj;
+	demoData:			Record<string, DemoTreeNode[]>;
+	r3Context:			R3Context;
+	tenantList:			TenantData[];
+	cbProgressControl:	((show: boolean) => void) | null;
+	r3TextRes:			StringValObj;
+	roleTokens:			Record<string, DemoRoleTokenEntry[]>;
+
+	constructor(cbProgressControl: ProgressCallback | null, signin?: boolean, username?: string, unscopedtoken?: string)
 	{
 		this.demoDummyDatas = {
 			username:			'demo',
@@ -491,11 +514,11 @@ export default class R3Provider
 			registerpath:		'demo-path'
 		};
 
-		if(isStartup){
+		if(!r3IsBoolean(signin)){
+			// Initialize only when signin is undefined.
 			signin			= true;
 			username		= this.demoDummyDatas.username;
 			unscopedtoken	= this.demoDummyDatas.unscopedtoken;
-			isStartup		= false;
 		}
 
 		this.r3Context			= new R3Context(signin, username, unscopedtoken);
@@ -512,24 +535,24 @@ export default class R3Provider
 		this.roleTokens			= r3DeepClone(DemoInitialRoleTokens);
 	}
 
-	getR3Context()
+	getR3Context(): R3Context
 	{
 		return this.r3Context;
 	}
 
-	getR3TextRes()
+	getR3TextRes(): StringValObj
 	{
 		return this.r3TextRes;
 	}
 
-	startProgress()
+	startProgress(): void
 	{
 		if(null !== this.cbProgressControl){
 			this.cbProgressControl(true);
 		}
 	}
 
-	stopProgress()
+	stopProgress(): void
 	{
 		if(null !== this.cbProgressControl){
 			this.cbProgressControl(false);
@@ -542,9 +565,9 @@ export default class R3Provider
 	//
 	// raw get Unscoped User token
 	//
-	getUnscopedUserToken(username, passphrase, callback)							// eslint-disable-line no-unused-vars
+	getUnscopedUserToken(username: string, passphrase: string | null, callback: TokenCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -573,9 +596,9 @@ export default class R3Provider
 	//
 	// Get tenant list
 	//
-	getTenantList(force, useLocalTenant, callback)
+	getTenantList(force: boolean, useLocalTenant: boolean, callback: DataCallback<TenantData[]>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -611,16 +634,16 @@ export default class R3Provider
 	// description	: description for new local tenant(allowed null/emptyv1/tenant)
 	// users		: initial user name array for new local tenant
 	//
-	createLocalTenant(name, display, description, users, callback)
+	createLocalTenant(name: string, display: string | null, description: string | null, users: string[], callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
 
 		let	_callback	= callback;
 		let	_error;
-		if(r3IsEmptyString(name, true) || !r3IsSafeTypedEntity(users, 'array') || 0 === users.length){
+		if(r3IsEmptyString(name, true) || !r3IsArray(users) || 0 === users.length){
 			_error = new Error('name(' + JSON.stringify(name) + ') or display(' + JSON.stringify(display) + ') or description(' + JSON.stringify(description) + ') or users(' + JSON.stringify(users) + ') parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
@@ -652,7 +675,6 @@ export default class R3Provider
 			return;
 		}
 
-
 		//
 		// Add local tenant
 		//
@@ -683,16 +705,16 @@ export default class R3Provider
 	// description	: description for local tenant(allowed null/emptyv1/tenant)
 	// users		: user name array for local tenant
 	//
-	updateLocalTenant(name, id, display, description, users, callback)
+	updateLocalTenant(name: string, id: string, display: string | null, description: string | null, users: string[], callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
 
 		let	_callback	= callback;
 		let	_error;
-		if(r3IsEmptyString(name, true) || r3IsEmptyString(id, true) || !r3IsSafeTypedEntity(users, 'array') || 0 === users.length){
+		if(r3IsEmptyString(name, true) || r3IsEmptyString(id, true) || !r3IsArray(users) || 0 === users.length){
 			_error = new Error('name(' + JSON.stringify(name) + ') or id(' + JSON.stringify(id) + ') or display(' + JSON.stringify(display) + ') or description(' + JSON.stringify(description) + ') or users(' + JSON.stringify(users) + ') parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
@@ -743,9 +765,9 @@ export default class R3Provider
 	// name			: local tenant name
 	// id			: local tenant id
 	//
-	deleteLocalTenant(name, id, callback)
+	deleteLocalTenant(name: string, id: string, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
@@ -804,15 +826,15 @@ export default class R3Provider
 	//
 	// Common raw method : Get tree in tenant
 	//
-	rawGetChildTreeList(childArray, path, expand, callback)
+	rawGetChildTreeList(childArray: DemoTreeNode[], path: string | null, expand: boolean, callback: DataCallback<DemoTreeNode[]>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	paths		= r3IsEmptyString(path) ? [] : path.split('/');
-		let	_callback	= callback;
-		let	_expand		= expand;
+		let	paths: string[]	= r3IsEmptyString(path) ? [] : path.split('/');
+		let	_callback		= callback;
+		let	_expand			= expand;
 		if(0 === paths.length){
 			let	_childArray = r3DeepClone(childArray);
 			_childArray.forEach((child) => {
@@ -836,9 +858,6 @@ export default class R3Provider
 				}
 				if(!r3IsEmptyEntityObject(child, 'action')){
 					delete child.action;
-				}
-				if(!r3IsEmptyEntityObject(child, 'condition')){
-					delete child.condition;
 				}
 				if(!r3IsEmptyEntityObject(child, 'resource')){
 					delete child.resource;
@@ -879,17 +898,20 @@ export default class R3Provider
 		}
 	}
 
-	rawGetTreeList(tenant, service, type, path, expand, callback)
+	rawGetTreeList(tenant: TenantData, service: string | null, type: ItemType, path: string | null, expand: boolean | null, callback: DataCallback<TreeListItem[]>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	error;
-		if(	r3IsEmptyStringObject(tenant, 'name') ||
-			(resourceType !== type && roleType !== type && policyType !== type && serviceType !== type) )
-		{
-			error = new Error('type(' + JSON.stringify(type) + ') or tenant(' + JSON.stringify(tenant) + ') parameters are wrong.');
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name)){
+			const	error = new Error('type(' + JSON.stringify(type) + ') or tenant(' + JSON.stringify(tenant) + ') parameters are wrong.');
+			console.error(error.message);
+			callback(error, null);
+			return;
+		}
+		if(!isItemType(type)){
+			const	error = new Error('type(' + JSON.stringify(type) + ') or tenant(' + JSON.stringify(tenant) + ') parameters are wrong.');
 			console.error(error.message);
 			callback(error, null);
 			return;
@@ -897,7 +919,7 @@ export default class R3Provider
 
 		// check tenant name in demo data
 		if(r3IsEmptyEntityObject(this.demoData, tenant.name)){
-			error = new Error('Not found tenant: ' + tenant.display + '(' + tenant.name + ')');
+			const	error = new Error('Not found tenant: ' + tenant.display + '(' + tenant.name + ')');
 			console.error(error.message);
 			callback(error, null);
 			return;
@@ -911,11 +933,11 @@ export default class R3Provider
 		let	_callback		= callback;
 		let	_found			= false;
 		if(null !== _service){
-			demoTenantData.forEach((element) => {
+			demoTenantData.forEach((element: DemoTreeNode) => {
 				if(element.path === serviceType){
-					element.children.forEach((serviceChild) => {
+					element.children.forEach((serviceChild: DemoTreeNode) => {
 						if(serviceChild.name === _service){
-							serviceChild.children.forEach((serviceElement) => {
+							serviceChild.children.forEach((serviceElement: DemoTreeNode) => {
 								if(serviceElement.path === _type){
 									_found = true;
 									this.rawGetChildTreeList(serviceElement.children, _path, _expand, _callback);
@@ -941,26 +963,26 @@ export default class R3Provider
 	//
 	// Get tree in tenant
 	//
-	getRoleTreeList(tenant, service, path, expand, callback)
+	getRoleTreeList(tenant: TenantData, service: string | null, path: string | null, expand: boolean | null, callback: DataCallback<TreeListItem[]>): void
 	{
 		this.rawGetTreeList(tenant, service, roleType, path, expand, callback);
 	}
 
-	getResourceTreeList(tenant, service, path, expand, callback)
+	getResourceTreeList(tenant: TenantData, service: string | null, path: string | null, expand: boolean | null, callback: DataCallback<TreeListItem[]>): void
 	{
 		this.rawGetTreeList(tenant, service, resourceType, path, expand, callback);
 	}
 
-	getPolicyTreeList(tenant, service, path, expand, callback)
+	getPolicyTreeList(tenant: TenantData, service: string | null, path: string | null, expand: boolean | null, callback: DataCallback<TreeListItem[]>): void
 	{
 		this.rawGetTreeList(tenant, service, policyType, path, expand, callback);
 	}
 
-	getServiceTreeList(tenant, expand, callback)
+	getServiceTreeList(tenant: TenantData, expand: boolean, callback: DataCallback<TreeListItem[]>): void
 	{
-		var	_tenant		= tenant;
-		var	_expand		= expand;
-		var	_callback	= callback;
+		const _tenant	= tenant;
+		const _expand	= expand;
+		const _callback	= callback;
 
 		this.startProgress();																// start progressing
 
@@ -976,7 +998,7 @@ export default class R3Provider
 				_callback(error, null);
 				return;
 			}
-			if(!r3IsSafeTypedEntity(serviceChildren, 'array')){
+			if(!r3IsArray(serviceChildren) || !serviceChildren.every((item: unknown) => isTreeListItem(item))){
 				console.info('SERVICE Tree list is something wrong.');
 
 				this.stopProgress();														// stop progressing
@@ -984,34 +1006,25 @@ export default class R3Provider
 				return;
 			}
 
-
 			//
 			// Check each service for distributed
 			//
 			if(0 < serviceChildren.length){
-				var	_tenant2		= _tenant;
-				var	_expand2		= _expand;
-				var	_callback2		= _callback;
-				var	_serviceChildren= serviceChildren;
-
-				for(var cnt = 0; cnt < _serviceChildren.length; ++cnt){
-					((pos) =>
+				const _serviceChildren= serviceChildren;
+				for(let cnt = 0; cnt < _serviceChildren.length; ++cnt){
+					((pos: number) =>
 					{
 						if(r3IsEmptyStringObject(_serviceChildren[pos], 'name')){
 							return;
 						}
-						var	_pos				= pos;
-						var	_callback3			= _callback2;
-						var	_serviceChildren2	= _serviceChildren;
-
-						this.rawGetTreeListInServiceTenant(_tenant2, _serviceChildren[pos].name, _expand2, (children, disributed) =>
+						this.rawGetTreeListInServiceTenant(_tenant, _serviceChildren[pos].name, _expand, (children, distributed) =>
 						{
-							_serviceChildren2[_pos].children	= children;
-							_serviceChildren2[_pos].distributed	= disributed;
+							_serviceChildren[pos].children		= children;
+							_serviceChildren[pos].distributed	= distributed;
 
-							if((_pos + 1) === _serviceChildren2.length){
+							if((pos + 1) === _serviceChildren.length){
 								this.stopProgress();										// stop progressing
-								_callback3(null, _serviceChildren2);
+								_callback(null, _serviceChildren);
 							}
 						});
 					})(cnt);
@@ -1024,16 +1037,16 @@ export default class R3Provider
 		});
 	}
 
-	rawGetTreeListInServiceTenant(tenant, servicename, expand, callback)
+	rawGetTreeListInServiceTenant(tenant: TenantData, servicename: string, expand: boolean, callback: (children: TreeListItem[], distributed: boolean) => void): void
 	{
-		var	_tenant		= tenant;
-		var	_servicename= servicename;
-		var	_expand		= expand;
-		var	_children	= [];
-		var	_callback	= callback;
-		var	_distributed= false;
+		const	_tenant						= tenant;
+		const	_servicename				= servicename;
+		const	_expand						= expand;
+		const	_callback					= callback;
+		let		_children: TreeListItem[]	= [];
+		let		_distributed				= false;
 
-		if(r3IsEmptyEntity(_tenant) || r3IsEmptyString(_servicename)){
+		if(!isTenantData(_tenant) || r3IsEmptyString(_tenant.name) || r3IsEmptyString(_servicename)){
 			_callback(_children, _distributed);
 			return;
 		}
@@ -1052,7 +1065,7 @@ export default class R3Provider
 			//
 			// Set distributed flag for service
 			//
-			if(null !== error || !r3IsSafeTypedEntity(roleChildren, 'array') || 0 === roleChildren.length){
+			if(null !== error || !r3IsArray(roleChildren) || 0 === roleChildren.length){
 				_distributed = false;
 			}else{
 				// Role under service+tenant is existed(distributed).
@@ -1077,8 +1090,8 @@ export default class R3Provider
 			//
 			this.getResourceTreeList(_tenant, _servicename, null, _expand, (error, resourceChildren) =>
 			{
-				if(null !== error || r3IsEmptyEntity(resourceChildren)){
-					console.info('Could not get RESOURCE Tree list in SERVICE+TENANT by ' + (null !== error ? error.message : ''));
+				if(null !== error || !r3IsArray(resourceChildren) || 0 === resourceChildren.length){
+					console.info('Could not get RESOURCE Tree list in SERVICE+TENANT by ' + r3GetSafeString(error?.message));
 				}else{
 					this.rawSetTreeListChildren(_children, resourceType, resourceChildren);
 				}
@@ -1088,12 +1101,13 @@ export default class R3Provider
 				//
 				this.getPolicyTreeList(_tenant, _servicename, null, _expand, (error, policyChildren) =>
 				{
-					if(null !== error || r3IsEmptyEntity(policyChildren)){
-						console.info('Could not get POLICY Tree list in SERVICE+TENANT by ' + (null !== error ? error.message : ''));
+					if(null !== error || !r3IsArray(policyChildren) || 0 === policyChildren.length){
+						console.info('Could not get POLICY Tree list in SERVICE+TENANT by ' + r3GetSafeString(error?.message));
 					}else{
 						this.rawSetTreeListChildren(_children, policyType, policyChildren);
 					}
 					this.stopProgress();														// stop progressing
+
 					_callback(_children, _distributed);
 				});
 			});
@@ -1103,13 +1117,13 @@ export default class R3Provider
 	//
 	// Get All Tree List for tenant
 	//
-	getAllTreeList(tenant, callback)
+	getAllTreeList(tenant: TenantData, callback: DataCallback<TreeListItem[]>): void
 	{
-		let	_tenant		= tenant;
-		let	_callback	= callback;
-		let	_all		= this.getEmptyTreeList(true);
+		const _tenant	= tenant;
+		const _callback	= callback;
+		const _all		= this.getEmptyTreeList(true);
 
-		if(r3IsEmptyStringObject(tenant, 'name')){
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name)){
 			_callback(null, _all);
 			return;
 		}
@@ -1155,9 +1169,9 @@ export default class R3Provider
 		});
 	}
 
-	rawSetTreeListChildren(allTreeList, path, children)
+	rawSetTreeListChildren(allTreeList: TreeListItem[], path: string, children: TreeListItem[]): boolean
 	{
-		if(!r3IsSafeTypedEntity(allTreeList, 'array')){
+		if(!r3IsArray(allTreeList)){
 			return false;
 		}
 		for(let cnt = 0; cnt < allTreeList.length; ++cnt){
@@ -1169,82 +1183,80 @@ export default class R3Provider
 		return false;
 	}
 
-	getEmptyTreeList(is_service)
+	getEmptyTreeList(is_service: boolean): TreeListItem[]
 	{
-		let	treelist = [];
+		const treeList: TreeListItem[] = [];
 
-		if(r3IsSafeTypedEntity(is_service, 'boolean') && is_service){
-			treelist.push({
+		if(r3IsBoolean(is_service) && is_service){
+			treeList.push({
 				name:		serviceType.toUpperCase(),
 				path:		serviceType,
 				children:	[]
 			});
 		}
 
-		treelist.push({
+		treeList.push({
 			name:		roleType.toUpperCase(),
 			path:		roleType,
 			children:	[]
 		});
 
-		treelist.push({
+		treeList.push({
 			name:		resourceType.toUpperCase(),
 			path:		resourceType,
 			children:	[]
 		});
 
-		treelist.push({
+		treeList.push({
 			name:		policyType.toUpperCase(),
 			path:		policyType,
 			children:	[]
 		});
-		return treelist;
+		return treeList;
 	}
 
 	//
 	// Select pattern(see: r3container.jsx)
 	//
-	selectTreeList(treeList, service, type, path)
+	selectTreeList(treeList: TreeListItem[], service: string | null, type: ItemType, path: string | null): boolean
 	{
-		if(!r3IsSafeTypedEntity(treeList, 'array') || 0 === treeList.length){
+		if(!r3IsArray(treeList) || 0 === treeList.length){
 			return false;
 		}
-		if(r3IsEmptyString(type, true)){
+		if(!isItemType(type)){
 			return false;
 		}
 
-		let	cnt;
-		let	cnt2;
 		if(r3CompareCaseString(serviceType, type)){
 			//
 			// This case is under SERVICE
 			//
-			if(!r3IsEmptyString(path, true)){
+			if(r3IsString(path) && !r3IsEmptyString(path, true)){
 				console.error('Wrong parameter: type is SERVICE but specified path(' + path + ')');
 				return false;
 			}
 
 			// search 'SERVICE' top
-			for(cnt = 0; cnt < treeList.length; ++cnt){
-				if(r3IsEmptyStringObject(treeList[cnt], 'path') || !r3CompareCaseString(serviceType, treeList[cnt].path)){
+			for(let cnt = 0; cnt < treeList.length; ++cnt){
+				if(!isTreeListItem(treeList[cnt]) || r3IsEmptyString(treeList[cnt].path) || !r3CompareCaseString(serviceType, treeList[cnt].path)){
 					continue;									// not target tree
 				}
-				// found 'path' === 'service'
+				// found 'path' == 'service'
 
 				// case : select "SERVICE" top
-				if(r3IsEmptyString(service, true)){
-					treeList[cnt].selected	= true;
+				if(!r3IsString(service) || r3IsEmptyString(service, true)){
+					treeList[cnt].selected = true;
 					return true;								// finish
 				}
 
 				// search 'service name' top in children
-				if(!r3IsSafeTypedEntity(treeList[cnt].children, 'array') || 0 === treeList[cnt].children.length){
+				if(!r3IsArray(treeList[cnt].children) || 0 === treeList[cnt].children.length){
 					continue;									// SERVICE does not have children
 				}
-				for(cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
-					if(!r3IsEmptyStringObject(treeList[cnt].children[cnt2], 'path') && r3CompareCaseString(service, treeList[cnt].children[cnt2].path)){
-						// found 'path' === 'service name'
-						treeList[cnt].children[cnt2].selected	= true;
+				for(let cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
+					if(isTreeListItem(treeList[cnt].children[cnt2]) && !r3IsEmptyString(treeList[cnt].children[cnt2].path) && r3CompareCaseString(service, treeList[cnt].children[cnt2].path)){
+						// found 'path' == 'service name'
+						treeList[cnt].children[cnt2].selected = true;
 						return true;							// finish
 					}
 				}
@@ -1254,29 +1266,29 @@ export default class R3Provider
 			//
 			// Case : selected item under ROLE/POLICY/RESOURCE
 			//
-			let	fullPath = type;								// target path is 'ROLE or POLICY or RESOURCE' or 'ROLE or POLICY or RESOURCE'/path...
-			if(!r3IsEmptyString(path, true)){
+			let	fullPath: string = type;						// target path is 'ROLE or POLICY or RESOURCE' or 'ROLE or POLICY or RESOURCE'/path...
+			if(r3IsString(path) && !r3IsEmptyString(path, true)){
 				fullPath += '/' + path.trim();
 			}
 
-			if(!r3IsEmptyString(service, true)){
+			if(r3IsString(service) && !r3IsEmptyString(service, true)){
 				//
 				// The case is under SERVICE
 				//
 				// search 'SERVICE' top
-				for(cnt = 0; cnt < treeList.length; ++cnt){
-					if(r3IsEmptyStringObject(treeList[cnt], 'path') || !r3CompareCaseString(serviceType, treeList[cnt].path)){
+				for(let cnt = 0; cnt < treeList.length; ++cnt){
+					if(!isTreeListItem(treeList[cnt]) || r3IsEmptyString(treeList[cnt].path) || !r3CompareCaseString(serviceType, treeList[cnt].path)){
 						continue;								// not target tree
 					}
-					// found 'path' === 'service'
+					// found 'path' == 'service'
 
 					// search 'service name' top in children
-					if(!r3IsSafeTypedEntity(treeList[cnt].children, 'array') || 0 === treeList[cnt].children.length){
+					if(!r3IsArray(treeList[cnt].children) || 0 === treeList[cnt].children.length){
 						continue;								// SERVICE does not have children
 					}
-					for(cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
-						if(!r3IsEmptyStringObject(treeList[cnt].children[cnt2], 'path') && r3CompareCaseString(service, treeList[cnt].children[cnt2].path)){
-							// found 'path' === 'service name'
+					for(let cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
+						if(isTreeListItem(treeList[cnt].children[cnt2]) && r3IsEmptyString(treeList[cnt].children[cnt2].path) && r3CompareCaseString(service, treeList[cnt].children[cnt2].path)){
+							// found 'path' == 'service name'
 							return this.selectSubTreeList(treeList[cnt].children[cnt2].children, fullPath);
 						}
 					}
@@ -1293,36 +1305,36 @@ export default class R3Provider
 		return false;											// not found
 	}
 
-	selectSubTreeList(subTreeList, path)
+	selectSubTreeList(subTreeList: TreeListItem[], path: string): boolean
 	{
-		if(!r3IsSafeTypedEntity(subTreeList, 'array') || 0 === subTreeList.length){
+		if(!r3IsArray(subTreeList) || 0 === subTreeList.length){
 			return false;
 		}
 		if(r3IsEmptyString(path, true)){
 			return false;
 		}
 
-		let	pos			= path.indexOf('/');
-		let	curPath		= path;
-		let	childPath	= null;
+		const pos						= path.indexOf('/');
+		let	curPath						= path;
+		let	childPath: string | null	= null;
 		if(0 === pos){
 			return false;
 		}else if(0 < pos){
-			curPath		= path.substr(0, pos);
-			childPath	= path.substr(pos + 1);
+			curPath		= path.substring(0, pos);
+			childPath	= path.substring(pos + 1);
 		}
 
 		// search current path top
 		for(let cnt = 0; cnt < subTreeList.length; ++cnt){
-			if(!r3IsEmptyStringObject(subTreeList[cnt], 'name') && r3CompareCaseString(curPath, subTreeList[cnt].name)){
-				// found 'name' === current path
-				if(r3IsEmptyString(childPath, true)){
-					subTreeList[cnt].selected	= true;
+			if(isTreeListItem(subTreeList[cnt]) && !r3IsEmptyString(subTreeList[cnt].name) && r3CompareCaseString(curPath, subTreeList[cnt].name)){
+				// found 'name' == current path
+				if(!r3IsString(childPath) || r3IsEmptyString(childPath, true)){
+					subTreeList[cnt].selected = true;
 					return true;									// finish
 				}
 
 				// search child path under current path in children
-				if(!r3IsSafeTypedEntity(subTreeList[cnt].children, 'array') || 0 === subTreeList[cnt].children.length){
+				if(!r3IsArray(subTreeList[cnt].children) || 0 === subTreeList[cnt].children.length){
 					continue;										// current path does not have children
 				}
 				// reentrant
@@ -1335,26 +1347,26 @@ export default class R3Provider
 	//
 	// Check service owner
 	//
-	checkServiceOwnerInTreeList(treeList, service)
+	checkServiceOwnerInTreeList(treeList: TreeListItem[], service: string): boolean
 	{
-		if(!r3IsSafeTypedEntity(treeList, 'array') || 0 === treeList.length || r3IsEmptyString(service, true)){
+		if(!r3IsArray(treeList) || 0 === treeList.length || r3IsEmptyString(service, true)){
 			return false;
 		}
-		let	_service = service.trim();
+		const _service = service.trim();
 
 		// search 'SERVICE' top
 		for(let cnt = 0; cnt < treeList.length; ++cnt){
-			if(r3IsEmptyStringObject(treeList[cnt], 'path') || !r3CompareCaseString(serviceType, treeList[cnt].path)){
+			if(!isTreeListItem(treeList[cnt]) || r3IsEmptyString(treeList[cnt].path) || !r3CompareCaseString(serviceType, treeList[cnt].path)){
 				continue;									// not target tree
 			}
 			// search 'service name' top in children
-			if(!r3IsSafeTypedEntity(treeList[cnt].children, 'array') || 0 === treeList[cnt].children.length){
+			if(!r3IsArray(treeList[cnt].children) || 0 === treeList[cnt].children.length){
 				continue;									// SERVICE does not have children
 			}
 			for(let cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
-				if(!r3IsEmptyStringObject(treeList[cnt].children[cnt2], 'path') && r3CompareCaseString(_service, treeList[cnt].children[cnt2].path)){
-					// found 'path' === 'service name'
-					if(r3IsSafeTypedEntity(treeList[cnt].children[cnt2].owner, 'boolean') && true === treeList[cnt].children[cnt2].owner){
+				if(isTreeListItem(treeList[cnt].children[cnt2]) && !r3IsEmptyString(treeList[cnt].children[cnt2].path) && r3CompareCaseString(_service, treeList[cnt].children[cnt2].path)){
+					// found 'path' == 'service name'
+					if(r3IsBoolean(treeList[cnt].children[cnt2].owner) && true === treeList[cnt].children[cnt2].owner){
 						// service owner is tenant
 						return true;
 					}
@@ -1367,26 +1379,26 @@ export default class R3Provider
 	//
 	// Check service tenant type
 	//
-	checkServiceTenantInTreeList(treeList, service)
+	checkServiceTenantInTreeList(treeList: TreeListItem[], service: string): boolean
 	{
-		if(!r3IsSafeTypedEntity(treeList, 'array') || 0 === treeList.length || r3IsEmptyString(service, true)){
+		if(!r3IsArray(treeList) || 0 === treeList.length || r3IsEmptyString(service, true)){
 			return false;
 		}
-		let	_service = service.trim();
+		const _service = service.trim();
 
 		// search 'SERVICE' top
 		for(let cnt = 0; cnt < treeList.length; ++cnt){
-			if(r3IsEmptyStringObject(treeList[cnt], 'path') || !r3CompareCaseString(serviceType, treeList[cnt].path)){
+			if(!isTreeListItem(treeList[cnt]) || r3IsEmptyString(treeList[cnt].path) || !r3CompareCaseString(serviceType, treeList[cnt].path)){
 				continue;									// not target tree
 			}
 			// search 'service name' top in children
-			if(!r3IsSafeTypedEntity(treeList[cnt].children, 'array') || 0 === treeList[cnt].children.length){
+			if(!r3IsArray(treeList[cnt].children) || 0 === treeList[cnt].children.length){
 				continue;									// SERVICE does not have children
 			}
 			for(let cnt2 = 0; cnt2 < treeList[cnt].children.length; ++cnt2){
-				if(!r3IsEmptyStringObject(treeList[cnt].children[cnt2], 'path') && r3CompareCaseString(_service, treeList[cnt].children[cnt2].path)){
-					// found 'path' === 'service name'
-					if(r3IsSafeTypedEntity(treeList[cnt].children[cnt2].children, 'array') && 0 < treeList[cnt].children[cnt2].children.length){
+				if(isTreeListItem(treeList[cnt].children[cnt2]) && !r3IsEmptyString(treeList[cnt].children[cnt2].path) && r3CompareCaseString(_service, treeList[cnt].children[cnt2].path)){
+					// found 'path' == 'service name'
+					if(r3IsArray(treeList[cnt].children[cnt2].children) && 0 < treeList[cnt].children[cnt2].children.length){
 						// service has children, thus service is mapped service tenant.
 						return true;
 					}
@@ -1399,43 +1411,43 @@ export default class R3Provider
 	//--------------------------------------------------
 	// Get Detail information for path
 	//--------------------------------------------------
-	getPathDetailInfo(tenant, service, isServiceOwner, hasServiceTenant, type, path)
+	getPathDetailInfo(tenant: TenantData | null, service: string | null, isServiceOwner: boolean, hasServiceTenant: boolean, type: ItemType | null, path: string | null): PathDetailInfo
 	{
-		let	_tenant				= null;
-		let	_service			= null;
-		let	_serviceOwner		= false;
-		let	_hasServiceTenant	= false;
-		let	_type				= null;
-		let	_name				= null;
-		let	_fullpath			= null;
-		let	_currentpath		= null;
-		let	_hasParent			= false;
-		let	_canCreatePath		= false;
-		let	_canCreateService	= false;
+		let	_tenant: TenantData | null	= null;
+		let	_service: string | null			= null;
+		let	_serviceOwner					= false;
+		let	_hasServiceTenant				= false;
+		let	_type: ItemType | null			= null;
+		let	_name: string | null			= null;
+		let	_fullpath: string | null		= null;
+		let	_currentpath: string | null		= null;
+		let	_hasParent						= false;
+		let	_canCreatePath					= false;
+		let	_canCreateService				= false;
 
-		if(!r3IsEmptyStringObject(tenant, 'name')){
-			_tenant		= tenant;
+		if(isTenantData(tenant) && !r3IsEmptyString(tenant.name)){
+			_tenant = tenant;
 
-			if(serviceType === type || !r3IsEmptyString(service)){
+			if((isItemType(type) && serviceType === type) || (r3IsString(service) && !r3IsEmptyString(service))){
 				// [SELECTED TENANT] > SERVICE
-				_type	= type;
+				_type = type;
 
 				// under service
-				if(r3IsEmptyString(service)){
+				if(!r3IsString(service) || r3IsEmptyString(service)){
 					// [SELECTED TENANT] > SERVICE
 					_fullpath			= 'yrn:yahoo::::service';
 					_canCreateService	= true;
 
-				}else if(resourceType === type || roleType === type || policyType === type){
+				}else if(isItemType(type) && (resourceType === type || roleType === type || policyType === type)){
 					// [SELECTED TENANT] > SERVICE > service > ROLE/POLICY/RESOURCE
 					_service			= service;
 					_serviceOwner		= isServiceOwner;
 					_fullpath			= 'yrn:yahoo:' + _service + '::' + _tenant.name + ':' + _type;
 					_currentpath		= '';
 
-					if(!r3IsEmptyString(path)){
+					if(r3IsString(path) && !r3IsEmptyString(path)){
 						// [SELECTED TENANT] > SERVICE > service > ROLE/POLICY/RESOURCE > path
-						let	splitedPath	= path.split('/');
+						const splitedPath = path.split('/');
 						if(1 < splitedPath.length){
 							_hasParent	= true;
 						}
@@ -1443,7 +1455,6 @@ export default class R3Provider
 						_fullpath		+= ':' + path;
 						_currentpath	= path;
 					}
-
 				}else{
 					// [SELECTED TENANT] > SERVICE > service
 					_service			= service;
@@ -1452,24 +1463,23 @@ export default class R3Provider
 					_fullpath			= 'yrn:yahoo::::service:' + _service;
 				}
 
-			}else if(resourceType === type || roleType === type || policyType === type){
+			}else if(isItemType(type) && (resourceType === type || roleType === type || policyType === type)){
 				// [SELECTED TENANT] > ROLE/POLICY/RESOURCE
 				_type			= type;
 				_fullpath		= 'yrn:yahoo:::' + _tenant.name + ':' + _type;
 				_currentpath	= '';
 
-				if(r3IsEmptyString(path)){
+				if(!r3IsString(path) || r3IsEmptyString(path)){
 					// [SELECTED TENANT] > ROLE/POLICY/RESOURCE
 					_canCreatePath = true;
 				}else{
 					// [SELECTED TENANT] > ROLE/POLICY/RESOURCE > path
-					let	splitedPath = path.split('/');
+					const splitedPath	= path.split('/');
 					if(1 < splitedPath.length){
 						_hasParent	= true;
 					}
 					_name			= splitedPath[splitedPath.length - 1];
-					_fullpath		+= ':';
-					_fullpath		+= path;
+					_fullpath		+= ':' + path;
 					_currentpath	= path;
 
 					if(resourceType === type || roleType === type){
@@ -1478,7 +1488,6 @@ export default class R3Provider
 				}
 			}else{
 				// [SELECTED TENANT]
-				_fullpath		= 'yrn:yahoo:';
 				_fullpath		= 'yrn:yahoo:::' + _tenant.name;
 				_currentpath	= '';
 			}
@@ -1501,49 +1510,62 @@ export default class R3Provider
 	//--------------------------------------------------
 	// Common
 	//--------------------------------------------------
-	createEmptyData(tenant, type, path, callback)
+	createEmptyData(tenant: TenantData, type: ItemType, path: string, callback: ErrorCallback): void
 	{
-		if(roleType === type){
+		if(!isItemType(type)){
+			const error = new Error('create empty data for unknown type(' + JSON.stringify(type) + ')');
+			console.error(error.message);
+			callback(error);
+		}else if(roleType === type){
 			this.createEmptyRoleData(tenant, path, callback);
 		}else if(policyType === type){
 			this.createEmptyPolicyData(tenant, path, callback);
 		}else if(resourceType === type){
 			this.createEmptyResourceData(tenant, path, callback);
 		}else{
-			let	error = new Error('create empty data for unknown type(' + JSON.stringify(type) + ')');
+			const error = new Error('create empty data for unknown type(' + JSON.stringify(type) + ')');
 			console.error(error.message);
 			callback(error);
 		}
 	}
 
-	removeData(tenant, type, path, callback)
+	removeData(tenant: TenantData, type: ItemType, path: string, callback: ErrorCallback): void
 	{
-		if(roleType === type){
+		if(!isItemType(type)){
+			const error = new Error('remove data for unknown type(' + JSON.stringify(type) + ')');
+			console.error(error.message);
+			callback(error);
+		}else if(roleType === type){
 			this.removeRoleData(tenant, path, callback);
 		}else if(policyType === type){
 			this.removePolicyData(tenant, path, callback);
 		}else if(resourceType === type){
 			this.removeResourceData(tenant, path, callback);
 		}else{
-			let	error = new Error('remove data for unknown type(' + JSON.stringify(type) + ')');
+			const error = new Error('remove data for unknown type(' + JSON.stringify(type) + ')');
 			console.error(error.message);
 			callback(error);
 		}
 	}
 
-	updateData(tenant, type, path, data, callback)
+	updateData(tenant: TenantData, type: ItemType, path: string, data: RoleData | PolicyData | ResourceData, callback: ErrorCallback): void
 	{
-		if(roleType === type){
+		if(!isItemType(type)){
+			const error = new Error('update data for unknown type(' + JSON.stringify(type) + ')');
+			console.error(error.message);
+			callback(error);
+
+		}else if(roleType === type && isRoleData(data)){
 			this.updateRoleData(tenant, path, data, true, callback);
 
-		}else if(policyType === type){
+		}else if(policyType === type && isPolicyData(data)){
 			this.updatePolicyData(tenant, path, data, callback);
 
-		}else if(resourceType === type){
+		}else if(resourceType === type && isResourceData(data)){
 			this.updateResourceData(tenant, path, data, callback);
 
 		}else{
-			let	error = new Error('update data for unknown type(' + JSON.stringify(type) + ')');
+			const error = new Error('update data for unknown type(' + JSON.stringify(type) + ')');
 			console.error(error.message);
 			callback(error);
 		}
@@ -1558,39 +1580,38 @@ export default class R3Provider
 	// tenant		: tenant name
 	// servicename	: service name
 	//
-	getServiceData(tenant, servicename, callback)
+	getServiceData(tenant: TenantData, servicename: string, callback: DataCallback<ServiceData>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(servicename, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
+		const _callback	= callback;
+		if(!isTenantData(tenant) || !r3IsString(servicename) || r3IsEmptyString(servicename, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
 			console.error(_error.message);
-			_callback(_error);
+			_callback(_error, null);
 			return;
 		}
 
-		let demoTenantData	= this.demoData[tenant.name];
-		let	_servicename	= servicename;
-		let	result			= null;
-		demoTenantData.forEach((element) => {
+		let demoTenantData				= this.demoData[tenant.name];
+		let	_servicename				= servicename;
+		let	result: ServiceData | null	= null;
+		demoTenantData.forEach((element: DemoTreeNode) => {
 			if(element.path === serviceType){
-				element.children.forEach((serviceChild) => {
+				element.children.forEach((serviceChild: DemoTreeNode) => {
 					if(serviceChild.name === _servicename){
-						let	tenants = [];
-						let	verify	= null;
-						if(!r3IsEmptyEntityObject(serviceChild, 'tenant')){
+						let	tenants: string[]								= [];
+						let	verify: string | ServiceResourceObject[] | null	= null;
+						if(r3IsStringArray(serviceChild?.tenant)){
 							tenants = r3DeepClone(serviceChild.tenant);
 						}
-						if(!r3IsEmptyEntityObject(serviceChild, 'verify')){
-							verify = r3DeepClone(serviceChild.verify);
+						if(r3IsString(serviceChild?.verify)){
+							verify = serviceChild.verify;
+						}else if(isServiceResourceObjectArray(serviceChild?.verify)){
+							verify = serviceChild.verify;
 						}
 						result = {
-							name:		_servicename,
-							owner:		tenant.name,
 							tenant:		tenants,
 							verify:		verify
 						};
@@ -1598,6 +1619,12 @@ export default class R3Provider
 				});
 			}
 		});
+		if(null === result){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') and service(' + JSON.stringify(servicename) + ') does not have service data.');
+			console.error(_error.message);
+			_callback(_error, null);
+			return;
+		}
 		callback(null, result);
 	}
 
@@ -1614,41 +1641,43 @@ export default class R3Provider
 	// clear_tenant	: value is true, it means remove tenants without "tenants"
 	// verify		: verify url/object, if undefined/null, verify is not update.
 	//
-	updateServiceData(tenant, servicename, tenants, clear_tenant, verify, callback)
+	updateServiceData(tenant: TenantData, servicename: string, tenants: string[] | string | null | undefined, clear_tenant: boolean, verify: string | ServiceResourceObject[] | null, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(servicename, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
+		const _callback = callback;
+
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(servicename) || r3IsEmptyString(servicename, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
-		let demoTenantData	= this.demoData[tenant.name];
-		let	_service		= servicename.trim();
-		let	_tenants		= null;
-		let	_is_clear		= false;
-		let	_verify			= null;
+		let 	demoTenantData				= this.demoData[tenant.name];
+		const	_service					= servicename.trim();
+		let		_tenants: string[] | null	= null;
+		let		_is_clear					= false;
+		let		_verify: string | null		= null;
 
 		if(undefined !== tenants){
-			if(r3IsSafeTypedEntity(clear_tenant, 'boolean') && true === clear_tenant){
+			if(r3IsBoolean(clear_tenant) && true === clear_tenant){
 				_is_clear = true;
 			}
-			if(r3IsSafeTypedEntity(tenants, 'array') && 0 < tenants.length){
+			if(r3IsStringArray(tenants) && 0 < tenants.length){
 				_tenants = tenants;
-			}else if(!r3IsEmptyString(tenants)){
+			}else if(r3IsString(tenants) && !r3IsEmptyString(tenants)){
 				_tenants = [tenants];
 			}
 		}
-		if(!r3IsEmptyEntity(verify)){
+		if(r3IsString(verify)){
 			_verify = verify;
+		}else if(isServiceResourceObjectArray(verify)){
+			_verify = JSON.stringify(verify);
 		}
 		if(null === _tenants && false === _is_clear && null === _verify){
-			_error = new Error('Nothing to update for service');
+			const _error = new Error('Nothing to update for service');
 			console.error(_error.message);
 			_callback(_error);
 			return;
@@ -1656,18 +1685,20 @@ export default class R3Provider
 
 		this.startProgress();																// start progressing
 
-		let	isUpdated	= false;
-		let	oldTenants	= [];
-		demoTenantData.forEach((element) => {
+		let	isUpdated				= false;
+		let	oldTenants: string[]	= [];
+		demoTenantData.forEach((element: DemoTreeNode) => {
 			if(element.path === serviceType){
-				element.children.forEach((serviceChild) => {
+				element.children.forEach((serviceChild: DemoTreeNode) => {
 					if(serviceChild.name === _service){
 						// Found same service -> update it
-						oldTenants				= r3DeepClone(serviceChild.tenant);
+						if(r3IsStringArray(serviceChild?.tenant)){
+							oldTenants			= r3DeepClone(serviceChild.tenant);
+						}
 						if(_is_clear){
 							serviceChild.tenant = [];
 						}
-						if(null !== _tenants){
+						if(null !== _tenants && r3IsStringArray(serviceChild?.tenant)){
 							serviceChild.tenant = serviceChild.tenant.concat(_tenants);
 						}
 						if(null !== _verify){
@@ -1681,12 +1712,12 @@ export default class R3Provider
 
 		if(!isUpdated){
 			// Add new service
-			let newservice = {
+			let newservice: DemoTreeNode = {
 				name:			_service,
 				path:			_service,
+				children:		[],
 				owner:			true,
 				distributed:	false,
-				children:		[],
 				tenant:			(null === _tenants ? [] : r3DeepClone(tenants)),
 				verify:			_verify
 			};
@@ -1697,7 +1728,7 @@ export default class R3Provider
 			});
 		}
 
-		if(!r3IsSafeTypedEntity(_tenants, 'array')){
+		if(!r3IsArray(_tenants)){
 			_tenants = [];
 		}
 
@@ -1708,13 +1739,13 @@ export default class R3Provider
 		// remove service from tenant that has been incorporated
 		needRemoveTenants.forEach((tenantname) => {
 			let	matches = tenantname.match(regpath);
-			if(null != matches && 2 == matches.length){
+			if(r3IsArray(matches) && 2 == matches.length){
 				let	_tenant = matches[1];
 				if(!r3IsEmptyEntityObject(this.demoData, _tenant)){
 					this.demoData[_tenant].forEach((element) => {
 						if(element.path === serviceType){
 							let	removePos = -1;
-							element.children.forEach((serviceChild, pos) => {
+							element.children.forEach((serviceChild: DemoTreeNode, pos: number) => {
 								if(serviceChild.name === _service && !serviceChild.owner){
 									// Found service -> remove it
 									removePos = pos;
@@ -1732,25 +1763,25 @@ export default class R3Provider
 		// Add a service to the tenant that started cooperation
 		needAddTenants.forEach((tenantname) => {
 			let	matches = tenantname.match(regpath);
-			if(null != matches && 2 == matches.length){
+			if(r3IsArray(matches) && 2 == matches.length){
 				let	_tenant = matches[1];
 				if(!r3IsEmptyEntityObject(this.demoData, _tenant)){
-					this.demoData[_tenant].forEach((element) => {
+					this.demoData[_tenant].forEach((element: DemoTreeNode) => {
 						if(element.path === serviceType){
 							let	found = false;
-							element.children.forEach((serviceChild, pos) => {				// eslint-disable-line no-unused-vars
+							element.children.forEach((serviceChild: DemoTreeNode) => {
 								if(serviceChild.name === _service){
 									// Found service -> nothing to do
 									found = true;
 								}
 							});
 							if(!found){
-								let newService = {
+								let newService: DemoTreeNode = {
 									name:			_service,
 									path:			_service,
+									children:		[],
 									owner:			false,
-									distributed:	false,
-									children:		[]
+									distributed:	false
 								};
 								element.children.push(newService);
 							}
@@ -1771,37 +1802,38 @@ export default class R3Provider
 	// servicename	: service name
 	// verify		: verify url or static resource data object
 	//
-	createInitializedService(tenant, servicename, verify, callback)
+	createInitializedService(tenant: TenantData, servicename: string, verify: string, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(servicename, true) || r3IsEmptyEntity(verify) || (r3IsSafeTypedEntity(verify, 'string') && r3IsEmptyString(verify, true)) ){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ') or verify(' + JSON.stringify(verify) + ') parameters are wrong.');
+		const _callback = callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(servicename) || r3IsEmptyString(servicename, true) || !r3IsString(verify) || r3IsEmptyString(verify)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ') or verify(' + JSON.stringify(verify) + ') parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
 
-		let	_service	= servicename.trim();
-		let	_verify		= verify.trim();
+		let	_service				= servicename.trim();
+		let	_verify					= verify.trim();
+		let	_errmsg: string | null	= null;
 		Object.keys(this.demoData).forEach((key) => {
-			this.demoData[key].forEach((element) => {
+			this.demoData[key].forEach((element: DemoTreeNode) => {
 				if(element.path === serviceType){
-					element.children.forEach((serviceChild) => {
+					element.children.forEach((serviceChild: DemoTreeNode) => {
 						if(serviceChild.name === _service){
 							// Found same service name
-							_error = new Error('tenant(' + JSON.stringify(key) + ') has already same name service(' + JSON.stringify(_service) + ').');
-							console.error(_error.message);
+							_errmsg = 'tenant(' + JSON.stringify(key) + ') has already same name service(' + JSON.stringify(_service) + ').';
 						}
 					});
 				}
 			});
 		});
-		if(null !== _error){
+		if(r3IsString(_errmsg)){
+			const _error = new Error(_errmsg);
+			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
@@ -1815,16 +1847,16 @@ export default class R3Provider
 	// tenant		: tenant name
 	// servicename	: service name
 	//
-	removeService(tenant, servicename, isServiceTenant, callback)
+	removeService(tenant: TenantData, servicename: string, isServiceTenant: boolean, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(servicename, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
+		const _callback = callback;
+
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(servicename) || r3IsEmptyString(servicename, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
@@ -1834,10 +1866,10 @@ export default class R3Provider
 		let demoTenantData	= this.demoData[tenant.name];
 		let	_service		= servicename.trim();
 
-		demoTenantData.forEach((element) => {
+		demoTenantData.forEach((element: DemoTreeNode) => {
 			if(element.path === serviceType){
 				let	removePos = -1;
-				element.children.forEach((serviceChild, pos) => {
+				element.children.forEach((serviceChild: DemoTreeNode, pos: number) => {
 					if(serviceChild.name === _service){
 						// Found -> remove it
 						removePos = pos;
@@ -1860,9 +1892,9 @@ export default class R3Provider
 		_callback(null);
 	}
 
-	removeAllServiceTenant(servicename)
+	removeAllServiceTenant(servicename: string): boolean
 	{
-		if(r3IsEmptyString(servicename, true)){
+		if(!r3IsString(servicename) || r3IsEmptyString(servicename, true)){
 			console.error('service name' + JSON.stringify(servicename) + ' parameter is wrong.');
 			return false;
 		}
@@ -1870,10 +1902,10 @@ export default class R3Provider
 
 		let	_service		= servicename.trim();
 		Object.keys(this.demoData).forEach((key) => {
-			this.demoData[key].forEach((element) => {
+			this.demoData[key].forEach((element: DemoTreeNode) => {
 				if(element.path === serviceType){
 					let	removePos = -1;
-					element.children.forEach((serviceChild, pos) => {
+					element.children.forEach((serviceChild: DemoTreeNode, pos: number) => {
 						if(serviceChild.name === _service && !serviceChild.owner){
 							// Found -> remove it
 							removePos = pos;
@@ -1892,11 +1924,11 @@ export default class R3Provider
 	//
 	// Utility: Get error string which is result of verifying service resource
 	//
-	getErrorServiceResourceVerify(serviceResource)
+	getErrorServiceResourceVerify(serviceResource: StaticResourceObject[] | string): string | null
 	{
-		let	checkResult	= checkServiceResourceValue(serviceResource);
-		let	result		= null;
-		if(null != checkResult.error){
+		const	checkResult				= checkServiceResourceValue(serviceResource);
+		let		result: string | null	= null;
+		if(r3IsString(checkResult.error)){
 			if(r3IsEmptyStringObject(this.r3TextRes, checkResult.error)){
 				result = this.r3TextRes.eUnknownErrorKey;
 			}else{
@@ -1916,34 +1948,34 @@ export default class R3Provider
 	// servicename	: service name
 	// role			: default link alias role name(allowed empty)
 	//
-	createServiceTenant(tenant, servicename, role, callback)
+	createServiceTenant(tenant: TenantData, servicename: string, role: string | null, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(servicename, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(servicename) || r3IsEmptyString(servicename, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
-		let demoTenantData	= this.demoData[tenant.name];
-		let	_service		= servicename.trim();
-		let	_role			= role.trim();
+		let demoTenantData			= this.demoData[tenant.name];
+		let	_service				= servicename.trim();
+		let	_role: string			= r3IsString(role) ? role.trim() : '';
 
 		// check service tenant
-		demoTenantData.forEach((element) => {
+		demoTenantData.forEach((element: DemoTreeNode) => {
 			if(element.path === serviceType){
-				element.children.forEach((serviceChild, pos) => {							// eslint-disable-line no-unused-vars
+				element.children.forEach((serviceChild: DemoTreeNode, pos: number) => {
 					if(serviceChild.name === _service){
 						// Found service
 						if(0 !== serviceChild.children.length){
 							// Already cooperate service
-							_error = new Error('Already tenant(' + JSON.stringify(tenant) + ') has cooperated service(' + JSON.stringify(_service) + ').');
-							console.error(_error.message);
+							console.info('Already tenant(' + JSON.stringify(tenant) + ') has cooperated service(' + JSON.stringify(_service) + '), so overwrite those because of the demonstration application.');
+							serviceChild.distributed	= false;
+							serviceChild.children		= [];
 						}else{
 							// initializing
 							serviceChild.distributed	= false;
@@ -1953,18 +1985,14 @@ export default class R3Provider
 				});
 			}
 		});
-		if(null !== _error){
-			_callback(_error);
-			return;
-		}
 
 		this.startProgress();																// start progressing
 
 		// Add service with all new data
-		let serviceTenantChildren = [
+		let serviceTenantChildren: DemoTreeNode[] = [
 			{
 				name:	'ROLE',
-				path:	'role',
+				path:	roleType,
 				children: [
 					{
 						name:		'acr-role',
@@ -1983,7 +2011,7 @@ export default class R3Provider
 			},
 			{
 				name:	'RESOURCE',
-				path:	'resource',
+				path:	resourceType,
 				children: [
 					{
 						name:		_service + '-resource',
@@ -1999,17 +2027,16 @@ export default class R3Provider
 			},
 			{
 				name:	'POLICY',
-				path:	'policy',
+				path:	policyType,
 				children: [
 					{
 						name:		'acr-policy',
 						path:		'acr-policy',
 						children:	[],
-						effect:		'allow',
+						effect:		effectValueAllow,
 						action: [
-							'yrn:yahoo::::action:read'
+							actionValueRead
 						],
-						condition:	[],
 						resource: [
 							'yrn:yahoo:' + _service + '::' + tenant.name + ':resource:' + _service + '-resource'
 						],
@@ -2019,10 +2046,10 @@ export default class R3Provider
 			}
 		];
 
-		demoTenantData.forEach((element) => {
+		demoTenantData.forEach((element: DemoTreeNode) => {
 			if(element.path === serviceType){
 				let	found = false;
-				element.children.forEach((serviceChild, pos) => {						// eslint-disable-line no-unused-vars
+				element.children.forEach((serviceChild: DemoTreeNode, pos: number) => {
 					if(serviceChild.name === _service){
 						found = true;
 						serviceChild.distributed	= true;
@@ -2042,7 +2069,7 @@ export default class R3Provider
 		});
 		this.stopProgress();															// stop progressing
 
-		if(!r3IsEmptyString(role, true)){
+		if(!r3IsEmptyString(_role, true)){
 			this.setServiceTenantRoleAlias(tenant, _service, _role.trim(), _callback);
 		}else{
 			_callback(null);
@@ -2056,16 +2083,15 @@ export default class R3Provider
 	// servicename	: service name
 	// role			: role name
 	//
-	setServiceTenantRoleAlias(tenant, servicename, role, callback)
+	setServiceTenantRoleAlias(tenant: TenantData, servicename: string, role: string, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(servicename, true) || r3IsEmptyString(role, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ') or role(' + JSON.stringify(role) + ')  parameters are wrong.');
+		const _callback = callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name) || r3IsEmptyString(servicename, true) || r3IsEmptyString(role, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or service(' + JSON.stringify(servicename) + ') or role(' + JSON.stringify(role) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
@@ -2074,27 +2100,25 @@ export default class R3Provider
 		//
 		// get role data
 		//
-		let	_tenant		= tenant;
-		let	_service	= servicename.trim();
-		let	_role		= role.trim();
+		const _tenant	= tenant;
+		const _service	= servicename.trim();
+		const _role		= role.trim();
 
 		this.startProgress();																// start progressing
 
-		this.getRoleData(_tenant, null, _role, false, (error, roledata) =>
+		this.getRoleData(_tenant, null, _role, false, (error: FetchError | null, roledata: valTypeAllObject) =>
 		{
 			if(null !== error){
 				console.error(error.message);
-
 				this.stopProgress();														// stop progressing
 				_callback(error);
 				return;
 			}
-			if(null === roledata){
-				error = new Error('Could not get role data for tenant(' + _tenant.name + '), path(' + _role + ')');
-				console.error(error.message);
-
+			if(!isRoleData(roledata)){
+				const err = new Error('Could not get role data for tenant(' + _tenant.name + '), path(' + _role + ')');
+				console.error(err.message);
 				this.stopProgress();														// stop progressing
-				_callback(error);
+				_callback(err);
 				return;
 			}
 
@@ -2102,15 +2126,18 @@ export default class R3Provider
 			// SERVICE+TENANT ROLE path
 			// ( yrn:yahoo:<service name>::<tenant name>:role:acr-role )
 			//
-			let	_service_tenant_role = 'yrn:yahoo:' + _service + '::' + _tenant.name + ':role:acr-role';
+			const _service_tenant_role = 'yrn:yahoo:' + _service + '::' + _tenant.name + ':role:acr-role';
 
 			// add alias to service
-			for(let cnt = 0; cnt < roledata.aliases.length; ++cnt){
-				if(r3CompareCaseString(roledata.aliases[cnt], _service_tenant_role)){
-					// already has role in alias
-					this.stopProgress();													// stop progressing
-					_callback(null);
-					return;
+			const aliases: string[] = [];
+			if(r3IsStringArray(roledata.aliases)){
+				for(let cnt = 0; cnt < roledata.aliases.length; ++cnt){
+					if(r3CompareCaseString(roledata.aliases[cnt], _service_tenant_role)){
+						// already has role in alias
+						this.stopProgress();													// stop progressing
+						_callback(null);
+						return;
+					}
 				}
 			}
 			roledata.aliases.push(_service_tenant_role);
@@ -2118,7 +2145,7 @@ export default class R3Provider
 			//
 			// update role for alias
 			//
-			this.updateRoleData(_tenant, _role, roledata, false, (error) =>
+			this.updateRoleData(_tenant, _role, roledata, false, (error: FetchError | null) =>
 			{
 				this.stopProgress();														// stop progressing
 
@@ -2136,21 +2163,53 @@ export default class R3Provider
 	//
 	// Get Role data
 	//
-	rawGetRoleDataClone(roleArray, path, isRemove)
+	cvtDemoTreeNodeToRoleData(roleDemo: DemoTreeNode): RoleData | null
 	{
-		if(r3IsEmptyString(path)){
+		if(!r3IsObject(roleDemo)){
+			return null;
+		}
+
+		let	_policies: string[]			= [];
+		let	_aliases: string[] | null	= null;
+		let	_hosts: RoleHostList | null	= null;
+
+		if(!r3IsEmptyEntityObject(roleDemo, 'policies') && r3IsStringArray(roleDemo.policies)){
+			_policies = r3DeepClone(roleDemo.policies);
+		}
+		if(!r3IsEmptyEntityObject(roleDemo, 'aliases') && r3IsStringArray(roleDemo.aliases)){
+			_aliases = r3DeepClone(roleDemo.aliases);
+		}
+		if(!r3IsEmptyEntityObject(roleDemo, 'hosts') && isRoleHostList(roleDemo.hosts)){
+			_hosts = r3DeepClone(roleDemo.hosts);
+		}
+
+		let	_role: RoleData = {
+			policies:	_policies
+		};
+		if(null !== _aliases){
+			_role.aliases = r3DeepClone(_aliases);
+		}
+		if(null !== _hosts){
+			_role.hosts = r3DeepClone(_hosts);
+		}
+		return _role;
+	}
+
+	rawGetRoleDataClone(roleArray: DemoTreeNode[], path: string, isRemove: boolean): DemoTreeNode | null
+	{
+		if(!r3IsString(path) || r3IsEmptyString(path)){
 			return null;
 		}
 		let	paths = path.split('/');
 		if(0 === paths.length){
 			return null;
 		}
-		if(!r3IsSafeTypedEntity(isRemove, 'boolean')){
+		if(!r3IsBoolean(isRemove)){
 			isRemove = false;
 		}
 
-		let	_role		= null;
-		let	removePos	= -1;
+		let	_role: DemoTreeNode | null	= null;
+		let	removePos					= -1;
 		roleArray.forEach((role, pos) => {
 			if(role.name === paths[0]){
 				// Found role
@@ -2171,7 +2230,7 @@ export default class R3Provider
 		return _role;
 	}
 
-	rawSetRoleData(roleArray, path, data)
+	rawSetRoleData(roleArray: DemoTreeNode[], path: string, data: DemoTreeNode): boolean
 	{
 		if(r3IsEmptyString(path)){
 			return false;
@@ -2195,16 +2254,15 @@ export default class R3Provider
 		return result;
 	}
 
-	getRoleData(tenant, service, path, expand, callback)
+	getRoleData(tenant: TenantData, service: string | null, path: string, expand: boolean, callback: DataCallback<RoleData>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback = callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error, null);
 			return;
@@ -2212,22 +2270,22 @@ export default class R3Provider
 
 		this.startProgress();																// start progressing
 
-		let demoTenantData	= this.demoData[tenant.name];
-		let	_service		= service;
-		let	_path			= path.trim();
-		let	_expand			= expand;
-		let	_role			= null;
+		let demoTenantData					= this.demoData[tenant.name];
+		let	_service						= service;
+		let	_path							= path.trim();
+		let	_expand							= expand;										// Not use this value in this demo data.
+		let	_roleDemo: DemoTreeNode | null	= null;
 
 		// search role
-		if(!r3IsEmptyString(_service)){
-			demoTenantData.forEach((element) => {
+		if(r3IsString(_service) && !r3IsEmptyString(_service)){
+			demoTenantData.forEach((element: DemoTreeNode) => {
 				if(element.path === serviceType){
-					element.children.forEach((serviceChild) => {
+					element.children.forEach((serviceChild: DemoTreeNode) => {
 						if(serviceChild.name === _service){
 							// Found service
-							serviceChild.children.forEach((serviceElement) => {
+							serviceChild.children.forEach((serviceElement: DemoTreeNode) => {
 								if(serviceElement.path === roleType){
-									_role = this.rawGetRoleDataClone(serviceElement.children, _path, false);
+									_roleDemo = this.rawGetRoleDataClone(serviceElement.children, _path, false);
 								}
 							});
 						}
@@ -2237,23 +2295,28 @@ export default class R3Provider
 		}else{
 			demoTenantData.forEach((element) => {
 				if(element.path === roleType){
-					_role = this.rawGetRoleDataClone(element.children, _path, false);
+					_roleDemo = this.rawGetRoleDataClone(element.children, _path, false);
 				}
 			});
 		}
-		if(null === _role){
+		if(null === _roleDemo){
 			this.stopProgress();															// stop progressing
-			_error = new Error('not found role(' + JSON.stringify(_path) + ') in tenant(' + JSON.stringify(tenant) + ').');
+			const _error = new Error('not found role(' + JSON.stringify(_path) + ') in tenant(' + JSON.stringify(tenant) + ').');
 			console.error(_error.message);
 			_callback(_error, null);
 			return;
 		}
 
-		delete _role.name;
-		delete _role.path;
-		if(!_expand){					// [NOTE] always _expand is false.
-			delete _role.children;
+		// convert
+		let	_role: RoleData | null = this.cvtDemoTreeNodeToRoleData(_roleDemo);
+		if(!isRoleData(_role)){
+			this.stopProgress();															// stop progressing
+			const _error = new Error('not found role(' + JSON.stringify(_path) + ') in tenant(' + JSON.stringify(tenant) + ').');
+			console.error(_error.message);
+			_callback(_error, null);
+			return;
 		}
+
 		this.stopProgress();																// stop progressing
 		_callback(null, _role);
 	}
@@ -2261,18 +2324,16 @@ export default class R3Provider
 	//
 	// Update Role data
 	//
-	updateRoleData(tenant, path, data, isOWHosts, callback)
+	updateRoleData(tenant: TenantData, path: string, data: RoleData, isOWHosts: boolean, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-
-		let	_callback	= callback;
-		let	_isow		= r3IsSafeTypedEntity(isOWHosts, 'boolean') ? isOWHosts : false;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback	= callback;
+		const _isow		= r3IsBoolean(isOWHosts) ? isOWHosts : false;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name) || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
@@ -2281,9 +2342,10 @@ export default class R3Provider
 		this.startProgress();																// start progressing
 
 		// get base role
-		let demoTenantData	= this.demoData[tenant.name];
-		let	_path			= path.trim();
-		let	_role			= null;
+		let demoTenantData: DemoTreeNode[]	= this.demoData[tenant.name];
+		let	_path							= path.trim();
+		let	_role: DemoTreeNode | null		= null;
+
 		demoTenantData.forEach((element) => {
 			if(element.path === roleType){
 				_role = this.rawGetRoleDataClone(element.children, _path, true);
@@ -2307,53 +2369,54 @@ export default class R3Provider
 		}
 
 		// make new role
-		if(null !== data){
-			if(!r3IsEmptyEntityObject(data, 'policies')){
+		if(isRoleData(data)){
+			if(r3IsStringArray(data.policies)){
 				_role.policies	= r3DeepClone(data.policies);
 			}
-			if(!r3IsEmptyEntityObject(data, 'aliases')){
+			if(r3IsStringArray(data.aliases)){
 				_role.aliases	= r3DeepClone(data.aliases);
 			}
 			if(_isow){
-				if(!r3IsEmptyEntityObject(data, 'hosts')){
-					if(!r3IsEmptyEntityObject(data.hosts, 'hostnames')){
+				if(isRoleHostList(data.hosts)){
+					if(r3IsObject(_role?.hosts) && r3IsStringArray(_role.hosts.hostnames) && r3IsStringArray(data.hosts.hostnames) && 0 < data.hosts.hostnames.length){
 						_role.hosts.hostnames	= r3DeepClone(data.hosts.hostnames);
 					}
-					if(!r3IsEmptyEntityObject(data.hosts, 'ips')){
+					if(r3IsObject(_role?.hosts) && r3IsStringArray(_role.hosts.ips) && r3IsStringArray(data.hosts.ips) && 0 < data.hosts.ips.length){
 						_role.hosts.ips			= r3DeepClone(data.hosts.ips);
 					}
 				}
 			}else{
-				if(!r3IsEmptyEntityObject(data, 'hosts')){
-					if(!r3IsEmptyEntityObject(data.hosts, 'hostnames')){
+				if(isRoleHostList(data.hosts)){
+					if(r3IsStringArray(data.hosts.hostnames) && 0 < data.hosts.hostnames.length){
 						let _hostnames			= data.hosts.hostnames.concat(data.hosts.hostnames);
-						data.hosts.hostnames	= Array.from(new Set(_hostnames));
+						data.hosts.hostnames	= Array.from(new Set(_hostnames));			// Remove duplicate values
 					}
-					if(!r3IsEmptyEntityObject(data.hosts, 'ips')){
+					if(r3IsStringArray(data.hosts.ips) && 0 < data.hosts.ips.length){
 						let _ips				= data.hosts.ips.concat(data.hosts.ips);
-						data.hosts.ips			= Array.from(new Set(_ips));
+						data.hosts.ips			= Array.from(new Set(_ips));				// Remove duplicate values
 					}
 				}
 			}
 		}
 
 		// set role
+		let	_error2: Error | null = null;
 		demoTenantData.forEach((element) => {
 			if(element.path === roleType){
 				if(!this.rawSetRoleData(element.children, _path, _role)){
-					_error = new Error('could not set role(' + JSON.stringify(_path) + ').');
-					console.error(_error.message);
+					_error2 = new Error('could not set role(' + JSON.stringify(_path) + ').');
+					console.error(_error2.message);
 				}
 			}
 		});
 		this.stopProgress();																// stop progressing
-		_callback(_error);
+		_callback(_error2);
 	}
 
 	//
 	// Create Empty Role data
 	//
-	createEmptyRoleData(tenant, path, callback)
+	createEmptyRoleData(tenant: TenantData, path: string, callback: ErrorCallback): void
 	{
 		return this.updateRoleData(tenant, path, null, true, callback);
 	}
@@ -2361,17 +2424,15 @@ export default class R3Provider
 	//
 	// Remove Role data
 	//
-	removeRoleData(tenant, path, callback)
+	removeRoleData(tenant: TenantData, path: string, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-
-		let	_callback	= callback;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback = callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
@@ -2395,17 +2456,61 @@ export default class R3Provider
 	//
 	// Get Policy data
 	//
-	rawGetPolicyDataClone(policyArray, path, isRemove)
+	cvtDemoTreeNodeToPolicyData(policyDemo: DemoTreeNode): PolicyData | null
 	{
-		if(r3IsEmptyString(path)){
+		if(!r3IsObject(policyDemo)){
 			return null;
 		}
-		if(!r3IsSafeTypedEntity(isRemove, 'boolean')){
+
+		let	_name:		string				= '';
+		let	_effect:	PolicyEffectType	= effectValueAllow;
+		let	_action:	PolicyActionType[]	= [];
+		let	_resource:	string[]			= [];
+		let	_alias:		string[]			= [];
+
+		if(!r3IsEmptyEntityObject(policyDemo, 'name') && r3IsString(policyDemo.name) && !r3IsEmptyString(policyDemo.name)){
+			_name = policyDemo.name;
+		}else{
+			return null;
+		}
+		if(!r3IsEmptyEntityObject(policyDemo, 'effect') && r3IsString(policyDemo.effect) && isPolicyEffectType(policyDemo.effect)){
+			_effect = policyDemo.effect;
+		}else{
+			return null;
+		}
+		if(r3IsArray(policyDemo?.action) && policyDemo.action.every((item: unknown) => isPolicyActionType(item))){
+			_action = r3DeepClone(policyDemo.action);
+		}else{
+			return null;
+		}
+		if(!r3IsEmptyEntityObject(policyDemo, 'resource') && r3IsStringArray(policyDemo.resource)){
+			_resource = r3DeepClone(policyDemo.resource);
+		}
+		if(!r3IsEmptyEntityObject(policyDemo, 'alias') && r3IsStringArray(policyDemo.alias)){
+			_alias = r3DeepClone(policyDemo.alias);
+		}
+
+		let	_policy: PolicyData = {
+			name:		_name,
+			effect:		_effect,
+			action:		_action,
+			resource:	_resource,
+			alias:		_alias
+		};
+		return _policy;
+	}
+
+	rawGetPolicyDataClone(policyArray: DemoTreeNode[], path: string, isRemove: boolean): DemoTreeNode | null
+	{
+		if(!r3IsString(path) || r3IsEmptyString(path)){
+			return null;
+		}
+		if(!r3IsBoolean(isRemove)){
 			isRemove = false;
 		}
 
-		let	_policy		= null;
-		let	removePos	= -1;
+		let	_policy: DemoTreeNode | null	= null;
+		let	removePos						= -1;
 		policyArray.forEach((policy, pos) => {
 			if(policy.name === path){
 				// Found policy
@@ -2421,9 +2526,9 @@ export default class R3Provider
 		return _policy;
 	}
 
-	rawSetPolicyData(policyArray, path, data)
+	rawSetPolicyData(policyArray: DemoTreeNode[], path: string, data: DemoTreeNode): boolean
 	{
-		if(r3IsEmptyString(path)){
+		if(!r3IsString(path) || r3IsEmptyString(path)){
 			return false;
 		}
 		let	removePos = -1;
@@ -2440,37 +2545,37 @@ export default class R3Provider
 		return true;
 	}
 
-	getPolicyData(tenant, service, path, callback)
+	getPolicyData(tenant: TenantData, service: string | null, path: string, callback: DataCallback<PolicyData>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback = callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error, null);
 			return;
 		}
+
 		this.startProgress();																// start progressing
 
-		let demoTenantData	= this.demoData[tenant.name];
-		let	_service		= service;
-		let	_path			= path.trim();
-		let	_policy			= null;
+		let demoTenantData						= this.demoData[tenant.name];
+		let	_service							= service;
+		let	_path								= path.trim();
+		let	_policyDemo: DemoTreeNode | null	= null;
 
 		// search policy
-		if(!r3IsEmptyString(_service)){
-			demoTenantData.forEach((element) => {
+		if(r3IsString(_service) && !r3IsEmptyString(_service)){
+			demoTenantData.forEach((element: DemoTreeNode) => {
 				if(element.path === serviceType){
-					element.children.forEach((serviceChild) => {
+					element.children.forEach((serviceChild: DemoTreeNode) => {
 						if(serviceChild.name === _service){
 							// Found service
-							serviceChild.children.forEach((serviceElement) => {
+							serviceChild.children.forEach((serviceElement: DemoTreeNode) => {
 								if(serviceElement.path === policyType){
-									_policy = this.rawGetPolicyDataClone(serviceElement.children, _path, false);
+									_policyDemo = this.rawGetPolicyDataClone(serviceElement.children, _path, false);
 								}
 							});
 						}
@@ -2480,20 +2585,28 @@ export default class R3Provider
 		}else{
 			demoTenantData.forEach((element) => {
 				if(element.path === policyType){
-					_policy = this.rawGetPolicyDataClone(element.children, _path, false);
+					_policyDemo = this.rawGetPolicyDataClone(element.children, _path, false);
 				}
 			});
 		}
-		if(null === _policy){
-			this.stopProgress();															// stop progressing
-			_error = new Error('not found policy(' + JSON.stringify(_path) + ') in tenant(' + JSON.stringify(tenant) + ').');
+		if(null === _policyDemo){
+			const _error = new Error('not found policy(' + JSON.stringify(_path) + ') in tenant(' + JSON.stringify(tenant) + ').');
 			console.error(_error.message);
+			this.stopProgress();															// stop progressing
 			_callback(_error, null);
 			return;
 		}
-		delete _policy.name;
-		delete _policy.path;
-		delete _policy.children;
+
+		// convert
+		let	_policy: PolicyData | null = this.cvtDemoTreeNodeToPolicyData(_policyDemo);
+		if(!isPolicyData(_policy)){
+			const _error = new Error('not found role(' + JSON.stringify(_path) + ') in tenant(' + JSON.stringify(tenant) + ').');
+			console.error(_error.message);
+			this.stopProgress();															// stop progressing
+			_callback(_error, null);
+			return;
+		}
+
 		this.stopProgress();																// stop progressing
 		_callback(null, _policy);
 	}
@@ -2501,108 +2614,111 @@ export default class R3Provider
 	//
 	// Update Policy data
 	//
-	updatePolicyData(tenant, path, data, callback)
+	updatePolicyData(tenant: TenantData, path: string, data: PolicyData, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-
-		let	_callback	= callback;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
+
 		this.startProgress();																// start progressing
 
 		// get base policy
-		let demoTenantData	= this.demoData[tenant.name];
-		let	_path			= path.trim();
-		let	_policy			= null;
+		let demoTenantData					= this.demoData[tenant.name];
+		let	_path							= path.trim();
+		let	_policy: DemoTreeNode | null	= null;
+
 		demoTenantData.forEach((element) => {
 			if(element.path === policyType){
 				_policy = this.rawGetPolicyDataClone(element.children, _path, true);
 			}
 		});
+
 		if(null === _policy){
 			// make empty policy
 			_policy = {
 				name:			_path,
 				path:			_path,
 				children:		[],
-				effect:			'allow',
+				effect:			effectValueAllow,
 				action: [
-					'yrn:yahoo::::action:read',
-					'yrn:yahoo::::action:write'
+					actionValueRead,
+					actionValueWrite
 				],
-				condition:		[],
 				resource:		[],
 				alias:			[]
 			};
 		}
 
 		// make new policy
-		if(null !== data){
-			if(!r3IsEmptyEntityObject(data, 'effect')){
+		if(isPolicyData(data)){
+			if(isPolicyEffectType(data.effect)){
 				_policy.effect		= r3DeepClone(data.effect);
 			}
-			if(!r3IsEmptyEntityObject(data, 'action')){
+			if(isPolicyActionTypeArray(data.action)){
 				_policy.action		= r3DeepClone(data.action);
 			}
-			if(!r3IsEmptyEntityObject(data, 'condition')){
-				_policy.condition	= r3DeepClone(data.condition);
-			}
-			if(!r3IsEmptyEntityObject(data, 'resource')){
+			if(r3IsStringArray(data.resource)){
 				_policy.resource	= r3DeepClone(data.resource);
 			}
-			if(!r3IsEmptyEntityObject(data, 'alias')){
+			if(r3IsStringArray(data.alias)){
 				_policy.alias		= r3DeepClone(data.alias);
 			}
 		}
 
 		// set policy
+		let	_error2: Error | null = null;
 		demoTenantData.forEach((element) => {
 			if(element.path === policyType){
 				if(!this.rawSetPolicyData(element.children, _path, _policy)){
-					_error = new Error('could not set policy(' + JSON.stringify(_path) + ').');
-					console.error(_error.message);
+					_error2 = new Error('could not set policy(' + JSON.stringify(_path) + ').');
+					console.error(_error2.message);
 				}
 			}
 		});
 		this.stopProgress();																// stop progressing
-		_callback(_error);
+		_callback(_error2);
 	}
 
 	//
 	// Create Empty Policy data
 	//
-	createEmptyPolicyData(tenant, path, callback)
+	createEmptyPolicyData(tenant: TenantData, path: string, callback: ErrorCallback): void
 	{
 		// default	action is read('yrn:yahoo::::action:read');
 		//			effect is allow
-		return this.updatePolicyData(tenant, path, { action: [ 'yrn:yahoo::::action:read' ], effect: 'allow' }, callback);
+		//
+		// [NOTE]
+		// The name member in PolicyData is not used, but the path parameter is used instead of it.
+		//
+		return this.updatePolicyData(tenant, path, { name: '', action: [actionValueRead], effect: effectValueAllow, resource: [], alias: [] }, callback);
 	}
 
 	//
 	// Remove Policy data
 	//
-	removePolicyData(tenant, path, callback)
+	removePolicyData(tenant: TenantData, path: string, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
 		}
+
 		this.startProgress();																// start progressing
 
 		let demoTenantData	= this.demoData[tenant.name];
@@ -2622,21 +2738,68 @@ export default class R3Provider
 	//
 	// Get Resource data
 	//
-	rawGetResourceDataClone(resourceArray, path, isRemove)
+	cvtDemoTreeNodeToResourceData(resourceDemo: DemoTreeNode): ResourceData | null
 	{
-		if(r3IsEmptyString(path)){
+		if(!r3IsObject(resourceDemo)){
+			return null;
+		}
+
+		let	_valString: string | null			= null;
+		let	_valObject: valTypeAllObject | null	= null;
+		let	_valKeys: valTypeAllObject | null	= null;
+		let	_valExpire: number | null			= null;
+		let	_valAliases: string[] | null		= null;
+
+		if(!r3IsEmptyEntityObject(resourceDemo, 'string') && r3IsString(resourceDemo.string)){
+			_valString = resourceDemo.string;
+		}
+		if(!r3IsEmptyEntityObject(resourceDemo, 'object') && r3IsObject(resourceDemo.object)){
+			_valObject = r3DeepClone(resourceDemo.object);
+		}
+		if(!r3IsEmptyEntityObject(resourceDemo, 'keys') && r3IsObject(resourceDemo.keys)){
+			_valKeys = r3DeepClone(resourceDemo.keys);
+		}
+		if(!r3IsEmptyEntityObject(resourceDemo, 'expire') && r3IsNumber(resourceDemo.expire)){
+			_valExpire = resourceDemo.expire;
+		}
+		if(!r3IsEmptyEntityObject(resourceDemo, 'aliases') && r3IsStringArray(resourceDemo.aliases)){
+			_valAliases = r3DeepClone(resourceDemo.aliases);
+		}
+
+		let	_resource: ResourceData = {};
+		if(null !== _valString){
+			_resource.string	= _valString;
+		}
+		if(null !== _valObject){
+			_resource.object	= r3DeepClone(_valObject);
+		}
+		if(null !== _valKeys){
+			_resource.keys		= r3DeepClone(_valKeys);
+		}
+		if(null !== _valExpire){
+			_resource.expire	= _valExpire;
+		}
+		if(null !== _valAliases){
+			_resource.aliases	= r3DeepClone(_valAliases);
+		}
+		return _resource;
+	}
+
+	rawGetResourceDataClone(resourceArray: DemoTreeNode[], path: string, isRemove: boolean): DemoTreeNode | null
+	{
+		if(!r3IsString(path) || r3IsEmptyString(path)){
 			return null;
 		}
 		let	paths = path.split('/');
 		if(0 === paths.length){
 			return null;
 		}
-		if(!r3IsSafeTypedEntity(isRemove, 'boolean')){
+		if(!r3IsBoolean(isRemove)){
 			isRemove = false;
 		}
 
-		let	_resource	= null;
-		let	removePos	= -1;
+		let	_resource: DemoTreeNode | null	= null;
+		let	removePos						= -1;
 		resourceArray.forEach((resource, pos) => {
 			if(resource.name === paths[0]){
 				// Found resource
@@ -2657,7 +2820,7 @@ export default class R3Provider
 		return _resource;
 	}
 
-	rawSetResourceData(resourceArray, path, data)
+	rawSetResourceData(resourceArray: DemoTreeNode[], path: string, data: DemoTreeNode): boolean
 	{
 		if(r3IsEmptyString(path)){
 			return false;
@@ -2681,16 +2844,15 @@ export default class R3Provider
 		return result;
 	}
 
-	getResourceData(tenant, service, path, expand, callback)
+	getResourceData(tenant: TenantData, service: string | null, path: string, expand: boolean, callback: DataCallback<ResourceData>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error, null);
 			return;
@@ -2698,22 +2860,22 @@ export default class R3Provider
 
 		this.startProgress();																// start progressing
 
-		let demoTenantData	= this.demoData[tenant.name];
-		let	_service		= service;
-		let	_path			= path.trim();
-		let	_expand			= expand;
-		let	_resource		= null;
+		let demoTenantData						= this.demoData[tenant.name];
+		let	_service							= service;
+		let	_path								= path.trim();
+		let	_expand								= expand;
+		let	_resourceDemo: DemoTreeNode | null	= null;
 
 		// search resource
-		if(!r3IsEmptyString(_service)){
-			demoTenantData.forEach((element) => {
+		if(r3IsString(_service) && !r3IsEmptyString(_service)){
+			demoTenantData.forEach((element: DemoTreeNode) => {
 				if(element.path === serviceType){
-					element.children.forEach((serviceChild) => {
+					element.children.forEach((serviceChild: DemoTreeNode) => {
 						if(serviceChild.name === _service){
 							// Found service
-							serviceChild.children.forEach((serviceElement) => {
+							serviceChild.children.forEach((serviceElement: DemoTreeNode) => {
 								if(serviceElement.path === resourceType){
-									_resource = this.rawGetResourceDataClone(serviceElement.children, _path, false);
+									_resourceDemo = this.rawGetResourceDataClone(serviceElement.children, _path, false);
 								}
 							});
 						}
@@ -2723,23 +2885,27 @@ export default class R3Provider
 		}else{
 			demoTenantData.forEach((element) => {
 				if(element.path === resourceType){
-					_resource = this.rawGetResourceDataClone(element.children, _path, false);
+					_resourceDemo = this.rawGetResourceDataClone(element.children, _path, false);
 				}
 			});
 		}
-		if(null === _resource){
-			this.stopProgress();															// stop progressing
-			_error = new Error('not found resource(' + JSON.stringify(_path) + ') in tenant(' + JSON.stringify(tenant) + ').');
+		if(null === _resourceDemo){
+			const _error = new Error('not found resource(' + JSON.stringify(_path) + ') in tenant(' + JSON.stringify(tenant) + ').');
 			console.error(_error.message);
+			this.stopProgress();															// stop progressing
 			_callback(_error, null);
 			return;
 		}
 
-		delete _resource.name;
-		delete _resource.path;
-		if(!_expand){					// [NOTE] always _expand is false.
-			delete _resource.children;
+		let	_resource: ResourceData | null = this.cvtDemoTreeNodeToResourceData(_resourceDemo);
+		if(!isResourceData(_resource)){
+			const _error = new Error('not found resource(' + JSON.stringify(_path) + ') in tenant(' + JSON.stringify(tenant) + ').');
+			console.error(_error.message);
+			this.stopProgress();															// stop progressing
+			_callback(_error, null);
+			return;
 		}
+
 		this.stopProgress();																// stop progressing
 		_callback(null, _resource);
 	}
@@ -2747,17 +2913,15 @@ export default class R3Provider
 	//
 	// Update Resource data
 	//
-	updateResourceData(tenant, path, data, callback)
+	updateResourceData(tenant: TenantData, path: string, data: ResourceData, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-
-		let	_callback	= callback;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
@@ -2766,9 +2930,10 @@ export default class R3Provider
 		this.startProgress();																// start progressing
 
 		// get base resource
-		let demoTenantData	= this.demoData[tenant.name];
-		let	_path			= path.trim();
-		let	_resource		= null;
+		let demoTenantData					= this.demoData[tenant.name];
+		let	_path							= path.trim();
+		let	_resource: DemoTreeNode | null	= null;
+
 		demoTenantData.forEach((element) => {
 			if(element.path === resourceType){
 				_resource = this.rawGetResourceDataClone(element.children, _path, true);
@@ -2778,6 +2943,7 @@ export default class R3Provider
 		if(null === _resource){
 			// not found resource
 			let	_names = _path.split('/');
+
 			// make empty resource
 			_resource = {
 				name:		_names[_names.length - 1],
@@ -2790,42 +2956,44 @@ export default class R3Provider
 				aliases:	[]
 			};
 		}
+
 		// make new resource
-		if(null !== data){
-			if(!r3IsEmptyEntityObject(data, 'string')){
-				_resource.string	= r3DeepClone(data.string);
+		if(isResourceData(data)){
+			if(null === data.string || r3IsString(data.string)){
+				_resource.string	= data.string;
 			}
-			if(!r3IsEmptyEntityObject(data, 'object')){
+			if(null === data.object || r3IsObject(data.object)){
 				_resource.object	= r3DeepClone(data.object);
 			}
-			if(!r3IsEmptyEntityObject(data, 'keys')){
+			if(r3IsObject(data.keys)){
 				_resource.keys		= r3DeepClone(data.keys);
 			}
-			if(!r3IsEmptyEntityObject(data, 'expire')){
-				_resource.expire	= r3DeepClone(data.expire);
+			if(r3IsNumber(data.expire)){
+				_resource.expire	= data.expire;
 			}
-			if(!r3IsEmptyEntityObject(data, 'aliases')){
+			if(r3IsStringArray(data.aliases)){
 				_resource.aliases	= r3DeepClone(data.aliases);
 			}
 		}
 
 		// set resource
+		let	_error2: Error | null = null;
 		demoTenantData.forEach((element) => {
 			if(element.path === resourceType){
 				if(!this.rawSetResourceData(element.children, _path, _resource)){
-					_error = new Error('could not set resource(' + JSON.stringify(_path) + ').');
-					console.error(_error.message);
+					_error2 = new Error('could not set resource(' + JSON.stringify(_path) + ').');
+					console.error(_error2.message);
 				}
 			}
 		});
 		this.stopProgress();																// stop progressing
-		_callback(_error);
+		_callback(_error2);
 	}
 
 	//
 	// Create Empty Resource data
 	//
-	createEmptyResourceData(tenant, path, callback)
+	createEmptyResourceData(tenant: TenantData, path: string, callback: ErrorCallback): void
 	{
 		return this.updateResourceData(tenant, path, null, callback);
 	}
@@ -2833,17 +3001,15 @@ export default class R3Provider
 	//
 	// Remove Resource data
 	//
-	removeResourceData(tenant, path, callback)
+	removeResourceData(tenant: TenantData, path: string, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-
-		let	_callback	= callback;
-		let	_error		= null;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || !r3IsString(path) || r3IsEmptyString(path, true) || r3IsEmptyEntityObject(this.demoData, tenant.name)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or path(' + JSON.stringify(path) + ')  parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
@@ -2868,18 +3034,17 @@ export default class R3Provider
 	//
 	// Get New Role Token
 	//
-	getNewRoleToken(tenant, role, expire, callback)
+	getNewRoleToken(tenant: TenantData, role: string, expire: number | null, callback: DataCallback<RoleTokenPrimitiveInfo>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(role, true) || (r3IsSafeTypedEntity(expire, 'number') && expire < 0)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or role path(' + JSON.stringify(role) + ') or expire(' + JSON.stringify(expire) + ') parameters are wrong.');
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || r3IsEmptyString(role, true) || (null !== expire && !r3IsNumber(expire)) || (r3IsNumber(expire) && expire < 0)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or role path(' + JSON.stringify(role) + ') or expire(' + JSON.stringify(expire) + ') parameters are wrong.');
 			console.error(_error.message);
-			_callback(_error);
+			_callback(_error, null);
 			return;
 		}
 
@@ -2887,17 +3052,17 @@ export default class R3Provider
 
 		let	_tenant		= tenant.name;
 		let	_role		= role;
-		let	_expire;
-		if(!r3IsSafeTypedEntity(expire, 'number')){
+		let	_expire: number;
+		if(!r3IsNumber(expire)){
 			_expire		= 24 * 60 * 60 * 1000;												// default 24H(ms)
 		}else{
 			_expire		= 10 * 365 * 24 * 60 * 60 * 1000;									// no expire(10 years)
 		}
 
 		// make new role token
-		let	strRoleToken	= (Date.now().toString(16) + Math.random().toString(16).slice(2)).padEnd(32, '0').slice(0, 32);	// simple for demo
-		let	nowMilliTime	= Math.floor(new Date());
-		let	valueRoleToken	= {
+		let	strRoleToken						= (Date.now().toString(16) + Math.random().toString(16).slice(2)).padEnd(32, '0').slice(0, 32);		// simple for demo
+		let	nowMilliTime						= Date.now();
+		let	valueRoleToken: DemoRoleTokenListInfo = {
 			date:			(new Date(nowMilliTime)).toISOString(),
 			expire:			(new Date(nowMilliTime + _expire)).toISOString(),
 			user:			'demo',
@@ -2909,14 +3074,14 @@ export default class R3Provider
 		};
 
 		// search target role
-		let	_target_role = null;
+		let	_target_role: DemoRoleTokenEntry | null = null;
 		for(let cnt = 0; cnt < this.roleTokens[_tenant].length; ++cnt){
 			if(_role == this.roleTokens[_tenant][cnt].path){
 				_target_role = this.roleTokens[_tenant][cnt];
 				break;
 			}
 		}
-		if(null == _target_role){
+		if(null === _target_role){
 			// need to add new role
 			_target_role = {
 				path:		_role,
@@ -2939,33 +3104,29 @@ export default class R3Provider
 	//
 	// Get Role Token List
 	//
-	getRoleTokenList(tenant, role, expand, callback)
+	getRoleTokenList(tenant: TenantData, role: string, callback: DataCallback<RoleTokenInfo[]>): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(role, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or role path(' + JSON.stringify(role) + ') parameters are wrong.');
+		const _callback	= callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || r3IsEmptyString(role, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or role path(' + JSON.stringify(role) + ') parameters are wrong.');
 			console.error(_error.message);
-			_callback(_error);
+			_callback(_error, null);
 			return;
 		}
 
 		this.startProgress();																// start progressing
 
-		if(!r3IsSafeTypedEntity(expand, 'boolean')){										// do not care for this value(always expanding)
-			expand		= true;
-		}
-		let	_tenant		= tenant.name;
-		let	_role		= role;
+		let	_tenant	= tenant.name;
+		let	_role	= role;
 
 		// search target role
-		let	_target_role = null;
+		let	_target_role: DemoRoleTokenEntry | null = null;
 		for(let cnt = 0; cnt < this.roleTokens[_tenant].length; ++cnt){
-			if(_role == this.roleTokens[_tenant][cnt].path){
+			if(_role === this.roleTokens[_tenant][cnt].path){
 				_target_role = this.roleTokens[_tenant][cnt];
 				break;
 			}
@@ -2980,13 +3141,24 @@ export default class R3Provider
 		}
 
 		// convert object to object array
-		let	tokenArray = [];
-		Object.keys(_target_role.roletokens).forEach(function(oneToken){
-			let	tokendata = r3DeepClone(_target_role.roletokens[oneToken]);
-			tokendata.token = oneToken;														// add element { ..., token: 'role token string' }
-			tokenArray.push(tokendata);
+		const tokenArray: RoleTokenInfo[] = [];
+		Object.keys(_target_role.roletokens).forEach((oneToken) => {
+			const	oneValue = _target_role.roletokens[oneToken];
+			if(isRoleTokenListResponseInfo(oneValue)){
+				const	item: RoleTokenInfo = {
+					token:			oneToken,													// add element { ..., token: 'role token string' }
+					date:			oneValue.date,
+					expire:			oneValue.expire,
+					user:			oneValue.user,
+					hostname:		oneValue.hostname,
+					ip:				oneValue.ip,
+					port:			oneValue.port,
+					cuk:			oneValue.cuk,
+					registerpath:	(r3IsString(oneValue?.registerpath) ? oneValue.registerpath : '')
+				};
+				tokenArray.push(item);
+			}
 		});
-
 		this.stopProgress();																// stop progressing
 
 		_callback(null, tokenArray);
@@ -2995,16 +3167,15 @@ export default class R3Provider
 	//
 	// Remove Role Token
 	//
-	deleteRoleToken(tenant, roletoken, callback)
+	deleteRoleToken(tenant: TenantData, roletoken: string, callback: ErrorCallback): void
 	{
-		if(!r3IsSafeTypedEntity(callback, 'function')){
+		if(!r3IsFunction(callback)){
 			console.error('callback parameter is wrong.');
 			return;
 		}
-		let	_callback	= callback;
-		let	_error;
-		if(r3IsEmptyStringObject(tenant, 'name') || r3IsEmptyString(roletoken, true)){
-			_error = new Error('tenant(' + JSON.stringify(tenant) + ') or role token(' + JSON.stringify(roletoken) + ') parameters are wrong.');
+		const _callback = callback;
+		if(!isTenantData(tenant) || r3IsEmptyString(tenant.name, true) || r3IsEmptyString(roletoken, true)){
+			const _error = new Error('tenant(' + JSON.stringify(tenant) + ') or role token(not printed) parameters are wrong.');
 			console.error(_error.message);
 			_callback(_error);
 			return;
@@ -3037,15 +3208,15 @@ export default class R3Provider
 	//
 	// Get User Data Script
 	//
-	getUserDataScript(registerpath)
+	getUserDataScript(registerpath: string): string | null
 	{
 		if(r3IsEmptyString(registerpath, true)){
-			console.error('registerpath(' + JSON.stringify(registerpath) + ') parameter is wrong.');
+			console.error('registerpath(not printed) parameter is wrong.');
 			return null;
 		}
 
 		// get user token script by expanding template
-		let	userDataScript = this.r3Context.getExpandUserData(registerpath);
+		const userDataScript = this.r3Context.getExpandUserData(registerpath);
 		if(r3IsEmptyString(userDataScript, true)){
 			console.error('Failed to generate user data script from template.');
 			return null;
@@ -3057,27 +3228,26 @@ export default class R3Provider
 	//
 	// Get Secret Yaml
 	//
-	getSecretYaml(roletoken)
+	getSecretYaml(roletoken: string): string | null
 	{
 		if(r3IsEmptyString(roletoken, true)){
-			console.error('role token(' + JSON.stringify(roletoken) + ') parameter is wrong.');
+			console.error('role token(not printed) parameter is wrong.');
 			return null;
 		}
 
 		// get secret yaml by expanding template
-		let	secretYaml = this.r3Context.getExpandSecretYaml(roletoken);
+		const secretYaml = this.r3Context.getExpandSecretYaml(roletoken, false);
 		if(r3IsEmptyString(secretYaml, true)){
 			console.error('Failed to generate secret yaml from template.');
 			return null;
 		}
-
 		return secretYaml;
 	}
 
 	//
 	// Get Secret Yaml
 	//
-	getSidecarYaml(roleyrn)
+	getSidecarYaml(roleyrn: string): string | null
 	{
 		if(r3IsEmptyString(roleyrn, true)){
 			console.error('role full yrn path(' + JSON.stringify(roleyrn) + ') parameter is wrong.');
@@ -3085,7 +3255,7 @@ export default class R3Provider
 		}
 
 		// get sidecar yaml by expanding template
-		let	sidecarYaml = this.r3Context.getExpandSidecarYaml(roleyrn);
+		const sidecarYaml = this.r3Context.getExpandSidecarYaml(roleyrn);
 		if(r3IsEmptyString(sidecarYaml, true)){
 			console.error('Failed to generate sidecar yaml from template.');
 			return null;
@@ -3096,7 +3266,7 @@ export default class R3Provider
 	//
 	// Get Custom Registration Codes
 	//
-	getCRCObject(roleToken, roleyrn, registerpath)
+	getCRCObject(roleToken: string, roleyrn: string, registerpath: string): CRCObject | null
 	{
 		if(r3IsEmptyString(roleToken, true) || r3IsEmptyString(roleyrn, true) || r3IsEmptyString(registerpath, true)){
 			console.error('role token(not printed) or full yrn path(' + JSON.stringify(roleyrn) + ') or registerpath(not printed) parameters are wrong.');
@@ -3104,8 +3274,8 @@ export default class R3Provider
 		}
 
 		// get sidecar yaml by expanding template
-		let	crcObject = this.r3Context.getExpandCRCObject(roleToken, roleyrn, registerpath);
-		if(!r3IsSafeTypedEntity(crcObject, 'object') || r3IsSafeTypedEntity(crcObject, 'array')){
+		const crcObject = this.r3Context.getExpandCRCObject(roleToken, roleyrn, registerpath);
+		if(!isCRCObject(crcObject)){
 			console.error('Failed to generate CRC object from template.');
 			return null;
 		}

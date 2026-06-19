@@ -20,8 +20,6 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import TextField					from '@mui/material/TextField';
 import Button						from '@mui/material/Button';
@@ -33,8 +31,11 @@ import Typography					from '@mui/material/Typography';
 import CheckCircleIcon				from '@mui/icons-material/CheckCircle';
 import CancelIcon					from '@mui/icons-material/Cancel';
 
-import { r3CreateServiceTenantDialog } from './r3styles';
-import { r3IsEmptyStringObject, r3IsEmptyString } from '../util/r3util';
+import R3Provider					from '../util/r3provider';
+import type { R3Theme }				from './r3theme';
+import { valTypeAllObject }			from '../util/r3types';
+import { r3CreateServiceTenantDialogStyle }	from './r3styles';
+import { r3IsEmptyStringObject, r3IsEmptyString }	from '../util/r3util';
 
 //
 // Local variables
@@ -42,25 +43,42 @@ import { r3IsEmptyStringObject, r3IsEmptyString } from '../util/r3util';
 const serviceTenantTextFieldId	= 'service-tenant-textfield-id';
 
 //
+// Props/State type
+//
+type R3CreateServiceTenantDialogRequiredProps = {
+	theme:				R3Theme;
+	r3provider:			R3Provider;
+	onClose:			(event: {}, reason: string | null, confirmed: boolean, aliasRole: string | null) => void;
+};
+
+type R3CreateServiceTenantDialogOptionProps = {
+	open?:				boolean;
+	tenant?:			{ display?: string; name?: string } | null;
+	service?:			string | null;
+	aliasRole?:			string;
+};
+
+type R3CreateServiceTenantDialogProps = R3CreateServiceTenantDialogRequiredProps & R3CreateServiceTenantDialogOptionProps;
+
+type R3CreateServiceTenantDialogState = {
+	aliasRole:			string;
+	open:				boolean;
+};
+
+type R3CreateServiceTenantDialogStyleType = ReturnType<typeof r3CreateServiceTenantDialogStyle>;
+
+//
 // Create Service Tenant Dialog Class
 //
-export default class R3CreateServiceTenantDialog extends React.Component
+export default class R3CreateServiceTenantDialog extends React.Component<R3CreateServiceTenantDialogProps, R3CreateServiceTenantDialogState>
 {
-	static propTypes = {
-		r3provider:		PropTypes.object.isRequired,
-		open:			PropTypes.bool,
-		tenant:			PropTypes.object,
-		service:		PropTypes.string,
-		aliasRole:		PropTypes.string,
+	sxClasses: R3CreateServiceTenantDialogStyleType;
 
-		onClose:		PropTypes.func.isRequired
-	};
-
-	static defaultProps = {
-		open:			false,
-		tenant:			null,
-		service:		null,
-		aliasRole:		''
+	static defaultProps: R3CreateServiceTenantDialogOptionProps = {
+		open:		false,
+		tenant:		null,
+		service:	null,
+		aliasRole:	''
 	};
 
 	state = {
@@ -68,7 +86,7 @@ export default class R3CreateServiceTenantDialog extends React.Component
 		open:		this.props.open
 	};
 
-	constructor(props)
+	constructor(props: R3CreateServiceTenantDialogProps)
 	{
 		super(props);
 
@@ -76,14 +94,14 @@ export default class R3CreateServiceTenantDialog extends React.Component
 		this.handleAliasRoleChange	= this.handleAliasRoleChange.bind(this);
 
 		// styles
-		this.sxClasses				= r3CreateServiceTenantDialog(props.theme);
+		this.sxClasses				= r3CreateServiceTenantDialogStyle(props.theme);
 	}
 
 	// [NOTE]
 	// Use getDerivedStateFromProps by deprecating componentWillReceiveProps in React 17.x.
 	// The only purpose is to set the state data from props when the dialog changes from hidden to visible.
 	//
-	static getDerivedStateFromProps(nextProps, prevState)
+	static getDerivedStateFromProps(nextProps: R3CreateServiceTenantDialogProps, prevState: R3CreateServiceTenantDialogState): Partial<R3CreateServiceTenantDialogState> | null
 	{
 		if(prevState.open != nextProps.open){
 			if(nextProps.open){
@@ -103,7 +121,7 @@ export default class R3CreateServiceTenantDialog extends React.Component
 		return null;															// Return null to indicate no change to state.
 	}
 
-	handleAliasRoleChange(event)
+	handleAliasRoleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
 	{
 		this.setState({
 			aliasRole:	event.target.value
@@ -114,8 +132,8 @@ export default class R3CreateServiceTenantDialog extends React.Component
 	{
 		const { theme, r3provider } = this.props;
 
-		let	tenant;
-		let	tenantClass;
+		let	tenant:			string;
+		let	tenantClass:	valTypeAllObject;
 		if(!r3IsEmptyStringObject(this.props.tenant, 'display')){
 			tenant		= this.props.tenant.display;
 			tenantClass	= this.sxClasses.value;
@@ -124,8 +142,8 @@ export default class R3CreateServiceTenantDialog extends React.Component
 			tenantClass	= this.sxClasses.valueItalic;
 		}
 
-		let	service;
-		let	serviceClass;
+		let	service:		string;
+		let	serviceClass:	valTypeAllObject;
 		if(!r3IsEmptyString(this.props.service, true)){
 			service			= this.props.service.trim();
 			serviceClass	= this.sxClasses.value;
@@ -134,8 +152,9 @@ export default class R3CreateServiceTenantDialog extends React.Component
 			serviceClass	= this.sxClasses.valueItalic;
 		}
 
-		let	path		= 'yrn:yahoo:' + service + '::' + (r3IsEmptyStringObject(this.props.tenant, 'name') ? '' : this.props.tenant.name);
-		let	pathClass	= this.sxClasses.value;
+		const	path		= 'yrn:yahoo:' + service + '::' + (r3IsEmptyStringObject(this.props.tenant, 'name') ? '' : this.props.tenant.name);
+		const	pathClass	= this.sxClasses.value;
+		const	roleExample	= r3provider.getR3TextRes().tResAliasRoleHint + (r3IsEmptyStringObject(this.props.tenant, 'name') ? '' : this.props.tenant.name) + ':<Role path>)';
 
 		return (
 			<Dialog
@@ -207,7 +226,7 @@ export default class R3CreateServiceTenantDialog extends React.Component
 					<TextField
 						id={ serviceTenantTextFieldId }
 						value={ this.state.aliasRole }
-						placeholder={ r3provider.getR3TextRes().tResAliasRoleHint }
+						placeholder={ roleExample }
 						onChange={ (event) => this.handleAliasRoleChange(event) }
 						slotProps ={{ input: { sx: this.sxClasses.inputTextField } }}
 						{ ...theme.r3CreatePathDialog.textField }

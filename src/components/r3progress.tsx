@@ -19,33 +19,50 @@
  *
  */
 
-import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
+import React				from 'react';
 
-import Paper						from '@mui/material/Paper';
-import CircularProgress				from '@mui/material/CircularProgress';
+import Paper				from '@mui/material/Paper';
+import CircularProgress		from '@mui/material/CircularProgress';
 
-import { r3Progress }				from './r3styles';
+import type { R3Theme }		from './r3theme';
+import { r3ProgressStyle }	from './r3styles';
+
+//
+// Props type
+//
+type R3ProgressRequiredProps = {
+	theme:				R3Theme;
+};
+
+type R3ProgressOptionProps = {
+	cbRefRegister?:		((handler: (isDisplay: boolean) => void) => void) | null;
+	onClose?:			(() => void) | null;
+};
+
+type R3ProgressProps = R3ProgressRequiredProps & R3ProgressOptionProps;
+
+type R3ProgressState = {
+	open:				boolean;
+};
+
+type R3ProgressStyleType = ReturnType<typeof r3ProgressStyle>;
 
 //
 // Progress Modal Class
 //
-export default class R3Progress extends React.Component
+export default class R3Progress extends React.Component<R3ProgressProps, R3ProgressState>
 {
+	sxClasses: R3ProgressStyleType;
+
+	static defaultProps: R3ProgressOptionProps = {
+		cbRefRegister:	null,
+		onClose:		null
+	};
+
 	// [NOTE]
 	// It corresponds with Callback function without using ForwardRef.
 	// Please correct it when using ForwardRef in the future.
 	//
-	static propTypes = {
-		cbRefRegister:	PropTypes.func,
-		onClose:		PropTypes.func
-	};
-
-	static defaultProps = {
-		cbRefRegister:	null,
-		onClose:		null
-	};
 
 	state = {
 		open:			false
@@ -53,7 +70,7 @@ export default class R3Progress extends React.Component
 
 	displayCounter		= 0;			// internal data
 
-	constructor(props)
+	constructor(props: R3ProgressProps)
 	{
 		super(props);
 
@@ -65,10 +82,10 @@ export default class R3Progress extends React.Component
 		}
 
 		// styles
-		this.sxClasses = r3Progress(props.theme);
+		this.sxClasses = r3ProgressStyle(props.theme);
 	}
 
-	handleDisplay(isDisplay)
+	handleDisplay(isDisplay: boolean): void
 	{
 		if(isDisplay){
 			++(this.displayCounter);

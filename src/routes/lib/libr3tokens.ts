@@ -19,88 +19,112 @@
  *
  */
 
-'use strict';
+import fs			from 'fs';
+import http			from 'http';
+import https		from 'https';
+import { Request }	from 'express';
+import R3AppConfig	from './libr3appconfig';
+import { getSafeString, isSafeBoolean, isSafeEntity, isSafeFunction, isSafeHaskey, isSafeObject, isSafeString, isValidatorModule, SignMinUrlEntry, SignMinUrls, StringValObj }	from './libr3util';
 
-var	r3util		= require('./libr3util');
-var	appConfig	= require('./libr3appconfig').r3AppConfig;
-var	fs			= require('fs');
+//
+// Types
+//
+type resGetUserToken = {
+	result:		boolean;
+	message:	string | null;
+	token?:		string;
+	scoped?:	boolean;
+	username?:	string;
+};
+
+//
+// Type checker
+//
+const isResGetUserToken = (obj: unknown): obj is resGetUserToken =>
+{
+	if(!isSafeObject(obj)){
+		return false;
+	}
+	if(	isSafeBoolean(obj?.result)										&&
+		(null === obj?.message			|| isSafeString(obj?.message))	&&
+		(undefined === obj?.token		|| isSafeString(obj?.token))	&&
+		(undefined === obj?.scoped		|| isSafeBoolean(obj?.scoped))	&&
+		(undefined === obj?.username	|| isSafeString(obj?.username))	)
+	{
+		return true;
+	}
+	return false;
+};
 
 //---------------------------------------------------------
 // User Token Class
 //---------------------------------------------------------
-var R3UserToken = (function()
+export default class R3UserToken
 {
+	private appConfig:	R3AppConfig;
+	private username:	string | null									= null;
+	private sinintype:	string | null									= null;
+	private signinUrl:	SignMinUrls | SignMinUrlEntry | string | null	= null;
+	private signoutUrl:	SignMinUrls | SignMinUrlEntry | string | null	= null;
+	private otherToken:	string | null									= null;
+	private configName:	string | null									= null;
+
 	//
 	// Constructor
 	//
-	var R3UserToken = function(req)
+	constructor(req: Request)
 	{
-		if(!(this instanceof R3UserToken)){
-			return new R3UserToken(req);
-		}
+		this.appConfig	= new R3AppConfig();
 
-		this.appConfig	= new appConfig();
-		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getUserName)){
-			this.username	= this.appConfig.getUserValidatorObj().getUserName(req);
-			if(null === this.username){
+		const validator	= this.appConfig.getUserValidatorObj();
+		if(isValidatorModule(validator)){
+			this.username	= validator.getUserName(req);
+			if (null === this.username) {
 				console.error('could not get user name, it is not login status.');
 			}
+
+			this.sinintype	= validator.getSignInType();
+			this.signinUrl	= validator.getSignInUri(req);
+			this.signoutUrl	= validator.getSignOutUri(req);
+
+			if(isSafeFunction(validator.getOtherToken)){
+				this.otherToken = validator.getOtherToken(req);
+			}
+			if(isSafeFunction(validator.getConfigName)){
+				this.configName = validator.getConfigName(req);
+			}
+
 		}else{
-			this.username	= null;
-		}
-		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getSignInType)){
-			this.sinintype	= this.appConfig.getUserValidatorObj().getSignInType();
-		}else{
-			this.sinintype	= null;
-		}
-		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getSignInUri)){
-			this.signinUrl	= this.appConfig.getUserValidatorObj().getSignInUri(req);
-		}else{
-			this.signinUrl	= null;
-		}
-		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getSignOutUri)){
-			this.signoutUrl	= this.appConfig.getUserValidatorObj().getSignOutUri(req);
-		}else{
-			this.signoutUrl	= null;
-		}
-		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getOtherToken)){
-			this.otherToken	= this.appConfig.getUserValidatorObj().getOtherToken(req);
-		}else{
-			this.otherToken	= null;
-		}
-		if(r3util.isSafeEntity(this.appConfig.getUserValidatorObj().getConfigName)){
-			this.configName	= this.appConfig.getUserValidatorObj().getConfigName(req);
-		}else{
-			this.configName	= null;
+			console.error('validator object is something wrong.');
 		}
 	};
-
-	var proto = R3UserToken.prototype;
 
 	//
 	// Methods
 	//
-	proto.getUserName = function()
+	public getUserName = (): string | null =>
 	{
 		return this.username;
 	};
 
-	proto.rawExtractUserToken = function(req)
+	public rawExtractUserToken = (req: Request): string | null =>
 	{
-		if(	!r3util.isSafeEntity(req)							||
-			!r3util.isSafeEntity(req.headers)					||
-			!r3util.isSafeString(req.headers['x-auth-token'])	)
+		if(	!isSafeEntity(req)							||
+			!isSafeEntity(req.headers)					||
+			!isSafeHaskey(req.headers, 'x-auth-token')	||
+			!isSafeString(req.headers['x-auth-token'])	)
 		{
 			return null;
 		}
-		var	token = req.headers['x-auth-token'];
+
+		let	token: string = req.headers['x-auth-token'];
 		if(-1 !== token.indexOf('R=')){
 			console.warn('The request object does not have user token header but has role token.');
 			return null;
 		}
 		if(-1 !== token.indexOf('U=')){
-			token = token.substr(2);
-			if(!r3util.isSafeString(token)){
+			token = token.substring(2);
+			if(!isSafeString(token)){
 				console.warn('The request object has empty user token.');
 				return null;
 			}
@@ -108,135 +132,145 @@ var R3UserToken = (function()
 		return token;
 	};
 
-	proto.rawGetUserToken = function(callback, username, token, tenant)
+	public rawGetUserToken = (callback: (err: Error | null, token: string | null) => void, username: string | null, token: string | null, tenant?: string): void =>
 	{
-		var	secure		= false;
-		var	httpobj		= null;
-		var agent		= null;			// for HTTPS
-		if('https' == this.appConfig.getApiScheme() || 'HTTPS' == this.appConfig.getApiScheme()){
-			secure		= true;
-			httpobj		= require('https');
+		let	secure								= false;
+		let	httpobj: typeof http | typeof https	= null;		// default HTTP
+		let agent: https.Agent | null			= null;
 
-			var agentOptions = {
+		if('https' === this.appConfig.getApiScheme()?.toLowerCase()){
+			// Case HTTPS
+			secure	= true;
+			httpobj	= https;
+
+			const agentOptions = {
 				host:				this.appConfig.getApiHost(),
 				port:				this.appConfig.getApiPort(),
 				path:				'/',
 				rejectUnauthorized:	this.appConfig.getRejectUnauthorized()
 			};
 			agent		= new httpobj.Agent(agentOptions);
-
-		}else{
-			httpobj		= require('http');
 		}
-		var	_callback	= callback;
-		var	isscoped	= r3util.isSafeString(tenant) && r3util.isSafeString(token);
+
+		const _callback	= callback;
+		const isscoped	= isSafeString(tenant) && isSafeString(token);
 
 		// arguments for the request to API server
-		var urlarg	=  r3util.isSafeString(username) ? ('?username=' + this.username + (isscoped ? ('&tenantname=' + tenant) : '')) : '';
-		var	headers	= {
+		const urlarg	=  isSafeString(username) ? ('?username=' + username + (isscoped ? ('&tenantname=' + tenant) : '')) : '';
+
+		const headers: StringValObj = {
 			'Content-Type':		'application/json',
-			'Content-Length':	0
+			'Content-Length':	String(0)
 		};
 		if(isscoped){
-			headers['x-auth-token'] = 'U=' + token;
-		}else if(r3util.isSafeString(token)){
+			headers['x-auth-token'] = 'U=' + (isSafeString(token) ? token : '');
+		}else if(isSafeString(token)){
 			// token is other token
 			headers['x-auth-token'] = token;
 		}
-		var	options	= {
+
+		const options: http.RequestOptions & { ca?: string[] } = {
 			'host':		this.appConfig.getApiHost(),
 			'port':		this.appConfig.getApiPort(),
 			'method':	'PUT',
 			'headers':	headers,
 			'path':		('/v1/user/tokens' + encodeURI(urlarg))
 		};
-		if(secure){
+		if(secure && agent){
 			options.agent = agent;
 
 			// Set CA cert file
-			var ca = this.appConfig.getCA();
-			if(r3util.isSafeString(ca)){
+			const ca = this.appConfig.getCA();
+			if(isSafeString(ca)){
 				options.ca = [ fs.readFileSync(ca, {encoding: 'utf-8'}) ];
 			}
 		}
 
 		console.info('api host = ' + this.appConfig.getApiHost());
-		console.info('api port = ' + this.appConfig.getApiPort());
-		console.info('method = PUT');
-		console.info('headers = ' + headers);
-		console.info('path = /v1/user/tokens' + encodeURI(urlarg));
+		console.info('api port = ' + String(this.appConfig.getApiPort()));
+		console.info('method   = PUT');
+		console.info('headers  = ' + JSON.stringify(headers));
+		console.info('path     = /v1/user/tokens' + encodeURI(urlarg));
 
 		// send request
-		var	request		= httpobj.request(options, function(response)
-		{
+		const request	= httpobj.request(options, (response) => {
 			response.setEncoding('utf8');
-			var	resBody = '';
+			let	resBody = '';
 
-			response.on('data', function(chunk)
-			{
+			response.on('data', (chunk) => {
 				console.info('RESPONSE CHUNK = ' + chunk);
 				resBody += chunk;
 			});
 
-			response.on('end', function(result)					// eslint-disable-line no-unused-vars
-			{
+			response.on('end', () => {
 				console.info('RESPONSE CODE   = ' + response.statusCode);
 				console.info('RESPONSE HEADER = ' + JSON.stringify(response.headers));
-				console.info('RESPONSE BODY   = ' + r3util.getSafeString(resBody));
+				console.info('RESPONSE BODY   = ' + getSafeString(resBody));
 
-				var	errobj	= null;
-				var	cvtBody	= JSON.parse(r3util.getSafeString(resBody));
+				let errobj: Error | null			= null;
+				let	cvtBody: resGetUserToken | null	= JSON.parse(getSafeString(resBody));
+				let	_token: string | null			= null;
 
 				if(300 <= response.statusCode){
 					errobj = new Error('RESPONSE CODE = ' + response.statusCode);
-				}else if(	!r3util.isSafeEntity(cvtBody)			||
-							!r3util.isSafeBoolean(cvtBody.result)	||
-							!r3util.isSafeEntity(cvtBody.message)	||
-							!r3util.isSafeBoolean(cvtBody.scoped)	||
-							!r3util.isSafeEntity(cvtBody.token)		)
+				}else if(	!isSafeEntity(cvtBody)			||
+							!isSafeBoolean(cvtBody.result)	||
+							!isSafeEntity(cvtBody.message)	||
+							!isSafeBoolean(cvtBody.scoped)	||
+							!isSafeEntity(cvtBody.token)		)
 				{
 					errobj = new Error('Response body is something wrong.');
+
+				}else if(!isResGetUserToken(cvtBody)){
+					errobj = new Error('Could not get user token, the response is something wrong');
 				}else if(!cvtBody.result){
-					errobj = new Error('Could not get user token by ' + r3util.isSafeString(cvtBody.message));
+					errobj = new Error('Could not get user token by ' + isSafeString(cvtBody.message));
+				}else if(!isSafeBoolean(cvtBody?.scoped)){
+					errobj = new Error('Could not get user token scope, the response is something wrong');
 				}else if(isscoped !== cvtBody.scoped){
 					errobj = new Error('Could not get ' + (isscoped ? 'scoped' : 'unscoped') + ' user token.');
-				}else if(!r3util.isSafeString(cvtBody.token)){
+				}else if(!isSafeString(cvtBody?.token)){
 					errobj = new Error('Got token is not strong type.');
+				}else{
+					_token = cvtBody?.token;
 				}
+
 				if(null !== errobj){
 					console.error(errobj.message);
 					_callback(errobj, null);
 					return;
 				}
-				_callback(null, cvtBody.token);
+				_callback(null, _token);
 			});
 		});
-		request.on('error', function(error)
+
+		request.on('error', (error: Error) =>
 		{
 			// [NOTE]
 			// If fatal error is occurred, the error message must be started with 'K2HR3 API SERVER ERROR'.
 			// This value is checked in caller function.
 			//
-			console.error('ERROR RESPONSE = ' + error.message);
-			_callback(new Error('K2HR3 API SERVER ERROR : ' + error.message), null);
+			console.error('ERROR RESPONSE = ' + (isSafeString(error.message) ? error.message : 'unknown'));
+			_callback(new Error('K2HR3 API SERVER ERROR : ' + (isSafeString(error.message) ? error.message : 'unknown')), null);
 		});
+
 		request.end();
 	};
 
-	proto.hasTokenHeader = function(req)
+	public hasTokenHeader = (req: Request): boolean =>
 	{
 		return (null !== this.rawExtractUserToken(req));
 	};
 
-	proto.getConfigName = function()
+	public getConfigName = (): string | null =>
 	{
 		return this.configName;
 	};
 
-	proto.getUnscopedUserToken = function(callback)
+	public getUnscopedUserToken = (callback: (err: Error | null, token: string | null) => void): void =>
 	{
-		if(!r3util.isSafeString(this.username)){
-			var	errobj = new Error('User name is not specified(not found authentication cookie)');
+		if(!isSafeString(this.username)){
+			const	errobj = new Error('User name is not specified(not found authentication cookie)');
 			console.error(errobj.message);
 			callback(errobj, null);
 			return;
@@ -244,18 +278,18 @@ var R3UserToken = (function()
 		return this.rawGetUserToken(callback, null, this.otherToken);
 	};
 
-	proto.getScopedUserToken = function(req, tenant, callback)
+	public getScopedUserToken = (req: Request, tenant: string, callback: (err: Error | null, token: string | null) => void): void =>
 	{
-		var	errobj;
-		if(!r3util.isSafeString(this.username)){
-			errobj = new Error('Not find user name.');
+		if(!isSafeString(this.username)){
+			const	errobj = new Error('Not find user name.');
 			console.error(errobj.message);
 			callback(errobj, null);
 			return;
 		}
-		var	token = this.rawExtractUserToken(req);
-		if(!r3util.isSafeString(token)){
-			errobj = new Error('The request does not safe unscoped user token.');
+
+		const	token = this.rawExtractUserToken(req);
+		if(!isSafeString(token)){
+			const	errobj = new Error('The request does not safe unscoped user token.');
 			console.error(errobj.message);
 			callback(errobj, null);
 			return;
@@ -263,28 +297,21 @@ var R3UserToken = (function()
 		return this.rawGetUserToken(callback, this.username, token, tenant);
 	};
 
-	proto.getSignInType = function()
+	public getSignInType = (): string | null =>
 	{
 		return this.sinintype;
 	};
 
-	proto.getSignInUrl = function()
+	public getSignInUrl = (): SignMinUrls | SignMinUrlEntry | string | null =>
 	{
 		return this.signinUrl;
 	};
 
-	proto.getSignOutUrl = function()
+	public getSignOutUrl = (): SignMinUrls | SignMinUrlEntry | string | null =>
 	{
 		return this.signoutUrl;
 	};
-
-	return R3UserToken;
-})();
-
-//---------------------------------------------------------
-// Exports
-//---------------------------------------------------------
-exports.r3UserToken = R3UserToken;
+}
 
 /*
  * Local variables:

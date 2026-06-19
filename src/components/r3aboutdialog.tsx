@@ -20,8 +20,6 @@
  */
 
 import React						from 'react';
-import ReactDOM						from 'react-dom';						// eslint-disable-line no-unused-vars
-import PropTypes					from 'prop-types';
 
 import Button						from '@mui/material/Button';
 import Dialog						from '@mui/material/Dialog';
@@ -32,45 +30,59 @@ import DialogActions				from '@mui/material/DialogActions';
 import Typography					from '@mui/material/Typography';
 import CancelIcon					from '@mui/icons-material/Cancel';
 
+import R3Provider					from '../util/r3provider';
 import { r3IsEmptyString }			from '../util/r3util';
 import { r3AboutDialogStyles }		from './r3styles';
+import type { R3Theme }				from './r3theme';
 
 //
 // Local variables
 //
 const k2hr3Title		=	'K2HR3';
 const k2hr3LicenseType	=	'MIT';
-const k2hr3Content		=	'K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers common' + 
-							'management information for the cloud.' + 
-							'K2HR3 can dynamically manage information as "who", "what", "operate".' + 
+const k2hr3Content		=	'K2HR3 is K2hdkc based Resource and Roles and policy Rules, gathers common' +
+							'management information for the cloud.' +
+							'K2HR3 can dynamically manage information as "who", "what", "operate".' +
 							'These are stored as roles, resources, policies in K2hdkc, and the client' +
 							'system can dynamically read and modify these information.';
 const k2hr3License		=	'Copyright(C) 2017 Yahoo Japan Corporation.';
 
 //
+// Props/State type
+//
+type R3AboutDialogRequiredProps = {
+	theme:				R3Theme;
+	r3provider:			R3Provider;
+	open:				boolean;
+	onClose:			(event: {}, reason: string | null) => void;
+};
+
+type R3AboutDialogOptionProps = {
+	licenseText?:		string | null;
+	licensePackage?:	string | null;
+	licenseType?:		string | null;
+	r3VersionText?:		string | null;
+};
+
+type R3AboutDialogProps = R3AboutDialogRequiredProps & R3AboutDialogOptionProps;
+
+type R3AboutDialogStylesType = ReturnType<typeof r3AboutDialogStyles>;
+
+//
 // User Data(with role token) Information Class
 //
-export default class R3AboutDialog extends React.Component
+export default class R3AboutDialog extends React.Component<R3AboutDialogProps>
 {
-	static propTypes = {
-		r3provider:		PropTypes.object.isRequired,
-		open:			PropTypes.bool.isRequired,
-		onClose:		PropTypes.func.isRequired,
+	sxClasses: R3AboutDialogStylesType;
 
-		licensePackage:	PropTypes.string,
-		licenseType:	PropTypes.string,
-		licenseText:	PropTypes.string,
-		r3VersionText:	PropTypes.string
-	};
-
-	static defaultProps = {
+	static defaultProps: R3AboutDialogOptionProps = {
 		licensePackage:	null,
 		licenseType:	null,
 		licenseText:	null,
 		r3VersionText:	null
 	};
 
-	constructor(props)
+	constructor(props: R3AboutDialogProps)
 	{
 		super(props);
 
@@ -81,7 +93,7 @@ export default class R3AboutDialog extends React.Component
 		this.sxClasses		= r3AboutDialogStyles(props.theme);
 	}
 
-	handleClose(event, reason)
+	handleClose(event: {}, reason: string | null): void
 	{
 		this.props.onClose(event, reason);
 	}
@@ -90,10 +102,10 @@ export default class R3AboutDialog extends React.Component
 	{
 		// Output by <p> tag per line
 		//
-		let	lines = this.props.licenseText.split('\n');
+		let	lines = (this.props.licenseText ?? '').split('\n');
 
 		return (
-			lines.map( (item, pos) => {
+			lines.map( (item: string, pos: number) => {
 				return (
 					<Typography key={ pos }>
 						{ item }
@@ -171,7 +183,7 @@ export default class R3AboutDialog extends React.Component
 						About { (r3IsEmptyString(this.props.licensePackage) ? k2hr3Title : this.props.licensePackage) }
 					</Typography>
 				</DialogTitle>
-				<DialogContent 
+				<DialogContent
 					sx={ this.sxClasses.dialogContent }
 				>
 					<DialogContentText

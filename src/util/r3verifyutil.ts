@@ -19,13 +19,13 @@
  *
  */
 
-import { serviceResTypeUrl, serviceResTypeObject, serviceResTypeUnknown }	from '../util/r3types';
-import { r3IsEmptyEntity, r3IsEmptyString, r3CompareCaseString, r3IsSafeTypedEntity, r3IsJSON, r3ConvertFromJSON, r3IsSafeUrl, r3DeepClone }	from '../util/r3util';
+import { serviceResTypeUrl, serviceResTypeObject, serviceResTypeUnknown, ServiceResType, CheckServiceResult, isServiceResourceObjectArray, ServiceResourceObject, ResourceType, resourceTypeObject, resourceTypeString, valTypeAll, valTypeAllObject }	from '../util/r3types';
+import { r3IsString, r3IsBoolean, r3IsNumber, r3IsObject, r3IsArray, r3IsFunction, r3IsEmptyString, r3IsEmptyEntity, r3IsSafeUrl, r3IsJSON, r3ConvertFromJSON, r3DeepClone }	from '../util/r3util';
 
 //
-// Utility : Check service resource for static resource string
+// [NOTE]
+// Allowed static resource data is following:
 //
-// allowed static resource data is following:
 //	verify	= [					:	An array with at least one element object
 //		{
 //			name				:	resource name which is key name(path) for resource
@@ -39,122 +39,125 @@ import { r3IsEmptyEntity, r3IsEmptyString, r3CompareCaseString, r3IsSafeTypedEnt
 //		},
 //		...
 //	]
-export const checkServiceReourceStaticString = (serviceResObjArr) =>
-{
-	if(!r3IsSafeTypedEntity(serviceResObjArr, 'array') || 0 === serviceResObjArr.length){
-		return false;
-	}
-
-	for(let cnt = 0; cnt < serviceResObjArr.length; ++cnt){
-		if(r3IsEmptyString(serviceResObjArr[cnt].name)){
-			// name key must be existed.
-			return false;
-		}
-		if(!r3CompareCaseString('string', serviceResObjArr[cnt].type) && !r3CompareCaseString('object', serviceResObjArr[cnt].type)){
-			// type must be string or object
-			return false;
-		}
-	}
-	return true;
-};
+//
 
 //
 // Utility : Normalize service resource value to static resource string
 //
-export const normalizeServiceReourceOneStaticObject = (serviceResObj, count) =>
+export const normalizeServiceReourceOneStaticObject = (serviceResObj: unknown, count: number): ServiceResourceObject | null =>
 {
-	if(!r3IsSafeTypedEntity(count, 'number')){
+	if(!r3IsNumber(count)){
 		count = 0;
 	}
 
-	let	oneValue = {};
-	if(r3IsEmptyEntity(serviceResObj) || r3IsSafeTypedEntity(serviceResObj, 'function')){
+	let oneValue: ServiceResourceObject;
+	if(r3IsEmptyEntity(serviceResObj) || r3IsFunction(serviceResObj)){
 		// no value
 		return null;
 
-	}else if(r3IsSafeTypedEntity(serviceResObj, 'string')){
-		oneValue.name = 'undefined_' + String(count);
-		oneValue.type = 'string';
-		oneValue.date = serviceResObj;
+	}else if(r3IsString(serviceResObj)){
+		oneValue = {
+			name:	 'undefined_' + String(count),
+			type:	 resourceTypeString,
+			data:	 serviceResObj
+		};
 
-	}else if(r3IsSafeTypedEntity(serviceResObj, 'boolean')){
-		oneValue.name = 'undefined_' + String(count);
-		oneValue.type = 'string';
-		oneValue.data = (serviceResObj ? 'true' : 'false');
+	}else if(r3IsBoolean(serviceResObj)){
+		oneValue = {
+			name:	'undefined_' + String(count),
+			type:	resourceTypeString,
+			data:	(serviceResObj ? 'true' : 'false')
+		};
 
-	}else if(r3IsSafeTypedEntity(serviceResObj, 'array')){
-		oneValue.name = 'undefined_' + String(count);
-		oneValue.type = 'string';
-		oneValue.data = JSON.stringify(serviceResObj);
+	}else if(r3IsArray(serviceResObj)){
+		oneValue = {
+			name:	'undefined_' + String(count),
+			type:	resourceTypeString,
+			data:	JSON.stringify(serviceResObj)
+		};
 
-	}else{
-		// object...
+	}else if(r3IsObject(serviceResObj)){
+		let	_name: string;
 		if(r3IsEmptyEntity(serviceResObj.name)){
-			oneValue.name = 'undefined_' + String(count);
-		}else if(r3IsSafeTypedEntity(serviceResObj.name, 'string')){
-			oneValue.name = serviceResObj.name;
+			_name = 'undefined_' + String(count);
+		}else if(r3IsString(serviceResObj.name)){
+			_name = serviceResObj.name;
 		}else{
-			oneValue.name = JSON.stringify(serviceResObj.name);
+			_name = JSON.stringify(serviceResObj.name);
 		}
 
-		if(r3IsSafeTypedEntity(serviceResObj.type, 'object')){
-			oneValue.type = 'object';
+		let	_type: ResourceType;
+		if(r3IsObject(serviceResObj.type)){
+			_type = resourceTypeObject;
 		}else{
-			oneValue.type = 'string';
+			_type = resourceTypeString;
 		}
 
+		let	_data: string | valTypeAllObject | null;
 		if(r3IsEmptyEntity(serviceResObj.data)){
-			oneValue.data = null;
-		}else if(r3IsSafeTypedEntity(serviceResObj.data, 'string')){
-			oneValue.data = serviceResObj.data;
+			_data = null;
+		}else if(r3IsString(serviceResObj.data)){
+			_data = serviceResObj.data;
 		}else{
-			oneValue.data = JSON.stringify(serviceResObj.data);
+			_data = JSON.stringify(serviceResObj.data);
 		}
 
-		if(r3IsSafeTypedEntity(serviceResObj.expire, 'number')){
-			oneValue.expire = serviceResObj.expire;
+		let	_expire: number | null | undefined = undefined;
+		if(r3IsNumber(serviceResObj.expire)){
+			_expire = serviceResObj.expire;
 		}
 
-		if(!r3IsSafeTypedEntity(serviceResObj.keys, 'function')){
-			let	keys = serviceResObj.keys;
-			if(r3IsJSON(keys)){
-				keys = r3ConvertFromJSON(keys);
+		let	_key: valTypeAllObject | undefined;
+		if(r3IsObject(serviceResObj.keys) || r3IsString(serviceResObj.keys)){
+			let	_keystmp: valTypeAll;
+			if(r3IsJSON(serviceResObj.keys)){
+				_keystmp = r3ConvertFromJSON(serviceResObj.keys);
+			}else{
+				_keystmp = serviceResObj.keys;
 			}
-			if(	!r3IsEmptyEntity(keys)					&&
-				!r3IsSafeTypedEntity(keys, 'function')	&&
-				!r3IsSafeTypedEntity(keys, 'string')	&&
-				!r3IsSafeTypedEntity(keys, 'boolean')	&&
-				!r3IsSafeTypedEntity(keys, 'array')		)
-			{
-				oneValue.keys = r3DeepClone(keys);
+			if(r3IsObject(_keystmp) && !r3IsEmptyEntity(_keystmp)){
+				_key = r3DeepClone(_keystmp);
 			}else{
 				// keys is not object
 			}
 		}
+
+		oneValue = {
+			name:	_name,
+			expire:	_expire,
+			type:	_type,
+			data:	_data,
+			keys:	_key
+		};
+	}else{
+		// unknown object type
+		return null;
 	}
 	return oneValue;
 };
 
-export const normalizeServiceReourceStaticObject = (serviceResource) =>
+export const normalizeServiceReourceStaticObject = (serviceResource: unknown): ServiceResourceObject[] =>
 {
-	let	normValue = [];
+	const normValue: ServiceResourceObject[] = [];
 
-	if(r3IsJSON(serviceResource)){
+	let	resource = serviceResource;
+	if(r3IsString(resource) && r3IsJSON(resource)){
 		// value is JSON string(this process does not occur)
-		serviceResource = r3ConvertFromJSON(serviceResource);
+		resource = r3ConvertFromJSON(resource);
 	}
 
 	let	count    = 0;
-	let	oneValue;
-	if(!r3IsSafeTypedEntity(serviceResource, 'array')){
+	let	oneValue: ServiceResourceObject | null;
+	if(!r3IsArray(resource)){
 		// value should be an array, but try to convert it.
-		oneValue = normalizeServiceReourceOneStaticObject(serviceResource, count);
+		oneValue = normalizeServiceReourceOneStaticObject(resource, count);
 		if(null != oneValue){
 			normValue.push(oneValue);
 		}
 	}else{
-		for(let cnt = 0; cnt < serviceResource.length; ++cnt){
-			oneValue = normalizeServiceReourceOneStaticObject(serviceResource[cnt], count);
+		const arr = resource;
+		for(let cnt = 0; cnt < arr.length; ++cnt){
+			oneValue = normalizeServiceReourceOneStaticObject(arr[cnt], count);
 			if(null != oneValue){
 				normValue.push(oneValue);
 				++count;
@@ -172,35 +175,35 @@ export const normalizeServiceReourceStaticObject = (serviceResource) =>
 //		error:	<string is r3TextRes object key name. if not error, this value is null>
 // }
 //
-export const checkServiceResourceValue = (serviceResource) =>
+export const checkServiceResourceValue = (serviceResource: valTypeAll): CheckServiceResult =>
 {
-	let	result = {
-		type:	serviceResTypeUnknown,
-		error:	null
+	const result: CheckServiceResult = {
+		error:	null,
+		type:	serviceResTypeUnknown
 	};
 
-	if(r3IsSafeTypedEntity(serviceResource, 'array')){
+	if(r3IsArray(serviceResource)){
 		// an array for static resources object
-		if(!checkServiceReourceStaticString(serviceResource)){
+		if(!isServiceResourceObjectArray(serviceResource)){
 			result.error = 'eNewWrongVerifyObject';
 		}else{
 			result.type	 = serviceResTypeObject;
 		}
 
-	}else if(r3IsEmptyString(serviceResource)){
+	}else if(r3IsString(serviceResource) && r3IsEmptyString(serviceResource)){
 		// value must be not empty string
 		result.error = 'eNewEmptyVerify';
 
-	}else if(r3IsJSON(serviceResource)){
+	}else if(r3IsString(serviceResource) && r3IsJSON(serviceResource)){
 		// value is JSON string(this process does not occur)
-		let	serviceResObjArr = r3ConvertFromJSON(serviceResource);
-		if(!checkServiceReourceStaticString(serviceResObjArr)){
+		const serviceResObjArr = r3ConvertFromJSON(serviceResource);
+		if(!isServiceResourceObjectArray(serviceResObjArr)){
 			result.error = 'eNewWrongVerifyObject';
 		}else{
 			result.type	 = serviceResTypeObject;
 		}
 
-	}else if(r3IsSafeUrl(serviceResource)){
+	}else if(r3IsString(serviceResource) && r3IsSafeUrl(serviceResource)){
 		// value is verify URL
 		result.type	 = serviceResTypeUrl;
 
@@ -214,36 +217,36 @@ export const checkServiceResourceValue = (serviceResource) =>
 //
 // Utility : Check error in service resource value
 //
-export const isErrorServiceResourceValue = (serviceResource) =>
+export const isErrorServiceResourceValue = (serviceResource: valTypeAll): boolean =>
 {
-	let	result = checkServiceResourceValue(serviceResource);
+	const result = checkServiceResourceValue(serviceResource);
 	return (null != result.error);
 };
 
 //
 // Utility : Get verify url or static string type
 //
-export const getServiceResourceType = (serviceResource) =>
+export const getServiceResourceType = (serviceResource: valTypeAll): ServiceResType =>
 {
-	let	result = checkServiceResourceValue(serviceResource);
+	const result = checkServiceResourceValue(serviceResource);
 	return result.type;
 };
 
 //
 // Utility : check verify url type
 //
-export const isServiceResourceVerifyUrl = (serviceResource) =>
+export const isServiceResourceVerifyUrl = (serviceResource: valTypeAll): boolean =>
 {
-	let	result = checkServiceResourceValue(serviceResource);
+	const result = checkServiceResourceValue(serviceResource);
 	return (result.type == serviceResTypeUrl);
 };
 
 //
 // Utility : check static resource string type
 //
-export const isServiceResourceStaticString = (serviceResource) =>
+export const isServiceResourceStaticString = (serviceResource: valTypeAll): boolean =>
 {
-	let	result = checkServiceResourceValue(serviceResource);
+	const result = checkServiceResourceValue(serviceResource);
 	return (result.type == serviceResTypeObject);
 };
 
