@@ -4,23 +4,23 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^9.0.1",
-    "@mui/material": "^9.0.1",
+    "@mui/icons-material": "^9.1.1",
+    "@mui/material": "^9.1.1",
     "ajv": "^8.20.0",
-    "body-parser": "^2.2.2",
+    "body-parser": "^2.3.0",
     "config": "^4.4.1",
     "cookie-parser": "^1.4.7",
     "debug": "^4.4.3",
-    "ejs": "^5.0.2",
+    "ejs": "^6.0.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "jose": "^6.2.3",
-    "morgan": "^1.10.1",
+    "morgan": "^1.11.0",
     "openid-client": "^6.8.4",
     "passport": "^0.7.0",
     "prop-types": "^15.8.1",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "react-transition-group": "^4.4.5",
     "rotating-file-stream": "^3.2.9",
     "serve-favicon": "^2.5.1",
@@ -53,15 +53,12 @@
     "views": "views"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
-    "@babel/eslint-parser": "^7.28.6",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/plugin-proposal-decorators": "^7.29.0",
-    "@babel/plugin-proposal-private-methods": "^7.18.6",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@babel/preset-env": "^7.29.5",
-    "@babel/preset-react": "^7.28.5",
-    "@babel/preset-typescript": "^7.28.5",
+    "@babel/core": "^8.0.1",
+    "@babel/eslint-parser": "^8.0.1",
+    "@babel/plugin-proposal-decorators": "^8.0.2",
+    "@babel/preset-env": "^8.0.2",
+    "@babel/preset-react": "^8.0.1",
+    "@babel/preset-typescript": "^8.0.1",
     "@types/body-parser": "^1.19.6",
     "@types/cookie-parser": "^1.4.10",
     "@types/debug": "^4.1.13",
@@ -69,29 +66,29 @@
     "@types/express-session": "^1.19.0",
     "@types/jest": "^30.0.0",
     "@types/morgan": "^1.9.10",
-    "@types/node": "^25.7.0",
+    "@types/node": "^26.0.0",
     "@types/passport": "^1.0.17",
-    "@types/react": "^19.2.14",
+    "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@types/serve-favicon": "^2.5.7",
-    "@typescript-eslint/eslint-plugin": "^8.59.3",
-    "@typescript-eslint/parser": "^8.59.3",
+    "@typescript-eslint/eslint-plugin": "^8.61.1",
+    "@typescript-eslint/parser": "^8.61.1",
     "babel-jest": "^30.4.1",
     "babel-loader": "^10.1.1",
     "css-loader": "^7.1.4",
     "eslint": "^9.39.4",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^17.6.0",
-    "jest": "^30.4.1",
+    "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
     "license-checker": "^25.0.1",
     "react-test-context-provider": "^2.2.0",
-    "react-test-renderer": "^19.2.6",
+    "react-test-renderer": "^19.2.7",
     "style-loader": "^4.0.0",
-    "ts-loader": "^9.5.7",
+    "ts-loader": "^9.6.1",
     "typescript": "^6.0.3",
-    "webpack": "^5.106.2",
-    "webpack-cli": "^7.0.2"
+    "webpack": "^5.107.2",
+    "webpack-cli": "^7.0.3"
   },
   "browser": {
     "crypto": false
@@ -181,42 +178,18 @@
     "presets": [
       "@babel/preset-env",
       "@babel/preset-react",
-      [
-        "@babel/preset-typescript",
-        {
-          "allowDeclareFields": true
-        }
-      ]
+      "@babel/preset-typescript"
     ],
+    "assumptions": {
+      "setPublicClassFields": true,
+      "privateFieldsAsProperties": true
+    },
     "plugins": [
-      [
-        "@babel/plugin-transform-typescript",
-        {
-          "allowDeclareFields": true
-        }
-      ],
+      "@babel/plugin-transform-typescript",
       [
         "@babel/plugin-proposal-decorators",
         {
-          "legacy": true
-        }
-      ],
-      [
-        "@babel/plugin-proposal-class-properties",
-        {
-          "loose": true
-        }
-      ],
-      [
-        "@babel/plugin-proposal-private-methods",
-        {
-          "loose": true
-        }
-      ],
-      [
-        "@babel/plugin-proposal-private-property-in-object",
-        {
-          "loose": true
+          "version": "legacy"
         }
       ]
     ]

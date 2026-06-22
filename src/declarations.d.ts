@@ -42,6 +42,31 @@ declare module '*/r3version' {
 	export const r3VersionString: string;
 }
 
+// [NOTE]
+// Defined the types related to passport-strategy using a "declare module".
+//
+// While it's possible to install and import @types/passport-strategy in
+// oidc.ts, passport-strategy is an internal package of passport, and its
+// update frequency is a concern(ex, type inconsistencies).
+// Furthermore, since only three methods(error, success, and redirect) are
+// directly used, defining them directly offers more flexibility.
+//
+declare module 'passport-strategy' {
+	import { Request } from 'express';
+
+	class Strategy {
+		name?: string;
+
+		authenticate(req: Request, options?: unknown): void;
+		success(user: unknown, info?: unknown): void;
+		fail(challenge: string | number | undefined, status?: number): void;
+		redirect(url: string, status?: number): void;
+		pass(): void;
+		error(err: unknown): void;
+	}
+	export { Strategy };
+}
+
 /*
  * Local variables:
  * tab-width: 4

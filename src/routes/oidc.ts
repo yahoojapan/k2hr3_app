@@ -193,10 +193,18 @@
 import express		from 'express';
 import passport		from 'passport';
 import session		from 'express-session';
-// @ts-ignore -- code uses openid-client v5 API; v6 has a different interface
-import { custom, Issuer, Strategy }	from 'openid-client';
+import * as oidc	from 'openid-client';
+import { Strategy }	from 'passport-strategy';
 import { base64url, createRemoteJWKSet, jwtVerify, JWTVerifyOptions }	from 'jose';
 import { valTypeAllObject, isSafeObject, isSafeFunction, isSafeHaskey, compareCaseString, isSafeArray, isSafeBoolean, isSafeEntity, isSafeJSON, isSafeString, isSafeNumber, isOIDCExtRouterConfig, isStringArray, OIDCExtRouterConfig }	from './lib/libr3util';
+
+//--------------------------------------------------------------
+// Interface for internal
+//--------------------------------------------------------------
+interface OIDCAuthenticateOptions
+{
+	scope?:	string[];
+}
 
 //--------------------------------------------------------------
 // Configration for OIDC
@@ -266,6 +274,104 @@ const rawGetExtRouterName = (req: express.Request): string =>
 	return extRounterName;
 };
 
+//
+// Passport v6 Custom Strategy
+//
+class OIDCV6Strategy extends Strategy
+{
+	private	configInfo:	OIDCExtRouterConfig;
+	public	name:		string;
+
+	constructor(configInfo: OIDCExtRouterConfig)
+	{
+		super();
+		this.name		= 'oidc';
+		this.configInfo	= configInfo;
+	}
+
+	async authenticate(req: express.Request, options: OIDCAuthenticateOptions)
+	{
+		try{
+			const discoveryUrl = new URL(this.configInfo.oidcDiscoveryUrl);
+
+			// custom hook for debugging(Alternative to custom.setHttpOptionsDefaults in v5)
+			let customFetch: oidc.CustomFetch | undefined = undefined;
+			if(isSafeHaskey(this.configInfo, 'debug') && isSafeBoolean(this.configInfo.debug) && this.configInfo.debug){
+
+				customFetch = async(url: string, options: oidc.CustomFetchOptions) => {
+					const method = isSafeString(options.method) ? options.method : 'GET';
+
+					console.log('[OIDC debug] Request URL : %s %s', method.toUpperCase(), url);
+					console.log('[OIDC debug] Request HEADERS : %o', options.headers);
+
+					if(isSafeString(options.body)){
+						console.log('[OIDC debug] Request BODY : %s', options.body);
+					}
+
+					// convert CustomFetchOptions to RequestInit(as same as "options as RequestInit")
+					const fetchInit: RequestInit = {
+						method:		options.method,
+						headers:	options.headers,
+						redirect:	options.redirect,
+						signal:		options.signal,
+						body:		(options.body instanceof Uint8Array) ? new Uint8Array(options.body) : options.body
+					};
+					const response = await fetch(url, fetchInit);
+					const clonedRes = response.clone();
+
+					console.log('[OIDC debug] Response URL : %s %s', method.toUpperCase(), url);
+					console.log('[OIDC debug] Response STATUS : %i', clonedRes.status);
+					console.log('[OIDC debug] Response HEADERS : %o', Object.fromEntries(clonedRes.headers.entries()));
+
+					try{
+						const bodyText = await clonedRes.text();
+						console.log('[OIDC debug] Response BODY : %s', bodyText);
+					}catch(_){
+						// Ignore error if response body is not readable or empty
+					}
+					return response;
+				};
+			}
+
+			// Discovery (clockTolerance is set via ClientMetadata)
+			const	clientMetadata: Partial<oidc.ClientMetadata> = {
+				client_secret:			this.configInfo.params.client_secret,
+				[oidc.clockTolerance]:	5
+			};
+			const	config			= await oidc.discovery(discoveryUrl, this.configInfo.params.client_id, clientMetadata, undefined, (customFetch ? { [oidc.customFetch]: customFetch } : undefined));
+			const	redirect_uri	= this.configInfo.params.redirectUrl;
+
+			// Processing for callback (if authorization code exists)
+			if(isSafeObject(req?.query) && isSafeEntity(req.query?.code)){
+				const currentUrl	= new URL(req.protocol + '://' + req.get('host') + (isSafeString(req?.originalUrl) ? req.originalUrl : ''));
+				const tokenSet		= await oidc.authorizationCodeGrant(config, currentUrl);
+
+				if(!isSafeEntity(tokenSet?.id_token)){
+					return this.error(new Error('ID Token not found in token set.'));
+				}
+				return this.success(tokenSet.id_token);
+			}
+
+			// Redirection process on initial access
+			const scope				= isSafeArray(options?.scope) ? options.scope.join(' ') : 'openid';
+			const authorizationUrl	= oidc.buildAuthorizationUrl(config, {
+				redirect_uri,
+				scope
+			});
+
+			if(isSafeString(authorizationUrl?.href)){
+				this.redirect(authorizationUrl.href);
+			}else{
+				this.error(new Error('Failed to calculate a valid authorization URL.'));
+			}
+
+		}catch(error: unknown){
+			console.error('Authenticate discovery Error by ' + ((isSafeObject(error) && isSafeString(error.message)) ? error.message : 'unknown'));
+			this.error(error instanceof Error ? error : new Error(String(error)));
+		}
+	}
+}
+
 //--------------------------------------------------------------
 // Mountpath		: /<config path>/login
 //--------------------------------------------------------------
@@ -288,91 +394,16 @@ const oidcLogin = async(Request: express.Request, Response?: express.Response, N
 	const _oidcConfigInfo = oidcConfig[extRouterName];
 
 	//
-	// Create openid client
+	// Create openid client / Try to login / Create a client handler / Calls passport middleware
 	//
-	// Issuer.discovery returns Promise
-	// https://github.com/panva/node-openid-client/blob/main/lib/issuer.js#L210
-	//
-	const	discoveryUrl	= _oidcConfigInfo.oidcDiscoveryUrl;
-	const	oidcDiscovery	= Issuer.discover(discoveryUrl);
+	if(isSafeHaskey(_oidcConfigInfo, 'debug') && isSafeBoolean(_oidcConfigInfo.debug) && _oidcConfigInfo.debug){
+		console.log('[OIDC debug] Discovering issuer for %s', _oidcConfigInfo.oidcDiscoveryUrl);
+	}
 
-	//
-	// Try to login
-	//
-	await oidcDiscovery.then((oidcIssuer: Issuer) => {
-		//
-		// put debug message
-		//
-		if(isSafeHaskey(_oidcConfigInfo, 'debug') && isSafeBoolean(_oidcConfigInfo.debug) && _oidcConfigInfo.debug){
-			// debug message
-			console.log('[OIDC debug] Discovered issuer %s %O', oidcIssuer.issuer, oidcIssuer.metadata);
-
-			// hook for debugging
-			custom.setHttpOptionsDefaults({
-				hooks: {
-					beforeRequest: [
-						(options: valTypeAllObject) => {
-							if(isSafeObject(options)){
-								const	_method	= (isSafeString(options?.method) ? options.method.toUpperCase() : 'unknown');
-								const	_href	= ((isSafeObject(options?.url) && isSafeString(options.url?.href)) ? options.url.href : 'unknown');
-
-								console.log('[OIDC debug] Request URL : %s %s', _method, _href);
-								console.log('[OIDC debug] Request HEADERS : %o', options.headers);
-								if(isSafeString(options?.body)){
-									console.log('[OIDC debug] Request BODY : %s', options.body);
-								}
-							}
-						}
-					],
-					afterResponse: [
-						(response: valTypeAllObject) => {
-							if(isSafeObject(response)){
-								const	_method	= ((isSafeObject(response?.request) && isSafeObject(response.request?.options) && isSafeString(response.request.options?.method)) ? response.request.options.method.toUpperCase() : 'unknown');
-								const	_href	= ((isSafeObject(response?.request) && isSafeObject(response.request?.options) && isSafeObject(response.request.options?.url) &&  isSafeString(response.request.options.url?.href)) ? response.request.options.url.href : 'unknown');
-
-								console.log('[OIDC debug] Response URL : %s %s', _method, _href);
-								console.log('[OIDC debug] Response STATUS : %i', response.statusCode);
-								console.log('[OIDC debug] Response HEADERS : %o', response.headers);
-								if(isSafeString(response?.body)){
-									console.log('[OIDC debug] Response BODY : %s', response.body);
-								}
-								return response;
-							}
-						}
-					]
-				}
-			});
-		}
-
-		//
-		// Create a client handler
-		//
-		const	clientParams = {
-			client_id:		_oidcConfigInfo.params.client_id,
-			client_secret:	_oidcConfigInfo.params.client_secret,
-			redirect_uris:	[ ...(_oidcConfigInfo.params.redirectUrl) ]
-		};
-
-		const	client = new oidcIssuer.Client(clientParams);
-		client[custom.clock_tolerance] = 5;							// to allow a second 5 skew
-
-		//
-		// Calls passport middleware
-		//
-		passport.use(
-			'oidc',
-			new Strategy(
-				{ client },
-				(tokenset: { id_token: string }, done: (err: unknown, token: string) => void) => {
-					return done(null, tokenset.id_token);
-				}
-			)
-		);
-
-	}).catch((error: Error) => {
-		console.error('Authenticate discovery Error by ' + error.message);
-		throw error;
-	});
+	passport.use(
+		'oidc',
+		new OIDCV6Strategy(_oidcConfigInfo)
+	);
 };
 
 //

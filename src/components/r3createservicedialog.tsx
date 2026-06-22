@@ -1573,7 +1573,7 @@ export default class R3CreateServiceDialog extends React.Component<R3CreateServi
 					</TableCell>
 				</TableRow>
 			</TableHead>
-			);
+		);
 	}
 
 	//
