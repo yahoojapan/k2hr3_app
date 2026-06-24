@@ -1,3 +1,14 @@
+k2hr3-app (2.0.0) unstable; urgency=low
+
+  * Converted the code from CommonJS to TypeScript, etc - #150
+    - Upgrade packages, clean up code, and fix bugs
+    - Change react-test-renderer to @testing-library/react for Jest upgrade
+    - Update packages, therefore change OIDC logic and add OIDC tests
+    - Modify source code for migration to TypeScript(Phase 2)
+    - Change directories/files to switch to TypeScript(Phase 1)
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Wed, 24 Jun 2026 12:56:08 +0900
+
 k2hr3-app (1.0.43) unstable; urgency=low
 
   * Updated react to v19 and related packages - #148
