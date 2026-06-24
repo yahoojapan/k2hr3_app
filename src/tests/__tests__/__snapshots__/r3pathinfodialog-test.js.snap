@@ -1,3 +1,116 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `null`;
+exports[`R3PathInfoDialog test snapshot for R3PathInfoDialog 1`] = `
+<body
+  style="padding-right: 1024px; overflow: hidden;"
+>
+  <div
+    aria-hidden="true"
+  />
+  <div
+    aria-label="path information dialog"
+    class="MuiDialog-root MuiModal-root css-1424xw8-MuiModal-root-MuiDialog-root"
+    label="path-information-dialog"
+    role="presentation"
+  >
+    <div
+      aria-hidden="true"
+      class="MuiBackdrop-root MuiModal-backdrop MuiDialog-backdrop css-1cennmq-MuiBackdrop-root-MuiDialog-backdrop"
+      style="opacity: 1; transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;"
+    />
+    <div
+      data-testid="sentinelStart"
+      tabindex="0"
+    />
+    <div
+      class="MuiDialog-container MuiDialog-scrollBody css-xmd51d-MuiDialog-container"
+      role="presentation"
+      style="opacity: 1; transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;"
+      tabindex="-1"
+    >
+      <div
+        aria-labelledby="_r_1_"
+        aria-modal="true"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-12g55wp-MuiPaper-root-MuiDialog-paper"
+        data-mui-focusable=""
+        role="dialog"
+        style="--Paper-shadow: 0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12);"
+        tabindex="-1"
+      >
+        <h2
+          class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-t2cki7-MuiTypography-root-MuiDialogTitle-root"
+          id="_r_1_"
+          label="path-information-dialog"
+        >
+          <span
+            class="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-q9vdjo-MuiTypography-root"
+          >
+            Selected Path Information
+          </span>
+        </h2>
+        <div
+          class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
+        >
+          <span
+            class="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1v7hs93-MuiTypography-root"
+          >
+            TENANT
+          </span>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-srrzsc-MuiTypography-root"
+          >
+            GROUP0:TENANT0
+          </span>
+          <span
+            class="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1v7hs93-MuiTypography-root"
+          >
+            TYPE
+          </span>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-srrzsc-MuiTypography-root"
+          >
+            role
+          </span>
+          <span
+            class="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1v7hs93-MuiTypography-root"
+          >
+            PATH
+          </span>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-srrzsc-MuiTypography-root"
+          >
+            yrn:yahoo:::37146:role:JEST_OWNER_SERVICE
+          </span>
+        </div>
+        <div
+          class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
+        >
+          <button
+            aria-label="close dialog"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-sizeMedium MuiButton-colorSecondary css-clumik-MuiButtonBase-root-MuiButton-root"
+            tabindex="0"
+            type="button"
+          >
+            CLOSE
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-2zpagu-MuiSvgIcon-root"
+              data-testid="CheckCircleIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      data-testid="sentinelEnd"
+      tabindex="0"
+    />
+  </div>
+</body>
+`;

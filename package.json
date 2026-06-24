@@ -59,6 +59,8 @@
     "@babel/preset-env": "^8.0.2",
     "@babel/preset-react": "^8.0.1",
     "@babel/preset-typescript": "^8.0.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/body-parser": "^1.19.6",
     "@types/cookie-parser": "^1.4.10",
     "@types/debug": "^4.1.13",
@@ -83,7 +85,6 @@
     "jest-environment-jsdom": "^30.4.1",
     "license-checker": "^25.0.1",
     "react-test-context-provider": "^2.2.0",
-    "react-test-renderer": "^19.2.7",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.6.1",
     "typescript": "^6.0.3",
@@ -162,9 +163,17 @@
     "material-ui"
   ],
   "jest": {
-    "roots": ["<rootDir>/dist/"],
-    "testMatch": ["**/__tests__/**/*.[j]s?(x)", "**/?(*.)+(spec|test).[j]s?(x)"],
-    "setupFiles": ["whatwg-fetch", "<rootDir>/dist/tests/setupGlobals.js"],
+    "roots": [
+      "<rootDir>/dist/"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.[j]s?(x)",
+      "**/?(*.)+(spec|test).[j]s?(x)"
+    ],
+    "setupFiles": [
+      "whatwg-fetch",
+      "<rootDir>/dist/tests/setupGlobals.js"
+    ],
     "snapshotResolver": "./dist/tests/snapshotResolver.js",
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/dist/tests/__mocks__/fileMock.js",

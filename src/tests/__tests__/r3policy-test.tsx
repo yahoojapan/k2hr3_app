@@ -20,17 +20,16 @@
  */
 
 import React					from 'react';
-import renderer					from 'react-test-renderer';
+import { render }				from '@testing-library/react';
 import { ThemeProvider }		from '@mui/material/styles';
 import { StyledEngineProvider, CssBaseline}	from '@mui/material';					// for jss and reset.css
 
 import r3Theme					from '../../components/r3theme';					// custom theme
 import R3Policy					from '../../components/r3policy';
 import R3Provider				from '../../util/r3provider';
+import { PolicyData, effectValueAllow, actionValueRead } from '../../util/r3types';
 
 import '../__mocks__/fetchMock';
-import { createNodeMock }		from '../__mocks__/materialUiMock';					// for material-ui
-import { PolicyData, effectValueAllow, actionValueRead } from '../../util/r3types';
 
 //
 // Mock functions
@@ -104,9 +103,8 @@ describe('R3Policy', () => {
 			</StyledEngineProvider>
 		);
 
-		const component = renderer.create(element, { createNodeMock });
-		const tree		= component.toJSON();
-		expect(tree).toMatchSnapshot();
+		const { baseElement } = render(element);
+		expect(baseElement).toMatchSnapshot();
 	});
 });
 

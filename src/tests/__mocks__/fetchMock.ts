@@ -94,7 +94,7 @@ jest.spyOn(global, 'fetch').mockImplementation((url: string | URL | Request, opt
 		}else if(r3CompareString(authToken, 'U=UnscopedUserToken_ForTestByJEST')){		// unscoped token, see package.json
 			return fetchSuccess({
 				result:		true,
-				message:	'succeed',
+				message:	null,
 				scoped:		false,
 				user:		'test',
 				tenants:	[

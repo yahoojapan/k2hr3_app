@@ -20,7 +20,7 @@
  */
 
 import React					from 'react';
-import renderer					from 'react-test-renderer';
+import { render }				from '@testing-library/react';
 import { ThemeProvider }		from '@mui/material/styles';
 import { StyledEngineProvider, CssBaseline}	from '@mui/material';					// for jss and reset.css
 
@@ -30,7 +30,6 @@ import R3Provider				from '../../util/r3provider';
 import { PathDetailInfo, serviceType }		from '../../util/r3types';
 
 import '../__mocks__/fetchMock';
-import { createNodeMock }		from '../__mocks__/materialUiMock';					// for material-ui
 
 //
 // Mock functions
@@ -107,9 +106,8 @@ describe('R3ToolBar', () => {
 			</StyledEngineProvider>
 		);
 
-		const component = renderer.create(element, { createNodeMock });
-		const tree		= component.toJSON();
-		expect(tree).toMatchSnapshot();
+		const { baseElement } = render(element);
+		expect(baseElement).toMatchSnapshot();
 	});
 });
 

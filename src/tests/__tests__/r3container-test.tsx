@@ -20,7 +20,7 @@
  */
 
 import React					from 'react';
-import renderer					from 'react-test-renderer';
+import { render, waitFor }		from '@testing-library/react';
 import { ThemeProvider }		from '@mui/material/styles';
 import { StyledEngineProvider, CssBaseline}	from '@mui/material';				// for jss and reset.css
 
@@ -29,10 +29,12 @@ import R3Container				from '../../components/r3container';
 import R3Provider				from '../../util/r3provider';
 
 import '../__mocks__/fetchMock';
-import { createNodeMock }		from '../__mocks__/materialUiMock';				// for material-ui
 
+//
+// Main test
+//
 describe('R3Container', () => {
-	it('test snapshot for R3Container', () => {
+	it('test snapshot for R3Container', async () => {
 		const r3provider	= new R3Provider(null);
 
 		const element		= (
@@ -47,9 +49,9 @@ describe('R3Container', () => {
 			</StyledEngineProvider>
 		);
 
-		const component = renderer.create(element, { createNodeMock });
-		const	tree = component.toJSON();
-		expect(tree).toMatchSnapshot();
+		const { baseElement } = render(element);
+		await waitFor(() => {});
+		expect(baseElement).toMatchSnapshot();
 	});
 });
 
