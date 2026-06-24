@@ -187,11 +187,11 @@ function getDependPackages(package_name, packages)
 							.replace(/^.*@/g,	'')
 							.replace(/\s+.*/g,	'');
 		if(!r3util.isSafeString(package_version)){
-			console.error('  [WARNING] could not get ' + package_name + ' version, so retry another command(, but ultimately will not get license).');
+			//console.log('  [WARNING] could not get ' + package_name + ' version, so retry another command(, but ultimately will not get license).');
 			package_version = null;				// version is set null.
 		}
 	}catch(error){
-		console.error('  [WARNING] caught exception(' + error.message + ') for ' + package_name + ' version, so retry another command(, but ultimately will not get license).');
+		//console.log('  [WARNING] caught exception(' + error.message + ') for ' + package_name + ' version, so retry another command(, but ultimately will not get license).');
 		package_version = null;					// version is set null.
 	}
 	if(null == package_version){
@@ -300,11 +300,21 @@ function getPackageNames(import_lines)
 				//		"import Checkbox               from '@material-ui/core/Checkbox';	=> material-ui
 				//		"import { policyEffects, ... } from '../util/r3define';"			=> ..
 				//		"import { errorType, ... }     from './r3types';"					=> .
+				//		"import 'file'"														=> file
+				//		"import(file)"														=> NG
 				//
-				var	strImport = import_lines[cnt].replace(/^\s*/g, '').replace(/\/\/.*/g, '').replace(/^import.*from/g, '').replace(/\'|;| |\s/g, '');
+				var strImport = import_lines[cnt]
+									.replace(/^\s*/g, '')
+									.replace(/;.*/g, '')
+									.replace(/\/\/.*/g, '')
+									.replace(/.*import\(.*?\)/g, '')
+									.replace(/^import.*from/g, '')
+									.replace(/^import\s*\'/g, '\'')
+									.replace(/\'|;| |\s/g, '');
 				if(!r3util.isSafeString(strImport)){
 					continue;
 				}
+
 				if('@' === strImport[0]){
 					// Case: import XXXX from '@xxxx/yyy'
 					var	reg		= new RegExp('^@([^/]*)($|([\/]([^\/]*)+))');
@@ -339,7 +349,7 @@ function getTopLevelPackages()
 	var	all_imports = {};
 	var	current_dir	= process.cwd();
 	try{
-		result			= execSync('git ls-files ' + __dirname + '/.. | grep \'src/\'');
+		result			= execSync('git ls-files ' + __dirname + '/.. | grep \'src/\' | grep -v \'/__snapshots__/\'');
 		result			= String(result);
 		all_source_files= result.split('\n');
 	}catch(error){

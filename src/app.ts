@@ -29,7 +29,7 @@ import logger			from 'morgan';
 import cookieParser		from 'cookie-parser';
 import bodyParser		from 'body-parser';
 import R3AppConfig		from './routes/lib/libr3appconfig';
-import { isSafeEntity, isSafeString, ExtRouterSetConfig, isExtRouterInfos, isExtRouterInfo, isOIDCRouterInfo, isExtRouterSetConfig, isSafeObject }	from './routes/lib/libr3util';
+import { isSafeEntity, ExtRouterSetConfig, isExtRouterInfos, isExtRouterInfo, isOIDCRouterInfo, isExtRouterSetConfig, isSafeObject }	from './routes/lib/libr3util';
 
 //
 // Router

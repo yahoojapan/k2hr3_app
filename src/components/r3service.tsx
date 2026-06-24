@@ -49,7 +49,7 @@ import R3PopupMsgDialog				from './r3popupmsgdialog';
 
 import { regYrnTenantPathPrefix, regYrnAnyTenantPath }	from '../util/r3define';
 import { getServiceResourceType, normalizeServiceReourceStaticObject }	from '../util/r3verifyutil';
-import { StaticResourceObject, errorType, actionTypeValue, actionTypeDelete, actionTypeAdd, serviceResTypeUrl, serviceResTypeObject, serviceResTypeUnknown, ServiceData, ServiceResType, isServiceResType, isServiceResourceObjectArray, isStaticResourceObject }	from '../util/r3types';
+import { StaticResourceObject, errorType, actionTypeValue, actionTypeDelete, actionTypeAdd, serviceResTypeUrl, serviceResTypeObject, serviceResTypeUnknown, ServiceData, ServiceResType, isServiceResType, isStaticResourceObject }	from '../util/r3types';
 import { r3IsNumber, r3IsBoolean, r3DeepClone, r3DeepCompare, r3CompareCaseString, r3IsEmptyEntityObject, r3IsEmptyString, r3IsEmptyEntity, r3IsJSON, r3ConvertFromJSON, r3IsArray, r3IsString } from '../util/r3util';
 
 //
