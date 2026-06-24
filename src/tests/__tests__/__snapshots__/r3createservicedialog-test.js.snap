@@ -1,0 +1,256 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`R3CreateServiceDialog test snapshot for R3CreateServiceDialog 1`] = `
+<body
+  style="padding-right: 1024px; overflow: hidden;"
+>
+  <div
+    aria-hidden="true"
+  />
+  <div
+    aria-label="create service dialog"
+    class="MuiDialog-root MuiModal-root css-1424xw8-MuiModal-root-MuiDialog-root"
+    label="create-service-dialog"
+    role="presentation"
+  >
+    <div
+      aria-hidden="true"
+      class="MuiBackdrop-root MuiModal-backdrop MuiDialog-backdrop css-1cennmq-MuiBackdrop-root-MuiDialog-backdrop"
+      style="opacity: 1; transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;"
+    />
+    <div
+      data-testid="sentinelStart"
+      tabindex="0"
+    />
+    <div
+      class="MuiDialog-container MuiDialog-scrollBody css-xmd51d-MuiDialog-container"
+      role="presentation"
+      style="opacity: 1; transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;"
+      tabindex="-1"
+    >
+      <div
+        aria-labelledby="_r_1_"
+        aria-modal="true"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-12g55wp-MuiPaper-root-MuiDialog-paper"
+        data-mui-focusable=""
+        role="dialog"
+        style="--Paper-shadow: 0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12);"
+        tabindex="-1"
+      >
+        <h2
+          class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-t2cki7-MuiTypography-root-MuiDialogTitle-root"
+          id="_r_1_"
+          label="create-service-dialog"
+        >
+          <span
+            class="MuiTypography-root MuiTypography-h5 MuiTypography-noWrap css-q9vdjo-MuiTypography-root"
+          >
+            Create a new SERVICE
+          </span>
+        </h2>
+        <div
+          class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
+        >
+          <span
+            class="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1v7hs93-MuiTypography-root"
+          >
+            TENANT for SERVICE owner
+          </span>
+          <span
+            class="MuiTypography-root MuiTypography-body1 css-srrzsc-MuiTypography-root"
+          >
+            GROUP0:TENANT0
+          </span>
+          <span
+            class="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1v7hs93-MuiTypography-root"
+          >
+            CREATE SERVICE
+          </span>
+          <div
+            class="MuiFormControl-root MuiTextField-root css-1l0136s-MuiFormControl-root-MuiTextField-root"
+          >
+            <div
+              class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1mohkr8-MuiInputBase-root-MuiInput-root"
+            >
+              <input
+                aria-invalid="false"
+                class="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
+                id="new-service-textfield-id"
+                placeholder="Input create service name"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <span
+            class="MuiTypography-root MuiTypography-subtitle2 MuiTypography-noWrap css-1v7hs93-MuiTypography-root"
+          >
+            SERVICE RESOURCES
+          </span>
+          <div
+            aria-label="select type verify url or static resource"
+            class="MuiFormGroup-root MuiRadioGroup-root css-zutbov-MuiFormGroup-root"
+            id="new-service-radiogroup-id"
+            role="radiogroup"
+          >
+            <label
+              class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-ywopic-MuiFormControlLabel-root"
+            >
+              <span
+                class="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary Mui-checked MuiRadio-root MuiRadio-colorPrimary css-xc632-MuiButtonBase-root-MuiSwitchBase-root-MuiRadio-root"
+              >
+                <input
+                  checked=""
+                  class="PrivateSwitchBase-input css-12xagqm-MuiSwitchBase-root"
+                  name="_r_3_"
+                  type="radio"
+                  value="verifyUrl"
+                />
+                <span
+                  class="css-9oxshb-MuiRadioButtonIcon-root"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1bqw3pd-MuiSvgIcon-root-MuiRadioButtonIcon-root"
+                    data-testid="RadioButtonUncheckedIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
+                    />
+                  </svg>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1qe68id-MuiSvgIcon-root-MuiRadioButtonIcon-root"
+                    data-testid="RadioButtonCheckedIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M8.465 8.465C9.37 7.56 10.62 7 12 7C14.76 7 17 9.24 17 12C17 13.38 16.44 14.63 15.535 15.535C14.63 16.44 13.38 17 12 17C9.24 17 7 14.76 7 12C7 10.62 7.56 9.37 8.465 8.465Z"
+                    />
+                  </svg>
+                </span>
+              </span>
+              <p
+                class="MuiTypography-root MuiTypography-body1 MuiTypography-noWrap css-wk3189-MuiTypography-root"
+              >
+                VERIFY URL
+              </p>
+            </label>
+            <label
+              class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-13j6wxu-MuiFormControlLabel-root"
+            >
+              <span
+                class="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary MuiRadio-root MuiRadio-colorPrimary css-xc632-MuiButtonBase-root-MuiSwitchBase-root-MuiRadio-root"
+              >
+                <input
+                  class="PrivateSwitchBase-input css-12xagqm-MuiSwitchBase-root"
+                  name="_r_3_"
+                  type="radio"
+                  value="staticResourceObject"
+                />
+                <span
+                  class="css-9oxshb-MuiRadioButtonIcon-root"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1bqw3pd-MuiSvgIcon-root-MuiRadioButtonIcon-root"
+                    data-testid="RadioButtonUncheckedIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
+                    />
+                  </svg>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1op2r7d-MuiSvgIcon-root-MuiRadioButtonIcon-root"
+                    data-testid="RadioButtonCheckedIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M8.465 8.465C9.37 7.56 10.62 7 12 7C14.76 7 17 9.24 17 12C17 13.38 16.44 14.63 15.535 15.535C14.63 16.44 13.38 17 12 17C9.24 17 7 14.76 7 12C7 10.62 7.56 9.37 8.465 8.465Z"
+                    />
+                  </svg>
+                </span>
+              </span>
+              <p
+                class="MuiTypography-root MuiTypography-body1 MuiTypography-noWrap css-wk3189-MuiTypography-root"
+              >
+                STATIC RESOURCE OBJECT
+              </p>
+            </label>
+          </div>
+          <div
+            class="MuiFormControl-root MuiTextField-root css-1l0136s-MuiFormControl-root-MuiTextField-root"
+          >
+            <div
+              class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-1mohkr8-MuiInputBase-root-MuiInput-root"
+            >
+              <input
+                aria-invalid="false"
+                class="MuiInputBase-input MuiInput-input css-1yrc8ca-MuiInputBase-input-MuiInput-input"
+                id="new-verify-textfield-id"
+                placeholder="Input verify URL"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
+        >
+          <button
+            aria-label="cancel"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-sizeMedium MuiButton-colorPrimary css-8am8uk-MuiButtonBase-root-MuiButton-root"
+            tabindex="0"
+            type="button"
+          >
+            CANCEL
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-2zpagu-MuiSvgIcon-root"
+              data-testid="CancelIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2m5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12z"
+              />
+            </svg>
+          </button>
+          <button
+            aria-label="ok"
+            class="MuiButtonBase-root Mui-disabled MuiButton-root MuiButton-contained MuiButton-sizeMedium MuiButton-colorSecondary css-clumik-MuiButtonBase-root-MuiButton-root"
+            disabled=""
+            tabindex="-1"
+            type="button"
+          >
+            OK
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-2zpagu-MuiSvgIcon-root"
+              data-testid="CheckCircleIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      data-testid="sentinelEnd"
+      tabindex="0"
+    />
+  </div>
+</body>
+`;

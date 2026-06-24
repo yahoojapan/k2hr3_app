@@ -20,12 +20,28 @@
  *
  */
 
+// [NOTE]
+// This file is written in JavaScript because it runs before the build
+// process. TypeScript is avoided here to ensure it can be executed
+// without prior compilation.
+//
+
 'use strict';
 
 var	fs		= require('fs');
 var	execSync= require('child_process').execSync;			// For before section to launching sub processes
 
-var	r3util	= require('../routes/lib/libr3util');
+// [NOTE]
+// These are simplified copies of functions from libr3util.
+// This file runs before the TypeScript build, so it must remain plain
+// JavaScript.
+//
+var	r3util = {
+	isSafeString:		function(val)		 { return (null !== val && undefined !== val && 'string' === typeof val && 0 < val.length); },
+	isSafeEntity:		function(val)		 { return (null !== val && undefined !== val); },
+	isEmptyArray:		function(val)		 { return (null === val || undefined === val || !Array.isArray(val) || 0 === val.length); },
+	compareCaseString:	function(src1, src2) { return (null !== src1 && undefined !== src1 && 'string' === typeof src1 && null !== src2 && undefined !== src2 && 'string' === typeof src2 && src1.toLowerCase() === src2.toLowerCase()); }
+};
 
 //
 // Utility: parse arguments
@@ -171,11 +187,11 @@ function getDependPackages(package_name, packages)
 							.replace(/^.*@/g,	'')
 							.replace(/\s+.*/g,	'');
 		if(!r3util.isSafeString(package_version)){
-			console.error('  [WARNING] could not get ' + package_name + ' version, so retry another command(, but ultimately will not get license).');
+			//console.log('  [WARNING] could not get ' + package_name + ' version, so retry another command(, but ultimately will not get license).');
 			package_version = null;				// version is set null.
 		}
 	}catch(error){
-		console.error('  [WARNING] caught exception(' + error.message + ') for ' + package_name + ' version, so retry another command(, but ultimately will not get license).');
+		//console.log('  [WARNING] caught exception(' + error.message + ') for ' + package_name + ' version, so retry another command(, but ultimately will not get license).');
 		package_version = null;					// version is set null.
 	}
 	if(null == package_version){
@@ -284,11 +300,21 @@ function getPackageNames(import_lines)
 				//		"import Checkbox               from '@material-ui/core/Checkbox';	=> material-ui
 				//		"import { policyEffects, ... } from '../util/r3define';"			=> ..
 				//		"import { errorType, ... }     from './r3types';"					=> .
+				//		"import 'file'"														=> file
+				//		"import(file)"														=> NG
 				//
-				var	strImport = import_lines[cnt].replace(/^\s*/g, '').replace(/\/\/.*/g, '').replace(/^import.*from/g, '').replace(/\'|;| |\s/g, '');
+				var strImport = import_lines[cnt]
+									.replace(/^\s*/g, '')
+									.replace(/;.*/g, '')
+									.replace(/\/\/.*/g, '')
+									.replace(/.*import\(.*?\)/g, '')
+									.replace(/^import.*from/g, '')
+									.replace(/^import\s*\'/g, '\'')
+									.replace(/\'|;| |\s/g, '');
 				if(!r3util.isSafeString(strImport)){
 					continue;
 				}
+
 				if('@' === strImport[0]){
 					// Case: import XXXX from '@xxxx/yyy'
 					var	reg		= new RegExp('^@([^/]*)($|([\/]([^\/]*)+))');
@@ -323,7 +349,7 @@ function getTopLevelPackages()
 	var	all_imports = {};
 	var	current_dir	= process.cwd();
 	try{
-		result			= execSync('git ls-files ' + __dirname + '/.. | grep \'src/\'');
+		result			= execSync('git ls-files ' + __dirname + '/.. | grep \'src/\' | grep -v \'/__snapshots__/\'');
 		result			= String(result);
 		all_source_files= result.split('\n');
 	}catch(error){
@@ -489,18 +515,18 @@ function main(use_package_json)
 			//
 			var	filename = raw_licenses_obj[package_name].licenseFile.replace(/^.*\//g, '');
 			if(r3util.compareCaseString('README.md', filename)){
-				console.error('[WARNING] ' + package_name + ' license file is README.md, so we try to use license type string instead of it.');
+				console.log('[WARNING] ' + package_name + ' license file is README.md, so we try to use license type string instead of it.');
 				license_text = null;
 			}else{
 				// load all of license file context
 				license_text = loadFileContents(raw_licenses_obj[package_name].licenseFile);
 				if(!r3util.isSafeString(license_text)){
-					console.error('[WARNING] could not load ' + package_name + ' license file(' + raw_licenses_obj[package_name].licenseFile + '), so we try to use license type string instead of it.');
+					console.log('[WARNING] could not load ' + package_name + ' license file(' + raw_licenses_obj[package_name].licenseFile + '), so we try to use license type string instead of it.');
 					license_text = null;
 				}
 			}
 		}else{
-			console.error('[WARNING] not found ' + package_name + ' license file, so we use license type string instead of it.');
+			console.log('[WARNING] not found ' + package_name + ' license file, so we use license type string instead of it.');
 			license_text = null;
 		}
 		if(!r3util.isSafeString(license_text)){
@@ -528,10 +554,10 @@ function main(use_package_json)
 	//
 	// Put all licenses JSON string object to source file.
 	//
-	if(!putLicensesFile(__dirname + '/../src/util/r3licenses.js', all_licenses_obj)){
+	if(!putLicensesFile(__dirname + '/../src/util/r3licenses.ts', all_licenses_obj)){
 		return false
 	}
-	console.log('\nSucceed output file(' + __dirname + '/../src/util/r3licenses.js).');
+	console.log('\nSucceed output file(' + __dirname + '/../src/util/r3licenses.ts).');
 
 	return true;
 }

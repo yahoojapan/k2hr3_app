@@ -1,0 +1,769 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`R3MainTree test snapshot for R3MainTree 1`] = `
+<body>
+  <div>
+    <div
+      class="MuiBox-root css-1odwksc"
+    >
+      <div
+        class="MuiBox-root css-0"
+      >
+        <header
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionStatic css-3uduyq-MuiPaper-root-MuiAppBar-root"
+          style="--Paper-shadow: none;"
+        >
+          <div
+            class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-dense css-yf15cp-MuiToolbar-root"
+          >
+            <div
+              class="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorPrimary css-a5uxj2-MuiChip-root"
+            >
+              <span
+                class="MuiChip-label css-1dybbl5-MuiChip-label"
+              >
+                <span
+                  class="MuiTypography-root MuiTypography-subtitle2 css-1kd12jc-MuiTypography-root"
+                >
+                  TENANT
+                </span>
+              </span>
+            </div>
+            <span
+              class="MuiTypography-root MuiTypography-subtitle2 css-j745vp-MuiTypography-root"
+            >
+              GROUP0:TENANT0
+            </span>
+            <button
+              aria-label="select tenant"
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-skim0e-MuiButtonBase-root-MuiIconButton-root"
+              data-mui-internal-clone-element="true"
+              label="select-tenant"
+              tabindex="0"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                data-testid="MoreVertIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2m0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2m0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2"
+                />
+              </svg>
+            </button>
+          </div>
+        </header>
+      </div>
+      <div
+        class="MuiList-root css-54zhjy-MuiList-root"
+        id="mainTree-top-list"
+      >
+        <div
+          class="MuiBox-root css-0"
+        >
+          <li
+            class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+          >
+            <div
+              class="MuiListItemIcon-root css-4hwha7-MuiListItemIcon-root"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                data-testid="LabelIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12z"
+                />
+              </svg>
+            </div>
+            <div
+              class="MuiListItemText-root css-1og23hl-MuiListItemText-root"
+            >
+              <h6
+                class="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-uq6ltw-MuiTypography-root"
+              >
+                SERVICE
+              </h6>
+            </div>
+            <div
+              class="MuiListItemIcon-root css-1lsj7x8-MuiListItemIcon-root"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                data-testid="ExpandMoreIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                />
+              </svg>
+            </div>
+          </li>
+          <div
+            class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-cwrbtg-MuiCollapse-root"
+            style="min-height: 0px;"
+          >
+            <div
+              class="MuiCollapse-wrapper MuiCollapse-vertical css-1x6hinx-MuiCollapse-wrapper"
+            >
+              <div
+                class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
+              >
+                <div
+                  class="MuiList-root css-54zhjy-MuiList-root"
+                >
+                  <div
+                    class="MuiBox-root css-0"
+                  >
+                    <li
+                      class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+                    >
+                      <div
+                        class="MuiListItemText-root css-1s1e4tt-MuiListItemText-root"
+                      >
+                        <h6
+                          class="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-vrxs1-MuiTypography-root"
+                        >
+                          child_service
+                        </h6>
+                      </div>
+                      <div
+                        class="MuiListItemIcon-root css-1lsj7x8-MuiListItemIcon-root"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                          data-testid="ExpandMoreIcon"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                          />
+                        </svg>
+                      </div>
+                    </li>
+                    <div
+                      class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1sar3aj-MuiCollapse-root"
+                      style="min-height: 0px;"
+                    >
+                      <div
+                        class="MuiCollapse-wrapper MuiCollapse-vertical css-1x6hinx-MuiCollapse-wrapper"
+                      >
+                        <div
+                          class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
+                        >
+                          <div
+                            class="MuiList-root css-54zhjy-MuiList-root"
+                          >
+                            <div
+                              class="MuiBox-root css-0"
+                            >
+                              <li
+                                class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+                              >
+                                <div
+                                  class="MuiListItemText-root css-1s1e4tt-MuiListItemText-root"
+                                >
+                                  <h6
+                                    class="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-vrxs1-MuiTypography-root"
+                                  >
+                                    ROLE
+                                  </h6>
+                                </div>
+                                <div
+                                  class="MuiListItemIcon-root css-1lsj7x8-MuiListItemIcon-root"
+                                >
+                                  <svg
+                                    aria-hidden="true"
+                                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                                    data-testid="ExpandMoreIcon"
+                                    focusable="false"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                                    />
+                                  </svg>
+                                </div>
+                              </li>
+                              <div
+                                class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1sar3aj-MuiCollapse-root"
+                                style="min-height: 0px;"
+                              >
+                                <div
+                                  class="MuiCollapse-wrapper MuiCollapse-vertical css-1x6hinx-MuiCollapse-wrapper"
+                                >
+                                  <div
+                                    class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
+                                  >
+                                    <div
+                                      class="MuiList-root css-54zhjy-MuiList-root"
+                                    >
+                                      <div
+                                        class="MuiBox-root css-0"
+                                      >
+                                        <li
+                                          class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+                                        >
+                                          <div
+                                            class="MuiListItemText-root css-1s1e4tt-MuiListItemText-root"
+                                          >
+                                            <h6
+                                              class="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-vrxs1-MuiTypography-root"
+                                            >
+                                              dummyservicerole
+                                            </h6>
+                                          </div>
+                                        </li>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="MuiBox-root css-0"
+                            >
+                              <li
+                                class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+                              >
+                                <div
+                                  class="MuiListItemText-root css-1s1e4tt-MuiListItemText-root"
+                                >
+                                  <h6
+                                    class="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-vrxs1-MuiTypography-root"
+                                  >
+                                    RESOURCE
+                                  </h6>
+                                </div>
+                                <div
+                                  class="MuiListItemIcon-root css-1lsj7x8-MuiListItemIcon-root"
+                                >
+                                  <svg
+                                    aria-hidden="true"
+                                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                                    data-testid="ExpandMoreIcon"
+                                    focusable="false"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                                    />
+                                  </svg>
+                                </div>
+                              </li>
+                              <div
+                                class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1sar3aj-MuiCollapse-root"
+                                style="min-height: 0px;"
+                              >
+                                <div
+                                  class="MuiCollapse-wrapper MuiCollapse-vertical css-1x6hinx-MuiCollapse-wrapper"
+                                >
+                                  <div
+                                    class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
+                                  >
+                                    <div
+                                      class="MuiList-root css-54zhjy-MuiList-root"
+                                    >
+                                      <div
+                                        class="MuiBox-root css-0"
+                                      >
+                                        <li
+                                          class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+                                        >
+                                          <div
+                                            class="MuiListItemText-root css-1s1e4tt-MuiListItemText-root"
+                                          >
+                                            <h6
+                                              class="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-vrxs1-MuiTypography-root"
+                                            >
+                                              dummyserviceresource
+                                            </h6>
+                                          </div>
+                                        </li>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="MuiBox-root css-0"
+                            >
+                              <li
+                                class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+                              >
+                                <div
+                                  class="MuiListItemText-root css-1s1e4tt-MuiListItemText-root"
+                                >
+                                  <h6
+                                    class="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-vrxs1-MuiTypography-root"
+                                  >
+                                    POLICY
+                                  </h6>
+                                </div>
+                                <div
+                                  class="MuiListItemIcon-root css-1lsj7x8-MuiListItemIcon-root"
+                                >
+                                  <svg
+                                    aria-hidden="true"
+                                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                                    data-testid="ExpandMoreIcon"
+                                    focusable="false"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                                    />
+                                  </svg>
+                                </div>
+                              </li>
+                              <div
+                                class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1sar3aj-MuiCollapse-root"
+                                style="min-height: 0px;"
+                              >
+                                <div
+                                  class="MuiCollapse-wrapper MuiCollapse-vertical css-1x6hinx-MuiCollapse-wrapper"
+                                >
+                                  <div
+                                    class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
+                                  >
+                                    <div
+                                      class="MuiList-root css-54zhjy-MuiList-root"
+                                    >
+                                      <div
+                                        class="MuiBox-root css-0"
+                                      >
+                                        <li
+                                          class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+                                        >
+                                          <div
+                                            class="MuiListItemText-root css-1s1e4tt-MuiListItemText-root"
+                                          >
+                                            <h6
+                                              class="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-vrxs1-MuiTypography-root"
+                                            >
+                                              dummyservicepolicy
+                                            </h6>
+                                          </div>
+                                        </li>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiBox-root css-0"
+        >
+          <li
+            class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+          >
+            <div
+              class="MuiListItemIcon-root css-4hwha7-MuiListItemIcon-root"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                data-testid="LabelIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12z"
+                />
+              </svg>
+            </div>
+            <div
+              class="MuiListItemText-root css-1og23hl-MuiListItemText-root"
+            >
+              <h6
+                class="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-uq6ltw-MuiTypography-root"
+              >
+                ROLE
+              </h6>
+            </div>
+            <div
+              class="MuiListItemIcon-root css-1lsj7x8-MuiListItemIcon-root"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                data-testid="ExpandMoreIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                />
+              </svg>
+            </div>
+          </li>
+          <div
+            class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-cwrbtg-MuiCollapse-root"
+            style="min-height: 0px;"
+          >
+            <div
+              class="MuiCollapse-wrapper MuiCollapse-vertical css-1x6hinx-MuiCollapse-wrapper"
+            >
+              <div
+                class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
+              >
+                <div
+                  class="MuiList-root css-54zhjy-MuiList-root"
+                >
+                  <div
+                    class="MuiBox-root css-0"
+                  >
+                    <li
+                      class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+                    >
+                      <div
+                        class="MuiListItemText-root css-1s1e4tt-MuiListItemText-root"
+                      >
+                        <h6
+                          class="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-vrxs1-MuiTypography-root"
+                        >
+                          dummyrole
+                        </h6>
+                      </div>
+                      <div
+                        class="MuiListItemIcon-root css-1lsj7x8-MuiListItemIcon-root"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                          data-testid="ExpandMoreIcon"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                          />
+                        </svg>
+                      </div>
+                    </li>
+                    <div
+                      class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1sar3aj-MuiCollapse-root"
+                      style="min-height: 0px;"
+                    >
+                      <div
+                        class="MuiCollapse-wrapper MuiCollapse-vertical css-1x6hinx-MuiCollapse-wrapper"
+                      >
+                        <div
+                          class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
+                        >
+                          <div
+                            class="MuiList-root css-54zhjy-MuiList-root"
+                          >
+                            <div
+                              class="MuiBox-root css-0"
+                            >
+                              <li
+                                class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+                              >
+                                <div
+                                  class="MuiListItemText-root css-1s1e4tt-MuiListItemText-root"
+                                >
+                                  <h6
+                                    class="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-vrxs1-MuiTypography-root"
+                                  >
+                                    dummysubrole
+                                  </h6>
+                                </div>
+                              </li>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiBox-root css-0"
+        >
+          <li
+            class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+          >
+            <div
+              class="MuiListItemIcon-root css-4hwha7-MuiListItemIcon-root"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                data-testid="LabelIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12z"
+                />
+              </svg>
+            </div>
+            <div
+              class="MuiListItemText-root css-1og23hl-MuiListItemText-root"
+            >
+              <h6
+                class="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-uq6ltw-MuiTypography-root"
+              >
+                RESOURCE
+              </h6>
+            </div>
+            <div
+              class="MuiListItemIcon-root css-1lsj7x8-MuiListItemIcon-root"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                data-testid="ExpandMoreIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                />
+              </svg>
+            </div>
+          </li>
+          <div
+            class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-cwrbtg-MuiCollapse-root"
+            style="min-height: 0px;"
+          >
+            <div
+              class="MuiCollapse-wrapper MuiCollapse-vertical css-1x6hinx-MuiCollapse-wrapper"
+            >
+              <div
+                class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
+              >
+                <div
+                  class="MuiList-root css-54zhjy-MuiList-root"
+                >
+                  <div
+                    class="MuiBox-root css-0"
+                  >
+                    <li
+                      class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+                    >
+                      <div
+                        class="MuiListItemText-root css-1s1e4tt-MuiListItemText-root"
+                      >
+                        <h6
+                          class="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-vrxs1-MuiTypography-root"
+                        >
+                          dummyresource
+                        </h6>
+                      </div>
+                      <div
+                        class="MuiListItemIcon-root css-1lsj7x8-MuiListItemIcon-root"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                          data-testid="ExpandMoreIcon"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                          />
+                        </svg>
+                      </div>
+                    </li>
+                    <div
+                      class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1sar3aj-MuiCollapse-root"
+                      style="min-height: 0px;"
+                    >
+                      <div
+                        class="MuiCollapse-wrapper MuiCollapse-vertical css-1x6hinx-MuiCollapse-wrapper"
+                      >
+                        <div
+                          class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
+                        >
+                          <div
+                            class="MuiList-root css-54zhjy-MuiList-root"
+                          >
+                            <div
+                              class="MuiBox-root css-0"
+                            >
+                              <li
+                                class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+                              >
+                                <div
+                                  class="MuiListItemText-root css-1s1e4tt-MuiListItemText-root"
+                                >
+                                  <h6
+                                    class="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-vrxs1-MuiTypography-root"
+                                  >
+                                    dummysubresource
+                                  </h6>
+                                </div>
+                              </li>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiBox-root css-0"
+        >
+          <li
+            class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+          >
+            <div
+              class="MuiListItemIcon-root css-4hwha7-MuiListItemIcon-root"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                data-testid="LabelIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12z"
+                />
+              </svg>
+            </div>
+            <div
+              class="MuiListItemText-root css-1og23hl-MuiListItemText-root"
+            >
+              <h6
+                class="MuiTypography-root MuiTypography-subtitle2 MuiListItemText-primary css-uq6ltw-MuiTypography-root"
+              >
+                POLICY
+              </h6>
+            </div>
+            <div
+              class="MuiListItemIcon-root css-1lsj7x8-MuiListItemIcon-root"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                data-testid="ExpandMoreIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                />
+              </svg>
+            </div>
+          </li>
+          <div
+            class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-cwrbtg-MuiCollapse-root"
+            style="min-height: 0px;"
+          >
+            <div
+              class="MuiCollapse-wrapper MuiCollapse-vertical css-1x6hinx-MuiCollapse-wrapper"
+            >
+              <div
+                class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
+              >
+                <div
+                  class="MuiList-root css-54zhjy-MuiList-root"
+                >
+                  <div
+                    class="MuiBox-root css-0"
+                  >
+                    <li
+                      class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+                    >
+                      <div
+                        class="MuiListItemText-root css-1s1e4tt-MuiListItemText-root"
+                      >
+                        <h6
+                          class="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-vrxs1-MuiTypography-root"
+                        >
+                          dummypolicy
+                        </h6>
+                      </div>
+                      <div
+                        class="MuiListItemIcon-root css-1lsj7x8-MuiListItemIcon-root"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14500qs-MuiSvgIcon-root"
+                          data-testid="ExpandMoreIcon"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                          />
+                        </svg>
+                      </div>
+                    </li>
+                    <div
+                      class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-1sar3aj-MuiCollapse-root"
+                      style="min-height: 0px;"
+                    >
+                      <div
+                        class="MuiCollapse-wrapper MuiCollapse-vertical css-1x6hinx-MuiCollapse-wrapper"
+                      >
+                        <div
+                          class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
+                        >
+                          <div
+                            class="MuiList-root css-54zhjy-MuiList-root"
+                          >
+                            <div
+                              class="MuiBox-root css-0"
+                            >
+                              <li
+                                class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
+                              >
+                                <div
+                                  class="MuiListItemText-root css-1s1e4tt-MuiListItemText-root"
+                                >
+                                  <h6
+                                    class="MuiTypography-root MuiTypography-subtitle1 MuiListItemText-primary css-vrxs1-MuiTypography-root"
+                                  >
+                                    dummysubpolicy
+                                  </h6>
+                                </div>
+                              </li>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;

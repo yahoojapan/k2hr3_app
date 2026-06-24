@@ -47,8 +47,8 @@ DIST_CONFIG_EMAIL="antpickax-support@mail.yahoo.co.jp"
 #
 # Files
 #
-R3APP_JSX="r3app.jsx"
-R3PROVIDER_JS="r3provider.js"
+R3APP_JSX="r3app.tsx"
+R3PROVIDER_JS="r3provider.ts"
 DEMO_INDEX_HTML="index.html"
 DEMO_INDEXJA_HTML="indexja.html"
 DEMO_SSH_KEY="actions_id_rsa"
@@ -130,6 +130,72 @@ RUNCMD()
 	fi
 	return 0
 }
+
+#--------------------------------------------------------------
+# Usage
+#--------------------------------------------------------------
+func_usage()
+{
+	echo ""
+	echo "Usage: $1 [--debug_package(-dp)] [--wihtout_license_file(-nolic)] [--disable_ssh_setup(-nossh)]"
+	echo "       $1 [--help(-h)]"
+	echo ""
+	echo "Options:"
+	echo " --help(-h)                     Print help."
+	echo " --debug_package(-dp)           Specify the building and packaging for debugging."
+	echo " --wihtout_license_file(-nolic) Specify building without creating the license file."
+	echo " --disable_ssh_setup(-nossh)    Specify not setting SSH configuration for pushing to gh-page."
+	echo ""
+	echo "Environments:"
+	echo " PUBLISH_TAG_NAME               This is the environment variable that sets the Release Tag."
+	echo "                                If this is not specified, deployment to gh-pages will not occur."
+	echo " GHPAGES_WITHOUT_LICENSE        If \"1\" is set, it will build without creating the license file.(same as --wihtout_license_file)"
+	echo " SETUP_SSH_DISABLE              If \"1\" is set, the SSH configuration will not be set up.(same as --disable_ssh_setup)"
+	echo ""
+}
+
+#==============================================================
+# Parse options
+#==============================================================
+OPT_DEBUG=""
+OPT_WITHOUT_LICENSE=0
+OPT_DISABLE_SSH_SETUP=0
+
+while [ $# -ne 0 ]; do
+	if [ -z "$1" ]; then
+		break;
+
+	elif echo "$1" | grep -q -i -e "^-h$" -e "^--help$"; then
+		func_usage "${PRGNAME}"
+		exit 0
+
+	elif echo "$1" | grep -q -i -e "^-dp$" -e "^--debug_package$"; then
+		if [ -n "${OPT_DEBUG}" ]; then
+			PRNERR "Already specified --debug_package(-dp) option."
+			exit 1
+		fi
+		OPT_DEBUG=":dbg"
+
+	elif echo "$1" | grep -q -i -e "^-nolic$" -e "^--wihtout_license_file$"; then
+		if [ "${OPT_WITHOUT_LICENSE}" -ne 0 ]; then
+			PRNERR "Already specified --wihtout_license_file(-nolic) option."
+			exit 1
+		fi
+		OPT_WITHOUT_LICENSE=1
+
+	elif echo "$1" | grep -q -i -e "^-nossh$" -e "^--disable_ssh_setup$"; then
+		if [ "${OPT_DISABLE_SSH_SETUP}" -ne 0 ]; then
+			PRNERR "Already specified --disable_ssh_setup(-nossh) option."
+			exit 1
+		fi
+		OPT_DISABLE_SSH_SETUP=1
+
+	else
+		PRNERR "Unknown option : \"$1\""
+		exit 1
+	fi
+	shift
+done
 
 #==============================================================
 # Set dynamic variables
@@ -249,24 +315,24 @@ PRNSUCCESS "Convert files for demo site and make backup files"
 PRNTITLE "Build bundle.js for demo site"
 
 # [NOTE]
-# To bypass building the license file by setting the 
+# To bypass building the license file by setting the
 # "GHPAGES_WITHOUT_LICENSE" environment variable.
 #
-if [ -n "${GHPAGES_WITHOUT_LICENSE}" ] && [ "${GHPAGES_WITHOUT_LICENSE}" -eq 1 ]; then
+if [ "${OPT_WITHOUT_LICENSE}" -eq 0 ] && { [ -z "${GHPAGES_WITHOUT_LICENSE}" ] || [ "${GHPAGES_WITHOUT_LICENSE}" -ne 1 ]; }; then
 	#
-	# without bulding License file
+	# with bulding License file
 	#
-	if ! RUNCMD npm run build:webpack; then
-		PRNERR "Failed to create bundle.js without building License file."
+	if ! RUNCMD npm run "build:all${OPT_DEBUG}"; then
+		PRNERR "Failed to create bundle.js with building License file."
 		PRNFAILURE "Build bundle.js for demo site"
 		exit 1
 	fi
 else
 	#
-	# with bulding License file
+	# without bulding License file
 	#
-	if ! RUNCMD npm run build:all; then
-		PRNERR "Failed to create bundle.js with building License file."
+	if ! RUNCMD npm run "build:webpack${OPT_DEBUG}"; then
+		PRNERR "Failed to create bundle.js without building License file."
 		PRNFAILURE "Build bundle.js for demo site"
 		exit 1
 	fi
@@ -284,7 +350,7 @@ PRNSUCCESS "Build bundle.js for demo site"
 #
 PRNTITLE "Setup SSH before pushing"
 
-if [ -n "${PUBLISH_TAG_NAME}" ] && { [ -z "${SETUP_SSH_DISABLE}" ] || [ "${SETUP_SSH_DISABLE}" != "1" ]; }; then
+if [ -n "${PUBLISH_TAG_NAME}" ] && [ "${OPT_DISABLE_SSH_SETUP}" -eq 0 ] && { [ -z "${SETUP_SSH_DISABLE}" ] || [ "${SETUP_SSH_DISABLE}" -ne 1 ]; }; then
 	#
 	# Check directory and file about SSH setting
 	#
@@ -336,6 +402,7 @@ if [ -n "${PUBLISH_TAG_NAME}" ] && { [ -z "${SETUP_SSH_DISABLE}" ] || [ "${SETUP
 		exit 1
 	fi
 
+	# shellcheck disable=SC1090
 	. "${SSH_AGENT_TMPFILE}"
 
 	if ! RUNCMD ssh-add ~/.ssh/"${DEMO_SSH_KEY}"; then
@@ -430,7 +497,6 @@ if [ -n "${PUBLISH_TAG_NAME}" ]; then
 else
 	PRNSUCCESS "Not publish gh-pages, so skip setup ${BRANCH_GHPAGES} branch and prepare files to commit."
 fi
-
 
 #==============================================================
 # Push files to gh-pages
