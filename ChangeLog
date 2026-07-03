@@ -1,3 +1,9 @@
+k2hr3-app (2.0.1) unstable; urgency=low
+
+  * Adds Alpine3.24/manual GHA trigger, Updates dependencies - #152
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Fri, 03 Jul 2026 20:48:53 +0900
+
 k2hr3-app (2.0.0) unstable; urgency=low
 
   * Converted the code from CommonJS to TypeScript, etc - #150
