@@ -59,7 +59,7 @@
  */
 
 /**
- * @mui/material v9.1.2
+ * @mui/material v9.2.0
  *
  * @license MIT
  * This source code is licensed under the MIT license found in the
@@ -67,7 +67,7 @@
  */
 
 /**
- * @mui/private-theming v9.1.1
+ * @mui/private-theming v9.2.0
  *
  * @license MIT
  * This source code is licensed under the MIT license found in the
@@ -83,7 +83,7 @@
  */
 
 /**
- * @mui/system v9.1.2
+ * @mui/system v9.2.0
  *
  * @license MIT
  * This source code is licensed under the MIT license found in the
